@@ -59,15 +59,15 @@ AddTile("HOODEDFOREST_FOLIAGE", -- tile_name 1
         snowsound = "dontstarve/movement/run_snow",
         mudsound = "dontstarve/movement/run_mud",
         colors = GROUND_OCEAN_COLOR,
-        cannotbedug = true
+        --cannotbedug = false
     }, {
         -- minimap_tile_def 5
         name = "map_edge",
         noise_texture = "mini_grass_noise",
     }, {
         -- turf_def 6
-        name = "hoodedmoss",
-        anim = "hoodedmoss",
+        name = "hoodedfoliage",
+        anim = "hoodedfoliage",
         bank_build = "hfturf"
     })
 
@@ -91,8 +91,8 @@ AddTile("HOODEDFOREST_FOLIAGE_DARK", -- tile_name 1
         noise_texture = "mini_forest_noise",
     }, {
         -- turf_def 6
-        name = "hoodedmoss",
-        anim = "hoodedmoss",
+        name = "hoodedfoliage_dark",
+        anim = "hoodedfoliage_dark",
         bank_build = "hfturf"
     })
 
@@ -294,9 +294,9 @@ AddTile(
         noise_texture = "mini_um_grassmagma.tex"
     },
     { --turf_def 6
-        name = "magma_rock",
-        anim = "magma_rock",
-        bank_build = "turf_archives"
+        name = "magma_grass",
+        anim = "magma_grass",
+        bank_build = "hfturf"
     }
 )
 
@@ -347,11 +347,6 @@ AddTile(
         name = "hoodedmoss.tex",
         atlas = "ancienthoodedturf.xml",
         noise_texture = "mini_ground_xenobasalt.tex"
-    },
-    { --turf_def 6
-        name = "magma_rock",
-        anim = "magma_rock",
-        bank_build = "turf_archives"
     }
 )
 
@@ -374,11 +369,6 @@ AddTile(
         name = "hoodedmoss.tex",
         atlas = "ancienthoodedturf.xml",
         noise_texture = "mini_um_magma.tex"
-    },
-    { --Placeholder turf
-        name = "magma_rock",
-        anim = "magma_rock",
-        bank_build = "turf_archives"
     }
 )
 
