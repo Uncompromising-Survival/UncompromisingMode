@@ -39,8 +39,8 @@ local UM_FLOODWATER_WAVE_DATA = {
 }
 
 env.AddPrefabPostInit("cave", function(inst)
-    --[[if not TheNet:IsDedicated() then
-        if not inst.WaveComponent then
+    if not TheNet:IsDedicated() then
+        --[[if not inst.WaveComponent then
             inst.entity:AddWaveComponent()
         end
         inst.WaveComponent:SetWaveParams(13.5, 2.5, -1)
@@ -50,8 +50,10 @@ env.AddPrefabPostInit("cave", function(inst)
 
         inst:AddComponent("um_waveswapper")
         inst.components.um_waveswapper:SetTileWaveData(WORLD_TILES.UM_MAGMA_LAVAMOLTEN, UM_LAVA_WAVE_DATA)
-        inst.components.um_waveswapper:SetTileWaveData(WORLD_TILES.UM_FLOODWATER_GROTTO, UM_FLOODWATER_WAVE_DATA)
-    end]]
+        inst.components.um_waveswapper:SetTileWaveData(WORLD_TILES.UM_FLOODWATER_GROTTO, UM_FLOODWATER_WAVE_DATA)]]
+
+        inst:AddComponent("wavemanager")
+    end
 
     if not TheWorld.ismastersim then
         return

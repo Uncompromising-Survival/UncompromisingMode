@@ -73,7 +73,8 @@ local component_post = {
     "retrofitcavemap_anr",
     "fumarolelocaltemperature",
     "pickable",
-    "actionqueuer"
+    "actionqueuer",
+    "wavemanager"
 }
 
 local prefab_post = {
