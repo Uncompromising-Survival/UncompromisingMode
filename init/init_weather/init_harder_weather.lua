@@ -57,7 +57,7 @@ env.AddPrefabPostInit("cave", function(inst)
     if not TheWorld.ismastersim then
         return
     end
-	inst:AddComponent("um_guano_rain")
+    inst:AddComponent("um_guano_rain")
     inst:AddComponent("um_tilelogger")
     inst:AddComponent("um_tentacle_repopulator")
     -- if TUNING.DSTU.CAVECLOPS then
@@ -89,10 +89,10 @@ env.AddPrefabPostInit("cave", function(inst)
 end)
 
 env.AddPrefabPostInit("forest", function(inst)
-	if not TheWorld.ismastersim then
-		return
-	end
-	
+    if not TheWorld.ismastersim then
+        return
+    end
+
 
     --inst:AddComponent("toadrain")
     --inst:AddComponent("hayfever_tracker")
@@ -112,7 +112,7 @@ env.AddPrefabPostInit("forest", function(inst)
     inst:AddComponent("um_tentacle_repopulator")
     --inst:AddComponent("um_pestilencecontroller")
     --if TUNING.DSTU.GOOSE_SETTING == "ROG" or TUNING.DSTU.GOOSE_SETTING == "BOTH" then
-        --inst:AddComponent("gmoosespawner")
+    --inst:AddComponent("gmoosespawner")
     --end
 
     if TUNING.DSTU.SPAWNWILTINGFLY then
