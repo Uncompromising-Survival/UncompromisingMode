@@ -585,6 +585,14 @@ local function GetTileForGrottoFloodHeavySandy(noise)
     return WORLD_TILES.PEBBLEBEACH
 end
 
+local function GetTileForMoltenMagma(noise)
+    if noise < 0.75 then
+        return WORLD_TILES.UM_MAGMA_LAVATEMP
+    end
+
+    return WORLD_TILES.UM_MAGMA
+end
+
 
 AddTile("UM_HOTSPRING", "NOISE")
 AddTile("UM_HOTSPRING_IA", "NOISE")
@@ -601,6 +609,8 @@ AddTile("UM_GROTTO_PATCHY", "NOISE")
 AddTile("UM_GROTTO_LIGHTFLOODED", "NOISE")
 AddTile("UM_GROTTO_HEAVYFLOODED", "NOISE")
 AddTile("UM_GROTTO_HEAVYFLOODED_SANDY", "NOISE")
+AddTile("UM_MAGMA_MOLTEN", "NOISE")
+
 
 local NoiseTileFunctions = require("noisetilefunctions")
 
@@ -620,6 +630,7 @@ NoiseTileFunctions[WORLD_TILES.UM_MAGMA_MIX] = GetTileForMagmaMix
 
 NoiseTileFunctions[WORLD_TILES.UM_MAGMAVOLCANO_IA] = GetTileForVolcanoMagma
 
+NoiseTileFunctions[WORLD_TILES.UM_MAGMA_MOLTEN] = GetTileForMoltenMagma
 
 
 NoiseTileFunctions[WORLD_TILES.UM_GROTTO_PATCHY] = GetTileForGrottoPatchy

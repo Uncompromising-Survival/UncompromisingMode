@@ -32,8 +32,7 @@ env.AddComponentPostInit("playervision", function(self)
     function self:UpdateCCTable()
         _UpdateCCTable(self)
         if self.inst.components.areaaware then
-            local biome = self.inst.components.areaaware:CurrentlyInTag("MagmaCold") and "cave"
-                or self.inst.components.areaaware:CurrentlyInTag("MagmaWarm") and "ocean"
+            local biome = self.inst.components.areaaware:CurrentlyInTag("magmacaves") and "cave"
                 --have to check tile itself because IMPASSABLE tiles do not work for areaaware.
                 or TheWorld.Map:GetTileAtPoint(self.inst.Transform:GetWorldPosition()) == WORLD_TILES.UM_MAGMA_LAVAMOLTEN and "ocean" or nil
 
