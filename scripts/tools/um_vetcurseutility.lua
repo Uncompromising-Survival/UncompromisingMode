@@ -50,7 +50,7 @@ local function ForceToTakeMoreTime(inst)
         if amount and overtime and amount < 0 then
             if not inst:HasAnyTag(TARGET_MUST_TAGS) then
                 -- Take extra time
-                amount = amount * (1 + ((inst.um_deathcount + 1) / 10))
+                amount = amount * (1 + (2 / 10))
             end
         end
         return _OnTakeDamage(self, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb)
@@ -214,6 +214,7 @@ UMVetCurse.ToggleVetCurse = function(inst, toggle)
     else
         DetachCurse(inst)
     end
+    if inst.UMToggleUniqueVetCurse then inst:UMToggleUniqueVetCurse(toggle)end
 end
 
 return UMVetCurse
