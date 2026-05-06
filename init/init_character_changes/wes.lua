@@ -106,7 +106,7 @@ local function ToggleUniqueVetCurse(inst, toggle)
             inst.um_wes_vetcurse2:Cancel()
             inst.um_wes_vetcurse2 = nil
         end
-        if inst.um_wes_vetcurs3 then
+        if inst.um_wes_vetcurse3 then
             inst.um_wes_vetcurse3:Cancel()
             inst.um_wes_vetcurse3 = nil
         end
