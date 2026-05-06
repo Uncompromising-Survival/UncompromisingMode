@@ -214,7 +214,7 @@ UMVetCurse.ToggleVetCurse = function(inst, toggle)
     else
         DetachCurse(inst)
     end
-    if inst.UMToggleUniqueVetCurse then inst:UMToggleUniqueVetCurse(toggle)end
+    if inst.UMToggleUniqueVetCurse then inst:UMToggleUniqueVetCurse(toggle) end
 end
 
 return UMVetCurse

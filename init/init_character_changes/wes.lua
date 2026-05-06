@@ -91,15 +91,34 @@ local function BountyOnYourHead(inst, range, BountyFn)
     end
 end
 
-AddPrefabPostInit("wes", function(inst)
-    if not GLOBAL.TheWorld.ismastersim then
-        return
+local function ToggleUniqueVetCurse(inst, toggle)
+    if toggle then
+        if inst.um_wes_vetcurse1 or inst.um_wes_vetcurse2 or inst.um_wes_vetcurse3 then return end
+        inst.um_wes_vetcurse1 = inst:DoPeriodicTask(0, BountyOnYourHead, nil, hate, HatefulBounty)
+        inst.um_wes_vetcurse2 = inst:DoPeriodicTask(0, BountyOnYourHead, nil, love, LovableBounty)
+        inst.um_wes_vetcurse3 = inst:DoPeriodicTask(0, BountyOnYourHead, nil, midrange, MidrangeBounty)
+    else
+        if inst.um_wes_vetcurse1 then
+            inst.um_wes_vetcurse1:Cancel()
+            inst.um_wes_vetcurse1 = nil
+        end
+        if inst.um_wes_vetcurse2 then
+            inst.um_wes_vetcurse2:Cancel()
+            inst.um_wes_vetcurse2 = nil
+        end
+        if inst.um_wes_vetcurs3 then
+            inst.um_wes_vetcurse3:Cancel()
+            inst.um_wes_vetcurse3 = nil
+        end
     end
+end
+
+AddPrefabPostInit("wes", function(inst)
+    if not GLOBAL.TheWorld.ismastersim then return end
 
     inst:AddTag("the_mime")
-    inst:DoPeriodicTask(0, BountyOnYourHead, nil, hate, HatefulBounty)
-    inst:DoPeriodicTask(0, BountyOnYourHead, nil, love, LovableBounty)
-    inst:DoPeriodicTask(0, BountyOnYourHead, nil, midrange, MidrangeBounty)
+
+    inst.UMToggleUniqueVetCurse = ToggleUniqueVetCurse
 end)
 
 for _, bat in pairs({"bat", "vampirebat"}) do

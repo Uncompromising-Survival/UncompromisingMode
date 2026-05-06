@@ -208,6 +208,14 @@ local function UnlockShadowGear(inst, data)
     end
 end
 
+local function ToggleUniqueVetCurse(inst, toggle)
+    if toggle then
+		inst:ListenForEvent("attacked", CalculateMaxHealthLoss)
+    else
+        inst:RemoveEventCallback("attacked", CalculateMaxHealthLoss)
+    end
+end
+
 local function WaxwellUMStuff(inst)
     --[[inst.pact_sworn = false
 
@@ -288,7 +296,7 @@ local function WaxwellUMStuff(inst)
         petleash:SetOnDespawnFn(OnDespawnPet)
     end]]
 
-    inst:ListenForEvent("attacked", CalculateMaxHealthLoss)
+    inst.UMToggleUniqueVetCurse = ToggleUniqueVetCurse
 end
 
 env.AddPrefabPostInit("waxwell", function(inst)

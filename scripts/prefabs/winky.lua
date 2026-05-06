@@ -140,11 +140,11 @@ end
 
 local function OnDropItem(inst, data)
     local item = data.item
-	inst:DoTaskInTime(0, function()
-		if not inst.no_sanity_drop and not item:HasTag("heavy") then
-			inst.components.sanity:DoDelta(-5)
-		end
-	end)
+    inst:DoTaskInTime(0, function()
+        if not inst.no_sanity_drop and not item:HasTag("heavy") then
+            inst.components.sanity:DoDelta(-5)
+        end
+    end)
 end
 
 local function sanityfn(inst)
@@ -166,32 +166,54 @@ end
 local CURSED_SLOTS = {11, 12, 13, 14, 15}
 
 local function CursedSlots(inst, slot)
-	if not inst:HasTag("vetcurse") then
-		return false
-	end
+    if not inst:HasTag("vetcurse") then
+        return false
+    end
 
-	for _, blockedslot in ipairs(CURSED_SLOTS) do
-		if blockedslot == slot then
-			return true
-		end
-	end
+    for _, blockedslot in ipairs(CURSED_SLOTS) do
+        if blockedslot == slot then
+            return true
+        end
+    end
 
-	return false
+    return false
 end
 
 local function CursedInventory(inst)
-	if inst.components.inventory == nil then
-		return
-	end
+    if not inst.components.inventory then return end
 
-	if inst:HasTag("vetcurse") then
-		for slot = 11, 15 do
-			local item = inst.components.inventory:GetItemInSlot(slot)
-			if item ~= nil then
-				inst.components.inventory:DropItem(item, true, true)
-			end
-		end
-	end
+    if inst:HasTag("vetcurse") then
+        for slot = 11, 15 do
+            local item = inst.components.inventory:GetItemInSlot(slot)
+            if item ~= nil then
+                inst.components.inventory:DropItem(item, true, true)
+            end
+        end
+    end
+end
+
+local function ToggleUniqueVetCurse(inst, toggle)
+    if toggle then
+        if not inst.um_winky_vetcurse then
+            inst.um_winky_vetcurse = inst:DoPeriodicTask(0, CursedInventory)
+        end
+        if inst.components.inventory then
+            local old_giveitem = inst.components.inventory.GiveItem
+            inst.components.inventory.GiveItem = function(self, item, slot, src_pos, ...)
+                if slot ~= nil and CursedSlots(self.inst, slot) then
+                    self:DropItem(item, true, true)
+                    return false
+                end
+
+                return old_giveitem(self, item, slot, src_pos, ...)
+            end
+        end
+    else
+        if inst.um_winky_vetcurse then
+            inst.um_winky_vetcurse:Cancel()
+            inst.um_winky_vetcurse = nil
+        end
+    end
 end
 
 local function master_postinit(inst)
@@ -222,10 +244,10 @@ local function master_postinit(inst)
 
     inst.components.eater.spoiled_sanity = TUNING.WINKY_SPOILED_FOOD_SANITY --edible get sanity
 
-	-- todo: Add an example special power here.
-	inst.components.health:SetMaxHealth(175)
-	inst.components.hunger:SetMax(175)
-	inst.components.sanity:SetMax(125)
+    -- todo: Add an example special power here.
+    inst.components.health:SetMaxHealth(175)
+    inst.components.hunger:SetMax(175)
+    inst.components.sanity:SetMax(125)
     --inst.components.sanity.custom_rate_fn = sanityfn
 
     inst.components.combat.damagemultiplier = TUNING.WENDY_DAMAGE_MULT
@@ -250,21 +272,8 @@ local function master_postinit(inst)
     inst:ListenForEvent("um_combinestack", OnDropItem)
     inst:ListenForEvent("player_despawn", WinkyDespawn)
     --inst:ListenForEvent("itemlose", OnDropItem)
-	inst:DoPeriodicTask(0, CursedInventory)
 
-	if inst.components.inventory ~= nil then
-
-		local old_giveitem = inst.components.inventory.GiveItem
-
-		inst.components.inventory.GiveItem = function(self, item, slot, src_pos, ...)
-			if slot ~= nil and CursedSlots(self.inst, slot) then
-				self:DropItem(item, true, true)
-				return false
-			end
-
-			return old_giveitem(self, item, slot, src_pos, ...)
-		end
-	end
+    inst.UMToggleUniqueVetCurse = ToggleUniqueVetCurse
 end
 
 return MakePlayerCharacter("winky", prefabs, assets, common_postinit, master_postinit)
