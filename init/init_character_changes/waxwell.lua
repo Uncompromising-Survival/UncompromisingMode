@@ -210,7 +210,7 @@ end
 
 local function ToggleUniqueVetCurse(inst, toggle)
     if toggle then
-		inst:ListenForEvent("attacked", CalculateMaxHealthLoss)
+        inst:ListenForEvent("attacked", CalculateMaxHealthLoss)
     else
         inst:RemoveEventCallback("attacked", CalculateMaxHealthLoss)
     end

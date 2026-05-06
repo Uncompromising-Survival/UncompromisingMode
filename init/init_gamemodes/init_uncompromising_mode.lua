@@ -1,6 +1,6 @@
 local require = GLOBAL.require
 
---	[ 	Import Prefabs, Assets, Widgets and Util	]	--
+--    [     Import Prefabs, Assets, Widgets and Util    ]    --
 modimport("init/init_util")
 modimport("init/init_assets")
 modimport("init/init_widgets")
@@ -12,14 +12,14 @@ modimport('init/init_dynlayout')
 --  [   Mock Dragonfly Spit Bait ]    --
 modimport("init/init_weather/init_dragonfly_bait")
 
---  [  	Over Eating Nerf	     ]    --
+--  [      Over Eating Nerf         ]    --
 --modimport("init/init_food/init_stuffed")
 --Currently shelved due to hunger upvalue return error
 
 -- Needs to go up here, other files will try to reference it
 modimport("init/init_tuning")
 
---	[ 	Import Names and Descriptions	]	--
+--    [     Import Names and Descriptions    ]    --
 modimport("init/init_strings/init_strings")
 modimport("init/init_strings/init_names")
 modimport("init/init_strings/init_tooltips")--load before postinit please!
@@ -49,7 +49,7 @@ modimport("init/init_strings/init_descriptions/wathom")
 
 
 
---	[ 		Number Tuning and PostInits		]	--
+--    [         Number Tuning and PostInits        ]    --
 modimport("init/init_postinit")
 modimport("init/init_actions")
 modimport("init/init_containers")
@@ -60,18 +60,18 @@ modimport("init/init_creatures/init_bear_trap_immune")
 modimport("init/init_generatorcharging")
 modimport("init/init_generatorcharging2")
 modimport("init/init_inkubator_ingredients")
---	[ 	Console Commands for tests !	]	--
+--    [     Console Commands for tests !    ]    --
 
 require("uncompromisingcommands")
 modimport("scripts/uncompromisingcommands_autocomplete")
 
---	[ 			 User   Interface	    ]	--
+--    [              User   Interface        ]    --
 
 if TUNING.DSTU.UI_SHOWMULTIPRODUCTS then
     modimport("init/init_showmultiproducts")
 end
 
---	[ 				Gamemodes			]	--
+--    [                 Gamemodes            ]    --
 
 local GAMEMODE_UNCOMPROMISING = 0;
 local GAMEMODE_CUSTOM_SETTINGS = 2;
@@ -80,7 +80,7 @@ local GAMEMODE_CUSTOM_SETTINGS = 2;
 --modimport("init/init_gamemodes/init_hardcore") --TODO: Fix hardcore game mode. For now, it is a mod config below.
 --end
 
---	[ 				Features			]	--
+--    [                 Features            ]    --
 
 --if GetModConfigData("harder_monsters") then4
 if GetModConfigData("horriblefood") then
@@ -154,8 +154,8 @@ if GetModConfigData("snowstorms") then
 end
 
 if GetModConfigData("hayfever_disable") then
-	modimport("init/init_weather/init_hayfever")
-	modimport("init/init_creatures/init_sneeze_hitters")
+    modimport("init/init_weather/init_hayfever")
+    modimport("init/init_creatures/init_sneeze_hitters")
 
 end
 
@@ -166,9 +166,9 @@ modimport("init/init_character_changes/willow")
 modimport("init/init_character_changes/willow_bernie")
 
 --[[if GetModConfigData("gamemode") == GAMEMODE_UNCOMPROMISING and GetModConfigData("waxwell") or
-	(GetModConfigData("gamemode") == GAMEMODE_CUSTOM_SETTINGS and GetModConfigData("waxwell")) then
-		modimport("init/init_character_changes/waxwell")
-	end]]
+    (GetModConfigData("gamemode") == GAMEMODE_CUSTOM_SETTINGS and GetModConfigData("waxwell")) then
+        modimport("init/init_character_changes/waxwell")
+    end]]
 
 --if GetModConfigData("warly") then
 --modimport("init/init_character_changes/warly")
@@ -187,13 +187,13 @@ modimport("init/init_character_changes/wormwood")
 
 -- All of these are wathgrightr changes
 if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then
-	modimport("postinit/prefabs/skilltree_wathgrithr")
-	modimport("postinit/prefabs/beefalo") -- Yes, even this one
-	modimport("postinit/prefabs/battlesongs")
-	modimport("postinit/components/singinginspiration")
-	modimport("postinit/components/battleborn")
-	modimport("postinit/widgets/inspirationbadge")
-	modimport("postinit/prefabs/wathgrithr_shield")
+    modimport("postinit/prefabs/skilltree_wathgrithr")
+    modimport("postinit/prefabs/beefalo") -- Yes, even this one
+    modimport("postinit/prefabs/battlesongs")
+    modimport("postinit/components/singinginspiration")
+    modimport("postinit/components/battleborn")
+    modimport("postinit/widgets/inspirationbadge")
+    modimport("postinit/prefabs/wathgrithr_shield")
     modimport("postinit/prefabs/spear_wathgrithr")
 end
 
