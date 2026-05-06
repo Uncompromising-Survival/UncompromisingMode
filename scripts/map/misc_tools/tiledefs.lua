@@ -444,7 +444,8 @@ ChangeTileRenderOrder(WORLD_TILES.UM_HOTSPRING_YELLOWROCK, WORLD_TILES.DIRT)
 ChangeTileRenderOrder(WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.DIRT)
 ChangeTileRenderOrder(WORLD_TILES.UM_HOTSPRING_GRASS, WORLD_TILES.DIRT)
 ChangeTileRenderOrder(WORLD_TILES.UM_FLOORTOX, WORLD_TILES.DIRT)
-
+ChangeTileRenderOrder(WORLD_TILES.UM_HOTSPRING_GRASS, WORLD_TILES.DIRT)
+ChangeTileRenderOrder(WORLD_TILES.UM_FLOODWATER_GROTTO, WORLD_TILES.PEBBLEBEACH, true)
 
 ChangeMiniMapTileRenderOrder(WORLD_TILES.HOODEDFOREST, WORLD_TILES.DIRT)
 ChangeMiniMapTileRenderOrder(WORLD_TILES.ANCIENTHOODEDFOREST, WORLD_TILES.DIRT)
@@ -695,8 +696,9 @@ end
 
 GLOBAL.UM_LAVA_TILES = {}
 GLOBAL.UM_LAVA_TILES[GLOBAL.WORLD_TILES.UM_MAGMA_LAVAMOLTEN] = true
+
 GLOBAL.UM_RegisterParticleWorldTileState(GLOBAL.WORLD_TILES.UM_MAGMA_LAVAMOLTEN, "levels/particle_tiles/lavamolten.tex", "shaders/tilelavamoltenstate.ksh", {has_variant = true, layer = GLOBAL.LAYER_GROUND, sort = -1})
-GLOBAL.UM_RegisterParticleWorldTileState(GLOBAL.WORLD_TILES.UM_FLOODWATER_GROTTO, "levels/particle_tiles/um_floodwater_grotto.tex", "shaders/tilefloodwaterstate.ksh", {has_variant = true, layer = GLOBAL.LAYER_GROUND, sort = -1})
+GLOBAL.UM_RegisterParticleWorldTileState(GLOBAL.WORLD_TILES.UM_FLOODWATER_GROTTO, "levels/particle_tiles/um_floodwater_grotto.tex", "shaders/tilefloodwaterstate.ksh", {has_variant = true, layer = GLOBAL.LAYER_GROUND, sort = 1})
 
 
 --
