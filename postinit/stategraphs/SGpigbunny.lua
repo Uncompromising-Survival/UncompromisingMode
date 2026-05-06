@@ -10,7 +10,7 @@ local function DoCounterAttack(inst)
 
         local inventory = target.components.inventory
         local bodyslot = inventory and inventory:GetEquippedItem(EQUIPSLOTS.BODY)
-        if not target:HasAnyTag(KNOCKBACK_CANT_TAGS) and not target.sg:HasStateTag("shell") and not (target.components.rider and target.components.rider:IsRiding())
+        if not target:HasAnyTag(KNOCKBACK_CANT_TAGS) and not (target.sg and target.sg:HasStateTag("shell")) and not (target.components.rider and target.components.rider:IsRiding())
             and (not bodyslot or not bodyslot:HasAnyTag(KNOCKBACK_ARMOR_CANT_TAGS)) then
             target:PushEvent("knockback", { knocker = inst, radius = 150, strengthmult = 1 })
         end

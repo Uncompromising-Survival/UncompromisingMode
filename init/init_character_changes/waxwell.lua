@@ -197,7 +197,7 @@ local function OnLoseItem(inst, data)
     end
 end
 
-local shadowgearlist = { ["armor_sanity"] = "um_maxwell_armor_sanity", ["nightsword"] = "um_maxwell_nightsword" }
+local shadowgearlist = {["armor_sanity"] = "um_maxwell_armor_sanity", ["nightsword"] = "um_maxwell_nightsword"}
 local function UnlockShadowGear(inst, data)
     local shadowgear = data and data.item and shadowgearlist[data.item.prefab]
     if not shadowgear then return end

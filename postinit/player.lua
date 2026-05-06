@@ -322,17 +322,15 @@ env.AddPlayerPostInit(function(inst)
     end
 
     local _OnSave = inst.OnSave
-
     inst.OnSave = function(inst, data, ...)
         data.um_all_followers = inst.um_all_followers
 
-        if _OnSave ~= nil then
+        if _OnSave then
             return _OnSave(inst, data, ...)
         end
     end
 
     local _OnLoad = inst.OnLoad
-
     inst.OnLoad = function(inst, data, ...)
         if data then
             if data.um_all_followers then
@@ -354,8 +352,7 @@ env.AddPlayerPostInit(function(inst)
                 end
             end
         end
-
-        if _OnLoad ~= nil then
+        if _OnLoad then
             return _OnLoad(inst, data, ...)
         end
     end
