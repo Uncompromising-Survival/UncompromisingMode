@@ -39,12 +39,12 @@ ChangeSortKey("scrap_monoclehat", "moonstorm_goggleshat", "CLOTHING", true)
 ChangeSortKey("scrap_monoclehat", "antlionhat", "TOOLS", false)
 
 AddRecipe2("um_hat_nettlemask", { Ingredient("firenettles", 20), Ingredient("slurper_pelt", 1), Ingredient("goldnugget", 1)}, TECH.SCIENCE_TWO, nil, {"CLOTHING","WINTER","RAIN"})
-ChangeSortKey("um_hat_nettlemask", "gasmask", "CLOTHING", false)
+ChangeSortKey("um_hat_nettlemask", "beehat", "CLOTHING", false)
 ChangeSortKey("um_hat_nettlemask", "earmuffshat", "WINTER", true)
 ChangeSortKey("gasmask", "balloonhat", "RAIN", true)
 
 AddRecipe2("gasmask", { Ingredient("goose_feather", 10), Ingredient("red_cap", 2), Ingredient("pigskin", 2) }, TECH.SCIENCE_TWO, nil, { "CLOTHING", "RAIN", "SUMMER" })
-ChangeSortKey("gasmask", "beehat", "CLOTHING", true)
+ChangeSortKey("gasmask", "um_hat_nettlemask", "CLOTHING", true)
 ChangeSortKey("gasmask", "um_hat_nettlemask", "RAIN", true)
 
 AddRecipe2("plaguemask", { Ingredient("gasmask", 1), Ingredient("um_spongeplant_item", 6), Ingredient("um_tentaclespot_moon", 2) }, TECH.SCIENCE_TWO, nil, { "CLOTHING", "RAIN", "SUMMER" })
