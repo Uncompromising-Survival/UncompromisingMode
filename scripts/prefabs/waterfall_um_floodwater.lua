@@ -36,14 +36,14 @@ local DIR = table.invert({
 })
 
 local DIR_TO_DATA = {
-    [DIR.N] = {0 * DEGREES, BUILDBANK, SHADER, SORT_A},
-    [DIR.S] = {-180 * DEGREES, BUILDBANK, SHADER, SORT_B},
-    [DIR.W] = {-90 * DEGREES, BUILDBANK, SHADER, SORT_A},
-    [DIR.E] = {-270 * DEGREES, BUILDBANK, SHADER, SORT_B},
-    [DIR.NW] = {-90 * DEGREES, BUILDBANK_CORNER, SHADER_CORNER, SORT_A},
-    [DIR.NE] = {-360 * DEGREES, BUILDBANK_CORNER, SHADER_CORNER, SORT_A},
-    [DIR.SW] = {-180 * DEGREES, BUILDBANK_CORNER, SHADER_CORNER, SORT_B},
-    [DIR.SE] = {-270 * DEGREES, BUILDBANK_CORNER, SHADER_CORNER, SORT_B},
+    [DIR.N] = { 0 * DEGREES, BUILDBANK, SHADER, SORT_A },
+    [DIR.S] = { -180 * DEGREES, BUILDBANK, SHADER, SORT_B },
+    [DIR.W] = { -90 * DEGREES, BUILDBANK, SHADER, SORT_A },
+    [DIR.E] = { -270 * DEGREES, BUILDBANK, SHADER, SORT_B },
+    [DIR.NW] = { -90 * DEGREES, BUILDBANK_CORNER, SHADER_CORNER, SORT_A },
+    [DIR.NE] = { -360 * DEGREES, BUILDBANK_CORNER, SHADER_CORNER, SORT_A },
+    [DIR.SW] = { -180 * DEGREES, BUILDBANK_CORNER, SHADER_CORNER, SORT_B },
+    [DIR.SE] = { -270 * DEGREES, BUILDBANK_CORNER, SHADER_CORNER, SORT_B },
 }
 
 local function Init(inst, dir, x, y)
@@ -63,7 +63,7 @@ local function EnableSound(inst, enable)
     -- TODO (HALF): Add your sound here, losers :)
     -- if enable then
     --     if not inst.SoundEmitter:PlayingSound("WATERFALL") then
-	-- 	    inst.SoundEmitter:PlaySound("dontstarve_DLC003/amb/Waterfall/LP_1", "WATERFALL")
+    -- 	    inst.SoundEmitter:PlaySound("dontstarve_DLC003/amb/Waterfall/LP_1", "WATERFALL")
     --     end
     -- elseif not enable then
     --     if inst.SoundEmitter:PlayingSound("WATERFALL") then
@@ -79,7 +79,11 @@ local function fn()
     inst.entity:AddSoundEmitter()
     inst.entity:AddAnimState()
 
-    inst.AnimState:SetLightOverride(1)
+    if not TheNet:IsDedicated() then
+        -- Register into the vanilla grotto waterfall sound system.
+        TheWorld:PushEvent("ms_registergrottopool", {pool = inst, small = false})
+    end
+
 
     inst:AddTag("NOCLICK")
     inst:AddTag("FX")
