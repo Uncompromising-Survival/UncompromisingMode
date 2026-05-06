@@ -16,7 +16,7 @@ env.AddPrefabPostInitAny(function(inst)
         return
     end
 
-    if inst.components.equippable and inst.components.equippable.equipslot == EQUIPSLOTS.HANDS --[[and (inst.components.tool or inst.components.weapon) ]] and not inst.components.stackable then
+    if inst.components.equippable and inst.components.equippable.equipslot == EQUIPSLOTS.HANDS and (inst.components.tool or inst.components.weapon) and not inst.components.stackable then
         inst:AddComponent("gem_enchantable")
     end
 end)
@@ -82,8 +82,6 @@ function ItemTile:UpdateTooltip(...)
     return ret
 end
 
-
-
 local function getframebuild(tier)
     if tier == nil then return "cracked" end
     if tier > 2 then
@@ -98,13 +96,13 @@ end
 local function getframesymbol(durability, tier)
     local tier_name = getframebuild(tier)
     if durability > .75 then
-        return "frame-"..tier_name
+        return "frame-" .. tier_name
     elseif durability <= .75 and durability > .5 then
-        return "frame-"..tier_name.."-0"
+        return "frame-" .. tier_name .. "-0"
     elseif durability <= .5 and durability > .25 then
-        return "frame-"..tier_name.."-1"
+        return "frame-" .. tier_name .. "-1"
     else
-        return "frame-"..tier_name.."-2"
+        return "frame-" .. tier_name .. "-2"
     end
 end
 
