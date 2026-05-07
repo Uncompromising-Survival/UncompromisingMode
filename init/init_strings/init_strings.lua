@@ -288,7 +288,7 @@ STRINGS.UI.HUD.UM_VETSKULL = {
     WURT = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,         --Wurt to Womp transition, real. Soon.
     WALTER = "Veteran's Curse:\n - Damage taken also applies a maximum Sanity penalty.\n - The penalty heals itself after a while without getting hurt.",
     WANDA = "Veteran's Curse:\n - Age faster when damaged.\n - Hunger drains faster.\n - Sanity from foods is applied *slowly* over time.",
-    WINKY = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
+    WINKY = "Veteran's Curse:\n - Lose 5 inventory slots.",
     WATHOM = "Veteran's Curse:\n - When above 50% Sanity, becomes enlighted.",
     WIXIE = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
 }
