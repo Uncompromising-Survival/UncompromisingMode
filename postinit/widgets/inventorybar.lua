@@ -32,7 +32,7 @@ env.AddClassPostConstruct("widgets/inventorybar", function(self, owner)
         local container = overflow.inst
         local widget = overflow:GetWidget()
         if self.overflow_button ~= nil then
-            if widget and widget.buttoninfo.validfn ~= nil then
+            if widget and widget.buttoninfo ~= nil and widget.buttoninfo.validfn ~= nil then
                 if widget.buttoninfo.validfn(container) then
                     self.overflow_button:Enable()
                 else
@@ -102,24 +102,23 @@ env.AddClassPostConstruct("widgets/inventorybar", function(self, owner)
         local W = 68
         local INTERSEP = 28
         if do_integrated_backpack then
-            
             local widget = overflow:GetWidget()
             -- Here we create the button for the Silken Sack. We want to position it to the right
             -- of the integrated layout arrow, right-flush with the head slot.
             if widget.buttoninfo ~= nil then
                 local doer = self.owner
                 local container = overflow.inst
-    
+
                 if doer ~= nil and doer.components.playeractionpicker ~= nil then
                     doer.components.playeractionpicker:RegisterContainer(container)
                 end
-        
+
                 self.overflow_button = self.bottomrow:AddChild(ImageButton(
-                    "images/ui.xml", "button_small.tex", "button_small_over.tex", 
-                    "button_small_disabled.tex", nil, nil, {1,1}, {0,0})
+                    "images/ui.xml", "button_small.tex", "button_small_over.tex",
+                    "button_small_disabled.tex", nil, nil, { 1, 1 }, { 0, 0 })
                 )
                 self.overflow_button.image:SetScale(1.07)
-                self.overflow_button.text:SetPosition(2,-2)
+                self.overflow_button.text:SetPosition(2, -2)
                 self.overflow_button:SetPosition(self.inv[#self.inv]:GetPosition().x + W * 0.5 + INTERSEP + 181, 8)
                 self.overflow_button:SetText(widget.buttoninfo.text)
                 if widget.buttoninfo.fn ~= nil then
@@ -148,11 +147,11 @@ env.AddClassPostConstruct("widgets/inventorybar", function(self, owner)
                 self.overflow_button.text:SetColour(0, 0, 0, 1)
                 self.overflow_button:Show()
                 self:RefreshOverflowButton()
-        
+
                 if TheInput:ControllerAttached() then
                     self.overflow_button:Hide()
                 end
-        
+
                 self.overflow_button.inst:ListenForEvent("continuefrompause", function()
                     if TheInput:ControllerAttached() then
                         self.overflow_button:Hide()
@@ -177,6 +176,6 @@ env.AddClassPostConstruct("widgets/inventorybar", function(self, owner)
             end
         end
     end
-    
+
     UpvalueHacker.SetUpvalue(self.Rebuild, RebuildLayout, "RebuildLayout")
 end)

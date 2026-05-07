@@ -111,8 +111,8 @@ local function fn()
 
     inst.MiniMapEntity:SetIcon("silksack.tex")
 
-    inst.AnimState:SetBank("silksack")
-    inst.AnimState:SetBuild("silksack")
+    inst.AnimState:SetBank("swap_silksack")
+    inst.AnimState:SetBuild("swap_silksack")
     inst.AnimState:PlayAnimation("idle")
 
 

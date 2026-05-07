@@ -287,8 +287,8 @@ local class_post = {
     "widgets/controls",
     "widgets/craftslot",
     "widgets/bloodover",
-    --"widgets/inventorybar",
-    --"widgets/containerwidget"
+    "widgets/inventorybar",
+    "widgets/containerwidget",
     "widgets/statusdisplays"
 }
 
