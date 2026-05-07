@@ -6,7 +6,6 @@ env.AddComponentPostInit("seamlessplayerswapper", function(self)
     local _OnSeamlessCharacterSwap = self.OnSeamlessCharacterSwap
     function self:OnSeamlessCharacterSwap(old_player, ...)
         UMVetCurse.ApplyCurse(old_player, self.inst)
-        local ret = _OnSeamlessCharacterSwap(self, old_player, ...)
-        return ret
+        return  _OnSeamlessCharacterSwap(self, old_player, ...)
     end
 end)
