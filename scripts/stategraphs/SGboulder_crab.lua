@@ -24,7 +24,7 @@ end
 local function KnockOutWeapon(inst,data)
     if data.redirected then return end
 
-    if data.target and data.target.components.inventory and not data.target:HasTag("stronggrip") then
+    if data.target and data.target.components.inventory and not data.target.components.inventory:IsThiefProof() and not data.target:HasTag("stronggrip") then
         local item = data.target.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
         if item and not item:HasTag("nosteal") then
             data.target.components.inventory:DropItem(item)

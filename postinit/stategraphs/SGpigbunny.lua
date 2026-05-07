@@ -8,11 +8,8 @@ local function DoCounterAttack(inst)
     if target and distsq(target:GetPosition(), inst:GetPosition()) <= inst.components.combat:CalcAttackRangeSq(target) then
         target.components.combat:GetAttacked(inst, 33)
 
-        local inventory = target.components.inventory
-        local bodyslot = inventory and inventory:GetEquippedItem(EQUIPSLOTS.BODY)
-        if not target:HasAnyTag(KNOCKBACK_CANT_TAGS) and not (target.sg and target.sg:HasStateTag("shell")) and not (target.components.rider and target.components.rider:IsRiding())
-            and (not bodyslot or not bodyslot:HasAnyTag(KNOCKBACK_ARMOR_CANT_TAGS)) then
-            target:PushEvent("knockback", { knocker = inst, radius = 150, strengthmult = 1 })
+        if UMCommonFns.ShouldKnockback(target) then
+            target:PushEvent("knockback", {knocker = inst, radius = 150, strengthmult = 1})
         end
     end
 end
@@ -226,7 +223,7 @@ env.AddStategraphPostInit("pig", function(inst)
             timeline =
             {
                 TimeEvent(12 * FRAMES, function(inst)
-					inst.components.combat:DoAttack(nil, nil, nil, nil, 2) -- 2x instance mult
+                    inst.components.combat:DoAttack(nil, nil, nil, nil, 2) -- 2x instance mult
                     inst.SoundEmitter:PlaySound("dontstarve/wilson/attack_whoosh")
                 end),
             },
