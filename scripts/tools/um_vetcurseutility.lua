@@ -174,37 +174,43 @@ local function ForceUsualFoodEffects(inst)
     inst:RemoveEventCallback("oneat", oneat)
 end
 
-local function AttachCurse(target)
-    if target.components.combat then
-        --target.components.combat.externaldamagemultipliers:SetModifier(inst, .75) -- Effect Removed
-        target.vetcurse = true
-
-        if target.components and target.components.oldager then
-            ForceToTakeMoreTime(target)
-        else
-            ForceToTakeMoreDamage(target)
-        end
-
-        ForceToTakeMoreHunger(target)
-        ForceOvertimeFoodEffects(target)
-        target:AddTag("vetcurse")
+UMVetCurse.ApplyCurse = function(old, new)
+    if TUNING.DSTU.VETCURSE ~= "off" and old:HasTag("vetcurse") then
+        if new.UMToggleVetCurse then new:UMToggleVetCurse(true) end
     end
 end
 
-local function DetachCurse(target)
-    if target.components.combat then
-        --target.components.combat.externaldamagemultipliers:RemoveModifier(inst)
-        target.vetcurse = nil
+local function AttachCurse(inst)
+    if inst.components.combat then
+        --inst.components.combat.externaldamagemultipliers:SetModifier(inst, .75) -- Effect Removed
+        inst.vetcurse = true
 
-        if target.components and target.components.oldager then --taking a guess thats what her tag is, I swear, I actually don't know
-            ForceToTakeUsualTime(target)
+        if inst.components and inst.components.oldager then
+            ForceToTakeMoreTime(inst)
         else
-            ForceToTakeUsualDamage(target)
+            ForceToTakeMoreDamage(inst)
         end
 
-        ForceToTakeUsualHunger(target)
-        ForceUsualFoodEffects(target)
-        target:RemoveTag("vetcurse")
+        ForceToTakeMoreHunger(inst)
+        ForceOvertimeFoodEffects(inst)
+        inst:AddTag("vetcurse")
+    end
+end
+
+local function DetachCurse(inst)
+    if inst.components.combat then
+        --inst.components.combat.externaldamagemultipliers:RemoveModifier(inst)
+        inst.vetcurse = nil
+
+        if inst.components and inst.components.oldager then --taking a guess thats what her tag is, I swear, I actually don't know
+            ForceToTakeUsualTime(inst)
+        else
+            ForceToTakeUsualDamage(inst)
+        end
+
+        ForceToTakeUsualHunger(inst)
+        ForceUsualFoodEffects(inst)
+        inst:RemoveTag("vetcurse")
     end
 end
 

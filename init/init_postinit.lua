@@ -74,7 +74,8 @@ local component_post = {
     "fumarolelocaltemperature",
     "pickable",
     "actionqueuer",
-    "wavemanager"
+    "wavemanager",
+    "seamlessplayerswapper"
 }
 
 local prefab_post = {
