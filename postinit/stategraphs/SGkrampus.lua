@@ -127,8 +127,8 @@ env.AddStategraphPostInit("krampus", function(inst)
                         --inst.SoundEmitter:PlaySound("dontstarve/creatures/krampus/bag_foley")
                         inst.SoundEmitter:PlaySound("dontstarve/creatures/krampus/bag_swing")
                         
-                        if v and v.components.inventory and not v.components.inventory:IsThiefProof() then 
-                            if not v:HasTag("stronggrip") then
+                        if v and v.components.inventory then 
+                            if not v.components.inventory:IsThiefProof() and not v:HasTag("stronggrip") then
                                 local item = v.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
                                 if item and not item:HasTag("nosteal") then
                                     v.components.inventory:DropItem(item)
