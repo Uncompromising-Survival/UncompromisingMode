@@ -1,36 +1,36 @@
 local MakePlayerCharacter = require("prefabs/player_common")
 
 local assets = {
-    Asset( "ANIM", "anim/player_basic.zip" ),
-    Asset( "ANIM", "anim/player_idles_shiver.zip" ),
-    Asset( "ANIM", "anim/player_actions.zip" ),
-    Asset( "ANIM", "anim/player_actions_axe.zip" ),
-    Asset( "ANIM", "anim/player_actions_pickaxe.zip" ),
-    Asset( "ANIM", "anim/player_actions_shovel.zip" ),
-    Asset( "ANIM", "anim/player_actions_blowdart.zip" ),
-    Asset( "ANIM", "anim/player_actions_eat.zip" ),
-    Asset( "ANIM", "anim/player_actions_item.zip" ),
-    Asset( "ANIM", "anim/player_actions_uniqueitem.zip" ),
-    Asset( "ANIM", "anim/player_actions_bugnet.zip" ),
-    Asset( "ANIM", "anim/player_actions_fishing.zip" ),
-    Asset( "ANIM", "anim/player_actions_boomerang.zip" ),
-    Asset( "ANIM", "anim/player_bush_hat.zip" ),
-    Asset( "ANIM", "anim/player_attacks.zip" ),
-    Asset( "ANIM", "anim/player_idles.zip" ),
-    Asset( "ANIM", "anim/player_rebirth.zip" ),
-    Asset( "ANIM", "anim/player_jump.zip" ),
-    Asset( "ANIM", "anim/player_amulet_resurrect.zip" ),
-    Asset( "ANIM", "anim/player_teleport.zip" ),
-    Asset( "ANIM", "anim/wilson_fx.zip" ),
-    Asset( "ANIM", "anim/player_one_man_band.zip" ),
-    Asset( "ANIM", "anim/shadow_hands.zip" ),
-    Asset( "SOUND", "sound/sfx.fsb" ),
-    Asset( "SOUND", "sound/wilson.fsb" ),
-    Asset( "ANIM", "anim/beard.zip" ),
+    Asset("ANIM", "anim/player_basic.zip"),
+    Asset("ANIM", "anim/player_idles_shiver.zip"),
+    Asset("ANIM", "anim/player_actions.zip"),
+    Asset("ANIM", "anim/player_actions_axe.zip"),
+    Asset("ANIM", "anim/player_actions_pickaxe.zip"),
+    Asset("ANIM", "anim/player_actions_shovel.zip"),
+    Asset("ANIM", "anim/player_actions_blowdart.zip"),
+    Asset("ANIM", "anim/player_actions_eat.zip"),
+    Asset("ANIM", "anim/player_actions_item.zip"),
+    Asset("ANIM", "anim/player_actions_uniqueitem.zip"),
+    Asset("ANIM", "anim/player_actions_bugnet.zip"),
+    Asset("ANIM", "anim/player_actions_fishing.zip"),
+    Asset("ANIM", "anim/player_actions_boomerang.zip"),
+    Asset("ANIM", "anim/player_bush_hat.zip"),
+    Asset("ANIM", "anim/player_attacks.zip"),
+    Asset("ANIM", "anim/player_idles.zip"),
+    Asset("ANIM", "anim/player_rebirth.zip"),
+    Asset("ANIM", "anim/player_jump.zip"),
+    Asset("ANIM", "anim/player_amulet_resurrect.zip"),
+    Asset("ANIM", "anim/player_teleport.zip"),
+    Asset("ANIM", "anim/wilson_fx.zip"),
+    Asset("ANIM", "anim/player_one_man_band.zip"),
+    Asset("ANIM", "anim/shadow_hands.zip"),
+    Asset("SOUND", "sound/sfx.fsb"),
+    Asset("SOUND", "sound/wilson.fsb"),
+    Asset("ANIM", "anim/beard.zip"),
 
     -- Don't forget to include your character's custom assets!
-    Asset( "ANIM", "anim/winky.zip" ),
-    Asset( "ANIM", "anim/ghost_winky_build.zip" ),
+    Asset("ANIM", "anim/winky.zip"),
+    Asset("ANIM", "anim/ghost_winky_build.zip"),
 }
 
 local start_inv = {}
@@ -55,7 +55,7 @@ local function RightClickPicker(inst, target, pos)
 
     return target and target == inst --and target.components.follower and target.components.follower:GetLeader() == inst --target:HasTag("winky_rat")
         and not validtargetaction and not useitem
-        and inst.components.playeractionpicker:SortActionList({ACTIONS.RAT_ORDER}, target, nil) or nil, true
+        and inst.components.playeractionpicker:SortActionList({ ACTIONS.RAT_ORDER }, target, nil) or nil, true
 end
 
 local function GetPointSpecialActions(inst, pos, useitem, right)
@@ -76,17 +76,18 @@ local function OnSetOwner(inst)
 end
 
 local function common_postinit(inst)
-    inst.readytogather = net_bool(inst.GUID, "winky.readytogather")
-
-    inst.avatar_tex   = "avatar_winky.tex"
-    inst.avatar_atlas = "images/avatars/avatar_winky.xml"
+    inst.readytogather    = net_bool(inst.GUID, "winky.readytogather")
+    inst.update_inventory = net_bool(inst.GUID, "winky.rebuild_inventory", "winky.inventory_dirty")
+    inst.update_inventory:set(true)
+    inst.avatar_tex         = "avatar_winky.tex"
+    inst.avatar_atlas       = "images/avatars/avatar_winky.xml"
 
     inst.avatar_ghost_tex   = "avatar_ghost_winky.tex"
     inst.avatar_ghost_atlas = "images/avatars/avatar_ghost_winky.xml"
-    
+
     inst:AddTag("playermonster")
     inst:AddTag("monster")
-    
+
     inst:ListenForEvent("setowner", OnSetOwner)
 end
 
@@ -163,7 +164,7 @@ local function WinkyDespawn(inst)
     inst.no_sanity_drop = true
 end
 
-local CURSED_SLOTS = {11, 12, 13, 14, 15}
+local CURSED_SLOTS = { 11, 12, 13, 14, 15 }
 
 local function CursedSlots(inst, slot)
     if not inst:HasTag("vetcurse") then
@@ -194,32 +195,24 @@ end
 
 local function ToggleUniqueVetCurse(inst, toggle)
     if toggle then
-        if not inst.um_winky_vetcurse then
-            inst.um_winky_vetcurse = inst:DoPeriodicTask(0, CursedInventory)
-        end
-        if inst.components.inventory then
-            local old_giveitem = inst.components.inventory.GiveItem
-            inst.components.inventory.GiveItem = function(self, item, slot, src_pos, ...)
-                if slot ~= nil and CursedSlots(self.inst, slot) then
-                    self:DropItem(item, true, true)
-                    return false
-                end
-
-                return old_giveitem(self, item, slot, src_pos, ...)
+        for slot = 11, 15 do
+            local item = inst.components.inventory:GetItemInSlot(slot)
+            if item ~= nil then
+                inst.components.inventory:DropItem(item, true, true)
             end
         end
-    else
-        if inst.um_winky_vetcurse then
-            inst.um_winky_vetcurse:Cancel()
-            inst.um_winky_vetcurse = nil
-        end
     end
+
+    --readonly? YOU CAN'T TELL ME WHAT TO DO!!
+    rawset(inst.components.inventory, "maxslots", toggle and 10 or GetMaxItemSlots(TheNet:GetServerGameMode()))
+
+    inst.update_inventory:set(not inst.update_inventory:value()) --value here doesn't really matter, we are just forcing a dirtyevent by flipping it.
 end
 
 local function master_postinit(inst)
     inst.starting_inventory = start_inv[TheNet:GetServerGameMode()] or start_inv.default
 
-     -- Minimap icon
+    -- Minimap icon
     inst.MiniMapEntity:SetIcon("winky.tex")
     inst:AddTag("winky")
     inst:AddTag("ratwhisperer")
@@ -233,12 +226,12 @@ local function master_postinit(inst)
     if inst.components.eater then
         inst.components.eater:SetCanEatVeggieHorrible() -- Can eat UM_HORRIBLE_VEGGIE
         inst.components.eater:SetCanEatHorrible()
-        inst.components.eater:SetStrongStomach(true) -- can eat monster meat!
+        inst.components.eater:SetStrongStomach(true)    -- can eat monster meat!
         inst.components.eater:SetCanEatRawMeat(true)
         inst.components.eater:SetOnEatFn(checkfav)
         inst.components.eater.custom_stats_mod_fn = CustomFoodStatsMod
     end
-    
+
     inst.components.sanity.night_drain_mult = TUNING.WENDY_SANITY_MULT
     inst.components.sanity.neg_aura_mult = TUNING.WENDY_SANITY_MULT
 
@@ -252,21 +245,21 @@ local function master_postinit(inst)
 
     inst.components.combat.damagemultiplier = TUNING.WENDY_DAMAGE_MULT
     if TheWorld.state.isnight then
-        inst.components.locomotor:SetExternalSpeedMultiplier(inst, "im_winky_mother_frikker", 1.25) 
+        inst.components.locomotor:SetExternalSpeedMultiplier(inst, "im_winky_mother_frikker", 1.25)
     else
         inst.components.locomotor:SetExternalSpeedMultiplier(inst, "im_winky_mother_frikker", 1.15)
     end
 
-    inst:WatchWorldState("isnight", function() 
+    inst:WatchWorldState("isnight", function()
         if TheWorld.state.isnight then
-            inst.components.locomotor:SetExternalSpeedMultiplier(inst, "im_winky_mother_frikker", 1.25) 
+            inst.components.locomotor:SetExternalSpeedMultiplier(inst, "im_winky_mother_frikker", 1.25)
         else
             inst.components.locomotor:SetExternalSpeedMultiplier(inst, "im_winky_mother_frikker", 1.15)
         end
     end)
-    
+
     --inst:ListenForEvent("picksomething", OnPickSomething)
-    
+
     inst.no_sanity_drop = false
     inst:ListenForEvent("dropitem", OnDropItem)
     inst:ListenForEvent("um_combinestack", OnDropItem)
