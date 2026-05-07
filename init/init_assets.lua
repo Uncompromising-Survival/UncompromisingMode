@@ -158,12 +158,14 @@ local inventoryitems =
     "theatercorn",
     "turf_ancienthoodedturf",
     "turf_hoodedmoss",
-
+    "turf_hoodedfoliage",
+    "turf_hoodedfoliage_dark",
 
     "turf_um_hotspring_grass",
     "turf_um_hotspring_yellowrock",
     "turf_um_hotspring_whiterock",
     "turf_um_magma",
+    "turf_magma_grass",
 
     "um_bear_trap_equippable",
     "um_bear_trap_equippable_gold",

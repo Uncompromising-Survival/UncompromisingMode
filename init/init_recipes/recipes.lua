@@ -24,7 +24,7 @@ AddRecipe2("turf_um_hotspring_yellowrock", { Ingredient("rocks", 1), Ingredient(
 ChangeSortKey("turf_um_hotspring_yellowrock", "turf_um_hotspring_whiterock", "DECOR", true)
 
 AddRecipe2("turf_magma_grass", { Ingredient("rocks", 1), Ingredient("firenettles", 1) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
-ChangeSortKey("turf_magma_grass", "turf_um_hotspring_whiterock", "DECOR", true)
+ChangeSortKey("turf_magma_grass", "turf_underrock", "DECOR", false)
 
 AddRecipe2("turf_um_magma", { Ingredient("rocks", 1), Ingredient("firenettles_dried", 1) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
 ChangeSortKey("turf_um_magma", "turf_magma_grass", "DECOR", true)
@@ -33,11 +33,11 @@ if GetModConfigData("hoodedforest") then
     AddRecipe2("turf_hoodedmoss", { Ingredient("twigs", 1), Ingredient("um_moss", 1) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
     ChangeSortKey("turf_hoodedmoss", "turf_deciduous", "DECOR", true)
 
-    AddRecipe2("turf_hoodedfoliage", { Ingredient("grass", 1), Ingredient("seeds", 1) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
+    AddRecipe2("turf_hoodedfoliage", { Ingredient("cutgrass", 1), Ingredient("seeds", 1) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
     ChangeSortKey("turf_hoodedfoliage", "turf_hoodedmoss", "DECOR", true)
 
     AddRecipe2("turf_hoodedfoliage_dark", { Ingredient("twigs", 1), Ingredient("seeds", 1) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
-    ChangeSortKey("turf_hoodedfoliage", "turf_hoodedmoss", "DECOR", true)
+    ChangeSortKey("turf_hoodedfoliage_dark", "turf_hoodedfoliage", "DECOR", true)
 
     AddRecipe2("turf_ancienthoodedturf", { Ingredient("turf_hoodedmoss", 2), Ingredient("moonrocknugget", 1) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
     ChangeSortKey("turf_ancienthoodedturf", "turf_hoodedmoss", "DECOR", true)

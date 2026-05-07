@@ -114,10 +114,6 @@ AddTile("UM_FLOODWATER",
     }, {
         name = "map_edge",
         noise_texture = "mini_noise_um_floodwater"
-    }, {
-        name = "ancienthoodedturf",
-        anim = "ancienthoodedturf",
-        bank_build = "hfturf"
     })
 
 AddTile("UM_FLOODWATER_GROTTO",
@@ -138,10 +134,6 @@ AddTile("UM_FLOODWATER_GROTTO",
     }, {
         name = "map_edge",
         noise_texture = "Ground_noise_moon_fungus_flooded_mini"
-    }, {
-        name = "ancienthoodedturf",
-        anim = "ancienthoodedturf",
-        bank_build = "hfturf"
     })
 
 AddTile("UM_FLOODWATER_MARSH",
@@ -162,10 +154,6 @@ AddTile("UM_FLOODWATER_MARSH",
     }, {
         name = "map_edge",
         noise_texture = "Ground_noise_moon_fungus_flooded_mini"
-    }, {
-        name = "ancienthoodedturf",
-        anim = "ancienthoodedturf",
-        bank_build = "hfturf"
     })
 
 
@@ -187,10 +175,6 @@ AddTile("UM_FLOODWATER_BROILING",
     }, {
         name = "map_edge",
         noise_texture = "Ground_noise_moon_fungus_flooded_mini"
-    }, {
-        name = "ancienthoodedturf",
-        anim = "ancienthoodedturf",
-        bank_build = "hfturf"
     })
 
 
@@ -309,10 +293,10 @@ AddTile(
     {
         name = "rocky_clear",
         noise_texture = "ground_magma_rock.tex", --Gearless's art
-        runsound="dontstarve/movement/run_dirt",
-        walksound="dontstarve/movement/walk_dirt",
-        snowsound="dontstarve/movement/run_ice",
-        mudsound="dontstarve/movement/run_mud",
+        runsound = "dontstarve/movement/run_dirt",
+        walksound = "dontstarve/movement/walk_dirt",
+        snowsound = "dontstarve/movement/run_ice",
+        mudsound = "dontstarve/movement/run_mud",
         colors = GROUND_OCEAN_COLOR
     },
     { --Placeholder minimap
@@ -337,10 +321,10 @@ AddTile(
     {
         name = "tile_invisible",
         noise_texture = "ground_invisible",
-        runsound="dontstarve/movement/run_dirt",
-        walksound="dontstarve/movement/walk_dirt",
-        snowsound="dontstarve/movement/run_ice",
-        mudsound="dontstarve/movement/run_mud",
+        runsound = "dontstarve/movement/run_dirt",
+        walksound = "dontstarve/movement/walk_dirt",
+        snowsound = "dontstarve/movement/run_ice",
+        mudsound = "dontstarve/movement/run_mud",
         colors = GROUND_OCEAN_COLOR
     },
     { --minimap_tile_def 5
@@ -359,10 +343,10 @@ AddTile(
     {
         name = "rocky_clear",
         noise_texture = "ground_magma_rock_lavaborder.tex", --Gearless's art
-        runsound="dontstarve/movement/run_dirt",
-        walksound="dontstarve/movement/walk_dirt",
-        snowsound="dontstarve/movement/run_ice",
-        mudsound="dontstarve/movement/run_mud",
+        runsound = "dontstarve/movement/run_dirt",
+        walksound = "dontstarve/movement/walk_dirt",
+        snowsound = "dontstarve/movement/run_ice",
+        mudsound = "dontstarve/movement/run_mud",
         colors = GROUND_OCEAN_COLOR
     },
     { --Placeholder minimap
@@ -382,10 +366,10 @@ AddTile(
     {
         name = "rocky_clear",
         noise_texture = "ground_magma_rock_lavaborder.tex", --Gearless's art
-        runsound="dontstarve/movement/run_dirt",
-        walksound="dontstarve/movement/walk_dirt",
-        snowsound="dontstarve/movement/run_ice",
-        mudsound="dontstarve/movement/run_mud",
+        runsound = "dontstarve/movement/run_dirt",
+        walksound = "dontstarve/movement/walk_dirt",
+        snowsound = "dontstarve/movement/run_ice",
+        mudsound = "dontstarve/movement/run_mud",
         colors = GROUND_OCEAN_COLOR
     },
     { --Placeholder minimap
@@ -537,15 +521,15 @@ end
 local function GetTileForMagmaMix(noise)
     if noise < 0.5 then
         return WORLD_TILES.UM_GRASSMAGMA
-	end
-	
+    end
+
     return WORLD_TILES.UM_MAGMA
 end
 
 local function GetTileForGrottoPatchy(noise)
     if noise < 0.4 then
         return WORLD_TILES.UM_FLOODWATER_GROTTO
-	end
+    end
     return WORLD_TILES.PEBBLEBEACH
 end
 
@@ -662,7 +646,7 @@ local filters = {
     ["shockworm"] = { WORLD_TILES.PEBBLEBEACH, WORLD_TILES.FUNGUSMOON },
     ["zaspberry_plant"] = { WORLD_TILES.PEBBLEBEACH, WORLD_TILES.FUNGUSMOON },
     ["um_reeds_lunar"] = { WORLD_TILES.PEBBLEBEACH, WORLD_TILES.FUNGUSMOON },
-    ["um_tentacle_moon"] = {WORLD_TILES.FUNGUSMOON },
+    ["um_tentacle_moon"] = { WORLD_TILES.FUNGUSMOON },
     ["um_mushroom_moon"] = { WORLD_TILES.PEBBLEBEACH, WORLD_TILES.UM_FLOODWATER_GROTTO },
 }
 
@@ -698,8 +682,8 @@ end
 GLOBAL.UM_LAVA_TILES = {}
 GLOBAL.UM_LAVA_TILES[GLOBAL.WORLD_TILES.UM_MAGMA_LAVAMOLTEN] = true
 
-GLOBAL.UM_RegisterParticleWorldTileState(GLOBAL.WORLD_TILES.UM_MAGMA_LAVAMOLTEN, "levels/particle_tiles/lavamolten.tex", "shaders/tilelavamoltenstate.ksh", {has_variant = true, layer = GLOBAL.LAYER_GROUND, sort = -1})
-GLOBAL.UM_RegisterParticleWorldTileState(GLOBAL.WORLD_TILES.UM_FLOODWATER_GROTTO, "levels/particle_tiles/um_floodwater_grotto.tex", "shaders/tilefloodwaterstate.ksh", {has_variant = true, layer = GLOBAL.LAYER_GROUND, sort = 1})
+GLOBAL.UM_RegisterParticleWorldTileState(GLOBAL.WORLD_TILES.UM_MAGMA_LAVAMOLTEN, "levels/particle_tiles/lavamolten.tex", "shaders/tilelavamoltenstate.ksh", { has_variant = true, layer = GLOBAL.LAYER_GROUND, sort = -1 })
+GLOBAL.UM_RegisterParticleWorldTileState(GLOBAL.WORLD_TILES.UM_FLOODWATER_GROTTO, "levels/particle_tiles/um_floodwater_grotto.tex", "shaders/tilefloodwaterstate.ksh", { has_variant = true, layer = GLOBAL.LAYER_GROUND, sort = 1 })
 
 
 --
@@ -711,29 +695,29 @@ local ground_table = GroundTiles.ground
 -- Make sure lava tiles always sort below all land tiles
 local _Initialize = GroundTiles.Initialize
 local function Initialize(...)
-	--Ground
-	local ground_land_first
-	for i, ground in ipairs(ground_table) do
-		if ground[1] ~= nil and GLOBAL.IsLandTile(ground[1]) then
-			ground_land_first = ground[1]
-			break
-		end
-	end
+    --Ground
+    local ground_land_first
+    for i, ground in ipairs(ground_table) do
+        if ground[1] ~= nil and GLOBAL.IsLandTile(ground[1]) then
+            ground_land_first = ground[1]
+            break
+        end
+    end
 
-	local um_lava_tile_order = {}
-	for i, v in ipairs(ground_table) do
-		if GLOBAL.UM_LAVA_TILES[v[1]] then
-			table.insert(um_lava_tile_order, {v[1], i})
-		end
-	end
-	table.sort(um_lava_tile_order, function(a,b) return a[2] < b[2] end)
-	for i, data in ipairs(um_lava_tile_order) do
-		local tile = data[1]
-		if tile ~= ground_land_first then
-			ChangeTileRenderOrder(tile, ground_land_first, false)
-		end
-	end
-	return _Initialize(...)
+    local um_lava_tile_order = {}
+    for i, v in ipairs(ground_table) do
+        if GLOBAL.UM_LAVA_TILES[v[1]] then
+            table.insert(um_lava_tile_order, { v[1], i })
+        end
+    end
+    table.sort(um_lava_tile_order, function(a, b) return a[2] < b[2] end)
+    for i, data in ipairs(um_lava_tile_order) do
+        local tile = data[1]
+        if tile ~= ground_land_first then
+            ChangeTileRenderOrder(tile, ground_land_first, false)
+        end
+    end
+    return _Initialize(...)
 end
 
 GroundTiles.Initialize = Initialize
