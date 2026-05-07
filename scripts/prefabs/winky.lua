@@ -164,35 +164,6 @@ local function WinkyDespawn(inst)
     inst.no_sanity_drop = true
 end
 
-local CURSED_SLOTS = { 11, 12, 13, 14, 15 }
-
-local function CursedSlots(inst, slot)
-    if not inst:HasTag("vetcurse") then
-        return false
-    end
-
-    for _, blockedslot in ipairs(CURSED_SLOTS) do
-        if blockedslot == slot then
-            return true
-        end
-    end
-
-    return false
-end
-
-local function CursedInventory(inst)
-    if not inst.components.inventory then return end
-
-    if inst:HasTag("vetcurse") then
-        for slot = 11, 15 do
-            local item = inst.components.inventory:GetItemInSlot(slot)
-            if item ~= nil then
-                inst.components.inventory:DropItem(item, true, true)
-            end
-        end
-    end
-end
-
 local function ToggleUniqueVetCurse(inst, toggle)
     if toggle then
         for slot = 11, 15 do
