@@ -1634,7 +1634,7 @@ local function SnifferFoodScoreCalculations(inst, container, v)
     inst.foodscore = inst.foodscore + (delta > 0 and ((delta * preparedmult) * stackmult) or delta)
 end
 
-local NO_CONTAINER_PREFABS = {"lureplant", "catcoon"}
+local NO_CONTAINER_PREFABS = {"lureplant", "catcoon", "uncompromising_winkyburrow", "uncompromising_winkyhomeburrow"}
 local function IsProperContainer(owner)
     return not owner or owner and not (table.contains(NO_CONTAINER_PREFABS, owner.prefab) or owner:HasAnyTag("lamp", "yots_post", "krampus_middleman", "pocketdimension_container", "buried"))
 end
@@ -1652,6 +1652,69 @@ local function TrySpawnIcon(v, owner, intensity)
     end
 end
 
+local function GetProxy(inst)
+	return inst.components.container_proxy ~= nil and inst.components.container_proxy.master or nil
+end
+
+local function GetIntensity(item, in_container)
+	return not in_container and ((item:HasTag("fresh") and .5) or (item:HasTag("stale") and .75) or (item:HasTag("spoiled") and .8)) or ((item:HasTag("stale") and .5) or (item:HasTag("spoiled") and .75)) or (IsAVersionOfRot(item) and 1)
+end
+
+local function DimensionalCalculations(in_container, item, fx_target, owner)
+	local intensity = GetIntensity(item, in_container)
+	if intensity ~= nil then
+		TrySpawnIcon(fx_target, owner, intensity)
+	end
+end
+
+local function DDVisual(owner, proxy)
+	if proxy == nil or not proxy:IsValid() or proxy.components.container_proxy == nil then
+		return
+	end
+
+	if table.contains(NO_CONTAINER_PREFABS, proxy.prefab) then
+		return
+	end
+
+	local master = GetProxy(proxy)
+	if master == nil or master.components.container == nil then
+		return
+	end
+
+	local MORE = nil
+
+	for k, item in pairs(master.components.container.slots) do
+		if item ~= nil and item:IsValid() then
+			local intensity = GetIntensity(item, true)
+			if intensity ~= nil and (MORE == nil or intensity > MORE) then
+				MORE = intensity
+			end
+		end
+	end
+
+	if MORE ~= nil then
+		TrySpawnIcon(proxy, owner, MORE)
+	end
+end
+
+local function DDScore(inst, proxy, scanned_masters)
+	local master = GetProxy(proxy)
+	if master == nil or master.components.container == nil then
+		return
+	end
+
+	if scanned_masters[master] then
+		return
+	end
+	scanned_masters[master] = true
+
+	for k, item in pairs(master.components.container.slots) do
+		if item ~= nil and item:IsValid() then
+			SnifferFoodScoreCalculations(inst, true, item)
+		end
+	end
+end
+
 local function FoodScoreCalculations(container, v, owner)
     local intensity = not container and (v:HasTag("fresh") and .5 or v:HasTag("stale") and .75 or v:HasTag("spoiled") and .8)
         or (v:HasTag("stale") and .5 or v:HasTag("spoiled") and .75) or IsAVersionOfRot(v) and 1
@@ -1661,23 +1724,31 @@ end
 
 local NOTAGS = {"engineeringbatterypowered", "smallcreature", "_container", "spore", "NORATCHECK", "_combat", "_health", "balloon", "heavy", "projectile", "frozen", "deployedfarmplant", "outofreach"}
 local function Sniffertime(owner, sniffer)
-    if not owner or not owner:IsValid() or not sniffer or not sniffer:IsValid() then
-        return
-    end
+	if not owner or not owner:IsValid() or not sniffer or not sniffer:IsValid() then
+		return
+	end
 
-    local x, y, z = sniffer.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM, {"_inventoryitem"}, NOTAGS)
+	local x, y, z = sniffer.Transform:GetWorldPosition()
+	local ents = TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM, {"_inventoryitem"}, NOTAGS)
 
-    for i, v in ipairs(ents) do
-        if v:IsValid() and v.components.inventoryitem ~= nil then
-            local container = v.components.inventoryitem:IsHeld()
-                and (v.components.inventoryitem:GetGrandOwner() or v.components.inventoryitem.owner)
+	for i, v in ipairs(ents) do
+		if v:IsValid() and v.components.inventoryitem ~= nil then
+			local container = v.components.inventoryitem:IsHeld()
+				and (v.components.inventoryitem:GetGrandOwner() or v.components.inventoryitem.owner)
 
-            if IsProperContainer(container) then
-                FoodScoreCalculations(container, v, owner)
-            end
-        end
-    end
+			if IsProperContainer(container) then
+				FoodScoreCalculations(container, v, owner)
+			end
+		end
+	end
+
+	local check = TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM, nil, {"INLIMBO", "FX", "NOCLICK"})
+
+	for i, v in ipairs(check) do
+		if v:IsValid() and v.components.container_proxy ~= nil then
+			DDVisual(owner, v)
+		end
+	end
 end
 
 local function TimeForACheckUp(inst, dev)
@@ -1722,6 +1793,17 @@ local function TimeForACheckUp(inst, dev)
         end
     end
 
+	local DiferentDD = {}
+	local check = TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM, nil, {"INLIMBO", "FX", "NOCLICK"})
+
+	for i, v in ipairs(check) do
+		if (inst.ratscore + inst.foodscore + inst.burrowbonus) < 300 then
+			if v:IsValid() and v.components.container_proxy ~= nil and IsProperContainer(v) then
+				DDScore(inst, v, DiferentDD)
+			end
+		end
+	end
+	
     inst.ratscore = inst.ratscore + inst.foodscore + inst.burrowbonus
     -- print("------------------------")
     -- print("Itemscore = "..inst.itemscore)
