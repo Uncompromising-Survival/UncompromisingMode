@@ -64,6 +64,9 @@ RECIPE_DESC.TRINKET_6 = "A key ingredient for modern marvels."
 RECIPE_DESC.PORTABLEBOAT_ITEM = "Pack up and go!"
 RECIPE_DESC.MASTUPGRADE_WINDTURBINE_ITEM = "Full speed ahead!"
 RECIPE_DESC.CODEX_MANTRA = "Repeat after me."
+if GetModConfigData("telestaff_rework") then
+    RECIPE_DESC.TELEBASE = "Gems included."
+end
 -- sailing rebalance strings
 RECIPE_DESC.MOONSTORM_STATIC_ITEM = "The power of the moon, contained!"
 RECIPE_DESC.ALTERGUARDIANHATSHARD = "Harness the moonlight."
