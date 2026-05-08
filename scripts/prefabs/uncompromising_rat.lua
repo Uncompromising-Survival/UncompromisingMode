@@ -1657,7 +1657,8 @@ local function GetProxy(inst)
 end
 
 local function GetIntensity(item, in_container)
-    return not in_container and ((item:HasTag("fresh") and .5) or (item:HasTag("stale") and .75) or (item:HasTag("spoiled") and .8)) or ((item:HasTag("stale") and .5) or (item:HasTag("spoiled") and .75)) or (IsAVersionOfRot(item) and 1)
+    return not in_container and (item:HasTag("fresh") and .5 or item:HasTag("stale") and .75 or item:HasTag("spoiled") and .8)
+		or (item:HasTag("stale") and .5 or item:HasTag("spoiled") and .75) or IsAVersionOfRot(item) and 1
 end
 
 local function DimensionalCalculations(in_container, item, fx_target, owner)
