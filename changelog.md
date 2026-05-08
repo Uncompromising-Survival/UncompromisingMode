@@ -200,6 +200,7 @@
 - Mushtree Petrification Disasters are of shorter range for blue mushrooms.
 - Rice is no longer required on worldgen, making worldgen restart less.
 - Seawreath makes you wet and has 60 summer insulation, similar to the fashion melon.
+- Strawhat rain protection increased from 20% to 35%
 
 ## Fixes
 - Fixed Deerclops's timer not starting.
