@@ -1320,37 +1320,37 @@ local function fn_burrow()
 end
 
 local function WinkyInteract(inst, doer)
-	if doer.components.leader:CountFollowers("winky_rat") < 12 then
-		if inst.ratcount < 3 then
-			if doer:HasTag("ratwhisperer") and doer.components.hunger and doer.components.hunger.current >= 20 then
-				doer.components.hunger:DoDelta(-20)
-				inst.ratcount = inst.ratcount + 1
+    if doer.components.leader:CountFollowers("winky_rat") < 12 then
+        if inst.ratcount < 3 then
+            if doer:HasTag("ratwhisperer") and doer.components.hunger and doer.components.hunger.current >= 20 then
+                doer.components.hunger:DoDelta(-20)
+                inst.ratcount = inst.ratcount + 1
 
-				local newrat = SpawnPrefab("uncompromising_rat")
+                local newrat = SpawnPrefab("uncompromising_rat")
 
-				newrat.Transform:SetPosition(inst.Transform:GetWorldPosition())
-				doer.components.leader:AddFollower(newrat)
+                newrat.Transform:SetPosition(inst.Transform:GetWorldPosition())
+                doer.components.leader:AddFollower(newrat)
 
-				newrat:AddTag("notraptrigger")
-				newrat:RemoveTag("canbetrapped")
-				newrat:AddTag("companion")
-				newrat:AddTag("winky_rat")
+                newrat:AddTag("notraptrigger")
+                newrat:RemoveTag("canbetrapped")
+                newrat:AddTag("companion")
+                newrat:AddTag("winky_rat")
                 newrat:RemoveTag("hostile")
 
-				inst.AnimState:PlayAnimation("dig")
-				inst.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/submerge")
+                inst.AnimState:PlayAnimation("dig")
+                inst.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/submerge")
                 --[[if inst.ratcount == 3 then
                     doer.components.talker:Say(GetActionFailString(doer, "TOUCH_BURROW_RATLESS")) --"No more in this tunnel? I will dig another."
                 end]]
-			else
-				doer.components.talker:Say(GetActionFailString(doer, "TOUCH_BURROW_NO_HUNGER")) --"Broke."
-			end
+            else
+                doer.components.talker:Say(GetActionFailString(doer, "TOUCH_BURROW_NO_HUNGER")) --"Broke."
+            end
         else
             inst:winkyburrowremove()
-		end
-	else
-		doer.components.talker:Say(GetActionFailString(doer, "TOUCH_BURROW_RAT_LIMIT")) --"There are too many of them."
-	end
+        end
+    else
+        doer.components.talker:Say(GetActionFailString(doer, "TOUCH_BURROW_RAT_LIMIT")) --"There are too many of them."
+    end
 end
 
 local function WinkyHomeInteract(inst, doer)
@@ -1371,8 +1371,8 @@ local function WinkyHomeInteract(inst, doer)
 
             inst.AnimState:PlayAnimation("dig")
             inst.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/submerge")
-		else
-			doer.components.talker:Say(GetActionFailString(doer, "TOUCH_BURROW_NO_HUNGER")) --"Broke."
+        else
+            doer.components.talker:Say(GetActionFailString(doer, "TOUCH_BURROW_NO_HUNGER")) --"Broke."
         end
     else
         doer.components.talker:Say(GetActionFailString(doer, "TOUCH_BURROW_RAT_LIMIT")) --"There are too many of them."
@@ -1399,8 +1399,8 @@ local function winkyburrowremove(inst)
 end
 
 local function winkyhomeburrowremove(inst)
-	winkyburrowremove(inst)
-	TheWorld.winkyburrowhome = false
+    winkyburrowremove(inst)
+    TheWorld.winkyburrowhome = false
 end
 
 local function WinkyBurrowDespawn(inst)
@@ -1538,7 +1538,7 @@ local function fn_winkyhomeburrow()
     -- inst.components.channelable.ignore_prechannel = true
 
     inst:DoTaskInTime(1, BurrowAnim)
-	inst:DoTaskInTime(0, function() TheWorld.winkyburrowhome = true end)
+    inst:DoTaskInTime(0, function() TheWorld.winkyburrowhome = true end)
 
     inst.winkyburrowremove = winkyhomeburrowremove
     inst.OnSave = onsave_winkyburrow
@@ -1634,7 +1634,7 @@ local function SnifferFoodScoreCalculations(inst, container, v)
     inst.foodscore = inst.foodscore + (delta > 0 and ((delta * preparedmult) * stackmult) or delta)
 end
 
-local NO_CONTAINER_PREFABS = {"lureplant", "catcoon"}
+local NO_CONTAINER_PREFABS = {"lureplant", "catcoon", "uncompromising_winkyburrow", "uncompromising_winkyhomeburrow"}
 local function IsProperContainer(owner)
     return not owner or owner and not (table.contains(NO_CONTAINER_PREFABS, owner.prefab) or owner:HasAnyTag("lamp", "yots_post", "krampus_middleman", "pocketdimension_container", "buried"))
 end
@@ -1649,6 +1649,70 @@ local function TrySpawnIcon(v, owner, intensity)
         icon.Network:SetClassifiedTarget(owner)
         icon.Transform:SetPosition(x, y, z)
         icon:Resize(intensity)
+    end
+end
+
+local function GetProxy(inst)
+    return inst.components.container_proxy ~= nil and inst.components.container_proxy.master or nil
+end
+
+local function GetIntensity(item, in_container)
+    return not in_container and (item:HasTag("fresh") and .5 or item:HasTag("stale") and .75 or item:HasTag("spoiled") and .8)
+        or (item:HasTag("stale") and .5 or item:HasTag("spoiled") and .75) or IsAVersionOfRot(item) and 1
+end
+
+local function DimensionalCalculations(in_container, item, fx_target, owner)
+    local intensity = GetIntensity(item, in_container)
+    if intensity ~= nil then
+        TrySpawnIcon(fx_target, owner, intensity)
+    end
+end
+
+local function DDVisual(owner, proxy)
+    if proxy == nil or not proxy:IsValid() or proxy.components.container_proxy == nil then
+        return
+    end
+
+    if table.contains(NO_CONTAINER_PREFABS, proxy.prefab) then
+        return
+    end
+
+    local master = GetProxy(proxy)
+    if master == nil or master.components.container == nil then
+        return
+    end
+
+    local MORE = nil
+
+    for k, item in pairs(master.components.container.slots) do
+        if item ~= nil and item:IsValid() then
+            local intensity = GetIntensity(item, true)
+            if intensity ~= nil and (MORE == nil or intensity > MORE) then
+                MORE = intensity
+            end
+        end
+    end
+
+    if MORE ~= nil then
+        TrySpawnIcon(proxy, owner, MORE)
+    end
+end
+
+local function DDScore(inst, proxy, scanned_masters)
+    local master = GetProxy(proxy)
+    if master == nil or master.components.container == nil then
+        return
+    end
+
+    if scanned_masters[master] then
+        return
+    end
+    scanned_masters[master] = true
+
+    for k, item in pairs(master.components.container.slots) do
+        if item ~= nil and item:IsValid() then
+            SnifferFoodScoreCalculations(inst, true, item)
+        end
     end
 end
 
@@ -1670,25 +1734,31 @@ local function Sniffertime(owner, sniffer)
 
     for i, v in ipairs(ents) do
         if v:IsValid() and v.components.inventoryitem ~= nil then
-            local container = v.components.inventoryitem:IsHeld()
-                and (v.components.inventoryitem:GetGrandOwner() or v.components.inventoryitem.owner)
-
+            local container = v.components.inventoryitem:IsHeld() and (v.components.inventoryitem:GetGrandOwner() or v.components.inventoryitem.owner)
             if IsProperContainer(container) then
                 FoodScoreCalculations(container, v, owner)
             end
+        end
+    end
+
+    local check = TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM, nil, {"INLIMBO", "FX", "NOCLICK"})
+
+    for i, v in ipairs(check) do
+        if v:IsValid() and v.components.container_proxy ~= nil then
+            DDVisual(owner, v)
         end
     end
 end
 
 local function TimeForACheckUp(inst, dev)
     local x, y, z = inst.Transform:GetWorldPosition()
-	
+    
     local players = TheSim:FindEntities(x, y, z, TUNING.DSTU.SNIFFER_PLAYER, {"player"}, {"playerghost"})
     for a, b in ipairs(players) do
         if b:IsValid() and b:IsNear(inst, TUNING.DSTU.SNIFFER_PLAYER) then
-			Sniffertime(b, inst)
-		end
-	end
+            Sniffertime(b, inst)
+        end
+    end
 
     local ents = TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM, {"_inventoryitem"}, NOTAGS)
     --[[print("THE RAT SNIFFS")
@@ -1722,6 +1792,17 @@ local function TimeForACheckUp(inst, dev)
         end
     end
 
+    local DiferentDD = {}
+    local check = TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM, nil, {"INLIMBO", "FX", "NOCLICK"})
+
+    for i, v in ipairs(check) do
+        if (inst.ratscore + inst.foodscore + inst.burrowbonus) < 300 then
+            if v:IsValid() and v.components.container_proxy ~= nil and IsProperContainer(v) then
+                DDScore(inst, v, DiferentDD)
+            end
+        end
+    end
+    
     inst.ratscore = inst.ratscore + inst.foodscore + inst.burrowbonus
     -- print("------------------------")
     -- print("Itemscore = "..inst.itemscore)
@@ -1761,33 +1842,33 @@ local function TimeForACheckUp(inst, dev)
             end
         end]]
 
-		local rattimer = TheWorld.components.ratcheck ~= nil and TheWorld.components.ratcheck:GetRatTimer() or nil
-		local warn = GetTime()
+        local rattimer = TheWorld.components.ratcheck ~= nil and TheWorld.components.ratcheck:GetRatTimer() or nil
+        local warn = GetTime()
 
-		if rattimer ~= nil and rattimer < 3000 and inst.ratscore ~= nil and inst.ratscore > 0 and (inst.last_ratwarning_time == nil or warn - inst.last_ratwarning_time >= 600) then
-			inst.last_ratwarning_time = warn
+        if rattimer ~= nil and rattimer < 3000 and inst.ratscore ~= nil and inst.ratscore > 0 and (inst.last_ratwarning_time == nil or warn - inst.last_ratwarning_time >= 600) then
+            inst.last_ratwarning_time = warn
 
-			if inst.ratwarning > 5 then
-				inst.ratwarning = 5
-			end
+            if inst.ratwarning > 5 then
+                inst.ratwarning = 5
+            end
 
-			for c = 1, inst.ratwarning do
-				inst:DoTaskInTime(c / 5, function(inst)
-					local warning = SpawnPrefab("uncompromising_ratwarning")
-					warning.Transform:SetPosition(inst.Transform:GetWorldPosition())
-				end)
-			end
+            for c = 1, inst.ratwarning do
+                inst:DoTaskInTime(c / 5, function(inst)
+                    local warning = SpawnPrefab("uncompromising_ratwarning")
+                    warning.Transform:SetPosition(inst.Transform:GetWorldPosition())
+                end)
+            end
 
-			local players = TheSim:FindEntities(x, y, z, 40, {"player"}, {"playerghost"})
-			for a, b in ipairs(players) do
-				local str = inst.burrowbonus > inst.foodscore and "BURROWS" or inst.foodscore > inst.burrowbonus and "FOOD" or nil
-				if str ~= nil then
-					b:DoTaskInTime(2 + math.random(), function(b)
-						b.components.talker:Say(GetString(b, "ANNOUNCE_RATSNIFFER_"..str, "LEVEL_1"))
-					end)
-				end
-			end
-		end
+            local players = TheSim:FindEntities(x, y, z, 40, {"player"}, {"playerghost"})
+            for a, b in ipairs(players) do
+                local str = inst.burrowbonus > inst.foodscore and "BURROWS" or inst.foodscore > inst.burrowbonus and "FOOD" or nil
+                if str ~= nil then
+                    b:DoTaskInTime(2 + math.random(), function(b)
+                        b.components.talker:Say(GetString(b, "ANNOUNCE_RATSNIFFER_"..str, "LEVEL_1"))
+                    end)
+                end
+            end
+        end
     end
 end
 
@@ -2012,10 +2093,10 @@ local function CheckTargetPiece(inst)
 
         inst.SoundEmitter:KillSound("ratping")
         inst.SoundEmitter:PlaySound("UCSounds/ratping/ping_hotter", "ratping")
-		local sniffer = FindEntity(owner, 40, nil, {"rat_sniffer"})
-		if sniffer ~= nil then
-			Sniffertime(owner, sniffer)
-		end
+        local sniffer = FindEntity(owner, 40, nil, {"rat_sniffer"})
+        if sniffer ~= nil then
+            Sniffertime(owner, sniffer)
+        end
     end
     --inst.components.rechargeable:Discharge(8)
 end
