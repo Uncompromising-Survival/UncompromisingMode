@@ -199,6 +199,7 @@
 - Tuned gemology mushtrees spawn chances.
 - Mushtree Petrification Disasters are of shorter range for blue mushrooms.
 - Rice is no longer required on worldgen, making worldgen restart less.
+- Seawreath makes you wet and has 60 summer insulation, similar to the fashion melon.
 
 ## Fixes
 - Fixed Deerclops's timer not starting.
@@ -223,6 +224,7 @@
 - Implemented missing art and recipes for new Magma Caves and Hooded Forest turf items.
 - Fixed Boat Bottle boat VFX sort order.
 - Updated Telelocator Focus recipe description change.
+- Fixed battle songs losing lunar melodist effects on shard change and world load.
 ⠀
 ## Removed
 - Removed old deprecated Pyre Nettles config, updated Heat Waves config description.
