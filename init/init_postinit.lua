@@ -255,6 +255,7 @@ local prefab_post = {
     "um_moonmutables",
     "slurper",
     "kelphat",
+    "strawhat",
 }
 
 local stategraph_post = {
