@@ -538,7 +538,9 @@ local minimap_icons = {
     "cave_entrance_magmabiome",
     "cave_entrance_moon",
     "um_spongeplant",
-    "blueberryplant"
+    "blueberryplant",
+    "sludgestack",
+    "sludgestack_corked"
 }
 
 for _, item in ipairs(inventoryitems) do
