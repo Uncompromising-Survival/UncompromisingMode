@@ -253,7 +253,8 @@ local prefab_post = {
     "tillweedsalve",
     "ancienttree_fruits",
     "um_moonmutables",
-    "slurper"
+    "slurper",
+    "kelphat",
 }
 
 local stategraph_post = {

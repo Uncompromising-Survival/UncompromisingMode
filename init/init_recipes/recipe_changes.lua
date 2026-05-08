@@ -398,6 +398,8 @@ AddRecipeToFilter("trunkvest_summer", "RAIN")
 ChangeSortKey("trunkvest_summer", "armor_sharksuit_um", "RAIN", false)
 AddRecipeToFilter("reflectivevest", "RAIN")
 ChangeSortKey("reflectivevest", "um_armor_pyre_nettles", "RAIN", true)
+AddRecipeToFilter("kelphat", "SUMMER")
+ChangeSortKey("kelphat", "watermelonhat", "SUMMER", false)
 
 if TUNING.DSTU.SHAVE_MODE then
     AllRecipes["razor"].level = TechTree.Create(TECH.NONE)
