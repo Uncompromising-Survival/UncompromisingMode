@@ -531,7 +531,6 @@ local minimap_icons = {
     "hawaiianshirt",
     "skullchest",
     "winona_toolbox",
-    "rimeweed",
     "um_reeds_lunar",
     "um_fern_fox_den",
     "um_manny",

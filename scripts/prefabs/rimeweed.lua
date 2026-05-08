@@ -664,8 +664,6 @@ local function mainweed()
     inst.entity:AddNetwork()
     inst.entity:AddMiniMapEntity()
 
-    inst.MinimapEntity:SetIcon("rimeweed.tex")
-
     inst.AnimState:SetBank("um_rimeweed")
     inst.AnimState:SetBuild("um_rimeweed")
     --inst.AnimState:PlayAnimation("crop_full", true)
