@@ -222,7 +222,7 @@
 - Fixed Telelocator Staff not draining durability when causing mini earthquakes.
 - Implemented missing art and recipes for new Magma Caves and Hooded Forest turf items.
 - Fixed Boat Bottle boat VFX sort order.
-- Reverted Telelocator Focus recipe description change.
+- Updated Telelocator Focus recipe description change.
 ⠀
 ## Removed
 - Removed old deprecated Pyre Nettles config, updated Heat Waves config description.
