@@ -7,7 +7,7 @@ end
 
 local function DisarmTarget(inst, target)
     local item = nil
-    if target and target.components.inventory and not target:HasTag("stronggrip") then
+    if target and target.components.inventory and not target.components.inventory:IsThiefProof() and not target:HasTag("stronggrip") then
         item = target.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
     end
     if item and not item:HasTag("nosteal") and item.Physics then

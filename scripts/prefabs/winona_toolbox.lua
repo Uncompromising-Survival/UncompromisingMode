@@ -44,7 +44,7 @@ local function MakeTackleContainer(name, bank, build, assets)
         inst.entity:AddMiniMapEntity()
         inst.entity:AddNetwork()
 
-        inst.MiniMapEntity:SetIcon(name .. ".png")
+        inst.MiniMapEntity:SetIcon(name .. ".tex")
 
         inst:AddTag("waterproofer")
         inst:AddTag("portablestorage")

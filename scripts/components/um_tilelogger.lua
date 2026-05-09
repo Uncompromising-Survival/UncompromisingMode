@@ -12,7 +12,7 @@ return Class(function(self, inst)
         for x = -max_x, max_x, 4 do --Instead relate to world size if accessible
             for z = -max_z, max_z, 4 do
                 if TheWorld.Map:GetTileAtPoint(x, 0, z) == tiletype then
-                    table.insert(tileTable, { x= x, z= z })
+                    table.insert(tileTable, { x = x, z = z })
                 end
             end
         end
@@ -58,9 +58,15 @@ return Class(function(self, inst)
             end)
         end
 
+        if not self.OceanCoastal and TheWorld:HasTag("cave") then
+            self.inst:DoTaskInTime(0, function()
+                self.OceanCoastal = self:AnalyzeWorld(WORLD_TILES["OCEAN_COASTAL"])
+            end)
+        end
+
         if not self.Magma and TheWorld:HasTag("cave") then
             self.inst:DoTaskInTime(0, function()
-                self.Magma = self:AnalyzeWorld(WORLD_TILES["UM_MAGMA_LAVAMOLTEN"])
+                self.Magma = self:AnalyzeWorld(WORLD_TILES["UM_MAGMA_LAVATEMP"])
             end)
         end
     end

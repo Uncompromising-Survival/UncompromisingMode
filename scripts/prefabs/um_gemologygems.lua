@@ -146,6 +146,15 @@ local function MakeGem(gem, bank, build, anim)
 
         inst.entity:SetPristine()
 
+        --THANK YOU KLEI
+        --also this needs to be on common side.
+        inst.stackable_CanStackWithFn = function(inst, item)
+            if inst:HasTag("gemology_gem") and item:HasTag("gemology_gem") and inst.GetTier ~= nil and item.GetTier ~= nil and inst.IsRevealed ~= nil and item.IsRevealed ~= nil then
+                return inst:GetTier() == item:GetTier() and item:IsRevealed() == inst:IsRevealed()
+            end
+        end
+
+
         if not TheWorld.ismastersim then
             return inst
         end
@@ -174,6 +183,8 @@ local function MakeGem(gem, bank, build, anim)
         inst.components.workable:SetOnFinishCallback(OnWorked)
 
         inst:AddComponent("inventoryitem")
+        inst:AddComponent("stackable")
+        inst.components.stackable.maxsize = 10 --? idk.
 
         inst:AddComponent("tradable")
         inst.components.tradable.rocktribute = 8

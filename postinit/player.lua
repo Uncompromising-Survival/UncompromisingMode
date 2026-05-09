@@ -166,7 +166,7 @@ local function OnSetOwner(inst)
 end
 local SCRAPBOOK_CANT_TAGS = { "FX", "INLIMBO" }
 local function UpdateMineralLog(inst)
-	--assert(inst = ThePlayer)
+    --assert(inst = ThePlayer)
     local x, y, z = inst.Transform:GetWorldPosition()
     local ents = TheSim:FindEntities(x, y, z, TUNING.SCRAPBOOK_UPDATERADIUS, {"gemology_gem"}, SCRAPBOOK_CANT_TAGS) 
     for _, ent in ipairs(ents) do
@@ -272,16 +272,16 @@ env.AddPlayerPostInit(function(inst)
         if inst ~= nil and inst.components.health ~= nil and
             not inst:HasTag("playerghost") then
             if not inst:HasTag("vetcurse") then
-                inst.components.debuffable:AddDebuff("buff_vetcurse",
-                    "buff_vetcurse")
-                inst:PushEvent("foodbuffattached",
-                    { buff = "ANNOUNCE_ATTACH_BUFF_VETCURSE", 1 })
+                --inst.components.debuffable:AddDebuff("buff_vetcurse", "buff_vetcurse")
+                if inst.UMToggleVetCurse then inst:UMToggleVetCurse(true) end
+                inst:PushEvent("foodbuffattached", { buff = "ANNOUNCE_ATTACH_BUFF_VETCURSE", 1 })
             end
         end
     elseif TUNING.DSTU.VETCURSE == "off" and inst:HasTag("vetcurse") then
-        if inst ~= nil and inst.components.debuffable ~= nil then
+        --[[if inst ~= nil and inst.components.debuffable ~= nil then
             inst.components.debuffable:RemoveDebuff("buff_vetcurse")
-        end -- help I can't get this stupid thing to work!!
+        end -- help I can't get this stupid thing to work!!]]
+        if inst.UMToggleVetCurse then inst:UMToggleVetCurse() end
     end
 
     inst:AddTag("SLUDGE_CORK_upgradeuser")
@@ -322,17 +322,15 @@ env.AddPlayerPostInit(function(inst)
     end
 
     local _OnSave = inst.OnSave
-
     inst.OnSave = function(inst, data, ...)
         data.um_all_followers = inst.um_all_followers
 
-        if _OnSave ~= nil then
+        if _OnSave then
             return _OnSave(inst, data, ...)
         end
     end
 
     local _OnLoad = inst.OnLoad
-
     inst.OnLoad = function(inst, data, ...)
         if data then
             if data.um_all_followers then
@@ -354,8 +352,7 @@ env.AddPlayerPostInit(function(inst)
                 end
             end
         end
-
-        if _OnLoad ~= nil then
+        if _OnLoad then
             return _OnLoad(inst, data, ...)
         end
     end

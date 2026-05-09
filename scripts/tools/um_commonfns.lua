@@ -5,6 +5,15 @@ UMCommonFns.Say = function(inst, string)
     if talker then talker:Say(string) end
 end
 
+UMCommonFns.KNOCKBACK_CANT_TAGS = {"fat_gang", "foodknockbackimmune", "heavybody"}
+UMCommonFns.KNOCKBACK_ARMOR_CANT_TAGS = {"heavyarmor", "knockback_protection"}
+UMCommonFns.ShouldKnockback = function(inst)
+    local inventory = inst.components.inventory
+    local bodyslot = inventory and inventory:GetEquippedItem(EQUIPSLOTS.BODY)
+    return not inst:HasAnyTag(UMCommonFns.KNOCKBACK_CANT_TAGS) and not (inst.sg and inst.sg:HasStateTag("shell")) and not (inst.components.rider and inst.components.rider:IsRiding())
+        and (not bodyslot or not bodyslot:HasAnyTag(UMCommonFns.KNOCKBACK_ARMOR_CANT_TAGS))
+end
+
 UMCommonFns.VetcurseUnequip = function(inst, owner, slot)
     if not owner:HasTag("vetcurse") and owner:HasTag("player") and not owner.components.inventory.isloading then
         inst:DoTaskInTime(0, function(inst)

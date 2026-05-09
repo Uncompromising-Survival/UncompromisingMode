@@ -56,45 +56,45 @@ local function ToDigOrNotToDig(inst)
             inst.components.workable:SetWorkLeft(1)
             inst.components.workable:SetOnFinishCallback(on_blueberry_mine)
             inst.components.workable:SetWorkable(true)
-            DisableBurn(inst)            
+            DisableBurn(inst)
         else
             inst.components.workable:SetWorkable(false)
-            inst:AddTag("plant")    
-            BurnToTheGround(inst)                
+            inst:AddTag("plant")
+            BurnToTheGround(inst)
         end
         return
     end
-    
+
     if inst.harvestable == "full" then
         inst.components.workable:SetWorkAction(ACTIONS.DIG)
         inst.components.workable:SetWorkLeft(1)
-        inst.components.workable:SetOnFinishCallback(on_blueberry_dug_up)        
+        inst.components.workable:SetOnFinishCallback(on_blueberry_dug_up)
         inst.components.workable:SetWorkable(true)
-        DisableBurn(inst)        
+        DisableBurn(inst)
     else
         inst.components.workable:SetWorkable(false)
         inst:AddTag("plant")
-        BurnToTheGround(inst)        
+        BurnToTheGround(inst)
     end
 end
 
 local function on_deactivate(inst)
     -- if inst.components.lootdropper ~= nil then
-        -- if inst.harvestable == "full" then
-            -- if math.random() > 0.1 then
+    -- if inst.harvestable == "full" then
+    -- if math.random() > 0.1 then
     inst.components.lootdropper:SpawnLootPrefab("giant_blueberry")
-                -- local x, y, z = inst.Transform:GetWorldPosition()
-                -- local otherbombs = TheSim:FindEntities(x, y, z, 1.1*TUNING.STARFISH_TRAP_RADIUS, {"blueberrybomb"}, mine_no_tags)
-                -- for i, target in ipairs(otherbombs) do
-                    -- if target ~= inst and target.components.mine and not target.components.mine.issprung and not target.froze then
-                        -- target.components.mine:Explode(target)
-                    -- end
-                -- end                
-            -- else
-                -- local berryman = SpawnPrefab("fruitbat")
-                -- berryman.Transform:SetPosition(inst.Transform:GetWorldPosition())
-            -- end
-        -- end    
+    -- local x, y, z = inst.Transform:GetWorldPosition()
+    -- local otherbombs = TheSim:FindEntities(x, y, z, 1.1*TUNING.STARFISH_TRAP_RADIUS, {"blueberrybomb"}, mine_no_tags)
+    -- for i, target in ipairs(otherbombs) do
+    -- if target ~= inst and target.components.mine and not target.components.mine.issprung and not target.froze then
+    -- target.components.mine:Explode(target)
+    -- end
+    -- end
+    -- else
+    -- local berryman = SpawnPrefab("fruitbat")
+    -- berryman.Transform:SetPosition(inst.Transform:GetWorldPosition())
+    -- end
+    -- end
     -- end
     if inst.harvestable == "regrow" then
         inst:Remove()
@@ -105,7 +105,7 @@ local function on_deactivate(inst)
     end
 end
 
-local function OnPickedFn(inst,picker)
+local function OnPickedFn(inst, picker)
     if not inst.components.mine.issprung then
         inst.components.mine:Explode()
     end
@@ -128,7 +128,7 @@ on_blueberry_dug_up = function(inst, digger)
         --inst.components.workable:SetWorkable(false)
         inst:AddTag("plant")
         --inst:DoTaskInTime(5, function(inst)
-            --inst.components.workable:SetWorkable(true)
+        --inst.components.workable:SetWorkable(true)
         --end)
     else
         --inst:Remove()
@@ -136,14 +136,14 @@ on_blueberry_dug_up = function(inst, digger)
 end
 
 local function MakeNotWinter(inst)
-    inst.components.mine:SetRadius(TUNING.STARFISH_TRAP_RADIUS*1.1)
+    inst.components.mine:SetRadius(TUNING.STARFISH_TRAP_RADIUS * 1.1)
     ToDigOrNotToDig(inst)
 end
 
 local function Melt(inst)
     MakeNotWinter(inst)
     inst.AnimState:PlayAnimation("melt")
-    inst.AnimState:PushAnimation("idle"..math.random(1,4))
+    inst.AnimState:PushAnimation("idle" .. math.random(1, 4))
 end
 
 local function on_anim_over(inst)
@@ -153,21 +153,21 @@ local function on_anim_over(inst)
     if inst.froze then
         if inst.harvestable == "full" and TheWorld.state.iswinter then
             inst.AnimState:PushAnimation("idle_frozen", true)
-            elseif not TheWorld.state.iswinter  then
+        elseif not TheWorld.state.iswinter then
             inst.froze = false
             Melt(inst)
         else
             inst.AnimState:PushAnimation("trap_idle", true)
         end
     elseif not TheWorld.state.iswinter then
-        inst.AnimState:PushAnimation("idle"..math.random(1,4))
+        inst.AnimState:PushAnimation("idle" .. math.random(1, 4))
     end
 end
 
 -- Copied from mine.lua to emulate its mine test.
 local mine_test_fn = function(target, inst)
     return not (target.components.health ~= nil and target.components.health:IsDead())
-            and (target.components.combat ~= nil and target.components.combat:CanBeAttacked(inst))
+        and (target.components.combat ~= nil and target.components.combat:CanBeAttacked(inst))
 end
 
 local function do_snap(inst)
@@ -180,16 +180,16 @@ local function do_snap(inst)
         FxAppear(inst)
         -- Do an AOE attack, based on how the combat component does it.
         local x, y, z = inst.Transform:GetWorldPosition()
-        local target_ents = TheSim:FindEntities(x, y, z, 1.1*TUNING.STARFISH_TRAP_RADIUS, mine_must_tags, mine_no_tags, mine_test_tags)
+        local target_ents = TheSim:FindEntities(x, y, z, 1.1 * TUNING.STARFISH_TRAP_RADIUS, mine_must_tags, mine_no_tags, mine_test_tags)
         for i, target in ipairs(target_ents) do
             if target ~= inst and target.entity:IsVisible() and mine_test_fn(target, inst) then
                 target.components.combat:GetAttacked(inst, TUNING.STARFISH_TRAP_DAMAGE)
             end
         end
-        local otherbombs = TheSim:FindEntities(x, y, z, 3*TUNING.STARFISH_TRAP_RADIUS, {"blueberrybomb"}, mine_no_tags)
+        local otherbombs = TheSim:FindEntities(x, y, z, 3 * TUNING.STARFISH_TRAP_RADIUS, { "blueberrybomb" }, mine_no_tags)
         for i, target in ipairs(otherbombs) do
             if target ~= inst and target.components.mine and not target.components.mine.issprung and not target.froze then
-                    target.components.mine:Explode(target)
+                target.components.mine:Explode(target)
             end
         end
         inst.harvestable = "regrow"
@@ -202,10 +202,10 @@ local function do_snap(inst)
 end
 
 local function Regrow(inst)
-    inst.components.mine:SetRadius(TUNING.STARFISH_TRAP_RADIUS*1.1)
+    inst.components.mine:SetRadius(TUNING.STARFISH_TRAP_RADIUS * 1.1)
     inst.components.mine:Reset()
     inst.harvestable = "full"
-    ToDigOrNotToDig(inst)        
+    ToDigOrNotToDig(inst)
     inst:RemoveTag("plant")
 end
 
@@ -223,7 +223,7 @@ end
 
 local function on_explode(inst, target)
     inst.AnimState:PlayAnimation("trap")
-    inst.components.mine:SetRadius(TUNING.STARFISH_TRAP_RADIUS*1.1) --Gotta Reset
+    inst.components.mine:SetRadius(TUNING.STARFISH_TRAP_RADIUS * 1.1) --Gotta Reset
     inst:RemoveEventCallback("animover", on_anim_over)
     if --[[target ~= nil and]] inst._snap_task == nil then
         local frames_until_anim_snap = 40
@@ -236,7 +236,7 @@ local function on_reset(inst)
     inst:ListenForEvent("animover", on_anim_over)
     inst.AnimState:PlayAnimation("reset")
     inst.SoundEmitter:PlaySound("turnoftides/creatures/together/starfishtrap/idle")
-    inst.AnimState:PushAnimation("idle"..math.random(1,4), true)
+    inst.AnimState:PushAnimation("idle" .. math.random(1, 4), true)
 end
 
 local function on_sprung(inst)
@@ -270,8 +270,8 @@ end
 
 on_blueberry_mine = function(inst)
     inst.components.lootdropper:SpawnLootPrefab("ice")
-    local x,y,z = inst.Transform:GetWorldPosition()
-    local players = TheSim:FindEntities(x,y,z,1.5,{"player"},{"ghost"})
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local players = TheSim:FindEntities(x, y, z, 1.5, { "player" }, { "ghost" })
     for i, v in ipairs(players) do
         if v.components.moisture ~= nil then
             v.components.moisture:DoDelta(5)
@@ -283,11 +283,11 @@ on_blueberry_mine = function(inst)
     inst.AnimState:PushAnimation("spawn")
     inst.AnimState:PushAnimation("trap_idle")
     inst.harvestable = "regrow"
-    ToDigOrNotToDig(inst)        
+    ToDigOrNotToDig(inst)
 end
 
 local function MakeWinter(inst)
-    inst.components.mine:SetRadius(TUNING.STARFISH_TRAP_RADIUS*0)
+    inst.components.mine:SetRadius(TUNING.STARFISH_TRAP_RADIUS * 0)
     ToDigOrNotToDig(inst)
 end
 
@@ -314,16 +314,16 @@ local function on_load(inst, data)
         inst.froze = false
         MakeNotWinter(inst)
     end
-    ToDigOrNotToDig(inst)    
+    ToDigOrNotToDig(inst)
 end
 
 local function OnSpring(inst)
-    if inst.pendingregrow or (inst.harvestable == "regrow" and not inst.components.timer:TimerExists("regrow"))then
+    if inst.pendingregrow or (inst.harvestable == "regrow" and not inst.components.timer:TimerExists("regrow")) then
         Regrow(inst)
     end
     if inst.harvestable == "full" and inst.froze then
-        inst:RemoveEventCallback("animover",on_anim_over)
-        inst:DoTaskInTime(3+math.random(0,15), function(inst) 
+        inst:RemoveEventCallback("animover", on_anim_over)
+        inst:DoTaskInTime(3 + math.random(0, 15), function(inst)
             Melt(inst)
             inst:ListenForEvent("animover", on_anim_over)
         end)
@@ -345,7 +345,7 @@ end
 
 local function OnWinter(inst)
     if inst.froze ~= true then
-        inst:DoTaskInTime(3+math.random(0,15), Freeze)
+        inst:DoTaskInTime(3 + math.random(0, 15), Freeze)
     end
 end
 
@@ -356,10 +356,12 @@ local function blueberryplant()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
+    inst.entity:AddMiniMapEntity()
+    inst.MiniMapEntity:SetIcon("blueberryplant.tex")
 
     inst.AnimState:SetBank("blueberryplant")
     inst.AnimState:SetBuild("blueberryplant")
-    inst.AnimState:PlayAnimation("idle"..math.random(1,4), true)
+    inst.AnimState:PlayAnimation("idle" .. math.random(1, 4), true)
 
     inst:AddTag("trap")
     inst:AddTag("blueberrybomb")
@@ -374,12 +376,12 @@ local function blueberryplant()
     if not TheWorld.ismastersim then
         return inst
     end
-    
+
     inst:DoTaskInTime(math.random() * (10 * math.random()), function(inst)
         local x, y, z = inst.Transform:GetWorldPosition()
-        
+
         local pitchers = TheSim:FindEntities(x, y, z, 50, { "pitcherplant" })
-        
+
         if pitchers == nil or #pitchers < 1 then
             SpawnPrefab("pitcherplant").Transform:SetPosition(x, y, z)
         end
@@ -397,7 +399,7 @@ local function blueberryplant()
     -- inst.components.pickable.max_cycles  = TUNING.JUNK_PILE_STAGES
     -- inst.components.pickable.cycles_left = TUNING.JUNK_PILE_STAGES
     -- inst.components.pickable.picksound = "dontstarve/wilson/pickup_reeds"
-    
+
     inst:AddComponent("workable")
     inst.components.workable:SetWorkAction(ACTIONS.DIG)
     inst.components.workable:SetWorkLeft(1)
@@ -408,7 +410,7 @@ local function blueberryplant()
     inst.components.hauntable.hauntvalue = TUNING.HAUNT_TINY
 
     inst:AddComponent("mine")
-    inst.components.mine:SetRadius(TUNING.STARFISH_TRAP_RADIUS*1.1)
+    inst.components.mine:SetRadius(TUNING.STARFISH_TRAP_RADIUS * 1.1)
     inst.components.mine:SetAlignment("plantkin") -- blueberries trigger on EVERYTHING on the ground, players and non-players alike.
     inst.components.mine:SetOnExplodeFn(on_explode)
     inst.components.mine:SetOnResetFn(on_reset)
@@ -417,17 +419,17 @@ local function blueberryplant()
     inst.components.mine:SetTestTimeFn(calculate_mine_test_time)
     inst.components.mine:SetReusable(false)
     Regrow(inst)
-    ToDigOrNotToDig(inst)    
+    ToDigOrNotToDig(inst)
 
     -- Stop the blueberries from idling in unison.
-    inst.AnimState:SetTime(math.random(0.1,0.3) * inst.AnimState:GetCurrentAnimationLength())
+    inst.AnimState:SetTime(math.random(0.1, 0.3) * inst.AnimState:GetCurrentAnimationLength())
 
     inst:AddComponent("timer")
     inst:ListenForEvent("timerdone", CheckTimeRegrow)
     -- Start the task for the characterizing additional idles.
     inst:ListenForEvent("animover", on_anim_over)
-    
-    inst:DoTaskInTime(0,function(inst) if not inst.harvestable then inst.harvestable = "full" end end)
+
+    inst:DoTaskInTime(0, function(inst) if not inst.harvestable then inst.harvestable = "full" end end)
     inst.OnSave = on_save
     inst.OnLoad = on_load
     inst.pendingregrow = false
@@ -447,7 +449,7 @@ local function on_deploy(inst, position, deployer)
 
         new_trap_starfish.Transform:SetPosition(position:Get())
         new_trap_starfish.SoundEmitter:PlaySound("dontstarve/common/plant")
-        
+
         inst:AddTag("plant")
         inst:Remove()
     end
@@ -501,7 +503,7 @@ local function blueberryexplosion()
 
     MakeInventoryPhysics(inst)
 
-    inst.Transform:SetScale(1.5,1.5,1.5)
+    inst.Transform:SetScale(1.5, 1.5, 1.5)
     inst.AnimState:SetBank("treegrowthsolution")
     inst.AnimState:SetBuild("um_goo_blue")
     inst.AnimState:PlayAnimation("use", false)
@@ -519,17 +521,17 @@ local function blueberryexplosion()
     return inst
 end
 
-local no_slow = {"INLIMBO", "notarget", "playerghost", "wall", "shadow", "shadowchesspiece", "trap"}
-local no_slow_players = ConcatArrays({"companion", "abigail", "shadowminion", "player"}, no_slow)
+local no_slow = { "INLIMBO", "notarget", "playerghost", "wall", "shadow", "shadowchesspiece", "trap" }
+local no_slow_players = ConcatArrays({ "companion", "abigail", "shadowminion", "player" }, no_slow)
 local function ApplySlows(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, 3, {"_combat"}, inst.playermade and no_slow_players or no_slow)
+    local ents = TheSim:FindEntities(x, y, z, 3, { "_combat" }, inst.playermade and no_slow_players or no_slow)
     for i, v in ipairs(ents) do
         local debuffkey = inst.prefab
         if v.components.locomotor then
             v.components.locomotor:SetExternalSpeedMultiplier(v, debuffkey, 0.5)
             v.um_boomslowtask = v:DoPeriodicTask(1, function(guy)
-                if not FindEntity(guy,3,function(ent) return ent.prefab == "blueberrypuddle" end) then
+                if not FindEntity(guy, 3, function(ent) return ent.prefab == "blueberrypuddle" end) then
                     guy.components.locomotor:RemoveExternalSpeedMultiplier(guy, debuffkey)
                     if guy.um_boomslowtask then
                         guy.um_boomslowtask:Cancel()
@@ -565,8 +567,8 @@ local function blueberrypuddle()
         return inst
     end
 
-    inst:ListenForEvent("animover",function(inst) inst.AnimState:SetDeltaTimeMultiplier(.2) end)
-    inst:ListenForEvent("animqueueover",function(inst) inst:Remove() end)
+    inst:ListenForEvent("animover", function(inst) inst.AnimState:SetDeltaTimeMultiplier(.2) end)
+    inst:ListenForEvent("animqueueover", function(inst) inst:Remove() end)
 
     inst.persists = false
 
@@ -575,7 +577,7 @@ local function blueberrypuddle()
     return inst
 end
 
-return Prefab("blueberryplant", blueberryplant,assets),
+return Prefab("blueberryplant", blueberryplant, assets),
     Prefab("blueberryflower", blueberryflower),
     MakePlacer("blueberryflower_placer", "star_trap", "star_trap", "trap_idle"),
     Prefab("blueberryexplosion", blueberryexplosion),

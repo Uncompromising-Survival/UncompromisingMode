@@ -263,6 +263,7 @@ ACTIONFAIL.READ.GENERIC = "Of course I know what I'm doing."
 ACTIONFAIL.GIVE.NOTNIGHT = "Maybe if I hit it hard, it will work?"
 ACTIONFAIL.TOUCH_BURROW_RAT_LIMIT = "There are too many of them."
 ACTIONFAIL.TOUCH_BURROW_NO_HUNGER = "Where is all my food."
+--ACTIONFAIL.TOUCH_BURROW_RATLESS = "No more in this tunnel. I will dig another."
 
 -- Xmas Update
 DESCRIBE.MAGMAHOUND = "Bumpy rocky thing."
@@ -595,7 +596,7 @@ DESCRIBE.UM_RIMEWEED_TEQUILA = "It's far too cold to enjoy."
 DESCRIBE.UM_RIMEWEED_SPAGETT = "Crunchy spagetti, not my first choice."
 
 -- Lava Caves
-DESCRIBE.MAGMAROCK1 = DESCRIBE.ROCKS
+DESCRIBE.UM_MAGMAROCK1 = DESCRIBE.ROCKS
 DESCRIBE.MAGMABONE = "I wonder if the worms got to it."
 
 DESCRIBE.UM_COOKPOT_WAGSTAFF = {

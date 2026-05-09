@@ -42,6 +42,7 @@ local function OnUpgraded(inst)
     inst.components.pickable:Pause()
     inst.AnimState:PlayAnimation("corked")
     inst.AnimState:PushAnimation("idle_corked", true)
+	inst.MiniMapEntity:SetIcon("sludgestack_corked.tex")
     if not inst.components.timer:TimerExists("pop_cork") then
         inst.components.timer:StartTimer("pop_cork", TUNING.GRASS_REGROW_TIME)
     end
@@ -180,6 +181,7 @@ local function OnLoad(inst, data)
         end
         if inst.components.pickable.canbepicked == false and inst.components.timer:TimerExists("pop_cork") then
             inst.AnimState:PushAnimation("idle_corked", true)
+            inst.MiniMapEntity:SetIcon("sludgestack_corked.tex")
         end
     end
     inst:AddTag("SLUDGE_CORK_upgradeable") -- GOD DAMNIT KEEP THE DAMN TAG!!!
@@ -189,6 +191,8 @@ end
 local function OnRegen(inst)
     inst.AnimState:PushAnimation("grow")
     inst.AnimState:PushAnimation("idle_sludge", true)
+    inst.MiniMapEntity:SetIcon("sludgestack.tex")
+
     inst.components.timer:StartTimer("pop", TUNING.GRASS_REGROW_TIME * GetRandomWithVariance(0.75, 0.25))
 end
 
@@ -213,7 +217,7 @@ local function fn_stack()
     inst.entity:AddSoundEmitter()
     inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
-    inst.MiniMapEntity:SetIcon("seastack.png")
+    inst.MiniMapEntity:SetIcon("sludgestack.tex")
 
     inst:SetPhysicsRadiusOverride(2.35)
 

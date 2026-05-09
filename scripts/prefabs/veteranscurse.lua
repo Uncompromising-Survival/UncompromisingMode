@@ -2,7 +2,7 @@
 ---------------------- Attach and dettach functions ---------------------
 -------------------------------------------------------------------------
 ----------------------------------ATTACH---------------------------------
-local TARGET_MUST_TAGS = {"mime", "pinetreepioneer", "plantkin", "wathom"}
+local TARGET_MUST_TAGS = {"mime", "pinetreepioneer", "plantkin", "wathom", "shadowmagic", "winky"}
 
 local function ForceToTakeMoreDamage(inst)
     local self = inst.components.combat
@@ -14,7 +14,7 @@ local function ForceToTakeMoreDamage(inst)
         if attacker and damage then
             if not inst:HasAnyTag(TARGET_MUST_TAGS) then
                 -- Take extra damage
-                damage = damage * (1 + ((inst.um_deathcount + 1) / 10))
+                damage = damage * (1 + (((inst.um_deathcount and inst.um_deathcount or 1) + 1) / 10))
             end
         end
         return _GetAttacked(self, attacker, damage, weapon, stimuli, ...)
@@ -31,7 +31,7 @@ local function ForceToTakeMoreHunger(inst)
         if delta and overtime and delta < 0 then
             if not inst:HasAnyTag(TARGET_MUST_TAGS) then
                 -- Take extra hunger
-                delta = delta * (1 + ((inst.um_deathcount + 1) / 10))
+                delta = delta * (1 + (((inst.um_deathcount and inst.um_deathcount or 1) + 1) / 10))
             end
         end
         return _DoDelta(self, delta, overtime, ignore_invincible)
@@ -48,7 +48,7 @@ local function ForceToTakeMoreTime(inst)
         if amount and overtime and amount < 0 then
             if not inst:HasAnyTag(TARGET_MUST_TAGS) then
                 -- Take extra time
-                amount = amount * (1 + ((inst.um_deathcount + 1) / 10))
+                amount = amount * (1 + (((inst.um_deathcount and inst.um_deathcount or 1) + 1) / 10))
             end
         end
         return _OnTakeDamage(self, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb)

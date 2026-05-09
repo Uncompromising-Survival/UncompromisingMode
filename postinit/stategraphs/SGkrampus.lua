@@ -116,12 +116,10 @@ env.AddStategraphPostInit("krampus", function(inst)
             {
                 TimeEvent(5 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/krampus/bag_swing") end),
                 TimeEvent(8 * FRAMES, function(inst)
-                    
                     local x, y, z = inst:GetPosition():Get()
-                
                     local ents = TheSim:FindEntities(x, y, z, 5, nil, {"deergemresistance", "snowish", "ghost", "playerghost", "shadow", "INLIMBO"})
                     for i, v in ipairs(ents) do
-                        if v.components.combat ~= nil then
+                        if v.components.combat then
                             v.components.combat:GetAttacked(inst, 50, nil)
                         end
                         
@@ -129,8 +127,8 @@ env.AddStategraphPostInit("krampus", function(inst)
                         --inst.SoundEmitter:PlaySound("dontstarve/creatures/krampus/bag_foley")
                         inst.SoundEmitter:PlaySound("dontstarve/creatures/krampus/bag_swing")
                         
-                        if v ~= nil and v.components.inventory ~= nil then 
-                            if not v:HasTag("stronggrip") then
+                        if v and v.components.inventory then 
+                            if not v.components.inventory:IsThiefProof() and not v:HasTag("stronggrip") then
                                 local item = v.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
                                 if item and not item:HasTag("nosteal") then
                                     v.components.inventory:DropItem(item)
@@ -144,10 +142,8 @@ env.AddStategraphPostInit("krampus", function(inst)
                                 end
                             end
                         
-                            if not v:HasTag("fat_gang") and not v:HasTag("foodknockbackimmune") and not (v.components.rider ~= nil and v.components.rider:IsRiding()) and 
-                                --Don't knockback if you wear marble
-                                (v.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) ==nil or not v.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY):HasTag("marble") and not v.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY):HasTag("knockback_protection")) then
-                                    v:PushEvent("knockback", {knocker = inst, radius = 150, strengthmult = 1.5})
+                            if UMCommonFns.ShouldKnockback(v) then
+                                v:PushEvent("knockback", {knocker = inst, radius = 150, strengthmult = 1.5})
                             end
                         end
                     end

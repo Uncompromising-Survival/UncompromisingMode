@@ -115,8 +115,8 @@ local function fn()
     inst.fx = SpawnPrefab("um_boatbottle_fx")
     inst.fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
     inst.fx.entity:SetParent(inst.entity)
-    inst.fx.AnimState:SetSortOrder(3)
-    inst.fx.Follower:FollowSymbol(inst.GUID, "boat", 0, 50, 0) --TODO, check offsets.
+    inst.fx.AnimState:SetSortOrder(0)
+    inst.fx.Follower:FollowSymbol(inst.GUID, "boat", 0, 50, 0)
     inst.fx.components.highlightchild:SetOwner(inst)
     inst.fx:Hide()
 

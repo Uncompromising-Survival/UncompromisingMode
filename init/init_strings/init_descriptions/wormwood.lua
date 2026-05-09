@@ -537,7 +537,7 @@ DESCRIBE.UM_RIMEWEED_TEQUILA = "Brrr! Chilly friend juice"
 DESCRIBE.UM_RIMEWEED_SPAGETT = "Tasty cold strings"
 
 -- Lava Caves
-DESCRIBE.MAGMAROCK1 = "Hot Rock!"
+DESCRIBE.UM_MAGMAROCK1 = "Hot Rock!"
 DESCRIBE.MAGMABONE = "Dead from heat?"
 
 DESCRIBE.UM_COOKPOT_WAGSTAFF = {

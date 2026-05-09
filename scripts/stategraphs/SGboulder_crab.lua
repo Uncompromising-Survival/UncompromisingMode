@@ -24,7 +24,7 @@ end
 local function KnockOutWeapon(inst,data)
     if data.redirected then return end
 
-    if data.target and data.target.components.inventory and not data.target:HasTag("stronggrip") then
+    if data.target and data.target.components.inventory and not data.target.components.inventory:IsThiefProof() and not data.target:HasTag("stronggrip") then
         local item = data.target.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
         if item and not item:HasTag("nosteal") then
             data.target.components.inventory:DropItem(item)
@@ -65,14 +65,14 @@ local events=
         if inst.hiding and not inst.components.timer:TimerExists("startregenrock") then -- This shouldn't happen, but if it does!
             inst.sg:GoToState("hide_pst")
         else
-            if inst.components.health and not inst.components.health:IsDead() and not inst.sg:HasAnyStateTag("busy", "attack") then
+            if not (inst.sg:HasAnyStateTag("busy", "attack") and not inst.sg:HasStateTag("evade") or inst.components.health and inst.components.health:IsDead()) then
                 inst.sg:GoToState("hit") -- can't attack during hit reaction
             end
         end
     end),
     EventHandler("doattack", function(inst, data)
-        if inst.components.health and not inst.components.health:IsDead() and not inst.sg:HasAnyStateTag("busy", "evade") and data and data.target then
-            inst.sg:GoToState("attack", data.target)
+        if not (inst.sg:HasStateTag("busy") or inst.components.health and inst.components.health:IsDead()) then
+            inst.sg:GoToState("attack", data and data.target or nil)
         end
     end),
     EventHandler("hideunderrock", function(inst)
@@ -92,6 +92,11 @@ local events=
             inst.sg:GoToState("dig")
         end
     end),
+    EventHandler("rockworked", function(inst)
+        if not (inst.sg:HasAnyStateTag("sleeping", "frozen", "thawing") or inst.components.health and inst.components.health:IsDead()) then
+            inst.sg:GoToState("fuckingsad")
+        end
+    end),
     EventHandler("death", function(inst) inst.sg:GoToState("death") end),
     CommonHandlers.OnSleep(),
     CommonHandlers.OnFreeze(),
@@ -99,11 +104,11 @@ local events=
         if not inst.sg:HasStateTag("busy") then
             local is_moving = inst.sg:HasStateTag("moving")
             local wants_to_move = inst.components.locomotor:WantsToMoveForward()
-            if not (inst.sg:HasStateTag("attack") or inst.sg:HasStateTag("hit")) and is_moving ~= wants_to_move then
+            if not inst.sg:HasAnyStateTag("attack", "hit") and is_moving ~= wants_to_move then
                 if wants_to_move then
                     inst.sg:GoToState("premoving")
                 else
-                    inst.sg:GoToState("pstmoving")
+                    inst.sg:GoToState("idle", "walk_pst")
                 end
             end
         end
@@ -164,6 +169,7 @@ local states =
         tags = {"moving", "canrotate"},
 
         onenter = function(inst)
+            inst.components.locomotor:WalkForward()
             inst.AnimState:PushAnimation("walk_loop")
         end,
 
@@ -191,7 +197,20 @@ local states =
                 end
             end),
         },
-        
+    },
+    State{
+        name = "idle",
+        tags = {"idle", "canrotate"},
+
+        onenter = function(inst, start_anim)
+            inst.Physics:Stop()
+            if start_anim then
+                inst.AnimState:PlayAnimation(start_anim)
+                inst.AnimState:PushAnimation("idle", true)
+            else
+                inst.AnimState:PlayAnimation("idle", true)
+            end
+        end,
     },
     State{
         name = "uppercut",
@@ -238,31 +257,8 @@ local states =
         },
     },
     State{
-        name = "pstmoving",
-        tags = {"idle", "canrotate"},
-
-        onenter = function(inst, start_anim)
-            inst.Physics:Stop()
-            inst.AnimState:PlayAnimation("walk_pst", false)
-        end,
-
-        events =
-        {
-            EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
-        },
-    },
-    State{
-        name = "idle",
-        tags = {"idle", "canrotate"},
-
-        onenter = function(inst, start_anim)
-            inst.Physics:Stop()
-            inst.AnimState:PlayAnimation("idle", true)
-        end,
-    },
-    State{
         name = "fuckingsad",
-        tags = {"idle", "evade"},
+        tags = {"busy", "evade"},
 
         onenter = function(inst, start_anim)
             inst.Physics:Stop()
@@ -465,7 +461,7 @@ local states =
     },
     State{
         name = "dig",
-        tags = {"busy"},
+        tags = {"busy", "nosleep", "nofreeze"},
 
         onenter = function(inst)
             inst.Transform:SetNoFaced()
@@ -512,7 +508,7 @@ local states =
     },]]
     State{
         name = "emerge",
-        tags = {"busy", "noattack"},-- You can only mine the boulder, they can't be attacked in this phase.
+        tags = {"busy", "nosleep", "nofreeze", "noattack"},-- You can only mine the boulder, they can't be attacked in this phase.
 
         onenter = function(inst)
             --inst.Transform:SetNoFaced()

@@ -28,7 +28,6 @@ local component_post = {
     "boatleak", -- for custom boat patches.
     "wisecracker",
     "boatphysics",
-    "map",
     "playerspawner",
     --"drownable",
     "combat",
@@ -74,7 +73,9 @@ local component_post = {
     "retrofitcavemap_anr",
     "fumarolelocaltemperature",
     "pickable",
-    "actionqueuer"
+    "actionqueuer",
+    "wavemanager",
+    "seamlessplayerswapper"
 }
 
 local prefab_post = {
@@ -252,7 +253,10 @@ local prefab_post = {
     "tillweedsalve",
     "ancienttree_fruits",
     "um_moonmutables",
-    "rocky"
+    "rocky",
+    "slurper",
+    "kelphat",
+    "strawhat",
 }
 
 local stategraph_post = {
@@ -286,8 +290,8 @@ local class_post = {
     "widgets/controls",
     "widgets/craftslot",
     "widgets/bloodover",
-    --"widgets/inventorybar",
-    --"widgets/containerwidget"
+    "widgets/inventorybar",
+    "widgets/containerwidget",
     "widgets/statusdisplays"
 }
 
@@ -308,7 +312,8 @@ local brain_post = {
 
 --package post system courtesy of IA team!
 local package_post = {
-    ["shadeeffects"] = "shadeeffects"
+    ["components/map"] = "map",
+    ["shadeeffects"] = "shadeeffects",
 }
 
 

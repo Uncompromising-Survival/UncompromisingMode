@@ -223,7 +223,33 @@ env.AddComponentPostInit("health", function(self)
         end
         return _SetVal(self, val, cause, afflicter, ...)
     end
-    
+
+    local _OnSave = self.OnSave
+    function self:OnSave(...)
+        local ret = _OnSave(self, ...)
+        if ret and ret.penalty and ret.penalty > TUNING.MAXIMUM_HEALTH_PENALTY and self.inst.prefab == "waxwell" and self.inst:HasTag("vetcurse") then
+            ret.um_vetcursed = true
+        end
+        return ret
+    end
+
+    local _OnLoad = self.OnLoad
+    function self:OnLoad(data, ...)
+        if data.um_vetcursed then self.um_vetcursed = true end
+        local ret = _OnLoad(self, data, ...)
+        if data.um_vetcursed then self.um_vetcursed = nil end
+        return ret
+    end
+
+    local _SetPenalty = self.SetPenalty
+    function self:SetPenalty(penalty, ...)
+        if self.inst.prefab == "waxwell" and (self.inst:HasTag("vetcurse") or self.um_vetcursed) and not self.disable_penalty then
+            self.penalty = math.clamp(penalty, 0, .99)
+            return
+        end
+        return _SetPenalty(self, penalty, ...)
+    end
+
     if TUNING.DSTU.ONEHP == true then-- All this code is here
         TUNING.WX78_MAXHEALTH_BOOST = 0
         TUNING.WX78_MAXHEALTH2_MULT = 0

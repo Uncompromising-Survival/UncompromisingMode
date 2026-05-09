@@ -65,7 +65,7 @@ RECIPE_DESC.PORTABLEBOAT_ITEM = "Pack up and go!"
 RECIPE_DESC.MASTUPGRADE_WINDTURBINE_ITEM = "Full speed ahead!"
 RECIPE_DESC.CODEX_MANTRA = "Repeat after me."
 if GetModConfigData("telestaff_rework") then
-    RECIPE_DESC.TELEBASE = "Now with 100% less gold!"
+    RECIPE_DESC.TELEBASE = "Gems included."
 end
 -- sailing rebalance strings
 RECIPE_DESC.MOONSTORM_STATIC_ITEM = "The power of the moon, contained!"
@@ -159,6 +159,11 @@ RECIPE_DESC.SCRAP_MONOCLEHAT = "Explore the horizon."
 RECIPE_DESC.TURF_UM_HOTSPRING_GRASS = "A patch of steamy wet grass."
 RECIPE_DESC.TURF_UM_HOTSPRING_WHITEROCK = "The warm white rocky floor of the Broiling Hills."
 RECIPE_DESC.TURF_UM_HOTSPRING_YELLOWROCK = "The yielding yellow rocky floor of the Broiling Hills."
+RECIPE_DESC.TURF_UM_MAGMA = "A chunk of warm rock from the Magma Caves."
+RECIPE_DESC.TURF_MAGMA_GRASS = "The spicy grass of the Magma Caves."
+RECIPE_DESC.TURF_HOODEDFOLIAGE = "The vibrant undergrowth of the Hooded Forest."
+RECIPE_DESC.TURF_HOODEDFOLIAGE_DARK = "The lush undergrowth of the Hooded Forest."
+
 RECIPE_DESC.UM_FYRE_BOMB = "A bomb, plain and simple."
 RECIPE_DESC.UM_HAT_BEE_MOON = "A hat filled with mutant angry bees."
 RECIPE_DESC.UM_EYEBALM = "Tread with ease through storms."
@@ -273,7 +278,7 @@ STRINGS.UI.HUD.UM_VETSKULL = {
     WICKERBOTTOM = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
     WOODIE = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,       --WIP
     WES = "Veteran's Curse:\n - Wes Must Die.",
-    WAXWELL = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,      --WIP
+    WAXWELL = "Veteran's Curse:\n - Half of taken attack damage is also applied as maximum health loss.\n - Maximum health loss is capped at 99% instead of 75%.",
     WATHGRITHR = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,   --WIP
     WEBBER = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,       --WIP
     WINONA = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,       --WIP
@@ -283,7 +288,7 @@ STRINGS.UI.HUD.UM_VETSKULL = {
     WURT = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,         --Wurt to Womp transition, real. Soon.
     WALTER = "Veteran's Curse:\n - Damage taken also applies a maximum Sanity penalty.\n - The penalty heals itself after a while without getting hurt.",
     WANDA = "Veteran's Curse:\n - Age faster when damaged.\n - Hunger drains faster.\n - Sanity from foods is applied *slowly* over time.",
-    WINKY = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
+    WINKY = "Veteran's Curse:\n - Lose 5 inventory slots.",
     WATHOM = "Veteran's Curse:\n - When above 50% Sanity, becomes enlighted.",
     WIXIE = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
 }

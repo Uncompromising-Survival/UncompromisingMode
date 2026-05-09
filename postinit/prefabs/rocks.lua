@@ -61,17 +61,15 @@ local function NewCallBack(inst, worker, workleft, ...)
             if workleft <= 0 then
                 inst.crab.components.health:SetAbsorptionAmount(0)
                 inst.crab.components.timer:StartTimer("startregenrock", math.random(60*4,60*8))--half to a full day
-                if (inst.crab.components.sleeper and not inst.crab.components.sleeper:IsAsleep()) and inst.crab.components.health and not inst.crab.components.health:IsDead() then
-                    inst.crab.sg:GoToState("fuckingsad")
-                end
+                inst.crab:PushEvent("rockworked")
             end
         end
         local crabs = TheSim:FindEntities(x,y,z,16,{"rocky"})
         for i,crab in ipairs(crabs) do
             if crab.prefab == "boulder_crab" and crab.components.combat and (crab.components.sleeper and not crab.components.sleeper:IsAsleep()) then
                 crab.components.combat:SuggestTarget(worker)
-                if crab.hiding and not crab.components.timer:TimerExists("startregenrock") then
-                    crab.sg:GoToState("hide_pst")
+                if not crab.components.timer:TimerExists("startregenrock") then
+                    crab:PushEvent("comeoutfromunderrock")
                 end
             end
         end
