@@ -82,6 +82,13 @@ local function BeginScaleUp(inst,time)
 	inst.growing = inst:DoPeriodicTask(FRAMES,Grow)
 end
 
+local function SetupColdLight(inst)
+	inst.Light:Enable(true)
+	inst.Light:SetFalloff(0.8)
+	inst.Light:SetIntensity(0.8)
+	inst.Light:SetRadius(12)
+	inst.Light:SetColour( 64 / 255, 64 / 255, 208 / 255 )
+end
 local function Shoot(inst)
 	local speed = inst.speed or 10
 	if not inst.time then
@@ -123,6 +130,8 @@ local function Shoot(inst)
 	inst.scalemax = inst.scale
 	BeginScaleUp(inst)
 	if inst.chilly then
+		
+		SetupColdLight(inst)
 		inst:DoPeriodicTask(FRAMES, ChillSurroundings)
 	elseif inst.cursed then
 		-- ADD CURSED
@@ -138,6 +147,7 @@ local function fn()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
+	inst.entity:AddLight()
 
     inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
     inst.AnimState:SetBank("fire")
@@ -159,6 +169,7 @@ local function fn()
     end
 
     inst.doer = nil
+	inst.Light:Enable(false)
 
     inst.Physics:SetMass(1)
     inst.Physics:SetDamping(.1)	

@@ -60,6 +60,7 @@ env.AddPrefabPostInit("cave", function(inst)
 	inst:AddComponent("um_guano_rain")
     inst:AddComponent("um_tilelogger")
     inst:AddComponent("um_tentacle_repopulator")
+    inst:AddComponent("um_poofshroom_repopulator")
     -- if TUNING.DSTU.CAVECLOPS then
         -- inst:AddComponent("cavedeerclopsspawner")
     -- end

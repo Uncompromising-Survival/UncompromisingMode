@@ -496,13 +496,16 @@ local function MorphChester(inst)
 
 	DoMorph(inst, canShadow and MorphShadowChester or canSnow and MorphSnowChester or canLazy and MorphLazyChester)
 end
+-- AXE The code above is for the deprecated lazy chester.
 
+
+
+-- AXE Commented code below is for deprecated lazy chester
 env.AddPrefabPostInit("chester", function(inst)
 	if not TheWorld.ismastersim then
 		return
 	end
-
-	local _OnPreLoad = inst.OnPreLoad
+	--[[local _OnPreLoad = inst.OnPreLoad
 
 	local function OnPreLoad(inst, data)
 		if data == nil then
@@ -516,8 +519,15 @@ env.AddPrefabPostInit("chester", function(inst)
 
 	inst.MorphChester = MorphChester
 	inst.OnPreLoad = OnPreLoad
-	inst:WatchWorldState("isfullmoon", CheckForMorph)
+	inst:WatchWorldState("isfullmoon", CheckForMorph)]]
 end)
+
+local chester_lookalikes = {"chester","hutch"}
+for i,v in ipairs(chester_lookalikes) do
+	env.AddPrefabPostInit(v, function(inst)
+		inst:AddTag("notraptrigger") -- AXE Do not let them clear mines - snaptraps, poofshrooms
+	end)
+end
 ----------------------------------------------------------------
 --Eyebone stuff
 
@@ -526,6 +536,8 @@ env.AddPrefabPostInit("chester_eyebone", function(inst)
 		return
 	end
 
+
+	--[[
 	local SPAWN_DIST = 30
 
 
@@ -608,4 +620,5 @@ env.AddPrefabPostInit("chester_eyebone", function(inst)
 
 	inst.MorphLazyEyebone = MorphLazyEyebone
 	inst.OnLoad = OnLoadBoneUM
+	]]
 end)

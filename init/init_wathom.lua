@@ -524,7 +524,7 @@ AddStategraphPostInit("wilson", function(inst)
                     inst.components.locomotor.runspeed = TUNING.WILSON_RUN_SPEED
                     inst.Transform:ClearPredictedFacingModel()
                 end
-                if HoldingCane(inst) and HasSkill(inst,"digitigrade_2") and inst.components.adrenaline and inst.components.adrenaline:GetPercent() < .51 then
+                if not inst:HasTag("amped") and HoldingCane(inst) and HasSkill(inst,"digitigrade_2") and inst.components.adrenaline and inst.components.adrenaline:GetPercent() < .51 then
                     inst.components.adrenaline:DoDelta(1)
                 end
             end,

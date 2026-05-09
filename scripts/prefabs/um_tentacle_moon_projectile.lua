@@ -23,7 +23,7 @@ local function OnLand(inst)
 
     local ents = TheSim:FindEntities(x, y, z, 1.5, should_hit, shouldnt_hit)
     for i, v in ipairs(ents) do
-        if not (inst.attacker_faction and v:HasTag(inst.attacker_faction)) then
+        if v.prefab ~= inst.attacker.prefab and not (inst.attacker_faction and v:HasTag(inst.attacker_faction)) then
             v.components.combat:GetAttacked(inst.attacker and inst.attacker or nil,34)
         end
     end
@@ -89,18 +89,58 @@ local function lobbedprojectilefn()
 end
 -- Projectile functions above
 
+local function DoDamageEffect(inst,target)
+	
+	local mult = 1
+	local plague
+	if target.components.inventory then
+		if target.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD) then
+			if target.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD).prefab == "plaguemask" then
+				plague = true
+			end
+			if target.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD).prefab == "um_hat_nettlemask" then
+				mult = mult * 0.25
+			end
+			if target.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD).prefab == "gasmask" then
+				mult = mult * 0.25
+			end
+		end
+		if target.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) then
+			if target.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS).prefab == "minifan" then
+				mult = mult * 0.25
+			end
+		end
+	end
+
+	if not plague then
+        if target.components.combat and not target.components.health:IsDead() then
+            target.components.combat:GetAttacked(inst.attacker and inst.attacker or nil,34)	
+        end
+		target:PushEvent("knockback", { knocker = inst, radius = 1.5, strengthmult = 1.5, forcelanded = true })
+	end
+end
+
 local function OnExplode(inst, target)
     inst.DynamicShadow:Enable(false)
     local x,y,z = inst.Transform:GetWorldPosition()
     local ents = TheSim:FindEntities(x, y, z, 3)
     for i, v in ipairs(ents) do
-        if v:HasAllTags(should_hit) and not v:HasAnyTag(shouldnt_hit) and not (inst.attacker_faction and v:HasTag(inst.attacker_faction)) then
-            v.components.combat:GetAttacked(inst.attacker,68)
-        end
-        if v.components.perishable then
-            v.components.perishable:SetPercent(v.components.perishable:GetPercent()-0.2)
+        if v.prefab ~= inst.attacker.prefab and v:HasAllTags(should_hit) and not v:HasAnyTag(shouldnt_hit) and not (inst.attacker_faction and v:HasTag(inst.attacker_faction)) then
+            DoDamageEffect(inst,v)
         end
     end
+	inst:DoTaskInTime(0.1,function(inst) --AXE trigger the spoil after a delay, incase something was dropped from an enemy
+		local ents = TheSim:FindEntities(x, y, z, TUNING.TRAP_TEETH_RADIUS)
+		for i, v in ipairs(ents) do
+			if v.components.inventoryitem and v.components.perishable then
+				if v.components.inventoryitem:IsHeld() then
+					v.components.perishable:SetPercent(v.components.perishable:GetPercent()-0.33)
+				else
+					v.components.perishable:SetPercent(0)
+				end
+			end
+		end
+	end)
     inst.SoundEmitter:PlaySound("dontstarve/common/together/infection_burst")
     inst.components.umripples:OnNoLongerLandedServer()
     inst.AnimState:PlayAnimation("explode")
@@ -144,12 +184,14 @@ local function lobbedminefn()
     if not TheWorld.ismastersim then return inst end
 
     local mine = inst:AddComponent("mine")
-    mine:SetRadius(TUNING.TRAP_TEETH_RADIUS * 1.3)
+    mine:SetRadius(0.5)
     mine:SetOnExplodeFn(OnExplode)
     mine:SetTestTimeFn(calculate_mine_test_time)
+    mine:SetAlignment("tentacle")
+    mine:Reset()
 
-    inst:AddComponent("deployable")
-    inst.components.deployable:SetDeploySpacing(DEPLOYSPACING.LESS)
+    --inst:AddComponent("deployable")
+    --inst.components.deployable:SetDeploySpacing(DEPLOYSPACING.LESS)
 
     inst:AddComponent("hauntable")
     inst.components.hauntable:SetOnHauntFn(OnExplode)

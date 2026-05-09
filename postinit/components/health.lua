@@ -199,7 +199,7 @@ local function StopDeathStuffHere(self, amount, cause, afflicter, ...)
             self.inst:ToggleUndeathState(self.inst, true)
             self:DoDelta(-self.currenthealth + 1, false, cause, true) -- Needed to do this for ignore_invincible...
             return true
-        elseif self.inst:HasTag("deathamp") and cause ~= "deathamp" then
+        elseif self.inst:HasTag("deathamp") and cause ~= "deathamp" and amount < 0 then
             self.inst.components.adrenaline:DoDelta(amount * 1)
             return true
         end

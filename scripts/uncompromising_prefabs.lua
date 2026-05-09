@@ -631,7 +631,8 @@ local prefabs = {
 	"um_hat_nettlemask",
     "wormwood_mushtrees", -- AXE This is needed to make several placers for wormwood's skill.
     "um_thulecite_razor",
-    "gemology_book"
+    "gemology_book",
+    "um_poofshrooms"
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then

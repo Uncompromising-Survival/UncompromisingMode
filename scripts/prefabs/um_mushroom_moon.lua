@@ -84,81 +84,6 @@ local function OnIsOpenPhase(inst, isopen)
     end
 end
 
-local function OnSpawnedFromHaunt(inst, data)
-    Launch(inst, data.haunter, TUNING.LAUNCH_SPEED_SMALL)
-end
-
---V2C: basically, each colour and type can switch to another colour of the same type
-local switchtable = {}
-local switchcolours = { "red", "blue", "green" }
-local switchtypes = { "_cap", "_cap_cooked", "_mushroom" }
-for i, v in ipairs(switchcolours) do
-    for i2, v2 in ipairs(switchtypes) do
-        local t = {}
-        switchtable[v..v2] = t
-        for i3, v3 in ipairs(switchcolours) do
-            if v ~= v3 then
-                table.insert(t, v3..v2)
-            end
-        end
-    end
-end
-local function pickswitchprefab(inst)
-    local t = switchtable[inst.prefab]
-    return t ~= nil and t[math.random(#t)] or nil
-end
-
-local function OnHauntMush(inst, haunter)
-    local ret = false
-    if math.random() <= TUNING.HAUNT_CHANCE_OCCASIONAL then
-        local x, y, z = inst.Transform:GetWorldPosition()
-        SpawnPrefab("small_puff").Transform:SetPosition(x, y, z)
-        local prefab = pickswitchprefab(inst)
-        local new = prefab ~= nil and SpawnPrefab(prefab) or nil
-        if new ~= nil then
-            new.Transform:SetPosition(x, y, z)
-            -- Make it the right state
-            if inst.components.pickable ~= nil and not inst.components.pickable.canbepicked then
-                if new.components.pickable ~= nil then
-                    new.components.pickable:MakeEmpty()
-                end
-            elseif inst.components.pickable ~= nil and not inst.components.pickable.caninteractwith then
-                new.AnimState:PlayAnimation("inground")
-                if new.components.pickable ~= nil then
-                    new.components.pickable.caninteractwith = false
-                end
-            else
-                new.AnimState:PlayAnimation(new.data.animname)
-                if new.components.pickable ~= nil then
-                    new.components.pickable.caninteractwith = true
-                end
-            end
-        end
-        new:PushEvent("spawnedfromhaunt", { haunter = haunter, oldPrefab = inst })
-        inst:PushEvent("despawnedfromhaunt", { haunter = haunter, newPrefab = new })
-        inst.persists = false
-        inst.entity:Hide()
-        inst:DoTaskInTime(0, inst.Remove)
-        inst.components.hauntable.hauntvalue = TUNING.HAUNT_SMALL
-        ret = true
-    elseif inst.components.pickable ~= nil and inst.components.pickable:CanBePicked() and inst.components.pickable.caninteractwith then
-        inst:closetaskfn()
-        inst.components.hauntable.hauntvalue = TUNING.HAUNT_SMALL
-        ret = true
-    end
-    --#HAUNTFIX
-    --if math.random() <= TUNING.HAUNT_CHANCE_VERYRARE then
-        --if inst.components.burnable ~= nil and not inst.components.burnable:IsBurning() and
-            --inst.components.pickable ~= nil and inst.components.pickable.canbepicked then
-            --inst.components.burnable:Ignite()
-            --inst.components.hauntable.hauntvalue = TUNING.HAUNT_MEDIUM
-            --inst.components.hauntable.cooldown_on_successful_haunt = false
-            --ret = true
-        --end
-    --end
-    return ret
-end
-
 local function TryPopup(inst)
     if TheWorld.state.isfullmoon or inst.components.areaaware:CurrentlyInTag("lunacyarea") then
         inst.AnimState:PlayAnimation("idle_"..inst.data.animname)
@@ -243,9 +168,6 @@ local function mushcommonfn(data)
     MakeSmallBurnable(inst)
     MakeSmallPropagator(inst)
     MakeNoGrowInWinter(inst)
-
-    inst:AddComponent("hauntable")
-    inst.components.hauntable:SetOnHauntFn(OnHauntMush) --AXE Haunting undoes the lunar mutations
 
     inst:WatchWorldState("isfullmoon", OnIsOpenPhase)
 

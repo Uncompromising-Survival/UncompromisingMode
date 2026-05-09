@@ -1,11 +1,8 @@
 local function onhammered(inst, worker)
-inst.components.lootdropper:SpawnLootPrefab("moonglass_charged")
-inst.components.lootdropper:SpawnLootPrefab("moonglass_charged")
-inst.components.lootdropper:SpawnLootPrefab("moonglass_charged")
-inst.components.lootdropper:SpawnLootPrefab("moonglass_charged")
-inst.components.lootdropper:SpawnLootPrefab("moonglass_charged")
-inst.components.lootdropper:SpawnLootPrefab("moonglass_charged")
-inst:Remove()
+    for i = 1,math.random(6,10) do
+        inst.components.lootdropper:SpawnLootPrefab("moonglass_charged")
+    end
+    inst:Remove()
 end
 
 local function fngeode()
