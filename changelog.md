@@ -219,13 +219,14 @@
 - Fixed lunarmelodist regen being lost on shard change.
 - Rimeweeds now respect the "Start Date for Winter weather" config.
 - Snaildrakes panic when haunted again.
-- Fixed an issue with Wixie being able to kill Butterflies with her shove
+- Fixed an issue with Wixie being able to kill Butterflies with her Slingshot shove.
 - Fixed Ancient Hooded Forest turf placing Flood Water.
 - Fixed Telelocator Staff not draining durability when causing mini earthquakes.
 - Implemented missing art and recipes for new Magma Caves and Hooded Forest turf items.
 - Fixed Boat Bottle boat VFX sort order.
 - Updated Telelocator Focus recipe description change.
 - Fixed battle songs losing lunar melodist effects on shard change and world load.
+- Fixed an issue with Boulder Crabs "unfreezing" themselves when their boulder is mined.
 ⠀
 ## Removed
 - Removed old deprecated Pyre Nettles config, updated Heat Waves config description.

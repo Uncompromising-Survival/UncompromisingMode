@@ -65,14 +65,14 @@ local events=
         if inst.hiding and not inst.components.timer:TimerExists("startregenrock") then -- This shouldn't happen, but if it does!
             inst.sg:GoToState("hide_pst")
         else
-            if inst.components.health and not inst.components.health:IsDead() and not inst.sg:HasAnyStateTag("busy", "attack") then
+            if not (inst.sg:HasAnyStateTag("busy", "attack") and not inst.sg:HasStateTag("evade") or inst.components.health and inst.components.health:IsDead()) then
                 inst.sg:GoToState("hit") -- can't attack during hit reaction
             end
         end
     end),
     EventHandler("doattack", function(inst, data)
-        if inst.components.health and not inst.components.health:IsDead() and not inst.sg:HasAnyStateTag("busy", "evade") and data and data.target then
-            inst.sg:GoToState("attack", data.target)
+        if not (inst.sg:HasStateTag("busy") or inst.components.health and inst.components.health:IsDead()) then
+            inst.sg:GoToState("attack", data and data.target or nil)
         end
     end),
     EventHandler("hideunderrock", function(inst)
@@ -90,6 +90,11 @@ local events=
         local rock = inst.myrock
         if not (inst.sg:HasStateTag("busy") or inst.components.health and inst.components.health:IsDead()) and not (rock and rock:IsValid()) then
             inst.sg:GoToState("dig")
+        end
+    end),
+    EventHandler("rockworked", function(inst)
+        if not (inst.sg:HasAnyStateTag("sleeping", "frozen", "thawing") or inst.components.health and inst.components.health:IsDead()) then
+            inst.sg:GoToState("fuckingsad")
         end
     end),
     EventHandler("death", function(inst) inst.sg:GoToState("death") end),
@@ -191,7 +196,6 @@ local states =
                 end
             end),
         },
-        
     },
     State{
         name = "uppercut",
@@ -262,7 +266,7 @@ local states =
     },
     State{
         name = "fuckingsad",
-        tags = {"idle", "evade"},
+        tags = {"busy", "evade"},
 
         onenter = function(inst, start_anim)
             inst.Physics:Stop()
@@ -465,7 +469,7 @@ local states =
     },
     State{
         name = "dig",
-        tags = {"busy"},
+        tags = {"busy", "nosleep", "nofreeze"},
 
         onenter = function(inst)
             inst.Transform:SetNoFaced()
@@ -512,7 +516,7 @@ local states =
     },]]
     State{
         name = "emerge",
-        tags = {"busy", "noattack"},-- You can only mine the boulder, they can't be attacked in this phase.
+        tags = {"busy", "nosleep", "nofreeze", "noattack"},-- You can only mine the boulder, they can't be attacked in this phase.
 
         onenter = function(inst)
             --inst.Transform:SetNoFaced()
