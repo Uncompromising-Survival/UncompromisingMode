@@ -104,11 +104,11 @@ local events=
         if not inst.sg:HasStateTag("busy") then
             local is_moving = inst.sg:HasStateTag("moving")
             local wants_to_move = inst.components.locomotor:WantsToMoveForward()
-            if not (inst.sg:HasStateTag("attack") or inst.sg:HasStateTag("hit")) and is_moving ~= wants_to_move then
+            if not inst.sg:HasAnyStateTag("attack", "hit") and is_moving ~= wants_to_move then
                 if wants_to_move then
                     inst.sg:GoToState("premoving")
                 else
-                    inst.sg:GoToState("pstmoving")
+                    inst.sg:GoToState("idle", "walk_pst")
                 end
             end
         end
@@ -169,6 +169,7 @@ local states =
         tags = {"moving", "canrotate"},
 
         onenter = function(inst)
+            inst.components.locomotor:WalkForward()
             inst.AnimState:PushAnimation("walk_loop")
         end,
 
@@ -196,6 +197,20 @@ local states =
                 end
             end),
         },
+    },
+    State{
+        name = "idle",
+        tags = {"idle", "canrotate"},
+
+        onenter = function(inst, start_anim)
+            inst.Physics:Stop()
+            if start_anim then
+                inst.AnimState:PlayAnimation(start_anim)
+                inst.AnimState:PushAnimation("idle", true)
+            else
+                inst.AnimState:PlayAnimation("idle", true)
+            end
+        end,
     },
     State{
         name = "uppercut",
@@ -240,29 +255,6 @@ local states =
         {
             EventHandler("animover", function(inst) inst.sg:GoToState("taunt") end),
         },
-    },
-    State{
-        name = "pstmoving",
-        tags = {"idle", "canrotate"},
-
-        onenter = function(inst, start_anim)
-            inst.Physics:Stop()
-            inst.AnimState:PlayAnimation("walk_pst", false)
-        end,
-
-        events =
-        {
-            EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
-        },
-    },
-    State{
-        name = "idle",
-        tags = {"idle", "canrotate"},
-
-        onenter = function(inst, start_anim)
-            inst.Physics:Stop()
-            inst.AnimState:PlayAnimation("idle", true)
-        end,
     },
     State{
         name = "fuckingsad",
