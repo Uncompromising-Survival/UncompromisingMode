@@ -226,7 +226,7 @@
 - Fixed Boat Bottle boat VFX sort order.
 - Updated Telelocator Focus recipe description change.
 - Fixed battle songs losing lunar melodist effects on shard change and world load.
-- Fixed an issue with Boulder Crabs "unfreezing" themselves when their boulder is mined.
+- Fixed an issue with Boulder Crabs "unfreezing" themselves when their boulder is mined and attempted to fix an issue with them walking.
 ⠀
 ## Removed
 - Removed old deprecated Pyre Nettles config, updated Heat Waves config description.
