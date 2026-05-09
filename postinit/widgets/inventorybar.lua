@@ -19,6 +19,10 @@ local ImageButton = require("widgets/imagebutton")
 local ItemTile = require("widgets/itemtile")
 
 env.AddClassPostConstruct("widgets/inventorybar", function(self, owner)
+    local _RebuildLayout = UpvalueHacker.GetUpvalue(self.Rebuild, "RebuildLayout")
+
+    if not _RebuildLayout then return end
+        
     -- This function is used to highlight or grey out the backpack's button when it is valid to
     -- press. For example, the Silken Sack's wrap button will be greyed out when there is not
     -- Silk in its Silk slot or there are no valid items to bundle.
