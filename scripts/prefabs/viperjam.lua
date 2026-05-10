@@ -5,43 +5,7 @@ local assets =
 	--Asset("IMAGE", "images/inventoryimages/zaspberryparfait.tex"),
 }
 local easing = require("easing")
-local function spawnfriends(inst)
-    local x, y, z = inst.Transform:GetWorldPosition()
-    local projectile = SpawnPrefab("viperprojectile")
-    projectile.Transform:SetPosition(x, y, z)
-    local pt = inst:GetPosition()
-	pt.x = pt.x + math.random(-3,3)
-	pt.z = pt.z + math.random(-3,3)
-	local speed = easing.linear(3, 7, 3, 10)
-	projectile:AddTag("canthit")
-	projectile:AddTag("friendly")
-	--projectile.components.wateryprotection.addwetness = TUNING.WATERBALLOON_ADD_WETNESS/2
-    projectile.components.complexprojectile:SetHorizontalSpeed(speed+math.random(4,9))
-	if TheWorld.Map:IsAboveGroundAtPoint(pt.x, 0, pt.z) or TheWorld.Map:GetPlatformAtPoint(pt.x, pt.z) ~= nil then
-		inst.count = 0
-		projectile.components.complexprojectile:Launch(pt, inst, inst)
-	else
-		if inst.count < 10 then
-			inst.count = inst.count + 1
-			inst:DoTaskInTime(0,spawnfriends(inst))
-		end
-	projectile:Remove()
-	end
-end
 
-
-local function oneatenfn(inst, eater)
-	inst.count = 0
-	if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
-		not (eater.components.health ~= nil and eater.components.health:IsDead()) and
-		not eater:HasTag("playerghost") then
-		TheNet:Announce("eaten")
-		local i = GetWorms(eater)
-		for k = 1,i do
-			inst:DoTaskInTime(0,spawnfriends(inst))
-		end
-	end
-end
 local function fn()
     local inst = CreateEntity()
 
