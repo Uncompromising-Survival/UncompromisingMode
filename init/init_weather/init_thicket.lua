@@ -24,9 +24,9 @@ end
 --local ignore_thicket = {"smallcreature","bird","shadowcreature","ghost","playerghost","bat"}
 env.AddComponentPostInit("locomotor", function(self)
     local _OnUpdate = self.OnUpdate
-    function self:OnUpdate(dt, arrive_check_only)
+    function self:OnUpdate(dt, arrive_check_only, ...)
         --if dt % 2 ~= 0 then return end
         ThicketCheck(self.inst)
-        return _OnUpdate(self,dt,arrive_check_only)
+        return _OnUpdate(self, dt, arrive_check_only, ...)
     end
 end)
