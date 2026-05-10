@@ -3,7 +3,7 @@ local STRINGS = GLOBAL.STRINGS
 
 STRINGS.UNCOMP_TOOLTIP = {
     AMULET =
-    "- Only revives the player upon death while worn.\n- Increased heal rate at lower health.\n- Never breaks, can be refueled with Nightmare Fuel.",
+    "- Prevents death while worn.\n- Increased heal rate at lower health.\n- Never breaks, can be refueled with Nightmare Fuel.",
     ARMORRUINS = "- Prevents knockback effects.\n- Reduces insanity aura effects by 30%.",
     SWEATERVEST = "- Reduces insanity aura effects by 60%.",
     SKELETONHAT = "- Will not spawn the Creeping Fear when worn.",
