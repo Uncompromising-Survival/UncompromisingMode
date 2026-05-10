@@ -10,6 +10,7 @@ SetSharedLootTable('slurp_up',
 })
 
 env.AddPrefabPostInit("slurper", function(inst)
+    if not TheWorld.ismastersim then return end
     if inst.components.lootdropper then
         inst.components.lootdropper:SetChanceLootTable('slurp_up')
     end

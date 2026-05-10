@@ -272,8 +272,8 @@ if TUNING.DSTU.SNOWSTORMS then
     TOOLTIPS.TURF_DRAGONFLY = TOOLTIPS.TURF_DRAGONFLY .. "\n- Prevents Snow Pile build-up."
     TOOLTIPS.YELLOWSTAFF = "- Dwarf Stars provide protection from snowstorms."
     TOOLTIPS.MOLEHAT = "- Grants protection against snowstorms/sandstorms when worn."
-    TOOLTIPS.DESERTHAT = "- Also works as protection against snowstorms."
-    TOOLTIPS.BEARGERVEST = "- Provides protection from snowstorms' slowdown."
+    --TOOLTIPS.DESERTHAT = "- Also works as protection against snowstorms." -- this is dum
+    TOOLTIPS.BEARGERVEST = "- Provides protection from snow piles and snowstorms' slowdown."
 else
     TOOLTIPS.MOLEHAT = "- Grants protection against sandstorms and moonstorms when worn."
 end
