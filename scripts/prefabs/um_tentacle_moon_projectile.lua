@@ -125,7 +125,7 @@ local function OnExplode(inst, target)
     local x,y,z = inst.Transform:GetWorldPosition()
     local ents = TheSim:FindEntities(x, y, z, 3)
     for i, v in ipairs(ents) do
-        if v.prefab ~= inst.attacker.prefab and v:HasAllTags(should_hit) and not v:HasAnyTag(shouldnt_hit) and not (inst.attacker_faction and v:HasTag(inst.attacker_faction)) then
+        if inst.attacker and v.prefab ~= inst.attacker.prefab and v:HasAllTags(should_hit) and not v:HasAnyTag(shouldnt_hit) and not (inst.attacker_faction and v:HasTag(inst.attacker_faction)) then
             DoDamageEffect(inst,v)
         end
     end
