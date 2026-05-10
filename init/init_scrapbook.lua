@@ -131,7 +131,7 @@ end
 --this table contains extra things, also used for stuff that the tooltip prefab ~= scrapbook. Additionally supports overwrites.
 --example:
 --REDAMULET = {"string", bool} --wherein bool can be ommited unless you're overwriting.
-local clockwork_str = "No longer flameable, additionally, does not panic from fires."
+local clockwork_str = "No longer flameable. Additionally, does not panic from fires."
 local um_specialinfo = {
     --TOOLTIPS - these are the stuff that have tooltips that either require overwrites or due to different key/prefab names need to be manually defined.
     REDAMULET = { ParseTooltip(TOOLTIP.AMULET), true },
@@ -215,8 +215,9 @@ local um_specialinfo = {
     EYEOFTERROR = "Has a new attack.",
     TWINOFTERROR1 = "Has new attacks, matching more closely to its source material.",
     TWINOFTERROR2 = "Has new attacks, matching more closely to its source material.",
-    BUTTERFLY = "Immune to aura damage.",
-    CRABKING = "Reworked fight.\nTakes damage from being rammed by boats, healing is interruped by cannons or by killing its claws. Main attack no longer creates leaks.",
+    BUTTERFLY = "Slips away from incoming melee attacks, unless landed.\nImmune to aura damage.", -- Make it config dependent.
+    KELPHAT = "Wearer's wetness will slowly rise up to 33%."
+    --CRABKING = "Reworked fight.\nTakes damage from being rammed by boats, healing is interruped by cannons or by killing its claws. Main attack no longer creates leaks.",
 }
 
 --adds the addtional scrapbook info based on the table above.
