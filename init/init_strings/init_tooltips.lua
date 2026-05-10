@@ -99,7 +99,8 @@ STRINGS.UNCOMP_TOOLTIP = {
     UM_HAT_LEAFWING = "- Speedier when worn.\n- Can breeze through Thickets.",
     UM_FEATHER_TOTEM = "- Stays with you post-mortem.\n- Consumes feathers inside on revival for maximum\nhealth loss prevention and other special effects.",
     SEEDPOUCH = "- Halts seed spoilage inside it.\n- Can be upgraded with an Elastispacer.",
-    ANTLIONHAT = "- Has infinite stack size inside.\n- Picks up nearby Turf on the ground."
+    ANTLIONHAT = "- Has infinite stack size inside.\n- Picks up nearby Turf on the ground.",
+    KELPHAT = "- Wearer's wetness will slowly rise up to 33%."
 }
 local TOOLTIPS = STRINGS.UNCOMP_TOOLTIP
 
