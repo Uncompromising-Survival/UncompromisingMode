@@ -203,6 +203,7 @@
 - Strawhat rain protection increased from 20% to 35%
 - Friendly Viperlings now remain for 4 minutes, instead of 60 seconds.
 - You can now get multiple Friendly Viperlings by any source of them; however, you can only have 6 Friendly Viperlings at once, if you try spawning more than 6, the Friendly Viperling with less amount of time will despawn.
+- Pirate's Bandana is now burnable.
 
 ## Fixes
 - Fixed Deerclops's timer not starting.
