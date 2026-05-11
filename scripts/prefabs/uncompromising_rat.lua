@@ -1629,7 +1629,7 @@ end
 local function SnifferFoodScoreCalculations(inst, container, v)
     local stackmult = v.components.stackable and v.components.stackable:StackSize() or 1
     local preparedmult = v:HasTag("preparedfood") and 2 or 1
-    local delta = not container and (v:HasTag("fresh") and 10 or v:HasTag("stale") and 20 or (v:HasTag("spoiled") or IsAVersionOfRot(v)) and 30)
+    local delta = not container and (v:HasTag("stale") and 20 or (v:HasTag("spoiled") or IsAVersionOfRot(v)) and 30)
         or (v:HasTag("stale") and 5 or (v:HasTag("spoiled") or IsAVersionOfRot(v)) and 10) or 0
     inst.foodscore = inst.foodscore + (delta > 0 and ((delta * preparedmult) * stackmult) or delta)
 end
@@ -1657,7 +1657,7 @@ local function GetProxy(inst)
 end
 
 local function GetIntensity(item, in_container)
-    return not in_container and (item:HasTag("fresh") and .5 or item:HasTag("stale") and .75 or item:HasTag("spoiled") and .8)
+    return not in_container and (item:HasTag("stale") and .75 or item:HasTag("spoiled") and .8)
         or (item:HasTag("stale") and .5 or item:HasTag("spoiled") and .75) or IsAVersionOfRot(item) and 1
 end
 
@@ -1710,7 +1710,7 @@ local function DDScore(inst, proxy, scanned_masters)
 end
 
 local function FoodScoreCalculations(container, v, owner)
-    local intensity = not container and (v:HasTag("fresh") and .5 or v:HasTag("stale") and .75 or v:HasTag("spoiled") and .8)
+    local intensity = not container and (v:HasTag("stale") and .75 or v:HasTag("spoiled") and .8)
         or (v:HasTag("stale") and .5 or v:HasTag("spoiled") and .75) or IsAVersionOfRot(v) and 1
     if not intensity then return end
     TrySpawnIcon(v, owner, intensity)
