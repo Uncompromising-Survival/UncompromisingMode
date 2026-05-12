@@ -643,36 +643,29 @@ env.AddComponentPostInit("farmplantstress", function(self)
     self.GetFinalStressState = function(self)
         if self.depressed_forever then
             self.final_stress_state = 4 -- High
-            return self.final_stress_state
-        else
-            return self.final_stress_state
         end
+        return self.final_stress_state
     end
 
     -- AXE I haven't figured out how to correctly Postinit this. If you fix it, *test your fix first*, I've tried a decent chunk of things and they
     -- tend to screw things up (like trying to insert the variables into the "data" structure getting passed).
     -- There's probably a correct way to do it, though.
-    self.OnSave = function(self)
-        return {
-            final_stress_state = self.final_stress_state,
-            stress_points = self.stress_points,
-            stressors = self.stressors,
-
-            wormwood_res1 = self.wormwood_res1,
-            wormwood_res2 = self.wormwood_res2,
-            wormwood_res3 = self.wormwood_res3,
-            depressed_forever = self.depressed_forever,
-        }
+    local _OnSave = self.OnSave
+    function self:OnSave(...)
+        local ret = _OnSave(self, ...)
+        if ret then
+            ret.wormwood_res1 = self.wormwood_res1
+            ret.wormwood_res2 = self.wormwood_res2
+            ret.wormwood_res3 = self.wormwood_res3
+            ret.depressed_forever = self.depressed_forever
+        end
+        return ret
     end
 
-    self.OnLoad = function(self,data)
-        if data ~= nil then
-            self.final_stress_state = data.final_stress_state
-            self.stress_points = data.stress_points
-            for k, _ in pairs(self.stressors) do
-                self.stressors[k] = data.stressors[k]
-            end
-
+    local _OnLoad = self.OnLoad
+    function self:OnLoad(data, ...)
+        local ret = _OnLoad(self, data, ...)
+        if data then
             self.wormwood_res1 = data.wormwood_res1
             self.wormwood_res2 = data.wormwood_res2
             self.wormwood_res3 = data.wormwood_res3
@@ -682,6 +675,7 @@ env.AddComponentPostInit("farmplantstress", function(self)
                 self.inst.components.farmplanttendable:TendTo(TheWorld)
             end
         end
+        return ret
     end
 end)
 
@@ -779,28 +773,27 @@ env.AddPrefabPostInit("trap_bramble", function(inst)
     end
 
     local _ondeploy = inst.components.deployable.ondeploy
-
     local function ondeploy(inst, pt, deployer)
         if deployer.components.skilltreeupdater and deployer.components.skilltreeupdater:IsActivated("wormwood_blooming_trapbramble") then
             inst.bonusrange = true
         end
         _ondeploy(inst,pt,deployer)
     end
-
     inst.components.deployable.ondeploy = ondeploy
 
-    inst.OnSave = function(inst)
-        data = {}
+	local _OnSave = inst.OnSave
+    inst.OnSave = function(inst, data, ...)
         if inst.bonusrange then
             data.bonusrange = true
-            
         end
-        return data
+        return _OnSave and _OnSave(inst, data, ...)
     end
 
-    inst.OnLoad = function(inst,data)
+	local _OnLoad = inst.OnLoad
+    inst.OnLoad = function(inst, data, ...)
         if data and data.bonusrange then
             inst.bonusrange = true
         end
+		return _OnLoad and _OnLoad(inst, data, ...)
     end
 end)

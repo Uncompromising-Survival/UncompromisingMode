@@ -141,7 +141,6 @@ local function fn()
     inst.components.inventoryitem.nobounce = true
     inst.components.inventoryitem.pushlandedevents = false
 
-
     inst:AddComponent("tradable")
 
     inst:AddComponent("lootdropper")
