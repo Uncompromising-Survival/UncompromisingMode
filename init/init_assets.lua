@@ -463,6 +463,9 @@ local inventoryitems =
     "um_hat_nettlemask",
     "um_thulecite_razor",
     "uncompromising_winkyhomeburrow",
+    "um_scrapper",
+    "um_astral_projector",
+    "um_astral_projector_target"
 }
 
 local minimap_icons = {
@@ -539,7 +542,10 @@ local minimap_icons = {
     "um_spongeplant",
     "blueberryplant",
     "sludgestack",
-    "sludgestack_corked"
+    "sludgestack_corked",
+    "um_scrapper",
+    "um_astral_projector",
+    "um_astral_projector_target"
 }
 
 for _, item in ipairs(inventoryitems) do
