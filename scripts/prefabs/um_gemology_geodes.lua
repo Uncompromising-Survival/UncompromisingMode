@@ -14,26 +14,26 @@ local ventassets = { Asset("ANIM", "anim/um_geode_vent.zip") }
 local loot_table = require("um_gemology_geode_defs")
 
 local function GenerateLoot(inst, miner, num_rocks_worked)
-    for i = 1, 3 * (num_rocks_worked or 1) do -- nongem loot
-        local loot = weighted_random_choice(loot_table[inst.prefab].notgemloot)
-        local prefab = SpawnPrefab(loot)
-        LaunchAt(prefab, inst, miner, -1.8, 1.5, nil, math.random(0, 360))
-    end
-    for i = 1, num_rocks_worked do -- gem loot
-		for j = 1, math.random() < .05 and 2 or 1 do -- Need to make it uncommon to get more than 1
-			local loot = weighted_random_choice(loot_table[inst.prefab].gemloot)
-			local prefab = SpawnPrefab(loot)
-			LaunchAt(prefab, inst, miner, -1.8, 1.5, nil, math.random(0, 360))
-			if prefab:HasTag("gemology_gem") then
-				local rand = math.random()
-				if not (rand >= 0.05) then
-					prefab:SetTier(2)
-					if rand < 0.01 then
-						prefab:SetTier(3)
-					end
-				end
-			end
-		end
+    for i = 1, num_rocks_worked do
+        for i = 1, 3 do -- nongem loot
+            local loot = weighted_random_choice(loot_table[inst.prefab].notgemloot)
+            local prefab = SpawnPrefab(loot)
+            LaunchAt(prefab, inst, miner, -1.8, 1.5, nil, math.random(0, 360))
+        end
+        for j = 1, math.random() < .05 and 2 or 1 do -- Need to make it uncommon to get more than 1
+            local loot = weighted_random_choice(loot_table[inst.prefab].gemloot)
+            local prefab = SpawnPrefab(loot)
+            LaunchAt(prefab, inst, miner, -1.8, 1.5, nil, math.random(0, 360))
+            if prefab:HasTag("gemology_gem") then
+                local rand = math.random()
+                if not (rand >= 0.05) then
+                    prefab:SetTier(2)
+                    if rand < 0.01 then
+                        prefab:SetTier(3)
+                    end
+                end
+            end
+        end
     end
 end
 
