@@ -11,9 +11,7 @@ local ruinsassets = { Asset("ANIM", "anim/um_geode_ruins.zip") }
 local sinksassets = { Asset("ANIM", "anim/um_geode_sink.zip") }
 local ventassets = { Asset("ANIM", "anim/um_geode_vent.zip") }
 
-
 local loot_table = require("um_gemology_geode_defs")
-
 
 local function GenerateLoot(inst, miner)
     for i = 1, 3 do -- nongem loot
@@ -40,7 +38,6 @@ local function GenerateLoot(inst, miner)
         end
     end
 end
-
 
 local function on_mine(inst, miner, workleft, workdone)
     local num_rocks_worked = math.clamp(math.ceil(workdone / TUNING.ROCK_FRUIT_MINES), 1, inst.components.stackable:StackSize())
@@ -159,7 +156,6 @@ end
 local function vent()
     return geodemain("um_geode_vent")
 end
-
 
 return Prefab("um_gemology_geode_red", mushred, mushredassets),
     Prefab("um_gemology_geode_green", mushgreen, mushgreenassets),
