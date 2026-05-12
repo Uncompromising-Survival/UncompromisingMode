@@ -358,8 +358,7 @@ end
 local function ShouldRunAway(target, inst)
     if not target.components.health or target.components.health:IsDead() then return false end
     local leader = GetLeader(inst)
-    if not leader then return true end
-    return leader and leader.components.combat and not leader.components.combat:IsAlly(target)
+    return not leader or leader.components.combat and not leader.components.combat:IsAlly(target)
 end
 
 function Uncompromising_RatBrain:OnStart()
