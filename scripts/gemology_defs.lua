@@ -22,9 +22,11 @@ The values are:
         [2] = "Description for tier 2 gem"
         ...and so forth
     }
-    build = "string" --build name
-    bank = "string" --bank name  --should these be the inv img instead??? probably.
+    createprefab = boolean --whether the item prefab is automatically created.
+    build = "string" --build name - even if you don't generate the prefab, you need this for scrapbook/mineral logbook.
+    bank = "string" --bank name
     anim = "string" --anim name   -- defaults to "idle"
+    postfn = function(inst) -- function that runs when the prefab is created on the common side on post-init.
 }
 
 Additional note:
@@ -51,6 +53,7 @@ local function AddUMGemDef(name, def) --helper function to just skip some re-use
     def.build = "um_gemologygems"
     def.bank = "um_gemologygems"
     def.anim = name
+    def.createprefab = true
 
     def.desc = STRINGS.UM_DESCRIPTOR.GEM_ENCHANTABLE[string.upper(string.gsub(name, "gem", ""))]
 
@@ -411,7 +414,6 @@ local function ElectricAttack(inst, attacker, target, tier)
     end
 
     if target.components.combat then
-
         target.components.combat:GetAttacked(attacker, static_mods[tier], nil, "electric")
     end
 

@@ -2,7 +2,6 @@ local assets =
 {
     Asset("ANIM", "anim/um_gemologygems.zip"),
 }
-local gems = { "bluegem", "redgem", "purplegem", "orangegem", "yellowgem", "palegem" }
 local GEM_DEFS = require("gemology_defs").GEM_DEFS
 local function OnSave(inst, data)
     data.tier = inst:GetTier()
@@ -116,7 +115,7 @@ local function OnDestack(new, inst)
     new:SetRevealed(inst:IsRevealed())
 end
 
-local function MakeGem(gem, bank, build, anim)
+local function MakeGem(gem, bank, build, anim, postfn)
     local function fncommon()
         local inst = CreateEntity()
 
@@ -159,6 +158,12 @@ local function MakeGem(gem, bank, build, anim)
                 return inst:GetTier() == item:GetTier() and item:IsRevealed() == inst:IsRevealed()
             end
         end
+
+        inst:DoTaskInTime(0, function(inst)
+            if postfn ~= nil then
+                postfn(inst)
+            end
+        end)
 
         if not TheWorld.ismastersim then
             return inst
@@ -206,6 +211,8 @@ local function MakeGem(gem, bank, build, anim)
         inst.OnLoad = OnLoad
         inst.OnEntityWake = OnEntityWake
 
+
+
         return inst
     end
 
@@ -215,7 +222,9 @@ end
 local prefabs = {}
 
 for gem, defs in pairs(GEM_DEFS) do
-    table.insert(prefabs, MakeGem(gem, defs.bank, defs.build, defs.anim)) --hmm, should I move this asset to the defs file so any mod can import their assets?
+    if defs.createprefab then
+        table.insert(prefabs, MakeGem(gem, defs.bank, defs.build, defs.anim, defs.postfn), assets)
+    end
 end
 
 return unpack(prefabs)
