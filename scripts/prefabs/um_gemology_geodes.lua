@@ -13,35 +13,33 @@ local ventassets = { Asset("ANIM", "anim/um_geode_vent.zip") }
 
 local loot_table = require("um_gemology_geode_defs")
 
-local function GenerateLoot(inst, miner)
-    for i = 1, 3 do -- nongem loot
+local function GenerateLoot(inst, miner, num_rocks_worked)
+    for i = 1, 3 * (num_rocks_worked or 1) do -- nongem loot
         local loot = weighted_random_choice(loot_table[inst.prefab].notgemloot)
         local prefab = SpawnPrefab(loot)
         LaunchAt(prefab, inst, miner, -1.8, 1.5, nil, math.random(0, 360))
     end
-    local max_i = 1
-    if math.random() < 0.05 then -- Need to make it uncommon to get more than 1
-        max_i = 2
-    end
-    for i = 1, max_i do -- gem loot
-        local loot = weighted_random_choice(loot_table[inst.prefab].gemloot)
-        local prefab = SpawnPrefab(loot)
-        LaunchAt(prefab, inst, miner, -1.8, 1.5, nil, math.random(0, 360))
-        if prefab:HasTag("gemology_gem") then
-            local rand = math.random()
-            if not (rand >= 0.05) then
-                prefab:SetTier(2)
-                if rand < 0.01 then
-                    prefab:SetTier(3)
-                end
-            end
-        end
+    for i = 1, num_rocks_worked do -- gem loot
+		for j = 1, math.random() < .05 and 2 or 1 do -- Need to make it uncommon to get more than 1
+			local loot = weighted_random_choice(loot_table[inst.prefab].gemloot)
+			local prefab = SpawnPrefab(loot)
+			LaunchAt(prefab, inst, miner, -1.8, 1.5, nil, math.random(0, 360))
+			if prefab:HasTag("gemology_gem") then
+				local rand = math.random()
+				if not (rand >= 0.05) then
+					prefab:SetTier(2)
+					if rand < 0.01 then
+						prefab:SetTier(3)
+					end
+				end
+			end
+		end
     end
 end
 
 local function on_mine(inst, miner, workleft, workdone)
     local num_rocks_worked = math.clamp(math.ceil(workdone / TUNING.ROCK_FRUIT_MINES), 1, inst.components.stackable:StackSize())
-    GenerateLoot(inst, miner)
+    GenerateLoot(inst, miner, num_rocks_worked)
     -- Finally, remove the actual stack items we just consumed
     local top_stack_item = inst.components.stackable:Get(num_rocks_worked)
     top_stack_item:Remove()
