@@ -113,6 +113,14 @@ env.AddPrefabPostInit("wormwood", function(inst)
     inst:RemoveTag("beebeacon")
     inst.beebeacon = nil
 
+    inst:ListenForEvent("healthdelta", function(inst, data)
+        if data.cause == "fire" then
+            local maxhealth = inst.components.health.maxhealth
+            inst.components.health:DeltaPenalty(math.abs(data.amount / maxhealth / 2))
+        end
+    end)
+
+
     inst:AddTag("hayfever_immune")
 end)
 
@@ -186,11 +194,10 @@ end
 
 
 if env.GetModConfigData("wormwood_photosynthesis") then
-
     --------------------------------------------------------------------------------------------------------------------------------
     -- [ Final Built Skilltree ] ---------------------------------------------------------------------------------------------------
     --------------------------------------------------------------------------------------------------------------------------------
-    
+
     env.modimport("init/init_character_changes/skilltree_wormwood") -- Import New Wormwood Tree
 
     local function VetCurseCancelHealing(inst, data)
@@ -276,18 +283,18 @@ if env.GetModConfigData("wormwood_photosynthesis") then
                 if inst.components.skilltreeupdater:IsActivated("wormwood_blooming_max_upgrade") then
                     healing = healing * TUNING.WORMWOOD_BLOOM_MAX_UPGRADE_MULT
                 end
-                
-                inst:AddDebuff("compostheal_buff", "compostheal_buff", {duration = healing * (TUNING.WORMWOOD_COMPOST_HEALOVERTIME_TICK/TUNING.WORMWOOD_COMPOST_HEALOVERTIME_HEALTH)})
+
+                inst:AddDebuff("compostheal_buff", "compostheal_buff", { duration = healing * (TUNING.WORMWOOD_COMPOST_HEALOVERTIME_TICK / TUNING.WORMWOOD_COMPOST_HEALOVERTIME_HEALTH) })
             end
         end
         inst.OnFertilizedWithCompost = OnFertilizedWithCompost
-        
+
         local function OnFertilizedWithManure(inst, value, src)
             if value > 0 and inst.components.bloomness then
                 local healing = TUNING.WORMWOOD_MANURE_HEAL_VALUES[math.ceil(value / 8)] or TUNING.WORMWOOD_MANURE_HEAL_VALUES[1]
                 if inst.components.skilltreeupdater:IsActivated("wormwood_blooming_max_upgrade") then
                     healing = healing * TUNING.WORMWOOD_BLOOM_MAX_UPGRADE_MULT
-                end                
+                end
                 inst.components.health:DoDelta(healing, false, src.prefab)
             end
         end
@@ -297,8 +304,8 @@ end
 
 -- AXE This is required for compatibility with Wormwood's new skilltree
 
-local creatures_to_grab = {"bee","killerbee","butterfly","um_buttery_fly","moonbutterfly","lightflier","um_bee_moon","spore_medium","spore_tall","spore_small","um_smolder_spore"}
-for i,v in ipairs(creatures_to_grab) do
+local creatures_to_grab = { "bee", "killerbee", "butterfly", "um_buttery_fly", "moonbutterfly", "lightflier", "um_bee_moon", "spore_medium", "spore_tall", "spore_small", "um_smolder_spore" }
+for i, v in ipairs(creatures_to_grab) do
     env.AddPrefabPostInit(v, function(inst)
         if not TheWorld.ismastersim then
             return inst
@@ -314,26 +321,26 @@ require("recipe")
 local TECH = env.TECH
 local Ingredient = env.Ingredient
 
-local plant_craft_skills = {"sapling","berrybush","berrybush2","juicyberrybush","reeds","lureplant"}
-for i,v in ipairs(plant_craft_skills) do
-    env.AllRecipes["wormwood_"..v].builder_skill="wormwood_originator"
+local plant_craft_skills = { "sapling", "berrybush", "berrybush2", "juicyberrybush", "reeds", "lureplant" }
+for i, v in ipairs(plant_craft_skills) do
+    env.AllRecipes["wormwood_" .. v].builder_skill = "wormwood_originator"
 end
 
-local mutation_skills = {"carrat","lightflier","fruitdragon"}
-for i,v in ipairs(mutation_skills) do
-    env.AllRecipes["wormwood_"..v].builder_skill = "wormwood_lunar_mutations"
+local mutation_skills = { "carrat", "lightflier", "fruitdragon" }
+for i, v in ipairs(mutation_skills) do
+    env.AllRecipes["wormwood_" .. v].builder_skill = "wormwood_lunar_mutations"
 end
 
 -- Lunar Mushtree Skills
-env.AddRecipe2("wormwood_mushtree_tall", {Ingredient("blue_cap", 1),Ingredient("spore_tall", 1),Ingredient("guano", 5)}, TECH.NONE, { placer = "wormwood_mushtree_tall_placer" , builder_skill = "wormwood_mushroommadness", product = "mushtree_tall", nounlock = true,no_deconstruction=true, description="wormwood_mushtree", image = "wormwood_mushtree_tall.tex"}, {"CHARACTER"})
-env.AddRecipe2("wormwood_mushtree_medium", {Ingredient("red_cap", 1),Ingredient("spore_medium", 1),Ingredient("guano", 5)}, TECH.NONE, { placer = "wormwood_mushtree_medium_placer" , builder_skill = "wormwood_mushroommadness", product = "mushtree_medium", nounlock = true,no_deconstruction=true, description="wormwood_mushtree", image = "wormwood_mushtree_medium.tex" }, {"CHARACTER"})
-env.AddRecipe2("wormwood_mushtree_small", {Ingredient("green_cap", 1),Ingredient("spore_small", 1),Ingredient("guano", 5)}, TECH.NONE, { placer = "wormwood_mushtree_small_placer" , builder_skill = "wormwood_mushroommadness", product = "mushtree_small", nounlock = true,no_deconstruction=true, description="wormwood_mushtree", image = "wormwood_mushtree_small.tex" }, {"CHARACTER"})
+env.AddRecipe2("wormwood_mushtree_tall", { Ingredient("blue_cap", 1), Ingredient("spore_tall", 1), Ingredient("guano", 5) }, TECH.NONE, { placer = "wormwood_mushtree_tall_placer", builder_skill = "wormwood_mushroommadness", product = "mushtree_tall", nounlock = true, no_deconstruction = true, description = "wormwood_mushtree", image = "wormwood_mushtree_tall.tex" }, { "CHARACTER" })
+env.AddRecipe2("wormwood_mushtree_medium", { Ingredient("red_cap", 1), Ingredient("spore_medium", 1), Ingredient("guano", 5) }, TECH.NONE, { placer = "wormwood_mushtree_medium_placer", builder_skill = "wormwood_mushroommadness", product = "mushtree_medium", nounlock = true, no_deconstruction = true, description = "wormwood_mushtree", image = "wormwood_mushtree_medium.tex" }, { "CHARACTER" })
+env.AddRecipe2("wormwood_mushtree_small", { Ingredient("green_cap", 1), Ingredient("spore_small", 1), Ingredient("guano", 5) }, TECH.NONE, { placer = "wormwood_mushtree_small_placer", builder_skill = "wormwood_mushroommadness", product = "mushtree_small", nounlock = true, no_deconstruction = true, description = "wormwood_mushtree", image = "wormwood_mushtree_small.tex" }, { "CHARACTER" })
 
 env.AllRecipes["wormwood_mushtree_tall"].builder_tag = "plantkin"
 env.AllRecipes["wormwood_mushtree_medium"].builder_tag = "plantkin"
 env.AllRecipes["wormwood_mushtree_small"].builder_tag = "plantkin"
 
-env.AddRecipe2("wormwood_mushtree_lunar", {Ingredient("moon_cap", 2),Ingredient("guano", 5)}, TECH.NONE, { placer = "wormwood_mushtree_lunar_placer" , builder_skill = "wormwood_moon_cap_eating", product = "mushtree_moon", nounlock = true,no_deconstruction=true, description="wormwood_mushtree", image = "wormwood_mushtree_lunar.tex" }, {"CHARACTER"})
+env.AddRecipe2("wormwood_mushtree_lunar", { Ingredient("moon_cap", 2), Ingredient("guano", 5) }, TECH.NONE, { placer = "wormwood_mushtree_lunar_placer", builder_skill = "wormwood_moon_cap_eating", product = "mushtree_moon", nounlock = true, no_deconstruction = true, description = "wormwood_mushtree", image = "wormwood_mushtree_lunar.tex" }, { "CHARACTER" })
 env.AllRecipes["wormwood_mushtree_lunar"].builder_tag = "plantkin"
 --[[
 local plant_types = {"tomato","eggplant","potato","dragonfruit","pepper","carrot","pumpkin","onion","pomegranate","asparagus",
@@ -347,25 +354,25 @@ end
 env.AllRecipes["wormwood_tomato_eqex"].image = "wormwood_tomato.tex"
 env.AllRecipes["wormwood_onion_eqex"].image = "wormwood_onion.tex"]]
 
-local plants_1 = {"potato","asparagus","garlic","pumpkin","pomegranate","dragonfruit","watermelon"}
-local plants_2 = {"eggplant","corn","durian","carrot","onion","pepper","tomato"}
-for i,v in ipairs(plants_1) do
-    env.AddRecipe2("wormwood_"..v.."_eqex", {Ingredient(plants_2[i].."_seeds", 5),Ingredient(CHARACTER_INGREDIENT.HEALTH, 5   )}, TECH.NONE, {  numtogive = 4,  builder_skill = "wormwood_allegiance_lunar_eqex", product = v.."_seeds", nounlock = true,no_deconstruction=true, description="wormwood_eqex"}, {"CHARACTER"})
-    env.AllRecipes["wormwood_"..v.."_eqex"].builder_tag = "plantkin"
+local plants_1 = { "potato", "asparagus", "garlic", "pumpkin", "pomegranate", "dragonfruit", "watermelon" }
+local plants_2 = { "eggplant", "corn", "durian", "carrot", "onion", "pepper", "tomato" }
+for i, v in ipairs(plants_1) do
+    env.AddRecipe2("wormwood_" .. v .. "_eqex", { Ingredient(plants_2[i] .. "_seeds", 5), Ingredient(CHARACTER_INGREDIENT.HEALTH, 5) }, TECH.NONE, { numtogive = 4, builder_skill = "wormwood_allegiance_lunar_eqex", product = v .. "_seeds", nounlock = true, no_deconstruction = true, description = "wormwood_eqex" }, { "CHARACTER" })
+    env.AllRecipes["wormwood_" .. v .. "_eqex"].builder_tag = "plantkin"
 
-    env.AddRecipe2("wormwood_"..plants_2[i].."_eqex", {Ingredient(v.."_seeds", 5),Ingredient(CHARACTER_INGREDIENT.HEALTH, 5   )}, TECH.NONE, {  numtogive = 4,  builder_skill = "wormwood_allegiance_lunar_eqex", product = plants_2[i].."_seeds", nounlock = true,no_deconstruction=true, description="wormwood_eqex"}, {"CHARACTER"})
-    env.AllRecipes["wormwood_"..plants_2[i].."_eqex"].builder_tag = "plantkin"
+    env.AddRecipe2("wormwood_" .. plants_2[i] .. "_eqex", { Ingredient(v .. "_seeds", 5), Ingredient(CHARACTER_INGREDIENT.HEALTH, 5) }, TECH.NONE, { numtogive = 4, builder_skill = "wormwood_allegiance_lunar_eqex", product = plants_2[i] .. "_seeds", nounlock = true, no_deconstruction = true, description = "wormwood_eqex" }, { "CHARACTER" })
+    env.AllRecipes["wormwood_" .. plants_2[i] .. "_eqex"].builder_tag = "plantkin"
 end
 
 
 
 local levels =
 {
-    { amount=6, grow="mushroom_4", idle="mushroom_4_idle", hit="hit_mushroom_4" },  -- this can only be reached by starting with spores
-    { amount=4, grow="mushroom_3", idle="mushroom_3_idle", hit="hit_mushroom_3" },  -- max for starting with mushrooms
-    { amount=2, grow="mushroom_2", idle="mushroom_2_idle", hit="hit_mushroom_2" },
-    { amount=1, grow="mushroom_1", idle="mushroom_1_idle", hit="hit_mushroom_1" },
-    { amount=0, idle="idle", hit="hit_idle" },
+    { amount = 6, grow = "mushroom_4", idle = "mushroom_4_idle", hit = "hit_mushroom_4" }, -- this can only be reached by starting with spores
+    { amount = 4, grow = "mushroom_3", idle = "mushroom_3_idle", hit = "hit_mushroom_3" }, -- max for starting with mushrooms
+    { amount = 2, grow = "mushroom_2", idle = "mushroom_2_idle", hit = "hit_mushroom_2" },
+    { amount = 1, grow = "mushroom_1", idle = "mushroom_1_idle", hit = "hit_mushroom_1" },
+    { amount = 0, idle = "idle",   hit = "hit_idle" },
 }
 
 local spore_to_cap = --AXE I'm referring to these, and the other local arrays... I think we have to keep these to reset StartGrowing.
@@ -378,7 +385,7 @@ local spore_to_cap = --AXE I'm referring to these, and the other local arrays...
 local FULLY_REPAIRED_WORKLEFT = 3
 
 local function DoMushroomOverrideSymbol(inst, product)
-    inst.AnimState:OverrideSymbol("swap_mushroom", "mushroom_farm_"..(string.split(product, "_")[1]).."_build", "swap_mushroom")
+    inst.AnimState:OverrideSymbol("swap_mushroom", "mushroom_farm_" .. (string.split(product, "_")[1]) .. "_build", "swap_mushroom")
 end
 
 local function StartGrowing(inst, giver, product)
@@ -414,7 +421,7 @@ end
 local UpvalueHacker = require("tools/upvaluehacker")
 env.AddPrefabPostInit("world", function(inst) -- AXE Assuming Max said this -> Supposedly, this is better since it's called once for each "world" prefab, which usually only spawns once per shard.
     if not _G.TheWorld.ismastersim then return end
-    UpvalueHacker.SetUpvalue(_G.Prefabs.mushroom_farm.fn, StartGrowing, "onacceptitem","StartGrowing")
+    UpvalueHacker.SetUpvalue(_G.Prefabs.mushroom_farm.fn, StartGrowing, "onacceptitem", "StartGrowing")
 end)
 
 local TREESTATES =
@@ -424,16 +431,18 @@ local TREESTATES =
 }
 
 local function IsWormwoodGone(inst)
-    local wormwood = FindEntity(inst,TUNING.WORMWOOD_BLOOM_FARM_PLANT_INTERACT_RANGE*TUNING.WORMWOOD_TENDRANGE_MULT,function(ent) return ent.prefab == "wormwood" and 
-        ent.components.skilltreeupdater and ent.components.skilltreeupdater:IsActivated("wormwood_sympathetic_blooming") and ent.fullbloom end)
+    local wormwood = FindEntity(inst, TUNING.WORMWOOD_BLOOM_FARM_PLANT_INTERACT_RANGE * TUNING.WORMWOOD_TENDRANGE_MULT, function(ent)
+        return ent.prefab == "wormwood" and
+            ent.components.skilltreeupdater and ent.components.skilltreeupdater:IsActivated("wormwood_sympathetic_blooming") and ent.fullbloom
+    end)
     if wormwood then
-        inst:DoTaskInTime(60*4,IsWormwoodGone)
+        inst:DoTaskInTime(60 * 4, IsWormwoodGone)
     elseif not TheWorld.state.issummer and inst.components.pickable and inst.components.pickable.canbepicked and (inst.prefab == "cactus" or inst.prefab == "oasis_cactus") then
         inst.AnimState:PlayAnimation("idle", true)
         inst.has_flower = false
-    elseif inst:HasTag("mushtree") and not ((inst.prefab == "mushtree_tall" and TheWorld.state.iswinter) or 
-        (inst.prefab == "mushtree_small" and TheWorld.state.isspring) or (inst.prefab == "mushtree_medium" and TheWorld.state.issummer)) then
-        inst._Normal(inst, true) 
+    elseif inst:HasTag("mushtree") and not ((inst.prefab == "mushtree_tall" and TheWorld.state.iswinter) or
+            (inst.prefab == "mushtree_small" and TheWorld.state.isspring) or (inst.prefab == "mushtree_medium" and TheWorld.state.issummer)) then
+        inst._Normal(inst, true)
     end
     if not wormwood then
         SpawnPrefab("wormwood_lunar_transformation_finish").Transform:SetPosition(inst.Transform:GetWorldPosition())
@@ -445,22 +454,22 @@ local function DoSympatheticBlooming(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
 
     -- Cactus
-    local cacti = TheSim:FindEntities(x,y,z,TUNING.WORMWOOD_BLOOM_FARM_PLANT_INTERACT_RANGE*TUNING.WORMWOOD_TENDRANGE_MULT,{"plant","thorny"})
-    for i,v in ipairs(cacti) do
+    local cacti = TheSim:FindEntities(x, y, z, TUNING.WORMWOOD_BLOOM_FARM_PLANT_INTERACT_RANGE * TUNING.WORMWOOD_TENDRANGE_MULT, { "plant", "thorny" })
+    for i, v in ipairs(cacti) do
         if (v.prefab == "cactus" or v.prefab == "oasis_cactus") and not v.has_flower and v.components.pickable.canbepicked then
             v.AnimState:PlayAnimation("idle_flower", true)
             v.has_flower = true
-            v:DoTaskInTime(60*4,IsWormwoodGone)
+            v:DoTaskInTime(60 * 4, IsWormwoodGone)
             SpawnPrefab("wormwood_lunar_transformation_finish").Transform:SetPosition(v.Transform:GetWorldPosition())
         end
     end
 
     -- Mushtrees
-    local mushtrees = TheSim:FindEntities(x,y,z,TUNING.WORMWOOD_BLOOM_FARM_PLANT_INTERACT_RANGE*TUNING.WORMWOOD_TENDRANGE_MULT,{"mushtree"})
-    for i,v in ipairs(mushtrees) do
+    local mushtrees = TheSim:FindEntities(x, y, z, TUNING.WORMWOOD_BLOOM_FARM_PLANT_INTERACT_RANGE * TUNING.WORMWOOD_TENDRANGE_MULT, { "mushtree" })
+    for i, v in ipairs(mushtrees) do
         if (v.prefab == "mushtree_tall" or v.prefab == "mushtree_medium" or v.prefab == "mushtree_small") and v.treestate == "normal" then
-            v._Bloom(v, true) 
-            v:DoTaskInTime(60*4,IsWormwoodGone)
+            v._Bloom(v, true)
+            v:DoTaskInTime(60 * 4, IsWormwoodGone)
             SpawnPrefab("wormwood_lunar_transformation_finish").Transform:SetPosition(v.Transform:GetWorldPosition())
         end
     end
@@ -468,20 +477,20 @@ end
 
 local PLANT_DEFS = require("prefabs/farm_plant_defs").PLANT_DEFS
 
-env.AddPrefabPostInit("world", function(inst) 
+env.AddPrefabPostInit("world", function(inst)
     if not _G.TheWorld.ismastersim then return end
-    
-    local _DoAOEeffect = UpvalueHacker.GetUpvalue(_G.Prefabs.wormwood.fn,"master_postinit","UpdateBloomStage","EnableFullBloom","DoAOEeffect")
-    local function DoAOEeffect(inst,enable)
-        _DoAOEeffect(inst,enable)
+
+    local _DoAOEeffect = UpvalueHacker.GetUpvalue(_G.Prefabs.wormwood.fn, "master_postinit", "UpdateBloomStage", "EnableFullBloom", "DoAOEeffect")
+    local function DoAOEeffect(inst, enable)
+        _DoAOEeffect(inst, enable)
         local skilltreeupdater = inst.components.skilltreeupdater
         if skilltreeupdater and skilltreeupdater:IsActivated("wormwood_sympathetic_blooming") then
             DoSympatheticBlooming(inst)
         end
     end
-    UpvalueHacker.SetUpvalue(_G.Prefabs.wormwood.fn, DoAOEeffect,"master_postinit","UpdateBloomStage","EnableFullBloom","DoAOEeffect")
+    UpvalueHacker.SetUpvalue(_G.Prefabs.wormwood.fn, DoAOEeffect, "master_postinit", "UpdateBloomStage", "EnableFullBloom", "DoAOEeffect")
 
-    local _EnableFullBloom = UpvalueHacker.GetUpvalue(_G.Prefabs.wormwood.fn,"master_postinit","UpdateBloomStage","EnableFullBloom")
+    local _EnableFullBloom = UpvalueHacker.GetUpvalue(_G.Prefabs.wormwood.fn, "master_postinit", "UpdateBloomStage", "EnableFullBloom")
     local function EnableFullBloom(inst, enable)
         if enable then
             if not inst.fullbloom then
@@ -496,20 +505,20 @@ env.AddPrefabPostInit("world", function(inst)
         end
         _EnableFullBloom(inst, enable)
     end
-    UpvalueHacker.SetUpvalue(_G.Prefabs.wormwood.fn, EnableFullBloom,"master_postinit","UpdateBloomStage","EnableFullBloom")
+    UpvalueHacker.SetUpvalue(_G.Prefabs.wormwood.fn, EnableFullBloom, "master_postinit", "UpdateBloomStage", "EnableFullBloom")
 
     for k, v in pairs(PLANT_DEFS) do
-        env.AddPrefabPostInit(v.prefab,function(inst)
-            inst:ListenForEvent("on_planted", on_planted)   
+        env.AddPrefabPostInit(v.prefab, function(inst)
+            inst:ListenForEvent("on_planted", on_planted)
         end)
     end
 
-    local _OnBlocked = UpvalueHacker.GetUpvalue(_G.Prefabs.armor_bramble.fn,"OnBlocked")
+    local _OnBlocked = UpvalueHacker.GetUpvalue(_G.Prefabs.armor_bramble.fn, "OnBlocked")
     local function OnBlocked(owner, data, inst)
         _OnBlocked(owner, data, inst)
         if data ~= nil and not data.redirected then
             if owner.components.skilltreeupdater and owner.components.skilltreeupdater:IsActivated("wormwood_armor_bramble2") then
-                owner:DoTaskInTime(0.6,function(owner) --AXE The capstone ability triggers the bramble effect a second time.
+                owner:DoTaskInTime(0.6, function(owner) --AXE The capstone ability triggers the bramble effect a second time.
                     if owner then
                         SpawnPrefab("bramblefx_armor"):SetFXOwner(owner)
                         if owner.SoundEmitter ~= nil then
@@ -520,15 +529,15 @@ env.AddPrefabPostInit("world", function(inst)
             end
         end
     end
-    UpvalueHacker.SetUpvalue(_G.Prefabs.armor_bramble.fn, OnBlocked,"OnBlocked")
+    UpvalueHacker.SetUpvalue(_G.Prefabs.armor_bramble.fn, OnBlocked, "OnBlocked")
 
-    local _OnHuskBlocked = UpvalueHacker.GetUpvalue(_G.Prefabs.armor_lunarplant_husk.fn, "husk_master_postinit","OnHuskBlocked")
+    local _OnHuskBlocked = UpvalueHacker.GetUpvalue(_G.Prefabs.armor_lunarplant_husk.fn, "husk_master_postinit", "OnHuskBlocked")
     local function OnHuskBlocked(owner, data, inst)
         _OnHuskBlocked(owner, data, inst)
-        
+
         if data ~= nil and not data.redirected then
             if owner.components.skilltreeupdater and owner.components.skilltreeupdater:IsActivated("wormwood_armor_bramble2") then
-                owner:DoTaskInTime(0.6,function(owner) --AXE The capstone ability triggers the bramble effect a second time.
+                owner:DoTaskInTime(0.6, function(owner) --AXE The capstone ability triggers the bramble effect a second time.
                     if owner then
                         SpawnPrefab("bramblefx_armor_upgrade"):SetFXOwner(owner)
                         if owner.SoundEmitter ~= nil then
@@ -546,7 +555,7 @@ env.AddPrefabPostInit("world", function(inst)
 
         local attacker = data.attacker
         if not attacker or not attacker.components.locomotor
-                or (attacker.components.health and attacker.components.health:IsDead()) then
+            or (attacker.components.health and attacker.components.health:IsDead()) then
             return
         end
 
@@ -556,7 +565,7 @@ env.AddPrefabPostInit("world", function(inst)
         end
     end
 
-    UpvalueHacker.SetUpvalue(_G.Prefabs.armor_lunarplant_husk.fn, OnHuskBlocked,"husk_master_postinit","OnHuskBlocked")
+    UpvalueHacker.SetUpvalue(_G.Prefabs.armor_lunarplant_husk.fn, OnHuskBlocked, "husk_master_postinit", "OnHuskBlocked")
 
     local function DoThornsTrap(inst, pos)
         local thorns = SpawnPrefab("bramblefx_trap")
@@ -564,11 +573,11 @@ env.AddPrefabPostInit("world", function(inst)
         thorns.canhitplayers = TheNet:GetPVPEnabled()
         if inst.bonusrange then
             thorns.range = thorns.range + 2
-            thorns.Transform:SetScale(2,2,2)
+            thorns.Transform:SetScale(2, 2, 2)
         end
     end
 
-    UpvalueHacker.SetUpvalue(_G.Prefabs.trap_bramble.fn, DoThornsTrap,"OnExplode","DoThorns")
+    UpvalueHacker.SetUpvalue(_G.Prefabs.trap_bramble.fn, DoThornsTrap, "OnExplode", "DoThorns")
 end)
 
 local function on_planted(inst, data)
@@ -588,16 +597,16 @@ local function on_planted(inst, data)
         if skilltreeupdater and skilltreeupdater:IsActivated("wormwood_resilient_crops3") then
             --TheNet:Announce("Wormwood made me extremely resilient")
             inst.components.farmplantstress.wormwood_res3 = true
-        end   
+        end
     end
 end
 
 
 for k, v in pairs(PLANT_DEFS) do
-    env.AddPrefabPostInit(v.prefab,function(inst)
-        inst:ListenForEvent("on_planted", on_planted)  
-        
-        -- AXE This is our backdoor to make edits to all plants during the fn call 
+    env.AddPrefabPostInit(v.prefab, function(inst)
+        inst:ListenForEvent("on_planted", on_planted)
+
+        -- AXE This is our backdoor to make edits to all plants during the fn call
         local _UpdateResearchStage = inst.UpdateResearchStage
         inst.UpdateResearchStage = function(inst, stage)
             -- AXE Resilient Crops II triggers here after the crops grow; if they're wild, then they tend themselves.
@@ -612,11 +621,11 @@ for k, v in pairs(PLANT_DEFS) do
                 inst.components.growable:DoGrowth()
                 stage = stage - 1
                 inst.components.farmplantstress.depressed_forever = true
-                inst:DoTaskInTime(0,function(inst) inst.AnimState:PlayAnimation("crop_full", true) end)
-            else  
+                inst:DoTaskInTime(0, function(inst) inst.AnimState:PlayAnimation("crop_full", true) end)
+            else
                 --AXE in this instance, we don't need to update the research stage, it's going to get called again....
-                _UpdateResearchStage(inst,stage)
-            end   
+                _UpdateResearchStage(inst, stage)
+            end
         end
     end)
 end
@@ -679,10 +688,10 @@ env.AddComponentPostInit("farmplantstress", function(self)
     end
 end)
 
-local cactii = {"cactus","oasis_cactus"}
-for i,v in ipairs(cactii) do
-    env.AddPrefabPostInit(v,function(inst)
-        if not TheWorld.ismastersim then 
+local cactii = { "cactus", "oasis_cactus" }
+for i, v in ipairs(cactii) do
+    env.AddPrefabPostInit(v, function(inst)
+        if not TheWorld.ismastersim then
             return inst
         end
         local _onpickedfn = inst.components.pickable.onpickedfn
@@ -716,7 +725,7 @@ for i,v in ipairs(cactii) do
     end)
 end
 
-env.AddPrefabPostInit("marsh_bush",function(inst)
+env.AddPrefabPostInit("marsh_bush", function(inst)
     if not TheWorld.ismastersim then
         return inst
     end
@@ -763,7 +772,6 @@ env.AddPrefabPostInit("glasscutter", function(inst)
             if _OnAttack then _OnAttack(inst, attacker, target, ...) end
         end)
     end
-
 end)
 
 
@@ -777,11 +785,11 @@ env.AddPrefabPostInit("trap_bramble", function(inst)
         if deployer.components.skilltreeupdater and deployer.components.skilltreeupdater:IsActivated("wormwood_blooming_trapbramble") then
             inst.bonusrange = true
         end
-        _ondeploy(inst,pt,deployer)
+        _ondeploy(inst, pt, deployer)
     end
     inst.components.deployable.ondeploy = ondeploy
 
-	local _OnSave = inst.OnSave
+    local _OnSave = inst.OnSave
     inst.OnSave = function(inst, data, ...)
         if inst.bonusrange then
             data.bonusrange = true
@@ -789,11 +797,11 @@ env.AddPrefabPostInit("trap_bramble", function(inst)
         return _OnSave and _OnSave(inst, data, ...)
     end
 
-	local _OnLoad = inst.OnLoad
+    local _OnLoad = inst.OnLoad
     inst.OnLoad = function(inst, data, ...)
         if data and data.bonusrange then
             inst.bonusrange = true
         end
-		return _OnLoad and _OnLoad(inst, data, ...)
+        return _OnLoad and _OnLoad(inst, data, ...)
     end
 end)
