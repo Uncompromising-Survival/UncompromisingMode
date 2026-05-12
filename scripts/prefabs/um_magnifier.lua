@@ -2,15 +2,6 @@ local assets = {
     Asset("ANIM", "anim/um_magnifier.zip"),
 }
 
-local function OnScanned(inst, target, doer)
-    local cost = 1
-    if target.components.stackable ~= nil then
-        cost = target.components.stackable:StackSize()
-    end
-    inst.components.finiteuses:Use(cost)
-end
-
-
 function CreateManifier(name, durability, build, bank, common_fn)
     local function fn()
         local inst = CreateEntity()
@@ -43,12 +34,13 @@ function CreateManifier(name, durability, build, bank, common_fn)
         inst:AddComponent("inventoryitem")
 
         inst:AddComponent("gemologyscanner")
-        inst.components.gemologyscanner:SetOnScannedFn(OnScanned)
+        --inst.components.gemologyscanner:SetOnScannedFn(OnScanned)
 
         inst:AddComponent("finiteuses")
         inst.components.finiteuses:SetOnFinished(inst.Remove)
         inst.components.finiteuses:SetMaxUses(durability)
         inst.components.finiteuses:SetUses(durability)
+        inst.components.finiteuses:SetConsumption(ACTIONS.SCAN_GEMOLOGY_GEM, 1)
 
         MakeHauntableLaunch(inst)
 
@@ -59,6 +51,5 @@ function CreateManifier(name, durability, build, bank, common_fn)
 end
 
 return CreateManifier("um_magnifier", 100),
-        CreateManifier("um_magnifier_obsidian", 100, "um_magnifier", "um_magnifier"), --TODO: Obsidian art
-        CreateManifier("um_magnifier_purplegem", 25, "um_magnifier", "um_magnifier") --TODO: Purplegem art
-
+    CreateManifier("um_magnifier_obsidian", 100, "um_magnifier", "um_magnifier"),     --TODO: Obsidian art
+    CreateManifier("um_magnifier_purplegem", 25, "um_magnifier", "um_magnifier")      --TODO: Purplegem art
