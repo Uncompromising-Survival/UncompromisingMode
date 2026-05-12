@@ -10,7 +10,7 @@ local function OnSave(inst, data)
 end
 
 local function OnLoad(inst, data)
-    if data and data.tier then
+    if data then
         if data.tier ~= nil then
             inst:SetTier(data.tier)
         end
@@ -110,6 +110,7 @@ local function OnWorked(inst)
 
     inst:Remove()
 end
+
 local function MakeGem(gem, bank, build, anim)
     local function fncommon()
         local inst = CreateEntity()
@@ -153,7 +154,6 @@ local function MakeGem(gem, bank, build, anim)
                 return inst:GetTier() == item:GetTier() and item:IsRevealed() == inst:IsRevealed()
             end
         end
-
 
         if not TheWorld.ismastersim then
             return inst
@@ -211,6 +211,5 @@ local prefabs = {}
 for gem, defs in pairs(GEM_DEFS) do
     table.insert(prefabs, MakeGem(gem, defs.bank, defs.build, defs.anim)) --hmm, should I move this asset to the defs file so any mod can import their assets?
 end
-
 
 return unpack(prefabs)
