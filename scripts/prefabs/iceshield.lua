@@ -53,7 +53,7 @@ local function Init(inst, parent, fx_symbol, tier)
                 return inst.um_redirect_old and inst.um_redirect_old(self, amount, overtime, cause, ...) or false
             end
 
-            if inst.components.health and inst:IsValid() then
+            if inst.components.health and inst:IsValid() and not overtime then
                 if cause == "fire" then
                     amount = amount * 10
                     SpawnPrefab("washashore_puddle_fx").Transform:SetPosition(parent.Transform:GetWorldPosition())
@@ -86,9 +86,7 @@ local function Init(inst, parent, fx_symbol, tier)
 
 
     parent.shield_fx2 = SpawnPrefab("um_ice_shield_fx")
-    parent.shield_fx2.Transform:SetPosition(parent.Transform:GetWorldPosition())
-    parent.shield_fx2.entity:AddFollower()
-    parent.shield_fx2.Follower:FollowSymbol(parent.GUID, fx_symbol, 0, -150, 0)
+    parent.shield_fx2.entity:SetParent(parent.entity) --don't need followsymbol here.
 end
 
 local function fn()
@@ -163,15 +161,18 @@ local function fx_fn()
     inst.entity:AddAnimState()
 
     inst:AddTag("FX")
-
+    inst.persists = false
     inst.entity:SetPristine()
 
-    inst.Transform:SetScale(2, 2, 2)
+    inst.Transform:SetScale(1.25, 1.25, 1.25)
     inst.AnimState:SetBank("deer_ice_charge")
     inst.AnimState:SetBuild("deer_ice_charge")
     inst.AnimState:PlayAnimation("pre")
     inst.AnimState:HideSymbol("line")
-    inst.AnimState:SetSortOrder(0)
+    inst.AnimState:SetLayer(LAYER_GROUND)
+    inst.AnimState:SetSortOrder(2)
+
+    inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
     inst.AnimState:PushAnimation("loop", true)
 
     return inst
