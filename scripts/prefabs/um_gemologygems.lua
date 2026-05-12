@@ -223,7 +223,7 @@ local prefabs = {}
 
 for gem, defs in pairs(GEM_DEFS) do
     if defs.createprefab then
-        table.insert(prefabs, MakeGem(gem, defs.bank, defs.build, defs.anim, defs.postfn), assets)
+        table.insert(prefabs, MakeGem(gem, defs.bank, defs.build, defs.anim, defs.postfn)
     end
 end
 
