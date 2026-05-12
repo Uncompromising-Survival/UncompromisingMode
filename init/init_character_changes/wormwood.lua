@@ -193,7 +193,7 @@ if env.GetModConfigData("wormwood_photosynthesis") then
     
     env.modimport("init/init_character_changes/skilltree_wormwood") -- Import New Wormwood Tree
 
-    local function VetCurseCancelHealing(data)
+    local function VetCurseCancelHealing(inst, data)
         local debuffable = inst.components.debuffable
         if inst:HasTag("vetcurse") and debuffable then
             local debuffs = debuffable.debuffs
