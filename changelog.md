@@ -148,9 +148,11 @@
 ### Hooded Forest
 - A majority of entities are affected by the thicket now.
 > Detection of "being in the thicket" is done on the side of things that move instead of on the side of all individual loaded thickets.
-- Aphids will appear less often, but when they do, they will appear in a mob. This mob will be larger when the world gets older.
-- Aphids are significantly faster.
-- Aphids are satisfied from eating the thicket for longer.
+- Aphid Changes.
+> Aphids will appear less often, but when they do, they will appear in a mob. This mob will be larger when the world gets older.
+> They are significantly faster. Originally 3 Speed, now is 5 Speed.
+> They are satisfied from eating the Thicket for longer.
+> They now apply hit stun less often, at the same rate as Bees and Rats.
 ⠀
 ### Other
 - Flame burster now allows some cold items as ammo, and will shoot cold-fire instead when used.
@@ -205,6 +207,10 @@
 - You can now get multiple Friendly Viperlings by any source of them; however, you can only have 6 Friendly Viperlings at once, if you try spawning more than 6, the Friendly Viperling with less amount of time will despawn.
 - Pirate's Bandana is now burnable.
 - Fresh food in the ground doesn't count for Rat Score.
+- Naked Mole Bats always drop 1 Monster Morsel and 1 Naked Nostrils.
+- Allied Rats are no longer scared of followers and companions.
+- Lowered temperature reduction from Ice Sickle to -3º for both work and combat. Won't trigger if it's Winter.
+> DEV NOTE: The old harsher temperature reduction from combat was supposed to punish using it to stunlock mobs by freezing them. Because of the new coldness grace period system introduced, this wasn't needed anymore, and so the mechanics are being simplified.
 
 ## Fixes
 - Fixed Deerclops's timer not starting.
