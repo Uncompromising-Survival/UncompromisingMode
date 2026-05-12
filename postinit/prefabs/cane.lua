@@ -84,9 +84,11 @@ local function CANEEXPLOSION(inst)
     inst:Remove()
 end
 
---[[local function MYCANEISDYING(inst, data)
-    SpawnPrefab("um_brokentool").Transform:SetPosition(inst.Transform:GetWorldPosition())
-end]]
+local function MYCANEISDYING(inst, data)
+    if data.percent and data.percent <= .15 then
+        SpawnPrefab("um_brokentool").Transform:SetPosition(inst.Transform:GetWorldPosition())
+    end
+end
 
 for i,v in ipairs(canes) do
     env.AddPrefabPostInit(v, function(inst)
@@ -98,7 +100,7 @@ for i,v in ipairs(canes) do
         fueled:SetFirstPeriod(TUNING.TURNON_FULL_FUELED_CONSUMPTION)
         fueled.no_sewing = true
 
-        --inst:ListenForEvent("percentusedchange", MYCANEISDYING)
+        inst:ListenForEvent("percentusedchange", MYCANEISDYING)
 
         MakeHauntableLaunch(inst)
 
