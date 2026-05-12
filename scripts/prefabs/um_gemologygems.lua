@@ -49,7 +49,7 @@ local function GetMainName(inst)
     --only reveal name
 
     local color = "DEFAULT"
-    if string.find(inst.prefab, "um_gemology") ~= nil then     --just UM has the color stuff idk if any addons will apply, so we'll use the default.
+    if string.find(inst.prefab, "um_gemology") ~= nil then --just UM has the color stuff idk if any addons will apply, so we'll use the default.
         color = string.upper(string.gsub(string.gsub(inst.prefab, "um_gemology", ""), "gem%d", ""))
     end
 
@@ -109,6 +109,11 @@ local function OnWorked(inst)
     --dust.Transform:SetPosition(inst.Transform:GetWorldPosition())
 
     inst:Remove()
+end
+
+local function OnDestack(new, inst)
+    new:SetTier(inst:GetTier())
+    new:SetRevealed(inst:IsRevealed())
 end
 
 local function MakeGem(gem, bank, build, anim)
@@ -185,6 +190,8 @@ local function MakeGem(gem, bank, build, anim)
         inst:AddComponent("inventoryitem")
         inst:AddComponent("stackable")
         inst.components.stackable.maxsize = 10 --? idk.
+        inst.components.stackable:SetOnDeStack(OnDestack)
+
 
         inst:AddComponent("tradable")
         inst.components.tradable.rocktribute = 8
