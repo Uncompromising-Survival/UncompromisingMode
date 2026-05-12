@@ -161,6 +161,8 @@ local function fn()
     inst.components.combat:SetDefaultDamage(10)
     inst.components.combat:SetAttackPeriod(GetRandomMinMax(1, 3))
     inst.components.combat:SetRange(5, 2)
+    inst.components.combat:SetPlayerStunlock(PLAYERSTUNLOCK.RARELY)
+
 	inst:AddComponent("follower")
     inst:AddComponent("knownlocations")
     inst:AddComponent("inspectable")

@@ -63,8 +63,6 @@ local function OnStopFloating(inst)
     inst:DoTaskInTime(0, PushIdleLoop) --#V2C: #HACK restore the looping anim, timing issues
 end
 
-
-
 local function OnEquip(inst, owner)
     local skin_build = inst:GetSkinBuild()
 
@@ -107,7 +105,20 @@ local function HarvestPickable(inst, ent, doer)
    if ent.prefab == "hooded_fern" and inst.components.finiteuses ~= nil then
         inst.components.finiteuses:Use(0.1)
     end
-	
+	if doer.components.temperature:GetCurrent() >= 4 and not TheWorld.state.iswinter then
+		doer.components.temperature:DoDelta(-3)
+    end
+end
+
+local function OnScythed(inst, data)
+    if data.doer then
+        local icefx = SpawnPrefab("deer_ice_flakes")
+        icefx.AnimState:PlayAnimation("idle")
+        local x, y, z = data.doer.Transform:GetWorldPosition()
+	    icefx:DoTaskInTime(0, icefx.KillFX)
+        icefx.Transform:SetPosition(x, y, z)
+        icefx.Transform:SetScale(0.6, 0.7, 0.7)
+    end
 end
 
 local function IsEntityInFront(inst, entity, doer_rotation, doer_pos)
@@ -121,7 +132,7 @@ local HARVEST_CANTTAGS  = {"INLIMBO", "FX"}
 local HARVEST_ONEOFTAGS = {"plant", "lichen", "oceanvine", "kelp"}
 
 local function DoScythe(inst, target, doer)
-    if target.components.pickable ~= nil then
+    --[[if target.components.pickable ~= nil then
         local doer_pos = doer:GetPosition()
         local x, y, z = doer_pos:Get()
         if doer.components.temperature:GetCurrent() >= 4 and not TheWorld.state.iswinter then
@@ -146,6 +157,8 @@ local function DoScythe(inst, target, doer)
             end
         end
     end
+    --code is handled in init/init_compat.lua
+    ]]
 end
 
 local function onattack_blue(inst, attacker, target, skipsanity)
@@ -172,13 +185,10 @@ local function onattack_blue(inst, attacker, target, skipsanity)
         target.components.freezable:SpawnShatterFX()
     end
 
-    attacker.components.temperature:DoDelta(-10)
-    local icefx = SpawnPrefab("deer_ice_flakes")
-    icefx.AnimState:PlayAnimation("idle")
-    local x, y, z = attacker.Transform:GetWorldPosition()
-	icefx:DoTaskInTime(0, icefx.KillFX)
-    icefx.Transform:SetPosition(x, y, z)
-    icefx.Transform:SetScale(0.6, 0.7, 0.7)
+    if attacker.components.temperature:GetCurrent() >= 4 and not TheWorld.state.iswinter then
+        attacker.components.temperature:DoDelta(-3)
+    end
+    OnScythed(inst, {doer = attacker})
 end
 
 local function SetupComponents(inst)
@@ -256,9 +266,8 @@ local function ScytheFn()
     --weapon (from weapon component) added to pristine state for optimization
     inst:AddTag("weapon")
 
-
 	inst:AddComponent("floater")
-	
+
     --Dedicated server does not need to spawn the local sound fx
     if not TheNet:IsDedicated() then
         inst.localsounds = CreateEntity()
@@ -271,7 +280,6 @@ local function ScytheFn()
         inst.localsounds:Hide()
         inst.localsounds.persists = false
     end
-
 
     inst.entity:SetPristine()
 
@@ -293,7 +301,7 @@ local function ScytheFn()
     inst:AddComponent("inspectable")
     inst:AddComponent("inventoryitem")
 	--inst.components.inventoryitem.atlasname = "images/inventoryimages/um_ice_sicle.xml"
-	
+
     local finiteuses = inst:AddComponent("finiteuses")
     finiteuses:SetMaxUses(50*TUNING.GOLDENTOOLFACTOR)
     finiteuses:SetUses(50*TUNING.GOLDENTOOLFACTOR)
@@ -307,6 +315,8 @@ local function ScytheFn()
     inst.DoScythe = DoScythe
     inst.IsEntityInFront = IsEntityInFront
     inst.HarvestPickable = HarvestPickable
+
+    inst:ListenForEvent("um_scythed", OnScythed)
 
     return inst
 end
@@ -417,5 +427,5 @@ local function FollowSymbolFxFn()
 end
 
 
-return Prefab("um_ice_sicle", ScytheFn, assets),
+return Prefab("um_ice_sicle", ScytheFn, assets), --Rename prefab to "um_ice_scythe"
 Prefab("um_ice_sicle_fx", FollowSymbolFxFn)
