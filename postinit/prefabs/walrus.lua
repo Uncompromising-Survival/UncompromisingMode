@@ -97,6 +97,48 @@ local function OnIsSummer(inst, issummer)
     end
 end
 
+local function SaveHome(inst)
+    if inst._um_saved_home == nil and inst.components.homeseeker ~= nil then
+        inst._um_saved_home = inst.components.homeseeker.home
+    end
+
+    if inst._um_saved_home_pos == nil and inst.components.knownlocations ~= nil then
+        inst._um_saved_home_pos = inst.components.knownlocations:GetLocation("home")
+    end
+end
+
+local function ForgetHome(inst)
+    SaveHome(inst)
+
+    if inst.components.homeseeker ~= nil then
+        inst.components.homeseeker.home = nil
+    end
+
+    if inst.components.knownlocations ~= nil then
+        inst.components.knownlocations:ForgetLocation("home")
+    end
+end
+
+local function RememberHome(inst)
+    if inst.components.homeseeker ~= nil and inst._um_saved_home ~= nil and inst._um_saved_home:IsValid() then
+        inst.components.homeseeker:SetHome(inst._um_saved_home)
+    end
+
+    if inst.components.knownlocations ~= nil and inst._um_saved_home_pos ~= nil then
+        inst.components.knownlocations:RememberLocation("home", inst._um_saved_home_pos)
+    end
+end
+
+local function BusyWithWar(inst, data)
+    if data ~= nil and data.target ~= nil then
+        ForgetHome(inst)
+    end
+end
+
+local function FreeWithPeace(inst)
+    RememberHome(inst)
+end
+
 env.AddPrefabPostInit("walrus", function (inst)
 	if not TheWorld.ismastersim then
 		return
@@ -114,7 +156,20 @@ env.AddPrefabPostInit("walrus", function (inst)
         OnIsSummer(inst, true)
     end
 	
+	SetSharedLootTable('um_walrus',
+    {
+        {'meat',            1.00},
+        {'blowdart_pipe',   1.00},
+        {'walrushat',       0.50},
+        {'walrus_tusk',     1.00},
+    })
 
+    inst.components.lootdropper:SetChanceLootTable('um_walrus')
+	
+	inst:ListenForEvent("newcombattarget", BusyWithWar)
+    inst:ListenForEvent("droppedtarget", FreeWithPeace)
+    inst:ListenForEvent("entitysleep", RememberHome)
+	
 end)
 
 local function OnIsSummerBaby(inst, issummer)

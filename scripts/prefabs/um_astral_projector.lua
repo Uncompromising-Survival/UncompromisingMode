@@ -465,6 +465,13 @@ local function GetStatus(inst)
     return inst.components.teleporter:IsActive() and "ACTIVE" or nil
 end
 
+local function init(inst)
+    if inst.icon == nil then
+        inst.icon = SpawnPrefab("globalmapicon")
+        inst.icon:TrackEntity(inst)
+    end
+end
+
 -- projectinator constructor
 local function fn()
     local inst = CreateEntity()
@@ -475,7 +482,7 @@ local function fn()
     inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
 
-    inst.MiniMapEntity:SetIcon("townportal.png")
+    inst.MiniMapEntity:SetIcon("um_astral_projector.tex")
     inst.MiniMapEntity:SetCanUseCache(false)
     inst.MiniMapEntity:SetDrawOverFogOfWar(true)
 
@@ -528,6 +535,8 @@ local function fn()
 
     inst.OnEntityWake  = OnEntityWake
     inst.OnEntitySleep = OnEntitySleep
+
+    inst:DoTaskInTime(0, init)
 
     return inst
 end
@@ -685,7 +694,7 @@ local function TargetFn()
     inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
 
-    inst.MiniMapEntity:SetIcon("townportal.png")
+    inst.MiniMapEntity:SetIcon("um_astral_projector_target.tex")
     inst.MiniMapEntity:SetCanUseCache(false)
     inst.MiniMapEntity:SetDrawOverFogOfWar(true)
 
@@ -733,6 +742,8 @@ local function TargetFn()
     inst.components.inspectable.getstatus = GetStatus
 
     inst:ListenForEvent("onbuilt", OnBuilt)
+
+    inst:DoTaskInTime(0, init)
 
     return inst
 end

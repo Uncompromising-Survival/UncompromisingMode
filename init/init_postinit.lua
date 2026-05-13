@@ -257,6 +257,8 @@ local prefab_post = {
     "slurper",
     "kelphat",
     "strawhat",
+	"monkey_smallhat",
+	"cane",
 }
 
 local stategraph_post = {
@@ -426,10 +428,6 @@ if GetModConfigData("pinelings") then
     table.insert(prefab_post, "evergreen_stump")
 end
 
-if GetModConfigData("canedurability") then
-    table.insert(prefab_post, "cane")
-end
-
 if GetModConfigData("angrypenguins") then
     table.insert(prefab_post, "penguin")
     table.insert(prefab_post, "penguin_ice") -- I think that should go too?  idk right here
@@ -445,7 +443,7 @@ if GetModConfigData("angry_werepigs") then
     table.insert(brain_post, "werepig")
 end
 
-if GetModConfigData("harder_walrus") then
+if GetModConfigData("walrus") then
     table.insert(prefab_post, "walrus")
     table.insert(stategraph_post, "walrus")
 end

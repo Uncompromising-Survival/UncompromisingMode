@@ -3,7 +3,7 @@ local STRINGS = GLOBAL.STRINGS
 
 STRINGS.UNCOMP_TOOLTIP = {
     AMULET =
-    "- Only revives the player upon death while worn.\n- Increased heal rate at lower health.\n- Never breaks, can be refueled with Nightmare Fuel.",
+    "- Prevents death while worn.\n- Increased heal rate at lower health.\n- Never breaks, can be refueled with Nightmare Fuel.",
     ARMORRUINS = "- Prevents knockback effects.\n- Reduces insanity aura effects by 30%.",
     SWEATERVEST = "- Reduces insanity aura effects by 60%.",
     SKELETONHAT = "- Will not spawn the Creeping Fear when worn.",
@@ -99,7 +99,8 @@ STRINGS.UNCOMP_TOOLTIP = {
     UM_HAT_LEAFWING = "- Speedier when worn.\n- Can breeze through Thickets.",
     UM_FEATHER_TOTEM = "- Stays with you post-mortem.\n- Consumes feathers inside on revival for maximum\nhealth loss prevention and other special effects.",
     SEEDPOUCH = "- Halts seed spoilage inside it.\n- Can be upgraded with an Elastispacer.",
-    ANTLIONHAT = "- Has infinite stack size inside.\n- Picks up nearby Turf on the ground."
+    ANTLIONHAT = "- Has infinite stack size inside.\n- Picks up nearby Turf on the ground.",
+    KELPHAT = "- Wearer's wetness will slowly rise up to 33%."
 }
 local TOOLTIPS = STRINGS.UNCOMP_TOOLTIP
 
@@ -271,8 +272,8 @@ if TUNING.DSTU.SNOWSTORMS then
     TOOLTIPS.TURF_DRAGONFLY = TOOLTIPS.TURF_DRAGONFLY .. "\n- Prevents Snow Pile build-up."
     TOOLTIPS.YELLOWSTAFF = "- Dwarf Stars provide protection from snowstorms."
     TOOLTIPS.MOLEHAT = "- Grants protection against snowstorms/sandstorms when worn."
-    TOOLTIPS.DESERTHAT = "- Also works as protection against snowstorms."
-    TOOLTIPS.BEARGERVEST = "- Provides protection from snowstorms' slowdown."
+    --TOOLTIPS.DESERTHAT = "- Also works as protection against snowstorms." -- this is dum
+    TOOLTIPS.BEARGERVEST = "- Provides protection from snow piles and snowstorms' slowdown."
 else
     TOOLTIPS.MOLEHAT = "- Grants protection against sandstorms and moonstorms when worn."
 end

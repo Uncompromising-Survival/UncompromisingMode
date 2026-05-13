@@ -9,6 +9,14 @@ local fxlist = {
             inst.AnimState:SetFinalOffset(1)
         end,
     },
+    {
+        name = "um_brokentool",
+        bank = "broketool",
+        build = "broken_tool",
+        anim = "used",
+        sound = "dontstarve/wilson/use_break",
+        nofaced = true,
+    },
 }
 
 local fxprefabs = require("fx")

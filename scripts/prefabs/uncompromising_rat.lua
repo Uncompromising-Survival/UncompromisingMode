@@ -1629,7 +1629,7 @@ end
 local function SnifferFoodScoreCalculations(inst, container, v)
     local stackmult = v.components.stackable and v.components.stackable:StackSize() or 1
     local preparedmult = v:HasTag("preparedfood") and 2 or 1
-    local delta = not container and (v:HasTag("fresh") and 10 or v:HasTag("stale") and 20 or (v:HasTag("spoiled") or IsAVersionOfRot(v)) and 30)
+    local delta = not container and (v:HasTag("stale") and 20 or (v:HasTag("spoiled") or IsAVersionOfRot(v)) and 30)
         or (v:HasTag("stale") and 5 or (v:HasTag("spoiled") or IsAVersionOfRot(v)) and 10) or 0
     inst.foodscore = inst.foodscore + (delta > 0 and ((delta * preparedmult) * stackmult) or delta)
 end
@@ -1657,18 +1657,11 @@ local function GetProxy(inst)
 end
 
 local function GetIntensity(item, in_container)
-    return not in_container and (item:HasTag("fresh") and .5 or item:HasTag("stale") and .75 or item:HasTag("spoiled") and .8)
+    return not in_container and (item:HasTag("stale") and .75 or item:HasTag("spoiled") and .8)
         or (item:HasTag("stale") and .5 or item:HasTag("spoiled") and .75) or IsAVersionOfRot(item) and 1
 end
 
-local function DimensionalCalculations(in_container, item, fx_target, owner)
-    local intensity = GetIntensity(item, in_container)
-    if intensity ~= nil then
-        TrySpawnIcon(fx_target, owner, intensity)
-    end
-end
-
-local function DDVisual(owner, proxy)
+local function DDVisual(owner, proxy, visual)
     if proxy == nil or not proxy:IsValid() or proxy.components.container_proxy == nil then
         return
     end
@@ -1694,7 +1687,7 @@ local function DDVisual(owner, proxy)
     end
 
     if MORE ~= nil then
-        TrySpawnIcon(proxy, owner, MORE)
+        TrySpawnIcon(visual or proxy, owner, MORE)
     end
 end
 
@@ -1717,7 +1710,7 @@ local function DDScore(inst, proxy, scanned_masters)
 end
 
 local function FoodScoreCalculations(container, v, owner)
-    local intensity = not container and (v:HasTag("fresh") and .5 or v:HasTag("stale") and .75 or v:HasTag("spoiled") and .8)
+    local intensity = not container and (v:HasTag("stale") and .75 or v:HasTag("spoiled") and .8)
         or (v:HasTag("stale") and .5 or v:HasTag("spoiled") and .75) or IsAVersionOfRot(v) and 1
     if not intensity then return end
     TrySpawnIcon(v, owner, intensity)
@@ -1741,11 +1734,10 @@ local function Sniffertime(owner, sniffer)
         end
     end
 
-    local check = TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM, nil, {"INLIMBO", "FX", "NOCLICK"})
-
-    for i, v in ipairs(check) do
-        if v:IsValid() and v.components.container_proxy ~= nil then
-            DDVisual(owner, v)
+    for i, v in ipairs(TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM, nil, {"FX", "NOCLICK"})) do
+        local container = v:IsValid() and (v.components.container_proxy and v or v.container and v.container.components.container_proxy and v.container)
+        if container then
+            DDVisual(owner, container, v.container and v or nil)
         end
     end
 end
@@ -1793,12 +1785,11 @@ local function TimeForACheckUp(inst, dev)
     end
 
     local DiferentDD = {}
-    local check = TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM, nil, {"INLIMBO", "FX", "NOCLICK"})
-
-    for i, v in ipairs(check) do
+    for i, v in ipairs(TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM, nil, {"FX", "NOCLICK"})) do
         if (inst.ratscore + inst.foodscore + inst.burrowbonus) < 300 then
-            if v:IsValid() and v.components.container_proxy ~= nil and IsProperContainer(v) then
-                DDScore(inst, v, DiferentDD)
+            local container = v:IsValid() and IsProperContainer(v) and (v.components.container_proxy and v or v.container and v.container.components.container_proxy and v.container)
+            if container then
+                DDScore(inst, container, DiferentDD)
             end
         end
     end

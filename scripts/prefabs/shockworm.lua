@@ -216,7 +216,7 @@ local function ShockWormOnAttacked(inst, data)
             if not IsEntityElectricImmune(attacker) then
                 damage_mult = TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * attacker:GetWetMultiplier()
             end
-            attacker.components.combat:GetAttacked(inst, damage_mult * TUNING.WORM_DAMAGE, nil, "electric")
+            attacker.components.combat:GetAttacked(inst, damage_mult * TUNING.WORM_DAMAGE / 5, nil, "electric")
         end
 
         inst.components.combat:SetTarget(attacker)

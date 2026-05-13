@@ -146,7 +146,7 @@ local loot_table = {
             um_gemologyorangegem1 = 1,
             orangegem = 0.1,
             greengem = 0.05,
-            yellowgemgem = 0.05,
+            yellowgem = 0.05,
         },
     },
     ["um_gemology_geode_vent"] =

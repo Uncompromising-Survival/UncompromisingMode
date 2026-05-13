@@ -158,7 +158,7 @@ end)
 -------Orange
 
 local function OrangeAmuletPostInit(inst)
-    local ORANGE_PICKUP_MUST_TAGS = {
+    --[[local ORANGE_PICKUP_MUST_TAGS = {
         "_inventoryitem",
         "plant",
         "witherable",
@@ -218,7 +218,7 @@ local function OrangeAmuletPostInit(inst)
                 end
                 return
             end
-            if v.components.pickable and v.components.pickable:CanBePicked() then --Pickable stuff
+            if v.components.pickable and v.components.pickable:CanBePicked() and v.components.pickable.caninteractwith then --Pickable stuff
                 v.components.pickable:Pick(owner)
                 inst.components.fueled:DoDelta(-2)
                 SpawnPrefab("sand_puff").Transform:SetPosition(v.Transform:GetWorldPosition())
@@ -263,18 +263,39 @@ local function OrangeAmuletPostInit(inst)
     fueled.fueltype = FUELTYPE.NIGHTMARE
     fueled:SetDepletedFn(nofuel_orange)
     fueled:SetTakeFuelFn(ontakefuel_orange)
-    fueled.accepting = true
+    fueled.accepting = true]]
+
+    local _OnEquip = inst.components.equippable.onequipfn
+    local function onequip_orange_UM(inst, owner, ...)
+        local ret = _OnEquip(inst, owner, ...)
+        if inst.task then
+            local _pickup = inst.task.fn
+            inst.task.fn = function(inst, owner, ...)
+                if inst:HasTag("usesdepleted") then return end
+                if owner then owner.um_orangeamulet = inst end
+                local ret = _pickup(inst, owner, ...)
+                if owner then owner.um_orangeamulet = nil end
+                return ret
+            end
+        end
+        return ret
+    end
 
     local equippable = inst.components.equippable
     if equippable then
         equippable:SetOnEquip(onequip_orange_UM)
     end
+
+    local finiteuses = inst.components.finiteuses
+    if finiteuses then
+        finiteuses:SetOnFinished(nil)
+    end
 end
 
 env.AddPrefabPostInit("orangeamulet", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
+    inst:AddTag("lazy_forager")
+
+    if not TheWorld.ismastersim then return end
 
     OrangeAmuletPostInit(inst)
 end)
@@ -313,7 +334,7 @@ local function CactusPostInit(inst)
                 if not amulet then
                     amulet = picker.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
                 end
-                if amulet and not (amulet.components.fueled and amulet.components.fueled:IsEmpty()) then
+                if amulet and not amulet:HasTag("usesdepleted") then
                     amulet:AddTag("bramble_resistant")
                     _OnPick(inst, picker)
                     amulet:RemoveTag("bramble_resistant")
@@ -334,9 +355,7 @@ local function CactusPostInit(inst)
 end
 
 env.AddPrefabPostInit("cactus", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
+    if not TheWorld.ismastersim then return end
 
     CactusPostInit(inst)
 end)
@@ -371,7 +390,7 @@ local function OasisCactusPostInit(inst)
                 if not amulet then
                     amulet = picker.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
                 end
-                if amulet and not (amulet.components.fueled and amulet.components.fueled:IsEmpty()) then
+                if amulet and not amulet:HasTag("usesdepleted") then
                     amulet:AddTag("bramble_resistant")
                     _OnPick(inst, picker)
                     amulet:RemoveTag("bramble_resistant")
@@ -392,9 +411,7 @@ local function OasisCactusPostInit(inst)
 end
 
 env.AddPrefabPostInit("oasis_cactus", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
+    if not TheWorld.ismastersim then return end
 
     OasisCactusPostInit(inst)
 end)
@@ -414,7 +431,7 @@ local function MarshBushPostInit(inst)
                 if not amulet then
                     amulet = picker.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
                 end
-                if amulet and not (amulet.components.fueled and amulet.components.fueled:IsEmpty()) then
+                if amulet and not amulet:HasTag("usesdepleted") then
                     amulet:AddTag("bramble_resistant")
                     _OnPick(inst, picker)
                     amulet:RemoveTag("bramble_resistant")
@@ -435,9 +452,7 @@ local function MarshBushPostInit(inst)
 end
 
 env.AddPrefabPostInit("marsh_bush", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
+    if not TheWorld.ismastersim then return end
 
     MarshBushPostInit(inst)
 end)
@@ -473,9 +488,7 @@ local function PurpleAmuletPostInit(inst)
 end
 
 env.AddPrefabPostInit("purpleamulet", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
+    if not TheWorld.ismastersim then return end
 
     PurpleAmuletPostInit(inst)
 end)

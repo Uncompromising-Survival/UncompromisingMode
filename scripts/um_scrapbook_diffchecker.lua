@@ -485,7 +485,7 @@ function d_create_diffchecker_scrapbookdata(print_missing_icons)
         TheWorld:PushEvent("ms_forceprecipitation", false)
 
         -- Push events and then rerun the command!
-        scheduler:ExecuteInTime(0.05, ExecuteConsoleCommand, nil, string.format("d_createscrapbookdata(%s)", tostring(print_missing_icons or "")))
+        scheduler:ExecuteInTime(0.05, ExecuteConsoleCommand, nil, string.format("d_create_diffchecker_scrapbookdata(%s)", tostring(print_missing_icons or "")))
         return
     end
 

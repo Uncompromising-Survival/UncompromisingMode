@@ -36,7 +36,7 @@ local function retargetfn(inst)
     local rangesq, rangesq1, rangesq2 = maxrangesq, math.huge, math.huge
     local target1, target2 = nil, nil
     for i, v in ipairs(AllPlayers) do
-        if v.components.sanity:IsCrazy() and not v:HasTag("playerghost") then
+        if v.components.sanity:IsCrazy() and not v:HasTag("playerghost") and not v:HasTag("notarget_shadow") then
             local distsq = v:GetDistanceSqToInst(inst)
             if distsq < rangesq then
                 if inst.components.shadowsubmissive:TargetHasDominance(v) then
@@ -89,10 +89,8 @@ env.AddPrefabPostInit("nightmarebeak", function(inst)
         return
     end
 
-    --inst.components.combat:SetRetargetFunction(3, retargetfn)--yell at me if this causes problems later, I couldn't be bothered to function hook -Atobá
+    inst.components.combat:SetRetargetFunction(3, retargetfn) --yell at me if this causes problems later, I couldn't be bothered to function hook -Atobá
 end)
-
-local easing = require("easing")
 
 local function LaunchProjectile(inst)
     local theta = math.random() * 2 * PI
@@ -111,7 +109,7 @@ end
 local function onkilledbyother_crawlinghorror(inst, attacker)
     if attacker and attacker.components.sanity then
         local x, y, z = inst.Transform:GetWorldPosition()
-        local ents = TheSim:FindEntities(x, y, z, 15, {"player"}, {"playerghost"})
+        local ents = TheSim:FindEntities(x, y, z, 15, {"player" }, {"playerghost"})
 
         inst.halfreward = TUNING.SANITY_SMALL / 2
 
