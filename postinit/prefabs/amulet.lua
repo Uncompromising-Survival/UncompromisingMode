@@ -218,7 +218,7 @@ local function OrangeAmuletPostInit(inst)
                 end
                 return
             end
-            if v.components.pickable and v.components.pickable:CanBePicked() then --Pickable stuff
+            if v.components.pickable and v.components.pickable:CanBePicked() and v.components.pickable.caninteractwith then --Pickable stuff
                 v.components.pickable:Pick(owner)
                 inst.components.fueled:DoDelta(-2)
                 SpawnPrefab("sand_puff").Transform:SetPosition(v.Transform:GetWorldPosition())
