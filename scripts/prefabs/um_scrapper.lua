@@ -27,11 +27,13 @@ end
 local assets =
 {
 	Asset("ANIM", "anim/rain_meter.zip"),
+
 }
 
 local prefabs =
 {
 	"collapse_small",
+	"globalmapicon",
 }
 
 local function onbuilt(inst)
@@ -298,6 +300,13 @@ local function AcceptTest(inst, item, giver)
 	return AllRecipes[item.prefab] ~= nil
 end
 
+local function init(inst)
+    if inst.icon == nil then
+        inst.icon = SpawnPrefab("globalmapicon")
+        inst.icon:TrackEntity(inst)
+    end
+end
+
 local function fn()
 	local inst = CreateEntity()
 
@@ -309,6 +318,8 @@ local function fn()
 
 	MakeObstaclePhysics(inst, .4)
 	inst.MiniMapEntity:SetIcon("um_scrapper.tex")
+	inst.MiniMapEntity:SetCanUseCache(false)
+    inst.MiniMapEntity:SetDrawOverFogOfWar(true)
 
 	inst.AnimState:SetBank("airconditioner")
 	inst.AnimState:SetBuild("airconditioner")
@@ -364,6 +375,8 @@ local function fn()
 
 	inst._PlayAnimation = Default_PlayAnimation
 	inst._PushAnimation = Default_PushAnimation
+
+	inst:DoTaskInTime(0, init)
 
 	return inst
 end
