@@ -111,7 +111,7 @@ end
 local function onkilledbyother_crawlinghorror(inst, attacker)
     if attacker and attacker.components.sanity then
         local x, y, z = inst.Transform:GetWorldPosition()
-        local ents = TheSim:FindEntities(x, y, z, 15, { "player" }, { "playerghost" })
+        local ents = TheSim:FindEntities(x, y, z, 15, {"player" }, {"playerghost"})
 
         inst.halfreward = TUNING.SANITY_SMALL / 2
 
