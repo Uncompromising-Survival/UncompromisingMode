@@ -20,7 +20,7 @@ local function ProductDeterminer(inst)
     return inst.components.pickable and inst.components.pickable.product
 end
 
-function IsSpecializedContainersFull(specialized)
+local function IsSpecializedContainersFull(specialized)
     if specialized then
         for _, container in pairs(specialized) do
             if not container:IsFull() then
@@ -32,8 +32,8 @@ function IsSpecializedContainersFull(specialized)
     return true
 end
 
-function FindItemsInSpecializedContainers(specialized, fn)
-    local items = {}
+local function FindItems(items, specialized, fn)
+    local items = items or {}
 
     if specialized then
         for _, container in pairs(specialized) do
@@ -60,19 +60,10 @@ local function ExistsInInventory(owner, inst)
             and not (equippable and equippable:IsEquipped())
             and not (inventory and item == inventory:GetActiveItem())
     end
-    for _, id in pairs(inventory:FindItems(ShouldGoInList)) do
+    for _, id in pairs(FindItems(inventory:FindItems(ShouldGoInList), specialized, ShouldGoInList)) do
         if id and not (id.components.stackable and id.components.stackable:IsFull()) then
             stackisnotfull = true
             break
-        end
-    end
-    if specialized then
-        stackisnotfull = false
-        for _, id in pairs(FindItemsInSpecializedContainers(specialized, ShouldGoInList)) do
-            if id and not (id.components.stackable and id.components.stackable:IsFull()) then
-                stackisnotfull = true
-                break
-            end
         end
     end
     return stackisnotfull
