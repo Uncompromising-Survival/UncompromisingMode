@@ -624,7 +624,7 @@ configuration_options = {
     BinaryConfig("townportal_rework", "Lazy Deserter Rework",
         "Makes the Lazy Deserter useful in singleplayer, by automatically harvesting nearby plants and objects.", true),
     BinaryConfig("cooldown_orangestaff", "Lazy Explorer",
-        "Lazy Explorer loses durability similarly to a Whirly Fan. Telepoof doesn't waste durability and has cooldown, like Wanda's watches. By Lux.",
+        "Lazy Explorer loses durability similarly to a Whirly Fan. Telepoof doesn't waste durability and has cooldown, like Wanda's watches.",
     false),		
     BinaryConfig("lifeamulet", "Life Giving Amulet Rework",
         "The Amulet won't revive ghosts, but it now interrupts death upon taking a fatal hit while wearing it.\nIts hunger > health conversion ticks much faster.",
