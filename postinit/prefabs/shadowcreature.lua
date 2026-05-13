@@ -92,8 +92,6 @@ env.AddPrefabPostInit("nightmarebeak", function(inst)
     inst.components.combat:SetRetargetFunction(3, retargetfn) --yell at me if this causes problems later, I couldn't be bothered to function hook -Atobá
 end)
 
-local easing = require("easing")
-
 local function LaunchProjectile(inst)
     local theta = math.random() * 2 * PI
     local r = inst:GetPhysicsRadius(0) + 0.50 + math.sqrt(math.random()) * TUNING.WARG_GINGERBREAD_GOO_DIST_VAR
