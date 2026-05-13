@@ -438,6 +438,7 @@ TUNING.DSTU = {
     TELESTAFF_REWORK = GetModConfigData("telestaff_rework"),
     BEEBOX_NERF = GetModConfigData("beebox_nerf"),
     CANEDURABILITY = GetModConfigData("cane_durability"),
+	COOLDOWN_ORANGESTAFF = GetModConfigData("cooldown_orangestaff"),
     --AC_COOLING = GetModConfigData("ac_does_ac"),
     HARDER_SPIDERQUEEN = GetModConfigData("harder_spider_queen"),
     HARDER_MOOSE = GetModConfigData("harder_moose"),
