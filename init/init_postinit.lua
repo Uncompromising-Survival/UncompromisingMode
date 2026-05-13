@@ -257,8 +257,8 @@ local prefab_post = {
     "slurper",
     "kelphat",
     "strawhat",
-	"monkey_smallhat",
-	"cane",
+    "monkey_smallhat",
+    "cane",
 }
 
 local stategraph_post = {
@@ -306,6 +306,7 @@ local brain_post = {
     "mossling",
     "perd",
     --"catcoon",
+    "walrus",
     "deer",
     "shadowwaxwell",
     "hound",

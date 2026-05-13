@@ -1,7 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-
 local BrainCommon = require("brains/braincommon")
 local UpvalueHacker = require("tools/upvaluehacker")
 
