@@ -11,14 +11,15 @@ RECIPE_DESC.CRITTERLAB_REAL = "Cute pals to ruin the mood."
 RECIPE_DESC.UM_SAND = "Turn a big rock into smaller rocks."
 RECIPE_DESC.SNOWGOGGLES = "Keep your eyes clear and ears extra warm."
 RECIPE_DESC.RATPOISONBOTTLE = "Highly addictive to pestilence pests."
-RECIPE_DESC.DISEASECUREBOMB = "Effective disease prevention."
 RECIPE_DESC.ICE = "Water of the solid kind."
 RECIPE_DESC.GASMASK = "Makes everything smell like bird."
 RECIPE_DESC.PLAGUEMASK = "You are the cure!"
+RECIPE_DESC.UM_HAT_NETTLEMASK = "Displace dangerous gasses with an equally horrible irritant."
 RECIPE_DESC.SALTPACK = "Spice up the world."
 RECIPE_DESC.RATPOISON = "A most deadly feast."
 RECIPE_DESC.SHROOM_SKIN = "Stitched skins."
 RECIPE_DESC.SPOREPACK = "Unhygenic storage."
+RECIPE_DESC.UM_BACKPACK_AMULETUSE = "Empowers most amulets AND carries your things."
 RECIPE_DESC.AIR_CONDITIONER = "Condition the air."
 if GetModConfigData("longpig") then
     RECIPE_DESC.REVIVER = "Dead flesh revived to revive a dead friend."
@@ -35,7 +36,11 @@ RECIPE_DESC.UM_BEAR_TRAP_EQUIPPABLE_TOOTH = "These jaws need to get a grip!"
 RECIPE_DESC.UM_BEAR_TRAP_EQUIPPABLE_GOLD = "My shiny teeth and me!"
 RECIPE_DESC.ARMOR_GLASSMAIL = "Surround yourself with broken glass."
 RECIPE_DESC.MUTATOR_TRAPDOOR = "They're smart, allegedly."
-RECIPE_DESC.DRIFTWOODFISHINGROD = "Go Fancy Fishing. For Fancy Fish."
+if TUNING.DSTU.DATES.APRIL_FOOLS then
+    RECIPE_DESC.DRIFTWOODFISHINGROD = "Go fucking fishing. For fucking fish."
+else
+    RECIPE_DESC.DRIFTWOODFISHINGROD = "Go fancy fishing. For fancy fish."
+end
 RECIPE_DESC.UNCOMPROMISING_FISHINGNET = "Nothing but net!"
 RECIPE_DESC.UNCOMPROMISING_HARPOON = "Keel Haul 'Em!"
 RECIPE_DESC.UNCOMPROMISING_HARPOON_HEAVY = "Up for a Chain'ge?"
@@ -64,7 +69,7 @@ RECIPE_DESC.PORTABLEBOAT_ITEM = "Pack up and go!"
 RECIPE_DESC.MASTUPGRADE_WINDTURBINE_ITEM = "Full speed ahead!"
 RECIPE_DESC.CODEX_MANTRA = "Repeat after me."
 if GetModConfigData("telestaff_rework") then
-    RECIPE_DESC.TELEBASE = "Now with 100% less gold!"
+    RECIPE_DESC.TELEBASE = "Gems included."
 end
 -- sailing rebalance strings
 RECIPE_DESC.MOONSTORM_STATIC_ITEM = "The power of the moon, contained!"
@@ -111,7 +116,7 @@ RECIPE_DESC.PACT_SWORD_SANITY = "Hefty, like the weight on your shoulders."
 RECIPE_DESC.UM_ASTRAL_PROJECTOR = "The soul seperates from the body. Careful nothing slips inside."
 RECIPE_DESC.UM_ASTRAL_PROJECTOR_TARGET = "Are you the real you?"
 RECIPE_DESC.UM_INKUBATOR = "A new life is born. But at what cost?"
-RECIPE_DESC.UM_SCRAPPER = "Reduce anything, or anyone, to their base components."
+RECIPE_DESC.UM_SCRAPPER = "Reduce anything to their base components."
 RECIPE_DESC.PLAUNT_MANNY = "She rubs her knees when she knows something bad's going to happen."
 
 --Winky
@@ -158,6 +163,11 @@ RECIPE_DESC.SCRAP_MONOCLEHAT = "Explore the horizon."
 RECIPE_DESC.TURF_UM_HOTSPRING_GRASS = "A patch of steamy wet grass."
 RECIPE_DESC.TURF_UM_HOTSPRING_WHITEROCK = "The warm white rocky floor of the Broiling Hills."
 RECIPE_DESC.TURF_UM_HOTSPRING_YELLOWROCK = "The yielding yellow rocky floor of the Broiling Hills."
+RECIPE_DESC.TURF_UM_MAGMA = "A chunk of warm rock from the Magma Caves."
+RECIPE_DESC.TURF_MAGMA_GRASS = "The spicy grass of the Magma Caves."
+RECIPE_DESC.TURF_HOODEDFOLIAGE = "The vibrant undergrowth of the Hooded Forest."
+RECIPE_DESC.TURF_HOODEDFOLIAGE_DARK = "The lush undergrowth of the Hooded Forest."
+
 RECIPE_DESC.UM_FYRE_BOMB = "A bomb, plain and simple."
 RECIPE_DESC.UM_HAT_BEE_MOON = "A hat filled with mutant angry bees."
 RECIPE_DESC.UM_EYEBALM = "Tread with ease through storms."
@@ -182,9 +192,13 @@ RECIPE_DESC.UM_HAT_PEPPERDRAGON = "Invert temperature rules."
 RECIPE_DESC.UM_BOOMBERRY_BOMB = "Fruit-mine on a stick."
 
 RECIPE_DESC.UM_FEATHER_TOTEM = "Three feathers in the hand are worth more to those who can't escape death."
-RECIPE_DESC.UM_MAGNIFIER = "Discover the hidden properties of Strange Gems."
-RECIPE_DESC.UM_MAGNIFIER_OBSIDIAN = RECIPE_DESC.UM_MAGNIFIER
-RECIPE_DESC.UM_GEMOLOGY_POUCH = "Holds gemology gems and geodes. Bigger on the inside."
+RECIPE_DESC.UM_MAGNIFIER = "Discover the hidden properties of Strange Gems the Ancient way."
+RECIPE_DESC.UM_MAGNIFIER_PURPLEGEM = "Discover the hidden properties of Strange Gems."
+RECIPE_DESC.UM_MAGNIFIER_OBSIDIAN = "Discover the hidden properties of Strange Gems the fiery way."
+RECIPE_DESC.UM_GEMOLOGY_POUCH = "Holds Strange Gems and geodes. Bigger on the inside."
+RECIPE_DESC.WORMWOOD_MUSHTREE = "Create your very own fungus among us."
+RECIPE_DESC.WORMWOOD_EQEX = "Friends come and go."
+RECIPE_DESC.UM_BOMB_MOON = "Create freaks scorched by the moon's light!"
 
 RECIPE_DESC.UM_THULECITE_RAZOR = "Essential for the ancient technique of \"shaving\" "
 -- [              DSTU Related Overrides                  ]
@@ -268,7 +282,7 @@ STRINGS.UI.HUD.UM_VETSKULL = {
     WICKERBOTTOM = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
     WOODIE = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,       --WIP
     WES = "Veteran's Curse:\n - Wes Must Die.",
-    WAXWELL = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,      --WIP
+    WAXWELL = "Veteran's Curse:\n - Half of taken attack damage is also applied as maximum health loss.\n - Maximum health loss is capped at 99% instead of 75%.",
     WATHGRITHR = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,   --WIP
     WEBBER = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,       --WIP
     WINONA = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,       --WIP
@@ -278,7 +292,7 @@ STRINGS.UI.HUD.UM_VETSKULL = {
     WURT = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,         --Wurt to Womp transition, real. Soon.
     WALTER = "Veteran's Curse:\n - Damage taken also applies a maximum Sanity penalty.\n - The penalty heals itself after a while without getting hurt.",
     WANDA = "Veteran's Curse:\n - Age faster when damaged.\n - Hunger drains faster.\n - Sanity from foods is applied *slowly* over time.",
-    WINKY = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
+    WINKY = "Veteran's Curse:\n - Lose 5 inventory slots.",
     WATHOM = "Veteran's Curse:\n - When above 50% Sanity, becomes enlighted.",
     WIXIE = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
 }
@@ -388,18 +402,20 @@ STRINGS.STANTON_POET3 = { "If you draw against his hand, you can never win." }
 STRINGS.STANTON_POET4 = { "Go ahead... drink with the living dead." }
 STRINGS.STANTON_POET5 = { "Drink with the living dead." }
 
-
 STRINGS.UI.COOKBOOK.UM_BEEFALOWINGS = "Prevents Knockback"
 STRINGS.UI.COOKBOOK.UM_CALIFORNIAKING = "Immunity to Hayfever"
-STRINGS.UI.COOKBOOK.UM_LICELOAF = "Moderate Hayfever Relief"
-STRINGS.UI.COOKBOOK.UM_SEAFOODPAELLA = "Huge Hayfever Relief"
-STRINGS.UI.COOKBOOK.UM_SNOTROAST = "Reduces Hunger Drain"
-STRINGS.UI.COOKBOOK.UM_STUFFED_PEEPER_POPPERS = "Spawns Friendly Al-'eyes'"
-STRINGS.UI.COOKBOOK.UM_THEATERCORN = "Sanity For Spectacle"
-STRINGS.UI.COOKBOOK.UM_VIPERJAM = "Spawns Friendly Vipers"
-STRINGS.UI.COOKBOOK.UM_ZASPBERRYPARFAIT = "Shocks Your Attackers"
-STRINGS.UI.COOKBOOK.UM_RIMEWEED_SPAGETT = "Immediately Freezes Your Surroundings"
-STRINGS.UI.COOKBOOK.UM_RIMEWEED_TEQUILA = "Increases Resistance to Freezing"
+STRINGS.UI.COOKBOOK.UM_LICELOAF = "Moderate Hayfever relief"
+STRINGS.UI.COOKBOOK.UM_SEAFOODPAELLA = "Huge Hayfever relief"
+STRINGS.UI.COOKBOOK.UM_SNOTROAST = "Reduces hunger drain"
+STRINGS.UI.COOKBOOK.UM_STUFFED_PEEPER_POPPERS = "Spawns friendly al-'eyes'"
+STRINGS.UI.COOKBOOK.UM_THEATERCORN = "Entertaining with a spectacle"
+STRINGS.UI.COOKBOOK.UM_VIPERJAM = "Spawns friendly Vipers"
+STRINGS.UI.COOKBOOK.UM_ZASPBERRYPARFAIT = "Shocks your attackers"
+STRINGS.UI.COOKBOOK.UM_DURIAN_CREAM_MARSHCAKE = "Exotic out of season"
+STRINGS.UI.COOKBOOK.UM_BOOMBERRYPIE = "Will blow you away!"
+STRINGS.UI.COOKBOOK.UM_BOOM_TART = "Will blow others away!"
+STRINGS.UI.COOKBOOK.UM_RIMEWEED_SPAGETT = "Freezes your surroundings"
+STRINGS.UI.COOKBOOK.UM_RIMEWEED_TEQUILA = "Increases resistance to freezing"
 
 STRINGS.NAMES.UM_VARGLET_PET_NAMES = {
 "Cupcake", --Shy
@@ -624,14 +640,17 @@ STRINGS.STALKER_ATRIUM_WATHOM_BATTLECRY = {
 
 STRINGS.UM_VETERANSHRINE = {
     VETERANCURSETAUNT = {
-        "COME... CLOSER...",
-        "THE... CHALLENGE...",
-        "CURSE... WAY OUT..."
+        "COME... CLOSER... CONSIDER...",
+        "THE... CHALLENGE.. REWARD...",
+        "CURSE... N.. OUT...",
+        "POWER.. GLORY..."
     },
     VETERANCURSED = {
-        "NO... GOING... BACK...",
-        "PACT... MADE...",
-        "BRING... SKULLS..."
+        "GO... PACT... MADE...",
+        "FIND... DESTROY...",
+        "GOOD... LUCK...",
+        "FIND... EAT... NIGHT",
+        "MOON.. GONE.. PREPARE..."
     },
     NOT_VETERANCURSED = { --Unused
         "NOT... AFFLICTED..."
@@ -639,27 +658,32 @@ STRINGS.UM_VETERANSHRINE = {
     NOT_VETERANSKULL = { --Unused
         "NOT... DESIRED..."
     },
-    VETSKULL_COMMENT = { --Unused
-        WILSON = "A CURIOUS MIND... DESTINED FOR DANGER",
-        WALTER = "A KIND SOUL... BUT TOO CURIOUS... LIKE 'THEY' WERE",
-        WORTOX = "TOO BREAK FREE... OF ONES NATURE... A RARE THING",
-        MAXWELL = "THINKS HIMSELF A KING... HE WAS ONLY EVER A PAWN",
-        WILLOW = "CAREFREE... CARELESS... MAY SHE FIND PEACE",
-        WARLY = "ALWAYS HUNGRY FOR MORE... NEVER SATED",
-        WINKY = "THE RESULT... OF THEIR MEDDLING...",
-        WICKERBOTTOM = "TOO EAGER... TO TAMPER... WITH DARK FORCES",
-        WIXIE = "DARKNESS INSIDE HER... THEIR FAVORITE FUEL SOURCE",
-        WOODIE = "TAMPERED ONCE... WITH OUR INFLUENCES",
-        WOLFGANG = "SEEKS STRENGTH... WHERE WEAKNESS IS FED UPON",
-        WANDA = "ALWAYS RUNNING... HER TIME RUNS SHORT",
-        WATHGRITHR = "THEY FUEL HER DELUSIONS... SHE FUELS THEIR DESITRES",
-        WES = "SEEKS STRENGTH... WHERE WEAKNESS IS FED UPON",
-        WENDY = "TO BRING BACK THE DEAD... A DANGEROUS PROSPECT",
+    VETSKULL_COMMENT = { -- Unused...
+        WILSON = "A CURIOUS MIND... DESTINED FOR DANGER.. HIS CHALLENGE IS THEIR HUNGER AND VULNERABILITY...",
+        WALTER = "A KIND SOUL... BUT TOO CURIOUS... LIKE 'THEY' WERE.. HIS CHALLENGE IS THEIR MAIMED MIND..",
+        WORTOX = "TOO BREAK FREE... OF ONES NATURE... A RARE THING.. HIS CHALLENGE IS THEIR REGRET..",
+        MAXWELL = "THINKS HIMSELF A KING... HE WAS ONLY EVER A PAWN... HIS CHALLENGE IS THEIR REQUIREMENT..",
+        WILLOW = "CAREFREE... CARELESS... MAY SHE FIND PEACE... HER CHALLENGE IS THEIR COLD HEART..",
+        WARLY = "ALWAYS HUNGRY FOR MORE... NEVER SATED... HIS CHALLENGE IS THEIR DISSATISFACTION..",
+        WINKY = "THE RESULT... OF THEIR MEDDLING... HER CHALLENGE IS UNKNOWN...",
+        WICKERBOTTOM = "TOO EAGER... TO TAMPER... WITH DARK FORCES.. HER CHALLENGE IS UNKNOWN...",
+        WIXIE = "DARKNESS INSIDE HER... THEIR FAVORITE FUEL SOURCE.. HER CHALLENGE IS UNKNOWN...",
+        WOODIE = "TAMPERED ONCE... WITH OUR INFLUENCES.. HIS CHALLENGE IS THEIR BROKEN BODY AND MIND...",
+        WOLFGANG = "SEEKS STRENGTH... WHERE WEAKNESS IS FED UPON... HIS CHALLENGE IS UNKNOWN...",
+        WANDA = "ALWAYS RUNNING... HER TIME RUNS SHORT.. HER CHALLENGE IS IN THE FUTURE...",
+        WATHGRITHR = "THEY FUEL HER DELUSIONS... SHE FUELS THEIR DESIRES.. HER CHALLENGE IS THEIR UNENDING OPPOSITION...",
+        WES = "CURSED BY THE YESTERYEAR KING.. HIS CHALLENGE IS THEIR UNENDING HATRED..",
+        WENDY = "TO BRING BACK THE DEAD... A DANGEROUS PROSPECT... HER CHALLENGE IS UNKNOWN...",
 
-        WORMWOOD = "TO BRING BACK THE DEAD... A DANGEROUS PROSPECT",
-        WX78 = "A NEW SHELL... WITH NO SOUL TRANSFERRED",
+        WORMWOOD = "DOES NOT... BELONG... HERE... HIS CHALLENGE IS THEIR MAIMED BODY...",
+        WX78 = "A NEW SHELL... WITH NO SOUL.. IS IT REALLY HIM.. ITS CHALLENGE IS UNKNOWN...",
     },
 }
+
+--AXE The veteranshrine will eventually make comments about night terrors happening if the characters choose to be near him when it happens.
+-- It is advantagous to the player to be somewhat near the veteranshrine. The ancient inside will tell them what's coming, if anything.
+-- It will be possible to attach a radio device onto the veteranshrine itself and carry your own radio elsewhere, he will always inform you of what's happening near you, somehow, he knows.
+-- He will functionally be the event's cheat sheet. Secret ooooh Secret.
 
 STRINGS.UM_VOXOLOPHONE = { --All Unused Night Terrors stuff
     SHADOW_WARNING = {
@@ -890,6 +914,7 @@ STRINGS.SKILLTREE.WATHOM = {
     RAMPAGE_1_DESC = "Creatures you crash into at the end of your leaping strikes will be knocked back a little.",
     RAMPAGE_2_TITLE = "Lethal Rampage",
     RAMPAGE_2_DESC = "Damage enemies you crash into. Scales with your Adrenaline.",
+    AMP_1_TITLE = "Amp Up I",
     AMP_1_DESC = "The nightmare within you festers during combat. Your speed and power rises as you gain Adrenaline, at the cost of sustaining more damage when hit.",
     AMP_2_TITLE = "Amp Up II",
     AMP_2_DESC = "Your combat abilities as well as damage vulnerability are increased at high Adrenaline levels.",
@@ -1176,7 +1201,9 @@ STRINGS.SKILLTREE.WORMWOOD.BLOOMING_MAX_UPGRADE_DESC                = "Fertiliza
 
 STRINGS.UM_DESCRIPTOR = {
     --this is for the gem items, with "when applied to an item:" prefix.
+    GEM_TIER_PREFIX = "Quality:",
     GEMOLOGY_GEM = {
+        PREFIX = "When applied:",
         BLUE1 = {
             "Gives summer insulation when held and freezes enemies on hit.",
             "Gives summer insulation when held and freezes enemies on hit.\nHitting frozen enemies grants you an ice shield.",
@@ -1219,8 +1246,8 @@ STRINGS.UM_DESCRIPTOR = {
         },
         GREEN1 = {
             "Increases attack and working speed.",
-            "Increases attack and working speed.\nA shadow clone may appear to assist you when attacking or working.",
-            "Increases attack and working speed.\nA shadow clone may appear to assist you when attacking or working.",
+            "Increases attack and working speed.\nA shadow weapon/tool may appear to assist you when attacking or working.",
+            "Increases attack and working speed.\nA shadow weapon/tool may appear to assist you when attacking or working.",
         },
         GREEN2 = {
             "Copies 3 random gems of the same tier.\nGems are randomized every day.",
@@ -1250,6 +1277,8 @@ STRINGS.UM_DESCRIPTOR = {
     },
     --this is for the items with a minerology effect, with the prefix "gemology effects:"
     GEM_ENCHANTABLE = {
+        PREFIX = "Gemology Effects:",
+        SLOTS_PREFIX = "Gem slots:",
         BLUE1 = {
             "Has summer insulation when held and freezes enemies on hit.",
             "Has summer insulation when held and freezes enemies on hit.\nHitting frozen enemies grants you an ice shield.",
@@ -1293,8 +1322,8 @@ STRINGS.UM_DESCRIPTOR = {
         },
         GREEN1 = {
             "Attacks and works faster.",
-            "Attacks and works faster.\nA shadow clone may appear to assist you when attacking or working.",
-            "Attacks and works faster.\nA shadow clone may appear to assist you when attacking or working.",
+            "Attacks and works faster.\nA shadow weapon/tool may appear to assist you when attacking or working.",
+            "Attacks and works faster.\nA shadow weapon/tool may appear to assist you when attacking or working.",
         },
         GREEN2 = {
             "Copies 3 random gems of the same tier.\nGems are randomized every day.",
@@ -1476,7 +1505,6 @@ STRINGS._STATUS_ANNOUNCEMENTS.WALTER = {
     },
 }
 
---Mineral logbook
 STRINGS.MINERAL_LOGBOOK = {
     UNKNOWN_GEM = "Unknown Gem",
     SOURCES = "Sources",

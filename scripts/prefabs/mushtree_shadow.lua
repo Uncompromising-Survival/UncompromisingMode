@@ -56,23 +56,36 @@ local function workcallback(inst, worker, workleft)
     --V2C: different anims are played in workfinishcallback if workleft <= 0
 end
 
+local function GooNearby(inst)
+    local x,y,z = inst.Transform:GetWorldPosition()
+    local others = TheSim:FindEntities(x,y,z,3,{"_sanity","_health"})
+    for i,other in ipairs(others) do
+        if not other.components.health:IsDead() then
+            if other.components.inkable then
+                other.components.inkable:Ink()
+            end
+            other.components.sanity:DoDelta(-5)
+        end
+    end
+end
+
 local function maketree(name, data, state)
 
 	local function onspawnfn(inst, spawn)
-    inst.AnimState:PlayAnimation("cough")
-    inst.AnimState:PushAnimation("idle_loop", true)
+        local miasmamanager = TheWorld.components.miasmamanager
+        if miasmamanager then
+            local x, y, z = inst.Transform:GetWorldPosition()
+            local theta = math.random() * TWOPI
+            local ox, oz = TILE_SCALE * math.cos(theta), TILE_SCALE * math.sin(theta)
+            miasmamanager:CreateMiasmaAtPoint(x + ox, 0, z + oz)
+        end
+        inst.AnimState:PlayAnimation("cough")
+        inst.AnimState:PushAnimation("idle_loop", true)
 
-    inst.SoundEmitter:PlaySound("dontstarve/cave/mushtree_tall_spore_fart")
-
-    local pos = inst:GetPosition()
-    local radius = spawn:GetPhysicsRadius(0) + inst:GetPhysicsRadius(0) + 0.75
-    local offset = FindWalkableOffset(pos, math.random() * TWOPI, radius, 8)
-
-    if offset ~= nil then
-        pos = pos + offset
-    end
-
-    spawn.Transform:SetPosition(pos.x, 0, pos.z)
+        inst.SoundEmitter:PlaySound("dontstarve/cave/mushtree_tall_spore_fart")
+        if spawn then -- just using periodicspawner as a timer... miasmamangager is handling the actual miasma
+            spawn:Remove()
+        end
 	end
 	
 	local function ontimerdone(inst, data)
@@ -125,12 +138,7 @@ local function maketree(name, data, state)
 	local function workfinishcallback(inst,other)
 		inst.SoundEmitter:PlaySound("dontstarve/forest/treefall")
 		makestump(inst)
-		if other.components.sanity ~= nil and other.components.health ~= nil and not other.components.health:IsDead() and other.components.inkable then
-			other.components.inkable:Ink()
-			other.components.sanity:DoDelta(-5)
-		elseif other.components.sanity ~= nil then
-			other.components.sanity:DoDelta(-5)
-		end
+        GooNearby(inst)
 		inst.AnimState:PlayAnimation("fall")
 		inst.AnimState:PushAnimation("idle_stump")
 
@@ -183,9 +191,9 @@ local function maketree(name, data, state)
         end
 		
         inst:AddComponent("periodicspawner")
-        inst.components.periodicspawner:SetPrefab("spore_shadow")
+        inst.components.periodicspawner:SetPrefab("miasma_cloud")
         inst.components.periodicspawner:SetOnSpawnFn(onspawnfn)
-        inst.components.periodicspawner:SetDensityInRange(TUNING.MUSHSPORE_MAX_DENSITY_RAD, TUNING.MUSHSPORE_MAX_DENSITY)
+        --inst.components.periodicspawner:SetDensityInRange(TUNING.MUSHSPORE_MAX_DENSITY_RAD, TUNING.MUSHSPORE_MAX_DENSITY)
         inst.components.periodicspawner:Stop()
 		
 		inst:WatchWorldState("nightmarephase",inst.SporeTask)
@@ -375,18 +383,9 @@ end
 
 local function oneatenregular(inst, eater)
 	if eater.components.skilltreeupdater and eater.components.skilltreeupdater:IsActivated("wormwood_moon_cap_eating") then
-
-		-- Launch 4 Boomshrooms
-		local targetpos = Vector3(3,0,3)
-		SpawnMushroomBombProjectile(inst,targetpos)
-		targetpos = Vector3(-3,0,3)
-		SpawnMushroomBombProjectile(inst,targetpos)		
-		targetpos = Vector3(-3,0,-3)
-		SpawnMushroomBombProjectile(inst,targetpos)	
-		targetpos = Vector3(3,0,-3)
-		SpawnMushroomBombProjectile(inst,targetpos)			
-		
-		eater.components.sanity:DoDelta(50)
+		local cloud = SpawnPrefab("um_agonycloud")
+		cloud.Transform:SetPosition(eater.Transform:GetWorldPosition())
+		cloud:SetOwner(eater)
 	end
 end
 			
@@ -417,7 +416,7 @@ local function fnregular()
 	inst:AddComponent("edible")
 	inst.components.edible.healthvalue = -20
 	inst.components.edible.hungervalue = 18.8
-	inst.components.edible.sanityvalue = -50
+	inst.components.edible.sanityvalue = -33
 	inst.components.edible.foodtype = FOODTYPE.VEGGIE
 	
 	inst:AddComponent("perishable")
@@ -427,7 +426,7 @@ local function fnregular()
 	inst.components.edible:SetOnEatenFn(oneatenregular)
 	
 	inst:AddComponent("stackable")
-
+	inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
 	inst:AddComponent("inspectable")
 	
 	
@@ -494,7 +493,7 @@ local function fn_cooked()
 	inst.components.edible:SetOnEatenFn(oneatenfncooked)
 	
 	inst:AddComponent("stackable")
-
+	inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
 	inst:AddComponent("inspectable")
 	
 	inst:AddComponent("inventoryitem")

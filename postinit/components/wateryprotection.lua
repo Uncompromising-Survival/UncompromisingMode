@@ -10,8 +10,8 @@ env.AddComponentPostInit("wateryprotection", function(self)
         for i, v in ipairs(ents) do
             if v.prefab == "ratpoison" then
                 v:Remove()
-            elseif not (v._isfading and v._isfading:value()) and v.OnStartFade then
-                v:OnStartFade(v)
+            elseif not (v._isfading and v._isfading:value()) and v.FadeAway then
+                v:FadeAway(v)
             end
         end
         _SpreadProtectionAtPoint(self, x, y, z, dist, noextinguish)

@@ -80,7 +80,7 @@ local function rockyrock()
 
     local workable = inst:AddComponent("workable")
     workable:SetWorkAction(ACTIONS.MINE)
-    workable:SetWorkLeft(TUNING.ROCKS_MINE)
+    workable:SetWorkLeft(2*TUNING.ROCKS_MINE)
     workable:SetOnWorkCallback(OnWork)
 
 	inst.components.lootdropper:SetChanceLootTable('um_rocklobster_rock')

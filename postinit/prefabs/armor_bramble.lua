@@ -15,6 +15,17 @@ local function OnBlocked(owner, data, inst)
         if owner.SoundEmitter ~= nil then
             owner.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
         end
+		if owner.components.skilltreeupdater and owner.components.skilltreeupdater:IsActivated("wormwood_armor_bramble2") then
+			owner:DoTaskInTime(0.6,function(owner)
+				if owner then
+					SpawnPrefab("bramblefx_armor"):SetFXOwner(owner)
+					
+					if owner.SoundEmitter ~= nil then
+						owner.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
+					end
+				end
+			end)
+		end
     end
 end
 

@@ -15,7 +15,7 @@ return Class(function(self, inst)
 
         local STRUCTURE_DIST = 20
         local HASSLER_SPAWN_DIST = 40
-        local HASSLER_KILLED_DELAY_MULT = 6
+        local HASSLER_KILLED_DELAY_MULT = 2
         local STRUCTURES_PER_SPAWN = 4
         local MOCKFLY_TIMERNAME = "mockfly_timetoattack"
         local _moonmaw_available = "mockfly_timetoattack"
@@ -31,7 +31,7 @@ return Class(function(self, inst)
         --[[ Private Member Variables ]]
         --------------------------------------------------------------------------
         local _warning = false
-        local _spawmmoonmaw = true
+        local _spawnmoonmaw = true
         local _warnduration = 60
         local _timetonextwarningsound = 0
         local _announcewarningsoundinterval = 4
@@ -48,14 +48,14 @@ return Class(function(self, inst)
         local _timetoattack
 		
         local _activeplayers = {}
-
+		local um_overridespawn = false
         --------------------------------------------------------------------------
         --[[ Private member functions ]]
         --------------------------------------------------------------------------
 
         local function AllowedToAttack()
             return (#_activeplayers > 0 and
-                TheWorld.state.cycles > TUNING.DSTU.NO_MOCK_DRAGONFLY_BOSS_TIME and
+                ((TheWorld.state.cycles > TUNING.DSTU.NO_MOCK_DRAGONFLY_BOSS_TIME) or um_overridespawn) and
                 (_attackduringoffseason or
                 TheWorld.state.season == "summer"))
         end
@@ -115,7 +115,7 @@ return Class(function(self, inst)
         local function TryStartAttacks(killed)
             if AllowedToAttack() then
                 if _activehassler == nil and _attacksperseason > 0 and _worldsettingstimer:GetTimeLeft(MOCKFLY_TIMERNAME) == nil then
-                    local attackdelay = killed == true and _attackdelay * HASSLER_KILLED_DELAY_MULT or _attackdelay
+                    local attackdelay = killed == true and 2 * _attackdelay * HASSLER_KILLED_DELAY_MULT or _attackdelay
                     _worldsettingstimer:StartTimer(MOCKFLY_TIMERNAME, attackdelay)
                 end
 
@@ -166,7 +166,7 @@ return Class(function(self, inst)
             local boat = TheWorld.Map:GetPlatformAtPoint(x, z)
 			
             if boat ~= nil or not TheWorld.Map:IsOceanTileAtPoint(pt:Get()) then
-                if TheWorld.state.cycles > 50 and TheWorld.state.isfullmoon or TheWorld.state.isalterawake then
+                if TheWorld.state.cycles > 50 and (TheWorld.state.isfullmoon or TheWorld.state.isalterawake) then
                     pt = FindNearbyLandFullMoon(pt, 1) or pt
                 else
                     pt = FindNearbyLand(pt, 1) or pt
@@ -192,7 +192,7 @@ return Class(function(self, inst)
             local spawn_pt = GetSpawnPoint(targetPlayer:GetPosition())
 
             if spawn_pt ~= nil then
-                if TheWorld.state.cycles > 50 and TheWorld.state.isfullmoon or TheWorld.state.isalterawake then
+                if TheWorld.state.cycles > 50 and (TheWorld.state.isfullmoon or TheWorld.state.isalterawake) then
                     hassler = SpawnPrefab("moonmaw_dragonfly")
                 elseif _storedhassler ~= nil then
                     hassler = SpawnSaveRecord(_storedhassler, {})
@@ -216,10 +216,32 @@ return Class(function(self, inst)
         --------------------------------------------------------------------------
         --[[ Private event handlers ]]
         --------------------------------------------------------------------------
-
+		local function OnMegaFlare(src, data)
+			if data.sourcept and TheWorld.Map:IsVisualGroundAtPoint(data.sourcept.x, data.sourcept.y, data.sourcept.z) and TheWorld.state.issummer then
+				um_overridespawn = true
+				if not _activehassler then
+					if _worldsettingstimer:ActiveTimerExists(MOCKFLY_TIMERNAME) and _worldsettingstimer:GetTimeLeft(MOCKFLY_TIMERNAME) > 480*1.8 then -- Cannot advance any more if it's within two days
+						local time = _worldsettingstimer:GetTimeLeft(MOCKFLY_TIMERNAME)
+						if time > 480*8 then
+							time = time - 480*math.random(2,3)
+						elseif time > 480*4 then
+							time = time - 480*math.random(1,2)
+						elseif time > 480*2 then
+							time = time - 240*math.random(1,3) 
+						else
+							time = time - 480*math.random(1,1.5)
+						end
+						_worldsettingstimer:SetTimeLeft(MOCKFLY_TIMERNAME, time)
+					elseif not _worldsettingstimer:ActiveTimerExists(MOCKFLY_TIMERNAME) then
+						_worldsettingstimer:StartTimer(MOCKFLY_TIMERNAME, 480*math.random(6,8))
+					end
+				end
+			end
+		end
+		
         local function OnSeasonChange(self, season)
             if TheWorld.state.season ~= SEASONS.SUMMER then
-                _spawmmoonmaw = true
+                _spawnmoonmaw = true
             end
 
             TryStartAttacks()
@@ -398,7 +420,7 @@ return Class(function(self, inst)
             {
                 warning = _warning,
                 storedhassler = _storedhassler,
-                spawmmoonmaw = _spawmmoonmaw,
+                spawmmoonmaw = _spawnmoonmaw,
             }
 
             local ents = {}
@@ -413,7 +435,7 @@ return Class(function(self, inst)
         function self:OnLoad(data)
             _warning = data.warning or false
             _storedhassler = data.storedhassler
-            _spawmmoonmaw = data.spawmmoonmaw
+            _spawnmoonmaw = data.spawmmoonmaw
 
             if data.timetoattack then
                 _timetoattack = data.timetoattack
@@ -459,15 +481,15 @@ return Class(function(self, inst)
         end
 
         local function SummonMonsterFullMoon(player)
-            if _spawmmoonmaw and TheWorld.state.cycles > 50 and TheWorld.state.issummer and (TheWorld.state.isfullmoon or TheWorld.state.isalterawake) then
-                if _worldsettingstimer:ActiveTimerExists(MOCKFLY_TIMERNAME) then
+            if _spawnmoonmaw and TheWorld.state.cycles > 50 and TheWorld.state.issummer and (TheWorld.state.isfullmoon or TheWorld.state.isalterawake) then
+                if _worldsettingstimer:ActiveTimerExists(MOCKFLY_TIMERNAME) and _worldsettingstimer:GetTimeLeft(MOCKFLY_TIMERNAME) < (60*8*5) then
                     _worldsettingstimer:SetTimeLeft(MOCKFLY_TIMERNAME, 40)
                     _worldsettingstimer:ResumeTimer(MOCKFLY_TIMERNAME)
                 else
-                    _worldsettingstimer:StartTimer(MOCKFLY_TIMERNAME, 40)
+                    --_worldsettingstimer:StartTimer(MOCKFLY_TIMERNAME, 40)
                 end
 
-                _spawmmoonmaw = false
+                _spawnmoonmaw = false
 
                 self.inst:StartUpdatingComponent(self)
             end
@@ -485,10 +507,14 @@ return Class(function(self, inst)
         end
 
         self.inst:WatchWorldState("isfullmoon", SummonMonsterFullMoon)
+
         self.inst:ListenForEvent("ms_playerjoined", OnPlayerJoined, TheWorld)
         self.inst:ListenForEvent("ms_playerleft", OnPlayerLeft, TheWorld)
         self:WatchWorldState("season", OnSeasonChange)
         self.inst:ListenForEvent("mockflyremoved", OnHasslerRemoved, TheWorld)
         self.inst:ListenForEvent("mockflykilled", OnHasslerKilled, TheWorld)
         self.inst:ListenForEvent("storehasslermockdragonfly", OnStoreHassler, TheWorld)
+		
+		self.inst:ListenForEvent("megaflare_detonated", OnMegaFlare, TheWorld)
+
     end)

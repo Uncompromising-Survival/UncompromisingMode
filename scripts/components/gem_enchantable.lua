@@ -1,29 +1,24 @@
 local DEFS = require("gemology_defs")
-local GEM_DEFS, GEM_LOOKUP, INVERTED_GEM_LOOKUP = DEFS.GEM_DEFS, DEFS.GEM_LOOKUP, DEFS.INVERTED_GEM_LOOKUP
+local GEM_DEFS, GEM_LOOKUP  = DEFS.GEM_DEFS, DEFS.GEM_LOOKUP
 local GEM_UPDATE_RATE = 1
 local DEFAULT_SLOTS = 1
 
 local function on_enchants(self, flag)
-    if self.update_flag then
+    if self.dirty then
         local enchants = self.enchants
 
-        local names = {}
+        local enchant_data = {}
 
         for k, v in pairs(enchants) do
-            if not table.contains(self.hidden_enchants, k) then --only sync non-hidden names.
-                table.insert(names, k)
+            if not table.contains(self.hidden_enchants, k) then --only sync non-hidden gems.
+                enchant_data[k] = {t = v, d = self.enchant_durabilty[k]}
             end
         end
 
-
-        self.inst.replica.gem_enchantable:SetEnchantmentsFromNames(names)
+        self.inst.replica.gem_enchantable._enchant_data:set(json.encode(enchant_data))
         self.inst.replica.gem_enchantable._slots:set(self.slots)
 
-
-
-        self.inst.replica.gem_enchantable._enchant_durabilty:set(json.encode(self.enchant_durabilty))
-
-        self.update_flag = false
+        self.dirty = false
     end
 end
 
@@ -33,7 +28,7 @@ local GemEnchantable = Class(function(self, inst)
     self.enchant_durabilty = {} --[enchantment name] = durability (0-1)%
     self.slots = DEFAULT_SLOTS
     self.hidden_enchants = {}   --WARNING: NOT SAVED
-    self.update_flag = false
+    self.dirty = false
 
     --this data saves
     if self.inst.persistent_gemology_data == nil then
@@ -63,11 +58,11 @@ local GemEnchantable = Class(function(self, inst)
             end
         end
 
-        self.update_flag = true
+        self.dirty = true
     end)
 
 
-    self.update_flag = true
+    self.dirty = true
 
     self.inst:ListenForEvent("perishchange", function(inst, data)
         local new_durability = data.percent
@@ -75,7 +70,7 @@ local GemEnchantable = Class(function(self, inst)
         for gem, tier in pairs(self.inst.components.gem_enchantable.enchants) do
             if self.inst.components.gem_enchantable:HasDurabilityEnabled(gem) then
                 for _gem, durability in pairs(self.inst.components.gem_enchantable.enchant_durabilty) do
-                    if durability > new_durability and gem == _gem then
+                    if durability > new_durability and gem == _gem and not self.loading then
                         self.inst.components.gem_enchantable:SetDurability(gem, new_durability)
                     end
                 end
@@ -85,11 +80,11 @@ local GemEnchantable = Class(function(self, inst)
 
     --for methods updating durability from fueled, armor and finiteuses, see init/init_gemology/common
 end, nil, {
-    update_flag = on_enchants,
+    dirty = on_enchants,
     slots = on_enchants,
 })
 
-function GemEnchantable:HasEnchant(enchant, tier)
+function GemEnchantable:HasEnchantment(enchant, tier)
     assert(GEM_DEFS[enchant] ~= nil, "Attempted to check unknown enchantment: " .. enchant)
     if tier ~= nil then
         assert(tier <= MAX_GEM_TIER and tier >= MIN_GEM_TIER, "Attempted to check gem enchantment with invalid tier: \"" .. tier .. "\" Gem tiers are " .. MIN_GEM_TIER .. " to " .. MAX_GEM_TIER .. ".")
@@ -125,7 +120,7 @@ function GemEnchantable:SetDurability(enchantment, durability)
     self.enchant_durabilty[enchantment] = durability
 
 
-    self.update_flag = true
+    self.dirty = true
 end
 
 function GemEnchantable:DoDurabilityDelta(enchantment, value)
@@ -134,6 +129,12 @@ end
 
 function GemEnchantable:HasDurabilityEnabled(enchant)
     return self.enchant_durabilty[enchant] ~= nil
+end
+
+function GemEnchantable:GetDurability(enchantment)
+    assert(self:HasDurabilityEnabled(enchantment), "Attempted to get durability of enchantment \"" .. enchantment .. "\", but it has no durability.")
+
+    return self.enchant_durabilty[enchantment]
 end
 
 function GemEnchantable:AddEnchantment(enchant, tier)
@@ -152,7 +153,7 @@ function GemEnchantable:AddEnchantment(enchant, tier)
 
     self.slots = self.slots - 1
 
-    self.update_flag = true
+    self.dirty = true
 
     self.inst:PushEvent("onaddenchant", { enchant = enchant, tier = tier })
 end
@@ -179,7 +180,7 @@ function GemEnchantable:RemoveEnchantment(enchant)
     self.inst.persistent_gemology_data[enchant] = {} --clear data for this effect.
     self.inst.volatile_gemology_data[enchant] = {}   --clear data for this effect.
 
-    self.update_flag = true
+    self.dirty = true
 end
 
 function GemEnchantable:IsEnchanted()
@@ -203,6 +204,7 @@ function GemEnchantable:OnSave()
 end
 
 function GemEnchantable:OnLoad(data)
+    self.loading = true
     local _enchants = data.enchants
 
     self.inst.persistent_gemology_data = data.gem_data
@@ -211,13 +213,15 @@ function GemEnchantable:OnLoad(data)
         self:AddEnchantment(enchant, tier) --running add enchant to re-apply onapply effects.
     end
 
-    local _durability = data.durability
+    self.enchant_durabilty = data.durability
+
     self.inst:DoTaskInTime(0, function(inst)
-        self.enchant_durabilty = _durability
-        self.update_flag = true
+    self.enchant_durabilty = data.durability
+        self.dirty = true
+        self.loading = false
     end)
 
-    self.update_flag = true
+    self.dirty = true
 end
 
 function GemEnchantable:OnRemoveFromEntity()

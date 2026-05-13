@@ -24,19 +24,9 @@ local prefabs =
     "viperling",
 }
 
-local brain = require("brains/wormbrain")
+local brain = require("brains/viperwormbrain")
 local viperlingbrain = require("brains/viperlingbrain")
 local MAX_LIGHT_FRAME = 20
----Added Stuff
-
-
-
-
-
-
-
-
-
 
 -- Depth worm stuff
 local function OnUpdateLight(inst, dframes)
@@ -341,13 +331,58 @@ local function fnviperling()
     return inst
 end
 
+local function EnforceLimit(inst)
+	if inst.components.follower == nil or inst.components.follower.leader == nil then
+		return
+	end
+
+	local leader = inst.components.follower.leader
+
+	if leader == nil or not leader:IsValid() then
+		return
+	end
+
+	local x, y, z = leader.Transform:GetWorldPosition()
+	local vipers = TheSim:FindEntities(x, y, z, 40, { "viperlingfriend" }, { "INLIMBO" })
+	local owned_vipers = {}
+
+	for _, v in ipairs(vipers) do
+		if v:IsValid() and v.components.follower ~= nil and v.components.follower.leader == leader then
+			table.insert(owned_vipers, v)
+		end
+	end
+
+	if #owned_vipers <= 6 then
+		return
+	end
+
+	table.sort(owned_vipers, function(a, b)
+		return (a.despawn_time or 0) < (b.despawn_time or 0)
+	end)
+
+	local excess = #owned_vipers - 6
+
+	for i = 1, excess do
+		local v = owned_vipers[i]
+
+		if v ~= nil and v:IsValid() then
+			v:ShadowDespawn()
+		end
+	end
+end
+
 local function FindPerson(inst)
-    local person = FindEntity(inst, 10, nil, { "player" })
-    if person ~= nil then
-        person.components.leader:AddFollower(inst)
-    else
-        inst.sg:GoToState("death")
-    end
+	local person = FindEntity(inst, 10, nil, { "player" })
+
+	if person ~= nil then
+		person.components.leader:AddFollower(inst)
+
+		inst:DoTaskInTime(0, function()
+			EnforceLimit(inst)
+		end)
+	else
+		inst.sg:GoToState("death")
+	end
 end
 
 local function fnviperlingfriend()
@@ -408,9 +443,11 @@ local function fnviperlingfriend()
     inst:SetBrain(viperlingbrain)
     inst.ShadowDespawn = ShadowDespawn
     inst:AddComponent("timer")
-    inst:ListenForEvent("timerover",ShadowDespawn)
-    inst.components.timer:StartTimer("despawn",60)
-
+    --inst:ListenForEvent("timerover",ShadowDespawn)
+    --inst.components.timer:StartTimer("despawn",60)
+	inst.despawn_time = GetTime() + 240
+	inst:DoTaskInTime(240, ShadowDespawn)
+	
     inst:DoTaskInTime(0, FindPerson)
     inst.persists = false
 

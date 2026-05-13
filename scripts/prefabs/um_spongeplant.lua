@@ -60,10 +60,10 @@ local function plant(name, stage)
         inst.entity:AddTransform()
         inst.entity:AddAnimState()
         inst.entity:AddSoundEmitter()
-        --inst.entity:AddMiniMapEntity() -- Remind Lidemo about Map Icon
+        inst.entity:AddMiniMapEntity()
         inst.entity:AddNetwork()
 
-        --inst.MiniMapEntity:SetIcon("grass.png")
+        inst.MiniMapEntity:SetIcon("um_spongeplant.tex")
 
         inst.AnimState:SetBank("um_spongeplant")
         inst.AnimState:SetBuild("um_spongeplant")

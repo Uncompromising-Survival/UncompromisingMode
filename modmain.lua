@@ -6,6 +6,11 @@ GLOBAL.UMCommonFns = require("tools/um_commonfns")
 GLOBAL.MAX_GEM_TIER = 3
 GLOBAL.MIN_GEM_TIER = 0
 
+GLOBAL.UM_DEV = GetModConfigData("devmode")
+if GLOBAL.UM_DEV then
+    GLOBAL.CHEATS_ENABLED = true
+end
+
 PrefabFiles = require("uncompromising_prefabs")
 PreloadAssets = {
     Asset("IMAGE", "images/UM_tip_icon.tex"),
@@ -65,7 +70,7 @@ AddPrefabPostInit("world", function(inst)
             end
         end
     end)
-	GLOBAL.TheWorld:AddTag("um_beta") -- Added so it's easy to tell if the um beta is active
+    GLOBAL.TheWorld:AddTag("um_beta") -- Added so it's easy to tell if the um beta is active
     if not inst.ismastersim then
         return
     end
@@ -73,6 +78,7 @@ end)
 
 modimport("init/init_gamemodes/init_uncompromising_mode")
 modimport("init/init_wathom")
+modimport("init/init_magmatiles")
 
 local skilltree_defs = require("prefabs/skilltree_defs")
 local BuildSkillsData = require("prefabs/skilltree_wixie")
@@ -109,13 +115,13 @@ GLOBAL.MATERIALS.COPPER = "copper"
 
 if GetModConfigData("um_music", true) then
     AddPrefabPostInit("eyeofterror", function(inst)
-	    RemoveRemapSoundEvent("terraria1/common/music_epicfight_eot")
+        RemoveRemapSoundEvent("terraria1/common/music_epicfight_eot")
     end)
     AddPrefabPostInit("twinofterror1", function(inst)
-	    RemapSoundEvent("terraria1/common/music_epicfight_eot", "UMMusic2/music/um_epicfight_tot")
+        RemapSoundEvent("terraria1/common/music_epicfight_eot", "UMMusic2/music/um_epicfight_tot")
     end)
     AddPrefabPostInit("twinofterror2", function(inst)
-	    RemapSoundEvent("terraria1/common/music_epicfight_eot", "UMMusic2/music/um_epicfight_tot")
+        RemapSoundEvent("terraria1/common/music_epicfight_eot", "UMMusic2/music/um_epicfight_tot")
     end)
     local track = math.random() > .01 and "UMMusic2/music/uncomp_char_select2" or "UMMusic/music/uncomp_char_select" -- Change chances to 50/50 later.
     RemapSoundEvent("dontstarve/together_FE/DST_theme_portaled", track)
@@ -307,7 +313,12 @@ end
 
 AddClientModRPCHandler("UncompromisingSurvival", "LearnGemologyGem", LearnGemologyGem)
 
-
+AddClientModRPCHandler("UncompromisingSurvival", "OnTerraform", function(data)
+    local data = DecodeAndUnzipString(data)
+    if TheWorld.components.um_localtilewatcher ~= nil then
+        TheWorld.components.um_localtilewatcher:OnTerraform(data)
+    end
+end)
 
 -- WIXIE RELATED RPC'S
 
@@ -416,17 +427,17 @@ end
 -- local skilltree_defs = require("prefabs/skilltree_defs")
 -- local BuildSkillsData = require("prefabs/skilltree_wathom")
 -- if BuildSkillsData then
-	-- local data = BuildSkillsData(skilltree_defs.FN)
+    -- local data = BuildSkillsData(skilltree_defs.FN)
 
-	-- skilltree_defs.CreateSkillTreeFor("wathom", data.SKILLS)
-	-- skilltree_defs.SKILLTREE_ORDERS["wathom"] = data.ORDERS
+    -- skilltree_defs.CreateSkillTreeFor("wathom", data.SKILLS)
+    -- skilltree_defs.SKILLTREE_ORDERS["wathom"] = data.ORDERS
 
-	-- RegisterSkilltreeBGForCharacter(GLOBAL.resolvefilepath("images/wixie_skilltree.xml"), "wixie")
-	-- for k, v in pairs(data.SKILLS) do
-		-- if v.icon then
-			-- RegisterSkilltreeIconsAtlas("images/wixie_skilltree.xml", v.icon .. ".tex")
-		-- end
-	-- end
+    -- RegisterSkilltreeBGForCharacter(GLOBAL.resolvefilepath("images/wixie_skilltree.xml"), "wixie")
+    -- for k, v in pairs(data.SKILLS) do
+        -- if v.icon then
+            -- RegisterSkilltreeIconsAtlas("images/wixie_skilltree.xml", v.icon .. ".tex")
+        -- end
+    -- end
 -- end
 
 
@@ -477,7 +488,11 @@ GLOBAL.feather_frock_clear_fn = function(inst) GLOBAL.basic_clear_fn(inst, "feat
 
 GLOBAL.cursed_antler_init_fn = function(inst, build_name) GLOBAL.basic_init_fn(inst, build_name, "cursed_antler") end
 
+GLOBAL.crystal_cursed_antler_init_fn = function(inst, build_name) GLOBAL.basic_init_fn(inst, build_name, "crystal_cursed_antler") end
+
 GLOBAL.cursed_antler_clear_fn = function(inst) GLOBAL.basic_clear_fn(inst, "cursed_antler") end
+
+GLOBAL.crystal_cursed_antler_init_fn = function(inst) GLOBAL.basic_clear_fn(inst, "crystal_cursed_antler") end
 
 GLOBAL.ancient_amulet_red_init_fn = function(inst, build_name) GLOBAL.basic_init_fn(inst, build_name, "amulet_red_ground") end
 

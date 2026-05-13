@@ -10,7 +10,7 @@ function SpawnDurabilityLoot(inst, loot, amount, chance)
     for i = 1, amount do
         if chance >= 1 or math.random() < chance then
             local item = inst.components.lootdropper:SpawnLootPrefab(type(loot) == "function" and loot() or loot, inst:GetPosition())
-            if item == nil then
+            if not item then
                 print("Item " .. (type(loot) == "function" and loot() or loot) .. " is NOT a valid prefab!")
                 return
             end
@@ -98,9 +98,12 @@ local function SetUpCocoon(inst)
             inst.cocoon_data = COCOON_DEFS.DEFAULT[inst.cocoon_creature]
         end
     end
-
-    inst.components.named:SetName(inst.cocoon_data.name .. " Cocoon")
-    SetCocoonSize(inst, inst.cocoon_data.size)
+    if not (inst.cocoon_data and inst.cocoon_creature) then
+        inst:Remove()
+    else
+        inst.components.named:SetName(inst.cocoon_data.name .. " Cocoon")
+        SetCocoonSize(inst, inst.cocoon_data.size)
+    end
 end
 
 local function OnKilled(inst)
@@ -188,7 +191,7 @@ local function Regen(inst, data)
             inst:PlayHitAnimations()
             if attacker:HasTag("player") and not attacker:HasTag("mime") and (not attacker:HasTag("widowsgrasp")
                     or (attacker.components.rider and attacker.components.rider:IsRiding())) then
-                attacker.components.talker:Say(GetString(attacker.prefab, "WEBBEDCREATURE"))
+                UMCommonFns.Say(attacker, GetString(attacker.prefab, "WEBBEDCREATURE"))
             end
         end
     end
@@ -198,8 +201,8 @@ local function ShouldRecoil(inst, attacker, weapon, damage)
     local has_claw = attacker ~= nil and attacker:HasTag("widowsgrasp")
 
     if not has_claw then
-        if attacker ~= nil and attacker.components.talker ~= nil then
-            attacker.components.talker:Say(GetString(inst, "WEBBEDCREATURE"))
+        if attacker then
+            UMCommonFns.Say(attacker, GetString(inst, "WEBBEDCREATURE"))
             Regen(inst, { attacker = attacker })
         end
     end

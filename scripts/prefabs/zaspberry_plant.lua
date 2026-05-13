@@ -60,12 +60,22 @@ local function fn()
     inst.Light:SetIntensity(0.5)
     inst.Light:SetFalloff(0.5)
     inst.Light:SetColour(1,1,0)
+
     inst.Light:Enable(true)
 
-	MakeInventoryFloatable(inst, "med", nil, 0.68)
-	inst.components.floater.bob_percent = 0
-	
+
+    inst:AddComponent("umripples")
+    inst.components.umripples.xscale = 0.5
+    inst.components.umripples.yscale = 0.5
+    inst.components.umripples.zscale = 0.5
+
     inst.entity:SetPristine()
+	
+	
+	
+
+	--inst.components.um_ripples.horiz_offset = 0.1
+	--inst.components.um_ripples.should_parent_effect = true	
 
     if not TheWorld.ismastersim then
         return inst
@@ -98,7 +108,7 @@ local function fn()
     MakeSmallPropagator(inst)
     MakeHauntableIgnite(inst)
     ---------------------
-
+    
     return inst
 end
 

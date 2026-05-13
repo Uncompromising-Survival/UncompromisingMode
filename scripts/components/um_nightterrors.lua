@@ -37,11 +37,10 @@ return Class(function(self, inst)
 	self.storedcharacters = {}
 	self.totalrandomnightterrorsweight = nil
 	self.totalrandomshadowcharactersweight = nil
-	
+	self.stanton_spawned = false
     self._hasspawnedvoxolophone = false
     self._retry_spawning_voxolophone = false
 	
-    self.prep_for_nightterrors = false
 	
 	self.ongoing = false
     --------------------------------------------------------------------------
@@ -330,6 +329,88 @@ return Class(function(self, inst)
 	        end
 	    end
 	end
+	
+	local function StalkerFadeOut(stalker)
+		stalker.opacity = stalker.opacity - 0.01
+		local opacity = stalker.opacity
+		inst.AnimState:SetMultColour(1,1,1,opacity)
+		if stalker.opacity < 0 then
+			stalker:Remove()
+		end	
+	end
+	
+	local function StalkerFadeIn(stalker)
+		stalker.opacity = stalker.opacity + 0.005
+		local opacity = stalker.opacity
+		stalker.AnimState:SetMultColour(1,1,1,opacity)
+		if stalker.opacity > 1 then
+			StalkerFadeOut(stalker)
+		else
+			StalkerFadeIn(stalker)
+		end
+	end
+	
+	local function SpawnLightFlowersNFerns(player)
+		local x,y,z = player.Transform:GetWorldPosition()
+        local offset = FindWalkableOffset(player:GetPosition(), math.random() * 2 * PI, 30, 36, true)
+        if offset ~= nil then
+            x = offset.x + x
+            z = offset.z + z
+        end
+		local stalker = SpawnPrefab("stalker_forest") -- Instead temporarily make a ghost of the stalker, he'll immediately go away. Sidenote, why is he called a "Stalker", he does no stalking whatsoever.
+		stalker.Transform:SetPosition(x,y,z)
+		stalker.Physics:ClearCollisionMask()
+		stalker:DoTaskInTime(FRAMES,StalkerFadeIn)
+		stalker.opacity = 0
+	end
+		
+	local chesspiece = {"shadow_bishop","shadow_rook","shadow_knight"}
+	local function SpawnChessPiece(player) -- only spawn 1 chess piece
+		local choice_chess = math.random(1,#chesspiece)
+		local x,y,z = player.Transform:GetWorldPosition()
+        local offset = FindWalkableOffset(player:GetPosition(), math.random() * 2 * PI, 16, 24, true)
+        if offset ~= nil then
+            x = offset.x + x
+            z = offset.z + z
+        end
+		SpawnPrefab(chesspiece[choice_chess]).Transform:SetPosition(x,y,z)
+	end
+		
+	local function SpawnFissuresFunction(player)
+		local x, y, z = player.Transform:GetWorldPosition()
+
+        local offset = FindWalkableOffset(player:GetPosition(), math.random() * 2 * PI, 10, 12, true)
+        if offset ~= nil then
+            x = offset.x + x
+            z = offset.z + z
+        end
+		
+		if TheWorld.state.isnight then --AXE incase the function gets close to day when it's called.
+			SpawnPrefab("rnefissure").Transform:SetPosition(x, 0, z)
+		end
+	end
+
+	local function SpawnFissures(player)
+		local fissures = 2+math.floor(math.random()*3, 3)
+		local chances = 1
+		for i = chances, fissures do
+			player:DoTaskInTime(0.2 * i + math.random(4) * 0.3, function()
+				SpawnFissuresFunction(player)
+			end)
+		end
+
+	end
+	
+	local function SpawnStanton(player)
+		local x,y,z = player.Transform:GetWorldPosition()
+        local offset = FindWalkableOffset(player:GetPosition(), math.random() * 2 * PI, 4, 6, true)
+        if offset ~= nil then
+            x = offset.x + x
+            z = offset.z + z
+        end
+		SpawnPrefab("stanton").Transform:SetPosition(x,y,z)
+		self.stanton_spawned = true --AXE limit the number of Stantons per night terror to just 1.
+	end
 
 	local function SpawnShadowGrabby(player) -- Grabby hands, these teleport the player into the darkness
 		if TheWorld.state.isnight then
@@ -484,10 +565,6 @@ return Class(function(self, inst)
 					end
 				end
 			end
-			
-			if not has_spawned_threat then
-				self:PickTerror(player)
-			end
 		end
 	end
 
@@ -508,9 +585,6 @@ return Class(function(self, inst)
 									ent.haunt_target = v
 									ent.Transform:SetPosition(x1, 0, z1)
 									DespawnOnDay(ent)
-						
-									TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.HAUNT }) 
-
 									return
 								end
 							end
@@ -518,9 +592,6 @@ return Class(function(self, inst)
 					end
 				end
 			end
-			
-			self:PickTerror(player)
-			return
 		end
 	end
 
@@ -599,7 +670,9 @@ return Class(function(self, inst)
 			end
 		end
 	end
-	
+	local function Nothing(player)
+		-- While there are few/no versions of high sanity effects, we need to have "nothing" occur so Skitts isn't everywhere.
+	end
     --------------------------------------------------------------------------
     --[[ Public member functions ]]
     --------------------------------------------------------------------------
@@ -619,7 +692,6 @@ return Class(function(self, inst)
 		local data = {}
 		
 		data._hasspawnedvoxolophone = self._hasspawnedvoxolophone
-		data.prep_for_nightterrors = self.prep_for_nightterrors
 		data._retry_spawning_voxolophone = self._retry_spawning_voxolophone
 			
 		return data
@@ -631,9 +703,6 @@ return Class(function(self, inst)
 				self._hasspawnedvoxolophone = data._hasspawnedvoxolophone
 			end
 			
-			if data.prep_for_nightterrors then
-				self.prep_for_nightterrors = data.prep_for_nightterrors
-			end
 			
 			if data._retry_spawning_voxolophone then
 				self._retry_spawning_voxolophone = data._retry_spawning_voxolophone
@@ -641,218 +710,112 @@ return Class(function(self, inst)
 		end
 	end
 
-	local function AddTerror(name, weight)
-		if not self.nightterrors then
-			self.nightterrors = {}
-			self.totalrandomnightterrorsweight = 0
-		end
-		
-		if not table.contains(self.nightterrors, name) then
-			table.insert(self.nightterrors, { name = name, weight = weight })
-			self.totalrandomnightterrorsweight = self.totalrandomnightterrorsweight + weight
-		end
-	end
-
-	local function AddCharacters(weight, character, level)
-		if not self.shadowcharacters then
-			self.shadowcharacters = {}
-			self.totalrandomshadowcharactersweight = 0
-		end
-		
-		if not table.contains(self.shadowcharacters, character) then
-			table.insert(self.shadowcharacters, { weight = weight, character = character, level = level })
-			self.totalrandomshadowcharactersweight = self.totalrandomshadowcharactersweight + weight
-		end
-	end
-	
-	
 	local ENVIRONMENTAL = 
 	{
 		ThunderStorm = { name = SpawnThunderFar, weight = .3, },
-	
-	
-	
-	
-	
-	
 	}
 	
 	local HIGHSANITY =
 	{
-	
-	
-	
-	
+		SpawnSkitts = { name = SpawnSkitts, weight = .3, },
+		Nothing = {name = Nothing, weight = 3},
+		SpawnStanton = { name = SpawnStanton, weight = .1, tag = "skeleton"},
+		--SpawnGhostOfStalker = { name = SpawnLightFlowersNFerns, weight = .05},
 	}
 	local HIGHMEDSANITY = 
-	{
-	
+	{	
 		SpawnHand = { name = SpawnHand, weight = .3, },
 		SpawnHaunt = { name = SpawnHaunt, weight = .5, },
-		SpawnShadowGrabby = { name = SpawnShadowGrabby, weight = .5, },
-	
-	
-	
-	
+		SpawnStanton = { name = SpawnStanton, weight = .2, tag = "skeleton"},
+		--SpawnGhostOfStalker = { name = SpawnLightFlowersNFerns, weight = .1},
 	}
 	local MEDSANITY = 
-	{
-	
+	{	
 		SpawnHand = { name = SpawnHand, weight = .3, },
 		SpawnHaunt = { name = SpawnHaunt, weight = .5, },
 		SpawnShadowGrabby = { name = SpawnShadowGrabby, weight = .5, },
-	
-	
-	
-	
+		SpawnNightCrawlers = { name = SpawnNightCrawlers, weight = .5, },
+		SpawnFuelSeekers = { name = SpawnFuelSeekers, weight = .5, },
+		
 	}
 	local LOWMEDSANITY = 
 	{
-	
-		SpawnHand = { name = SpawnHand, weight = .3, },
-		SpawnNightCrawlers = { name = SpawnNightCrawlers, weight = .5, },
-		SpawnNightCrawlers = { name = SpawnNightCrawlers, weight = .5, },
+		SpawnNightmareCreature = { name = SpawnNightmareCreature, weight = .3, },
 		SpawnMindWeavers = { name = SpawnMindWeavers, weight = .5, },
 		SpawnHeckler = { name = SpawnHeckler, weight = .5, },
-		SpawnShadowWilson = { weight = .5, character = "swilson", level = 2 },
+		SpawnShadowWilson = { name = SpawnShadowCharacter, weight = .5, character = "swilson"},
 	
 	}
 	local LOWSANITY = 
 	{
-		SpawnHand = { name = SpawnHand, weight = .3, },
-		SpawnNightCrawlers = { name = SpawnNightCrawlers, weight = .5, },
-		SpawnShadowVortex = { name = SpawnShadowVortex, weight = .4, },	
-		SpawnNightCrawlers = { name = SpawnNightCrawlers, weight = .5, },
-		SpawnMindWeavers = { name = SpawnMindWeavers, weight = .5, },
-		SpawnHeckler = { name = SpawnHeckler, weight = .5, },
-		SpawnNightmareCreature = { name = SpawnNightmareCreature, weight = .3, },
-		SpawnShadowWilson = { weight = .5, character = "swilson", level = 2 },
-	
-	
-	
-	
-
-	}
-	
-	
-	
-	local HARASSMENT =
-	{
-		SpawnHand = { name = SpawnHand, weight = .3, },
-		SpawnShadowGrabby = { name = SpawnShadowGrabby, weight = .5, },
-		SpawnShadowVortex = { name = SpawnShadowVortex, weight = .4, },
-
-		--SpawnNightCrawlers = { name = SpawnNightCrawlers, weight = .5, },
-
-		--SpawnHaunt = { name = SpawnHaunt, weight = .5, },
-		--SpawnLeeches = { name = SpawnHaunt, weight = .5, },
-	}
-	
-	local TERRORS =
-	{
-		SpawnMindWeavers = { name = SpawnMindWeavers, weight = .5, },
-		--SpawnBreakers = { name = SpawnNervousTicks, weight = .5, },
-		--SpawnNervousNest = { name = SpawnNervousTicks, weight = .5, },
-		SpawnFuelSeekers = { name = SpawnFuelSeekers, weight = .5, },
-		SpawnHeckler = { name = SpawnHeckler, weight = .5, },
-	}
-	
-	local SHADOWS =
-	{
+		SpawnShadowVortex = { name = SpawnShadowVortex, weight = .9, },	
+		SpawnFissuresFunction = { name = SpawnFissuresFunction, weight = .3, },
 		SpawnNightmareCreature = { name = SpawnNightmareCreature, weight = .3, },
 	}
 	
-	local CHARACTERS =
-	{
-		SpawnShadowWilson = { weight = .5, character = "swilson", level = 2 },
-		SpawnShadowWalter = { weight = .5, character = "um_shadow_walter", level = 1 },
-		SpawnShadowWortox = { weight = .5, character = "um_shadow_wortox", level = 2 },
-		--SpawnShadowMaxwell = { weight = .5, character = "um_shadow_maxwell", level = 3 },
-		--SpawnShadowWillow = { weight = .5, character = "um_shadow_willow", level = 0 },
-		SpawnShadowWarly = { weight = .5, character = "um_shadow_warly", level = 1 },
-		--SpawnShadowWinky = { weight = .5, character = "um_shadow_winky", level = 1 },
-		SpawnShadowWickerbottom = { weight = .5, character = "um_shadow_wickerbottom", level = 2 },
-		--SpawnShadowWoodie = { weight = .5, character = "um_shadow_woodie", level = 2 },
-		SpawnShadowWolfgang = { weight = .5, character = "um_shadow_wolfgang", level = 1 },
-		--SpawnShadowWanda = { weight = .5, character = "um_shadow_wanda", level = 1 },
-		SpawnShadowWathgrithr = { weight = .5, character = "swathgrithr", level = 2 },
-		SpawnShadowWes = { weight = .5, character = "um_shadow_wes", level = 1 },
-		--SpawnShadowWendy = { weight = .5, character = "um_shadow_wendy", level = 1 },
-	}
+	local function weighted_random_choice(items)
+		local total_weight = 0
+		for i, v in ipairs(items) do
+			total_weight = total_weight + v.weight
+		end
 
-	for k, v in pairs(HARASSMENT) do
-		AddTerror(v.name, v.weight)
+		local random_value = math.random() * total_weight
+		local cumulative_weight = 0
+		for i, v in pairs(items) do
+			cumulative_weight = cumulative_weight + v.weight
+			if random_value <= cumulative_weight then
+				return i 
+			end
+		end
+		return 1
 	end
 
-	for k, v in pairs(TERRORS) do
-		AddTerror(v.name, v.weight)
+	function self:DoTerror(player,level,bank)
+		if self.stanton_spawned then
+			local to_remove = {}
+			for i,v in ipairs(bank) do
+				if v.tag == "skeleton" then
+					table.insert(to_remove,i)
+				end
+			end
+			if #to_remove > 0 then
+				for i,v in ipairs_reverse(self.screenstack) do
+					table.remove(bank,v)
+				end
+			end
+		end
+		local choice = bank[weighted_random_choice(bank)].name
+		--TheNet:Announce(level)
+		choice(player)
 	end
-
-	for k, v in pairs(SHADOWS) do
-		AddTerror(v.name, v.weight)
-	end
-
-	for k, v in pairs(CHARACTERS) do
-		AddCharacters(v.weight, v.character, v.level)
-	end
-
-    --------------------------------------------------------------------------
-    --[[ Debug ]]
-    --------------------------------------------------------------------------
 	
 	function self:PickTerror(player)
 		if TheWorld.state.isnight then
-			if self.totalrandomnightterrorsweight and self.totalrandomnightterrorsweight > 0 and self.nightterrors then
-				local rnd = math.random()*self.totalrandomnightterrorsweight
-				for k,v in pairs(self.nightterrors) do
-					rnd = rnd - v.weight
-					if rnd <= 0 and not table.contains(self.storedterrors, v.name) then
-						if #self.storedterrors > (#self.nightterrors / 2) then
-							table.remove(self.storedterrors, 1)
-						end
-
-						table.insert(self.storedterrors, v.name)
-						v.name(player)
-						
-						return
-					else
-						--TheNet:Announce("NT spawn failed!")
-					end
+			local sanity = player.components.sanity
+			if sanity then
+				local pct = sanity:GetPercent()
+				
+				if pct >= 0.8 then -- Sanity is high, do something mundane.
+					local level = "High Sanity Trigger"
+					self:DoTerror(player,level,HIGHSANITY)
+				end
+				if pct < 0.8 and pct >= 0.6 then -- Sanity is still high, do something a bit creeper, but don't do multiple things.
+					local level = "High-med Sanity Trigger"
+					self:DoTerror(player,level,HIGHMEDSANITY)
+				end
+				if pct < 0.6 then -- You're on the way to insanity, begin hostilities.
+					local level = "Med Sanity Trigger"
+					self:DoTerror(player,level,MEDSANITY)
+				end
+				if pct < 0.4 then -- You're almost insane, do hostile stuff, and the stuff in the tier above it should get a roll too! 
+					local level = "Med-low Sanity Trigger"
+					self:DoTerror(player,level,LOWMEDSANITY)
+				end
+				if pct < 0.2 then -- You're insane, do very hostile stuff, and do the stuff above all the way to the medium sanity level.
+					local level = "Low Sanity Trigger"
+					self:DoTerror(player,level,LOWSANITY)
 				end
 			end
-		end
-	end
-	
-	local function PickCharacter(player)
-		if TheWorld.state.isnight then
-			if self.totalrandomshadowcharactersweight and self.totalrandomshadowcharactersweight > 0 and self.shadowcharacters then
-				local rnd = math.random()*self.totalrandomshadowcharactersweight
-				for k,v in pairs(self.shadowcharacters) do
-					rnd = rnd - v.weight
-					if rnd <= 0 and not table.contains(self.storedcharacters, v.character) then
-						if #self.storedcharacters > (#CHARACTERS - 1) then
-							table.remove(self.storedcharacters, 1)
-						end
-
-						table.insert(self.storedcharacters, v.character)
-						
-						if DayScaling() >= v.level then
-							SpawnShadowCharacter(player, v.character)
-						else
-							self.inst:DoTaskInTime(0, PickCharacter, player)
-						end
-						
-						return
-					end
-				end
-			end
-		end
-	end
-	
-	local function onmoonphasechagned(inst, phase)
-		if TheWorld.state.moonphase == "new" then
-			local daytime = CalcDayTime()
-			TheWorld:PushEvent("ms_setclocksegs", {day = daytime, dusk = 8-daytime, night = 8})
 		end
 	end
 					
@@ -885,29 +848,23 @@ return Class(function(self, inst)
 		if TheWorld.state.cycles > 1 and TheWorld.state.isnight then
 			DelayHoundsAndGiantsIfNecessary()
 			self.ongoing = true
+			self.stanton_spawned = false
 			local cycles = (TheWorld.state.cycles / 20)
-			self.terror_count = 0
-			
 			if #_activeplayers > 0 then
 				for i,v in ipairs(_activeplayers) do
 					v.components.terrorized.nightterror = 0
 				end
 			end
 			
-			self.terror_task = self.inst:DoPeriodicTask(15 - (cycles <= 5 and cycles or 5), function()
+			self.terror_task = self.inst:DoPeriodicTask(40 - (cycles <= 5 and cycles or 5), function()
 				if #_activeplayers > 0 then
 					local player = _activeplayers[math.random(#_activeplayers)]
 					
-					if player ~= nil and not ShadowPieceNearby(player) then
-						if self.terror_count == 8 then
-							print("Night Terrors Pick Character")
-							PickCharacter(player)
-						else
+					if player then
+						if TheWorld.state.isnight then
 							print("Night Terrors Pick Terror")
 							self:PickTerror(player)
-						end
-						
-						self.terror_count = self.terror_count + 1					
+						end				
 					end
 				end
 			end)
@@ -956,7 +913,5 @@ return Class(function(self, inst)
     self.inst:ListenForEvent("ms_playerjoined", OnPlayerJoined, TheWorld)
     self.inst:ListenForEvent("ms_playerleft", OnPlayerLeft, TheWorld)
 	self:WatchWorldState("isnewmoon", function() self.inst:DoTaskInTime(6, StartNightTerrors) end)
-	--self:WatchWorldState("isnight", function() self.inst:DoTaskInTime(6, StartNightTerrors) end)
-	--self.inst:ListenForEvent("cycles", ForceTerrors)
 	self.inst:ListenForEvent("moonphasechanged2", CheckPhase)
 end)

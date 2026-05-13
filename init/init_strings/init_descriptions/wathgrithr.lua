@@ -174,7 +174,7 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "A new plague arrives!"
 DESCRIBE.MARSH_GRASS = "It's a bush!"
 DESCRIBE.CURSED_ANTLER = "A magnificent weapon!"
-DESCRIBE.BERNIEBOX = "I've no need for toys!"
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "A blade öf ice förged in the blöod öf battle!"
 DESCRIBE.HOODED_FERN = "A beast could be lurking in the underbrush!"
 DESCRIBE.HOODEDWIDOW = "I... I am not fearful!"
 DESCRIBE.GIANT_TREE = "Surely I stand before Yggdrasil!"
@@ -187,14 +187,7 @@ DESCRIBE.SILKEN_BUNDLE = "Sticky supplies stored for an epic."
 
 DESCRIBE.WEBBEDCREATURE = "I see spoils!"
 ANNOUNCE.WEBBEDCREATURE = "Too tough! The spider hath the key!"
-DESCRIBE.SNAPDRAGON_BUDDY = "'Tis no warrior!"
-DESCRIBE.SNAPDRAGON = "'Tis a vegetable - mine mortal enemy!"
-DESCRIBE.SNAPPLANT = "They have a strong bond!"
-DESCRIBE.WHISPERPOD = "Gardening is not a warriors task!"
-DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
-    GENERIC = "Mayhaps seeds could come in handy.",
-    GROWING = "I am a shieldmaiden, not a farmer!"
-}
+
 DESCRIBE.FRUITBAT = "Tis not meat!"
 DESCRIBE.PITCHERPLANT = "A plant!"
 DESCRIBE.APHID = "Have at thee, bug!"
@@ -243,14 +236,6 @@ DESCRIBE.KLAUS_AMULET = "The lock of a warrior!"
 DESCRIBE.CRABCLAW = "A magnificent weapon to be adorned with jewels!"
 DESCRIBE.HAT_RATMASK = "Reminds me of the masks back in the theatre."
 
-DESCRIBE.ORANGE_VOMIT = "... No."
-DESCRIBE.GREEN_VOMIT = "... No."
-DESCRIBE.RED_VOMIT = "... No."
-DESCRIBE.PINK_VOMIT = "... No."
-DESCRIBE.YELLOW_VOMIT = "... No."
-DESCRIBE.PURPLE_VOMIT = "... No."
-DESCRIBE.PALE_VOMIT = "... No."
-
 DESCRIBE.WALRUS_CAMP_EMPTY = DESCRIBE.WALRUS_CAMP.EMPTY
 DESCRIBE.PIGKING_PIGGUARD = {
     GUARD = DESCRIBE.PIGMAN.GUARD,
@@ -269,12 +254,6 @@ DESCRIBE.CAVE_ENTRANCE_OPEN_SUNKDECID = DESCRIBE.CAVE_ENTRANCE_OPEN
 DESCRIBE.CAVE_EXIT_SUNKDECID = DESCRIBE.CAVE_EXIT
 
 DESCRIBE.PIGKING_PIGTORCH = DESCRIBE.PIGTORCH
--- Blowgun stuff
-DESCRIBE.UNCOMPROMISING_BLOWGUN = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_TOOTH = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_FIRE = DESCRIBE.BLOWDART_FIRE
-DESCRIBE.BLOWGUNAMMO_SLEEP = DESCRIBE.BLOWDART_SLEEP
-DESCRIBE.BLOWGUNAMMO_ELECTRIC = DESCRIBE.BLOWDART_YELLOW
 
 DESCRIBE.ANCIENT_AMULET_RED = "My soul belongs to war!"
 DESCRIBE.UM_BEAR_TRAP = "Disarming it would be easy."
@@ -506,8 +485,6 @@ DESCRIBE.MEATRACK_HAT = {
     DRYING_NOTMEAT = DESCRIBE.MEATRACK.DRYING_NOTMEAT,
     DRYINGINRAIN_NOTMEAT = DESCRIBE.MEATRACK.DRYINGINRAIN_NOTMEAT
 }
-DESCRIBE.FISHMEAT_DRIED = "I feast for a day!"
-DESCRIBE.SMALLFISHMEAT_DRIED = "Barely a snack!"
 
 DESCRIBE.WIXIEGUN = "This modern warfare frightens me."
 
@@ -579,7 +556,7 @@ DESCRIBE.UM_RIMEWEED_TEQUILA = "It's far too cold to enjoy."
 DESCRIBE.UM_RIMEWEED_SPAGETT = "Crunchy spagetti, not my first choice."
 
 -- Lava Caves
-DESCRIBE.MAGMAROCK1 = DESCRIBE.ROCKS
+DESCRIBE.UM_MAGMAROCK1 = DESCRIBE.ROCKS
 DESCRIBE.MAGMABONE = "I wonder if the worms got to it."
 
 DESCRIBE.UM_COOKPOT_WAGSTAFF = {
@@ -611,3 +588,11 @@ DESCRIBE.WATHOM_CORPSE = "I suspect the finale is yet upon us!"
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Protects my body but not my mind."
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Your weakness will show in the heat of battle!"
 DESCRIBE.UM_THULECITE_RAZOR= "A blade to shave the beard off my foes!"
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Where is the glorious steak to match this stench?!"
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = { --Vegan Wigfrid real?
+    SPRING = "Its taste was weak and watery!",
+    SUMMER = "A wilted dish for a sweltering day.",
+    AUTUMN = "I was left craving true nourishment.",
+    WINTER = "It was... almost worthy.",
+}
+DESCRIBE.UM_BOOMBERRYPIE = "I wouldn't even if I could!"

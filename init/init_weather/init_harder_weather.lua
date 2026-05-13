@@ -57,25 +57,36 @@ env.AddPrefabPostInit("cave", function(inst)
     if not TheWorld.ismastersim then
         return
     end
+    inst:AddComponent("um_guano_rain")
+    inst:AddComponent("um_tilelogger")
+    inst:AddComponent("um_tentacle_repopulator")
+    inst:AddComponent("um_poofshroom_repopulator")
     -- if TUNING.DSTU.CAVECLOPS then
-        -- inst:AddComponent("cavedeerclopsspawner")
+    -- inst:AddComponent("cavedeerclopsspawner")
     -- end
     -- inst:AddComponent("randomnighteventscaves")
     -- inst:AddComponent("ratacombs_junk_manager")
 
     -- inst:AddComponent("um_stormspawner")
 
-    if TUNING.DSTU.PYRENETTLES then
-        --inst:AddComponent("um_pyre_nettles_summer_spawner")
-    end
-
     -- inst:DoTaskInTime(0, function(inst)
-        -- if TestForIA() then
-            -- inst:RemoveComponent("cavedeerclopsspawner")
-            -- inst:RemoveComponent("randomnighteventscaves")
-            -- inst:RemoveComponent("ratacombs_junk_manager")
-        -- end
+    -- if TestForIA() then
+    -- inst:RemoveComponent("cavedeerclopsspawner")
+    -- inst:RemoveComponent("randomnighteventscaves")
+    -- inst:RemoveComponent("ratacombs_junk_manager")
+    -- end
     -- end)
+    inst:AddComponent("um_magmamanager")
+
+    inst:AddComponent("um_tilelogger")
+    inst:DoTaskInTime(0.1, function(inst)
+        inst.components.um_magmamanager:Init(inst.components.um_tilelogger.Magma)
+
+        for _, pos in ipairs(inst.components.um_tilelogger.OceanCoastal) do
+            local tile_x, tile_z = TheWorld.Map:GetTileCoordsAtPoint(pos.x, 0, pos.z)
+            TheWorld.Map:SetTile(tile_x, tile_z, WORLD_TILES.IMPASSABLE)
+        end
+    end)
 end)
 
 env.AddPrefabPostInit("forest", function(inst)
@@ -83,7 +94,6 @@ env.AddPrefabPostInit("forest", function(inst)
         return
     end
 
-    --inst:AddComponent("uncompromising_deerclopsspawner")
 
     --inst:AddComponent("toadrain")
     --inst:AddComponent("hayfever_tracker")
@@ -100,9 +110,10 @@ env.AddPrefabPostInit("forest", function(inst)
     --inst:AddComponent("horriblenightmanager")
     inst:AddComponent("um_tilelogger")
     inst:AddComponent("um_ocupusappearinator")
+    inst:AddComponent("um_tentacle_repopulator")
     --inst:AddComponent("um_pestilencecontroller")
     --if TUNING.DSTU.GOOSE_SETTING == "ROG" or TUNING.DSTU.GOOSE_SETTING == "BOTH" then
-        --inst:AddComponent("gmoosespawner")
+    --inst:AddComponent("gmoosespawner")
     --end
 
     if TUNING.DSTU.SPAWNWILTINGFLY then
@@ -128,4 +139,3 @@ env.AddPrefabPostInit("forest", function(inst)
         inst:AddComponent("um_stormspawner")
     end
 end)
-

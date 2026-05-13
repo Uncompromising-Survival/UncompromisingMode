@@ -191,8 +191,7 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "They're kinda cute when you get over the extra eyes."
 DESCRIBE.MARSH_GRASS = "We could hide behind it, I guess?"
 DESCRIBE.CURSED_ANTLER = "A memento of a story-worthy fight!"
-DESCRIBE.BERNIEBOX =
-"That belongs to Willow, I fear what would happen if I touch it..."
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "This could freeze a whole pack in their tracks!"
 DESCRIBE.HOODED_FERN = "Leaves so big, we could use it to collect rainwater."
 DESCRIBE.HOODEDWIDOW = "Wow! That could eat anything!"
 DESCRIBE.GIANT_TREE = "A redwood tree! You can see it from miles away!"
@@ -206,14 +205,7 @@ DESCRIBE.SILKEN_BUNDLE = "Our provisions are stuck inside."
 
 DESCRIBE.WEBBEDCREATURE = "Ooh, I wonder what's in it!"
 ANNOUNCE.WEBBEDCREATURE = "How am I going to get her to unwrap this for me?"
-DESCRIBE.SNAPDRAGON_BUDDY = "Careful Woby! Those plants look hungry!"
-DESCRIBE.SNAPDRAGON = "I've never seen anything like this before!"
-DESCRIBE.SNAPPLANT = "They are really captivating!"
-DESCRIBE.WHISPERPOD = "I think it needs some soil!"
-DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
-    GENERIC = "I think it needs some seeds! Got any, Woby?",
-    GROWING = "I wish plants could grow as fast as you do Woby."
-}
+
 DESCRIBE.FRUITBAT = "Maybe if we're lucky it'll turn me into a fruit!"
 DESCRIBE.PITCHERPLANT = "Is something moving in there?"
 DESCRIBE.APHID = "It's fuzzy!"
@@ -264,14 +256,6 @@ DESCRIBE.KLAUS_AMULET = "Goat power!"
 DESCRIBE.CRABCLAW = "He left his claw behind!"
 DESCRIBE.HAT_RATMASK = "Look out, here comes the Rat Man!"
 
-DESCRIBE.ORANGE_VOMIT = "Thanks for sharing your digestive juices?"
-DESCRIBE.GREEN_VOMIT = "Thanks for sharing your digestive juices?"
-DESCRIBE.RED_VOMIT = "Thanks for sharing your digestive juices?"
-DESCRIBE.PINK_VOMIT = "Thanks for sharing your digestive juices?"
-DESCRIBE.YELLOW_VOMIT = "Thanks for sharing your digestive juices?"
-DESCRIBE.PURPLE_VOMIT = "Thanks for sharing your digestive juices?"
-DESCRIBE.PALE_VOMIT = "Thanks for sharing your digestive juices?"
-
 DESCRIBE.WALRUS_CAMP_EMPTY = DESCRIBE.WALRUS_CAMP.EMPTY
 DESCRIBE.PIGKING_PIGGUARD = {
     GUARD = DESCRIBE.PIGMAN.GUARD,
@@ -289,13 +273,6 @@ DESCRIBE.UM_PAWN_NIGHTMARE = "Don't get too close now, Woby."
 DESCRIBE.CAVE_ENTRANCE_SUNKDECID = DESCRIBE.CAVE_ENTRANCE
 DESCRIBE.CAVE_ENTRANCE_OPEN_SUNKDECID = DESCRIBE.CAVE_ENTRANCE_OPEN
 DESCRIBE.CAVE_EXIT_SUNKDECID = DESCRIBE.CAVE_EXIT
-
--- Blowgun stuff
-DESCRIBE.UNCOMPROMISING_BLOWGUN = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_TOOTH = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_FIRE = DESCRIBE.BLOWDART_FIRE
-DESCRIBE.BLOWGUNAMMO_SLEEP = DESCRIBE.BLOWDART_SLEEP
-DESCRIBE.BLOWGUNAMMO_ELECTRIC = DESCRIBE.BLOWDART_YELLOW
 
 DESCRIBE.ANCIENT_AMULET_RED = "I would still like to avoid being hurt."
 DESCRIBE.UM_BEAR_TRAP = "Normally these are meant for, uh, bears."
@@ -545,8 +522,6 @@ DESCRIBE.MEATRACK_HAT = {
     DRYING_NOTMEAT = DESCRIBE.MEATRACK.DRYING_NOTMEAT,
     DRYINGINRAIN_NOTMEAT = DESCRIBE.MEATRACK.DRYINGINRAIN_NOTMEAT
 }
-DESCRIBE.FISHMEAT_DRIED = "It's a great snack, if you don't mind the taste!"
-DESCRIBE.SMALLFISHMEAT_DRIED = "A bite sized nutritional snack!"
 
 DESCRIBE.WIXIEGUN = "This is NOT Pinetree Pioneer approved!"
 
@@ -618,7 +593,7 @@ DESCRIBE.UM_RIMEWEED_TEQUILA = "It's far too cold to enjoy."
 DESCRIBE.UM_RIMEWEED_SPAGETT = "Crunchy spagetti, not my first choice."
 
 -- Lava Caves
-DESCRIBE.MAGMAROCK1 = DESCRIBE.ROCKS
+DESCRIBE.UM_MAGMAROCK1 = DESCRIBE.ROCKS
 DESCRIBE.MAGMABONE = "I wonder if the worms got to it."
 
 DESCRIBE.UM_COOKPOT_WAGSTAFF = {
@@ -650,3 +625,11 @@ DESCRIBE.WATHOM_CORPSE = "Woby, look! He's still breathing!"
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Nothing dreadful about a shield!"
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Writers, please write something clever here.\nMention the fact you need fire or something idk"
 DESCRIBE.UM_THULECITE_RAZOR= "It's an ancient razor. It's what old people use!"
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Er, maybe Woby wants it?"
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "I was hoping for something a bit more exciting...",
+    SUMMER = "It's better than eating bugs, I guess!",
+    AUTUMN = "It's got a much more interesting kick than the usual.",
+    WINTER = "Eating this in the snow is like a tropical expedition!",
+}
+DESCRIBE.UM_BOOMBERRYPIE = "Y'know, I got fourth place in a pie eating contest. This'll be easy as pie!"

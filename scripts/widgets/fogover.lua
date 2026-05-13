@@ -67,11 +67,19 @@ local FogOver = Class(Widget, function(self, owner)
 	--self.bg2:SetTint(1, 1, 1, 0.6)
 	self.track = 4
 	
-	self.inst:WatchWorldState("isday", function() 
-		self.track = 4 -- No music
+	self.owner:WatchWorldState("isday", function()
+		self.owner:DoTaskInTime(0.1,
+			function(inst) if TheWorld.state.isday then
+				self.track = 4 -- No music
+			end
+		end)
 	end, TheWorld)
-	self.inst:WatchWorldState("iscaveday", function() 
-		self.track = 4 -- No music
+	self.owner:WatchWorldState("iscaveday", function() 
+		self.owner:DoTaskInTime(0.1,
+			function(inst) if TheWorld.state.isday then
+				self.track = 4 -- No music
+			end
+		end)
 	end, TheWorld)
 	
 	self.terror = 1

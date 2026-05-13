@@ -60,6 +60,7 @@ local wardrobe_prefabs = {
     "saddle_shadow",
     "bedroll_straw",
     "bedroll_furry",
+    "wx78_moduleremover",
 }
 
 local wardrobe_noprefabs = {
@@ -110,7 +111,7 @@ function CheckBee(container, item, slot)
 end
 
 function CheckNettle(container, item, slot)
-    return item.prefab == "firenettles" or item.prefab == "pepper" or item.prefab == "spice_chili"
+    return item.prefab == "firenettles" or item.prefab == "firenettles_dried" or item.prefab == "pepper" or item.prefab == "spice_chili" or item.prefab == "um_rimeweed_itemvine" or item.prefab == "um_rimeweed_itemflower" or item.prefab == "um_ghost_pepper_item" or item.prefab == "um_ghost_fajita"
 end
 
 function CheckGem(container, item, slot)
@@ -323,6 +324,40 @@ function modparams.silksack.widget.buttoninfo.validfn(inst)
     end
 end
 
+modparams.um_backpack_amuletuse =
+{
+    widget =
+    {
+        slotpos = {},
+        animbank = "ui_piggyback_2x6",
+        animbuild = "ui_piggyback_2x6",
+        --pos = Vector3(-5, -70, 0),
+        pos = Vector3(-5, -90, 0),
+        slotbg =
+        {
+            { image = "inv_slot.tex",    atlas = "images/hud.xml" },
+            { image = "inv_slot.tex",    atlas = "images/hud.xml" },
+            { image = "inv_slot.tex",    atlas = "images/hud.xml" },
+            { image = "inv_slot.tex",    atlas = "images/hud.xml" },
+            { image = "inv_slot.tex",    atlas = "images/hud.xml" },
+            { image = "inv_slot.tex",    atlas = "images/hud.xml" },
+            { image = "inv_slot.tex",    atlas = "images/hud.xml" },
+            { image = "inv_slot.tex",    atlas = "images/hud.xml" },
+            { image = "amulet_slot.tex", atlas = "images/amulet_slot.xml" },
+        },
+    },
+    issidewidget = true,
+    type = "pack",
+    openlimit = 1,
+
+}
+for y = 0, 3 do
+    table.insert(modparams.um_backpack_amuletuse.widget.slotpos, Vector3(-162, -75 * y + 170, 0))
+    table.insert(modparams.um_backpack_amuletuse.widget.slotpos, Vector3(-162 + 75, -75 * y + 170, 0))
+end
+
+table.insert(modparams.um_backpack_amuletuse.widget.slotpos, Vector3(-162 + 37.5, -60 * 4.5 + 135, 0))
+
 modparams.crabclaw =
 {
     widget =
@@ -400,23 +435,6 @@ modparams.jessie =
     itemtestfn = CheckSlingshotAmmoJessie, -- HEY SCRIMBLES! FOR SOME REASON IT SEEMS LIKE
     -- JESSIE WONT ACCEPT AMMO DESPITE can_take_ammo BEING TRUE?
     -- FIND WHAT 'container' REFERS TO
-    type = "hand_inv",
-}
-
-modparams.um_blowgun =
-{
-    widget =
-    {
-        slotpos =
-        {
-            Vector3(0, 32 + 4, 0),
-        },
-        animbank = "ui_cookpot_1x2",
-        animbuild = "ui_cookpot_1x2",
-        pos = Vector3(0, 15, 0),
-    },
-    itemtestfn = CheckDart,
-    acceptsstacks = true,
     type = "hand_inv",
 }
 
@@ -631,6 +649,10 @@ for y = 2.5, -1.5, -1 do
         table.insert(modparams.um_gemology_pouch.widget.slotpos, Vector3(80 * x - 80 * 2, 80 * y - 80 * 2 + 120
         , 0))
     end
+end
+
+for i = 0, 25, 1 do
+    table.insert(modparams.um_gemology_pouch.widget.slotbg, { image = "gem_slot.tex", atlas = "images/gem_slot.xml" })
 end
 
 for y = 0, 3 do
@@ -978,7 +1000,7 @@ end
 function containers.params.um_gemologyforge.widget.buttoninfo.validfn(inst)
     local tool = inst.replica.container:GetItemInSlot(1)
     local gem = inst.replica.container:GetItemInSlot(2)
-    return inst.replica.container ~= nil and inst.replica.container:IsFull() and tool ~= nil and tool.replica.gem_enchantable._slots:value() > 0 and gem ~= nil and not table.contains(tool.replica.gem_enchantable:GetEnchantmentNames(), gem.prefab)
+    return inst.replica.container ~= nil and inst.replica.container:IsFull() and tool ~= nil and gem ~= nil
 end
 
 if TUNING.DSTU.ICEBOX_TWEAKS then
@@ -986,7 +1008,7 @@ if TUNING.DSTU.ICEBOX_TWEAKS then
     containers.params.icebox.lowpriorityselection = true
     local oldicebox = containers.params.icebox.itemtestfn
     function containers.params.icebox.itemtestfn(container, item, slot, ...)
-        if cooking.IsCookingIngredient(item.prefab) and not item:HasTag("smallcreature") or item.replica.gem_enchantable ~= nil and table.contains(item.replica.gem_enchantable:GetEnchantmentNames(), "um_gemologybluegem2") then
+        if cooking.IsCookingIngredient(item.prefab) and not item:HasTag("smallcreature") or item.replica.gem_enchantable ~= nil and item.replica.gem_enchantable:HasEnchantment("um_gemologybluegem2") then
             return true
         end
 

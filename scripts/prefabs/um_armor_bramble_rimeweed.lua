@@ -11,23 +11,28 @@ local function OnCooldown(inst)
 end
 
 local function DoThorns(inst, owner)
-    --V2C: tiny CD to limit chain reactions
-    inst._cdtask = inst:DoTaskInTime(.3, OnCooldown)
+    if owner then
+        --V2C: tiny CD to limit chain reactions
+        inst._cdtask = inst:DoTaskInTime(.3, OnCooldown)
 
-	if inst._hitcount then
-		inst._hitcount = 0
-	end
+        if inst._hitcount then
+            inst._hitcount = 0
+        end
 
-    SpawnPrefab("bramblefx_rime"):SetFXOwner(owner)
-
-    if owner.SoundEmitter ~= nil then
-        owner.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
+        SpawnPrefab("bramblefx_rime"):SetFXOwner(owner)
+        
+        if owner.SoundEmitter ~= nil then
+            owner.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
+        end
     end
 end
 
 local function OnBlocked(owner, data, inst)
     if inst._cdtask == nil and data ~= nil and not data.redirected then
         DoThorns(inst, owner)
+        if owner.components.skilltreeupdater and owner.components.skilltreeupdater:IsActivated("wormwood_armor_bramble2") then
+            inst:DoTaskInTime(0.6,function(inst) DoThorns(inst, owner) end)
+        end
     end
 end
 

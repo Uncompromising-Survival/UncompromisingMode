@@ -16,11 +16,9 @@ assert(TheWorld.ismastersim, "Gmoosespawner should not exist on client")
 
 local STRUCTURE_DIST = 20
 local HASSLER_SPAWN_DIST = 40
-local HASSLER_KILLED_DELAY_MULT = 6
+local HASSLER_KILLED_DELAY_MULT = 2
 local STRUCTURES_PER_SPAWN = 4
 local MOTHERGOOSE_TIMERNAME = "mothergoose_timetoattack"
-
-
 --------------------------------------------------------------------------
 --[[ Public Member Variables ]]
 --------------------------------------------------------------------------
@@ -200,6 +198,26 @@ end
 --[[ Private event handlers ]]
 --------------------------------------------------------------------------
 
+local function OnMegaFlare(src, data)
+	if data.sourcept and TheWorld.Map:IsVisualGroundAtPoint(data.sourcept.x, data.sourcept.y, data.sourcept.z) and TheWorld.state.issummer then
+		if not _activehassler then
+			if _worldsettingstimer:ActiveTimerExists(MOTHERGOOSE_TIMERNAME) and _worldsettingstimer:GetTimeLeft(MOTHERGOOSE_TIMERNAME) > 480*1.8 then -- Cannot advance any more if it's within two days
+				local time = _worldsettingstimer:GetTimeLeft(MOTHERGOOSE_TIMERNAME)
+				if time > 480*8 then
+					time = time - 480*math.random(2,3)
+				elseif time > 480*4 then
+					time = time - 480*math.random(1,2)
+				else
+					time = time - 480*math.random(1,1.5)
+				end
+				_worldsettingstimer:SetTimeLeft(MOTHERGOOSE_TIMERNAME, time)
+			elseif not _worldsettingstimer:ActiveTimerExists(MOTHERGOOSE_TIMERNAME) then
+				_worldsettingstimer:StartTimer(MOTHERGOOSE_TIMERNAME, 480*math.random(6,8))
+			end
+		end
+	end
+end
+		
 local function OnSeasonChange(self, season)
     TryStartAttacks()
 end
@@ -454,4 +472,5 @@ self:WatchWorldState("season", OnSeasonChange)
 self.inst:ListenForEvent("mothergooseremoved", OnHasslerRemoved, TheWorld)
 self.inst:ListenForEvent("mothergoosekilled", OnHasslerKilled, TheWorld)
 
+self.inst:ListenForEvent("megaflare_detonated", OnMegaFlare, TheWorld)
 end)

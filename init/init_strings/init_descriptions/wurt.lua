@@ -177,7 +177,7 @@ DESCRIBE.TRAPDOORGRASS = "Big grass."
 DESCRIBE.LUREPLAGUE_RAT = "Glorp! Something wrong with this squeaker!"
 DESCRIBE.MARSH_GRASS = "Cute fishies inside?"
 DESCRIBE.CURSED_ANTLER = "Glurph, is heavy..."
-DESCRIBE.BERNIEBOX = "Fun box... what inside?"
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "Flrrr, bright blue stick make big cold!"
 DESCRIBE.HOODED_FERN = "Taste okay."
 DESCRIBE.HOODEDWIDOW = "Glorp!! Biggest spider ever!"
 DESCRIBE.GIANT_TREE = "It a really big tree!"
@@ -190,14 +190,7 @@ DESCRIBE.SILKEN_BUNDLE = "Sticky stuff keep for later."
 
 DESCRIBE.WEBBEDCREATURE = "Belongs to Spiderfolk, florp."
 ANNOUNCE.WEBBEDCREATURE = "Can't break! Flurgh! How Spiderfolk break?"
-DESCRIBE.SNAPDRAGON_BUDDY = "Plant want to eat more plant?"
-DESCRIBE.SNAPDRAGON = "Seems friendly, florp."
-DESCRIBE.SNAPPLANT = "Big plant likes that ugly flower."
-DESCRIBE.WHISPERPOD = "Maybe put in dirt."
-DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
-    GENERIC = "Need some seeds?",
-    GROWING = "Ready soon, flort?"
-}
+
 DESCRIBE.FRUITBAT = "Glorp! Fruit alive?!"
 DESCRIBE.PITCHERPLANT = "Gluuurgh... can't reach."
 DESCRIBE.APHID = "It a bug, florp."
@@ -247,14 +240,6 @@ DESCRIBE.KLAUS_AMULET = "Brr... It cold!"
 DESCRIBE.CRABCLAW = "Big clampy claw!"
 DESCRIBE.HAT_RATMASK = "So many smells!"
 
-DESCRIBE.ORANGE_VOMIT = "Flurgh..."
-DESCRIBE.GREEN_VOMIT = "Flurgh..."
-DESCRIBE.RED_VOMIT = "Flurgh..."
-DESCRIBE.PINK_VOMIT = "Flurgh..."
-DESCRIBE.YELLOW_VOMIT = "Flurgh..."
-DESCRIBE.PURPLE_VOMIT = "Flurgh..."
-DESCRIBE.PALE_VOMIT = "Flurgh..."
-
 DESCRIBE.WALRUS_CAMP_EMPTY = DESCRIBE.WALRUS_CAMP.EMPTY
 DESCRIBE.PIGKING_PIGGUARD = {
     GUARD = "Pigfolk stole royal guard idea! Not fair!!",
@@ -274,12 +259,6 @@ DESCRIBE.CAVE_EXIT_SUNKDECID = DESCRIBE.CAVE_EXIT
 
 DESCRIBE.PIGKING_PIGTORCH =
 "Flurmph, gonna make better fire sticks around better king!"
--- Blowgun stuff
-DESCRIBE.UNCOMPROMISING_BLOWGUN = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_TOOTH = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_FIRE = DESCRIBE.BLOWDART_FIRE
-DESCRIBE.BLOWGUNAMMO_SLEEP = DESCRIBE.BLOWDART_SLEEP
-DESCRIBE.BLOWGUNAMMO_ELECTRIC = DESCRIBE.BLOWDART_YELLOW
 
 DESCRIBE.ANCIENT_AMULET_RED = "Impy say it help my soul..?"
 DESCRIBE.UM_BEAR_TRAP = "\"Keep looking down\"? ...Glorp! Almost stepped on it!"
@@ -508,8 +487,6 @@ DESCRIBE.MEATRACK_HAT = {
     DRYING_NOTMEAT = DESCRIBE.MEATRACK.DRYING_NOTMEAT,
     DRYINGINRAIN_NOTMEAT = DESCRIBE.MEATRACK.DRYINGINRAIN_NOTMEAT
 }
-DESCRIBE.FISHMEAT_DRIED = "Ohh, no..."
-DESCRIBE.SMALLFISHMEAT_DRIED = "Me feel sick..."
 
 DESCRIBE.WIXIEGUN = "Heavy..."
 
@@ -585,7 +562,7 @@ DESCRIBE.UM_RIMEWEED_TEQUILA = "It's far too cold to enjoy."
 DESCRIBE.UM_RIMEWEED_SPAGETT = "Crunchy spagetti, not my first choice."
 
 -- Lava Caves
-DESCRIBE.MAGMAROCK1 = DESCRIBE.ROCKS
+DESCRIBE.UM_MAGMAROCK1 = DESCRIBE.ROCKS
 DESCRIBE.MAGMABONE = "I wonder if the worms got to it."
 
 DESCRIBE.UM_COOKPOT_WAGSTAFF = {
@@ -615,3 +592,11 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"Hee-hee, chasing is fun.",
 DESCRIBE.WATHOM_CORPSE = "Florp! He bubbling!"
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Ghrr! Why it so hard!?"
 DESCRIBE.UM_THULECITE_RAZOR= "Yucky mucky gooey ooey razor... florp."
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Best snack! Stinks like swamp!"
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "Glorp, me wanted to save for later...",
+    SUMMER = "Too hot for stinky pancake... but very yummy!",
+    AUTUMN = "Mmm... pokey. Better than crunchy leaves, florp!",
+    WINTER = "Oooh, tastes best cold!",
+}
+DESCRIBE.UM_BOOMBERRYPIE = "This yummy, but... looks kinda scary, glurp."

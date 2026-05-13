@@ -152,6 +152,7 @@ NAMES.DECIDUOUS_ROOT = "Living Tree Root"
 NAMES.LAVAESLIME = "Lavae Slime"
 NAMES.SALTPACK = "Salt Shaker 3000"
 NAMES.SPOREPACK = "Spore Pack"
+NAMES.UM_BACKPACK_AMULETUSE = "Amusement Pack"
 NAMES.RAT_TAIL = "Rat Tail"
 NAMES.SHROOM_SKIN_FRAGMENT = "Shroom Skin Scrap"
 NAMES.AIR_CONDITIONER = "Air Conditioner" --<--
@@ -221,6 +222,8 @@ NAMES.CURSED_ANTLER = "Cursed Antler"
 SKINS.ms_twisted_antler = "Twisted Antler"
 SKINSDESC.ms_twisted_antler = "A twisted antler for a twisted person."
 
+NAMES.CRYSTAL_CURSED_ANTLER = "Crystal Cursed Antler"
+
 NAMES.UM_EXHUMER = "Exhumer"
 NAMES.UM_WINGSUIT = "Wingsuit"
 NAMES.UM_MOONFLY_LANTERN = "Moonfly Lantern"
@@ -242,9 +245,6 @@ NAMES.WEBBEDCREATURE_LEATHER = "Leathery Cocoon"
 NAMES.WEBBEDCREATURE_FEATHER = "Feathery Cocoon"
 NAMES.WEBBEDCREATURE_LEAFY = "Leafy Cocoon"
 
-NAMES.CHOMPER = "Plant"
-NAMES.BERNIEBOX = "Cuddly Friends Toy Box"
-NAMES.SNAPDRAGON = "Snapdragon"
 NAMES.GIANT_BLUEBERRY = "Boomberry"
 NAMES.BLUEBERRYPLANT = "Boomberry Plant"
 NAMES.BLUEBERRYFLOWER = "Boomberry Flower"
@@ -253,24 +253,7 @@ NAMES.HOODED_FERN = "Thicket"
 NAMES.FALLINGBEEHIVE = NAMES.BEEHIVE
 NAMES.FRUITBAT = "Fruit Bat"
 NAMES.PITCHERPLANT = "Pitcherplant"
-NAMES.GIANT_TREE_INFESTED = "Infested Giant Redwood"
-NAMES.SNAPDRAGON_BUDDY_pale = "Pale Snap Buddy"
-NAMES.SNAPDRAGON_BUDDY_orange = "Orange Snap Buddy"
-NAMES.SNAPDRAGON_BUDDY_red = "Red Snap Buddy"
-NAMES.SNAPDRAGON_BUDDY_purple = "Purple Snap Buddy"
-NAMES.SNAPDRAGON_BUDDY_pink = "Pink Snap Buddy"
-NAMES.SNAPDRAGON_BUDDY_green = "Green Snap Buddy"
-NAMES.SNAPDRAGON_BUDDY_yellow = "Yellow Snap Buddy"
-NAMES.PALE_VOMIT = "Pale Vomit"
-NAMES.ORANGE_VOMIT = "Orange Vomit"
-NAMES.RED_VOMIT = "Red Vomit"
-NAMES.PURPLE_VOMIT = "Purple Vomit"
-NAMES.PINK_VOMIT = "Pink Vomit"
-NAMES.GREEN_VOMIT = "Green Vomit"
-NAMES.YELLOW_VOMIT = "Yellow Vomit"
-NAMES.SNAPPLANT = "Snap Plant"
-NAMES.WHISPERPOD = "Whisper Pod"
-NAMES.WHISPERPOD_NORMAL_GROUND = "Whisper Pod"
+
 NAMES.DEPLETED_HOODED_FERN = "Large Fern"
 NAMES.APHID = "Aphid"
 NAMES.NYMPH = "Nymph"
@@ -290,9 +273,6 @@ NAMES.HOODED_MUSHTREE_MEDIUM = NAMES.MUSHTREE_MEDIUM
 NAMES.HOODED_MUSHTREE_SMALL = NAMES.MUSHTREE_SMALL
 NAMES.SCREECHER_TRINKET = "Lost Doll"
 NAMES.SNOWCONE = "Snowcone"
-NAMES.CINNAMON_TREE = "Cinnamon Tree"
-NAMES.CINNAMON_TREE_BURNT = "Cinnamon Tree"
-NAMES.CINNAMON_TREE_STUMP = "Cinnamon Tree"
 NAMES.WATERMELON_LANTERN = "Watermelon Lantern"
 NAMES.ANCIENT_TREPIDATION = "Trepidation"
 NAMES.ANCIENT_TREPIDATION_ARM = "Trepidation's Reach"
@@ -318,10 +298,15 @@ NAMES.SNOTROAST = "Snot Roast"
 NAMES.LICELOAF = "Liceloaf" --For the cookbook
 
 NAMES.TURF_HOODEDMOSS = "Mossy Forest Turf"
+NAMES.TURF_HOODEDFOLIAGE = "Undergrowth Turf"
+NAMES.TURF_HOODEDFOLIAGE_DARK = "Dark Undergrowth Turf"
+
 NAMES.TURF_ANCIENTHOODEDTURF = "Ancient Hooded Turf"
 NAMES.TURF_UM_HOTSPRING_GRASS = "Mucky Forest Turf"
 NAMES.TURF_UM_HOTSPRING_YELLOWROCK = "Yellow Rock Turf"
 NAMES.TURF_UM_HOTSPRING_WHITEROCK = "White Rock Turf"
+NAMES.TURF_UM_MAGMA = "Magmatic Rock Turf"
+NAMES.TURF_MAGMA_GRASS = "Pyre Grass Turf"
 
 NAMES.DEERCLOPS_BARRIER = "Glacial Wall"
 NAMES.PIGKING_PIGTORCH = NAMES.PIGTORCH
@@ -378,13 +363,6 @@ NAMES.SKULLFLASK_EMPTY = "Empty Skull Flask"
 NAMES.THEATERCORN = "Theater Corn"
 NAMES.ARMORLAVAE = "Dimvae"
 NAMES.WIDOW_WEB_COMBAT = "Sticky Webbing"
-
--- Blowgun stuff
-NAMES.UNCOMPROMISING_BLOWGUN = "Blowpipe" --Lol
-NAMES.BLOWGUNAMMO_TOOTH = "Dart"
-NAMES.BLOWGUNAMMO_FIRE = "Fire Dart"
-NAMES.BLOWGUNAMMO_SLEEP = "Sleep Dart"
-NAMES.BLOWGUNAMMO_ELECTRIC = "Electric Dart"
 
 NAMES.BOOK_RAIN_UM = "Rainy Days"
 
@@ -616,8 +594,6 @@ NAMES.PLACEHOLDER_INGREDIENT_IA_UM = "Requires Island Adventures or Uncompromisi
 NAMES.PLACEHOLDER_INGREDIENT_IA = "Requires Island Adventures!"
 
 NAMES.MEATRACK_HAT = "Jerky Hat"
-NAMES.FISHMEAT_DRIED = "Fish Jerky"
-NAMES.SMALLFISHMEAT_DRIED = "Small Fish Jerky"
 
 NAMES.WIXIEGUN =
 "The Glock 17 (Beretta 92FS in the HD Edition), also known as the 9mm Pistol, is a weapon featured in Half-Life and its expansions."
@@ -739,7 +715,7 @@ NAMES.SNAPPY_JAW = "Snappy Jaw"
 NAMES.UM_BOATBOTTLE = "Boat Bottle"
 NAMES.BOAT_ANCIENT_ITEM_BLUEPRINT = "Archaic Boat Kit Blueprint"
 NAMES.UM_BUTTERY_FLY = "Buttery Fly"
-NAMES.UM_HAT_LEAFWING = "Fleeting Leafy Helm"
+NAMES.UM_HAT_LEAFWING = "Leafy Helm"
 NAMES.UM_LEAFWING = "Leafy Wing"
 NAMES.UM_DETONATOR = "Universal Detonator"
 
@@ -766,7 +742,17 @@ NAMES.UM_BOOM_TART = "Boomberry Tart"
 NAMES.UM_RIBOPOD = "Ribopod"
 NAMES.UM_RIBOPODDEN = "Bone Mound"
 
-NAMES.UM_GEMOLOGYGEM_UNKNOWN = "Strange Gem"
+NAMES.UM_GEMOLOGYGEM_UNKNOWN = {
+    DEFAULT = "Strange Gem",
+    RED = "Strange Red Gem",
+    ORANGE = "Strange Orange Gem",
+    YELLOW = "Strange Yellow Gem",
+    GREEN = "Strange Green Gem",
+    BLUE = "Strange Blue Gem",
+    PURPLE = "Strange Purple Gem",
+    PALE = "Strange Pale Gem"
+}
+
 
 NAMES.UM_GEMOLOGYGEM_PREFIX = {
     "Cracked",
@@ -817,6 +803,7 @@ NAMES.UM_MOSS = "Hooded Moss"
 
 NAMES.WATHGRITHR_SHIELD_DREADSTONE = "Dread Rönd"
 NAMES.UM_FERN_FOX = "Ferned Fox"
+NAMES.UM_FERN_FOX_DEN = "Fox Hole"
 
 NAMES.UM_PEPPERDRAGON = "Capsidragon"
 NAMES.UM_PEPPERDRAGON_BLADDER = "Fire Bladder"
@@ -845,13 +832,35 @@ NAMES.UM_GREENMUSHTREE_GEMLESS = "Petrified Mushtree"
 NAMES.UM_BLUEMUSHTREE_GEM = "Petrified Mushtree"
 NAMES.UM_BLUEMUSHTREE_GEMLESS = "Petrified Mushtree"
 
-NAMES.UM_GUANO_ROCK = "Guano-covered Rock"
+NAMES.UM_GUANO_ROCK = "Coprolite Outcrop"
+NAMES.UM_GUANO_ROCK_GEMLESS = "Coprolite Outcrop"
+NAMES.UM_SLIMESTONE_ROCK_GEMLESS = "Slimestone"
+NAMES.UM_SLIMESTONE_ROCK = "Slimestone"
 NAMES.UM_ROCKLOBSTER_ROCK = "Gestating Rock"
+NAMES.UM_SINKMOUND_ROCK = "Unassuming Den"
+NAMES.UM_SINKMOUND_ROCK_GEMLESS = "Unassuming Den"
 NAMES.GLACIALHOUND_ICESPIKE = "Ice Spike"
+
 NAMES.UM_FEATHER_TOTEM = "Feather Idol"
-NAMES.UM_MAGNIFIER = "Gem Magnifier"
-NAMES.UM_MAGNIFIER_OBSIDIAN = "Gem Magmafier"
-
 NAMES.UM_GEMOLOGY_POUCH = "Gemology Pouch"
+NAMES.UM_MAGNIFIER = "Ancient Gem Magnifier"
+NAMES.UM_MAGNIFIER_PURPLEGEM = "Gem Magnifier"
+NAMES.UM_MAGNIFIER_OBSIDIAN = "Gem Magmafier"
+NAMES.UM_REEDS_LUNAR = "Maned Reeds"
+NAMES.UM_STRANGE_RABBIT_ROCK = "Strange Rock"
+NAMES.UM_GUANO_RAIN_PARTICLE = "Extra Fresh Guano"
+NAMES.UM_HAT_NETTLEMASK = "Nettle Mask"
 
+NAMES.UM_TENTACLE_MOON = "Gros Tentacle"
 NAMES.UM_THULECITE_RAZOR = "Thulecite Razor"
+NAMES.UM_TENTACLESPIKE_MOON = "Tentacle Dart"
+NAMES.UM_TENTACLESPOT_MOON = "Gros Peel"
+NAMES.UM_BOMB_MOON = "Transgrosgas Bomb"
+NAMES.UM_BACKPACK_AMULETUSE = "Amusement Pack"
+NAMES.UM_MUSHROOM_MOON = "Moon Mushroom"
+NAMES.UM_POOFSHROOM = "Poofshroom"
+
+
+
+
+

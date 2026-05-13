@@ -88,12 +88,12 @@ local function fn()
 
     inst:AddComponent("fueled")
     inst.components.fueled.fueltype = FUELTYPE.USAGE
-    inst.components.fueled:InitializeFuelLevel(TUNING.UMBRELLA_PERISHTIME)
+    inst.components.fueled:InitializeFuelLevel(TUNING.RAINHAT_PERISHTIME)
     inst.components.fueled:SetDepletedFn(inst.Remove)
     inst.opentop = true
 
     inst:AddComponent("waterproofer")
-    inst.components.waterproofer:SetEffectiveness(TUNING.WATERPROOFNESS_SMALL)
+    inst.components.waterproofer:SetEffectiveness(TUNING.WATERPROOFNESS_MED)
 
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)

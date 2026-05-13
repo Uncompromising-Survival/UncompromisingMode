@@ -1007,7 +1007,7 @@ local function fnmagma()
     end
 
     if inst.sg ~= nil then
-        inst.sg:GoToState("taunt")
+        inst.sg:GoToState("idle")
     end
     --MakeMediumFreezableCharacter(inst, "hound_body") No freeze bc haha FIRE
     inst.Transform:SetScale(1.2, 1.2, 1.2)
@@ -1035,7 +1035,8 @@ local function fnmagma()
     inst.foogley = 0
 
     inst.lightningshot = true
-
+	inst.components.health.fire_damage_scale = 0 --AXE Magma hounds should take zero damage from the fire damage stimuli
+	
     return inst
 end
 

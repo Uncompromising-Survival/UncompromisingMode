@@ -30,7 +30,11 @@ local function create_light(eater, lightprefab)
 end
 
 local function oneatenfn(inst, eater)
-    eater:AddDebuff("buff_lesserelectricattack", "buff_lesserelectricattack")
+	if inst.prefab == "zaspberry_lesser" then
+		eater:AddDebuff("buff_electricretaliationlesser", "buff_electricretaliationlesser")
+	else
+		eater:AddDebuff("buff_electricretaliationmedium", "buff_electricretaliationmedium")
+	end
     create_light(eater, "wormlight_light")
 end
 

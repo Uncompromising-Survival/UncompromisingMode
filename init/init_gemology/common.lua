@@ -2,7 +2,7 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 local DEFS = require("gemology_defs")
-local GEM_DEFS, GEM_LOOKUP, INVERTED_GEM_LOOKUP = DEFS.GEM_DEFS, DEFS.GEM_LOOKUP, DEFS.INVERTED_GEM_LOOKUP
+local GEM_DEFS = DEFS.GEM_DEFS
 local UpvalueHacker = require("tools/upvaluehacker")
 local UIAnim = require "widgets/uianim"
 
@@ -82,32 +82,37 @@ function ItemTile:UpdateTooltip(...)
     return ret
 end
 
-local function getframesymbol(durability)
-    if durability > .75 then
-        return "frame"
-    elseif durability <= .75 and durability > .5 then
-        return "frame-0"
-    elseif durability <= .5 and durability > .25 then
-        return "frame-1"
+local function getframebuild(tier)
+    if tier == nil then return "cracked" end
+    if tier > 2 then
+        return "flawless"
+    elseif tier < 2 then
+        return "cracked"
     else
-        return "frame-2"
+        return "rough"
     end
 end
 
-local function HasEnchant(_table)
-    for k, v in pairs(_table) do
-        if v ~= nil then
-            return true
-        end
+local function getframesymbol(durability, tier)
+    local tier_name = getframebuild(tier)
+    if durability > .75 then
+        return "frame-" .. tier_name
+    elseif durability <= .75 and durability > .5 then
+        return "frame-" .. tier_name .. "-0"
+    elseif durability <= .5 and durability > .25 then
+        return "frame-" .. tier_name .. "-1"
+    else
+        return "frame-" .. tier_name .. "-2"
     end
-    return false
 end
 
 local __ctor = ItemTile._ctor
 
 function ItemTile._ctor(self, invitem, ...)
     __ctor(self, invitem, ...)
-    if invitem.replica.gem_enchantable ~= nil and HasEnchant(invitem.replica.gem_enchantable.enchant_durabilty) then
+    if invitem.replica.gem_enchantable ~= nil and invitem.replica.gem_enchantable:IsEnchanted() then
+        local enchant, durability, tier = invitem.replica.gem_enchantable:GetLowestGemDurability()
+
         self.gem_border = self:AddChild(UIAnim())
         self.gem_border:GetAnimState():SetBank("gem_meter")
         self.gem_border:GetAnimState():SetBuild("gem_meter")
@@ -115,32 +120,32 @@ function ItemTile._ctor(self, invitem, ...)
         self.gem_border:GetAnimState():AnimateWhilePaused(false)
         self.gem_border:SetClickable(false)
 
-        if invitem.replica.gem_enchantable:IsEnchanted() and not self.dragging then
+        if not self.dragging then
             self.gem_border:Show()
         else
             self.gem_border:Hide()
         end
 
-        local enchant, durability = invitem.replica.gem_enchantable:GetLowestGemDurability()
-        if durability ~= nil and enchant ~= nil and GEM_DEFS[enchant] ~= nil then
-            self.gem_border:GetAnimState():OverrideSymbol("frame", "gem_meter", getframesymbol(durability))
+        if durability ~= nil and enchant ~= nil and GEM_DEFS[enchant] ~= nil and tier ~= nil then
+            self.gem_border:GetAnimState():OverrideSymbol("frame", "gem_meter", getframesymbol(durability, tier))
 
             local color = GEM_DEFS[enchant].color
             self.gem_border:GetAnimState():SetMultColour(color[1], color[2], color[3], 1)
         end
-        self.inst:ListenForEvent("gemology.enchant_durabilitydirty", function(inst)
+
+        self.inst:ListenForEvent("gemology.enchant_datadirty", function(inst)
             if invitem.replica.gem_enchantable:IsEnchanted() and not self.dragging then
                 self.gem_border:Show()
             else
                 self.gem_border:Hide()
             end
 
-            local enchant, durability = invitem.replica.gem_enchantable:GetLowestGemDurability()
-            if durability == nil or enchant == nil or GEM_DEFS[enchant] == nil then
+            local enchant, durability, tier = invitem.replica.gem_enchantable:GetLowestGemDurability()
+            if durability == nil or enchant == nil or GEM_DEFS[enchant] == nil or tier == nil then
                 return
             end
 
-            self.gem_border:GetAnimState():OverrideSymbol("frame", "gem_meter", getframesymbol(durability))
+            self.gem_border:GetAnimState():OverrideSymbol("frame", "gem_meter", getframesymbol(durability, tier))
 
             local color = GEM_DEFS[enchant].color
             self.gem_border:GetAnimState():SetMultColour(color[1], color[2], color[3], 1)
@@ -222,6 +227,8 @@ end)
 --gem durability
 
 --gem durability
+--experimenting with something...
+--[[
 env.AddComponentPostInit("finiteuses", function(self)
     local _SetUses = self.SetUses
 
@@ -232,7 +239,7 @@ env.AddComponentPostInit("finiteuses", function(self)
 
         if delta < 0 and self.inst.components.gem_enchantable ~= nil then
             for gem, tier in pairs(self.inst.components.gem_enchantable.enchants) do
-                if self.inst.components.gem_enchantable:HasDurabilityEnabled(gem) then
+                if self.inst.components.gem_enchantable:HasDurabilityEnabled(gem) and not self.inst.components.gem_enchantable.loading then
                     self.inst.components.gem_enchantable:DoDurabilityDelta(gem, delta)
                 end
             end
@@ -252,7 +259,7 @@ env.AddComponentPostInit("fueled", function(self)
 
         if delta < 0 and self.inst.components.gem_enchantable ~= nil then
             for gem, tier in pairs(self.inst.components.gem_enchantable.enchants) do
-                if self.inst.components.gem_enchantable:HasDurabilityEnabled(gem) then
+                if self.inst.components.gem_enchantable:HasDurabilityEnabled(gem) and not self.inst.components.gem_enchantable.loading then
                     self.inst.components.gem_enchantable:DoDurabilityDelta(gem, delta)
                 end
             end
@@ -272,7 +279,7 @@ env.AddComponentPostInit("armor", function(self)
 
         if delta < 0 and self.inst.components.gem_enchantable ~= nil then
             for gem, tier in pairs(self.inst.components.gem_enchantable.enchants) do
-                if self.inst.components.gem_enchantable:HasDurabilityEnabled(gem) then
+                if self.inst.components.gem_enchantable:HasDurabilityEnabled(gem) and not self.inst.components.gem_enchantable.loading then
                     self.inst.components.gem_enchantable:DoDurabilityDelta(gem, delta)
                 end
             end
@@ -281,3 +288,4 @@ env.AddComponentPostInit("armor", function(self)
         _SetCondition(self, amount, ...)
     end
 end)
+]]

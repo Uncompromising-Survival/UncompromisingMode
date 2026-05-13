@@ -176,7 +176,7 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "Hey there buddy, nice eyes!"
 DESCRIBE.MARSH_GRASS = "A bush."
 DESCRIBE.CURSED_ANTLER = "Woah, look at how big it is!"
-DESCRIBE.BERNIEBOX = "I want to open it, but it doesn't belong to us."
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "It's too big and bright for our eyes!"
 DESCRIBE.HOODED_FERN = "Mossy and Leafy."
 DESCRIBE.HOODEDWIDOW = "We're a spider too!! Why are you attacking us?!"
 DESCRIBE.GIANT_TREE = "It's probably super old."
@@ -189,14 +189,7 @@ DESCRIBE.SILKEN_BUNDLE = "We wish we could do it by ourselves."
 
 DESCRIBE.WEBBEDCREATURE = "Ooh! Are our friends storing gifts for us?"
 ANNOUNCE.WEBBEDCREATURE = "We need bigger hands, from a bigger spider!"
-DESCRIBE.SNAPDRAGON_BUDDY = "Golly! We're glad they don't eat meat!"
-DESCRIBE.SNAPDRAGON = "It looks pretty!"
-DESCRIBE.SNAPPLANT = "Best buds! Get it?"
-DESCRIBE.WHISPERPOD = "Lets get you planted!"
-DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
-    GENERIC = "Let's try growing something in it!",
-    GROWING = "Is it done yet?"
-}
+
 DESCRIBE.FRUITBAT = "It's our favorite color!"
 DESCRIBE.PITCHERPLANT =
 "If we could climb like the other spiders we could reach it."
@@ -245,14 +238,6 @@ DESCRIBE.KLAUS_AMULET = "We've been naughty..."
 DESCRIBE.CRABCLAW = "It's so fun to swing around! Wooosh! Fwooosh!"
 DESCRIBE.HAT_RATMASK = "We love treasure hunting!"
 
-DESCRIBE.ORANGE_VOMIT = "Haha, ew."
-DESCRIBE.GREEN_VOMIT = "Haha, ew."
-DESCRIBE.RED_VOMIT = "Haha, ew."
-DESCRIBE.PINK_VOMIT = "Haha, ew."
-DESCRIBE.YELLOW_VOMIT = "Haha, ew."
-DESCRIBE.PURPLE_VOMIT = "Haha, ew."
-DESCRIBE.PALE_VOMIT = "Haha, ew."
-
 DESCRIBE.WALRUS_CAMP_EMPTY = DESCRIBE.WALRUS_CAMP.EMPTY
 DESCRIBE.PIGKING_PIGGUARD = {
     GUARD = DESCRIBE.PIGMAN.GUARD,
@@ -271,12 +256,6 @@ DESCRIBE.CAVE_ENTRANCE_OPEN_SUNKDECID = DESCRIBE.CAVE_ENTRANCE_OPEN
 DESCRIBE.CAVE_EXIT_SUNKDECID = DESCRIBE.CAVE_EXIT
 
 DESCRIBE.PIGKING_PIGTORCH = DESCRIBE.PIGTORCH
--- Blowgun stuff
-DESCRIBE.UNCOMPROMISING_BLOWGUN = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_TOOTH = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_FIRE = DESCRIBE.BLOWDART_FIRE
-DESCRIBE.BLOWGUNAMMO_SLEEP = DESCRIBE.BLOWDART_SLEEP
-DESCRIBE.BLOWGUNAMMO_ELECTRIC = DESCRIBE.BLOWDART_YELLOW
 
 DESCRIBE.ANCIENT_AMULET_RED = "Does it have room for both of us?"
 DESCRIBE.UM_BEAR_TRAP = "Eep!"
@@ -515,8 +494,6 @@ DESCRIBE.MEATRACK_HAT = {
     DRYING_NOTMEAT = DESCRIBE.MEATRACK.DRYING_NOTMEAT,
     DRYINGINRAIN_NOTMEAT = DESCRIBE.MEATRACK.DRYINGINRAIN_NOTMEAT
 }
-DESCRIBE.FISHMEAT_DRIED = "I wasn't sure that would work!"
-DESCRIBE.SMALLFISHMEAT_DRIED = "Itty bitty fishy bites!"
 
 DESCRIBE.WIXIEGUN = "We shouldn't play with this!"
 
@@ -588,7 +565,7 @@ DESCRIBE.UM_RIMEWEED_TEQUILA = "It's far too cold to enjoy."
 DESCRIBE.UM_RIMEWEED_SPAGETT = "Crunchy spagetti, not my first choice."
 
 -- Lava Caves
-DESCRIBE.MAGMAROCK1 = DESCRIBE.ROCKS
+DESCRIBE.UM_MAGMAROCK1 = DESCRIBE.ROCKS
 DESCRIBE.MAGMABONE = "I wonder if the worms got to it."
 
 DESCRIBE.UM_COOKPOT_WAGSTAFF = {
@@ -620,3 +597,11 @@ DESCRIBE.WATHOM_CORPSE = "Uhh... Where's the skeleton?"
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Doesnt shield me from getting shivers."
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Writers, please write something clever here.\nMention the fact you need fire or something idk"
 DESCRIBE.UM_THULECITE_RAZOR= "I watched my grand-grand-grand-grand-grand-grandfather use one of these."
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Our nose doesn't like it, but our tummy does."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "It tasted like the wet ground.",
+    SUMMER = "It was okay, but we'd rather have a cold popsicle.",
+    AUTUMN = "Yum! It's all fluffy and weird.",
+    WINTER = "We've never felt so fancy in the snow!",
+}
+DESCRIBE.UM_BOOMBERRYPIE = "I don't think that's our tummy rumbling."

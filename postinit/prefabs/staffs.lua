@@ -57,7 +57,7 @@ env.AddPrefabPostInit("firestaff", function(inst)
     inst.components.weapon:SetOnAttack(OnAttack)
 end)
 
-if env.GetModConfigData("cooldown_orangestaff_") then
+if env.GetModConfigData("cooldown_orangestaff") then
     local function onblink(staff, pos, caster)
         if not (caster and staff and staff.components.rechargeable) then
             return
@@ -198,6 +198,7 @@ if env.GetModConfigData("telestaff_rework") then
         if ground:HasTag("cave") then
             -- There's a roof over your head, magic lightning can't strike!
             ground:PushEvent("ms_miniquake", { rad = 3, num = 5, duration = 1.5, target = teleportee })
+            staff.components.finiteuses:Use(1)
             return
         end
 
@@ -576,7 +577,7 @@ local function SpikeWaves(inst, target, attacker, angle)
             local fx = SpawnPrefab("warg_mutated_ember_fx")
             fx.Transform:SetPosition(dx + math.random(), dy, dz + math.random())
             fx:RestartFX(.25 + math.random())
-            fx:DoTaskInTime(math.random() + .5 , fx.KillFX)
+            fx:DoTaskInTime(math.random() + .5, fx.KillFX)
             if math.random() > .5 then
                 local fx2 = SpawnPrefab("warg_mutated_breath_fx")
                 fx2.Transform:SetPosition(dx + math.random(), dy, dz + math.random())
@@ -585,10 +586,10 @@ local function SpikeWaves(inst, target, attacker, angle)
                 fx2.Transform:SetScale(.5, .5, .5)
             end
             inst:DoTaskInTime(.6, function()
-                local ents = TheSim:FindEntities(dx, dy, dz, 1.5, {"_health", "_combat" }, {"FX", "NOCLICK", "INLIMBO", "notarget", "player", "playerghost", "companion"})
+                local ents = TheSim:FindEntities(dx, dy, dz, 1.5, { "_health", "_combat" }, { "FX", "NOCLICK", "INLIMBO", "notarget", "player", "playerghost", "companion" })
                 for k, v in ipairs(ents) do
                     if v ~= inst and attacker.components.combat and attacker.components.combat:CanTarget(v) and not attacker.components.combat:IsAlly(v) then
-                        v.components.combat:GetAttacked(attacker, 0, nil, nil, {planar = 8.75})
+                        v.components.combat:GetAttacked(attacker, 0, nil, nil, { planar = 8.75 })
                     end
                 end
             end)
@@ -646,8 +647,8 @@ do
         if attacker:HasTag("wathom") and not (attacker.components.rider and attacker.components.rider:IsRiding()) then
             for angle = -20, 20, 4 do
                 SpikeWaves(inst, target, attacker, angle + attacker.Transform:GetRotation())
-                if target and target.components.combat then 
-                    target.components.combat:GetAttacked(attacker, 0, nil, nil, {planar = 17})
+                if target and target.components.combat then
+                    target.components.combat:GetAttacked(attacker, 0, nil, nil, { planar = 17 })
                 end
             end
             inst.SoundEmitter:PlaySound("rifts/lunarthrall_bomb/explode")
@@ -696,7 +697,7 @@ do
             end
             forgerepairable:SetOnRepaired(OnRepaired)
         end
-        
+
         inst.UMSetProjectile = UMSetProjectile
     end)
 end

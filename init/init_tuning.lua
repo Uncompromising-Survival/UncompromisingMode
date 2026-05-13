@@ -240,6 +240,7 @@ TUNING.DSTU = {
     -- WX78
     WX78_MOISTURE_DAMAGE_INCREASE = 3,
     WX78_CONFIG = GetModConfigData("wx78"),
+    WX78_BACKUPBODY = GetModConfigData("wx78_backupbody"),
     WXLESS = false, --GetModConfigData("wxless"),
     WXLESSSPEEDBUMP = false, --GetModConfigData("wxlessspeedbump"),
 
@@ -296,9 +297,9 @@ TUNING.DSTU = {
     RAIDRAT_BUFFED_WALKSPEED = 6,
     RAIDRAT_SPAWNRATE = seg_time / 5,
     RAIDRAT_SPAWNRATE_VARIANCE = (seg_time / 5) * 0.5,
-	SNIFFER_ITEM = 40,
-	SNIFFER_PLAYER = 120,			
-	
+    SNIFFER_ITEM = 40,
+    SNIFFER_PLAYER = 120,            
+    
     PIEDPIPER_TOOT_RANGE = 25,
     -- Weather Start Date
     WEATHERHAZARD_START_DATE_AUTUMN = GetModConfigData("weatherhazard_autumn"),
@@ -340,14 +341,7 @@ TUNING.DSTU = {
     TOAD_RAIN_DELAY = { min = 5, max = 10 },
     SUMMER_CAVES_TEMP_MULT = .85,
     WINTER_CAVES_TEMP_MULT = 1.25,
-    -- SNAPDRAGON FERTILIZER VALUES
-    PURPLE_VOMIT_NUTRIENTS = { 16, 16, 0 },
-    ORANGE_VOMIT_NUTRIENTS = { 0, 16, 16 },
-    YELLOW_VOMIT_NUTRIENTS = { 16, 0, 16 },
-    RED_VOMIT_NUTRIENTS = { 0, 24, 0 },
-    GREEN_VOMIT_NUTRIENTS = { 0, 0, 24 },
-    PINK_VOMIT_NUTRIENTS = { 24, 0, 0 },
-    PALE_VOMIT_NUTRIENTS = { 8, 8, 8 },
+    
     MUSHROOM_CHANGES = GetModConfigData("mushroom_changes"),
     ALL_MUST_BE_GATHERED = false,
     WATERING_TEMPERATURE = GetModConfigData("watering_thermal"),
@@ -358,6 +352,8 @@ TUNING.DSTU = {
     ORANGESTAFF_COOLDOWN_3 = 15,
     ORANGESTAFF_DISTANCE_1 = 8,
     ORANGESTAFF_DISTANCE_2 = 16,
+    KOALEFANT_HEALTH = 2000,
+    KOALEFANT_STOMP_COUNTERATTACK = {MIN = 8, MAX = 12},
 
     ----------------------------------------------------------------------------
     -- Dynamic Boss Resistance
@@ -434,7 +430,6 @@ TUNING.DSTU = {
     BOSS_RESISTANCE = GetModConfigData("boss_resistance_"),
     STORMS = GetModConfigData("um_storms"),
     STORMS_PERFORMANCE = GetModConfigData("um_storms_performance"),
-    PYRENETTLES = GetModConfigData("pyrenettles"),
     HEATWAVES = GetModConfigData("heatwaves"),
     SMOG = GetModConfigData("smog"),
     MAXTEMPDAMAGE = GetModConfigData("maxtempdamage"),
@@ -442,7 +437,7 @@ TUNING.DSTU = {
     HARDER_TREPIDATION = GetModConfigData("nodespawn_trepidation"),
     TELESTAFF_REWORK = GetModConfigData("telestaff_rework"),
     BEEBOX_NERF = GetModConfigData("beebox_nerf"),
-    CANEDURABILITY = GetModConfigData("canedurability"),
+    CANEDURABILITY = GetModConfigData("cane_durability"),
     --AC_COOLING = GetModConfigData("ac_does_ac"),
     HARDER_SPIDERQUEEN = GetModConfigData("harder_spider_queen"),
     HARDER_MOOSE = GetModConfigData("harder_moose"),
@@ -524,6 +519,7 @@ end
 if GetModConfigData("armorrework") then
     TUNING.WEREMOOSE_ABSORPTION = 0.8
     TUNING.SHIELDOFTERROR_DAMAGE = 59.5
+    TUNING.ARMORMARBLE_SLOW = 0.8
 end
 
 TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WATHOM = {}
@@ -569,9 +565,9 @@ TUNING.DISEASE_WARNING_TIME = total_day_time * 5
 TUNING.SANITY_BECOME_INSANE_THRESH = 40 / 200 -- 20%
 TUNING.SANITY_BECOME_SANE_THRESH = 45 / 200   -- 22.5%
 
-TUNING.WORMWOOD_BURN_TIME = TUNING.DSTU.WORMWOOD_BURN_TIME
 
 if GetModConfigData("wormwood_extrafiredmg") then
+    TUNING.WORMWOOD_BURN_TIME = TUNING.DSTU.WORMWOOD_BURN_TIME
     TUNING.WORMWOOD_FIRE_DAMAGE = TUNING.DSTU.WORMWOOD_FIRE_DAMAGE
 end
 
@@ -694,8 +690,6 @@ end
 local um_naughtiness = {
     fruitbat = 4,
     woodpecker = 2,
-    snapdragon = 4,
-    snapdragon_buddy = 8, --wtf!!! doin't do that!!
 }
 for k, v in pairs(um_naughtiness) do
     GLOBAL.NAUGHTY_VALUE[k] = v

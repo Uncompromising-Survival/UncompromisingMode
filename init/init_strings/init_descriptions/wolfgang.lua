@@ -172,7 +172,7 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "GAH! Hairpuff scare wolfgang!"
 DESCRIBE.MARSH_GRASS = "Is mighty bush!"
 DESCRIBE.CURSED_ANTLER = "Ha! Stick is MIGHTY!"
-DESCRIBE.BERNIEBOX = "Wolfgang get turnip as child."
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "Mighty stick is bright now!"
 DESCRIBE.HOODED_FERN = "They are different in cave."
 DESCRIBE.HOODEDWIDOW = "AAAAH! AAAAAAAAAAHH!!"
 DESCRIBE.GIANT_TREE = "Mightiest tree!"
@@ -185,14 +185,7 @@ DESCRIBE.SILKEN_BUNDLE = "Scary surprise inside."
 
 DESCRIBE.WEBBEDCREATURE = "Wolfgang don't want to touch."
 ANNOUNCE.WEBBEDCREATURE = "Spider is not mightier!!"
-DESCRIBE.SNAPDRAGON_BUDDY = "Plant need food to grow strong like Wolfgang!"
-DESCRIBE.SNAPDRAGON = "Mightiest plant!"
-DESCRIBE.SNAPPLANT = "Good looking plant!"
-DESCRIBE.WHISPERPOD = "Wolfgang use green thumb?"
-DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
-    GENERIC = "Need something to grow big and strong!",
-    GROWING = "Is still growing."
-}
+
 DESCRIBE.FRUITBAT = "Flying fruity!"
 DESCRIBE.PITCHERPLANT = "If not skip leg day, Wolfgang could reach!"
 DESCRIBE.APHID = "Is tiny bug!"
@@ -241,14 +234,6 @@ DESCRIBE.KLAUS_AMULET = "Wolfgang mightiest man in world!"
 DESCRIBE.CRABCLAW = "Little holes for little rocks!"
 DESCRIBE.HAT_RATMASK = "Does Wolfgang have to find rats alone?"
 
-DESCRIBE.ORANGE_VOMIT = "Is face poop."
-DESCRIBE.GREEN_VOMIT = "Is face poop."
-DESCRIBE.RED_VOMIT = "Is face poop."
-DESCRIBE.PINK_VOMIT = "Is face poop."
-DESCRIBE.YELLOW_VOMIT = "Is face poop."
-DESCRIBE.PURPLE_VOMIT = "Is face poop."
-DESCRIBE.PALE_VOMIT = "Is face poop."
-
 DESCRIBE.WALRUS_CAMP_EMPTY = DESCRIBE.WALRUS_CAMP.EMPTY
 DESCRIBE.PIGKING_PIGGUARD = {
     GUARD = DESCRIBE.PIGMAN.GUARD,
@@ -267,12 +252,6 @@ DESCRIBE.CAVE_ENTRANCE_OPEN_SUNKDECID = DESCRIBE.CAVE_ENTRANCE_OPEN
 DESCRIBE.CAVE_EXIT_SUNKDECID = DESCRIBE.CAVE_EXIT
 
 DESCRIBE.PIGKING_PIGTORCH = DESCRIBE.PIGTORCH
--- Blowgun stuff
-DESCRIBE.UNCOMPROMISING_BLOWGUN = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_TOOTH = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_FIRE = DESCRIBE.BLOWDART_FIRE
-DESCRIBE.BLOWGUNAMMO_SLEEP = DESCRIBE.BLOWDART_SLEEP
-DESCRIBE.BLOWGUNAMMO_ELECTRIC = DESCRIBE.BLOWDART_YELLOW
 
 DESCRIBE.ANCIENT_AMULET_RED =
 "Wolfgang without soul is Wolfgang without strength."
@@ -512,8 +491,6 @@ DESCRIBE.MEATRACK_HAT = {
     DRYING_NOTMEAT = DESCRIBE.MEATRACK.DRYING_NOTMEAT,
     DRYINGINRAIN_NOTMEAT = DESCRIBE.MEATRACK.DRYINGINRAIN_NOTMEAT
 }
-DESCRIBE.FISHMEAT_DRIED = "Look like leather, taste like fish."
-DESCRIBE.SMALLFISHMEAT_DRIED = "Look like leather, taste like fish."
 
 DESCRIBE.WIXIEGUN = "Wolfgang not like this..."
 
@@ -585,7 +562,7 @@ DESCRIBE.UM_RIMEWEED_TEQUILA = "It's far too cold to enjoy."
 DESCRIBE.UM_RIMEWEED_SPAGETT = "Crunchy spagetti, not my first choice."
 
 -- Lava Caves
-DESCRIBE.MAGMAROCK1 = DESCRIBE.ROCKS
+DESCRIBE.UM_MAGMAROCK1 = DESCRIBE.ROCKS
 DESCRIBE.MAGMABONE = "I wonder if the worms got to it."
 
 DESCRIBE.UM_COOKPOT_WAGSTAFF = {
@@ -617,3 +594,11 @@ DESCRIBE.WATHOM_CORPSE = "Dead, but no skeleton?"
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Wolfgang has no need for scary rock shield!"
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Mighty punches are not hot enough!"
 DESCRIBE.UM_THULECITE_RAZOR= "Is for shaving orange rock beard."
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Is spiky cake-thing for throwing?"
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "Tasted like swamp, had many sad rain drops...",
+    SUMMER = "So sticky, makes Wolfgang's hands a mess.",
+    AUTUMN = "Better than old berries from ground.",
+    WINTER = "Makes Wolfgang feel very fancy and MIGHTY!",
+}
+DESCRIBE.UM_BOOMBERRYPIE = "Is food for cowards... Wolfgang take just in case."

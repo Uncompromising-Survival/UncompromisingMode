@@ -1,10 +1,6 @@
 local assets =
 {
     Asset("ANIM", "anim/manny.zip"),
-	Asset("IMAGE", "images/inventoryimages/houndious_observious.tex"),
-	Asset("ATLAS", "images/inventoryimages/houndious_observious.xml"),
-	Asset("IMAGE", "images/map_icons/houndious_observious_map.tex"),
-	Asset("ATLAS", "images/map_icons/houndious_observious_map.xml"),
 }
 
 local function onbuilt(inst)

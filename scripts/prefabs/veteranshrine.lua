@@ -70,7 +70,8 @@ local function ToggleCurse(inst, doer)
             for _, sound in pairs(sounds) do
                 doer.SoundEmitter:PlaySound("dontstarve/"..sound)
             end
-            doer.components.debuffable:AddDebuff("buff_vetcurse", "buff_vetcurse")
+            --doer.components.debuffable:AddDebuff("buff_vetcurse", "buff_vetcurse")
+            if doer.UMToggleVetCurse then doer:UMToggleVetCurse(true) end
             doer:PushEvent("foodbuffattached", {buff = "ANNOUNCE_ATTACH_BUFF_VETCURSE", 1})
             local x, y, z = inst.Transform:GetWorldPosition()
             local fxlist = {"statue_transition_2", "statue_transition"}
@@ -100,6 +101,13 @@ local function OnActivate(inst, doer)
         if not doer:HasTag("vetcurse") then
             doer.sg:GoToState("curse_controlled")
             ToggleCurse(inst, doer)
+
+            -- Watermelon lantern easter egg
+            if doer.components.inventory:HasItemThatMatches(function(item) return item.prefab == "watermelon" end,2) then
+                doer.components.builder:UnlockRecipe("watermelon_lantern")
+                doer:PushEvent("learnrecipe", {teacher = inst, recipe = "watermelon_lantern"})
+                inst.components.talker:Say("Nice melons. Have some forbidden knowledge.")
+            end
         end
         doer:RemoveTag("vetcurse_warning")
     end

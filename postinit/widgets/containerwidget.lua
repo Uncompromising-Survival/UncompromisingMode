@@ -24,6 +24,8 @@ self.button:Show() or self.button:Hide().
 4. A client-side crash occurs because self.button is nil from step 2 (indexing a nil value).
 
 The solution used here is to make sure the button is not nil after the "Close" function is run.
+containerwidget.lua calls some functions of the Button class (Hide, Kill, Show) so we make dummy
+functions that don't do anything to prevent crashes from calling nil values.
 
 Refer to postinit/widgets/inventorybar.lua for more information regarding integrated layout support
 for the Silken Sack.
@@ -39,11 +41,11 @@ env.AddClassPostConstruct("widgets/containerwidget", function(self, owner)
     function self:Close()
         _Close(self)
         if not self.isopen and self.button == nil then
-            self.button = self:AddChild(ImageButton(
-                "images/ui.xml", "button_small.tex", "button_small_over.tex", 
-                "button_small_disabled.tex", nil, nil, {1,1}, {0,0})
-            )
-            self.button:Hide()
+            self.button = {
+                ["Hide"] = function() return end,
+                ["Kill"] = function() return end,
+                ["Show"] = function() return end,
+            }
         end
     end
 end)

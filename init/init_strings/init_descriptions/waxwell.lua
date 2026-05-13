@@ -171,7 +171,7 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "This isn't right, eyeplants, on rats? Is this your doing Charlie?"
 DESCRIBE.MARSH_GRASS = "I should have let them in, this place is a real drab."
 DESCRIBE.CURSED_ANTLER = "You expect me to carry this?!"
-DESCRIBE.BERNIEBOX = "Great power lies within."
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "I suppose that the lethality is acceptable."
 DESCRIBE.HOODED_FERN = "Uninteresting."
 DESCRIBE.HOODEDWIDOW = "I want to stay FAR away from her."
 DESCRIBE.GIANT_TREE = "This tree is unusually large."
@@ -184,14 +184,7 @@ DESCRIBE.SILKEN_BUNDLE = "Sticky, but snug."
 
 DESCRIBE.WEBBEDCREATURE = "There's probably carcasses in there."
 ANNOUNCE.WEBBEDCREATURE = "Only the spider can access the contents. Hmmm."
-DESCRIBE.SNAPDRAGON_BUDDY = "If I feed it, will it go away?"
-DESCRIBE.SNAPDRAGON = "I have no quarrel with you. Yet."
-DESCRIBE.SNAPPLANT = "You look familiar."
-DESCRIBE.WHISPERPOD = "Great, more dirty work."
-DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
-    GENERIC = "It needs more? How do these things reproduce on their own?",
-    GROWING = "It's growing."
-}
+
 DESCRIBE.FRUITBAT = "Even uglier!"
 DESCRIBE.PITCHERPLANT = "It's a plant, but high up."
 DESCRIBE.APHID = "I don't like you."
@@ -242,14 +235,6 @@ DESCRIBE.KLAUS_AMULET = "A powerful, wonderful enchantment!"
 DESCRIBE.CRABCLAW = "I know gem-holes when I see them."
 DESCRIBE.HAT_RATMASK = "Must I be the one to do this filthy work?"
 
-DESCRIBE.ORANGE_VOMIT = "That's life!"
-DESCRIBE.GREEN_VOMIT = "That's life!"
-DESCRIBE.RED_VOMIT = "That's life!"
-DESCRIBE.PINK_VOMIT = "That's life!"
-DESCRIBE.YELLOW_VOMIT = "That's life!"
-DESCRIBE.PURPLE_VOMIT = "That's life!"
-DESCRIBE.PALE_VOMIT = "That's life!"
-
 DESCRIBE.WALRUS_CAMP_EMPTY = DESCRIBE.WALRUS_CAMP.EMPTY
 DESCRIBE.PIGKING_PIGGUARD = {
     GUARD = DESCRIBE.PIGMAN.GUARD,
@@ -267,13 +252,6 @@ DESCRIBE.UM_PAWN_NIGHTMARE = "They aren't my designs, thats for sure."
 DESCRIBE.CAVE_ENTRANCE_SUNKDECID = DESCRIBE.CAVE_ENTRANCE
 DESCRIBE.CAVE_ENTRANCE_OPEN_SUNKDECID = DESCRIBE.CAVE_ENTRANCE_OPEN
 DESCRIBE.CAVE_EXIT_SUNKDECID = DESCRIBE.CAVE_EXIT
-
--- Blowgun stuff
-DESCRIBE.UNCOMPROMISING_BLOWGUN = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_TOOTH = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_FIRE = DESCRIBE.BLOWDART_FIRE
-DESCRIBE.BLOWGUNAMMO_SLEEP = DESCRIBE.BLOWDART_SLEEP
-DESCRIBE.BLOWGUNAMMO_ELECTRIC = DESCRIBE.BLOWDART_YELLOW
 
 DESCRIBE.ANCIENT_AMULET_RED = "I don't think they need their souls anymore."
 DESCRIBE.UM_BEAR_TRAP = "I never taught them to do that."
@@ -499,8 +477,6 @@ DESCRIBE.MEATRACK_HAT = {
     DRYING_NOTMEAT = DESCRIBE.MEATRACK.DRYING_NOTMEAT,
     DRYINGINRAIN_NOTMEAT = DESCRIBE.MEATRACK.DRYINGINRAIN_NOTMEAT
 }
-DESCRIBE.FISHMEAT_DRIED = "It's softer than regular jerky."
-DESCRIBE.SMALLFISHMEAT_DRIED = "It's softer than regular jerky, and a bit smaller."
 
 DESCRIBE.WIXIEGUN = "What magic is this?!"
 
@@ -572,7 +548,7 @@ DESCRIBE.UM_RIMEWEED_TEQUILA = "It's far too cold to enjoy."
 DESCRIBE.UM_RIMEWEED_SPAGETT = "Crunchy spagetti, not my first choice."
 
 -- Lava Caves
-DESCRIBE.MAGMAROCK1 = DESCRIBE.ROCKS
+DESCRIBE.UM_MAGMAROCK1 = DESCRIBE.ROCKS
 DESCRIBE.MAGMABONE = "I wonder if the worms got to it."
 
 DESCRIBE.UM_COOKPOT_WAGSTAFF = {
@@ -605,3 +581,11 @@ DESCRIBE.WATHOM_CORPSE = "Still clinging to life are we?"
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "She has clouded her mind with protection by any means necessary."
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Writers, please write something clever here.\nMention the fact you need fire or something idk"
 DESCRIBE.UM_THULECITE_RAZOR= "I mined a whole statue just for that?"
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Spiky, yet delightful. Reminds me of someone."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "I hope the smell doesn't stick to me.",
+    SUMMER = "Better than my time at the throne, that's for sure.",
+    AUTUMN = "I guess some things do get better with time.",
+    WINTER = "Durians at this time of the year? Such a luxury.",
+}
+DESCRIBE.UM_BOOMBERRYPIE = "Ugh, next time go easy on the berries."

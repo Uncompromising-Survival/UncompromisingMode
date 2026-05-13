@@ -511,7 +511,7 @@ local default = {
                     TheWorld.state.isspring and "oceanfish_small_7_inv" or
                     TheWorld.state.issummer and "oceanfish_small_8_inv" or
                     "wobster_sheller_land"
-            end, 1, .5)
+            end, 1, 1)
         }
     },
     WALRUS = {

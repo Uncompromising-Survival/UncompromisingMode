@@ -47,7 +47,7 @@ local function TriggerPocketResurrection(self, item)
         end
     end
 
-    if item.prefab == "amulet" then
+    if item.prefab == "amulet" then    
         FindSleepable(self.inst)
         if self.inst.components.grogginess then
             self.inst.components.grogginess:ResetGrogginess()
@@ -129,6 +129,12 @@ local function HasPocketResurrection(self)
             local bodyslot = inventory:GetEquippedItem(EQUIPSLOTS.BODY)
             item = bodyslot ~= nil and (bodyslot.prefab == "amulet" or bodyslot:HasTag("resurrector")) and bodyslot
                 or inventory:FindItem(function(item) return item.prefab == "wortox_reviver" end)
+            
+            item = bodyslot ~= nil and (bodyslot.prefab == "um_backpack_amuletuse" and bodyslot.components.container and 
+                bodyslot.components.container:GetItemInSlot(9) and bodyslot.components.container:GetItemInSlot(9).prefab == "amulet"
+                and bodyslot.components.container:GetItemInSlot(9)) or item 
+                -- AXE If wearing the amusement pack, see if the amulet is in there... if it is... then swap the item of 
+                -- interest.
         end
         if self.inst.components.timer and not self.inst.components.timer:TimerExists("shadowwathomcooldown") then
             if item then
@@ -188,12 +194,12 @@ local function StopDeathStuffHere(self, amount, cause, afflicter, ...)
 
             TriggerPocketResurrection(self, res_item) -- Don't trigger the LLA here, let it happen in our own component, so this doesn't break whenever canis moves it to his own mod.
             return true
-        elseif maykill and (self.inst:HasTag("wathom") and self.inst:HasTag("amped")) and not self.inst:HasTag("deathamp") and cause ~= "deathamp" and HasSkill(self.inst,"shadow_wathom_1") then -- Suggest that we add a trigger here to show that wathom is still being hit, despite his lack of flinching or anything.
+        elseif maykill and self.inst:HasAllTags("wathom", "amped") and not self.inst:HasTag("deathamp") and cause ~= "deathamp" and HasSkill(self.inst,"shadow_wathom_1") then -- Suggest that we add a trigger here to show that wathom is still being hit, despite his lack of flinching or anything.
             self.inst:AddTag("deathamp")
             self.inst:ToggleUndeathState(self.inst, true)
             self:DoDelta(-self.currenthealth + 1, false, cause, true) -- Needed to do this for ignore_invincible...
             return true
-        elseif self.inst:HasTag("deathamp") and cause ~= "deathamp" then
+        elseif self.inst:HasTag("deathamp") and cause ~= "deathamp" and amount < 0 then
             self.inst.components.adrenaline:DoDelta(amount * 1)
             return true
         end
@@ -217,7 +223,33 @@ env.AddComponentPostInit("health", function(self)
         end
         return _SetVal(self, val, cause, afflicter, ...)
     end
-    
+
+    local _OnSave = self.OnSave
+    function self:OnSave(...)
+        local ret = _OnSave(self, ...)
+        if ret and ret.penalty and ret.penalty > TUNING.MAXIMUM_HEALTH_PENALTY and self.inst.prefab == "waxwell" and self.inst:HasTag("vetcurse") then
+            ret.um_vetcursed = true
+        end
+        return ret
+    end
+
+    local _OnLoad = self.OnLoad
+    function self:OnLoad(data, ...)
+        if data.um_vetcursed then self.um_vetcursed = true end
+        local ret = _OnLoad(self, data, ...)
+        if data.um_vetcursed then self.um_vetcursed = nil end
+        return ret
+    end
+
+    local _SetPenalty = self.SetPenalty
+    function self:SetPenalty(penalty, ...)
+        if self.inst.prefab == "waxwell" and (self.inst:HasTag("vetcurse") or self.um_vetcursed) and not self.disable_penalty then
+            self.penalty = math.clamp(penalty, 0, .99)
+            return
+        end
+        return _SetPenalty(self, penalty, ...)
+    end
+
     if TUNING.DSTU.ONEHP == true then-- All this code is here
         TUNING.WX78_MAXHEALTH_BOOST = 0
         TUNING.WX78_MAXHEALTH2_MULT = 0

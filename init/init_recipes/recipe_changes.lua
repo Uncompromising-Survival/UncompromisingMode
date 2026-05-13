@@ -151,7 +151,6 @@ AllRecipes["goggleshat"].ingredients = {
     Ingredient("houndstooth", 2)
 }
 
-AllRecipes["deserthat"].level = TechTree.Create(TECH.SCIENCE_TWO)
 AllRecipes["lantern"].level = TechTree.Create(TECH.SCIENCE_ONE)
 
 AllRecipes["saddle_race"].ingredients = {
@@ -378,8 +377,10 @@ if GetModConfigData("snowstorms") then
     ChangeSortKey("wall_wood_item", "wall_hay_item", "WINTER", true)
     AddRecipeToFilter("wall_stone_item", "WINTER")
     ChangeSortKey("wall_stone_item", "wall_wood_item", "WINTER", true)
+    AddRecipeToFilter("wall_scrap_item", "WINTER")
+    ChangeSortKey("wall_scrap_item", "wall_stone_item", "WINTER", true)
     AddRecipeToFilter("wall_moonrock_item", "WINTER")
-    ChangeSortKey("wall_moonrock_item", "wall_stone_item", "WINTER", true)
+    ChangeSortKey("wall_moonrock_item", "wall_scrap_item", "WINTER", true)
     AddRecipeToFilter("wall_dreadstone_item", "WINTER")
     ChangeSortKey("wall_dreadstone_item", "wall_moonrock_item", "WINTER", true)
 end
@@ -392,8 +393,16 @@ if not TUNING.DSTU.EYEBRELLAREWORK then
     ChangeSortKey("eyebrellahat", "strawhat", "SUMMER", true)
 end
 
+ChangeSortKey("tillweedsalve", "um_feather_totem", "RESTORATION", true)
 AddRecipeToFilter("trunkvest_summer", "RAIN")
 ChangeSortKey("trunkvest_summer", "armor_sharksuit_um", "RAIN", false)
+AddRecipeToFilter("reflectivevest", "RAIN")
+ChangeSortKey("reflectivevest", "um_armor_pyre_nettles", "RAIN", true)
+AddRecipeToFilter("kelphat", "SUMMER")
+ChangeSortKey("kelphat", "watermelonhat", "SUMMER", false)
+AddRecipeToFilter("sentryward", "STRUCTURES")
+ChangeSortKey("sentryward", "moondial", "STRUCTURES", true)
+--ChangeSortKey("townportal", "archive_resonator_item", "STRUCTURES", false) -- Setting this in recipes.lua so it's ordered correctly with Archives structures.
 
 if TUNING.DSTU.SHAVE_MODE then
     AllRecipes["razor"].level = TechTree.Create(TECH.NONE)

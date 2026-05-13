@@ -1,5 +1,3 @@
--- [TODO]
-
 local assets =
 {
     Asset("ANIM", "anim/um_rimeweed.zip"),
@@ -42,18 +40,12 @@ local assets =
 --/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- Retaliation Spikes
 
---DSV uses 4 but ignores physics radius
-local MAXRANGE = 4
-local NO_TAGS_NO_PLAYERS = { "bramble_resistant", "INLIMBO", "notarget", "noattack", "flight", "invisible", "wall", "player", "companion" }
-local NO_TAGS = { "bramble_resistant", "INLIMBO", "notarget", "noattack", "flight", "invisible", "wall", "playerghost", "rimeweed" }
-local COMBAT_TARGET_TAGS = { "_combat" }
-
 local function Freeze(v)
     -- Freeze
     --TheNet:Announce("freeze code ran")
     if v.components.freezable then -- Freeze
         --TheNet:Announce("Add Coldness")
-        v.components.freezable:AddColdness(3)
+        v.components.freezable:AddColdness(1)
     end
     if v.components.temperature then -- Chill
         --TheNet:Announce("Got a lil chilly")
@@ -74,12 +66,17 @@ local function TellToBuzzOff(v) -- Tell hounds and deerclops they should probabl
     end
 end
 
+local MAXRANGE = 4
+local NO_TAGS_NO_PLAYERS = { "bramble_resistant", "INLIMBO", "notarget", "noattack", "flight", "invisible", "wall", "player", "companion" }
+local NO_TAGS = { "bramble_resistant", "INLIMBO", "notarget", "noattack", "flight", "invisible", "wall", "playerghost", "rimeweed" }
+local COMBAT_TARGET_TAGS = { "_combat" }
+
 local function OnUpdateThorns(inst)
     inst.range = inst.range + 1
     local x, y, z = inst.Transform:GetWorldPosition()
     for i, v in ipairs(TheSim:FindEntities(x, y, z, inst.range + 2, COMBAT_TARGET_TAGS, inst.canhitplayers and NO_TAGS or NO_TAGS_NO_PLAYERS)) do
-        if not inst.ignore[v] and v:IsValid() and v.entity:IsVisible() and v.components.combat and not (v.components.inventory
-                and v.components.inventory:EquipHasTag("bramble_resistant")) then
+        if not inst.ignore[v] and v:IsValid() and v.entity:IsVisible() and v.components.combat
+            and not (v.components.inventory and v.components.inventory:EquipHasTag("bramble_resistant")) then
             local range = inst.range + v:GetPhysicsRadius(0)
             if v:GetDistanceSqToPoint(x, y, z) < range * range then
                 if inst.owner and not inst.owner:IsValid() then
@@ -91,8 +88,6 @@ local function OnUpdateThorns(inst)
                         v.components.combat:GetAttacked(v.components.follower and v.components.follower:GetLeader() == inst.owner and inst or inst.owner, inst.damage)
                         Freeze(v)
                         TellToBuzzOff(v)
-                        --V2C: wisecracks make more sense for being pricked by picking
-                        --v:PushEvent("thorns")
                     end
                 elseif v.components.combat:CanBeAttacked() then
                     local isally = false
@@ -106,7 +101,6 @@ local function OnUpdateThorns(inst)
                         v.components.combat:GetAttacked(inst, inst.damage)
                         TellToBuzzOff(v)
                         Freeze(v)
-                        --v:PushEvent("thorns")
                     end
                 end
             end
@@ -203,6 +197,26 @@ local function Retaliate(inst)
     end
 end
 
+local function BarrierRemove(inst)
+    if not inst.nospread then
+        local x, y, z = inst.Transform:GetWorldPosition()
+        local ents = TheSim:FindEntities(x, y, z, 5, {"rimeweed"})
+        for i = 1, #ents do
+            local v = ents[i]
+            if v and v:IsValid() and v ~= inst and v.prefab == "rimeweed_barrier" then
+                v.nospread = true
+                v:DoTaskInTime(.5 * inst:GetDistanceSqToInst(v) ^ .5, function(v)
+                    if v.components.health and not v.components.health:IsDead() then
+                        v.components.health:Kill()
+                    else
+                        v:Remove()
+                    end
+                end)
+            end
+        end
+    end
+end
+
 local function BarrierDie(inst)
     --TheNet:Announce("DODEATH")
     RemovePhysicsColliders(inst)
@@ -216,7 +230,7 @@ local function BarrierDie(inst)
     if not inst.nospread then
         local x, y, z = inst.Transform:GetWorldPosition()
         for i, v in ipairs(TheSim:FindEntities(x, y, z, 5, {"rimeweed"})) do
-            if v.prefab == "rimeweed_barrier" then
+            if v ~= inst and v.prefab == "rimeweed_barrier" then
                 v.nospread = true
                 v:DoTaskInTime(.5 * inst:GetDistanceSqToInst(v) ^ .5, function(v)
                     if v.components.health and not v.components.health:IsDead() then
@@ -228,6 +242,7 @@ local function BarrierDie(inst)
             end
         end
     end
+    inst:RemoveEventCallback("onremove", BarrierRemove)
 end
 
 local function BarrierSave(inst, data)
@@ -311,7 +326,7 @@ local function barrierweed()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
-
+    
     inst.AnimState:SetBank("um_rimeweed")
     inst.AnimState:SetBuild("um_rimeweed")
 
@@ -358,6 +373,7 @@ local function barrierweed()
     inst.Transform:SetScale(multsize, multsize, multsize)
     ---------------------
     inst:ListenForEvent("attacked", Retaliate)
+    inst:ListenForEvent("onremove", BarrierRemove)
     inst:ListenForEvent("death", BarrierDie)
 
     --MakeSmallBurnableCharacter(inst, "catcoon_torso")
@@ -415,6 +431,25 @@ local function OnLoadPostPassMain(inst, newents, data)
     end
 end
 
+local function MainRemove(inst)
+    if inst.fx and inst.fx:IsValid() then
+        inst.fx:Remove()
+        inst.fx = nil
+    end
+    if #inst.bramble > 0 and not inst.nospread then
+        for i, v in ipairs(inst.bramble) do
+            if v:IsValid() then
+                if v.components.health and not v.components.health:IsDead() then
+                    v.noloot = true
+                    v.components.health:Kill()
+                else
+                    v:Remove()
+                end
+            end
+        end
+    end
+end
+
 local function MainDie(inst)
     inst:AddTag("dead")
     if inst.fx then inst.fx:Remove() end
@@ -436,19 +471,20 @@ local function MainDie(inst)
         inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
     end
     if inst.stage == 2 and not inst.noloot then
-        if math.random() < 0.25 then
+        if math.random() < .25 then
             inst.components.lootdropper:SpawnLootPrefab("rimeweed_whip")
         end
         inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
     end
     if inst.stage >= 3 and not inst.noloot then
         inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
-        if math.random() > 0.5 then
+        if math.random() > .5 then
             inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemflower")
         else
             inst.components.lootdropper:SpawnLootPrefab("rimeweed_whip")
         end
     end
+    inst:RemoveEventCallback("onremove", MainRemove)
 end
 
 local function PlayStagedAnim(inst)
@@ -647,6 +683,7 @@ local function mainweed()
 
     inst:AddComponent("timer")
     inst:ListenForEvent("timerdone", TimerDone)
+    inst:ListenForEvent("onremove", MainRemove)
     inst:ListenForEvent("death", MainDie)
 
     inst:AddComponent("inspectable")
@@ -715,21 +752,23 @@ local function onattackwhip(inst, attacker, target, naughtlock)
         if target:HasTag("um_magmatic_defense") then
             coldval = coldval * 8
         end
-        target.components.freezable:AddColdness(coldval / (resistance > coldness + 2 and 1 or resistance > coldness + 1 and 4 or 8))
+
         local bonusdamage = 68
         bonusdamage = bonusdamage * coldness / resistance
 
-        if target.sg and target.sg:HasStateTag("frozen") then
+        --if target.sg and target.sg:HasStateTag("frozen") then
             --SpawnPrefab("bramblefx_rime"):SetFXOwner(target)
-        end
-
-        -- Lavae Vanilla bug fix
-        if target.components.freezable.coldness >= resistance then
-            target:DoTaskInTime(0, function(target) target.components.freezable:AddColdness(20) end)
-        end
+        --end
 
         target.components.combat:GetAttacked(attacker, bonusdamage) -- Frost-type damage, which is based on how close to freezing the enemy is
         target.components.freezable:SpawnShatterFX()
+        
+        target.components.freezable:AddColdness(coldval / (resistance > coldness + 2 and 1 or resistance > coldness + 1 and 4 or 8))        
+        
+        -- Lavae Vanilla bug fix
+        --if target.components.freezable.coldness >= resistance then
+            --target:DoTaskInTime(0, function(target) target.components.freezable:AddColdness(20) end)
+        --end
     end
 end
 

@@ -197,7 +197,7 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "Hey! what is going on with you?"
 DESCRIBE.MARSH_GRASS = "Shushhshhh, be quiet..."
 DESCRIBE.CURSED_ANTLER = "Bash heads ahahaha."
-DESCRIBE.BERNIEBOX = "Box I can open with my teeth."
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "Crystal is better!"
 DESCRIBE.HOODED_FERN = "It is green."
 DESCRIBE.HOODEDWIDOW = "Ah! Who invited you!"
 DESCRIBE.GIANT_TREE = "I should climb up it, and eat the baby birds."
@@ -210,14 +210,7 @@ DESCRIBE.SILKEN_BUNDLE = "I bet I would say something about liking to hoard, but
 
 DESCRIBE.WEBBEDCREATURE = ""
 ANNOUNCE.WEBBEDCREATURE = "I keep getting stuck when I try to rip it up!"
-DESCRIBE.SNAPDRAGON_BUDDY = "It looks hungry, I am hungry too."
-DESCRIBE.SNAPDRAGON = "Some wild root beast."
-DESCRIBE.SNAPPLANT = "The connection they have is very snappy."
-DESCRIBE.WHISPERPOD = "Huh? I do not hear any whispering coming from this lump."
-DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
-    GENERIC = "Huh, do something.",
-    GROWING = "The root is coming!"
-}
+
 DESCRIBE.FRUITBAT = "I hope you do not explode like the ground ones."
 DESCRIBE.PITCHERPLANT = "Must climb to it I can smell the sweetness."
 DESCRIBE.APHID = "Get out of here, this is Rat-land now."
@@ -270,6 +263,7 @@ ACTIONFAIL.READ.GENERIC = "Of course I know what I'm doing."
 ACTIONFAIL.GIVE.NOTNIGHT = "Maybe if I hit it hard, it will work?"
 ACTIONFAIL.TOUCH_BURROW_RAT_LIMIT = "There are too many of them."
 ACTIONFAIL.TOUCH_BURROW_NO_HUNGER = "Where is all my food."
+--ACTIONFAIL.TOUCH_BURROW_RATLESS = "No more in this tunnel. I will dig another."
 
 -- Xmas Update
 DESCRIBE.MAGMAHOUND = "Bumpy rocky thing."
@@ -281,14 +275,6 @@ DESCRIBE.RAT_WHIP = "I wish my tail could whack like this."
 DESCRIBE.KLAUS_AMULET = "Like the gem necklace, and less pretty."
 DESCRIBE.CRABCLAW = "Big whacker club."
 DESCRIBE.HAT_RATMASK = "It is how Humans say, flattering."
-
-DESCRIBE.ORANGE_VOMIT = "Slime paste. Very bitter tasting."
-DESCRIBE.GREEN_VOMIT = "Slime paste. Very sour tasting."
-DESCRIBE.RED_VOMIT = "Slime paste. Very bitter tasting."
-DESCRIBE.PINK_VOMIT = "Slime paste. Very sour tasting."
-DESCRIBE.YELLOW_VOMIT = "Slime paste. Very bitter tasting."
-DESCRIBE.PURPLE_VOMIT = "Slime paste. Very sour tasting."
-DESCRIBE.PALE_VOMIT = "Slime paste. Very bland tasting."
 
 DESCRIBE.WALRUS_CAMP_EMPTY = DESCRIBE.WALRUS_CAMP.EMPTY
 DESCRIBE.PIGKING_PIGGUARD = {
@@ -307,13 +293,6 @@ DESCRIBE.UM_PAWN_NIGHTMARE = "At least this one can SHUT UP!"
 DESCRIBE.CAVE_ENTRANCE_SUNKDECID = DESCRIBE.CAVE_ENTRANCE
 DESCRIBE.CAVE_ENTRANCE_OPEN_SUNKDECID = DESCRIBE.CAVE_ENTRANCE_OPEN
 DESCRIBE.CAVE_EXIT_SUNKDECID = DESCRIBE.CAVE_EXIT
-
--- Blowgun stuff
-DESCRIBE.UNCOMPROMISING_BLOWGUN = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_TOOTH = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_FIRE = DESCRIBE.BLOWDART_FIRE
-DESCRIBE.BLOWGUNAMMO_SLEEP = DESCRIBE.BLOWDART_SLEEP
-DESCRIBE.BLOWGUNAMMO_ELECTRIC = DESCRIBE.BLOWDART_YELLOW
 
 DESCRIBE.ANCIENT_AMULET_RED = ""
 DESCRIBE.UM_BEAR_TRAP = "Maybe I should throw a rock at it."
@@ -617,7 +596,7 @@ DESCRIBE.UM_RIMEWEED_TEQUILA = "It's far too cold to enjoy."
 DESCRIBE.UM_RIMEWEED_SPAGETT = "Crunchy spagetti, not my first choice."
 
 -- Lava Caves
-DESCRIBE.MAGMAROCK1 = DESCRIBE.ROCKS
+DESCRIBE.UM_MAGMAROCK1 = DESCRIBE.ROCKS
 DESCRIBE.MAGMABONE = "I wonder if the worms got to it."
 
 DESCRIBE.UM_COOKPOT_WAGSTAFF = {
@@ -695,3 +674,12 @@ DESCRIBE.WATHOM_CORPSE = "How. You died. You can't just... get back up?"
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Thouching it makes me shiver."
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Writers, please write something clever here.\nMention the fact you need fire or something idk"
 DESCRIBE.UM_THULECITE_RAZOR= "What kind of razor is this."
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Mmmm, succulent smell."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "I miss the smell, I should have kept it with me.",
+    SUMMER = "It was too melted. I hate this stupid heat.",
+    AUTUMN = "I need more! Where are more Durians. Now!",
+    WINTER = "It is delicious, why won't more of these stupid fruits grow now.",
+}
+DESCRIBE.UM_RICE_PUDDING = "I kind of liked the crunch it used to have."
+DESCRIBE.UM_BOOMBERRYPIE = "The slime will make my claws sticky forever."

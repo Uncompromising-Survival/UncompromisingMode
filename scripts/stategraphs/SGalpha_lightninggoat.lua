@@ -588,7 +588,7 @@ local states=
         events =
         {
             EventHandler("animover", function(inst)
-				if inst.stomp_count >= 2 then
+				if inst.stomp_count >= 1 then
 					inst.stomp_count = 0
 					inst.sg:GoToState("stomp_attack_stop")
 				else

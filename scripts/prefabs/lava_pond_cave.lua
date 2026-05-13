@@ -20,7 +20,7 @@ local function makerock(rocktype)
 
         inst.AnimState:SetBank("scorched_rock")
         inst.AnimState:SetBuild("scorched_rock")
-        inst.AnimState:PlayAnimation("idle"..rocktype)
+        inst.AnimState:PlayAnimation("idle" .. rocktype)
 
         if rocktype:len() > 0 then
             inst:SetPrefabNameOverride("lava_pond_rock")
@@ -39,32 +39,32 @@ local function makerock(rocktype)
 
         return inst
     end
-    return Prefab("lava_pond_rock"..rocktype, fn, rock_assets)
+    return Prefab("lava_pond_rock" .. rocktype, fn, rock_assets)
 end
 
 local function SpawnRocks(inst)
     inst.task = nil
     if inst.rocks == nil then
         inst.rocks = {}
-		local maxplant = math.random(2, 4)
+        local maxplant = math.random(2, 4)
         for i = 1, maxplant do
-            local theta = (math.random(20+360/maxplant*(i-1),360*i/maxplant-20)+90)*DEGREES
+            local theta = (math.random(20 + 360 / maxplant * (i - 1), 360 * i / maxplant - 20) + 90) * DEGREES
             local rocktype = math.random(NUM_ROCK_TYPES)
             table.insert(inst.rocks,
-            {
-                rocktype = rocktype > 1 and tostring(rocktype) or "",
-                offset =
                 {
-                    math.sin(theta) * 2.1 + math.random() * .3,
-                    0,
-                    math.cos(theta) * 2.1 + math.random() * .3,
-                },
-            })
+                    rocktype = rocktype > 1 and tostring(rocktype) or "",
+                    offset =
+                    {
+                        math.sin(theta) * 2.1 + math.random() * .3,
+                        0,
+                        math.cos(theta) * 2.1 + math.random() * .3,
+                    },
+                })
         end
     end
     for i, v in ipairs(inst.rocks) do
         if type(v.rocktype) == "string" and type(v.offset) == "table" and #v.offset == 3 then
-            local rock = SpawnPrefab("um_pyre_nettles_stage_"..math.random(2,5))
+            local rock = SpawnPrefab("um_pyre_nettles_stage_" .. math.random(2, 5))
             if rock ~= nil then
                 rock.entity:SetParent(inst.entity)
                 rock.Transform:SetPosition(unpack(v.offset))
@@ -153,7 +153,7 @@ local function fn()
     inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
 
-	MakePondPhysics(inst, 1.95)
+    MakePondPhysics(inst, 1.95)
 
     inst.AnimState:SetBuild("lava_tile")
     inst.AnimState:SetBank("lava_tile")
@@ -228,7 +228,7 @@ local ret = { makerock("") }
 local prefabs = { "lava_pond_rock" }
 for i = 2, NUM_ROCK_TYPES do
     table.insert(ret, makerock(tostring(i)))
-    table.insert(prefabs, "lava_pond_rock"..tostring(i))
+    table.insert(prefabs, "lava_pond_rock" .. tostring(i))
 end
 
 table.insert(ret, Prefab("lava_pond_cave", fn, assets, prefabs))

@@ -152,7 +152,8 @@ function AphidBrain:OnStart()
                         WhileNode(function() return self.inst.components.combat.target and
                                 self.inst.components.combat:InCooldown() end, "Dodge", RunAway(self.inst, function() return
                             self.inst.components.combat.target end, RUN_AWAY_DIST, STOP_RUN_AWAY_DIST)),
-                        DoAction(self.inst, function() return EatFoodAction(self.inst) end),
+                        WhileNode(function() return not self.inst.full_belly end, "JustEaten", DoAction(self.inst, function() return EatFoodAction(self.inst) end)),
+                        
 
                         WhileNode(function() return TheWorld.state.isnight end, "IsNight",
                             DoAction(self.inst, GoHomeAction, "go home", true)),

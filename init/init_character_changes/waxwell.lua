@@ -76,8 +76,8 @@ env.AddPrefabPostInit("waxwelljournal", function(inst)
 end)]]
 
 local function CalculateMaxHealthLoss(inst, data)
-    if not (inst.components.health and inst.components.health:IsDead()) then
-        local healthloss = ((data.damageresolved or data.damage) * 0.2) / 75
+    if inst:HasTag("vetcurse") and inst.components.health and not inst.components.health:IsDead() then
+        local healthloss = ((data.damageresolved or data.damage) * .5) / 75
         inst.components.health:DeltaPenalty(healthloss)
     end
 end
@@ -208,6 +208,14 @@ local function UnlockShadowGear(inst, data)
     end
 end
 
+local function ToggleUniqueVetCurse(inst, toggle)
+    if toggle then
+        inst:ListenForEvent("attacked", CalculateMaxHealthLoss)
+    else
+        inst:RemoveEventCallback("attacked", CalculateMaxHealthLoss)
+    end
+end
+
 local function WaxwellUMStuff(inst)
     --[[inst.pact_sworn = false
 
@@ -288,9 +296,7 @@ local function WaxwellUMStuff(inst)
         petleash:SetOnDespawnFn(OnDespawnPet)
     end]]
 
-    if TUNING.DSTU.MAX_HEALTH_WELL then
-        inst:ListenForEvent("attacked", CalculateMaxHealthLoss)
-    end
+    inst.UMToggleUniqueVetCurse = ToggleUniqueVetCurse
 end
 
 env.AddPrefabPostInit("waxwell", function(inst)

@@ -32,13 +32,13 @@ SetSharedLootTable('snaildrake_slime',
 {
     {'snapalm',      1.0},
     {'snapalm',      1.0},
-    {'snaildrakebucket', 0.75},
+    {'snaildrakebucket', 0.5},
 })
 SetSharedLootTable('snaildrake_magma',
 {
     {'snapalm',      1.0},
     {'snapalm',      1.0},
-    {'snaildrakehat', 0.75},
+    {'snaildrakehat', 0.50},
 })
 
 local snaildrake_brain = require("brains/snaildrakebrain")
@@ -300,6 +300,9 @@ local function common_fn(bank, build, tag)
     inst.components.burnable:SetOnIgniteFn(OnIgniteFn)
     inst.components.burnable:SetOnExtinguishFn(OnExtinguishFn)
     inst.components.burnable:SetBurnTime(TUNING.SNAILDRAKE_BURN_TIME) -- 4; default is 8
+
+    inst:AddComponent("heater")
+    inst.components.heater.heat = 100
 
     MakeHauntablePanic(inst)
     AddHauntableCustomReaction(inst, CustomOnHaunt, true, false, true)

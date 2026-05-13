@@ -319,7 +319,6 @@ AddPrefabPostInit("honey", function(inst)
     end
 end)
 AddPrefabPostInit("butterflywings", function(inst)
-    inst:AddTag("snapdragons_cant_eat")
 
     if inst.components.edible and TUNING.DSTU.BUTTERFLYWINGS_NERF == "stat_nerf" then
         inst.components.edible.healthvalue = GLOBAL.TUNING.DSTU.FOOD_BUTTERFLY_WING_HEALTH
@@ -328,13 +327,13 @@ AddPrefabPostInit("butterflywings", function(inst)
     end
 end)
 
-if TUNING.DSTU.MUSHROOM_CHANGES then
-    AddPrefabPostInit("green_cap_cooked", function(inst)
-        if inst ~= nil and inst.components.edible ~= nil then
-            inst.components.edible.healthvalue = -5
-        end
-    end)
-end
+--if TUNING.DSTU.MUSHROOM_CHANGES then
+    --AddPrefabPostInit("green_cap_cooked", function(inst)
+        --if inst ~= nil and inst.components.edible ~= nil then
+            --inst.components.edible.healthvalue = -5
+        --end
+    --end)
+--end
 
 AddPrefabPostInit("cookedmonstermeat", function(inst)
     if inst ~= nil and inst.components.edible ~= nil then

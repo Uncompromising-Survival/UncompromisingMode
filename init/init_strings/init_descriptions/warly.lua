@@ -140,7 +140,6 @@ DESCRIBE.HONEY_LOG = "Not quite an Ube Roll, but good effort."
 
 DESCRIBE.BUSHCRAB = "Berries and crab cake, anyone? No?"
 DESCRIBE.LAVAE2 = DESCRIBE.LAVAE
-DESCRIBE.DISEASECUREBOMB = "I doubt this would make for a good cooking oil."
 DESCRIBE.SHROOM_SKIN_FRAGMENT = "I'm... not cooking that."
 DESCRIBE.AIR_CONDITIONER = "Aah, my lungs are clear!"
 DESCRIBE.SPOREPACK = "Absolutely not."
@@ -179,7 +178,7 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "I'm not on the menu!"
 DESCRIBE.MARSH_GRASS = "It provides scenery."
 DESCRIBE.CURSED_ANTLER = "I know a thing or two about bones."
-DESCRIBE.BERNIEBOX = "That's one mystery I'll leave to Willow."
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "Careful, the crust on this is incredibly sharp."
 DESCRIBE.HOODED_FERN = "Well, it's there."
 DESCRIBE.HOODEDWIDOW = "I don't think I'm getting any monster meat from it."
 DESCRIBE.GIANT_TREE = "What a marvel."
@@ -193,14 +192,7 @@ DESCRIBE.SILKEN_BUNDLE = "I doubt spider silk is going to keep our food for long
 DESCRIBE.WEBBEDCREATURE = "Do I really want to get my ingredients from that?"
 ANNOUNCE.WEBBEDCREATURE =
 "I can't pierce it. My hands are different than a spider's."
-DESCRIBE.SNAPDRAGON_BUDDY = "Its hunger calls for me!"
-DESCRIBE.SNAPDRAGON = "Goodness, you're large."
-DESCRIBE.SNAPPLANT = "A lively plant!"
-DESCRIBE.WHISPERPOD = "Lets get you some soil!"
-DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
-    GENERIC = "Crop seeds could be handy.",
-    GROWING = "That is it, just a little more..."
-}
+
 DESCRIBE.FRUITBAT = "I actually don't mind this one."
 DESCRIBE.PITCHERPLANT = "I wonder if it has any dew inside?"
 DESCRIBE.APHID = "A horrible pest."
@@ -249,14 +241,6 @@ DESCRIBE.KLAUS_AMULET = "The steel is chilling."
 DESCRIBE.CRABCLAW = "Theres not a whole lot of meat on this claw."
 DESCRIBE.HAT_RATMASK = "Goodness gracious, what an awful smell!"
 
-DESCRIBE.ORANGE_VOMIT = "The last thing a chef wishes to see!"
-DESCRIBE.GREEN_VOMIT = "The last thing a chef wishes to see!"
-DESCRIBE.RED_VOMIT = "The last thing a chef wishes to see!"
-DESCRIBE.PINK_VOMIT = "The last thing a chef wishes to see!"
-DESCRIBE.YELLOW_VOMIT = "The last thing a chef wishes to see!"
-DESCRIBE.PURPLE_VOMIT = "The last thing a chef wishes to see!"
-DESCRIBE.PALE_VOMIT = "The last thing a chef wishes to see!"
-
 DESCRIBE.WALRUS_CAMP_EMPTY = DESCRIBE.WALRUS_CAMP.EMPTY
 DESCRIBE.PIGKING_PIGGUARD = {
     GUARD = DESCRIBE.PIGMAN.GUARD,
@@ -274,13 +258,6 @@ DESCRIBE.UM_PAWN_NIGHTMARE = "I'll watch my step."
 DESCRIBE.CAVE_ENTRANCE_SUNKDECID = DESCRIBE.CAVE_ENTRANCE
 DESCRIBE.CAVE_ENTRANCE_OPEN_SUNKDECID = DESCRIBE.CAVE_ENTRANCE_OPEN
 DESCRIBE.CAVE_EXIT_SUNKDECID = DESCRIBE.CAVE_EXIT
-
--- Blowgun stuff
-DESCRIBE.UNCOMPROMISING_BLOWGUN = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_TOOTH = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_FIRE = DESCRIBE.BLOWDART_FIRE
-DESCRIBE.BLOWGUNAMMO_SLEEP = DESCRIBE.BLOWDART_SLEEP
-DESCRIBE.BLOWGUNAMMO_ELECTRIC = DESCRIBE.BLOWDART_YELLOW
 
 DESCRIBE.ANCIENT_AMULET_RED = "It stirs my very soul. Like a stew."
 DESCRIBE.UM_BEAR_TRAP = "I'll keep my distance."
@@ -530,8 +507,6 @@ DESCRIBE.MEATRACK_HAT = {
     DRYING_NOTMEAT = DESCRIBE.MEATRACK.DRYING_NOTMEAT,
     DRYINGINRAIN_NOTMEAT = DESCRIBE.MEATRACK.DRYINGINRAIN_NOTMEAT
 }
-DESCRIBE.FISHMEAT_DRIED = "Where's a slice of lemon when you need it?"
-DESCRIBE.SMALLFISHMEAT_DRIED = "A low grade appetizer."
 
 DESCRIBE.WIXIEGUN = "Protect my casserole!"
 DESCRIBE.MARA_BOSS1 = "Ah."
@@ -602,7 +577,7 @@ DESCRIBE.UM_RIMEWEED_TEQUILA = "It's far too cold to enjoy."
 DESCRIBE.UM_RIMEWEED_SPAGETT = "Crunchy spagetti, not my first choice."
 
 -- Lava Caves
-DESCRIBE.MAGMAROCK1 = DESCRIBE.ROCKS
+DESCRIBE.UM_MAGMAROCK1 = DESCRIBE.ROCKS
 DESCRIBE.MAGMABONE = "I wonder if the worms got to it."
 
 DESCRIBE.UM_COOKPOT_WAGSTAFF = {
@@ -634,3 +609,11 @@ DESCRIBE.WATHOM_CORPSE = "He's... He's still breathing! Mon dieu, he may live!"
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "It's lighter than it looks."
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Our friend here could use a nice hot meal."
 DESCRIBE.UM_THULECITE_RAZOR= "If this was food I would eat it."
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Not often do I get to make dishes with such exotic fruits!"
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "It's their season yes, but my palate yearns for something else.",
+    SUMMER = "Some much needed refreshment in this harsh heat.",
+    AUTUMN = "I can almost feel the gentle drizzle of spring.",
+    WINTER = "The aftertaste is simply delightful.",
+}
+DESCRIBE.UM_BOOMBERRYPIE = "This would go great with some milk."

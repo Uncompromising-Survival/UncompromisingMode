@@ -3,7 +3,7 @@ local STRINGS = GLOBAL.STRINGS
 
 STRINGS.UNCOMP_TOOLTIP = {
     AMULET =
-    "- Only revives the player upon death while worn.\n- Increased heal rate at lower health.\n- Never breaks, can be refueled with Nightmare Fuel.",
+    "- Prevents death while worn.\n- Increased heal rate at lower health.\n- Never breaks, can be refueled with Nightmare Fuel.",
     ARMORRUINS = "- Prevents knockback effects.\n- Reduces insanity aura effects by 30%.",
     SWEATERVEST = "- Reduces insanity aura effects by 60%.",
     SKELETONHAT = "- Will not spawn the Creeping Fear when worn.",
@@ -45,6 +45,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     TRIDENT = "- Altered, more powerful spell.\n- More uses and damage.\n- May multi-hit.",
     COMPASS = "- Now works while on the inventory.\n- Increased durability.",
     SCRAP_MONOCLEHAT = "- Increases map reveal range.",
+    TILLWEEDSALVE = "- Restores lost maximum health.",
     __BREAK = "BREAK HERE",
     --uncomp content
     RAT_WHIP = "- Stronger when well fed.",
@@ -61,10 +62,11 @@ STRINGS.UNCOMP_TOOLTIP = {
     UM_BEAR_TRAP_EQUIPPABLE_GOLD =
     "- Slows down anything it's attached to.\n- Deployable and throwable.\n- Has multiple uses.",
     WATERMELON_LANTERN = "- Has a positive sanity aura.",
-    HAT_RATMASK = "- Finds Rat Burrows\n- Shows sources of unwanted attention.",
+    HAT_RATMASK = "- Finds Rat Burrows.\n- Shows sources of unwanted attention.",
     SKULLCHEST_CHILD = "- Shares its contents with other Skull Chests.",
     SNOWGOGGLES = "- Grants protection against snowstorms/sandstorms when worn.",
     GASMASK = "- Provides protection against spore clouds.",
+	UM_HAT_NETTLEMASK = "- Stings user when worn.\n- Provides protection against spore clouds.",
     PLAGUEMASK = "- Provides protection against spore clouds.",
     FLORAL_BANDAGE = "- Restores extra health over time.",
 	UM_RIMEWEED_ICEPACK = "- Cools the player.",
@@ -77,7 +79,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     KALEIDOSCOPE = "- Hitting enemies allows allies to deal Planar damage against it for a short time",
     ARMOR_CRAB_MAXHP = "- Increases maximum health when worn.",
     ARMOR_CRAB_REGEN = "- Self-healing.",
-    UM_ARMOR_PYRE_NETTLES = "- Panics and damages nearby miscreants.",
+    UM_ARMOR_PYRE_NETTLES = "- Stings user when worn.\n- Panics and damages nearby miscreants.",
     WINONA_TOOLBOX = "- Portable storage for dismantled structures and all things engineering.",
     WINONA_UPGRADEKIT_ELECTRICAL = "- Upgrades a Miner Hat or Latern to use electricity.\n- Increases max fuel.",
     CODEX_MANTRA = "- Will spawn Classic Shadows when read.\n- Acts as a Prestihatitator (Tier 1 Magic) when dropped.",
@@ -85,7 +87,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     --PACT_SWORD_SANITY = "- Creates a temporary Dark Sword.\n- Disappears when unequipped.",
     UM_MAXWELL_ARMOR_SANITY = "- Creates temporary Night Armor.\n- Disappears when dropped.\n- Is kept upon death or drowning.",
     UM_MAXWELL_NIGHTSWORD = "- Creates a temporary Dark Sword.\n- Disappears when dropped.\n- Is kept upon death or drowning.",
-    BRINE_BALM = "- Hurts you a little, heals you over time.\n- Restores lost maximum health.",
+    BRINE_BALM = "- Hurts you a little, heals you a lot over time.\n- Restores lost maximum health.",
     BATHBOMB = "- Restores lost maximum health, if tossed in a certain larger spring in mainland.",
     UM_EYEBALM = "- Grants protection against snowstorms/sandstorms when used.",
     UM_HAT_RIME = "- Protection depends on how low the user's temperature is.\n- Melts overtime instead of breaking on hit.",
@@ -97,7 +99,8 @@ STRINGS.UNCOMP_TOOLTIP = {
     UM_HAT_LEAFWING = "- Speedier when worn.\n- Can breeze through Thickets.",
     UM_FEATHER_TOTEM = "- Stays with you post-mortem.\n- Consumes feathers inside on revival for maximum\nhealth loss prevention and other special effects.",
     SEEDPOUCH = "- Halts seed spoilage inside it.\n- Can be upgraded with an Elastispacer.",
-    ANTLIONHAT = "- Has infinite stack size inside.\n- Picks up nearby Turf on the ground."
+    ANTLIONHAT = "- Has infinite stack size inside.\n- Picks up nearby Turf on the ground.",
+    KELPHAT = "- Wearer's wetness will slowly rise up to 33%."
 }
 local TOOLTIPS = STRINGS.UNCOMP_TOOLTIP
 
@@ -262,19 +265,21 @@ if TUNING.DSTU.SNOWSTORMS then
     TOOLTIPS.WALL_HAY_ITEM = "- Provides protection from snowstorms when built."
     TOOLTIPS.WALL_WOOD_ITEM = "- Provides protection from snowstorms when built."
     TOOLTIPS.WALL_STONE_ITEM = "- Provides protection from snowstorms when built."
+    TOOLTIPS.WALL_SCRAP_ITEM = "- Provides protection from snowstorms when built."
     TOOLTIPS.WALL_RUINS_ITEM = "- Provides protection from snowstorms when built."
     TOOLTIPS.WALL_MOONROCK_ITEM = "- Provides protection from snowstorms when built."
     TOOLTIPS.WALL_DREADSTONE_ITEM = TOOLTIPS.WALL_DREADSTONE_ITEM .. "\n- Provides protection from snowstorms when built."
     TOOLTIPS.TURF_DRAGONFLY = TOOLTIPS.TURF_DRAGONFLY .. "\n- Prevents Snow Pile build-up."
     TOOLTIPS.YELLOWSTAFF = "- Dwarf Stars provide protection from snowstorms."
     TOOLTIPS.MOLEHAT = "- Grants protection against snowstorms/sandstorms when worn."
-    TOOLTIPS.DESERTHAT = "- Also works as protection against snowstorms."
-    TOOLTIPS.BEARGERVEST = "- Provides protection from snowstorms' slowdown."
+    --TOOLTIPS.DESERTHAT = "- Also works as protection against snowstorms." -- this is dum
+    TOOLTIPS.BEARGERVEST = "- Provides protection from snow piles and snowstorms' slowdown."
 else
     TOOLTIPS.MOLEHAT = "- Grants protection against sandstorms and moonstorms when worn."
 end
 
 if TUNING.DSTU.HAYFEVER then
+    TOOLTIPS.UM_HAT_NETTLEMASK = TOOLTIPS.UM_HAT_NETTLEMASK .. "\n- Prevents Hayfever while worn... If that's coded in."
     TOOLTIPS.GASMASK = TOOLTIPS.GASMASK .. "\n- Prevents Hayfever while worn."
     TOOLTIPS.PLAGUEMASK = TOOLTIPS.PLAGUEMASK .. "\n- Prevents Hayfever while worn."
     TOOLTIPS.BEEHAT = "- Stings won't cause allergic reactions."
@@ -284,8 +289,9 @@ if TUNING.DSTU.HAYFEVER then
 end
 
 if TUNING.DSTU.SMOG then
+    TOOLTIPS.UM_HAT_NETTLEMASK = TOOLTIPS.UM_HAT_NETTLEMASK .. "\n- Protects against smog while worn."
     TOOLTIPS.GASMASK = TOOLTIPS.GASMASK .. "\n- Protects against smog while worn."
-    TOOLTIPS.PLAGUEMASK = TOOLTIPS.PLAGUEMASK .. "\n- Protects against smog while worn"
+    TOOLTIPS.PLAGUEMASK = TOOLTIPS.PLAGUEMASK .. "\n- Protects against smog while worn."
 	TOOLTIPS.SMOGEATER = "- Sucks up smog."
     if TOOLTIPS.MINIFAN ~= nil then
         TOOLTIPS.MINIFAN = string.gsub(TOOLTIPS.MINIFAN, ".", "") .. " and helps against smog."

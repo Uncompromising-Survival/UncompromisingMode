@@ -15,7 +15,7 @@ end
 
 local function OnHammeredBight(inst, worker)
     inst.components.lootdropper:DropLoot()
-    if math.random() <= .1 then --Grabbing the old version won't do, we're outright replacing what happens if math.random() <= 0.1
+    if math.random() <= .33 then --Grabbing the old version won't do, we're outright replacing what happens if math.random() <= 0.1
 		SpawnBight(inst,worker)		
     else
         local fx = SpawnPrefab("collapse_small")
@@ -39,7 +39,7 @@ end
 
 local function OnHammeredKnook(inst, worker)
     inst.components.lootdropper:DropLoot()
-    if math.random() <= .1 then --Grabbing the old version won't do, we're outright replacing what happens if math.random() <= 0.1
+    if math.random() <= .33 then --Grabbing the old version won't do, we're outright replacing what happens if math.random() <= 0.1
 		SpawnKnook(inst,worker)
     else
         local fx = SpawnPrefab("collapse_small")
@@ -63,7 +63,7 @@ end
 
 local function OnHammeredRoship(inst, worker)
     inst.components.lootdropper:DropLoot()
-    if math.random() <= .1 then --Grabbing the old version won't do, we're outright replacing what happens if math.random() <= 0.1
+    if math.random() <= .33 then --Grabbing the old version won't do, we're outright replacing what happens if math.random() <= 0.1
 		SpawnRoship(inst,worker)
     else
         local fx = SpawnPrefab("collapse_small")

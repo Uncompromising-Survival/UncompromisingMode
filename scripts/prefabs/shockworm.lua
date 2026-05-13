@@ -83,14 +83,23 @@ end
 local function retargetfn(inst)
     --Don't search for targets when you're luring. Targets will come to you.
     return not inst.sg:HasStateTag("lure")
-        and FindEntity(
+        and (FindEntity(
                 inst,
                 TUNING.WORM_TARGET_DIST,
                 IsAlive,
                 { "_combat", "_health" }, -- see entityscript.lua
-                { "prey", "worm", "INLIMBO" },
+                { "prey", "worm", "INLIMBO","tentacle" },
+                { "character", "monster", "animal" }
+            ) or
+            FindEntity(
+                inst,
+                TUNING.WORM_TARGET_DIST/4,
+                IsAlive,
+                { "_combat", "_health" }, -- see entityscript.lua
+                { "prey", "worm", "INLIMBO"},
                 { "character", "monster", "animal" }
             )
+        )
         or nil
 end
 
@@ -206,7 +215,7 @@ local function ShockWormOnAttacked(inst, data)
             if not IsEntityElectricImmune(attacker) then
                 damage_mult = TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * attacker:GetWetMultiplier()
             end
-            attacker.components.combat:GetAttacked(inst, damage_mult * TUNING.WORM_DAMAGE, nil, "electric")
+            attacker.components.combat:GetAttacked(inst, damage_mult * TUNING.WORM_DAMAGE / 5, nil, "electric")
         end
 
         inst.components.combat:SetTarget(attacker)

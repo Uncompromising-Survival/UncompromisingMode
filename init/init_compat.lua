@@ -79,6 +79,7 @@ local DoScythe_old
 
 local function DoScythe(inst, target, doer, ...)
     if target.components.pickable or target.components.hackable then
+        local harvested = nil
         local doer_pos = doer:GetPosition()
         local x, y, z = doer_pos:Get()
 
@@ -89,14 +90,19 @@ local function DoScythe(inst, target, doer, ...)
             if ent:IsValid() and ent:HasOneOfTags(HARVEST_AFTERFINDINGONEOFTAGS) and inst:IsEntityInFront(ent, doer_rotation, doer_pos) then
                 if ent.components.pickable ~= nil then
                     inst:HarvestPickable(ent, doer)
+                    harvested = true
                 elseif ent.components.hackable ~= nil then
                     local workamount = 3 * doer.components.workmultiplier:GetMultiplier(ACTIONS.HACK)
                     if ent.components.hackable.hacksleft <= workamount then
                         ent:ListenForEvent("hacked", hacked)
                     end
                     ent.components.hackable:Hack(doer, workamount, nil, nil, true)
+                    harvested = true
                 end
             end
+        end
+        if harvested then
+            inst:PushEvent("um_scythed", { doer = doer })
         end
     end
 

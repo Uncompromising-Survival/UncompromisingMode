@@ -611,7 +611,9 @@ if TUNING.DSTU.NEWRECIPES then
     for i, v in pairs(cookpots) do
         for n, b in pairs(um_preparedfoods) do
             if TUNING.DSTU.NEWRECIPES then
-                AddCookerRecipe(v, b)
+                if (b.warly_only and v == "portablecookpot") or not b.warly_only then
+                    AddCookerRecipe(v, b)
+                end
 
                 if b.card_def then
                     table.insert(recipe_cards, { recipe_name = b.name, cooker_name = "cookpot" })

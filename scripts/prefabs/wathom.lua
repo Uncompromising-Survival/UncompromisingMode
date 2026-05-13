@@ -23,6 +23,21 @@ local function VetCurseCheck(inst)
     end
 end
 
+local function ToggleUniqueVetCurse(inst, toggle)
+    if toggle then
+        if not inst.um_wathom_vetcurse then
+            inst.um_wathom_vetcurse = inst:DoPeriodicTask(0, VetCurseCheck)
+        end
+    else
+        if inst.um_wathom_vetcurse then
+            inst.um_wathom_vetcurse:Cancel()
+            inst.um_wathom_vetcurse = nil
+        end
+        local sanity = inst.components.sanity
+        sanity:EnableLunacy(false, "vetcurse")
+    end
+end
+
 local function HasSkill(inst,name)
     return inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated(name)
 end
@@ -811,7 +826,7 @@ local function master_postinit(inst)
     inst:ListenForEvent("makeplayerghost",function(inst) inst:DoTaskInTime(0,SeeIfShouldBecomeShadow) end)
     inst:ListenForEvent("ms_respawnedfromghost", StopBeingShadow)
 
-    inst:DoPeriodicTask(0, VetCurseCheck)
+    inst.UMToggleUniqueVetCurse = ToggleUniqueVetCurse
 end
 
 return MakePlayerCharacter("wathom", prefabs, assets, common_postinit, master_postinit)

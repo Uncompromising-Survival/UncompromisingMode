@@ -1,355 +1,469 @@
-require "prefabutil" -- for the MakePlacer function
-
 local assets = {
-	Asset("ANIM", "anim/um_poofshrooms.zip"),
+	Asset("ANIM", "anim/um_poofshroom.zip"),
 }
 
-local function FxAppear(inst)
-	SpawnPrefab("blueberryexplosion").Transform:SetPosition(inst.Transform:GetWorldPosition())
-	SpawnPrefab("blueberrypuddle").Transform:SetPosition(inst.Transform:GetWorldPosition())
-	inst:AddTag("plant")
+
+local function DoDamageEffect(inst,target)
+	local mult = 1
+	local plague
+
+	-- air filtration
+	if target.components.inventory then
+		if target.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD) then
+			if target.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD).prefab == "plaguemask" then
+				plague = true
+			end
+			if target.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD).prefab == "um_hat_nettlemask" then
+				mult = mult * 0.5
+			end
+			if target.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD).prefab == "gasmask" then
+				mult = mult * 0.5
+			end
+		end
+		if target.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) then
+			if target.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS).prefab == "minifan" then
+				mult = mult * 0.5
+			end
+		end
+	end
+					
+	if not plague then
+        if target.components.combat and not target.components.health:IsDead() then
+            --target.components.combat:GetAttacked(inst,inst.color == "g" and 20 or inst.color == "r" and 20 or inst.color == "b" and 20 or 20)	
+			target.components.combat:GetAttacked(inst,30)
+		end
+		target:PushEvent("knockback", { knocker = inst, radius = 1.5, strengthmult = 1.5, forcelanded = true })
+        if target.components.sanity and inst.color == "g" then
+            target.components.sanity:DoDelta(-5*mult)
+        end
+        if target.components.moisture and inst.color == "b" then
+            target.components.moisture:DoDelta(10*mult)
+        end
+        if target.components.hunger and inst.color == "r" then
+            target.components.hunger:DoDelta(-5*mult)
+        end
+	end
 end
 
-local mine_test_tags = { "monster", "character", "animal" }
-local mine_must_tags = { "_combat" }
-local mine_no_tags = { "notraptrigger", "flying", "ghost", "playerghost", "plantkin" }
+local should_hit = { "_health","_combat"}
+local shouldnt_hit = {"ghost","brightmare_gestalt","nightmarecreature"}
 
-local function on_deactivate(inst)
-    -- if inst.components.lootdropper ~= nil then
-        -- if inst.harvestable == "full" then
-            -- if math.random() > 0.1 then
-    inst.components.lootdropper:SpawnLootPrefab("giant_blueberry")
-				-- local x, y, z = inst.Transform:GetWorldPosition()
-				-- local otherbombs = TheSim:FindEntities(x, y, z, 1.1*TUNING.STARFISH_TRAP_RADIUS, {"blueberrybomb"}, mine_no_tags)
-				-- for i, target in ipairs(otherbombs) do
-					-- if target ~= inst and target.components.mine and not target.components.mine.issprung and not target.froze then
-						-- target.components.mine:Explode(target)
-					-- end
-				-- end				
-            -- else
-                -- local berryman = SpawnPrefab("fruitbat")
-                -- berryman.Transform:SetPosition(inst.Transform:GetWorldPosition())
-            -- end
-        -- end    
-    -- end
-    if inst.harvestable == "regrow" then
-        inst:Remove()
-    else
-        inst.components.workable:SetWorkLeft(1)
-        inst.harvestable = "regrow"
-    end
+local function OnExplode(inst, target)
+	inst.OnExplode = nil
+	inst.persists = false
+	local x,y,z = inst.Transform:GetWorldPosition()
+    inst.SoundEmitter:PlaySound("dontstarve/common/together/infection_burst")
+	
+    local poof = SpawnPrefab("air_conditioner_smoke")
+	if inst.color == "r" then
+		poof.AnimState:SetMultColour(1,0.2,0.2,1)
+	elseif inst.color == "b" then
+		poof.AnimState:SetMultColour(0.2,0.2,1,1)
+	else
+		poof.AnimState:SetMultColour(0.2,1,0.2,1)
+	end  
+    poof.Transform:SetPosition(x,y,z)
+    poof.Transform:SetScale(0.75,0.75,0.75)
+
+	inst.AnimState:PlayAnimation(inst.color..inst.variant.."_hide",false)
+
+	inst:ListenForEvent("animover",function(inst) inst:Remove() end)
+
+    local ents = TheSim:FindEntities(x, y, z, TUNING.TRAP_TEETH_RADIUS,{"_health"})
+    for i, v in ipairs(ents) do
+        if v:HasAllTags(should_hit) and not v:HasAnyTag(shouldnt_hit) then
+			DoDamageEffect(inst,v)
+        end
+	end
+	inst:DoTaskInTime(0.1,function(inst) --AXE trigger the spoil after a delay, incase something was dropped from an enemy
+		local ents = TheSim:FindEntities(x, y, z, 2*TUNING.TRAP_TEETH_RADIUS)
+		for i, v in ipairs(ents) do
+			if v.components.perishable then
+				if v.components.inventoryitem and v.components.inventoryitem:IsHeld() then
+					v.components.perishable:SetPercent(v.components.perishable:GetPercent()-0.33)
+				else
+					v.components.perishable:SetPercent(0)
+				end
+			end
+		end
+	end)
+
 end
 
-local function OnPickedFn(inst,picker)
-	if not inst.components.mine.issprung then
-		inst.components.mine:Explode()
+local function OnSave(inst)
+	local data = {}
+	data.color = inst.color
+	data.variant = inst.variant
+	data.flipped = inst.flipped
+	return data
+end
+
+local function OnLoad(inst,data)
+	if data then
+		inst.color = data.color
+		inst.variant = data.variant
+		inst.flipped = data.flipped
+	end
+end
+
+local function Leave(inst)
+	if inst.entity:IsAwake() then
+		inst.AnimState:PlayAnimation(inst.color..inst.variant.."_hide",false)
+		inst:ListenForEvent("animover",function(inst)
+			inst:Remove()
+		end)
+	else
+		inst:Remove()
+	end
+end
+
+local function TryLeave(inst,isseason)
+	inst:DoTaskInTime(0.1,function(inst)
+		if inst.color == "r" and TheWorld.state.issummer then
+			Leave(inst)
+		elseif inst.color == "g" and TheWorld.state.isspring then
+			Leave(inst)
+		elseif inst.color == "b" and TheWorld.state.iswinter then
+			Leave(inst)
+		end
+	end)
+end
+
+
+local function HideAnim(inst)
+	inst.showing = false
+	inst:Hide()
+	inst:RemoveEventCallback("animover",HideAnim)
+end
+
+
+local function LookForEnts(inst)
+	if not inst.showing and FindEntity(inst,8,nil,{"_health"}) and not FindEntity(inst,2,nil,{"_health"}) then
+		inst.showing = true
+		inst:Show()
+		inst.AnimState:PlayAnimation(inst.color..inst.variant.."_show",false)
+		inst.AnimState:PushAnimation(inst.color..inst.variant.."_loop",false)
+	elseif not inst.showing then
+		inst:Hide()
+		inst.showing = false
+	elseif not FindEntity(inst,12,nil,{"_health"}) then
+		inst.AnimState:PlayAnimation(inst.color..inst.variant.."_hide",false)
+		inst:ListenForEvent("animover",HideAnim)
+	end
+end
+
+local function InPoofshroomArea(inst)
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local node, node_index = TheWorld.Map:FindVisualNodeAtPoint(x, y, z)
+	local self = {}
+	if node_index ~= self.current_area then
+		self.current_area = node_index or 0
+		self.current_area_data = node and {
+			id = TheWorld.topology.ids[node_index],
+			type = node.type,
+			center = node.cent,
+			poly = node.poly,
+			tags = node.tags,
+		}
+		or nil
+	end
+
+	return self.current_area_data and self.current_area_data.tags and table.contains(self.current_area_data.tags, "um_poofshrooms")
+end
+
+local colors = {"r","g","b"}
+local colorsfull = {"red","green","blue"}
+
+local function Init(inst)
+	--inst.MiniMapEntity:SetEnabled(false)
+	if not inst.color then
+		local color = math.random(1,#colors)
+		inst.color = colors[color]
+		inst.colorfull = colorsfull[color]
+	end
+	if not inst.variant then
+		if inst.color == "r" then
+			inst.variant = math.random(1,11)
+		elseif inst.color == "g" then
+			inst.variant = math.random(1,10)
+		elseif inst.color == "b" then
+			inst.variant = math.random(1,9)
+		end
+	end
+	if not inst.flipped then
+		inst.flipped = math.random() > 0.5 and true or false
+	end
+	if inst.flipped then
+		inst.AnimState:SetScale(-1,1)
+	end
+	inst.AnimState:SetBank("um_poofshroom_"..inst.colorfull)
+	--inst.AnimState:PlayAnimation(inst.color..inst.variant.."_show",false)
+	--inst.AnimState:PushAnimation(inst.color..inst.variant.."_idle",true)
+
+	if inst.color == "r" then
+		inst:WatchWorldState("issummer",TryLeave)
+	elseif inst.color == "g" then
+		inst:WatchWorldState("isspring",TryLeave)
+	else
+		inst:WatchWorldState("iswinter",TryLeave)
+	end
+
+	if inst.entity:IsAwake() then
+		inst.showing = false
+		inst.looking = inst:DoPeriodicTask(math.random(20,30)/10,function(inst)
+			LookForEnts(inst)
+		end)
 	end
 	
-	on_deactivate(inst)
-	inst.AnimState:PlayAnimation("dig")
-	inst.AnimState:PushAnimation("spawn")
-	inst.AnimState:PushAnimation("trap_idle")
-	inst.components.workable:SetWorkable(true)
-end
-
-local function on_blueberry_dug_up(inst, digger)
-	if digger:HasTag("player") then
-		if inst.harvestable == "full" then
-			if not inst.components.mine.issprung then
-				inst.components.mine:Explode()
-			end
-			
-			on_deactivate(inst)
-			inst.AnimState:PlayAnimation("dig")
-			inst.AnimState:PushAnimation("spawn")
-			inst.AnimState:PushAnimation("trap_idle")
-			inst.components.workable:SetWorkable(false)
-			inst:AddTag("plant")
-			inst:DoTaskInTime(5, function(inst)
-				inst.components.workable:SetWorkable(true)
-			end)
-		else
-			inst:Remove()
+	inst:ListenForEvent("entitywake",function(inst)
+		inst.showing = false
+		inst.looking = inst:DoPeriodicTask(math.random(20,30)/10,function(inst)
+			LookForEnts(inst)
+		end)
+	end)
+	inst:ListenForEvent("entitysleep",function(inst)
+		inst.showing = false
+		if inst.looking then
+			inst.looking:Cancel()
+			inst.looking = nil
 		end
-	else
-		inst.components.workable:SetWorkLeft(1)
+	end)
+
+	if not InPoofshroomArea(inst) and not inst.ignore_biome then
+		inst:Remove() -- AXE Normal Poofshrooms should only be in mushroom biomes
 	end
-end
-
-local function MakeNotWinter(inst)
-	inst.components.mine:SetRadius(TUNING.STARFISH_TRAP_RADIUS*1.1)
-	inst:RemoveComponent("workable")
-	inst:AddComponent("workable")
-    inst.components.workable:SetWorkAction(ACTIONS.DIG)
-    inst.components.workable:SetWorkLeft(1)
-    inst.components.workable:SetOnFinishCallback(on_blueberry_dug_up)
-    inst.components.workable:SetWorkable(true)
-end
-
-local function Melt(inst)
-	MakeNotWinter(inst)
-	inst.AnimState:PlayAnimation("melt")
-	inst.AnimState:PushAnimation("idle"..math.random(1,4))
-end
-
-local function on_anim_over(inst)
-    if inst.components.mine.issprung then
-        return
-    end
-	if inst.froze then
-		if inst.harvestable == "full" and TheWorld.state.iswinter then
-			inst.AnimState:PushAnimation("idle_frozen", true)
-			elseif not TheWorld.state.iswinter  then
-			inst.froze = false
-			Melt(inst)
-		else
-			inst.AnimState:PushAnimation("trap_idle", true)
-		end
-	elseif not TheWorld.state.iswinter then
-		inst.AnimState:PushAnimation("idle"..math.random(1,4))
-	end
-end
-
--- Copied from mine.lua to emulate its mine test.
-local mine_test_fn = function(target, inst)
-    return not (target.components.health ~= nil and target.components.health:IsDead())
-            and (target.components.combat ~= nil and target.components.combat:CanBeAttacked(inst))
-end
-
-local function do_snap(inst)
-	if inst.harvestable == "full" then
-		inst.AnimState:PushAnimation("spawn")
-		inst.AnimState:PushAnimation("trap_idle", true)
-		inst.SoundEmitter:PlaySound("wintersfeast2019/creatures/gingerbread_vargr/splat", nil, 2)
-		inst.SoundEmitter:PlaySound("turnoftides/creatures/together/starfishtrap/trap")
-
-		FxAppear(inst)
-		-- Do an AOE attack, based on how the combat component does it.
-		local x, y, z = inst.Transform:GetWorldPosition()
-		local target_ents = TheSim:FindEntities(x, y, z, 1.1*TUNING.STARFISH_TRAP_RADIUS, mine_must_tags, mine_no_tags, mine_test_tags)
-		for i, target in ipairs(target_ents) do
-			if target ~= inst and target.entity:IsVisible() and mine_test_fn(target, inst) then
-				target.components.combat:GetAttacked(inst, TUNING.STARFISH_TRAP_DAMAGE)
-			end
-		end
-		local otherbombs = TheSim:FindEntities(x, y, z, 3*TUNING.STARFISH_TRAP_RADIUS, {"blueberrybomb"}, mine_no_tags)
-		for i, target in ipairs(otherbombs) do
-			if target ~= inst and target.components.mine and not target.components.mine.issprung and not target.froze then
-                    target.components.mine:Explode(target)
-			end
-		end
-		inst.harvestable = "regrow"
-	end
-    if inst._snap_task ~= nil then
-        inst._snap_task:Cancel()
-        inst._snap_task = nil
-    end
-end
-
-local function Regrow(inst)
-	inst.components.mine:SetRadius(TUNING.STARFISH_TRAP_RADIUS*1.1)
-    inst.components.mine:Reset()
-	inst.harvestable = "full"
-	inst:RemoveTag("plant")
-end
-
-local function CheckTimeRegrow(inst)
-	if TheWorld.state.iswinter then
-		inst.pendingregrow = true
-	else
-		Regrow(inst)
-	end
-end
-
-local function start_reset_task(inst)
-	inst.components.timer:StartTimer("regrow", 3840)
-end
-
-local function on_explode(inst, target)
-    inst.AnimState:PlayAnimation("trap")
-	inst.components.mine:SetRadius(TUNING.STARFISH_TRAP_RADIUS*1.1) --Gotta Reset
-    inst:RemoveEventCallback("animover", on_anim_over)
-    if --[[target ~= nil and]] inst._snap_task == nil then
-        local frames_until_anim_snap = 40
-        inst._snap_task = inst:DoTaskInTime(frames_until_anim_snap * FRAMES, do_snap)
-    end
-    start_reset_task(inst)
-end
-
-local function on_reset(inst)
-    inst:ListenForEvent("animover", on_anim_over)
-    inst.AnimState:PlayAnimation("reset")
-    inst.SoundEmitter:PlaySound("turnoftides/creatures/together/starfishtrap/idle")
-    inst.AnimState:PushAnimation("idle"..math.random(1,4), true)
-end
-
-local function on_sprung(inst)
-    inst.AnimState:PlayAnimation("trap_idle", true)
-	inst.AnimState:PushAnimation("trap_idle", true)
-    inst.AnimState:SetTime(math.random() * inst.AnimState:GetCurrentAnimationLength())
-    inst:RemoveEventCallback("animover", on_anim_over)
-	inst:AddTag("plant")
-    start_reset_task(inst)
-end
-
-local function get_status(inst)
-    return (inst.components.mine.issprung and "REGROWING") or (inst.froze and "FROZE") or "READY"
 end
 
 local function calculate_mine_test_time()
     return TUNING.STARFISH_TRAP_TIMING.BASE + (math.random() * TUNING.STARFISH_TRAP_TIMING.VARIANCE) --This will be the "regrow" period of the blueberry, will extend it to be much longer.
 end
 
-local function on_save(inst, data)
-    if inst._reset_task ~= nil then
-        local remaining_task_time = inst._reset_task_end_time - GetTime()
-        if remaining_task_time >= 0 then
-            data.reset_task_time_remaining = remaining_task_time
-        end
-    end
-	data.froze = inst.froze
-	data.harvestable = inst.harvestable
-	data.pendingregrow = inst.pendingregrow
-end
-
-local function on_blueberry_mine(inst)
-	inst.components.lootdropper:SpawnLootPrefab("ice")
-	local x,y,z = inst.Transform:GetWorldPosition()
-	local players = TheSim:FindEntities(x,y,z,1.5,{"player"},{"ghost"})
-	for i, v in ipairs(players) do
-		if v.components.moisture ~= nil then
-			v.components.moisture:DoDelta(5)
+local function OnDug(inst)
+	inst.OnExplode = nil
+	inst.persists = false
+	local rnd = math.random()
+	local loot
+	if rnd < 0.01 then
+		loot = "um_gemology_geode"..inst.colorfull
+	elseif rnd < 0.1 then
+		loot = inst.colorfull.."_cap"
+	elseif rnd < 0.5 then
+		loot = "spoiled_food"
+	elseif rnd < 0.7 then
+		if inst.color == "r" then
+			loot = "spore_medium"
+		elseif inst.color == "g" then
+			loot = "spore_short"
+		else
+			loot = "spore_tall"
 		end
 	end
-	inst.harvestable = "regrow"
-	inst.components.workable:SetWorkAction(ACTIONS.DIG)
-	inst.components.workable:SetWorkLeft(1)
-	inst.components.workable:SetOnFinishCallback(on_blueberry_dug_up)
-	start_reset_task(inst)
-	FxAppear(inst)
-	inst.AnimState:PlayAnimation("mine")
-	inst.AnimState:PushAnimation("spawn")
-	inst.AnimState:PushAnimation("trap_idle")
-end
-
-local function MakeWinter(inst)
-	inst.components.mine:SetRadius(TUNING.STARFISH_TRAP_RADIUS*0)
-	if inst.harvestable == "full" then
-		inst.components.workable:SetWorkAction(ACTIONS.MINE)
-		inst.components.workable:SetWorkLeft(1)
-		inst.components.workable:SetOnFinishCallback(on_blueberry_mine)
-		inst.components.workable:SetWorkable(true)
-	else
-		inst.components.workable:SetWorkAction(ACTIONS.DIG)
-		inst.components.workable:SetWorkLeft(1)
-		inst.components.workable:SetOnFinishCallback(on_blueberry_dug_up)
-		inst.components.workable:SetWorkable(true)
-		inst:AddTag("plant")
+	if loot then
+		inst.components.lootdropper:SpawnLootPrefab(loot)
 	end
-end
-
-local function on_load(inst, data)
-    if data then
-		if data.harvestable then
-			inst.harvestable = data.harvestable
-		end
-		if data.reset_task_time_remaining then
-			if inst._reset_task then
-				inst._reset_task:Cancel()
-			end
-			inst._reset_task = inst:DoTaskInTime(data.reset_task_time_remaining, reset)
-			inst._reset_task_end_time = GetTime() + data.reset_task_time_remaining
-		end
-		if data.pendingregrow then
-			inst.pendingregrow = data.pendingregrow
-		end
-    end
-	if TheWorld.state.iswinter then
-		inst.froze = true
-		MakeWinter(inst)
-	else
-		inst.froze = false
-		MakeNotWinter(inst)
-	end
+	Leave(inst)
 end
 
 
 
-local function OnSpring(inst)
-	if inst.pendingregrow or (inst.harvestable == "regrow" and not inst.components.timer:TimerExists("regrow"))then
-		Regrow(inst)
-	end
-	if inst.harvestable == "full" and inst.froze then
-		inst:RemoveEventCallback("animover",on_anim_over)
-		inst:DoTaskInTime(3+math.random(0,15), function(inst) 
-			Melt(inst)
-			inst:ListenForEvent("animover", on_anim_over)
-		end)
-	end
-	inst.froze = false
-end
-
-local function Freeze(inst)
-	if TheWorld.state.iswinter then
-		MakeWinter(inst)
-		if inst.harvestable == "full" then
-			inst.AnimState:PlayAnimation("freeze")
-			inst.froze = true
-		end
-	else
-		inst.froze = false
-	end
-end
-
-local function OnWinter(inst)
-	if inst.froze ~= true then
-		inst:DoTaskInTime(3+math.random(0,15), Freeze)
-	end
-end
-
-local function master()
+local function poofshroom()
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
-    inst.entity:AddSoundEmitter()
+    inst.entity:AddAnimState()
+	inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
+	--inst.entity:AddMiniMapEntity()
 
-
-
+    inst:AddTag("NOBLOCK")
     inst:AddTag("trap")
-    inst:AddTag("trapdamage")
-    inst:AddTag("birdblocker")
-	if inst.harvestable == "regrow" then
-		inst:AddTag("plant") --Wormwood will lose sanity collecting them otherwise...
-	end
-
+	inst:AddTag("groundspike")
+	--inst.MiniMapEntity:SetPriority(21)
+	--inst.MiniMapEntity:SetIcon("springrock1.png")
+	--inst.MiniMapEntity:SetEnabled(true)
+	inst.AnimState:SetBuild("um_poofshroom")
+	
     inst.entity:SetPristine()
-
+	
     if not TheWorld.ismastersim then
         return inst
     end
 
 
+	inst:DoTaskInTime(0.1,Init)
 
-    inst:AddComponent("lootdropper")
+	inst.OnSave = OnSave
+	inst.OnLoad = OnLoad
 
-	
 
-    inst:AddComponent("mine")
-    inst.components.mine:SetRadius(TUNING.STARFISH_TRAP_RADIUS*1.1)
-    inst.components.mine:SetAlignment("plantkin") -- blueberries trigger on EVERYTHING on the ground, players and non-players alike.
-    inst.components.mine:SetOnExplodeFn(on_explode)
-    inst.components.mine:SetOnResetFn(on_reset)
-    inst.components.mine:SetOnSprungFn(on_sprung)
-    inst.components.mine:SetOnDeactivateFn(on_deactivate)
-    inst.components.mine:SetTestTimeFn(calculate_mine_test_time)
-    inst.components.mine:SetReusable(false)
-	
-    return inst
+
+	MakeSmallBurnable(inst)
+	inst.components.burnable:SetBurnTime(0.75)
+    MakeSmallPropagator(inst)
+
+    --[[inst:AddComponent("mine")
+    inst.components.mine:SetRadius(0.5)
+    inst.components.mine:SetAlignment("plantkin")
+    inst.components.mine:SetOnExplodeFn(OnExplode)
+	inst.components.mine:SetTestTimeFn(calculate_mine_test_time)
+	inst.components.mine:Reset()]]
+	inst.OnExplode = OnExplode
+
+	inst:AddComponent("inspectable")
+	inst:AddComponent("workable")
+    inst.components.workable:SetWorkAction(ACTIONS.DIG)
+    inst.components.workable:SetWorkLeft(1)
+    inst.components.workable:SetOnFinishCallback(OnDug)
+    inst.components.workable:SetWorkable(true)
+
+	inst:AddComponent("lootdropper")
+
+	inst:AddComponent("areaaware")
+
+	return inst
 end
 
-local function poofredmaster()
-	
+local function noentcheckfn(pos)
+	--local invitems = FindEntity(Vector3(pos),1.5,nil,{"inventoryitem"})
+	local invitems = TheSim:FindEntities(pos.x, 0, pos.z, 2, nil,{"inventoryitem"})
+    if invitems and #invitems > 0 then
+		return false
+	end
+	local cave_exit = TheSim:FindEntities(pos.x, 0, pos.z, 32, { "migrator" })
+	--local cave_exit = FindEntity(Vector3(pos),32,function(ent) return ent.prefab == "cave_exit" end)
+	if cave_exit and #cave_exit > 0 then
+		return false
+	end
+	return true
 end
 
-return Prefab("um_poofshroom_red_master", poofredmaster,assets)
+local function nopoofsLarge(pos)
+	--local invitems = FindEntity(Vector3(pos),1.5,nil,{"inventoryitem"})
+	local poofs = TheSim:FindEntities(pos.x, 0, pos.z, math.random(8,16), {"trap"})
+    if poofs and #poofs > 0 then
+		return false
+	end
+	return noentcheckfn(pos)
+end
+
+local function nopoofsSmall(pos)
+	--local invitems = FindEntity(Vector3(pos),1.5,nil,{"inventoryitem"})
+	local poofs = TheSim:FindEntities(pos.x, 0, pos.z, 0.5, {"trap"})
+    if poofs and #poofs > 0 then
+		return false
+	end
+	return true
+end
+
+local function Ring(inst)
+	local type = inst.type
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local pt = inst:GetPosition()
+	local radius = math.random(8,16)
+	for theta = 0,2*PI,PI/(radius*4) do
+		local offset = FindWalkableOffset(pt, theta, radius-0.5, radius+0.5, false, true, noentcheckfn, true, true)
+		if offset and TheWorld.Map:IsAboveGroundAtPoint(x+offset.x,0,z+offset.z) then
+			local poofshroom = SpawnPrefab("um_poofshroom")
+			poofshroom.color = colors[inst.type]
+			poofshroom.colorfull = colorsfull[inst.type]
+			poofshroom.Transform:SetPosition(x+offset.x,0,z+offset.z)
+		end
+	end
+end
+
+local function Clustered(inst)
+	local type = inst.type
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local pt = inst:GetPosition()
+	for radius = 1,math.random(32,64),math.random(3,4) do
+		for theta = 0,2*PI,4 * (PI * math.random(6,10)/32)/radius do
+			local offset = FindWalkableOffset(pt, theta, radius-2, radius+2, false, true, nopoofsLarge, true, true)
+			if offset and TheWorld.Map:IsAboveGroundAtPoint(x+offset.x,0,z+offset.z) then
+				local poofshroom = SpawnPrefab("um_poofshroom")
+				poofshroom.color = colors[inst.type]
+				poofshroom.colorfull = colorsfull[inst.type]
+				poofshroom.Transform:SetPosition(x+offset.x,0,z+offset.z)
+
+				local newpt = {}
+				newpt.x = offset.x + x
+				newpt.y = 0
+				newpt.z = offset.z + z
+				for i = 1,math.random(4,5) do
+					local newoffset = FindWalkableOffset(newpt, 2*PI*math.random(), 0.5, 2, false, true, nopoofsSmall,true,true)
+					if newoffset and TheWorld.Map:IsAboveGroundAtPoint(x+newoffset.x,0,z+newoffset.z) then
+						local poofshroom = SpawnPrefab("um_poofshroom")
+						poofshroom.color = colors[inst.type]
+						poofshroom.colorfull = colorsfull[inst.type]
+						poofshroom.Transform:SetPosition(newpt.x+newoffset.x,0,newpt.z+newoffset.z)
+					end
+				end
+			end
+		end
+	end
+end
+
+local function PlacePoofShrooms(inst)
+	inst:DoTaskInTime(0,function(inst)
+		local rnd = math.random()
+		if rnd < 0.1 then
+			Ring(inst)
+		else
+			Clustered(inst)
+		end
+	end)
+end
+
+local function nodecommon(type)
+    local inst = CreateEntity()
+    inst.entity:AddTransform()
+    inst.entity:AddNetwork()
+    inst.entity:SetPristine()
+	
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+	inst.type = type
+
+	inst.PlacePoofShrooms = PlacePoofShrooms
+
+	-- AXE Tests functionality
+	--inst:DoTaskInTime(0,PlacePoofShrooms)
+	return inst
+end
+
+local function nodered()
+	local inst = nodecommon(1)
+	inst:DoTaskInTime(0,function(inst)
+		if TheWorld.components.um_poofshroom_repopulator then
+			table.insert(TheWorld.components.um_poofshroom_repopulator.list_red,inst)
+		end
+	end)
+	return inst
+end
+
+local function nodegreen()
+	local inst = nodecommon(2)
+	inst:DoTaskInTime(0,function(inst)
+		if TheWorld.components.um_poofshroom_repopulator then
+			table.insert(TheWorld.components.um_poofshroom_repopulator.list_green,inst)
+		end
+	end)
+	return inst
+end
+
+
+local function nodeblue()
+	local inst = nodecommon(3)
+	inst:DoTaskInTime(0,function(inst)
+		if TheWorld.components.um_poofshroom_repopulator then
+			table.insert(TheWorld.components.um_poofshroom_repopulator.list_blue,inst)
+		end
+	end)
+	return inst
+end
+
+return Prefab("um_poofshroom", poofshroom,assets),
+Prefab("um_poofshroom_node_red",nodered),
+Prefab("um_poofshroom_node_green",nodegreen),
+Prefab("um_poofshroom_node_blue",nodeblue)

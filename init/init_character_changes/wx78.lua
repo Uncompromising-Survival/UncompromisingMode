@@ -95,6 +95,44 @@ env.AddPrefabPostInit("wx78", function(inst)
     end
 end)
 
+env.AddPrefabPostInit("wx78_moduleremover", function(inst)
+    if not TheWorld.ismastersim then
+        return
+    end
+
+    inst:AddComponent("fuel")
+    inst.components.fuel.fuelvalue = TUNING.SMALL_FUEL
+end)
+
+if TUNING.DSTU.WX78_BACKUPBODY then
+    local _GetDoerSavedStats
+    local function GetDoerSavedStats(inst, doer, ...)
+        if doer:HasTag("player") then return {wx78_shield = doer.components.wx78_shield and doer.components.wx78_shield:GetCurrent() or nil} end
+        return _GetDoerSavedStats and _GetDoerSavedStats(inst, doer, ...)
+    end
+
+    local _ApplySavedStatsToDoer
+    local function ApplySavedStatsToDoer(inst, doer, ...)
+        if doer:HasTag("player") then
+            local saved_stats = inst.saved_stats
+            inst.saved_stats = {wx78_shield = saved_stats and saved_stats.wx78_shield or nil}
+        end
+        return _ApplySavedStatsToDoer and _ApplySavedStatsToDoer(inst, doer, ...)
+    end
+
+    env.AddPrefabPostInit("wx78_backupbody", function(inst)
+        if not TheWorld.ismastersim then return end
+        if not _GetDoerSavedStats then
+            _GetDoerSavedStats = inst.GetDoerSavedStats
+        end
+        inst.GetDoerSavedStats = GetDoerSavedStats
+        if not _ApplySavedStatsToDoer then
+            _ApplySavedStatsToDoer = inst.ApplySavedStatsToDoer
+        end
+        inst.ApplySavedStatsToDoer = ApplySavedStatsToDoer
+    end)
+end
+
 -------------WX RE-WIRED CHANGES :]------------------
 if TUNING.DSTU.WXLESS then --HI ATOBA :3 :3 <3 <3
     --btw I'm not sure if formatting translated correctly when I uploaded the file? It kinda gets messed up even if I copy pasted so sorry Atober if it ends up being converted into 4 spaces isntead of tab or smth :]
@@ -138,8 +176,8 @@ if TUNING.DSTU.WXLESS then --HI ATOBA :3 :3 <3 <3
                 -- If the module we just popped was charged, return that charge
                 -- as the cost of this removal. -- do not.
                 --[[if pre_remove_slotcount <= self.charge_level then
-				energy_cost = popped_module.components.upgrademodule.slots
-			end]]
+                energy_cost = popped_module.components.upgrademodule.slots
+            end]]
 
                 if self.ononemodulepopped then
                     self.ononemodulepopped(self.inst, popped_module)
@@ -187,13 +225,13 @@ if TUNING.DSTU.WXLESS then --HI ATOBA :3 :3 <3 <3
                 local oldtimeleft = inst.components.timer:GetTimeLeft(CHARGEDEGEN_TIMERNAME) or 0
                 local newtimeleft = oldtimeleft + timedif
                 --[[print("new module pushed, base time amount")
-			print(newtime)
-			print("time difference in charges")
-			print(timedif)
-			print("time left before")
-			print(oldtimeleft)
-			print("time left now")
-			print(newtimeleft)]]
+            print(newtime)
+            print("time difference in charges")
+            print(timedif)
+            print("time left before")
+            print(oldtimeleft)
+            print("time left now")
+            print(newtimeleft)]]
                 if timedif == 0 then                                              --if the amount of occupied slots is the same that means it was just an energy update
                     newtimeleft = newtime
                     if inst._hunger_chips ~= nil and inst._hunger_chips ~= 0 then --this used to apply on any module equip/unequip, that caused problems
@@ -211,17 +249,17 @@ if TUNING.DSTU.WXLESS then --HI ATOBA :3 :3 <3 <3
                 end
             end
             --[[print("slots in use before")
-		print(oldslotsinuse)
-		print("slots in use now")
-		print(slotsinuse)]]
+        print(oldslotsinuse)
+        print("slots in use now")
+        print(slotsinuse)]]
         else
             if inst._chip_inuse == 0 then
                 inst.components.timer:StopTimer(CHARGEDEGEN_TIMERNAME)
                 inst.components.timer:StartTimer(CHARGEREGEN_TIMERNAME, TUNING.WX78_CHARGE_REGENTIME)
             end
             --[[if inst.components.upgrademoduleowner:IsChargeEmpty() then -- not needed since it now listens every time module is pushed/popped
-			OnTryRegenTimerStart(inst)
-		end]]
+            OnTryRegenTimerStart(inst)
+        end]]
         end
         inst._old_chip_inuse = inst._chip_inuse
     end
@@ -255,29 +293,29 @@ if TUNING.DSTU.WXLESS then --HI ATOBA :3 :3 <3 <3
             inst.components.upgrademodule.onactivatedfn = data.activatefn
             inst.components.upgrademodule.ondeactivatedfn = data.deactivatefn
             inst.components.upgrademodule.onremovedfromownerfn = on_module_removed
-	 end)
+     end)
      end --shortened this function and made general durability changes global for better mod compatibility
             --------------------------------------------------------------------------
      env.AddPrefabPostInitAny(function(inst)
-	    if not TheWorld.ismastersim then
+        if not TheWorld.ismastersim then
                 return inst
             end
 
-	    if inst.components.upgrademodule then
-				
+        if inst.components.upgrademodule then
+                
             inst:RemoveComponent("finiteuses")
-				
-	    inst:AddTag('upgrademodule')
+                
+        inst:AddTag('upgrademodule')
             inst:AddComponent("fueled")
             --inst.components.fueled:SetSectionCallback(onfuelchange) --somehow only now I realized this nil thing exists??? How did I never got an error for it before?? How did that end up here????
             inst.components.fueled:InitializeFuelLevel(circuit_durability) -- considered giving different sizes different durability but idk
             inst.components.fueled:SetDepletedFn(ondepleted)
-	    inst:AddComponent("lootdropper")
+        inst:AddComponent("lootdropper")
             ----------------------
-	    --inst.components.fueled.fueltype = FUELTYPE.CIRCUITBITS --TEMPORARY. REMOVE AFTER ANOTHER METHOD OF REPAIRING CIRCUITS GETS ADDED. EITHER BY KLEI OR CIRCUIT BOX FINALLY BECOMES REAL
-	    --inst.components.fueled.accepting = true --added a system that allows to dismantle circuits with unplugging tool
-	    ----------------------
-	    
+        --inst.components.fueled.fueltype = FUELTYPE.CIRCUITBITS --TEMPORARY. REMOVE AFTER ANOTHER METHOD OF REPAIRING CIRCUITS GETS ADDED. EITHER BY KLEI OR CIRCUIT BOX FINALLY BECOMES REAL
+        --inst.components.fueled.accepting = true --added a system that allows to dismantle circuits with unplugging tool
+        ----------------------
+        
             local function checkforconsume(inst)
                 if inst.components.upgrademodule.target ~= nil and inst.components.fueled ~= nil and inst.module_in_use == nil and inst.components.upgrademodule.activated == true then
                     inst.module_in_use = 1
@@ -298,43 +336,43 @@ if TUNING.DSTU.WXLESS then --HI ATOBA :3 :3 <3 <3
                 end
             end
 
-	    local function circuits_combo(inst)
-		local wx = inst.components.upgrademodule.target
-		local moduleowner = wx.components.upgrademoduleowner
-		local num = moduleowner:NumModules()
-		
-		if moduleowner:GetModuleTypeCount('maxhealth2') == 1 and moduleowner:GetModuleTypeCount('maxhunger') == 1 and moduleowner:GetModuleTypeCount('maxsanity') == 1 and num == 3 then
-			wx.components.talker:Say("OBSERVE MY SUPERIOR BODY FLESHLINGS")
-		elseif moduleowner:GetModuleTypeCount('movespeed2') == 4 then
-			wx.components.talker:Say("STEPS PER SECOND AT MAXIMUM")
-		elseif (moduleowner:GetModuleTypeCount('cherrift') >= 8 and num == 8) or (moduleowner:GetModuleTypeCount('light') == 1 and moduleowner:GetModuleTypeCount('nightvision') == 1 and num == 2) then
-			wx.components.talker:Say("WHY DID I DO THAT")
-		elseif moduleowner:GetModuleTypeCount('heat') == 1 and moduleowner:GetModuleTypeCount('cold') == 1 and num == 2 then
-			wx.components.talker:Say("ELEMENTAL BALANCE ACHIEVED")
-		elseif moduleowner:GetModuleTypeCount('music') == 2 and num == 2 then
-			wx.components.talker:Say('IS THE HAPPINESS KICKING IN YET?')
-		elseif moduleowner:GetModuleTypeCount('music') == 1 and moduleowner:GetModuleTypeCount('light') == 1 and num == 2 then
-			wx.components.talker:Say("MY SUPERIOR GARDENING SKILLS OUTCLASS THAT FILTHY PLANT")
-		elseif moduleowner:GetModuleTypeCount('bee') == 2 and num == 2 then
-			wx.components.talker:Say('BOW DOWN BEFORE YOUR DRONEMASTER')
-		else 
-			return
-		end
-		--wx._combophrasecd = true
-		--end
-	    end
-			
-	    local _activatefn = inst.components.upgrademodule.onactivatedfn
-	    local wx = inst.components.upgrademodule.target
-	    inst.components.upgrademodule.onactivatedfn = function(inst, wx)
-	        _activatefn(inst, wx)
-	        circuits_combo(inst)
-	    end
+        local function circuits_combo(inst)
+        local wx = inst.components.upgrademodule.target
+        local moduleowner = wx.components.upgrademoduleowner
+        local num = moduleowner:NumModules()
+        
+        if moduleowner:GetModuleTypeCount('maxhealth2') == 1 and moduleowner:GetModuleTypeCount('maxhunger') == 1 and moduleowner:GetModuleTypeCount('maxsanity') == 1 and num == 3 then
+            wx.components.talker:Say("OBSERVE MY SUPERIOR BODY FLESHLINGS")
+        elseif moduleowner:GetModuleTypeCount('movespeed2') == 4 then
+            wx.components.talker:Say("STEPS PER SECOND AT MAXIMUM")
+        elseif (moduleowner:GetModuleTypeCount('cherrift') >= 8 and num == 8) or (moduleowner:GetModuleTypeCount('light') == 1 and moduleowner:GetModuleTypeCount('nightvision') == 1 and num == 2) then
+            wx.components.talker:Say("WHY DID I DO THAT")
+        elseif moduleowner:GetModuleTypeCount('heat') == 1 and moduleowner:GetModuleTypeCount('cold') == 1 and num == 2 then
+            wx.components.talker:Say("ELEMENTAL BALANCE ACHIEVED")
+        elseif moduleowner:GetModuleTypeCount('music') == 2 and num == 2 then
+            wx.components.talker:Say('IS THE HAPPINESS KICKING IN YET?')
+        elseif moduleowner:GetModuleTypeCount('music') == 1 and moduleowner:GetModuleTypeCount('light') == 1 and num == 2 then
+            wx.components.talker:Say("MY SUPERIOR GARDENING SKILLS OUTCLASS THAT FILTHY PLANT")
+        elseif moduleowner:GetModuleTypeCount('bee') == 2 and num == 2 then
+            wx.components.talker:Say('BOW DOWN BEFORE YOUR DRONEMASTER')
+        else 
+            return
+        end
+        --wx._combophrasecd = true
+        --end
+        end
+            
+        local _activatefn = inst.components.upgrademodule.onactivatedfn
+        local wx = inst.components.upgrademodule.target
+        inst.components.upgrademodule.onactivatedfn = function(inst, wx)
+            _activatefn(inst, wx)
+            circuits_combo(inst)
+        end
 
             inst:ListenForEvent("upgrademodule_moduleactivated", checkforconsume) --I didn't know how to know when the module is equipped --UPDATE: added a new one myself, used to check every 0.5 seconds
             inst:ListenForEvent("percentusedchange", overheatwarn)
-				
-	    end
+                
+        end
     end)
 
     for _, def in ipairs(module_definitions) do
@@ -343,12 +381,12 @@ if TUNING.DSTU.WXLESS then --HI ATOBA :3 :3 <3 <3
 
     env.AddPrefabPostInit("wx78_moduleremover", function(inst) --for an action that allows to dismantle circuits
 
-	--inst:AddTag("RAWDATA_fuel")
-	
+    --inst:AddTag("RAWDATA_fuel")
+    
     if not TheWorld.ismastersim then
         return inst
     end
-	
+    
     inst:AddComponent("data_extractor")
     end)
     ---------------------------------------------------------------------
@@ -357,9 +395,9 @@ if TUNING.DSTU.WXLESS then --HI ATOBA :3 :3 <3 <3
         local charge_hungeramount
 
         --[[if food.components.edible:GetHunger(inst) >= 150 then charge_hungeramount = 4
-	elseif food.components.edible:GetHunger(inst) >= 75 then charge_hungeramount = 3
-	elseif food.components.edible:GetHunger(inst) >= 37.5 then charge_hungeramount = 2
-	elseif food.components.edible:GetHunger(inst) >= 25 then charge_hungeramount = 1 end]]
+    elseif food.components.edible:GetHunger(inst) >= 75 then charge_hungeramount = 3
+    elseif food.components.edible:GetHunger(inst) >= 37.5 then charge_hungeramount = 2
+    elseif food.components.edible:GetHunger(inst) >= 25 then charge_hungeramount = 1 end]]
         --Gonna try a different system, keep it here if there's a sudden feeling to go back :P
 
         local hunger_to_charge = 50
@@ -401,30 +439,30 @@ if TUNING.DSTU.WXLESS then --HI ATOBA :3 :3 <3 <3
         local current = inst.components.temperature.current
         if inst._temperature_modulelean > 0 then
             --[[if current >= 50 then
-			emitting_temp = TUNING.WX78_HEATERTEMPPERMODULE * 2
-		elseif current >= 37.5 then
-			emitting_temp = TUNING.WX78_HEATERTEMPPERMODULE * 1.5
-		elseif current >= 25 then
-			emitting_temp = TUNING.WX78_HEATERTEMPPERMODULE
-		end]]
+            emitting_temp = TUNING.WX78_HEATERTEMPPERMODULE * 2
+        elseif current >= 37.5 then
+            emitting_temp = TUNING.WX78_HEATERTEMPPERMODULE * 1.5
+        elseif current >= 25 then
+            emitting_temp = TUNING.WX78_HEATERTEMPPERMODULE
+        end]]
             -- Let's try easing, again keeping it here since I hecking love comments
 
             emitting_temp = (current > 50 and TUNING.WX78_HEATERTEMPPERMODULE * 2) or
                 (current > 25 and easing.linear(current - 25, TUNING.WX78_HEATERTEMPPERMODULE, TUNING.WX78_HEATERTEMPPERMODULE, 25)) or 0
         elseif inst._temperature_modulelean < 0 then
             --[[if current <= 20 then
-			emitting_temp = TUNING.WX78_HEATERTEMPPERMODULE * 2
-		elseif current <= 32.5 then
-			emitting_temp = TUNING.WX78_HEATERTEMPPERMODULE * 1.5
-		elseif current <= 45 then
-			emitting_temp = TUNING.WX78_HEATERTEMPPERMODULE
-		end]]
+            emitting_temp = TUNING.WX78_HEATERTEMPPERMODULE * 2
+        elseif current <= 32.5 then
+            emitting_temp = TUNING.WX78_HEATERTEMPPERMODULE * 1.5
+        elseif current <= 45 then
+            emitting_temp = TUNING.WX78_HEATERTEMPPERMODULE
+        end]]
             --emitting_temp = TUNING.WX78_HEATERTEMPPERMODULE + 10
             emitting_temp = (current < 10 and TUNING.WX78_HEATERTEMPPERMODULE * 2) or
                 (current < 35 and easing.linear(35 - current, TUNING.WX78_HEATERTEMPPERMODULE, TUNING.WX78_HEATERTEMPPERMODULE, 25)) or 0
         end
         --if emitting_temp < 0 then emitting_temp = 0 end
-	if inst._cherriftchips and inst._cherriftchips > 0 then emitting_temp = emitting_temp * (1.15 ^ inst._cherriftchips) end
+    if inst._cherriftchips and inst._cherriftchips > 0 then emitting_temp = emitting_temp * (1.15 ^ inst._cherriftchips) end
         return inst._temperature_modulelean * emitting_temp
     end
 
@@ -449,9 +487,9 @@ if TUNING.DSTU.WXLESS then --HI ATOBA :3 :3 <3 <3
         end
 
         --[[if inst.components.eater ~= nil then
-		inst.components.eater:SetOnEatFn(OnEatFun)
-		inst.components.eater.custom_stats_mod_fn = stats_negate
-	end]]
+        inst.components.eater:SetOnEatFn(OnEatFun)
+        inst.components.eater.custom_stats_mod_fn = stats_negate
+    end]]
 
         if inst.components.eater ~= nil then
             local old_oneatfn = inst.components.eater.oneatfn
@@ -491,16 +529,16 @@ if TUNING.DSTU.WXLESS then --HI ATOBA :3 :3 <3 <3
         end
 
         --[[if inst.components.upgrademoduleowner ~= nil then
-		local old_onmoduleadded = inst.components.upgrademoduleowner.onmoduleadded
+        local old_onmoduleadded = inst.components.upgrademoduleowner.onmoduleadded
 
-		inst.components.upgrademoduleowner.onmoduleadded = function(inst, module)
-			if old_onmoduleadded ~= nil then
-				old_onmoduleadded(inst, module)
-			end
-			
-			inst:PushEvent("onmoduleadded")
-		end
-	end]]
+        inst.components.upgrademoduleowner.onmoduleadded = function(inst, module)
+            if old_onmoduleadded ~= nil then
+                old_onmoduleadded(inst, module)
+            end
+            
+            inst:PushEvent("onmoduleadded")
+        end
+    end]]
         -- NOT NEEDED, exists due to my mistake with the way OnEat function was coded that would push 0 energy updates that would trigger "upgrademodulesdirty"
 
         inst:ListenForEvent("energylevelupdate", OnUpgradeModuleChargeChanged)
@@ -710,12 +748,12 @@ if TUNING.DSTU.WXLESS then --HI ATOBA :3 :3 <3 <3
 
         env.AddClassPostConstruct("widgets/secondarystatusdisplays", function(self, ...)
             if self.upgrademodulesdisplay then
-	       if KnownModIndex:IsModEnabled("workshop-376333686") then
-	           self.upgrademodulesdisplay:SetPosition(self.column1, -100)
-	       else --combined status compat
-	           self.upgrademodulesdisplay:SetPosition(self.column1, -155)
-	       end
-	   end
+           if KnownModIndex:IsModEnabled("workshop-376333686") then
+               self.upgrademodulesdisplay:SetPosition(self.column1, -100)
+           else --combined status compat
+               self.upgrademodulesdisplay:SetPosition(self.column1, -155)
+           end
+       end
         end)
 
         local function OnAllUpgradeModulesRemoved(inst)

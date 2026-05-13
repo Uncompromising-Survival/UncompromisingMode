@@ -47,10 +47,6 @@ end
 local function onattackedfn(inst, data)
     if inst.components.health and not inst.components.health:IsDead()
         and (not inst.sg:HasStateTag("busy") or inst.sg:HasStateTag("frozen")) then
-        if inst.components.combat and data and data.attacker and not data.attacker:HasTag("moonglasscreature") then
-            inst.components.combat:SuggestTarget(data.target)
-        end
-		
         if data.attacker ~= nil and data.attacker:IsValid() and inst:GetDistanceSqToInst(data.attacker) < 15 then
             inst.sg:GoToState("hit")
         end
@@ -241,9 +237,9 @@ local states =
             inst.Physics:Stop()
             inst.AnimState:PlayAnimation("taunt")
             --[[local fx = SpawnPrefab("moonstorm_glass_ground_fx")
-			local x,y,z = inst.Transform:GetWorldPosition()
-			fx.Transform:SetPosition(x,y,z)
-			fx.Transform:SetScale(1.5,1.5,1.5)]]
+            local x,y,z = inst.Transform:GetWorldPosition()
+            fx.Transform:SetPosition(x,y,z)
+            fx.Transform:SetScale(1.5,1.5,1.5)]]
         end,
 
         events =
@@ -421,7 +417,7 @@ local states =
                 if inst.lavae[i] ~= nil then
                     inst.lavae[i].destroy = true
                     inst.lavae[i].components.linearcircler.setspeed = 3
-					inst.lavae[i].components.linearcircler.distance_limit = 3
+                    inst.lavae[i].components.linearcircler.distance_limit = 3
                     inst.AnimState:SetFinalOffset(1)
                 end
             end

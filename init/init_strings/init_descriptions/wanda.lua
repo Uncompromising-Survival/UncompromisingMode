@@ -183,7 +183,7 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "Oh botheration, what happened to you?"
 DESCRIBE.MARSH_GRASS = "I thought these things were lost to time."
 DESCRIBE.CURSED_ANTLER = "Quite the crude tool for my tastes."
-DESCRIBE.BERNIEBOX = "That's one mystery I'll leave to Willow." -- unused, unedited
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "This will freeze them in time when I want them to."
 DESCRIBE.HOODED_FERN = "A new take on ferns."
 DESCRIBE.HOODEDWIDOW = "Botheration, she's huge!"
 DESCRIBE.GIANT_TREE =
@@ -198,14 +198,7 @@ DESCRIBE.SILKEN_BUNDLE = "Stickily kept for efficient transport."
 
 DESCRIBE.WEBBEDCREATURE = "Preserved for later, I presume."
 ANNOUNCE.WEBBEDCREATURE = "I'll need something more fitting or else I'd just be wasting my time."
-DESCRIBE.SNAPDRAGON_BUDDY = "My very own time-saver!"
-DESCRIBE.SNAPDRAGON = "I feel like you aren't from around here."
-DESCRIBE.SNAPPLANT = "How beautiful, no wonder the snapdragons are so attracted to it!"
-DESCRIBE.WHISPERPOD = "More gardening? What a bother..."
-DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
-    GENERIC = "Need anything else? Some seeds, maybe?",
-    GROWING = "That's okay, take your time."
-}
+
 DESCRIBE.FRUITBAT = "A berry that had enough of being grounded."
 DESCRIBE.PITCHERPLANT = "It's out of my grasp."
 DESCRIBE.APHID =
@@ -255,14 +248,6 @@ DESCRIBE.KLAUS_AMULET = "Double time!"
 DESCRIBE.CRABCLAW = "Turns gems into power, just like it's predecessor."
 DESCRIBE.HAT_RATMASK = "Ha! A rat mask? How could I resist NOT wearing it?"
 
-DESCRIBE.ORANGE_VOMIT = "Gross!"
-DESCRIBE.GREEN_VOMIT = "Gross!"
-DESCRIBE.RED_VOMIT = "Gross!"
-DESCRIBE.PINK_VOMIT = "Gross!"
-DESCRIBE.YELLOW_VOMIT = "Gross!"
-DESCRIBE.PURPLE_VOMIT = "Gross!"
-DESCRIBE.PALE_VOMIT = "Gross!"
-
 DESCRIBE.WALRUS_CAMP_EMPTY = DESCRIBE.WALRUS_CAMP.EMPTY
 DESCRIBE.PIGKING_PIGGUARD = {
     GUARD = DESCRIBE.PIGMAN.GUARD,
@@ -280,13 +265,6 @@ DESCRIBE.UM_PAWN_NIGHTMARE = "Careful, it's a ticking time bomb."
 DESCRIBE.CAVE_ENTRANCE_SUNKDECID = DESCRIBE.CAVE_ENTRANCE
 DESCRIBE.CAVE_ENTRANCE_OPEN_SUNKDECID = DESCRIBE.CAVE_ENTRANCE_OPEN
 DESCRIBE.CAVE_EXIT_SUNKDECID = DESCRIBE.CAVE_EXIT
-
--- Blowgun stuff
-DESCRIBE.UNCOMPROMISING_BLOWGUN = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_TOOTH = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_FIRE = DESCRIBE.BLOWDART_FIRE
-DESCRIBE.BLOWGUNAMMO_SLEEP = DESCRIBE.BLOWDART_SLEEP
-DESCRIBE.BLOWGUNAMMO_ELECTRIC = DESCRIBE.BLOWDART_YELLOW
 
 DESCRIBE.ANCIENT_AMULET_RED = "It won't help me while I'm alive."
 DESCRIBE.UM_BEAR_TRAP = "I don't like being stuck in one place."
@@ -535,9 +513,6 @@ DESCRIBE.MEATRACK_HAT = {
     DRYING_NOTMEAT = DESCRIBE.MEATRACK.DRYING_NOTMEAT,
     DRYINGINRAIN_NOTMEAT = DESCRIBE.MEATRACK.DRYINGINRAIN_NOTMEAT
 }
-DESCRIBE.FISHMEAT_DRIED =
-"Time has taken away the smell, but will it improve the taste?"
-DESCRIBE.SMALLFISHMEAT_DRIED = "I'm surprised it didn't wither away."
 
 DESCRIBE.WIXIEGUN = "This is NOT the right timeline!"
 
@@ -609,7 +584,7 @@ DESCRIBE.UM_RIMEWEED_TEQUILA = "It's far too cold to enjoy."
 DESCRIBE.UM_RIMEWEED_SPAGETT = "Crunchy spagetti, not my first choice."
 
 -- Lava Caves
-DESCRIBE.MAGMAROCK1 = DESCRIBE.ROCKS
+DESCRIBE.UM_MAGMAROCK1 = DESCRIBE.ROCKS
 DESCRIBE.MAGMABONE = "I wonder if the worms got to it."
 
 DESCRIBE.UM_COOKPOT_WAGSTAFF = {
@@ -641,3 +616,11 @@ DESCRIBE.WATHOM_CORPSE = "Time, Wathom? Is it really that time again?"
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "It protects well for the time being."
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Oh botheration, someone ought to warm you up!"
 DESCRIBE.UM_THULECITE_RAZOR= "I don't need to shave off any more time."
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "I hope we didn't take too much time preparing for this."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "Distinct flavor of time being wasted on the mundane.",
+    SUMMER = "The taste was good enough.",
+    AUTUMN = "Its complexity reminds me of better years.",
+    WINTER = "A taste of future treats, quite remarkable!",
+}
+DESCRIBE.UM_BOOMBERRYPIE = "In another timeline not too far from ours, this exploded in my face."

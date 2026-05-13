@@ -26,24 +26,26 @@ env.AddComponentPostInit("combat", function(self)
                     NearbyPlayers = 10
                 end
 
-                if TUNING.DSTU.BOSS_RESISTANCE == "static" then
-                    damage = damage * math.pow(0.95, NearbyPlayers)
-                elseif TUNING.DSTU.BOSS_RESISTANCE == "dynamic" then
-                    -- TODO: config options for numbers...
-                    if self.inst.damage_res == nil then
-                        self.inst.damage_res = 1
-                    end
-                    self.inst.damage_res = self.inst.damage_res - 0.005
-                    local old_damage = damage
-                    damage = damage * self.inst.damage_res
+                if damage ~= nil then
+                    if TUNING.DSTU.BOSS_RESISTANCE == "static" then
+                        damage = damage * math.pow(0.95, NearbyPlayers)
+                    elseif TUNING.DSTU.BOSS_RESISTANCE == "dynamic" then
+                        -- TODO: config options for numbers...
+                        if self.inst.damage_res == nil then
+                            self.inst.damage_res = 1
+                        end
+                        self.inst.damage_res = self.inst.damage_res - 0.005
+                        local old_damage = damage
+                        damage = damage * self.inst.damage_res
 
-                    local min_dmg = 1 - ((NearbyPlayers / 10) - 0.05)
-                    if min_dmg <= 0.45 then
-                        min_dmg = 0.45
-                    end
+                        local min_dmg = 1 - ((NearbyPlayers / 10) - 0.05)
+                        if min_dmg <= 0.45 then
+                            min_dmg = 0.45
+                        end
 
-                    if damage < old_damage * min_dmg then
-                        damage = old_damage * min_dmg
+                        if damage < old_damage * min_dmg then
+                            damage = old_damage * min_dmg
+                        end
                     end
                 end
 

@@ -264,21 +264,43 @@ local function OnBuildAmmo(inst, data)
 end
 
 local function OnAttackOther(inst, data)
-    local target, weapon = data and data.target, data and data.weapon
+    local target, weapon = data.target, data.weapon
     local isriding = inst.components.rider and inst.components.rider:IsRiding()
     local shouldshove = target and (not weapon or weapon:HasTag("wixie_weapon"))
     if inst.sg then
         local shouldextinguish = weapon and not (weapon:HasTag("extinguisher") and target and target.components.burnable and target.components.burnable:IsBurning())
         local shovefrozen = not isriding and shouldshove and target and target.components.freezable and target.components.freezable:IsFrozen()
-        if shouldshove and shouldextinguish or inst.sg.mem.dontuseweaponinstate then
-            inst.sg.mem.dontuseweaponinstate = shouldshove and shouldextinguish or nil
+        if shouldshove and shouldextinguish or inst.sg.mem.um_dontuseweaponinstate then
+            inst.sg.mem.um_dontuseweaponinstate = shouldshove and shouldextinguish or nil
         end
-        if shovefrozen or inst.sg.mem.wixiefrozentargetshove then
-            inst.sg.mem.wixiefrozentargetshove = shovefrozen or nil
+        if shovefrozen or inst.sg.mem.um_wixiefrozentargetshove then
+            inst.sg.mem.um_wixiefrozentargetshove = shovefrozen or nil
         end
     end
     if not isriding and shouldshove then
         WixieShove(inst, target, inst.powerlevel, true, nil, nil, true)
+    end
+end
+
+local function ShouldNotRangeAttack(inst, data)
+    local weapon = data.weapon
+    local weaponcomp = weapon and weapon.components.weapon
+    if inst.sg.mem.um_dontuseweaponinstate and weaponcomp and weaponcomp.projectile then
+        if not weapon.um_projectiletorestore then
+            weapon.um_projectiletorestore = weaponcomp.projectile
+            weaponcomp:SetProjectile(nil)
+        end
+        return true
+    end
+    return false
+end
+
+local function OnAttackerAttackedPost(inst, data)
+    local weapon = data.weapon
+    local weaponcomp = weapon and weapon.components.weapon
+    if weapon and weapon.um_projectiletorestore and weaponcomp and not weaponcomp.projectile then
+        weaponcomp:SetProjectile(weapon.um_projectiletorestore)
+        weapon.um_projectiletorestore = nil
     end
 end
 
@@ -328,6 +350,8 @@ local function master_postinit(inst)
     inst.components.foodaffinity:AddPrefabAffinity("blueberrypancakes", 1.2)
 
     inst:ListenForEvent("onattackother", OnAttackOther)
+    inst.UMShouldNotRangeAttack = ShouldNotRangeAttack
+    inst:ListenForEvent("um_attacker_attacked_pst", OnAttackerAttackedPost)
     --inst:ListenForEvent("killed", OnKilledOther)
 
     inst.soundsname = "wixie"

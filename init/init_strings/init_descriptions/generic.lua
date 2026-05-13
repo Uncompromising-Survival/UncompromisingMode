@@ -232,12 +232,17 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "They're rat..tal... Oh no."
 DESCRIBE.MARSH_GRASS = "It's all bushy."
 DESCRIBE.CURSED_ANTLER = "Strong AND reliable!"
-DESCRIBE.BERNIEBOX = "What could be inside? If only I could open it..."
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "The antler has reached peak frigidity!"
 DESCRIBE.HOODED_FERN = "That fern is pretty big."
 DESCRIBE.HOODEDWIDOW = "That thing could eat a giant!!"
 DESCRIBE.GIANT_TREE = "It totally blocks out the sun."
-DESCRIBE.ANCIENTHOODEDTURF = DESCRIBE.TURF_FOREST
-DESCRIBE.HOODEDMOSS = DESCRIBE.TURF_FOREST
+DESCRIBE.TURF_ANCIENTHOODEDTURF = DESCRIBE.TURF_FOREST
+DESCRIBE.TURF_HOODEDMOSS = DESCRIBE.TURF_FOREST
+DESCRIBE.TURF_HOODEDFOLIAGE = DESCRIBE.TURF_FOREST
+DESCRIBE.TURF_HOODEDFOLIAGE_DARK = DESCRIBE.TURF_FOREST
+DESCRIBE.TURF_UM_MAGMA = DESCRIBE.TURF_UNDERROCK
+DESCRIBE.TURF_MAGMA_GRASS = DESCRIBE.TURF_UNDERROCK
+
 DESCRIBE.WIDOWSGRASP = "Let's open up those cocoons!"
 DESCRIBE.WEBBEDCREATURE = "It wouldn't hurt to see what's inside, right?"
 ANNOUNCE.WEBBEDCREATURE = "Only a spider could rip through silk this tough!"
@@ -245,14 +250,6 @@ ANNOUNCE.WEBBEDCREATURE = "Only a spider could rip through silk this tough!"
 DESCRIBE.SILKSACK = "I hope it isn't filled with cobwebs."
 DESCRIBE.SILKEN_BUNDLE = "Our supplies are somewhere stuck in there."
 
-DESCRIBE.SNAPDRAGON_BUDDY = "It looks hungry. Me too."
-DESCRIBE.SNAPDRAGON = "It looks nice enough."
-DESCRIBE.SNAPPLANT = "A little piece of home."
-DESCRIBE.WHISPERPOD = "Lets see what happens when you put it in the ground."
-DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
-    GENERIC = "Need some seeds?",
-    GROWING = "Guh! It's growing so slowly!"
-}
 DESCRIBE.FRUITBAT = "Agh, it's still terrifying!"
 DESCRIBE.PITCHERPLANT = "It's quite high up."
 DESCRIBE.APHID = "A horrible pest."
@@ -307,6 +304,9 @@ ACTIONFAIL.GIVE.NOTNIGHT = "I should wait until the moon is out."
 ACTIONFAIL.SCAN_GEMOLOGY_GEM = {
     GEM_ALREADY_KNOWN = "I already know that one.",
 }
+ACTIONFAIL.UM_FORGE_GEM = {
+    NOT_COMPATIBLE = "It's not the right gem for this."
+}
 -- Xmas Update
 DESCRIBE.MAGMAHOUND = "Hot dog!"
 DESCRIBE.LIGHTNINGHOUND = "Watch it, that one stings!"
@@ -317,14 +317,6 @@ DESCRIBE.RAT_WHIP = "I make all the rules."
 DESCRIBE.KLAUS_AMULET = "It's chains contain the King of Winter!"
 DESCRIBE.CRABCLAW = "Hey, these are gem holes!"
 DESCRIBE.HAT_RATMASK = "I'll sniff out those dens myself!"
-
-DESCRIBE.ORANGE_VOMIT = "Oh, how nice of you..."
-DESCRIBE.GREEN_VOMIT = "Oh, how nice of you..."
-DESCRIBE.RED_VOMIT = "Oh, how nice of you..."
-DESCRIBE.PINK_VOMIT = "Oh, how nice of you..."
-DESCRIBE.YELLOW_VOMIT = "Oh, how nice of you..."
-DESCRIBE.PURPLE_VOMIT = "Oh, how nice of you..."
-DESCRIBE.PALE_VOMIT = "Oh, how nice of you..."
 
 DESCRIBE.WALRUS_CAMP_EMPTY = DESCRIBE.WALRUS_CAMP.EMPTY
 DESCRIBE.PIGKING_PIGGUARD = {
@@ -343,13 +335,6 @@ DESCRIBE.UM_PAWN_NIGHTMARE = "I should keep my distance."
 DESCRIBE.CAVE_ENTRANCE_SUNKDECID = DESCRIBE.CAVE_ENTRANCE
 DESCRIBE.CAVE_ENTRANCE_OPEN_SUNKDECID = DESCRIBE.CAVE_ENTRANCE_OPEN
 DESCRIBE.CAVE_EXIT_SUNKDECID = DESCRIBE.CAVE_EXIT
-
--- Blowgun stuff
-DESCRIBE.UNCOMPROMISING_BLOWGUN = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_TOOTH = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_FIRE = DESCRIBE.BLOWDART_FIRE
-DESCRIBE.BLOWGUNAMMO_SLEEP = DESCRIBE.BLOWDART_SLEEP
-DESCRIBE.BLOWGUNAMMO_ELECTRIC = DESCRIBE.BLOWDART_YELLOW
 
 DESCRIBE.ANCIENT_AMULET_RED = "It's tugging at my heart strings!"
 DESCRIBE.UM_BEAR_TRAP = "I need to watch my step."
@@ -601,8 +586,6 @@ DESCRIBE.MEATRACK_HAT = {
     DRYING_NOTMEAT = DESCRIBE.MEATRACK.DRYING_NOTMEAT,
     DRYINGINRAIN_NOTMEAT = DESCRIBE.MEATRACK.DRYINGINRAIN_NOTMEAT
 }
-DESCRIBE.FISHMEAT_DRIED = "The fishy smell is gone."
-DESCRIBE.SMALLFISHMEAT_DRIED = "A little fishy."
 
 DESCRIBE.WIXIEGUN = "Science has gone too far."
 
@@ -679,7 +662,7 @@ DESCRIBE.UM_RIMEWEED_TEQUILA = "It's far too cold to enjoy."
 DESCRIBE.UM_RIMEWEED_SPAGETT = "Crunchy spagetti, not my first choice."
 
 -- Lava Caves
-DESCRIBE.MAGMAROCK1 = DESCRIBE.ROCKS
+DESCRIBE.UM_MAGMAROCK1 = DESCRIBE.ROCKS
 DESCRIBE.MAGMABONE = "I wonder if the worms got to it."
 
 DESCRIBE.UM_COOKPOT_WAGSTAFF = {
@@ -711,3 +694,12 @@ DESCRIBE.WATHOM_CORPSE = "I think he's still breathing!"
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "I have nothing to fear standing behind it!"
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "I should break this ice with some hot topics!"
 DESCRIBE.UM_THULECITE_RAZOR= "Thulecite razor! A classic!"
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "The scent is... statistically significant."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "The novelty has certainly washed away by the rain.",
+    SUMMER = "It was good, but I could have saved it for later.",
+    AUTUMN = "A sophisticated flavor for this time of the year.",
+    WINTER = "A tropical anomaly in the dead of winter!",
+}
+DESCRIBE.UM_BOOMBERRYPIE = "I'm over the moon for this pie."
+DESCRIBE.UM_CHILES_EN_NOGADA = "My mouth waters just looking at it!"

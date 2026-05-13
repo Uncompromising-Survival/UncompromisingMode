@@ -3,7 +3,7 @@ return Class(function(self, inst)
     assert(TheWorld.ismastersim, "um_tilelogger should not exist on client")
     --Tiles Occur Every 4 spaces
 
-    local function AnalyzeWorld(tiletype) --207 For Hazardous
+    function self:AnalyzeWorld(tiletype) --207 For Hazardous
         local world_size = TheWorld.Map:GetWorldSize() * 4
         local max_x = world_size / 2
         local max_z = world_size / 2
@@ -12,7 +12,7 @@ return Class(function(self, inst)
         for x = -max_x, max_x, 4 do --Instead relate to world size if accessible
             for z = -max_z, max_z, 4 do
                 if TheWorld.Map:GetTileAtPoint(x, 0, z) == tiletype then
-                    table.insert(tileTable, { x= x, z= z })
+                    table.insert(tileTable, { x = x, z = z })
                 end
             end
         end
@@ -29,9 +29,9 @@ return Class(function(self, inst)
         return tileTable
     end
 
-    local function FindAllTileTypes(self)
-        self.Hazardous = AnalyzeWorld(WORLD_TILES["OCEAN_HAZARDOUS"])
-    end
+    --[[local function FindAllTileTypes(self)
+        self.Hazardous = self:AnalyzeWorld(WORLD_TILES["OCEAN_HAZARDOUS"])
+    end]]
 
     --[[function self:OnSave()
 		local data = {}
@@ -54,13 +54,19 @@ return Class(function(self, inst)
     function self:OnPostInit()
         if not self.Hazardous and not TheWorld:HasTag("cave") then
             self.inst:DoTaskInTime(0, function()
-                self.Hazardous = AnalyzeWorld(WORLD_TILES["OCEAN_HAZARDOUS"])
+                self.Hazardous = self:AnalyzeWorld(WORLD_TILES["OCEAN_HAZARDOUS"])
+            end)
+        end
+
+        if not self.OceanCoastal and TheWorld:HasTag("cave") then
+            self.inst:DoTaskInTime(0, function()
+                self.OceanCoastal = self:AnalyzeWorld(WORLD_TILES["OCEAN_COASTAL"])
             end)
         end
 
         if not self.Magma and TheWorld:HasTag("cave") then
             self.inst:DoTaskInTime(0, function()
-                self.Magma = AnalyzeWorld(WORLD_TILES["UM_MAGMA_LAVAMOLTEN"])
+                self.Magma = self:AnalyzeWorld(WORLD_TILES["UM_MAGMA_LAVATEMP"])
             end)
         end
     end

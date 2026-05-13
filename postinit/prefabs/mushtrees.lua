@@ -13,12 +13,12 @@ Uses lootsetupfn to dynamically give it loot based on the season, instead of cha
 Make some mushtress petrify after they finish their sporing cycle. Checks whenever season ticks.
 ]]
 
-local function PetrificationDisaster(inst,replacement)
+local function PetrificationDisaster(inst,replacement,range,gemchance)
 	local x,y,z = inst.Transform:GetWorldPosition()
-	local mushtrees = TheSim:FindEntities(x,y,z,24,{"mushtree"})
+	local mushtrees = TheSim:FindEntities(x,y,z,range,{"mushtree"})
 	for i,tree in ipairs(mushtrees) do
 		if tree.prefab == inst.prefab and inst ~= tree then
-			if math.random() < 0.05 then
+			if math.random() < gemchance then
 				SpawnPrefab(replacement).Transform:SetPosition(tree.Transform:GetWorldPosition())
 			else
 				SpawnPrefab(replacement.."less").Transform:SetPosition(tree.Transform:GetWorldPosition())
@@ -41,6 +41,8 @@ if TUNING.DSTU.MUSHROOM_CHANGES then
 			loot = { "log" },
 			uhohseason = SEASONS.SUMMER,
 			replacement = "um_greenmushtree_gem",
+			range = 24,
+			gemchance = 0.025,
 		},
 		medium =
 		{ --Red
@@ -49,6 +51,8 @@ if TUNING.DSTU.MUSHROOM_CHANGES then
 			loot = { "log" },
 			uhohseason = SEASONS.AUTUMN,
 			replacement = "um_redmushtree_gem",
+			range = 24,
+			gemchance = 0.025,
 		},
 		tall =
 		{ --Blue
@@ -57,6 +61,8 @@ if TUNING.DSTU.MUSHROOM_CHANGES then
 			loot = { "log", "log", },
 			uhohseason = SEASONS.SPRING,
 			replacement = "um_bluemushtree_gem",
+			range = 16,
+			gemchance = 0.025,
 		},
 	}
 
@@ -78,7 +84,7 @@ if TUNING.DSTU.MUSHROOM_CHANGES then
 			
 			inst:WatchWorldState("season", function(inst)
 				if data.uhohseason == TheWorld.state.season and math.random() < 0.02 and not inst.entity:IsAwake() then
-					PetrificationDisaster(inst,data.replacement)
+					PetrificationDisaster(inst,data.replacement,data.range,data.gemchance)
 				end			
 			end)
 			

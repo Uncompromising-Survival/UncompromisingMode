@@ -42,7 +42,7 @@ SetSharedLootTable('um_pyre_nettles_5',
     })
 
 local function TrySpawnSpore(inst)
-    if not inst:IsAsleep() and math.random() > 0.8 then
+    if not inst:IsAsleep() and math.random() > 0.9 then
         SpawnPrefab("um_smolder_spore").Transform:SetPosition(inst.Transform:GetWorldPosition())
     end
 end
@@ -73,8 +73,21 @@ local function StopSpores(inst)
 	end
 end
 
+local function PlayerImmunity(inst)
+    if inst.prefab == "wormwood" then
+        return true
+    end
+    if inst.components.debuffable and inst.components.debuffable:HasDebuff("um_firecream_buff") then
+        return true
+    end
+    if inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) 
+        and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY).prefab == "um_armor_pyre_nettles" then
+        return true
+    end
+end
+
 local function pyrenettle_bumped(inst,nextvictim)
-    if nextvictim:IsValid() and not nextvictim:HasTag("shadow") then
+    if nextvictim:IsValid() and not nextvictim:HasTag("shadow") and not PlayerImmunity(nextvictim) then
         inst.AnimState:PlayAnimation("pn" .. inst.stage .. "_bump", false)
         inst.AnimState:PushAnimation("pn" .. inst.stage .. "_idle", true)
 		if inst.stage ~= 1 then
@@ -83,10 +96,13 @@ local function pyrenettle_bumped(inst,nextvictim)
         -- Apply debuff if it's a valid target.
         if not (nextvictim.components.health and nextvictim.components.health:IsDead()) and inst.stage > 1 then
             local DebuffDuration = inst.stage > 3 and 10 or 6
-			if nextvictim.components.health and not nextvictim.components.health:IsDead() then
-				nextvictim.components.health:DoDelta(-10)
-			end
+			--[[if nextvictim.components.combat and nextvictim.components.health and not nextvictim.components.health:IsDead() then
+				nextvictim.components.combat:GetAttacked(inst,1)
+			end]] --AXE I added damage to the thicket too at one point to ensure it wasn't possible to just tank the heating... but it may not be needed now.
             nextvictim:AddDebuff("umdebuff_pyre_toxin", "umdebuff_pyre_toxin", DebuffDuration)
+            if nextvictim.components.temperature and nextvictim.components.temperature.current < 80 then
+                nextvictim.components.temperature:DoDelta(15)
+            end
         end
     end
 end

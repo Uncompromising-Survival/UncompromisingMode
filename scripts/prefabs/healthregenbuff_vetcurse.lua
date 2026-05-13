@@ -8,14 +8,12 @@ local function IsWarlyBuffed(target)
 end
 
 local function HealthOnTick(inst, target, data)
-    local duration, maxhp_percent = GetDuration(data and data.duration or 1), data and data.maxhp_percent and type(data.maxhp_percent) == "number" and data.maxhp_percent or 0
+    local duration = GetDuration(data and data.duration or 1)
     if target.components.health and not target.components.health:IsDead() and not target:HasTag("playerghost") then
         local delta = duration or 1
         if data and data.negative_value then
             delta = -duration or -1
-            if maxhp_percent then maxhp_percent = -maxhp_percent end
         end
-        if maxhp_percent then target.components.health:DeltaPenalty(-maxhp_percent) end
         target.components.health:DoDelta(delta, nil, inst.prefab)
     else
         inst.components.debuff:Stop()
@@ -25,12 +23,6 @@ end
 local function HealthOnAttached(inst, target, followsymbol, followoffset, data)
     local warlybuff = IsWarlyBuffed(target)
     local duration = GetDuration((data and data.duration and data.duration / 2 or 1) / warlybuff)
-    local dohealmaxhealth = data and data.max_hp
-    if dohealmaxhealth then
-        local health = (duration * 2) * 10
-        local totalhealth = target.components.health.maxhealth
-        data.maxhp_percent = (health / totalhealth) * .1
-    end
 
     inst.entity:SetParent(target.entity)
     inst.Transform:SetPosition(0, 0, 0) --in case of loading

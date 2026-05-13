@@ -28,8 +28,8 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
 
     local function ByPassWeapon(weapon)
         return weapon and (weapon.prefab == "bugzapper" or weapon:HasTag("blowdart")
-			or (weapon.components.weapon and weapon.components.weapon.projectile
-			or weapon.components.projectile or weapon.components.complexprojectile and not weapon.components.complexprojectile.ismeleeweapon))
+            or (weapon.components.weapon and weapon.components.weapon.projectile
+            or weapon.components.projectile or weapon.components.complexprojectile and not weapon.components.complexprojectile.ismeleeweapon))
     end
 
     local function ByStimuli(stimuli)
@@ -38,17 +38,14 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
 
     local function UMSlipAway(inst, data, doslip)
         local attacker = data.attacker
+        local statename = inst.sg and inst.sg.currentstate.name
         local shouldslip = false
-        if attacker and attacker:IsValid() and not attacker:HasAnyTag(disallowedattackertags) then
-            local statename = inst.sg.currentstate.name
-            shouldslip = not SittingStill(statename) and not ByPassWeapon(data.weapon or attacker) and not ByStimuli(data.stimuli) -- Can only attack when criteria is met.
-        end
-        if doslip and shouldslip then
+        if doslip and attacker and attacker:IsValid() and not attacker:HasAnyTag(disallowedattackertags) and not ByStimuli(data.stimuli)
+            and not SittingStill(statename) and not ByPassWeapon(data.weapon or attacker) then -- Can only attack when criteria is met.
             inst.SoundEmitter:PlaySound("dontstarve/movement/slip_fall_whoop")
             Slippy(attacker, inst)
-            if attacker.components.talker and attacker:HasTag("player") then
-                attacker.components.talker:Say(GetString(attacker, "ANNOUNCE_BUTTERFLY_SLIP"))
-            end
+            if attacker:HasTag("player") then UMCommonFns.Say(attacker, GetString(attacker, "ANNOUNCE_BUTTERFLY_SLIP")) end
+            shouldslip = true
         end
         return shouldslip
     end

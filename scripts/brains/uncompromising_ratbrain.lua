@@ -341,7 +341,7 @@ local function closetoleader(inst)
 end
 
 local function IsItemNono(inst, item)
-    return not item:HasAnyTag("animal", "small_livestock", "trap")
+    return not item:HasAnyTag("animal", "small_livestock", "trap", "playingcard", "deck_of_cards", "deckcontainer") --and item.components.stackable
 end
 
 local function PickUpFilter(inst, target, leader)
@@ -353,6 +353,12 @@ local function LeaderHasWorkToggleOn(inst)
     if not leader then return false end
     local toggle = leader.readytogather
     return toggle and toggle:value()
+end
+
+local function ShouldRunAway(target, inst)
+    if not target.components.health or target.components.health:IsDead() then return false end
+    local leader = GetLeader(inst)
+    return not leader or leader.components.combat and not leader.components.combat:IsAlly(target)
 end
 
 function Uncompromising_RatBrain:OnStart()
@@ -401,7 +407,7 @@ function Uncompromising_RatBrain:OnStart()
                 WhileNode(function() return not self.inst:HasTag("packrat") and (self.inst.components.combat.target == nil or not self.inst.components.combat:InCooldown()) end, "AttackMomentarily",
                     ChaseAndAttack(self.inst, MAX_CHASE_TIME, MAX_CHASE_DIST)),
                 --RunAway(self.inst, "ghost", 8, 12),
-                RunAway(self.inst, { tags = { "scarytoprey" }, notags = { "ratwhisperer" } }, AVOID_PLAYER_DIST, AVOID_PLAYER_STOP),
+                RunAway(self.inst, { fn = ShouldRunAway, tags = { "scarytoprey" }, notags = { "ratwhisperer" } }, AVOID_PLAYER_DIST, AVOID_PLAYER_STOP),
                 --RunAway(self.inst, "scarytoprey", AVOID_PLAYER_DIST, AVOID_PLAYER_STOP),
                 WhileNode(function() return closetoleader(self.inst) end, "Stayclose", BrainCommon.NodeAssistLeaderPickUps(self, pickupparams)),
                 Follow(self.inst, GetLeader, MIN_FOLLOW_LEADER, TARGET_FOLLOW_LEADER, MAX_FOLLOW_LEADER),

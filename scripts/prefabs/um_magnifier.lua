@@ -2,87 +2,54 @@ local assets = {
     Asset("ANIM", "anim/um_magnifier.zip"),
 }
 
-local function OnScanned(inst, target, doer)
-    inst.components.finiteuses:Use(1)
+function CreateManifier(name, durability, build, bank, common_fn)
+    local function fn()
+        local inst = CreateEntity()
+
+        inst.entity:AddTransform()
+        inst.entity:AddAnimState()
+        inst.entity:AddNetwork()
+
+        MakeInventoryPhysics(inst)
+
+        inst.AnimState:SetBuild(build ~= nil and build or name)
+        inst.AnimState:SetBank(bank ~= nil and bank or name)
+        inst.AnimState:PlayAnimation("idle")
+
+        inst:AddTag("gemologyscanner")
+        inst:AddTag("tradeable")
+        inst:AddTag("wardrobe_item")
+
+        MakeInventoryFloatable(inst, "med", nil, 0.6)
+
+        inst.entity:SetPristine()
+
+        if common_fn ~= nil then
+            common_fn(inst)
+        end
+
+        if not TheWorld.ismastersim then return inst end
+
+        inst:AddComponent("inspectable")
+        inst:AddComponent("inventoryitem")
+
+        inst:AddComponent("gemologyscanner")
+        --inst.components.gemologyscanner:SetOnScannedFn(OnScanned)
+
+        inst:AddComponent("finiteuses")
+        inst.components.finiteuses:SetOnFinished(inst.Remove)
+        inst.components.finiteuses:SetMaxUses(durability)
+        inst.components.finiteuses:SetUses(durability)
+        inst.components.finiteuses:SetConsumption(ACTIONS.SCAN_GEMOLOGY_GEM, 1)
+
+        MakeHauntableLaunch(inst)
+
+        return inst
+    end
+
+    return Prefab(name, fn, assets)
 end
 
-local function fn()
-    local inst = CreateEntity()
-
-    inst.entity:AddTransform()
-    inst.entity:AddAnimState()
-    inst.entity:AddNetwork()
-
-    MakeInventoryPhysics(inst)
-
-    inst.AnimState:SetBuild("um_magnifier")
-    inst.AnimState:SetBank("um_magnifier")
-    inst.AnimState:PlayAnimation("idle")
-
-    inst:AddTag("gemologyscanner")
-    inst:AddTag("tradeable")
-    inst:AddTag("wardrobe_item")
-
-    MakeInventoryFloatable(inst, "med", nil, 0.6)
-
-    inst.entity:SetPristine()
-
-    if not TheWorld.ismastersim then return inst end
-
-    inst:AddComponent("inspectable")
-    inst:AddComponent("inventoryitem")
-
-    inst:AddComponent("gemologyscanner")
-    inst.components.gemologyscanner:SetOnScannedFn(OnScanned)
-
-    inst:AddComponent("finiteuses")
-    inst.components.finiteuses:SetOnFinished(inst.Remove)
-    inst.components.finiteuses:SetMaxUses(50)
-    inst.components.finiteuses:SetUses(50)
-
-    MakeHauntableLaunch(inst)
-
-    return inst
-end
-
-local function obsidian_fn()
-    local inst = CreateEntity()
-
-    inst.entity:AddTransform()
-    inst.entity:AddAnimState()
-    inst.entity:AddNetwork()
-
-    MakeInventoryPhysics(inst)
-
-    inst.AnimState:SetBuild("um_magnifier") 
-    inst.AnimState:SetBank("um_magnifier") --TODO: OBSIDIAN VARIANT
-    inst.AnimState:PlayAnimation("idle")
-
-    inst:AddTag("gemologyscanner")
-    inst:AddTag("tradeable")
-    inst:AddTag("wardrobe_item")
-
-    MakeInventoryFloatable(inst, "med", nil, 0.6)
-
-    inst.entity:SetPristine()
-
-    if not TheWorld.ismastersim then return inst end
-
-    inst:AddComponent("inspectable")
-    inst:AddComponent("inventoryitem")
-
-    inst:AddComponent("gemologyscanner")
-    inst.components.gemologyscanner:SetOnScannedFn(OnScanned)
-
-    inst:AddComponent("finiteuses")
-    inst.components.finiteuses:SetOnFinished(inst.Remove)
-    inst.components.finiteuses:SetMaxUses(50)
-    inst.components.finiteuses:SetUses(50)
-
-    MakeHauntableLaunch(inst)
-
-    return inst
-end
-
-return Prefab("um_magnifier", fn, assets),
-    Prefab("um_magnifier_obsidian", obsidian_fn, assets)
+return CreateManifier("um_magnifier", 100),
+    CreateManifier("um_magnifier_obsidian", 100, "um_magnifier", "um_magnifier"),     --TODO: Obsidian art
+    CreateManifier("um_magnifier_purplegem", 25, "um_magnifier", "um_magnifier")      --TODO: Purplegem art

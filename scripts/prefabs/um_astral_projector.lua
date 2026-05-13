@@ -475,9 +475,9 @@ local function fn()
     inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
 
-    inst.MiniMapEntity:SetIcon("townportal.png")
-    inst.MiniMapEntity:SetCanUseCache(false)
-    inst.MiniMapEntity:SetDrawOverFogOfWar(true)
+    inst.MiniMapEntity:SetIcon("um_astral_projector.tex")
+    --inst.MiniMapEntity:SetCanUseCache(false)
+    --inst.MiniMapEntity:SetDrawOverFogOfWar(true)
 
     MakeObstaclePhysics(inst, .1)
 
@@ -685,9 +685,9 @@ local function TargetFn()
     inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
 
-    inst.MiniMapEntity:SetIcon("townportal.png")
-    inst.MiniMapEntity:SetCanUseCache(false)
-    inst.MiniMapEntity:SetDrawOverFogOfWar(true)
+    inst.MiniMapEntity:SetIcon("um_astral_projector_target.tex")
+    --inst.MiniMapEntity:SetCanUseCache(false)
+    --inst.MiniMapEntity:SetDrawOverFogOfWar(true)
 
     MakeObstaclePhysics(inst, .0001)
 

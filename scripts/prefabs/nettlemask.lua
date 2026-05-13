@@ -75,15 +75,17 @@ local function fn()
 
     inst:AddComponent("inventoryitem")
 
+    inst:AddComponent("insulator")
+    inst.components.insulator:SetInsulation(TUNING.INSULATION_SMALL)
+
     inst:AddComponent("equippable")
     inst.components.equippable.equipslot = EQUIPSLOTS.HEAD
-    
 
     inst:AddComponent("perishable")
     inst.components.perishable:SetPerishTime(TUNING.PERISH_MED*(2/3))
     inst.components.perishable:StartPerishing()
     inst.components.perishable.onperishreplacement = "spoiled_food"
-	
+
     inst.opentop = true
 
     inst:AddComponent("waterproofer")

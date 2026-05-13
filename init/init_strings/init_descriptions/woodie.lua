@@ -176,7 +176,7 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "Not comin' for kit this time, eh?"
 DESCRIBE.MARSH_GRASS = "That's an awfully tall bush, eh?"
 DESCRIBE.CURSED_ANTLER = "This'll last us forever!"
-DESCRIBE.BERNIEBOX = "I'm not one for stuffed things."
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "Makes me remember of the coldest of winters back home."
 DESCRIBE.HOODED_FERN = "I love the outdoors."
 DESCRIBE.HOODEDWIDOW = "That ain't no normal spider."
 DESCRIBE.GIANT_TREE = "That's a real beaut."
@@ -190,14 +190,7 @@ DESCRIBE.SILKEN_BUNDLE = "There better be logs in there."
 DESCRIBE.WEBBEDCREATURE =
 "Should I really put my neck out to find out what it has?"
 ANNOUNCE.WEBBEDCREATURE = "This ain't a cocoon Luce'll be choppin'. Best to leave 'em to the spiders."
-DESCRIBE.SNAPDRAGON_BUDDY = "This one seems friendly enough."
-DESCRIBE.SNAPDRAGON = "Seems like a well endowed bunch."
-DESCRIBE.SNAPPLANT = "Ah, the beauty of nature!"
-DESCRIBE.WHISPERPOD = "It belongs in the ground, I think?"
-DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
-    GENERIC = "Needs something else to grow.",
-    GROWING = "A watched plant never grows."
-}
+
 DESCRIBE.FRUITBAT = "Who taught that fruit to fly?"
 DESCRIBE.PITCHERPLANT = "It's a plant, but not the choppin' kind."
 DESCRIBE.APHID = "They like the trees too, eh?"
@@ -246,14 +239,6 @@ DESCRIBE.KLAUS_AMULET = "The chains are comin' off now!"
 DESCRIBE.CRABCLAW = "Use every part of the animal, I suppose."
 DESCRIBE.HAT_RATMASK = "Did a real fine job, eh Lucy?"
 
-DESCRIBE.ORANGE_VOMIT = "Hoo-wee..."
-DESCRIBE.GREEN_VOMIT = "Hoo-wee..."
-DESCRIBE.RED_VOMIT = "Hoo-wee..."
-DESCRIBE.PINK_VOMIT = "Hoo-wee..."
-DESCRIBE.YELLOW_VOMIT = "Hoo-wee..."
-DESCRIBE.PURPLE_VOMIT = "Hoo-wee..."
-DESCRIBE.PALE_VOMIT = "Hoo-wee..."
-
 DESCRIBE.WALRUS_CAMP_EMPTY = DESCRIBE.WALRUS_CAMP.EMPTY
 DESCRIBE.PIGKING_PIGGUARD = {
     GUARD = DESCRIBE.PIGMAN.GUARD,
@@ -272,12 +257,6 @@ DESCRIBE.CAVE_ENTRANCE_OPEN_SUNKDECID = DESCRIBE.CAVE_ENTRANCE_OPEN
 DESCRIBE.CAVE_EXIT_SUNKDECID = DESCRIBE.CAVE_EXIT
 
 DESCRIBE.PIGKING_PIGTORCH = DESCRIBE.PIGTORCH
--- Blowgun stuff
-DESCRIBE.UNCOMPROMISING_BLOWGUN = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_TOOTH = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_FIRE = DESCRIBE.BLOWDART_FIRE
-DESCRIBE.BLOWGUNAMMO_SLEEP = DESCRIBE.BLOWDART_SLEEP
-DESCRIBE.BLOWGUNAMMO_ELECTRIC = DESCRIBE.BLOWDART_YELLOW
 
 DESCRIBE.ANCIENT_AMULET_RED =
 "I can keep myself together if I get chopped to bits."
@@ -521,8 +500,6 @@ DESCRIBE.MEATRACK_HAT = {
     DRYING_NOTMEAT = DESCRIBE.MEATRACK.DRYING_NOTMEAT,
     DRYINGINRAIN_NOTMEAT = DESCRIBE.MEATRACK.DRYINGINRAIN_NOTMEAT
 }
-DESCRIBE.FISHMEAT_DRIED = "A Canadian classic."
-DESCRIBE.SMALLFISHMEAT_DRIED = "A small bite."
 
 DESCRIBE.WIXIEGUN = "That just ain't right."
 
@@ -594,7 +571,7 @@ DESCRIBE.UM_RIMEWEED_TEQUILA = "It's far too cold to enjoy."
 DESCRIBE.UM_RIMEWEED_SPAGETT = "Crunchy spagetti, not my first choice."
 
 -- Lava Caves
-DESCRIBE.MAGMAROCK1 = DESCRIBE.ROCKS
+DESCRIBE.UM_MAGMAROCK1 = DESCRIBE.ROCKS
 DESCRIBE.MAGMABONE = "I wonder if the worms got to it."
 
 DESCRIBE.UM_COOKPOT_WAGSTAFF = {
@@ -626,3 +603,11 @@ DESCRIBE.WATHOM_CORPSE = "Come on, buddy! I'm rooting for you!"
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "I dont think I'd feel safe holding that."
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Colder than Lucy's silent treatment."
 DESCRIBE.UM_THULECITE_RAZOR= "Maybe if you got a Lucy razor I'd shave."
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "It smells like rotten nuggets."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "I was aboot to save it for later.",
+    SUMMER = "It was alright, eh?",
+    AUTUMN = "Not bad at all. Felt a little more special.",
+    WINTER = "Like a bit of sunshine right in the middle of a blizzard.",
+}
+DESCRIBE.UM_BOOMBERRYPIE = "I don't trust this pie."

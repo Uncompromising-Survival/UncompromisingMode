@@ -79,6 +79,9 @@ local events =
                 return
             elseif inst.components.sleeper and inst.components.sleeper:IsAsleep() then
                 inst.components.sleeper:WakeUp()
+			elseif inst.should_taunt_health_thresh then
+				inst.should_taunt_health_thresh = nil
+				inst.sg:GoToState("taunt")
             elseif inst.sg:HasStateTag("charge") and (inst._bear_trap_speedmulttask or inst.components.sleeper.sleepiness > 0) then
                 inst.sg:GoToState("chargeover")
             elseif not inst.sg:HasStateTag("electrocute") then
@@ -137,12 +140,20 @@ local function WebMortar(inst, angle)
         if not angle then
             angle = 0
         end
+		
+		local range = math.sqrt(inst:GetDistanceSqToInst(target)) or 15
+		local speed = math.sqrt(inst:GetDistanceSqToInst(target))
+		if angle ~= 0 then
+			range = range + math.random(-10,15)
+			speed = math.clamp(range,10,35)
+		end
         local theta = inst.Transform:GetRotation() + angle
         theta = theta * DEGREES
         targetpos.x = targetpos.x + 15 * math.cos(theta)
         targetpos.z = targetpos.z - 15 * math.sin(theta)
 
-        projectile.components.complexprojectile:SetHorizontalSpeed(20)
+        projectile.components.complexprojectile:SetHorizontalSpeed(speed)
+		projectile.components.complexprojectile:SetGravity(-35)
         projectile.components.complexprojectile:Launch(targetpos, inst, inst)
     end
 end

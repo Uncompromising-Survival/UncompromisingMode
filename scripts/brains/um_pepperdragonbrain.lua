@@ -1,6 +1,8 @@
 require "behaviours/chaseandattack"
 require "behaviours/wander"
 require "behaviours/doaction"
+require "behaviours/standandattack"
+
 local BrainCommon = require("brains/braincommon")
 
 local MAX_CHASE_TIME = 20
@@ -16,12 +18,6 @@ local function GoHomeAction(inst)
        inst.components.homeseeker:HasHome() then
         return BufferedAction(inst, inst.components.homeseeker.home, ACTIONS.GOHOME, nil, nil, nil, 0.2)
     end
-end
-
-local function IsNestEmpty(inst)
-    return inst.components.homeseeker and
-		inst.components.homeseeker:HasHome() and
-		(not inst.components.homeseeker.home.components.pickable or not inst.components.homeseeker.home.components.pickable:CanBePicked() )
 end
 
 local SEE_FOOD_DIST = 20
@@ -95,6 +91,17 @@ local function PickPepperAction(inst)
         or nil
 end
 
+local function CloseToHome(inst)
+    if inst.components.homeseeker and inst.components.homeseeker:HasHome() then
+		local home = inst.components.homeseeker.home
+		if inst:GetDistanceSqToInst(home) < 4^2 then
+			return true
+		else
+			return false
+		end
+    end
+end
+
 local UM_PepperdragonBrain = Class(Brain, function(self, inst)
     Brain._ctor(self, inst)
 end)
@@ -104,21 +111,42 @@ function UM_PepperdragonBrain:OnStart()
     local root =
         PriorityNode(
         {
+			-- GOTTA DO WHATEVER KLEI TOLD ME TO
 			BrainCommon.PanicTrigger(self.inst),
             BrainCommon.ElectricFencePanicTrigger(self.inst),
+
+			-- OW THAT FUCKIN HURT
+			WhileNode(function() return self.inst.components.health and self.inst.components.health:GetPercent() < 0.33 and not CloseToHome(self.inst) end, "Weak", -- if you're angry, don't care about eating.
+				DoAction(self.inst, function() return GoHomeAction(self.inst) end, "GoHome", true)
+			),
+
+			-- GET OUT OF MY HOUSE
+			WhileNode(function() return self.inst.components.health and self.inst.components.health:GetPercent() < 0.33 and CloseToHome(self.inst) end, "Weak", -- if you're angry, don't care about eating.
+				StandAndAttack(self.inst)
+			),
+
+			-- IM PISSED AND STRONG GO KICK THEIR ASSES
 			WhileNode(function() return self.inst.components.timer:TimerExists("pissedoff") end, "Angry", -- if you're angry, don't care about eating.
 				ChaseAndAttack(self.inst, SpringCombatMod(MAX_CHASE_TIME))
 			),
+
+			-- AWW MY BELLY FULL GOTTA GO NIGHTY NIGHT
             WhileNode(function() return self.inst.components.timer:TimerExists("bellyfull") end, "Full",
 				DoAction(self.inst, function() return GoHomeAction(self.inst) end, "GoHome", true)
 			),
+
+			-- IM HUNGRY ARGGHHHHH
 			WhileNode(function() return not self.inst.components.timer:TimerExists("bellyfull") end, "Full",
 				PriorityNode({
 					DoAction(self.inst, EatFoodAction, "Eat Food")	,
 					DoAction(self.inst, PickPepperAction, "Pick Pepper", true)
 				})					
 			),
+
+			-- DURR UHHH I DUNNO WHAT I SHOULD DO, CHOOSE VIOLENCE I GUESS
 			ChaseAndAttack(self.inst, SpringCombatMod(MAX_CHASE_TIME)),
+
+			-- BRAIN EMPTY, WALK AROUND AND SMELL THE ROSES
 			Wander(self.inst, function() return self.inst.components.knownlocations:GetLocation("home") end, MAX_WANDER_DIST),
       },1)
 

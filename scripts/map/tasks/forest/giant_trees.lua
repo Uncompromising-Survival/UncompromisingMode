@@ -71,7 +71,6 @@ if GetModConfigData("hoodedforest") then               -- Lock Everything Behind
             --["WalrusGiantTrees"] = 1,
             --["MoonBaseGiantTrees"] = 1,
             --["ShroomInfestedGiantTrees"] = 1,
-            --["SnapDragons"] = 1,
 
 			["FoxGathering"] = 1,
             ["SpideryGiantTrees"] = 1,

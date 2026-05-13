@@ -100,10 +100,8 @@ local function WalterFunctions(inst)
     if inst.components.foodaffinity then
         local foodaffinities = {
             ["meat_dried"] = TUNING.AFFINITY_15_CALORIES_MED,
-            ["fishmeat_dried"] = TUNING.AFFINITY_15_CALORIES_MED,
             ["jellyjerky"] = TUNING.AFFINITY_15_CALORIES_MED,
             ["smallmeat_dried"] = TUNING.AFFINITY_15_CALORIES_SMALL,
-            ["fishmeat_small_dried"] = TUNING.AFFINITY_15_CALORIES_SMALL,
             ["seaweed_dried"] = TUNING.AFFINITY_15_CALORIES_SMALL,
             ["kelp_dried"] = TUNING.AFFINITY_15_CALORIES_TINY
         }

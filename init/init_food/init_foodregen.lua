@@ -40,10 +40,14 @@ local function oneat(inst, data)
 
 	if TUNING.DSTU.WARLY_CHANGES ~= 0 then
 		if health_delta > 3 and not inst:HasAnyTag("ignores_foodregen", "ignores_healthregen") then
-			inst.components.debuffable:AddDebuff("healthregenbuff_vetcurse_"..data.food.prefab, "healthregenbuff_vetcurse", {duration = (health_delta * 0.1), max_hp = string.find(data.food.prefab, "spice_salt") ~= nil})
+			inst.components.debuffable:AddDebuff("healthregenbuff_vetcurse_"..data.food.prefab, "healthregenbuff_vetcurse", {duration = (health_delta * 0.1)})
 		else
 			inst.components.health:DoDelta(health_delta, nil, data.food.prefab)
 		end
+
+        if string.find(data.food.prefab, "spice_salt") then
+            inst.components.health:DeltaPenalty(-0.125)
+        end
 	else
 		if health_delta > 3 and not inst:HasAnyTag("ignores_foodregen", "ignores_healthregen") then
 			inst.components.debuffable:AddDebuff("healthregenbuff_vetcurse_"..data.food.prefab, "healthregenbuff_vetcurse", {duration = (health_delta * 0.1)})

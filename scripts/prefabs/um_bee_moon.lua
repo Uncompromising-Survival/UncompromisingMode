@@ -245,15 +245,15 @@ local function fn()
     inst.components.workable:SetWorkLeft(1)
     inst.components.workable:SetOnFinishCallback(OnWorked)
 
-    MakeSmallBurnableCharacter(inst, "moonbee_torso-0", Vector3(0, -1, 1))
-    MakeTinyFreezableCharacter(inst, "moonbee_torso-0", Vector3(0, -1, 1))
+    MakeSmallBurnableCharacter(inst, "moonbee_torso", Vector3(0, -1, 1))
+    MakeTinyFreezableCharacter(inst, "moonbee_torso", Vector3(0, -1, 1))
 
     ------------------
 
     inst:AddComponent("health")
     inst:AddComponent("combat")
     inst.components.combat:SetRange(TUNING.BEE_ATTACK_RANGE)
-    inst.components.combat.hiteffectsymbol = "moonbee_torso-0"
+    inst.components.combat.hiteffectsymbol = "moonbee_torso"
     inst.components.combat:SetPlayerStunlock(PLAYERSTUNLOCK.RARELY)
     inst.components.combat.bonusdamagefn = bonus_damage_via_allergy
 

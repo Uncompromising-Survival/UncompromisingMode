@@ -275,7 +275,7 @@ DESCRIBE.LUREPLAGUE_RAT =
 "It appears the lureplant is acting as a parasite to the rodentia kleptomanis, is it still alive?"
 DESCRIBE.MARSH_GRASS = "A nondescript bush."
 DESCRIBE.CURSED_ANTLER = "It seems to be extraordinarily durable as a weapon."
-DESCRIBE.BERNIEBOX = "Toys never came in packaging like this when I was a kid."
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "Its form goes through a rapid recrystallization."
 DESCRIBE.HOODED_FERN = "Shade is its prefect environment for ferns to prosper."
 DESCRIBE.HOODEDWIDOW =
 "A solidary predator. It appears to be near the top of the food chain."
@@ -291,14 +291,7 @@ DESCRIBE.WEBBEDCREATURE =
 "It doesnt appear to be a nest. I assume it contains something."
 ANNOUNCE.WEBBEDCREATURE =
 "Only the spider itself can match this tensile strength."
-DESCRIBE.SNAPDRAGON_BUDDY = "Reminds me of a dionaea muscipula."
-DESCRIBE.SNAPDRAGON = "Truly a Lusus Naturae!"
-DESCRIBE.SNAPPLANT = "I believe it has formed a symbiotic relationship."
-DESCRIBE.WHISPERPOD = "Some gardening may be required."
-DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
-    GENERIC = "A host for plant growth, perhaps?",
-    GROWING = "It is not yet ready for harvest."
-}
+
 DESCRIBE.FRUITBAT = "It seems to be connected to the pitcher plant somehow."
 DESCRIBE.PITCHERPLANT = "The fruit bats can be seen going in and out of it."
 DESCRIBE.APHID = "They're infesting the Sequoioideae."
@@ -350,14 +343,6 @@ DESCRIBE.CRABCLAW =
 "The appendage has distinct engravings. For gemstones, I presume."
 DESCRIBE.HAT_RATMASK = "Amplifies the abilities of our noses."
 
-DESCRIBE.ORANGE_VOMIT = "Delightful."
-DESCRIBE.GREEN_VOMIT = "Delightful."
-DESCRIBE.RED_VOMIT = "Delightful."
-DESCRIBE.PINK_VOMIT = "Delightful."
-DESCRIBE.YELLOW_VOMIT = "Delightful."
-DESCRIBE.PURPLE_VOMIT = "Delightful."
-DESCRIBE.PALE_VOMIT = "Delightful."
-
 DESCRIBE.WALRUS_CAMP_EMPTY = DESCRIBE.WALRUS_CAMP.EMPTY
 DESCRIBE.PIGKING_PIGGUARD = {
     GUARD = DESCRIBE.PIGMAN.GUARD,
@@ -376,12 +361,6 @@ DESCRIBE.CAVE_ENTRANCE_OPEN_SUNKDECID = DESCRIBE.CAVE_ENTRANCE_OPEN
 DESCRIBE.CAVE_EXIT_SUNKDECID = DESCRIBE.CAVE_EXIT
 
 DESCRIBE.PIGKING_PIGTORCH = DESCRIBE.PIGTORCH
--- Blowgun stuff
-DESCRIBE.UNCOMPROMISING_BLOWGUN = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_TOOTH = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_FIRE = DESCRIBE.BLOWDART_FIRE
-DESCRIBE.BLOWGUNAMMO_SLEEP = DESCRIBE.BLOWDART_SLEEP
-DESCRIBE.BLOWGUNAMMO_ELECTRIC = DESCRIBE.BLOWDART_YELLOW
 
 DESCRIBE.UM_BEAR_TRAP = "A mundane trap, I best stay clear of it."
 DESCRIBE.UM_BEAR_TRAP_OLD = "A mundane trap, I best stay clear of it."
@@ -646,8 +625,6 @@ DESCRIBE.MEATRACK_HAT = {
     DRYING_NOTMEAT = DESCRIBE.MEATRACK.DRYING_NOTMEAT,
     DRYINGINRAIN_NOTMEAT = DESCRIBE.MEATRACK.DRYINGINRAIN_NOTMEAT
 }
-DESCRIBE.FISHMEAT_DRIED = "Rich in sodium and oils."
-DESCRIBE.SMALLFISHMEAT_DRIED = "Just make sure to wash your hands after eating."
 
 DESCRIBE.WIXIEGUN = "This doesn't belong in the hands of a child."
 
@@ -719,7 +696,7 @@ DESCRIBE.UM_RIMEWEED_TEQUILA = "It's far too cold to enjoy."
 DESCRIBE.UM_RIMEWEED_SPAGETT = "Crunchy spagetti, not my first choice."
 
 -- Lava Caves
-DESCRIBE.MAGMAROCK1 = DESCRIBE.ROCKS
+DESCRIBE.UM_MAGMAROCK1 = DESCRIBE.ROCKS
 DESCRIBE.MAGMABONE = "I wonder if the worms got to it."
 
 DESCRIBE.UM_COOKPOT_WAGSTAFF = {
@@ -751,3 +728,12 @@ DESCRIBE.WATHOM_CORPSE = "The corpse appears to have expired, yet the heart is s
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "I cant complain about the results."
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Curious, it appears its frozen exterior keeps it protected."
 DESCRIBE.UM_THULECITE_RAZOR= "I'm going to pretend I didn't spend valuable resources for that."
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "The sulfurous compounds are tempered by the calcium."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "It was just a common spring confection.",
+    SUMMER = "Eating is hardly a scholarly achievement.",
+    AUTUMN = "It was a fine use of our stored provisions.",
+    WINTER = "Its flavor against the frost is stimulating for the mind.",
+}
+DESCRIBE.UM_BOOMBERRYPIE = "So many Boomberries in such a small space makes quite a violent reaction."
+DESCRIBE.UM_CHILES_EN_NOGADA = "A traditional Mexican delight."

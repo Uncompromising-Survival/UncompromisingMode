@@ -28,7 +28,7 @@ local function SpreadGoo(inst,number)
     for i = 1,circle do
         local x1 = x+radius*math.cos(2*3.14*i/circle)
         local z1 = z+radius*math.sin(2*3.14*i/circle)
-        local puddle =     GLOBAL.SpawnPrefab("wathom_puddle")
+        local puddle = GLOBAL.SpawnPrefab("wathom_puddle")
         puddle.Transform:SetPosition(x1,y,z1)
         puddle.wathom = inst
     end
@@ -211,14 +211,12 @@ local SLEEPREPEL_MUST_TAGS = {"_combat"}
 local SLEEPREPEL_CANT_TAGS = {"player", "companion", "abigail", "shadowminion", "playerghost", "INLIMBO", "wixieshoved", "invisible",
     "hiding", "notarget", "noattack", "flight", "wall"}
 local NO_SHOVE_TAGS = {"stageusher", "toadstool"}
-local NO_SHOVE_ATTACK_LEADER_TAGS = {"player", "bell", "irreplaceable"}
 local function Check_Bowling(inst, target)
     if inst ~= nil then
         local x, y, z = inst.Transform:GetWorldPosition()
         local ents = TheSim:FindEntities(x, y, z, 2, SLEEPREPEL_MUST_TAGS, SLEEPREPEL_CANT_TAGS)
         for i, v in ipairs(ents) do
-            local leader = v.components.follower and v.components.follower:GetLeader()
-            if inst.components.combat:CanTarget(v) and not (leader and leader:HasAnyTag(NO_SHOVE_ATTACK_LEADER_TAGS)) then --(not target) or (target and v ~= target)
+            if inst.components.combat:CanTarget(v) and not inst.components.combat:IsAlly(v) then --(not target) or (target and v ~= target)
                 v:AddTag("wixieshoved")
                 SpawnPrefab("round_puff_fx_sm").Transform:SetPosition(v.Transform:GetWorldPosition())
 
@@ -526,7 +524,7 @@ AddStategraphPostInit("wilson", function(inst)
                     inst.components.locomotor.runspeed = TUNING.WILSON_RUN_SPEED
                     inst.Transform:ClearPredictedFacingModel()
                 end
-                if HoldingCane(inst) and HasSkill(inst,"digitigrade_2") and inst.components.adrenaline and inst.components.adrenaline:GetPercent() < .51 then
+                if not inst:HasTag("amped") and HoldingCane(inst) and HasSkill(inst,"digitigrade_2") and inst.components.adrenaline and inst.components.adrenaline:GetPercent() < .51 then
                     inst.components.adrenaline:DoDelta(1)
                 end
             end,
@@ -1100,65 +1098,54 @@ local wathombark = AddAction(
     "WATHOMBARK",
     STRINGS.ACTIONS.WATHOMBARK,
     function(act)
-        local inst = act.doer
-        if HasSkill(inst,"wathom_friends_2") then
-            SurvivorBarkEffect(inst)
+        local doer = act.doer
+        if HasSkill(doer, "wathom_friends_2") then
+            SurvivorBarkEffect(doer)
         end
-        if HasSkill(inst,"bark_mastery") then
-            SpreadGoo(inst,1)
+        if HasSkill(doer, "bark_mastery") then
+            SpreadGoo(doer, 1)
         end
-        if act.doer ~= nil and act.doer.components.adrenaline ~= nil then -- previously act.target
-            local inst = act.doer
-            inst.AnimState:AddOverrideBuild("emote_angry")
-            inst.components.adrenaline:DoDelta(inst:HasTag("amped") and 8 or -25, 2)
-            --        inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/bark") Commented out for now since it already plays the sound before this code is performed
+        if doer and doer.components.adrenaline then -- previously act.target
+            doer.AnimState:AddOverrideBuild("emote_angry")
+            doer.components.adrenaline:DoDelta(doer:HasTag("amped") and 8 or -25, 2)
+            --        doer.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/bark") Commented out for now since it already plays the sound before this code is performed
 
-            local act_pos = act:GetActionPoint()
-            local ents = GLOBAL.TheSim:FindEntities(act_pos.x, act_pos.y, act_pos.z, 10, { "_combat" },
-                { "companion", "INLIMBO", "notarget", "noattack", "player", "playerghost", "wall", "abigail", "shadow", "shadowminion"}) --added playertags because of the taunt.
+            local pos = act:GetActionPoint()
+            local ents = GLOBAL.TheSim:FindEntities(pos.x, pos.y, pos.z, 10, {"_combat"}, {"companion", "INLIMBO", "notarget", "noattack", "player", "playerghost", "wall", "abigail", "shadowminion", "shadow"}) --added playertags because of the taunt.
             for i, v in ipairs(ents) do
-                if v.components.hauntable ~= nil and v.components.hauntable.panicable and not
-                    (
-                        v.components.follower ~= nil and v.components.follower:GetLeader() and
-                        v.components.follower:GetLeader():HasTag("player")) then
-                    v.components.hauntable:Panic(10) -- Fallback to TUNING.BATTLESONG_PANIC_TIME (6 seconds) if needed
-                    if HasSkill(inst,"wathom_friends_1") then
-                        v:AddTag("wathom_really_spooking_me")
-                        v:DoTaskInTime(10,function(v) v:RemoveTag("wathom_really_spooking_me") end)
+                if v ~= doer and v.entity:IsVisible()
+                    and not (v.components.health and v.components.health:IsDead())
+                    and not (doer.components.combat and doer.components.combat:IsAlly(v)) then
+                    if v.components.hauntable and v.components.hauntable.panicable then
+                        v.components.hauntable:Panic(10) -- Fallback to TUNING.BATTLESONG_PANIC_TIME (6 seconds) if needed
+                        if HasSkill(doer,"wathom_friends_1") then
+                            v:AddTag("wathom_really_spooking_me")
+                            v:DoTaskInTime(10,function(v) v:RemoveTag("wathom_really_spooking_me") end)
+                        end
+                        AddEnemyDebuffFx("battlesong_instant_panic_fx", v)
                     end
-                    AddEnemyDebuffFx("battlesong_instant_panic_fx", v)
-                end
-                if v.components.hauntable == nil or
-                    v.components.hauntable ~= nil and not v.components.hauntable.panicable and not (
-                        v.components.follower ~= nil and v.components.follower:GetLeader() and
-                        v.components.follower:GetLeader():HasTag("player")) then
-                    if not v:HasTag("bird") and v.components.combat then
-                        v.components.combat:SetTarget(act.doer)
+                    if not v:HasTag("bird") and v.components.combat and (not v.components.hauntable or v.components.hauntable and not v.components.hauntable.panicable) then
+                        v.components.combat:SetTarget(doer)
                         AddEnemyDebuffFx("battlesong_instant_taunt_fx", v)
                     end
                 end
             end
             --also scare enemies near wathom, at a smaller radius
-            local x, y, z = act.doer.Transform:GetWorldPosition()
-            ents = GLOBAL.TheSim:FindEntities(x, y, z, 4, { "_combat" },
-                { "companion", "INLIMBO", "notarget", "noattack", "player", "playerghost", "wall", "abigail", "shadow", "shadowminion", "trap" }) --added playertags because of the taunt.
+            local x, y, z = doer.Transform:GetWorldPosition()
+            ents = GLOBAL.TheSim:FindEntities(x, y, z, 4, {"_combat"}, {"companion", "INLIMBO", "notarget", "noattack", "player", "playerghost", "wall", "abigail", "shadowminion", "shadow", "trap"}) --added playertags because of the taunt.
             for i, v in ipairs(ents) do
-                if v.components.hauntable ~= nil and v.components.hauntable.panicable and not
-                    (
-                        v.components.follower ~= nil and v.components.follower:GetLeader() and
-                        v.components.follower:GetLeader():HasTag("player")) then
-                    v.components.hauntable:Panic(8) -- Fallback to TUNING.BATTLESONG_PANIC_TIME (6 seconds) if needed
-                    if HasSkill(inst,"wathom_friends_1") then
-                        v:AddTag("wathom_really_spooking_me")
-                        v:DoTaskInTime(8,function(v) v:RemoveTag("wathom_really_spooking_me") end)
+                if v ~= doer and v.entity:IsVisible()
+                    and not (v.components.health and v.components.health:IsDead())
+                    and not (doer.components.combat and doer.components.combat:IsAlly(v)) then
+                    if v.components.hauntable and v.components.hauntable.panicable then
+                        v.components.hauntable:Panic(8) -- Fallback to TUNING.BATTLESONG_PANIC_TIME (6 seconds) if needed
+                        if HasSkill(doer, "wathom_friends_1") then
+                            v:AddTag("wathom_really_spooking_me")
+                            v:DoTaskInTime(8,function(v) v:RemoveTag("wathom_really_spooking_me") end)
+                        end
                     end
-                end
-                if v.components.hauntable == nil or
-                    v.components.hauntable ~= nil and not v.components.hauntable.panicable and not (
-                        v.components.follower ~= nil and v.components.follower:GetLeader() and
-                        v.components.follower:GetLeader():HasTag("player")) and not v:HasTag("player") then
-                    if not v:HasTag("bird") and v.components.combat then
-                        v.components.combat:SetTarget(act.doer)
+                    if not v:HasTag("bird") and v.components.combat and (not v.components.hauntable or v.components.hauntable and not v.components.hauntable.panicable) then
+                        v.components.combat:SetTarget(doer)
                     end
                 end
             end

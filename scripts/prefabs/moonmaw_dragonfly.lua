@@ -107,18 +107,16 @@ local function RetargetFn(inst)
     if inst.components.sleeper and inst.components.sleeper:IsAsleep() then
         return
     end
-    if inst.spit_interval and inst.last_target_spit_time and (GetTime() - inst.last_target_spit_time) > (inst.spit_interval * 1.5) and inst.last_spit_time and (GetTime() - inst.last_spit_time) > (inst.spit_interval * 1.5) then
-        return FindEntity(inst, 7 * TARGET_DIST, function(guy) return inst.components.combat:CanTarget(guy) and not guy:HasTag("prey") and not guy:HasTag("smallcreature") and not guy:HasTag("antlion") and not guy:HasTag("moonglasscreature") end)
-    else
-        return FindEntity(inst, 4 * TARGET_DIST, function(guy) return inst.components.combat:CanTarget(guy) and not guy:HasTag("prey") and not guy:HasTag("smallcreature") and not guy:HasTag("antlion") and not guy:HasTag("moonglasscreature") end)
-    end
+    local radius = inst.spit_interval and inst.last_target_spit_time and (GetTime() - inst.last_target_spit_time) > (inst.spit_interval * 1.5)
+        and inst.last_spit_time and (GetTime() - inst.last_spit_time) > (inst.spit_interval * 1.5) and 7 or 4
+    return FindEntity(inst, radius * TARGET_DIST, function(guy) return inst.components.combat:CanTarget(guy) and not guy:HasTag("prey") and not guy:HasTag("smallcreature") and not guy:HasTag("antlion") and not guy:HasTag("moonglasscreature") end)
 end
 
 local function KeepTargetFn(inst, target) return inst.components.combat:CanTarget(target) and not target:HasTag("moonglasscreature") end
 
 local function OnEntitySleep(inst)
     --[[if ((not inst:NearPlayerBase() and inst.SeenBase and not inst.components.combat:TargetIs(ThePlayer))
-	--if ((not inst:NearPlayerBase() and inst.SeenBase and not inst.components.combat:TargetIs(GetPlayer()))
+    --if ((not inst:NearPlayerBase() and inst.SeenBase and not inst.components.combat:TargetIs(GetPlayer()))
         or inst.components.sleeper:IsAsleep()
         or inst.KilledPlayer)
         and not NearPlayerBase(inst) then
@@ -246,15 +244,14 @@ end
 
 local function OnAttacked(inst, data)
     inst:ClearBufferedAction()
-    if data and data.attacker then
-        if not data.attacker:HasTag("moonglasscreature") then
-            inst.components.combat:SetTarget(data.attacker)
-        end
+    local attacker = data.attacker
+    if attacker and not attacker:HasTag("moonglasscreature") then
+        inst.components.combat:SetTarget(attacker)
     end
 end
 
 local function ShouldSleep(inst)
-    if ((inst.num_targets_vomited >= TUNING.DRAGONFLY_VOMIT_TARGETS_FOR_SATISFIED) or (inst.num_ashes_eaten >= TUNING.DRAGONFLY_ASH_EATEN_FOR_SATISFIED)) and inst.arrivedatsleepdestination and not inst.sg:HasStateTag("crashed") then
+    if (inst.num_targets_vomited >= TUNING.DRAGONFLY_VOMIT_TARGETS_FOR_SATISFIED or inst.num_ashes_eaten >= TUNING.DRAGONFLY_ASH_EATEN_FOR_SATISFIED) and inst.arrivedatsleepdestination and not inst.sg:HasStateTag("crashed") then
         inst.num_targets_vomited = 0
         inst.num_ashes_eaten = 0
         inst.sleep_time = GetTime()
@@ -377,6 +374,7 @@ local function SpawnShards(inst)
     for i = 1, 8 do
         inst.shards[i] = SpawnPrefab("moonmaw_glassshards_ring")
         inst.shards[i].WINDSTAFF_CASTER = inst
+        inst.shards[i].MOONMAW_TARGET = inst.components.combat and inst.components.combat.target or nil
         inst.shards[i].components.linearcircler:SetCircleTarget(inst)
         inst.shards[i].components.linearcircler:Start()
         inst.shards[i].components.linearcircler.randAng = i * .125
@@ -391,15 +389,15 @@ end
 
 --[[local function ShardsSpawnAttack(inst)
 if inst.components.combat ~= nil and inst.components.combat.target ~= nil then
-	local target = inst.components.combat.target
-	for i = 1,8 do
-		local x,y,z = inst.shards[i].Transform:GetWorldPosition()
-		local shardattack = SpawnPrefab("moonmaw_glassshards")
-		shardattack.Transform:SetPosition(x,y,z)
-		shardattack.anim = inst.shards[i].anim
-		shardattack.components.projectile:Throw(inst, target, inst)
-		inst.shards[i]:Remove()
-	end
+    local target = inst.components.combat.target
+    for i = 1,8 do
+        local x,y,z = inst.shards[i].Transform:GetWorldPosition()
+        local shardattack = SpawnPrefab("moonmaw_glassshards")
+        shardattack.Transform:SetPosition(x,y,z)
+        shardattack.anim = inst.shards[i].anim
+        shardattack.components.projectile:Throw(inst, target, inst)
+        inst.shards[i]:Remove()
+    end
 end
 end]]
 
