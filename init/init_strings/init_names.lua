@@ -715,7 +715,7 @@ NAMES.SNAPPY_JAW = "Snappy Jaw"
 NAMES.UM_BOATBOTTLE = "Boat Bottle"
 NAMES.BOAT_ANCIENT_ITEM_BLUEPRINT = "Archaic Boat Kit Blueprint"
 NAMES.UM_BUTTERY_FLY = "Buttery Fly"
-NAMES.UM_HAT_LEAFWING = "Leafy Helm"
+NAMES.UM_HAT_LEAFWING = "Elated Leafy Helm"
 NAMES.UM_LEAFWING = "Leafy Wing"
 NAMES.UM_DETONATOR = "Universal Detonator"
 
