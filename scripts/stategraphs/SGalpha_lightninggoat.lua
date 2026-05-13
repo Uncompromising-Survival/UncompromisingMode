@@ -453,7 +453,6 @@ local states=
 					inst.count = inst.count - 1
 					inst.sg:GoToState("electricalattack")
 				else
-					TheNet:Announce("FinishedGoatmove")
 					inst.recharging_electric = true
 					inst.Recharge(inst)
 					inst.AnimState:Hide("fx")

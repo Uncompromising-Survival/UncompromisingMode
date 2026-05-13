@@ -15,16 +15,23 @@ local function RobustFloodCheck(inst) -- For players, check to see if they're on
     end
 end
 
-local ripple_blacklist = { "webbedcreature" }
-for i, v in ipairs(ripple_blacklist) do
+local ripple_blacklist_prefabs = { "webbedcreature"}
+for i, v in ipairs(ripple_blacklist_prefabs) do
     env.AddPrefabPostInit(v, function(inst)
         inst.um_ripple_blacklist = true
     end)
 end
 
+local ripple_blacklist_tags = {"projectile"}
 
 -- AXE Add ripples to plants, structures, and items
 env.AddPrefabPostInitAny(function(inst)
+    for i,v in ipairs(ripple_blacklist_tags) do
+        if inst:HasTag(v) then
+            inst.um_ripple_blacklist = true
+        end
+    end
+
     if (inst:HasAnyTag("structure", "boulder", "plant") or inst.components.inventoryitem) and not inst.um_ripple_blacklist then
         if not inst.components.umripples then
             inst:AddComponent("umripples")
@@ -45,6 +52,10 @@ env.AddPrefabPostInitAny(function(inst)
             umripples.bob_percent = floater.bob_percent
             umripples.splash = floater.splash
         end
+        if inst.components.inventoryitem and not inst.components.floatable then
+            local umripples = inst.components.umripples
+            umripples.vert_offset = 0.1
+        end
     end
 end)
 
@@ -52,6 +63,10 @@ end)
 env.AddClassPostConstruct("components/inventoryitem_replica", function(self) --AXE Add the ripples to the client side of items
     if not self.inst.components.umripples then
         self.inst:AddComponent("umripples")
+        if not self.inst.components.floatable then
+            local umripples = self.inst.components.umripples
+            umripples.vert_offset = 0.1
+        end
     end
 end)
 
@@ -82,7 +97,7 @@ AddRipples("skeleton", 2.25, 2, 2.25, 0.2)
 AddRipples("hound", 2)
 AddRipples("icehound", 2)
 AddRipples("firehound", 2)
-AddRipples("um_tentacle_moon", 1.5, 1.5, 1.5)
+AddRipples("um_tentacle_moon", 1.5, 1.5, 1.5,0.2)
 AddRipples("um_tentacle_moon_mine", 0.5)
 AddRipples("boulder_crab", 3)
 AddRipples("molebat", 1.1, 1.1, 1.1)
@@ -93,6 +108,8 @@ AddRipples("shockworm", 1.4, 1.4, 1.4)
 AddRipples("pigman", 1.2, 1.2, 1.2, 0.2)
 AddRipples("bunnyman", 1.2, 1.2, 1.2, 0.2)
 AddRipples("merm", 1.2, 1.2, 1.2, 0.2)
+AddRipples("carrat", 1.1, 1.1, 1.1, 0.2)
+AddRipples("mushgnome", 0.8, 0.8, 0.8, 0.2)
 --
 
 
@@ -361,7 +378,6 @@ env.AddStategraphPostInit("wilson", function(inst)
         _onexit(inst, ...)
     end
 end)
-
 
 ---------------------------
 -- [ Flooded Tile Handling] -- AXE

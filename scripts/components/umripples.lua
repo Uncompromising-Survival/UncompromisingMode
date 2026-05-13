@@ -3,9 +3,17 @@ local Umripples = Class(function(self, inst)
 
     self.ismastersim = TheNet:GetIsMasterSimulation()
     if self.ismastersim then
+        -- Calls from elsewhere
         self.inst:ListenForEvent("on_landed", function() self:OnLandedServer() end)
         self.inst:ListenForEvent("on_no_longer_landed", function() self:OnNoLongerLandedServer() end)
+
+        -- Inventory items being dropped
+        self.inst:ListenForEvent("ondropped", function() self:OnLandedServer() end)
+        
+        -- Remove FX on removal of entity with the ripple fx
         self.inst:ListenForEvent("onremove", function() self:OnNoLongerLandedServer() end)
+
+        -- On server load, check to see if I should be showing effect
         self.inst:DoTaskInTime(0,function(inst)
             if self:ShouldShowEffect() then
                 self:OnLandedServer()
@@ -150,9 +158,30 @@ function Umripples:SetSwapData(swap_data)
     self.swap_data = swap_data
 end
 
+local function CheckForY0(inst)
+    local x,y,z = inst.Transform:GetWorldPosition()
+    if y < 0.6 and inst.components.umripples then
+        inst.Transform:SetPosition(x,0,z)
+        inst.Physics:Stop()
+        inst.components.umripples:OnLandedServer()
+        if inst.falling then
+            inst.falling:Cancel()
+            inst.falling = nil
+        end
+    end
+end
+
 function Umripples:ShouldShowEffect()
     local inst = self.inst
-    return TheWorld.Map:GetTileAtPoint(inst.Transform:GetWorldPosition()) == WORLD_TILES.UM_FLOODWATER_GROTTO and not (inst.sg and inst.sg:HasStateTag("flying"))
+    local x,y,z = inst.Transform:GetWorldPosition()
+    if TheWorld.Map:GetTileAtPoint(x,0,z) == WORLD_TILES.UM_FLOODWATER_GROTTO and not (inst.sg and inst.sg:HasStateTag("flying")) then
+        if y > 0 then
+            inst.umripples_falling = inst:DoPeriodicTask(FRAMES,CheckForY0)
+            return false
+        else
+            return true
+        end
+    end
 end
 
 function Umripples:AttachEffect(effect)
