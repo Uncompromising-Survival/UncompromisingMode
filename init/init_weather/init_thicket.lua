@@ -1,8 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-
-
 local cant_poof = {"notraptrigger","flying","spore","plantkin","bat"}
 local cant_thicket = {"smallcreature","bird","shadowcreature","ghost","playerghost","bat"}
 local function ThicketCheck(inst) -- AND POOFSHROOMS
@@ -19,7 +17,6 @@ local function ThicketCheck(inst) -- AND POOFSHROOMS
         end
     end
 end
-
 
 --local ignore_thicket = {"smallcreature","bird","shadowcreature","ghost","playerghost","bat"}
 env.AddComponentPostInit("locomotor", function(self)

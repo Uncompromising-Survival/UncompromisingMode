@@ -42,12 +42,13 @@ end
 
 local function OnHitMutate(inst, attacker, target)
     local x,y,z = inst.Transform:GetWorldPosition()
-    local fx = SpawnPrefab("winona_catapult_projectile")
+    local fx = SpawnPrefab("um_lunar_explosion")
+    fx.AnimState:HideSymbol("fx_icon")
     fx.Transform:SetPosition(x,y,z)
     --fx.Transform:SetScale(1.25, 1.25, 1.25)
     fx.persists = false
-    fx.AnimState:PlayAnimation("impact3_special")
-    fx.hideanim:set(true)
+    --fx.AnimState:PlayAnimation("impact3_special")
+    --fx.hideanim:set(true)
     fx.SoundEmitter:PlaySound("meta4/winona_catapult/lunar_projectile_explode")
     fx:ListenForEvent("animover", fx.Remove)
     
@@ -73,6 +74,9 @@ local function OnHitMutate(inst, attacker, target)
                         mult = mult * 0.33 -- AXE Lunar bomb is exceptionally less effective against lunar creatures, or those than can mutate
                     end
                     v.components.combat:GetAttacked(attacker, mult * 150)
+                end
+                if v.components.sanity then
+                    v.components.sanity:DoDelta(50)
                 end
             end
         end
@@ -238,14 +242,44 @@ local function moon_bomb_fn()
         return inst
     end
     inst.components.complexprojectile:SetHorizontalSpeed(25)
-    inst.components.complexprojectile:SetOnHit(OnHitMutate) 
+    inst.components.complexprojectile:SetOnHit(OnHitMutate)
     inst.components.weapon:SetRange(12, 12)
     inst.components.weapon.toss_range_override = 12 --AXE override the usual toss range, additional code in init_actions passes this value
 
     return inst
 end
 
+local function explosionfn()
+    local inst = CreateEntity()
 
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddNetwork()
+    inst.entity:AddLight()
+    inst.Light:SetIntensity(.6)
+    inst.Light:SetRadius(2)
+    inst.Light:SetFalloff(1)
+    inst.Light:SetColour(1, 1, 1)
+
+	inst.entity:SetPristine()
+
+	
+    if not TheWorld.ismastersim then
+        return inst
+    end
+    inst:AddTag("NOCLICK")
+    inst:AddTag("FX")
+    inst.AnimState:SetBuild("um_lunar_explosion")
+    inst.AnimState:SetBank("um_lunar_explosion")
+    inst.AnimState:PlayAnimation("impact3_special")
+    inst.Transform:SetScale(1,1,1)
+	inst.Light:Enable(true)
+    inst:ListenForEvent("animover", function(inst) inst:Remove() end)
+
+    return inst
+end
 
 return Prefab("um_fyre_bomb", fyre_bomb_fn, assets),
-Prefab("um_bomb_moon", moon_bomb_fn, assets)
+Prefab("um_bomb_moon", moon_bomb_fn, assets),
+Prefab("um_lunar_explosion", explosionfn)

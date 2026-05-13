@@ -51,7 +51,7 @@ AddRecipe2("scrap_monoclehat", { Ingredient("wagpunk_bits", 4), Ingredient("tran
 ChangeSortKey("scrap_monoclehat", "moonstorm_goggleshat", "CLOTHING", true)
 ChangeSortKey("scrap_monoclehat", "antlionhat", "TOOLS", false)
 
-AddRecipe2("um_hat_nettlemask", { Ingredient("firenettles", 20), Ingredient("slurper_pelt", 1), Ingredient("goldnugget", 1) }, TECH.SCIENCE_TWO, nil, { "CLOTHING", "WINTER", "RAIN" })
+AddRecipe2("um_hat_nettlemask", { Ingredient("firenettles", 16), Ingredient("slurper_pelt", 1), Ingredient("goldnugget", 1) }, TECH.SCIENCE_TWO, nil, { "CLOTHING", "WINTER", "RAIN" })
 ChangeSortKey("um_hat_nettlemask", "beehat", "CLOTHING", false)
 ChangeSortKey("um_hat_nettlemask", "earmuffshat", "WINTER", true)
 ChangeSortKey("gasmask", "balloonhat", "RAIN", true)
@@ -525,7 +525,7 @@ ChangeSortKey("mastupgrade_windturbine_item", "mastupgrade_lightningrod_item", "
 
 -- Pyre Nettles stuff
 -- Pyre Mantle
-AddRecipe2("um_armor_pyre_nettles", { Ingredient("firenettles", 20), Ingredient("silk", 1) }, TECH.NONE, nil, { "ARMOUR", "WINTER", "RAIN" })
+AddRecipe2("um_armor_pyre_nettles", { Ingredient("firenettles", 16), Ingredient("silk", 3) }, TECH.NONE, nil, { "ARMOUR", "WINTER", "RAIN" })
 ChangeSortKey("um_armor_pyre_nettles", "armordragonfly", "ARMOUR", false)
 ChangeSortKey("um_armor_pyre_nettles", "raincoat", "WINTER", true)
 ChangeSortKey("um_armor_pyre_nettles", "armor_reed_um", "RAIN", false)
@@ -573,10 +573,7 @@ ChangeSortKey("um_record_tot", "um_record_hooded_widow", "DECOR", true)
 ChangeSortKey("um_record_moonmaw", "um_record_tot", "DECOR", true)
 ChangeSortKey("um_record_moonmaw", "um_backpack_amuletuse", "CRAFTING_STATION", true)
 
-AddRecipe2("um_scrapper", { Ingredient("gears", 1), Ingredient("houndstooth", 4), Ingredient("thulecite", 2) }, TECH.LOST, { placer = "um_scrapper_placer" }, { "STRUCTURES", "TOOLS" })
---AddRecipe2("um_inkubator", { Ingredient("gears", 1), Ingredient("nightmarefuel", 4), Ingredient("thulecite", 2) }, TECH.LOST, { placer = "um_inkubator_placer" }, { "STRUCTURES" })
-
-AddRecipe2("um_astral_projector", { Ingredient("purplemooneye", 1), Ingredient("moonrocknugget", 4), Ingredient("thulecite", 4) }, TECH.LOST, {
+AddRecipe2("um_astral_projector", { Ingredient("purplemooneye", 1), Ingredient("thulecite", 4), Ingredient("moonrocknugget", 4) }, TECH.LOST, {
     placer = "um_astral_projector_placer",
     testfn = function(pt, rot, builder)
         local x, y, z = pt:Get()
@@ -585,6 +582,7 @@ AddRecipe2("um_astral_projector", { Ingredient("purplemooneye", 1), Ingredient("
             and #TheSim:FindEntities(x, y, z, 27, { "um_astral_projector_target" }) == 0
     end
 }, { "STRUCTURES" })
+ChangeSortKey("um_astral_projector", "archive_resonator_item", "STRUCTURES", false)
 
 AddRecipe2("um_astral_projector_target", { Ingredient("moonglass", 3), Ingredient("thulecite", 4), Ingredient("moonrocknugget", 2) }, TECH.LOST, {
     placer = "um_astral_projector_target_placer",
@@ -595,13 +593,21 @@ AddRecipe2("um_astral_projector_target", { Ingredient("moonglass", 3), Ingredien
             and #TheSim:FindEntities(x, y, z, 27, { "um_astral_projector_target" }) == 0
     end
 }, { "STRUCTURES" })
+ChangeSortKey("um_astral_projector_target", "um_astral_projector", "STRUCTURES", true)
+ChangeSortKey("townportal", "um_astral_projector_target", "STRUCTURES", true)
+
+AddRecipe2("um_scrapper", { Ingredient("greenmooneye", 1), Ingredient("thulecite", 4), Ingredient("gears", 1) }, TECH.LOST, { placer = "um_scrapper_placer" }, { "STRUCTURES", "TOOLS" })
+ChangeSortKey("um_scrapper", "townportal", "STRUCTURES", true)
+ChangeSortKey("um_scrapper", "sentryward", "TOOLS", true)
+
+--AddRecipe2("um_inkubator", { Ingredient("gears", 1), Ingredient("nightmarefuel", 4), Ingredient("thulecite", 2) }, TECH.LOST, { placer = "um_inkubator_placer" }, { "STRUCTURES" })
 
 AddRecipe2("boat_ancient_item", { Ingredient("livinglog", 16) }, TECH.LOST, nil, { "SEAFARING" })
 ChangeSortKey("boat_ancient_item", "boat_item", "SEAFARING", true)
 
 AddRecipe2("beakbasher", { Ingredient("driftwood_log", 2), Ingredient("kelp", 8), Ingredient("ocupus_beak", 1) }, TECH.SCIENCE_TWO, nil, { "TOOLS", "WEAPONS" })
 ChangeSortKey("beakbasher", "goldenshovel", "TOOLS", true)
-ChangeSortKey("beakbasher", "hambat", "WEAPONS")
+ChangeSortKey("beakbasher", "hambat", "WEAPONS", true)
 
 AddRecipe2("um_hat_leafwing", { Ingredient("um_leafwing", 2), Ingredient("um_moss", 4), Ingredient("log", 3) }, TECH.SCIENCE_TWO, nil, { "CLOTHING" })
 ChangeSortKey("um_hat_leafwing", "beehat", "CLOTHING", true)

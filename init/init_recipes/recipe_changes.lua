@@ -400,6 +400,9 @@ AddRecipeToFilter("reflectivevest", "RAIN")
 ChangeSortKey("reflectivevest", "um_armor_pyre_nettles", "RAIN", true)
 AddRecipeToFilter("kelphat", "SUMMER")
 ChangeSortKey("kelphat", "watermelonhat", "SUMMER", false)
+AddRecipeToFilter("sentryward", "STRUCTURES")
+ChangeSortKey("sentryward", "moondial", "STRUCTURES", true)
+--ChangeSortKey("townportal", "archive_resonator_item", "STRUCTURES", false) -- Setting this in recipes.lua so it's ordered correctly with Archives structures.
 
 if TUNING.DSTU.SHAVE_MODE then
     AllRecipes["razor"].level = TechTree.Create(TECH.NONE)

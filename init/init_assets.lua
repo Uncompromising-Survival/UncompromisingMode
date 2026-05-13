@@ -1338,6 +1338,7 @@ Assets = {
 
     --FX
     Asset("ANIM", "anim/electric_explosion.zip"),
+    Asset("ANIM", "anim/um_lunar_explosion.zip"),
 
     Asset("ANIM", "anim/um_harpoonhitfx.zip"),
 

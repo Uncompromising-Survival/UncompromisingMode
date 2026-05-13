@@ -101,7 +101,7 @@ local function DoPuff(inst, channeler)
 	if inst._cdtask == nil and inst.components.container ~= nil then
 		inst._cdtask = inst:DoTaskInTime(1, OnCooldown)
 		local recipeitems = inst.components.container:FindItems(function(item) return AllRecipes[item.prefab] ~= nil end)
-		local lootcount = 1
+		local lootcount = 1.1
 		for i, v in ipairs(recipeitems) do
 			local recipe = AllRecipes[v.prefab]
 			if recipe == nil or FunctionOrValue(recipe.no_deconstruction, v) then
@@ -134,10 +134,11 @@ local function DoPuff(inst, channeler)
 					local amt = v.amount == 0 and 0 or math.max(1, math.ceil(v.amount --[[* ingredient_percent]]))
 					for n = 1, amt do
 						if math.random() <= rollthedice / 2 then
-							lootcount = lootcount + .1
+							lootcount = lootcount + math.random(1, 3) * .1
 							inst:DoTaskInTime(lootcount, function()
 								if inst ~= nil then
 									SpawnLootPrefab(inst, v, v.type)
+									inst.SoundEmitter:PlaySound("dontstarve/common/staff_dissassemble")
 								end
 							end)
 						end
@@ -145,7 +146,7 @@ local function DoPuff(inst, channeler)
 				end
 			end
 
-			inst.SoundEmitter:PlaySound("dontstarve/common/staff_dissassemble")
+			inst.SoundEmitter:PlaySound("turnoftides/common/together/seafaring_prototyper/use")
 
 			if v.components.inventory ~= nil then
 				v.components.inventory:DropEverything()
@@ -225,17 +226,18 @@ local function DoPuff(inst, channeler)
 			end
 
 			for i = 1, cube_count do
-				lootcount = lootcount + .1
+				lootcount = lootcount + math.random(1, 3) * .1
 				inst:DoTaskInTime(lootcount, function()
 					if inst ~= nil then
 						SpawnLootPrefab(inst, v, cube)
+						inst.SoundEmitter:PlaySound("dontstarve/common/staff_dissassemble")
 					end
 				end)
 			end
 
 			v:Remove()
+			inst.SoundEmitter:PlaySound("turnoftides/common/together/seafaring_prototyper/use")
 		end
-
 		inst:_PlayAnimation("idle_fueled")
 
 		inst.components.container:DropEverything()
