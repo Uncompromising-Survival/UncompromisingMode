@@ -80,7 +80,10 @@ end
 local function bumpcheck(owner, inst)
     local bumpradius = 2
     local x, y, z = owner.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, bumpradius, nil, { "pyre_toxin_immune", "companion", "FX", "INLIMBO", "invisible", "notarget", "noattack", "player", "playerghost" }, { "_combat", "_health" })
+    local TOXIN_NO_TAGS = { "pyre_toxin_immune", "companion", "FX", "INLIMBO", "invisible", "notarget", "noattack", "player", "playerghost", "boat" }
+    local TOXIN_NO_TAGS_PVP = { "pyre_toxin_immune", "companion", "FX", "INLIMBO", "invisible", "notarget", "noattack", "playerghost", "boat", "plantkin", "spawnprotection" }
+    local TOXIN_ONE_OF_TAGS = { "_combat", "_health" }
+    local ents = TheSim:FindEntities(x, y, z, bumpradius, nil, TOXIN_NO_TAGS, TOXIN_ONE_OF_TAGS)
 
     if #ents > 0 then
         for i, v in pairs(ents) do
@@ -97,7 +100,7 @@ local function bumpcheck(owner, inst)
     end
 
     if TheNet:GetPVPEnabled() then
-        local ents = TheSim:FindEntities(x, y, z, bumpradius, { "player" }, { "pyre_toxin_immune", "plantkin", "INLIMBO", "noattack", "spawnprotection", "playerghost" })
+        local ents = TheSim:FindEntities(x, y, z, bumpradius, { "player" }, TOXIN_NO_TAGS_PVP, TOXIN_ONE_OF_TAGS)
 
         if #ents > 0 then
             for i, v in pairs(ents) do
@@ -143,12 +146,7 @@ local function OnEquip(inst, owner)
     if owner:IsValid() and not owner:HasAnyTag("INLIMBO", "noattack") then
         inst.components.perishable:ReducePercent(0.05) -- 20 equips to fully spoil, to stop winter cheese, I think. -C
         owner:AddDebuff("umdebuff_pyre_toxin_armor_wearer", "umdebuff_pyre_toxin", DebuffDurationWearer)
-       --[[ if not TheWorld.state.iswinter then
-            task = owner:DoPeriodicTask(12, function() --Code from "吃西瓜", developer of "uncompromising patch"!
-                owner:AddDebuff("umdebuff_pyre_toxin_armor_wearer", "umdebuff_pyre_toxin", DebuffDurationWearer) 
-            end, 12) -- I didn't do this because I haven't heard much talk about this item.
-        end]] -- Also, the Pyre Mantle is supposed to help deal with Pyre Nettles' Toxins and help deal with threats from a new biome UM is adding in the next update.
-    end -- I am okay with discussing on how to nerf the mantle if it's truly overpowered. But I am unsure if overheating the player is the right move.
+    end
 	if owner:IsValid() and owner.components.health and not owner.components.health:IsDead() and owner.prefab ~= "wormwood" and owner.prefab ~= "willow" then
 		owner.components.health:DoDelta(-10)
 	end

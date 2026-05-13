@@ -1,5 +1,3 @@
--- [TODO]
-
 local assets =
 {
     Asset("ANIM", "anim/um_rimeweed.zip"),

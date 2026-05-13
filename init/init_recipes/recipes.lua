@@ -574,7 +574,7 @@ ChangeSortKey("um_record_moonmaw", "um_record_tot", "DECOR", true)
 ChangeSortKey("um_record_moonmaw", "um_backpack_amuletuse", "CRAFTING_STATION", true)
 
 AddRecipe2("um_scrapper", { Ingredient("gears", 1), Ingredient("houndstooth", 4), Ingredient("thulecite", 2) }, TECH.LOST, { placer = "um_scrapper_placer" }, { "STRUCTURES", "TOOLS" })
-AddRecipe2("um_inkubator", { Ingredient("gears", 1), Ingredient("nightmarefuel", 4), Ingredient("thulecite", 2) }, TECH.LOST, { placer = "um_inkubator_placer" }, { "STRUCTURES" })
+--AddRecipe2("um_inkubator", { Ingredient("gears", 1), Ingredient("nightmarefuel", 4), Ingredient("thulecite", 2) }, TECH.LOST, { placer = "um_inkubator_placer" }, { "STRUCTURES" })
 
 AddRecipe2("um_astral_projector", { Ingredient("purplemooneye", 1), Ingredient("moonrocknugget", 4), Ingredient("thulecite", 4) }, TECH.LOST, {
     placer = "um_astral_projector_placer",
