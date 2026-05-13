@@ -266,15 +266,16 @@ local function ShakeTree(inst, tree)
             end
 
             -- Watch your head
-            for i = 1, 4 do
-                tree.SpawnDebris(tree, player, impact_loot, player, true)
+            for i = 1, 3 do
+                tree.SpawnDebris(tree, nil, minion_loot, player)
+                --tree.SpawnDebris(tree, player, impact_loot, player, true)
             end
 
             -- Enemies
             --tree.SpawnDebris(tree, target, minion_loot, target)
             --tree.SpawnDebris(tree, target, minion_loot, target)
 
-            tree.SpawnDebris(tree, nil, minion_loot, player)
+            
         end
     end
 end
