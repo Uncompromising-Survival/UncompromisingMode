@@ -285,6 +285,13 @@ env.AddStategraphPostInit("wilson", function(inst)
         end
     end
 
+    -- LIMBO LEAP
+    -- check for dead state to prevent issues with the teleportation, also prevents getting attacked while teleporting just in case
+    local _OldAttacked = inst.events["attacked"].fn
+    inst.events["attacked"].fn = function(inst, data)
+        if inst.sg:HasStateTag("dead") then return end
+        return _OldAttacked(inst, data)
+    end
 
     local function FindBlueFuncap(inst)
         local helm = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)

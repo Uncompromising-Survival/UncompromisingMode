@@ -23,7 +23,7 @@ PortalGhostTeleport.GetRandomNearbyPosition = GetRandomNearbyPosition
 
 function PortalGhostTeleport.SetupPortalListeners(portal)
     if _portals[portal] then return end
-    _portals[portal] = true
+    _portals[portal] = portal.prefab
     portal:ListenForEvent("onremove", function()
         _portals[portal] = nil
     end)
@@ -33,6 +33,16 @@ function PortalGhostTeleport.GetPortal()
     for portal in pairs(_portals) do
         if portal:IsValid() then
             return portal
+        end
+        _portals[portal] = nil
+    end
+    return nil
+end
+
+function PortalGhostTeleport.GetPortalPrefab()
+    for portal, prefab in pairs(_portals) do
+        if portal:IsValid() then
+            return prefab
         end
         _portals[portal] = nil
     end
