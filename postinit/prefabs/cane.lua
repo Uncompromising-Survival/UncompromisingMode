@@ -1,24 +1,11 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-env.AddPrefabPostInit("walrus", function(inst)
+local canes = {}
 
-    if not TheWorld.ismastersim then
-        return
-    end
-    
-    SetSharedLootTable('um_walrus',
-    {
-        {'meat',            1.00},
-        {'blowdart_pipe',   1.00},
-        {'walrushat',       0.50},
-        {'walrus_tusk',     1.00},
-    })
-
-    inst.components.lootdropper:SetChanceLootTable('um_walrus')
-end)
-
-local canes = {"cane"}
+if TUNING.DSTU.CANEDURABILITY then
+    table.insert(canes,"cane")
+end
 
 if TUNING.DSTU.TELESTAFF_REWORK then
     table.insert(canes,"orangestaff")
