@@ -36,7 +36,11 @@ RECIPE_DESC.UM_BEAR_TRAP_EQUIPPABLE_TOOTH = "These jaws need to get a grip!"
 RECIPE_DESC.UM_BEAR_TRAP_EQUIPPABLE_GOLD = "My shiny teeth and me!"
 RECIPE_DESC.ARMOR_GLASSMAIL = "Surround yourself with broken glass."
 RECIPE_DESC.MUTATOR_TRAPDOOR = "They're smart, allegedly."
-RECIPE_DESC.DRIFTWOODFISHINGROD = "Go Fancy Fishing. For Fancy Fish."
+if TUNING.DSTU.DATES.APRIL_FOOLS then
+    RECIPE_DESC.DRIFTWOODFISHINGROD = "Go fucking fishing. For fucking fish."
+else
+    RECIPE_DESC.DRIFTWOODFISHINGROD = "Go fancy fishing. For fancy fish."
+end
 RECIPE_DESC.UNCOMPROMISING_FISHINGNET = "Nothing but net!"
 RECIPE_DESC.UNCOMPROMISING_HARPOON = "Keel Haul 'Em!"
 RECIPE_DESC.UNCOMPROMISING_HARPOON_HEAVY = "Up for a Chain'ge?"
@@ -112,7 +116,7 @@ RECIPE_DESC.PACT_SWORD_SANITY = "Hefty, like the weight on your shoulders."
 RECIPE_DESC.UM_ASTRAL_PROJECTOR = "The soul seperates from the body. Careful nothing slips inside."
 RECIPE_DESC.UM_ASTRAL_PROJECTOR_TARGET = "Are you the real you?"
 RECIPE_DESC.UM_INKUBATOR = "A new life is born. But at what cost?"
-RECIPE_DESC.UM_SCRAPPER = "Reduce anything, or anyone, to their base components."
+RECIPE_DESC.UM_SCRAPPER = "Reduce anything to their base components."
 RECIPE_DESC.PLAUNT_MANNY = "She rubs her knees when she knows something bad's going to happen."
 
 --Winky
@@ -194,7 +198,7 @@ RECIPE_DESC.UM_MAGNIFIER_OBSIDIAN = "Discover the hidden properties of Strange G
 RECIPE_DESC.UM_GEMOLOGY_POUCH = "Holds Strange Gems and geodes. Bigger on the inside."
 RECIPE_DESC.WORMWOOD_MUSHTREE = "Create your very own fungus among us."
 RECIPE_DESC.WORMWOOD_EQEX = "Friends come and go."
-
+RECIPE_DESC.UM_BOMB_MOON = "Create freaks scorched by the moon's light!"
 
 RECIPE_DESC.UM_THULECITE_RAZOR = "Essential for the ancient technique of \"shaving\" "
 -- [              DSTU Related Overrides                  ]

@@ -139,8 +139,8 @@ ChangeSortKey("um_boomberry_bomb", "waterballoon", "SUMMER", false)
 AddRecipe2("um_fyre_bomb", { Ingredient("um_fyrite", 2), Ingredient("twigs", 2), Ingredient("rocks", 3) }, TECH.SCIENCE_TWO, { numtogive = 4 }, { "WEAPONS" })
 ChangeSortKey("um_fyre_bomb", "um_boomberry_bomb", "WEAPONS", true)
 
-AddRecipe2("um_bomb_moon", { Ingredient("um_tentaclespot_moon", 1), Ingredient("wagpunk_bits", 1), Ingredient("moonglass", 8) }, TECH.CELESTIAL_THREE, { numtogive = 2, nounlock = true }, { "WEAPONS" })
-ChangeSortKey("um_bomb_moon", "glasscutter", "CRAFTING_STATION", true)
+AddRecipe2("um_bomb_moon", { Ingredient("um_tentaclespot_moon", 1), Ingredient("wagpunk_bits", 1), Ingredient("moonglass", 8) }, TECH.SCIENCE_TWO, { numtogive = 2 }, { "WEAPONS" })
+--ChangeSortKey("um_bomb_moon", "glasscutter", "CRAFTING_STATION", true)
 ChangeSortKey("um_bomb_moon", "um_fyre_bomb", "WEAPONS", true)
 
 AddRecipe2("um_eyebalm", { Ingredient("um_meatcomb", 1), Ingredient("um_meathoney", 3), Ingredient("mosquitosack", 3) }, TECH.SCIENCE_TWO, { numtogive = 3 }, { "RESTORATION" })
