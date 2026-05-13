@@ -7,7 +7,7 @@ if TUNING.DSTU.CANEDURABILITY then
     table.insert(canes,"cane")
 end
 
-if TUNING.DSTU.TELESTAFF_REWORK then
+if TUNING.DSTU.COOLDOWN_ORANGESTAFF then
     table.insert(canes,"orangestaff")
 end
 
@@ -75,58 +75,4 @@ local function MYCANEISDYING(inst, data)
     if data.percent and data.percent <= .15 then
         SpawnPrefab("um_brokentool").Transform:SetPosition(inst.Transform:GetWorldPosition())
     end
-end
-
-for i,v in ipairs(canes) do
-    env.AddPrefabPostInit(v, function(inst)
-        if not TheWorld.ismastersim then return end
-
-        local fueled = inst:AddComponent("fueled")
-        fueled:InitializeFuelLevel(TUNING.RAINHAT_PERISHTIME)
-        fueled:SetDepletedFn(CANEEXPLOSION)
-        fueled:SetFirstPeriod(TUNING.TURNON_FULL_FUELED_CONSUMPTION)
-        fueled.no_sewing = true
-
-        inst:ListenForEvent("percentusedchange", MYCANEISDYING)
-
-        MakeHauntableLaunch(inst)
-
-        local _onequip = inst.components.equippable.onequipfn
-        local _onunequip = inst.components.equippable.onunequipfn
-
-        local function onequip(inst, owner)
-            if inst._owner ~= nil then
-                inst:RemoveEventCallback("locomote", inst._onlocomote, inst._owner)
-            end
-            inst._owner = owner
-            inst:ListenForEvent("locomote", inst._onlocomote, owner)
-            _onequip(inst,owner)
-        end
-
-        local function onunequip(inst, owner)
-            if inst._owner ~= nil then
-                inst:RemoveEventCallback("locomote", inst._onlocomote, inst._owner)
-                inst._owner = nil
-            end
-
-            if inst.components.fueled ~= nil then
-                inst.components.fueled:StopConsuming()
-            end
-            _onunequip(inst,owner)
-        end
-
-        inst.components.equippable:SetOnEquip(onequip)
-        inst.components.equippable:SetOnUnequip(onunequip)
-
-        inst._onlocomote = function(owner)
-            if owner.components.rider and owner.components.rider:IsRiding() then return end
-            if owner.components.locomotor.wantstomoveforward then
-                if not inst.components.fueled.consuming then
-                    inst.components.fueled:StartConsuming()
-                end
-            elseif inst.components.fueled.consuming then
-                inst.components.fueled:StopConsuming()
-            end
-        end
-    end)
 end

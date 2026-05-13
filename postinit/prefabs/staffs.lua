@@ -57,7 +57,7 @@ env.AddPrefabPostInit("firestaff", function(inst)
     inst.components.weapon:SetOnAttack(OnAttack)
 end)
 
-if env.GetModConfigData("cooldown_orangestaff") then
+if TUNING.DSTU.COOLDOWN_ORANGESTAFF then
     local function onblink(staff, pos, caster)
         if not (caster and staff and staff.components.rechargeable) then
             return
