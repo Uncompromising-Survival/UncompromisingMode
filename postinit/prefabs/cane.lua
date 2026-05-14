@@ -5,12 +5,11 @@ local canes = {}
 
 if TUNING.DSTU.CANEDURABILITY then
     table.insert(canes,"cane")
-    table.insert(canes,"orangestaff")	
 end
 
---if TUNING.DSTU.COOLDOWN_ORANGESTAFF then
-	--table.insert(canes,"orangestaff")
---end
+if TUNING.DSTU.COOLDOWN_ORANGESTAFF then
+    table.insert(canes,"orangestaff")
+end
 
 local function GetPoints(pt, amount)
     local points = {}
