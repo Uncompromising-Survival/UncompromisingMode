@@ -47,6 +47,14 @@ local function SetOrientation(inst, rotation)
     end
 end
 
+local function ResolveTileFromData(tile)
+    if type(tile) == "string" then
+        return WORLD_TILES[tile]
+    end
+
+    return tile
+end
+
 local function UncompromisingSpawnGOOOOO(inst, data)
     local x, y, z = inst.Transform:GetWorldPosition()
     -- attempted fix for worldgen/load crash, maybe it's
@@ -161,29 +169,30 @@ local function UncompromisingSpawnGOOOOO(inst, data)
                 end
             end
         else
-            if v.tile and v.tile ~= TheWorld.Map:GetTileAtPoint(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz) then
+            if v.tile and ResolveTileFromData(v.tile) ~= TheWorld.Map:GetTileAtPoint(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz) then
+                local _tile = ResolveTileFromData(v.tile)
                 local tile_x, tile_z = TheWorld.Map:GetTileCoordsAtPoint(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz)
                 -- :Announce("spawninwater_tile:")
                 -- TheNet:Announce(tostring(inst.spawninwater_tile))
                 if inst.spawninwater_tiles then
                     -- TheNet:Announce("spawninwater true!")
-                    -- print(v.tile)
-                    if v.tile == WORLD_TILES.MONKEY_DOCK then
+                    -- print(_tile)
+                    if _tile == WORLD_TILES.MONKEY_DOCK then
                         TheWorld.components.dockmanager:CreateDockAtPoint(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz, WORLD_TILES.MONKEY_DOCK)
                         -- TheWorld.components.dockmanager:ResolveDockSafetyAtPoint(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz)
                     else
-                        TheWorld.Map:SetTile(tile_x, tile_z, v.tile)
+                        TheWorld.Map:SetTile(tile_x, tile_z, _tile)
                     end
                 else
                     if TheWorld.Map:IsOceanTileAtPoint(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz) then
                         -- TheNet:Announce("water at point!")
                     else
                         -- TheNet:Announce("not water!")
-                        if v.tile == WORLD_TILES.MONKEY_DOCK then
+                        if _tile == WORLD_TILES.MONKEY_DOCK then
                             TheWorld.components.dockmanager:CreateDockAtPoint(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz, WORLD_TILES.MONKEY_DOCK)
                             -- TheWorld.components.dockmanager:ResolveDockSafetyAtPoint(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz)
                         else
-                            TheWorld.Map:SetTile(tile_x, tile_z, v.tile)
+                            TheWorld.Map:SetTile(tile_x, tile_z, _tile)
                         end
                     end
                 end
@@ -212,7 +221,7 @@ local function DefineTable(inst, data)
         inst.spawninwater_prefabs = funtable.spawninwater_prefabs == nil and false or funtable.spawninwater_prefabs
         inst.SpawnFn = funtable.spawnfn
         inst.umss_tags = funtable.tags
-        inst.bg_tile = funtable.bg_tile
+        inst.bg_tile = ResolveTileFromData(funtable.bg_tile)
     end
 end
 
