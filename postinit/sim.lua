@@ -20,11 +20,38 @@ local function ProductDeterminer(inst)
     return inst.components.pickable and inst.components.pickable.product
 end
 
+local function IsSpecializedContainersFull(specialized)
+    if specialized then
+        for _, container in pairs(specialized) do
+            if not container:IsFull() then
+                return false
+            end
+        end
+    end
+
+    return true
+end
+
+local function FindItems(inventory, fn, specialized)
+    local items = inventory:FindItems(fn) or {}
+
+    if specialized then
+        for _, container in pairs(specialized) do
+            for k, v in pairs(container:FindItems(fn)) do
+                table.insert(items, v)
+            end
+        end
+    end
+
+    return items
+end
+
 local function ExistsInInventory(owner, inst)
     local inventory = owner.components.inventory
     if not inventory then return true end
     local overflow = inventory:GetOverflowContainer()
-    if not inventory:IsFull() or overflow and not overflow:IsFull() or not ProductDeterminer(inst) then return true end
+    local specialized = inventory:GetSpecializedContainers()
+    if not inventory:IsFull() or overflow and not overflow:IsFull() or specialized and not IsSpecializedContainersFull(specialized) or not ProductDeterminer(inst) then return true end
     local stackisnotfull = false
     local function ShouldGoInList(item)
         local stackable, equippable = item.components.stackable, item.components.equippable
@@ -33,7 +60,7 @@ local function ExistsInInventory(owner, inst)
             and not (equippable and equippable:IsEquipped())
             and not (inventory and item == inventory:GetActiveItem())
     end
-    for _, id in pairs(inventory:FindItems(ShouldGoInList)) do
+    for _, id in pairs(FindItems(inventory, ShouldGoInList, specialized)) do
         if id and not (id.components.stackable and id.components.stackable:IsFull()) then
             stackisnotfull = true
             break
