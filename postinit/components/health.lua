@@ -41,10 +41,8 @@ local function TriggerPocketResurrection(self, item)
     if self.inst.components.timer and self.inst:HasTag("wathom") then
         if self.inst.components.timer:TimerExists("shadowwathomcooldown") then
             self.inst.components.timer:StopTimer("shadowwathomcooldown")
-            self.inst.components.timer:StartTimer("shadowwathomcooldown", TUNING.TOTAL_DAY_TIME)
-        else
-            self.inst.components.timer:StartTimer("shadowwathomcooldown", TUNING.TOTAL_DAY_TIME)
         end
+        self.inst.components.timer:StartTimer("shadowwathomcooldown", TUNING.TOTAL_DAY_TIME)
     end
 
     if item.prefab == "amulet" then    

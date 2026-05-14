@@ -509,3 +509,4 @@ AddSimPostInit(function()
 end)
 
 modimport("init/um_tree_rock_data")
+modimport("init/init_limbo_leap")

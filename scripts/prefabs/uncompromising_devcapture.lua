@@ -119,7 +119,7 @@ local function Capture(inst)
         end
 
         if (v.prefab == "umdc_tileflag" and TheWorld.Map:GetTileAtPoint(px, py, pz)) then
-            totaltable = totaltable .. ", tile = " .. tostring(TheWorld.Map:GetTileAtPoint(px, py, pz)) -- flags always get tiles, regardless of tile setting.
+            totaltable = totaltable .. ", tile = " .. tostring(INVERTED_WORLD_TILES[TheWorld.Map:GetTileAtPoint(px, py, pz)]) -- flags always get tiles, regardless of tile setting.
         end
 
         if v.components.health ~= nil and not v.components.health:IsDead() then

@@ -1920,3 +1920,15 @@ for _, asset in pairs(minimap_icons) do
 end
 
 GLOBAL.UM_AddAssetsParticleWorldTileState(Assets)
+
+-- Limbo Leap portal button UI images
+local limboleap_ui = {
+    "images/limboleap/portal_button",
+    "images/limboleap/portal_button_hover",
+    "images/limboleap/moonrock_portal_button",
+    "images/limboleap/moonrock_portal_button_hover",
+}
+for _, path in ipairs(limboleap_ui) do
+    table.insert(Assets, Asset("IMAGE", path .. ".tex"))
+    table.insert(Assets, Asset("ATLAS", path .. ".xml"))
+end
