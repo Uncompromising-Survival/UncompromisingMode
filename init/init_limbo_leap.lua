@@ -1,7 +1,3 @@
-
-
--- REMOVE RPRITNS LATER
-
 local PortalGhostTeleport = require("um_portalteleport")
 local _cached_portal = nil
 local _portal_prefab = nil
@@ -11,8 +7,6 @@ local RPC_RequestPortalInfo
 local RPC_LimboLeapPortalInfo
 
 local TELEPORT_DELAY = 2
-
-print("[LimboLeap] init_limbo_leap.lua loaded")
 
 local function GetPortalTextures()
     if _portal_prefab == "multiplayer_portal_moonrock" then
@@ -30,39 +24,28 @@ local function GetPortalTextures()
 end
 
 local function SetPortalCache(inst)
-    print("[LimboLeap] SetPortalCache - prefab:", inst.prefab)
     _cached_portal = inst
     _portal_prefab = inst.prefab
 end
 
 local function TryFindPortal()
     if _cached_portal and _cached_portal:IsValid() then return end
-    print("[LimboLeap] TryFindPortal - searching")
     local found = TheSim:FindEntities(0, 0, 0, 50000, {"multiplayer_portal"})
-    print("[LimboLeap] TryFindPortal - count:", #found)
     if found[1] and found[1]:IsValid() then
-        print("[LimboLeap] TryFindPortal - found:", found[1].prefab)
         SetPortalCache(found[1])
-    else
-        print("[LimboLeap] TryFindPortal - not found")
     end
 end
 
 local function OnPortalPostInit(inst)
-    print("[LimboLeap] OnPortalPostInit - prefab:", inst.prefab)
     SetPortalCache(inst)
     inst:DoTaskInTime(0, function()
         if not inst:IsValid() then return end
-        print("[LimboLeap] OnPortalPostInit deferred - IsServer:", GLOBAL.TheNet:GetIsServer())
         if GLOBAL.TheNet:GetIsServer() then
             PortalGhostTeleport.SetupPortalListeners(inst)
         end
         if GLOBAL.ThePlayer and GLOBAL.ThePlayer:HasTag("playerghost") then
-            print("[LimboLeap] OnPortalPostInit deferred - player is ghost, calling recreate")
             if _recreate_button_fn then
                 _recreate_button_fn()
-            else
-                print("[LimboLeap] OnPortalPostInit deferred - _recreate_button_fn is nil!")
             end
         end
     end)
@@ -74,7 +57,6 @@ for _, portal in ipairs(portals) do
 end
 
 AddPrefabPostInit("world", function(inst)
-    print("[LimboLeap] world PostInit - ismastersim:", inst.ismastersim)
     if inst.ismastersim then
         inst:DoTaskInTime(0, function()
             PortalGhostTeleport.ScanExistingPortals()
@@ -85,17 +67,14 @@ end)
 AddModRPCHandler("UncompromisingSurvival", "RequestPortalInfo", function(player)
     if not (player and player:IsValid()) then return end
     local prefab = PortalGhostTeleport.GetPortalPrefab()
-    print("[LimboLeap] RequestPortalInfo - prefab:", prefab)
     if prefab then
         SendModRPCToClient(RPC_LimboLeapPortalInfo, player, prefab)
     end
 end)
 
 AddClientModRPCHandler("UncompromisingSurvival", "LimboLeapPortalInfo", function(prefab)
-    print("[LimboLeap] LimboLeapPortalInfo received - prefab:", prefab)
     _portal_prefab = prefab
     if GLOBAL.ThePlayer and GLOBAL.ThePlayer:HasTag("playerghost") and _recreate_button_fn then
-        print("[LimboLeap] LimboLeapPortalInfo - player is ghost, creating button")
         _recreate_button_fn()
     end
 end)
@@ -120,40 +99,27 @@ RPC_RequestPortalInfo = GetModRPC("UncompromisingSurvival", "RequestPortalInfo")
 RPC_LimboLeapPortalInfo = GetClientModRPC("UncompromisingSurvival", "LimboLeapPortalInfo")
 
 AddClassPostConstruct("widgets/statusdisplays", function(self)
-    print("[LimboLeap] AddClassPostConstruct statusdisplays fired")
-    print("[LimboLeap] ThePlayer:", GLOBAL.ThePlayer, "HUD:", GLOBAL.ThePlayer and GLOBAL.ThePlayer.HUD)
-    if not (GLOBAL.ThePlayer and GLOBAL.ThePlayer.HUD) then
-        print("[LimboLeap] ABORT: no ThePlayer or HUD")
-        return
-    end
-    print("[LimboLeap] self.owner:", self.owner, "ThePlayer:", GLOBAL.ThePlayer)
-    if GLOBAL.ThePlayer ~= self.owner then
-        print("[LimboLeap] ABORT: owner mismatch")
-        return
-    end
+    if not (GLOBAL.ThePlayer and GLOBAL.ThePlayer.HUD) then return end
+    if GLOBAL.ThePlayer ~= self.owner then return end
 
     local ImageButton = require("widgets/imagebutton")
     local btn = nil
 
     local function DestroyButton()
         if btn then
-            print("[LimboLeap] DestroyButton")
             btn:Kill()
             btn = nil
         end
     end
 
     local function CreateButton()
-        print("[LimboLeap] CreateButton - _portal_prefab:", _portal_prefab)
         if not _portal_prefab then
-            print("[LimboLeap] CreateButton ABORT: _portal_prefab nil, requesting from server")
             SendModRPCToServer(RPC_RequestPortalInfo)
             return
         end
         DestroyButton()
 
         local hover_atlas, hover_tex, normal_atlas, normal_tex = GetPortalTextures()
-        print("[LimboLeap] CreateButton - atlases:", hover_atlas, normal_atlas)
 
         btn = self:AddChild(ImageButton(hover_atlas, hover_tex))
 
@@ -167,7 +133,6 @@ AddClassPostConstruct("widgets/statusdisplays", function(self)
         btn.OnLoseFocus = function(s)
             _OnLoseFocus(s)
             s.image:SetTexture(normal_atlas, normal_tex)
-            -- chack later on multiplayer
         end
 
         btn.image:SetTexture(normal_atlas, normal_tex)
@@ -179,27 +144,21 @@ AddClassPostConstruct("widgets/statusdisplays", function(self)
             if GLOBAL.TheNet:IsServerPaused() then return end
             SendModRPCToServer(RPC_UsePortal)
         end)
-
-        print("[LimboLeap] CreateButton OK")
     end
 
     _recreate_button_fn = CreateButton
 
     TryFindPortal()
-    -- Always register the world loaded listener so it fires after cave/surface migration
-    print("[LimboLeap] registering ms_worldhasloaded listener")
+    -- Always register the world-loaded listener so it fires after cave/surface migration
     self.inst:ListenForEvent("ms_worldhasloaded", function()
-        print("[LimboLeap] ms_worldhasloaded fired")
         TryFindPortal()
         if self.owner:HasTag("playerghost") then
-            print("[LimboLeap] ms_worldhasloaded - player is ghost, creating button")
             CreateButton()
         end
     end, GLOBAL.TheWorld)
 
     local _SetGhostMode = self.SetGhostMode
     self.SetGhostMode = function(s, ghostmode, ...)
-        print("[LimboLeap] SetGhostMode - ghostmode:", ghostmode, "_portal_prefab:", _portal_prefab)
         _SetGhostMode(s, ghostmode, ...)
         if ghostmode then
             CreateButton()
@@ -209,7 +168,6 @@ AddClassPostConstruct("widgets/statusdisplays", function(self)
     end
 
     if self.owner:HasTag("playerghost") then
-        print("[LimboLeap] owner already ghost at init, creating button")
         CreateButton()
     end
 end)
