@@ -18,7 +18,7 @@ local function fncommon(anim, healthval, hungerval, sanityval)
     inst.AnimState:SetBuild("um_food_cube")
     inst.AnimState:PlayAnimation(anim)
     MakeInventoryFloatable(inst)
-	
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
@@ -30,22 +30,22 @@ local function fncommon(anim, healthval, hungerval, sanityval)
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-	
+
     inst:AddComponent("edible")
     inst.components.edible.healthvalue = healthval
     inst.components.edible.hungervalue = hungerval
     inst.components.edible.sanityvalue = sanityval
     inst.components.edible.foodtype = FOODTYPE.GENERIC
-	
+
 	inst:AddComponent("tradable")
-	
+
     inst:AddComponent("perishable")
     inst.components.perishable:SetPerishTime(TUNING.PERISH_SUPERFAST)
     inst.components.perishable:StartPerishing()
     inst.components.perishable:SetOnPerishFn(onperish)
 
     MakeHauntableLaunchAndPerish(inst)
-	
+
     return inst
 end
 

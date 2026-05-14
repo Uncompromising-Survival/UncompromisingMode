@@ -255,7 +255,7 @@ if GetModConfigData("sporehounds") then
     ChangeSortKey("shroom_skin", "bearger_fur", "REFINE", true)
 end
 
-AddRecipe2("watermelon_lantern", { Ingredient("watermelon", 1), Ingredient("fireflies", 1) }, TECH.LOST, nil, { "LIGHT" })
+AddRecipe2("watermelon_lantern", { Ingredient("watermelon", 1), Ingredient("fireflies", 1) }, TECH.HALLOWED_NIGHTS, {hint_msg = "NEEDSHALLOWED_NIGHTS_MELON"}, { "LIGHT" })
 ChangeSortKey("watermelon_lantern", "pumpkin_lantern", "LIGHT", true)
 
 if GetModConfigData("hayfever_disable") then -- not in dev build since the config is commented off, but live does have it.

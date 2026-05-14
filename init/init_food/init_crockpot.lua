@@ -115,25 +115,25 @@ else
 end
 
 AddIngredientValues({ "forgetmelots" }, { decoration = 1, foliage = 1 })
-AddIngredientValues({ "aphid" }, { insectoid = 0.5, meat = 0.5, monster = 0.5 })
+AddIngredientValues({ "aphid" }, { insectoid = 0.5, meat = 0.5, monster = GLOBAL.TUNING.DSTU.MONSTER_MEAT_COOKED_MONSTER_VALUE })
 AddIngredientValues({ "rabbit" }, { meat = 0.5 })
 AddIngredientValues({ "plantmeat" }, { meat = 1, plantmeat = 1 }, true, false, false)
 
-AddIngredientValues({ "um_meat_cube" }, { meat = 0.5 })
-AddIngredientValues({ "um_monster_cube" }, { meat = 0.5, monster = GLOBAL.TUNING.DSTU.MONSTER_MEAT_COOKED_MONSTER_VALUE })
-AddIngredientValues({ "um_veggie_cube" }, { veggie = 0.5 })
+AddIngredientValues({ "um_meat_cube" }, { meat = .5 })
+AddIngredientValues({ "um_monster_cube" }, { meat = .5, monster = GLOBAL.TUNING.DSTU.MONSTER_MEAT_COOKED_MONSTER_VALUE })
+AddIngredientValues({ "um_veggie_cube" }, { veggie = .5 })
 AddIngredientValues({ "um_sugar_cube" }, { sweetener = .5 })
 AddIngredientValues({ "um_roughage_cube" }, { inedible = 1 })
 AddIngredientValues({ "um_bland_cube" }, { decoration = 1 })
 
 recipes.koalefig_trunk.test = function(cooker, names, tags)
-    return (names.trunk_summer or names.trunk_cooked or names.trunk_winter) and (names.fig or names.fig_cooked or names.aphid) and
+    return (names.trunk_summer or names.trunk_cooked or names.trunk_winter) and (names.fig or names.fig_cooked) and
         UncompromisingFillers(tags) and not (tags.insectoid and tags.insectoid >= 1)
 end
 -- Original:	test = function(cooker, names, tags) return (names.trunk_summer or names.trunk_cooked or names.trunk_winter) and (names.fig or names.fig_cooked) end,
 
 recipes.figkabab.test = function(cooker, names, tags)
-    return (names.fig or names.fig_cooked or names.aphid) and names.twigs and tags.meat and tags.meat >= 1 and
+    return (names.fig or names.fig_cooked) and names.twigs and tags.meat and tags.meat >= 1 and
         (not tags.monster or tags.monster <= 1) and not tags.frozen and not tags.foliage and not (tags.insectoid and tags.insectoid >= 1)
 end
 -- Original:	test = function(cooker, names, tags) return (names.fig or names.fig_cooked) and names.twigs and tags.meat and tags.meat >= 1 and (not tags.monster or tags.monster <= 1) end,
@@ -141,12 +141,12 @@ end
 recipes.figatoni.test = function(cooker, names, tags)
     return ((names.fig or names.fig_cooked) and
             tags.veggie and tags.veggie >= 2 and not tags.meat)
-        or ((names.aphid) and tags.veggie and tags.veggie >= 2 and tags.meat and tags.meat <= 0.5 and not (tags.insectoid and tags.insectoid >= 1))
+        or ((names.aphid) and tags.veggie and tags.veggie >= 2 and tags.meat and tags.meat <= 0.5 and not (tags.insectoid and tags.insectoid >= 1) and not (tags.monster and tags.monster >= 2))
 end
 -- Original:	test = function(cooker, names, tags) return (names.fig or names.fig_cooked) and tags.veggie and tags.veggie >= 2  and not tags.meat end,
 
 recipes.frognewton.test = function(cooker, names, tags)
-    return (names.fig or names.fig_cooked or names.aphid) and (names.froglegs or names.froglegs_cooked) and
+    return (names.fig or names.fig_cooked) and (names.froglegs or names.froglegs_cooked) and
         UncompromisingFillers(tags) and not (tags.insectoid and tags.insectoid >= 1)
 end
 -- Original:	test = function(cooker, names, tags) return (names.fig or names.fig_cooked) and (names.froglegs or names.froglegs_cooked) end,

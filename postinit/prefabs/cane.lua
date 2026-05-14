@@ -77,17 +77,28 @@ local function MYCANEISDYING(inst, data)
     end
 end
 
+local function OnDepleted(inst)
+    SpawnPrefab("um_brokentool").Transform:SetPosition(inst.Transform:GetWorldPosition())
+    inst:Remove()
+end
+
 for i,v in ipairs(canes) do
     env.AddPrefabPostInit(v, function(inst)
         if not TheWorld.ismastersim then return end
 
         local fueled = inst:AddComponent("fueled")
         fueled:InitializeFuelLevel(TUNING.RAINHAT_PERISHTIME)
-        fueled:SetDepletedFn(CANEEXPLOSION)
+        if TUNING.DSTU.DATES.APRIL_FOOLS then
+            fueled:SetDepletedFn(CANEEXPLOSION)
+        else
+            fueled:SetDepletedFn(OnDepleted)
+        end
         fueled:SetFirstPeriod(TUNING.TURNON_FULL_FUELED_CONSUMPTION)
         fueled.no_sewing = true
 
-        inst:ListenForEvent("percentusedchange", MYCANEISDYING)
+        if TUNING.DSTU.DATES.APRIL_FOOLS then
+            inst:ListenForEvent("percentusedchange", MYCANEISDYING)
+        end
 
         MakeHauntableLaunch(inst)
 

@@ -306,6 +306,7 @@ STRINGS.VETS_TITLE = "The Veterans Curse."
 STRINGS.VETS = "You're about to be afflicted with a crippling curse.\nThe Constant will treat you more harshly,\nhowever fortune favors the bold (or foolish)! \n \nTouch the skull again to seal your fate."
 STRINGS.VETS_OK = "Ok"
 
+STRINGS.UI.CRAFTING.NEEDSHALLOWED_NIGHTS_MELON = STRINGS.UI.CRAFTING.NEEDSHALLOWED_NIGHTS .. "...and somewhere else?"
 STRINGS.UI.CRAFTING.NEEDSVETERANSHRINE_ONE = "Requires something... darker."
 STRINGS.UI.CRAFTING.RECIPEACTION.UM_WAXWELL_SUMMON = "Summon"
 

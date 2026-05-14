@@ -106,7 +106,7 @@ local function OnActivate(inst, doer)
             if doer.components.inventory:HasItemThatMatches(function(item) return item.prefab == "watermelon" end,2) then
                 doer.components.builder:UnlockRecipe("watermelon_lantern")
                 doer:PushEvent("learnrecipe", {teacher = inst, recipe = "watermelon_lantern"})
-                inst.components.talker:Say("Nice melons. Have some forbidden knowledge.")
+                inst.components.talker:Say("Nice melons. Have some forbidden knowledge.") --LOOOOOLLL so dum -CB
             end
         end
         doer:RemoveTag("vetcurse_warning")
