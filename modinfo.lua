@@ -7,7 +7,7 @@ end
 
 --MAJOR.MINOR.FIX
 --INCREASE THIS VERSION
-local _version = "4.2.5"
+local _version = "4.3.0"
 
 description = [[
     󰀔 ["On The Rocks!" v1.6  (Beta ver: v]] .. _version .. [[)]
@@ -666,7 +666,7 @@ configuration_options = {
     BinaryConfig("insul_thermalstone", "Thermal Stone Rework",
         "Thermal Stones now have less insulation, but inherit some insulation from clothing.", true),
     BinaryConfig("cane_durability", "Walking Cane",
-        "Cane loses durability similarly to a Whirly Fan.",
+        "Walking Cane loses durability similarly to a Whirly Fan.",
     false),		
     BinaryConfig("watering_thermal", "Watering Can Temperature",
         "Watering Cans don't reduce temperature, removing its exploit with Thermal Stones.", true),
