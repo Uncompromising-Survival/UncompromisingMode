@@ -51,22 +51,26 @@ local function GetPoints(pt, amount)
 end
 
 local function CANEEXPLOSION(inst)
-    local dummy = SpawnPrefab("dummytarget")
-    if dummy then
-        dummy.Transform:SetPosition(inst.Transform:GetWorldPosition())
-        dummy:Hide()
-        dummy.persists = false
-        local fx = 30
-        local points = GetPoints(dummy:GetPosition(), fx)
-        local map = TheWorld.Map
-        for i = 1, fx do
-            for j, v in ipairs(points[i]) do
-                if map:IsLandTileAtPoint(v:Get()) and not map:IsDockAtPoint(v:Get()) then
-                    SpawnPrefab("um_brokentool").Transform:SetPosition(v.x, 0, v.z)
+    if TUNING.DSTU.DATES.APRIL_FOOLS then
+        local dummy = SpawnPrefab("dummytarget")
+        if dummy then
+            dummy.Transform:SetPosition(inst.Transform:GetWorldPosition())
+            dummy:Hide()
+            dummy.persists = false
+            local fx = 30
+            local points = GetPoints(dummy:GetPosition(), fx)
+            local map = TheWorld.Map
+            for i = 1, fx do
+                for j, v in ipairs(points[i]) do
+                    if map:IsLandTileAtPoint(v:Get()) and not map:IsDockAtPoint(v:Get()) then
+                        SpawnPrefab("um_brokentool").Transform:SetPosition(v.x, 0, v.z)
+                    end
                 end
             end
+            dummy:DoTaskInTime(.5, inst.Remove)
         end
-        dummy:DoTaskInTime(.5, inst.Remove)
+    else
+        SpawnPrefab("um_brokentool").Transform:SetPosition(inst.Transform:GetWorldPosition())
     end
     inst:Remove()
 end
@@ -77,22 +81,13 @@ local function MYCANEISDYING(inst, data)
     end
 end
 
-local function OnDepleted(inst)
-    SpawnPrefab("um_brokentool").Transform:SetPosition(inst.Transform:GetWorldPosition())
-    inst:Remove()
-end
-
 for i,v in ipairs(canes) do
     env.AddPrefabPostInit(v, function(inst)
         if not TheWorld.ismastersim then return end
 
         local fueled = inst:AddComponent("fueled")
         fueled:InitializeFuelLevel(TUNING.RAINHAT_PERISHTIME)
-        if TUNING.DSTU.DATES.APRIL_FOOLS then
-            fueled:SetDepletedFn(CANEEXPLOSION)
-        else
-            fueled:SetDepletedFn(OnDepleted)
-        end
+        fueled:SetDepletedFn(CANEEXPLOSION)
         fueled:SetFirstPeriod(TUNING.TURNON_FULL_FUELED_CONSUMPTION)
         fueled.no_sewing = true
 
