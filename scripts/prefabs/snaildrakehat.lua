@@ -22,7 +22,7 @@ local function onequip(inst, owner)
     end
     
     if owner.components.health ~= nil then
-        owner.components.health.externalfiredamagemultipliers:SetModifier(inst, 1 - TUNING.ARMORDRAGONFLY_FIRE_RESIST)
+        owner.components.health.externalfiredamagemultipliers:SetModifier(inst, 1 - TUNING.DSTU.SNAILDRAKEHAT_FIRE_RESIST)
     end
 end
 
@@ -73,7 +73,7 @@ local function fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("armor")
-    inst.components.armor:InitCondition(TUNING.ARMOR_SLURTLEHAT, 0.8)
+    inst.components.armor:InitCondition(TUNING.ARMOR_SLURTLEHAT, 0.7)
 
     inst:AddComponent("equippable")
     inst.components.equippable.equipslot = EQUIPSLOTS.HEAD

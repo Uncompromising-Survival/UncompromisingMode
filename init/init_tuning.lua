@@ -354,6 +354,7 @@ TUNING.DSTU = {
     ORANGESTAFF_DISTANCE_2 = 16,
     KOALEFANT_HEALTH = 2000,
     KOALEFANT_STOMP_COUNTERATTACK = {MIN = 8, MAX = 12},
+	SNAILDRAKEHAT_FIRE_RESIST = 0.75,
 
     ----------------------------------------------------------------------------
     -- Dynamic Boss Resistance
