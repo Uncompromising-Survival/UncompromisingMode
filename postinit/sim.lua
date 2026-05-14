@@ -1,7 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
-
 local ORANGE_PICKUP_MUST_ONEOF_TAGS = {"_inventoryitem", "pickable"}
 local ORANGE_PICKUP_CANT_TAGS = {
     -- Items
