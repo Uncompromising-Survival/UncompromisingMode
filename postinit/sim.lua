@@ -32,8 +32,8 @@ local function IsSpecializedContainersFull(specialized)
     return true
 end
 
-local function FindItems(items, specialized, fn)
-    local items = items or {}
+local function FindItems(inventory, fn, specialized)
+    local items = inventory:FindItems(fn) or {}
 
     if specialized then
         for _, container in pairs(specialized) do
@@ -60,7 +60,7 @@ local function ExistsInInventory(owner, inst)
             and not (equippable and equippable:IsEquipped())
             and not (inventory and item == inventory:GetActiveItem())
     end
-    for _, id in pairs(FindItems(inventory:FindItems(ShouldGoInList), specialized, ShouldGoInList)) do
+    for _, id in pairs(FindItems(inventory, ShouldGoInList, specialized)) do
         if id and not (id.components.stackable and id.components.stackable:IsFull()) then
             stackisnotfull = true
             break
