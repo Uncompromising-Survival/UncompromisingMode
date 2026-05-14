@@ -620,7 +620,7 @@ configuration_options = {
             { description = "Off", data = 0 } },
         default = 1
     },
-    BinaryConfig("hambatnerf", "Ham Bat Nerf", "Spoils faster and minimum damage is lower.", true),
+    BinaryConfig("hambatnerf", "Ham Bat", "Spoils faster and minimum damage is lower.", true),	
     BinaryConfig("townportal_rework", "Lazy Deserter Rework",
         "Makes the Lazy Deserter useful in singleplayer, by automatically harvesting nearby plants and objects.", true),
     BinaryConfig("cooldown_orangestaff", "Lazy Explorer",
