@@ -61,7 +61,9 @@ local valid_data = {
 }
 
 AddPrefabPostInit("world", function(inst)
-    inst:DoTaskInTime(0, function()
+    -- this broke and we lost access to data generation :((((((
+    -- (well, sort of. I can't be assed to fix this)
+    --[[inst:DoTaskInTime(0, function()
         for entry, data in pairs(vanilla) do
             for k, datatype in ipairs(valid_data) do
                 if uncomp[entry] ~= nil and uncomp[entry][datatype] ~= nil and uncomp[entry][datatype] ~= vanilla[entry][datatype] then
@@ -69,7 +71,8 @@ AddPrefabPostInit("world", function(inst)
                 end
             end
         end
-    end)
+    end)]]
+
     GLOBAL.TheWorld:AddTag("um_beta") -- Added so it's easy to tell if the um beta is active
     if not inst.ismastersim then
         return

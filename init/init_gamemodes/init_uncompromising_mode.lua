@@ -92,6 +92,7 @@ modimport("init/init_gemology/common")
 modimport("init/init_gemology/special")
 modimport("init/init_gemology/misc") -- AXE Monkeys angering when you mine slimestone with geodes, lab and AG loot
 modimport("init/init_gemology/trades")
+modimport("init/init_gemology/scrapbook")
 
 --if GetModConfigData("harder_monsters") then
 modimport("init/init_creatures/init_treebuffs")

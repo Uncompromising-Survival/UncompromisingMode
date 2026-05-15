@@ -26,6 +26,8 @@ The values are:
     build = "string" --build name - even if you don't generate the prefab, you need this for scrapbook/mineral logbook.
     bank = "string" --bank name
     anim = "string" --anim name   -- defaults to "idle"
+    img = "string.tex" --texture name --for scrapbook only.
+    atlas = "string.xml" --atlas name
     postfn = function(inst) -- function that runs when the prefab is created on the common side on post-init.
 }
 
@@ -52,6 +54,8 @@ end
 local function AddUMGemDef(name, def) --helper function to just skip some re-used things we do.
     def.build = "um_gemologygems"
     def.bank = "um_gemologygems"
+    def.img = name .. ".tex"
+    def.atlas = name..".xml"
     def.anim = name
     def.createprefab = true
 

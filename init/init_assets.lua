@@ -465,7 +465,7 @@ local inventoryitems =
     "uncompromising_winkyhomeburrow",
     "um_scrapper",
     "um_astral_projector",
-    "um_astral_projector_target"
+    "um_astral_projector_target",
 }
 
 local minimap_icons = {
@@ -551,6 +551,40 @@ local minimap_icons = {
 for _, item in ipairs(inventoryitems) do
     RegisterInventoryItemAtlas(GLOBAL.resolvefilepath("images/inventoryimages/" .. item .. ".xml"), item .. ".tex")
 end
+
+local scrapbook_icons = {
+    "um_gemologyforge",
+    "um_gemology_geode_blue",
+    "um_gemology_geode_red",
+    "um_gemology_geode_green",
+    "um_gemology_geode_glass",
+    "um_gemology_geode_guano",
+    "um_gemology_geode_lobster",
+    "um_gemology_geode_ruins",
+    "um_gemology_geode_sink",
+    "um_gemology_geode_slime",
+    "um_gemology_geode_vent",
+    "um_gemologybluegem1",
+    "um_gemologybluegem2",
+    "um_gemologyredgem1",
+    "um_gemologyredgem2",
+    "um_gemologygreengem1",
+    "um_gemologygreengem2",
+    "um_gemologyorangegem1",
+    "um_gemologyorangegem2",
+    "um_gemologypalegem1",
+    "um_gemologypalegem2",
+    "um_gemologypurplegem1",
+    "um_gemologypurplegem2",
+    "um_gemologyyellowgem1",
+    "um_gemologyyellowgem2",
+}
+
+for _, item in ipairs(scrapbook_icons) do
+    RegisterScrapbookIconAtlas(GLOBAL.resolvefilepath("images/scrapbook/" .. item .. ".xml"), item .. ".tex")
+end
+
+
 
 Assets = {
     -- Cookbook HQ Icons
@@ -1911,6 +1945,11 @@ for _, asset in pairs(inventoryitems) do
     table.insert(Assets, Asset("IMAGE", "images/inventoryimages/" .. asset .. ".tex"))
     table.insert(Assets, Asset("ATLAS", "images/inventoryimages/" .. asset .. ".xml"))
     table.insert(Assets, Asset("ATLAS_BUILD", "images/inventoryimages/" .. asset .. ".xml", 256))
+end
+
+for _, asset in pairs(scrapbook_icons) do
+    table.insert(Assets, Asset("IMAGE", "images/scrapbook/" .. asset .. ".tex"))
+    table.insert(Assets, Asset("ATLAS", "images/scrapbook/" .. asset .. ".xml"))
 end
 
 for _, asset in pairs(minimap_icons) do

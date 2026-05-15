@@ -703,3 +703,5 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
 }
 DESCRIBE.UM_BOOMBERRYPIE = "I'm over the moon for this pie."
 DESCRIBE.UM_CHILES_EN_NOGADA = "My mouth waters just looking at it!"
+
+DESCRIBE.UM_GEMOLOGYBLUEGEM1 = ""
