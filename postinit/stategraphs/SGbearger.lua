@@ -82,7 +82,7 @@ env.AddStategraphPostInit("bearger", function(inst)
                 end),
                 TimeEvent(25 * FRAMES, function(inst)
                     if inst.components.combat and inst.sg.statemem.target and inst.sg.statemem.target:IsValid() then
-                        inst.LaunchProjectile(inst, inst.sg.statemem.target)
+                        inst:LaunchProjectile(inst.sg.statemem.target)
                         local x, y, z = inst.Transform:GetWorldPosition()
                         SpawnPrefab("groundpound_fx").Transform:SetPosition(x, 0, z)
                         local sandpuff = SpawnPrefab("sand_puff")

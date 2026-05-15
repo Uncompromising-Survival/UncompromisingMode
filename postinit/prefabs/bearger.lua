@@ -3,10 +3,9 @@ GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 local easing = require("easing")
 
-local function EquipWeapon(inst)
+--[[local function EquipWeapon(inst)
     if inst.components.inventory ~= nil and not inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) then
         local weapon = CreateEntity()
-        --[[Non-networked entity]]
         weapon.entity:AddTransform()
         weapon:AddComponent("weapon")
         weapon.components.weapon:SetDamage(inst.components.combat.defaultdamage)
@@ -23,7 +22,7 @@ end
 
 local function TeleportToFood(inst)
     local flower = GetClosestInstWithTag(inst.components.eater:GetEdibleTags(), inst, 600)
-    if flower and flower:IsValid() --[[and inst.findnewfood]] then
+    if flower and flower:IsValid() then -- and inst.findnewfood
         local init_pos = inst:GetPosition()
         local player_pos = flower:GetPosition()
         if player_pos then
@@ -31,7 +30,7 @@ local function TeleportToFood(inst)
             local offset = FindWalkableOffset(player_pos, angle*DEGREES, 30, 10)
             if offset then
                 local pos = player_pos + offset
-                if pos --[[and distsq(player_pos, init_pos) > 1600]] then
+                if pos then -- and distsq(player_pos, init_pos) > 1600
                     inst.components.combat:SetTarget(nil)
                     inst:DoTaskInTime(.1, function() 
                         inst.Transform:SetPosition(pos:Get())
@@ -43,7 +42,7 @@ local function TeleportToFood(inst)
     end
     inst.components.timer:StopTimer("FindNewFood")
     inst.components.timer:StartTimer("FindNewFood", 10)
-end
+end]]
 
 local function RockThrowTimer(inst, data)
     if data.name == "RockThrow" then
@@ -79,13 +78,12 @@ local function LaunchProjectile(inst, target)
         if target then
             inst.rockthrow = false
             local targetpos = target:GetPosition()
-            local theta = inst.Transform:GetRotation() + (i - 3) * 15
-            --local theta = (inst:GetAngleToPoint(targetpos.x, 0, targetpos.z) + (-30 + ((i - 1) * 15))) * DEGREES
-            --local theta = (inst:GetAngleToPoint(targetpos.x, 0, targetpos.z) + GetRandomWithVariance(0, 30)) * DEGREES
-            theta = theta * DEGREES
+            local theta = (inst:GetAngleToPoint(targetpos.x, 0, targetpos.z) + (-30 + ((i - 1) * 15))) * DEGREES
+            local variableanglex = (i - 1) * 7.5
+            local variableanglez = (5 - i) * 7.5
+            local rangesq = ((targetpos.x - x) ^ 2) + ((targetpos.z - z) ^ 2)
             targetpos.x = targetpos.x + 15 * math.cos(theta)
             targetpos.z = targetpos.z - 15 * math.sin(theta)
-            local rangesq = ((targetpos.x - x)^2) + ((targetpos.z - z)^2)
             local maxrange = 15
             local bigNum = 10
             local speed = easing.linear(rangesq, bigNum, 3, maxrange * maxrange)
