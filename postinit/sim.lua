@@ -75,7 +75,7 @@ local function PickUpFilter(inst, target, leader)
     return true
 end
 
-local function FindPickupableItem_filter(v, ba, owner, radius, furthestfirst, positionoverride, ignorethese, onlytheseprefabs, allowpickables, ispickable, worker, extra_filter, inventoryoverride)
+local function UM_FindPickupableItem_filter(v, ba, owner, radius, furthestfirst, positionoverride, ignorethese, onlytheseprefabs, allowpickables, ispickable, worker, extra_filter, inventoryoverride)
     local inventory = inventoryoverride or owner.components.inventory
     if extra_filter and not extra_filter(worker, v, owner) then
         return false
@@ -141,7 +141,7 @@ function FindPickupableItem(owner, radius, furthestfirst, positionoverride, igno
         for i = istart, iend, idiff do
             local v = ents[i]
             local ispickable = v:HasTag("pickable") and not (v.components.pickable and v.components.pickable:IsStuck())
-            if FindPickupableItem_filter(v, ba, owner, radius, furthestfirst, positionoverride, ignorethese, onlytheseprefabs, true, ispickable, worker, PickUpFilter, inventoryoverride) then
+            if UM_FindPickupableItem_filter(v, ba, owner, radius, furthestfirst, positionoverride, ignorethese, onlytheseprefabs, true, ispickable, worker, PickUpFilter, inventoryoverride) then
                 if v and ispickable and v.components.pickable then
                     v.components.pickable:Pick(owner)
                     SpawnPrefab("sand_puff").Transform:SetPosition(v.Transform:GetWorldPosition())
