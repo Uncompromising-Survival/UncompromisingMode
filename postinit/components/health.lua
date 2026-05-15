@@ -248,6 +248,12 @@ env.AddComponentPostInit("health", function(self)
         return _SetPenalty(self, penalty, ...)
     end
 
+    local _DoFireDamage = self.DoFireDamage
+    function self:DoFireDamage(...)
+        if self.um_fireimmune then return end -- (not instant or mult > 0) in DoFireDamage means we are "takingfiredamage" when we shouldn't...
+        return _DoFireDamage(self, ...)
+    end
+
     if TUNING.DSTU.ONEHP == true then-- All this code is here
         TUNING.WX78_MAXHEALTH_BOOST = 0
         TUNING.WX78_MAXHEALTH2_MULT = 0
