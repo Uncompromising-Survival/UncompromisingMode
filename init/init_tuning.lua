@@ -156,8 +156,8 @@ TUNING.DSTU = {
     ICECROCKBLOCKER = GetModConfigData("icecrockblocker"),
     -- Crockpot Dish Changes
 
-    MEATBALL = GetModConfigData("meatball_"),
-    PIEROGI = GetModConfigData("perogi"),
+    --MEATBALL = GetModConfigData("meatball_"),
+    --PIEROGI = GetModConfigData("perogi"),
     FARMFOODREDUX = GetModConfigData("farmfoodredux"),
     ICECREAMBUFF = GetModConfigData("icecream_buff"),
     BONESTEW = GetModConfigData("bonestew_nerf"),

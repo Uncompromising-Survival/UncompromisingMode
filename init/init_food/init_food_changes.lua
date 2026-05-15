@@ -30,24 +30,24 @@ local warly_recipes = cooking.recipes.portablecookpot
 --end
 
 
-if TUNING.DSTU.MEATBALL then
-    local MEATBALLS =
-    {
-        "meatballs",
-        "meatballs_spice_chili",
-        "meatballs_spice_garlic",
-        "meatballs_spice_salt",
-        "meatballs_spice_sugar",
-    }
+--if TUNING.DSTU.MEATBALL then
+    --local MEATBALLS =
+    --{
+        --"meatballs",
+        --"meatballs_spice_chili",
+        --"meatballs_spice_garlic",
+        --"meatballs_spice_salt",
+        --"meatballs_spice_sugar",
+    --}
 
-    for k, v in pairs(MEATBALLS) do
-        AddPrefabPostInit(v, function(inst)
-            if inst ~= nil and inst.components.edible ~= nil then
-                inst.components.edible.hungervalue = GLOBAL.TUNING.DSTU.RECIPE_CHANGE_MEATBALL_HUNGER
-            end
-        end)
-    end
-end
+    --for k, v in pairs(MEATBALLS) do
+        --AddPrefabPostInit(v, function(inst)
+            --if inst ~= nil and inst.components.edible ~= nil then
+                --inst.components.edible.hungervalue = GLOBAL.TUNING.DSTU.RECIPE_CHANGE_MEATBALL_HUNGER
+            --end
+        --end)
+    --end
+--end
 
 
 local FLOWERSALADS =

@@ -257,8 +257,8 @@ end
 -- Original:	test = function(cooker, names, tags) return tags.fish and names.twigs and (tags.inedible and tags.inedible <= 1) end,
 
 recipes.perogies.test = function(cooker, names, tags)
-    return tags.egg and tags.meat and (tags.veggie and tags.veggie >= TUNING.DSTU.PIEROGI) and
-        not tags.inedible and not (tags.insectoid and tags.insectoid >= 1)
+    return tags.egg and tags.meat and (tags.veggie and tags.veggie) -->= TUNING.DSTU.PIEROGI)
+	and not tags.inedible and not (tags.insectoid and tags.insectoid >= 1)
 end
 -- Original:	test = function(cooker, names, tags) return tags.egg and tags.meat and tags.veggie and not tags.inedible end,
 
