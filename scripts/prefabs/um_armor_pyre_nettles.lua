@@ -136,7 +136,7 @@ local function OnEquip(inst, owner)
 
     -- Add fire protection.
     if owner.components.health ~= nil then
-        owner.components.health.externalfiredamagemultipliers:SetModifier(inst, 0.33) -- Fire does 1/3 damage.
+        owner.components.health.externalfiredamagemultipliers:SetModifier(inst, 0.5) -- Fire does 1/2 damage.
     end
 
     -- Activate area debuff.
@@ -147,7 +147,10 @@ local function OnEquip(inst, owner)
         inst.components.perishable:ReducePercent(0.05) -- 20 equips to fully spoil, to stop winter cheese, I think. -C
         owner:AddDebuff("umdebuff_pyre_toxin_armor_wearer", "umdebuff_pyre_toxin", DebuffDurationWearer)
     end
-	if owner:IsValid() and owner.components.health and not owner.components.health:IsDead() and owner.prefab ~= "wormwood" and owner.prefab ~= "willow" then
+
+	if inst._skip_equip_damage then 
+		inst._skip_equip_damage = nil
+	elseif owner:IsValid() and owner.components.health ~= nil and not owner.components.health:IsDead() and owner.prefab ~= "wormwood" and owner.prefab ~= "willow" then
 		owner.components.health:DoDelta(-10)
 	end
 
@@ -207,6 +210,9 @@ local function OnPerish(inst)
     inst:Remove()
 end
 
+local function OnLoad(inst, data)
+    inst._skip_equip_damage = true
+end
 
 local function fn()
     local inst = CreateEntity()
@@ -281,6 +287,8 @@ local function fn()
     inst._onblocked = function(owner, data) OnBlocked(owner, data, inst) end
     inst._bumpcheck = function(owner, data) bumpcheck(owner, inst) end
     inst._onattackother = function(owner, data) OnAttackOther(owner, data, inst) end
+
+	inst.OnLoad = OnLoad
 
     return inst
 end

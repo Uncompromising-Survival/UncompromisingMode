@@ -697,7 +697,7 @@ configuration_options = {
     BinaryConfig("sr_foodrebalance", "Fish Foods Rebalance", "Several fish based foods have their stats tweaked.", true),
     BinaryConfig("goodies_nerf", "Goodies Food Type Changes", "The food type of more avaliable Goodies were changed into either Veggie or Generic.", true),
     BinaryConfig("icecream_buff", "Ice Cream Buff", "Ice Cream now restores 100 sanity.", true),
-    BinaryConfig("meatball_", "Meatball Nerf", "Meatballs restore 50 hunger instead of 62.5.", false),
+    --BinaryConfig("meatball_", "Meatball Nerf", "Meatballs restore 50 hunger instead of 62.5.", false),
     --BinaryConfig("bonestew_nerf", "Meaty Stew Rework", "Makes meaty stew require 3.5 meat value to be cooked.", true),
     {
         name = "bonestew_nerf",
@@ -710,15 +710,15 @@ configuration_options = {
         },
         default = "bone_appetit"
     },
-    {
-        name = "perogi",
-        label = "Pierogi Recipe Nerf",
-        hover = "Pierogis require more veggies to cook.",
-        options = {
-            { description = "1.5 Veggie Value", data = 1.5 }, { description = "2 Veggie Value", data = 2 },
-            { description = "1 Veggie Value",   data = 1 }, { description = "Vanilla Value", data = 0.5 } },
-        default = 1.5
-    },
+    --{
+        --name = "perogi",
+        --label = "Pierogi Recipe Nerf",
+        --hover = "Pierogis require more veggies to cook.",
+        --options = {
+            --{ description = "1.5 Veggie Value", data = 1.5 }, { description = "2 Veggie Value", data = 2 },
+            --{ description = "1 Veggie Value",   data = 1 }, { description = "Vanilla Value", data = 0.5 } },
+        --default = 1.5
+    --},
     SkipSpace(),
 
     Header("General Food Tweaks"),
