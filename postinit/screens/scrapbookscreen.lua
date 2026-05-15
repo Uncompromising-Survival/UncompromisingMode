@@ -57,6 +57,33 @@ local function GetKnownNameFromGem(name)
     return known and STRINGS.NAMES[string.upper(name)] or STRINGS.NAMES.UM_GEMOLOGYGEM_UNKNOWN[color]
 end
 
+local function GetPeriodString(period)
+	local days = math.floor(period/60/8*100)/100
+
+	if days < 1 then
+		local minutes = math.floor(period/60*100)/100
+
+		if minutes < 1 then
+			return subfmt(STRINGS.SCRAPBOOK.DATA_TIME, { time = period, txt = STRINGS.SCRAPBOOK.DATA_SECONDS })
+		end
+
+		return subfmt(STRINGS.SCRAPBOOK.DATA_TIME, { time = minutes, txt = (minutes <= 1 and STRINGS.SCRAPBOOK.DATA_MINUTE or STRINGS.SCRAPBOOK.DATA_MINUTES) })
+	else
+		return subfmt(STRINGS.SCRAPBOOK.DATA_TIME, { time = days, txt = (days <= 1 and STRINGS.SCRAPBOOK.DATA_DAY or STRINGS.SCRAPBOOK.DATA_DAYS) })
+	end
+end
+
+local FUELTYPE_SUBICON_LOOKUP = {
+	[FUELTYPE.BURNABLE]  = "icon_fuel_burnable.tex",
+	[FUELTYPE.CAVE] 	 = "icon_fuel_cavelight.tex",
+	[FUELTYPE.CHEMICAL]  = "icon_fuel_chemical.tex",
+	[FUELTYPE.NIGHTMARE] = "icon_fuel_nightmare.tex",
+	[FUELTYPE.WORMLIGHT] = "icon_fuel_wormlight.tex",
+}
+
+local FUELTYPE_SUBICONS = table.getkeys(FUELTYPE_SUBICON_LOOKUP)
+
+
 local function GetGemDescription(name, knowntier)
     name = string.upper(string.gsub(string.gsub(name, "um_gemology", ""), "gem", ""))
 

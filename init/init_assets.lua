@@ -578,6 +578,23 @@ local scrapbook_icons = {
     "um_gemologypurplegem2",
     "um_gemologyyellowgem1",
     "um_gemologyyellowgem2",
+    "um_bluemushtree_gem",
+    "um_bluemushtree_gemless",
+    "um_redmushtree_gem",
+    "um_redmushtree_gemless",
+    "um_greenmushtree_gem",
+    "um_greenmushtree_gemless",
+    "um_guano_rock",
+    "um_guano_rock_gemless",
+    "um_magnifier",
+    "um_magnifier_purplegem",
+    --"um_magnifier_obsidian",
+    "um_moonglass_ceiling",
+    "um_rocklobster_rock",
+    "um_sinkmound_rock",
+    "um_sinkmound_rock_gemless",
+    "um_slimestone_rock",
+    "um_slimestone_rock_gemless"
 }
 
 for _, item in ipairs(scrapbook_icons) do
