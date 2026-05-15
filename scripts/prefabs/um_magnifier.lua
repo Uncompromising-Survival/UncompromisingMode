@@ -1,6 +1,6 @@
 local assets = {
     Asset("ANIM", "anim/um_magnifier.zip"),
-    Asset("ANIM", "anim/um_magmafier.zip"),
+    Asset("ANIM", "anim/um_magnifier_obsidian.zip"),
     Asset("ANIM", "anim/um_magnifier_purplegem.zip"),
 }
 
@@ -53,5 +53,5 @@ function CreateManifier(name, durability, build, bank, common_fn)
 end
 
 return CreateManifier("um_magnifier", 100),
-    CreateManifier("um_magnifier_obsidian", 100, "um_magmafier", "um_magmafier"),
+    CreateManifier("um_magnifier_obsidian", 100, "um_magnifier_obsidian", "um_magnifier_obsidian"),
     CreateManifier("um_magnifier_purplegem", 25, "um_magnifier_purplegem", "um_magnifier_purplegem")
