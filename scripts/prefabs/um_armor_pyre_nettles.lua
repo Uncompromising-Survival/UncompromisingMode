@@ -80,8 +80,8 @@ end
 local function bumpcheck(owner, inst)
     local bumpradius = 2
     local x, y, z = owner.Transform:GetWorldPosition()
-    local TOXIN_NO_TAGS = { "pyre_toxin_immune", "companion", "FX", "INLIMBO", "invisible", "notarget", "noattack", "player", "playerghost", "boat" }
-    local TOXIN_NO_TAGS_PVP = { "pyre_toxin_immune", "companion", "FX", "INLIMBO", "invisible", "notarget", "noattack", "playerghost", "boat", "plantkin", "spawnprotection" }
+    local TOXIN_NO_TAGS = { "pyre_toxin_immune", "companion", "FX", "INLIMBO", "invisible", "notarget", "noattack", "player", "playerghost", "boat", "walkableplatform" }
+    local TOXIN_NO_TAGS_PVP = { "pyre_toxin_immune", "companion", "FX", "INLIMBO", "invisible", "notarget", "noattack", "playerghost", "boat", "plantkin", "spawnprotection", "walkableplatform" }
     local TOXIN_ONE_OF_TAGS = { "_combat", "_health" }
     local ents = TheSim:FindEntities(x, y, z, bumpradius, nil, TOXIN_NO_TAGS, TOXIN_ONE_OF_TAGS)
 

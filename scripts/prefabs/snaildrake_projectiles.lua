@@ -2,9 +2,9 @@ local assets =
 {
     Asset("ANIM", "anim/lava_vomit.zip"),
     Asset("ANIM", "anim/spat_splat.zip"),
-	Asset("ANIM", "anim/snapalm_bomb.zip"),
-	Asset("ANIM", "anim/snapalm_splat.zip"),
-	Asset("ANIM", "anim/goo_snapalm.zip"),
+    Asset("ANIM", "anim/snapalm_bomb.zip"),
+    Asset("ANIM", "anim/snapalm_splat.zip"),
+    Asset("ANIM", "anim/goo_snapalm.zip"),
 }
 
 TUNING.SNAILDRAKE_SLUDGE_DAMAGE = 4
@@ -62,18 +62,19 @@ end
 
 -- Find valid entities to apply the AoE slow and damage.
 local function DoAreaEffectMagma(inst)
+    local lobber = inst.lobber and inst.lobber:IsValid() and inst.lobber or nil
+    local lobbercombat = lobber and lobber.components.combat or nil
     local x, y, z = inst.Transform:GetWorldPosition()
     local ents = TheSim:FindEntities(x, y, z, inst.components.aura.radius, nil, AURA_EXCLUDE_TAGS)
     for i, v in ipairs(ents) do
-        if v.components ~= nil and v.components.locomotor ~= nil then
+        if v ~= lobber and v.entity:IsVisible() and not (lobbercombat and lobbercombat:IsAlly(v)) and v.components.locomotor then
             TrySlowdownMagma(inst, v)
         end
     end
 
     local walls = TheSim:FindEntities(x, y, z, inst.components.aura.radius, { "wall" }, { "INLIMBO", "_inventoryitem" })
-
     for i, v in ipairs(walls) do
-        if v.components ~= nil then
+        if v ~= lobber and v.entity:IsVisible() and not (lobbercombat and lobbercombat:IsAlly(v)) then
             TrySlowdownMagma(inst, v)
         end
     end
@@ -172,15 +173,15 @@ end
 local function DoAreaEffectMeltSnowPiles(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
     local snow = TheSim:FindEntities(x, y, z, 6, "snowpile","_health")
-	
-	for i,v in ipairs(snow) do
-		if v:HasTag("snowpile") then
-			if  v.components.workable ~= nil and v.components.workable:CanBeWorked() then
-				SpawnPrefab("splash_snow_fx").Transform:SetPosition(v.Transform:GetWorldPosition())
-			end
-			v:Remove()
-		end
-	end
+    
+    for i,v in ipairs(snow) do
+        if v:HasTag("snowpile") then
+            if  v.components.workable ~= nil and v.components.workable:CanBeWorked() then
+                SpawnPrefab("splash_snow_fx").Transform:SetPosition(v.Transform:GetWorldPosition())
+            end
+            v:Remove()
+        end
+    end
 end
 
 local function magma_projectile_fn()
@@ -210,13 +211,13 @@ local function magma_sludge_fn()
     end
 
     inst.components.aura.auraexcludetags = AURA_EXCLUDE_TAGS
-	
+
     inst:AddComponent("heater")
-    inst.components.heater.heat = 500	
-	inst._melttask = inst:DoPeriodicTask(1, DoAreaEffectMeltSnowPiles)
-	
+    inst.components.heater.heat = 500    
+    inst._melttask = inst:DoPeriodicTask(1, DoAreaEffectMeltSnowPiles)
+
     inst._spoiltask = inst:DoPeriodicTask(inst.components.aura.tickperiod, DoAreaEffectMagma, inst.components.aura.tickperiod * .5)
-	
+
     return inst
 end
 
@@ -284,19 +285,19 @@ local function slime_sludge_fn()
     if not TheWorld.ismastersim then
         return inst
     end
-	
+    
     inst:AddComponent("aura")
     inst.components.aura.radius = 2
     inst.components.aura.tickperiod = 0.6
     inst.components.aura.auraexcludetags = AURA_EXCLUDE_TAGS
     inst.components.aura:Enable(true)
-	
+    
     inst:AddComponent("heater")
     inst.components.heater.heat = 250
 
     inst._spoiltask = inst:DoPeriodicTask(inst.components.aura.tickperiod, DoAreaEffectSlime, inst.components.aura.tickperiod * .5)
 
-	
+    
     inst.removetask = inst:DoTaskInTime(TUNING.SNAILDRAKE_SLIME_SLUDGE_DURATION, inst.Remove)
 
     return inst
