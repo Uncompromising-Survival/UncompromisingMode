@@ -22,7 +22,7 @@ GEODE_LOOT_TABLE = {
             green_cap = 1,
             rocks = 1,
             log = 0.5,
-            spore_short = 0.5,
+            spore_small = 0.5,
         },
         gemloot = {
             um_gemologygreengem1 = 1,

@@ -149,6 +149,12 @@ dataset["um_gemologyforge"] = {
     specialinfo = "GEMOLOGY_FORGE"
 }
 
+for k, v in pairs(dataset) do
+    if (v.weapondamage or v.toolactions and not table.contains(v.toolactions, "PLAY") and not table.contains(v.toolactions, "NET")) and v.subcat ~= "riding" and not v.stacksize  then
+        table.insert(dataset["um_gemologyforge"].deps, k)
+    end
+end
+
 --gems
 local function GetKnownNameFromGem(name)
     local color = "DEFAULT"
@@ -162,7 +168,6 @@ end
 
 
 local function CreateGemologyEntryFromDefs(name, defs)
-    
     local data = {
         name = name,
         type = "gemology",
@@ -172,7 +177,7 @@ local function CreateGemologyEntryFromDefs(name, defs)
         bank = defs.bank,
         build = defs.build,
         anim = defs.anim,
-        special_info = "GEMOLOGY_GEM",
+        specialinfo = "GEMOLOGY_GEM",
         subcat = "gemologygem",
         notes = { gemology_gem = true }, --this will handles wheter to dynamically adjust description/name based on the mineral logbook.
         deps = { "um_gemologyforge", "ancientfruit_gem" },
@@ -181,7 +186,7 @@ local function CreateGemologyEntryFromDefs(name, defs)
 
     scrapbook_prefabs[name] = true
 
-    printwrap("DATA FOR "..name, data)
+    printwrap("DATA FOR " .. name, data)
     print()
 
     table.insert(dataset["ancientfruit_gem"].deps, name)
@@ -218,7 +223,7 @@ end
 
 --geodes
 local function CreateGeodeEntryFromLootTable(name, defs)
-    local buildbank = string.gsub(name, "gemology", "")
+    local buildbank = string.gsub(name, "gemology_", "")
     local data = {
         subcat = "geode",
         name = name,
@@ -229,8 +234,39 @@ local function CreateGeodeEntryFromLootTable(name, defs)
         type = "gemology",
         prefab = name,
         stacksize = 10,
-        workable = "HAMMER"
+        workable = "HAMMER",
+        deps = {}
     }
 
-    local deps = {}
+    local _notgemloot = {}
+    local _gemloot = {}
+
+    for k, v in pairs(defs.gemloot) do
+        if scrapbook_prefabs[k] ~= nil then
+            table.insert(_gemloot, k)
+        else
+            print("[WARNING] Geode Scrapbook: " .. k .. " is not a scrapbook prefab")
+        end
+    end
+
+    for k, v in pairs(defs.notgemloot) do
+        if scrapbook_prefabs[k] ~= nil then
+            table.insert(_notgemloot, k)
+        else
+            print("[WARNING] Geode Scrapbook: " .. k .. " is not a scrapbook prefab")
+        end
+    end
+
+    data.deps = JoinArrays(_notgemloot, _gemloot)
+
+    return data
+end
+
+for name, defs in pairs(GEODE_LOOT_TABLE) do
+    local data = CreateGeodeEntryFromLootTable(name, defs)
+    printwrap("data for " .. name, data)
+    printwrap("data.deps " .. name, data.deps)
+
+    dataset[name] = data
+    scrapbook_prefabs[name] = true
 end
