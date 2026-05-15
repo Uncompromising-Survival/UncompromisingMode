@@ -89,8 +89,6 @@ local function SpreadProtectionAtPoint(x, y, z, dist) -- This is taken from Wate
         end
     end
 
-
-
     if TheWorld.components.farming_manager ~= nil then
         TheWorld.components.farming_manager:AddSoilMoistureAtPoint(x, y, z, 100)
     end
@@ -107,6 +105,7 @@ local function ondeploy(inst, pt, deployer)
     local effect
     if inst.contains == "lava" then
         effect = SpawnPrefab("snaildrake_magma_sludge")
+        effect.lobber = deployer
     elseif inst.contains == "water" then
         effect = SpawnPrefab("mudpuddle_splash")
         SpreadProtectionAtPoint(pt.x,pt.y,pt.z,4)
@@ -241,12 +240,10 @@ local function fn()
     inst.AnimState:SetBuild("snaildrakebucket")
     inst.AnimState:PlayAnimation("empty")
 
-
-
     inst:AddTag("usedeploystring")
     inst:AddTag("um_bucket")
     inst:AddTag("wardrobe_item")
-    
+
     MakeInventoryFloatable(inst, "small", 0.2, 0.80)
 
     inst.entity:SetPristine()
@@ -255,31 +252,28 @@ local function fn()
         return inst
     end
 
-
     inst:AddComponent("inspectable")
     inst.components.inspectable.getstatus = getstatus
-    
+
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem.atlasname = resolvefilepath("images/inventoryimages/snaildrakebucket_empty.xml")
     inst.components.inventoryitem:ChangeImageName("snaildrakebucket_empty")
-    
+
     inst:AddComponent("lootdropper")
     inst.components.lootdropper:SetChanceLootTable("snaildrakebucket")
-    
+
     inst:AddComponent("workable")
     inst.components.workable:SetWorkAction(ACTIONS.HAMMER)
     inst.components.workable:SetWorkLeft(1)
     inst.components.workable:SetOnFinishCallback(ExplodeContents)
     inst.components.workable.savestate = false
 
-    
     inst:AddComponent("fillable")
     inst.components.fillable.overrideonfillfn = OnFill
     inst.components.fillable.showoceanaction = true
     inst.components.fillable.acceptsoceanwater = false
     inst.components.fillable.oceanwatererrorreason = "UNSUITABLE_FOR_PLANTS"
 
-    
     inst.uses = 0 -- Not using finiteuses because we'll be using durability for the shell itself, the image will change to represent how much liquid is in it.
     
     inst:AddComponent("fueled")
@@ -300,4 +294,4 @@ local function fn()
 end
 
 return Prefab("snaildrakebucket", fn, assets),
-MakePlacer("snaildrakebucket_placer", nil, nil, nil)
+    MakePlacer("snaildrakebucket_placer", nil, nil, nil)
