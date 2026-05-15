@@ -194,6 +194,11 @@ end
 
 local function OnDropped(inst)
 	inst.Light:Enable(true)
+	
+	if inst.components.heater ~= nil then
+		inst.components.heater.heat = 100
+	end
+	
 	inst.persists = false
 	inst.OnEntitySleep = inst.Remove
 
@@ -218,6 +223,11 @@ end
 
 local function OnPickup(inst)
 	inst.Light:Enable(false)
+	
+	if inst.components.heater ~= nil then
+		inst.components.heater.heat = 0
+	end
+	
 	inst.persists = true
 	inst.OnEntitySleep = nil
 
@@ -324,6 +334,10 @@ local function fn()
 
 	inst:AddComponent("fuel")
 	inst.components.fuel.fuelvalue = TUNING.LARGE_FUEL
+	
+	inst:AddComponent("heater")
+	inst.components.heater.heat = 100
+	inst.components.heater:SetThermics(true, false)
 
 	-- Eating explosives goes about as well as you'd think.
 	inst:AddComponent("edible")
