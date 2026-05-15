@@ -31,7 +31,7 @@ local function onkilledbyother(inst, attacker)
     return inst.Oldonkilledbyother(inst, attacker)
 end
 
-local function retargetfn(inst)
+--[[local function retargetfn(inst)
     local maxrangesq = TUNING.SHADOWCREATURE_TARGET_DIST * TUNING.SHADOWCREATURE_TARGET_DIST
     local rangesq, rangesq1, rangesq2 = maxrangesq, math.huge, math.huge
     local target1, target2 = nil, nil
@@ -63,7 +63,7 @@ local function retargetfn(inst)
         return target1, not inst.components.shadowsubmissive:TargetHasDominance(inst.components.combat.target)
     end
     return target2, forcechange
-end
+end]]
 
 env.AddPrefabPostInit("terrorbeak", function(inst)
     inst:AddTag("terrorbeak")
@@ -79,7 +79,7 @@ env.AddPrefabPostInit("terrorbeak", function(inst)
         inst.components.combat.onkilledbyother = onkilledbyother
     end
 
-    inst.components.combat:SetRetargetFunction(3, retargetfn) --yell at me if this causes problems later, I couldn't be bothered to function hook -Atobá
+    --inst.components.combat:SetRetargetFunction(3, retargetfn) --yell at me if this causes problems later, I couldn't be bothered to function hook -Atobá
 end)
 
 env.AddPrefabPostInit("nightmarebeak", function(inst)
@@ -89,7 +89,7 @@ env.AddPrefabPostInit("nightmarebeak", function(inst)
         return
     end
 
-    inst.components.combat:SetRetargetFunction(3, retargetfn) --yell at me if this causes problems later, I couldn't be bothered to function hook -Atobá
+    --inst.components.combat:SetRetargetFunction(3, retargetfn) --yell at me if this causes problems later, I couldn't be bothered to function hook -Atobá
 end)
 
 local function LaunchProjectile(inst)
@@ -142,7 +142,7 @@ env.AddPrefabPostInit("crawlinghorror", function(inst)
         return
     end
 
-    inst.components.combat:SetRetargetFunction(3, retargetfn) --yell at me if this causes problems later, I couldn't be bothered to function hook -Atobá
+    --inst.components.combat:SetRetargetFunction(3, retargetfn) --yell at me if this causes problems later, I couldn't be bothered to function hook -Atobá
 
     inst.sanityreward = TUNING.SANITY_SMALL
 
