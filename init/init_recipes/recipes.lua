@@ -525,7 +525,7 @@ ChangeSortKey("mastupgrade_windturbine_item", "mastupgrade_lightningrod_item", "
 
 -- Pyre Nettles stuff
 -- Pyre Mantle
-AddRecipe2("um_armor_pyre_nettles", { Ingredient("firenettles", 16), Ingredient("silk", 3) }, TECH.NONE, nil, { "ARMOUR", "WINTER", "RAIN" })
+AddRecipe2("um_armor_pyre_nettles", { Ingredient("um_smolder_spore", 2), Ingredient("firenettles", 16), Ingredient("silk", 2) }, TECH.ONE, nil, { "ARMOUR", "WINTER", "RAIN" })
 ChangeSortKey("um_armor_pyre_nettles", "armordragonfly", "ARMOUR", false)
 ChangeSortKey("um_armor_pyre_nettles", "raincoat", "WINTER", true)
 ChangeSortKey("um_armor_pyre_nettles", "armor_reed_um", "RAIN", false)
