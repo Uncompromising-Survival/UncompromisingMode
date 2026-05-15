@@ -191,6 +191,24 @@ local function TaskCancel(inst)
 	end
 end
 
+local function TimeToDie(inst) -- Forced explosion
+	inst:AddTag("BUSYSMOLDERSPORE")
+
+	if inst.components.locomotor ~= nil then
+		inst.components.locomotor:Stop()
+	end
+
+	inst.AnimState:PlayAnimation("divebomb", false)
+
+	inst:ListenForEvent("animover", function(inst)
+		if inst:IsValid() then
+			SpawnPrefab("explode_small").Transform:SetPosition(inst.Transform:GetWorldPosition())
+			FieryAftermath(inst)
+			FireSpread(inst)
+			inst:Remove()
+		end
+	end)
+end
 
 local function OnDropped(inst)
 	inst.Light:Enable(true)
@@ -214,7 +232,16 @@ local function OnDropped(inst)
 			end
 		end
 	end
+	
+	if inst._selfdestructtask ~= nil then
+		inst._selfdestructtask:Cancel()
+	end
 
+	inst._selfdestructtask = inst:DoTaskInTime(math.random(30, 90), function(inst)
+		if inst:IsValid() and not inst:HasTag("BUSYSMOLDERSPORE") then
+			TimeToDie(inst)
+		end
+	end)
 
 	TaskStartup(inst)
 end
@@ -240,6 +267,11 @@ local function OnPickup(inst)
 		if holder ~= nil and holder:HasTag("plantkin") then
 			inst.components.perishable:SetLocalMultiplier(TUNING.SEG_TIME * 3 / TUNING.PERISH_SLOW) -- From mushtree_spores.lua.
 		end
+	end
+	
+	if inst._selfdestructtask ~= nil then
+		inst._selfdestructtask:Cancel()
+		inst._selfdestructtask = nil
 	end
 end
 
