@@ -25,6 +25,8 @@ modimport("init/init_strings/init_names")
 modimport("init/init_strings/init_tooltips")--load before postinit please!
 modimport("init/init_bonusdescriptors") -- doesn't contain strings
 
+
+
 -- Character descriptions
 modimport("init/init_strings/init_descriptions/generic")
 modimport("init/init_strings/init_descriptions/willow")
@@ -92,6 +94,11 @@ modimport("init/init_gemology/common")
 modimport("init/init_gemology/special")
 modimport("init/init_gemology/misc") -- AXE Monkeys angering when you mine slimestone with geodes, lab and AG loot
 modimport("init/init_gemology/trades")
+
+--scrapbook
+modimport("init/init_scrapbook/additions")
+modimport("init/init_scrapbook/changes")
+modimport("init/init_scrapbook/gemology")
 
 --if GetModConfigData("harder_monsters") then
 modimport("init/init_creatures/init_treebuffs")

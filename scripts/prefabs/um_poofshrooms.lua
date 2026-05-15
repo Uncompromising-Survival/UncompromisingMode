@@ -253,7 +253,7 @@ local function OnDug(inst)
 		if inst.color == "r" then
 			loot = "spore_medium"
 		elseif inst.color == "g" then
-			loot = "spore_short"
+			loot = "spore_small"
 		else
 			loot = "spore_tall"
 		end
