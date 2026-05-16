@@ -571,7 +571,7 @@ local function OnHitSlime(inst, attacker, other, dont_stick)
         other:AddDebuff("snaildrake_slime_debuff", "snaildrake_slime_debuff")
     else
         local x, y, z = inst.Transform:GetWorldPosition()
-        local sludge = SpawnPrefab("snaildrake_slime_sludge")
+        local sludge = SpawnPrefab("um_snaildrake_slime_sludge")
         sludge.Transform:SetPosition(x, 0, z)
     end
 
