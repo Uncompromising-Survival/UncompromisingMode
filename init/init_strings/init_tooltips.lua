@@ -468,6 +468,3 @@ end
 if GetModConfigData("toolbox_tools") then
     TOOLTIPS.WINONA_TOOLBOX = "- Portable storage for dismantled structures, tools and all things engineering."
 end
-
-modimport("init/init_scrapbook")
---modimport("init/init_scrapbook_um")

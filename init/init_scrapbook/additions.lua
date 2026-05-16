@@ -6,6 +6,8 @@ local scrapbookdata = require("screens/redux/scrapbookdata")
 
 local UM_SCRAPBOOK_DEFS = require("screens/redux/um_scrapbookdata")
 
+--don't do this. Not yet. The current data (as of writing) is hella outdated.
+--[[
 for k, v in pairs(UM_SCRAPBOOK_DEFS) do
     if v.anim ~= nil then
         v.name = v.name or k
@@ -18,7 +20,7 @@ for k, v in pairs(UM_SCRAPBOOK_DEFS) do
         scrapbook_prefabs[k] = true
         scrapbookdata[k] = v
     end 
-end
+end]]
 
 local S = STRINGS.SCRAPBOOK.SPECIALINFO
 
