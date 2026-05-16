@@ -163,7 +163,7 @@ local function TriggerRose(self)
 
     self.inst.components.sanity:SetPercent(.5, true)
     self.inst.components.hunger:SetPercent(2 / 3, true)
-    self.inst.components.temperature:SetTemp(TUNING.STARTING_TEMP)
+    self.inst.components.temperature:SetTemperature(TUNING.STARTING_TEMP)
     self:DeltaPenalty(.25)
     self:SetPercent(.5)
     self.inst:PushEvent("PocketResurrection")
