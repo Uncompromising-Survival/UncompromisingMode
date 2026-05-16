@@ -216,7 +216,7 @@ configuration_options = {
     BinaryConfig("foodregen", "Over Time Food Stats",
         "Health and Sanity from foods is applied over time, each food acting as a seperate stackable health or sanity regen buff.",
         true),
-    BinaryConfig("rat_raids", "Rat Raids", "Rats will periodically be attracted to your base.", true),
+    BinaryConfig("rat_raids", "Rat Raids", "Rats will gain or lose points toward raiding your base depending on how much spoiled food you have in it, similar to Naughtiness.", true),
     {
         name = "vetcurse",
         label = "Veteran's Curse",
@@ -549,39 +549,36 @@ configuration_options = {
     ------------------------------
     -- Rats --
     ------------------------------
-    Header("Rats"),
+    Header("Rat Raids"),
     ------------------------------
     --BinaryConfig("itemcheck", "Item Score", "Equippable items and mole bait items increase the \'rat score\' value.",
         --true),
     {
         name = "rattimer",
-        label = "Rat Raid Cooldown",
-        hover = "The cooldown between Rat Raids!",
+        label = "Points",
+        hover = "How many points are needed for a Rat Raid.",
         options = {
-            { description = "As soon as possible.", data = 10 }, { description = "Half", data = 4800 },
-            { description = "Default",              data = 9600 }, { description = "Double", data = 14400 } },
+            { description = "Almost None (10)", data = 10 }, { description = "Half (4.800)", data = 4800 },
+            { description = "Default (9.600)", data = 9600 }, { description = "Double (19.200)", data = 19200 } },
         default = 9600
     },
     {
         name = "ratgrace",
-        label = "Rat Raid Grace Period",
-        hover =
-        "Minimum grace period, during which Rats are unable to invade!",
+        label = "Grace Period",
+        hover = "Minimum grace period, during which Rats are unable to Raid.",
         options = {
-            { description = "As soon as possible.", data = 1 }, { description = "Low[15 days]", data = 15 },
-            { description = "Default[30 days]",     data = 30 }, { description = "Medium[45 days]", data = 45 },
-            { description = "High[60 days]", data = 60 } },
+            { description = "No Grace Period", data = 1 }, { description = "Low (15 Days)", data = 15 },
+            { description = "Default (30 days)",     data = 30 }, { description = "Higher (45 days)", data = 45 },
+            { description = "Highest (60 days)", data = 60 } },
         default = 30
     },
     {
         name = "ratsnifftimer",
-        label = "Rat Sniff Timer",
-        hover =
-        "The rate at which your base is checked for messiness.",
+        label = "Sniffer Timer",
+        hover = "The rate at which your base is checked for spoiled food.",
         options = {
-            { description = "Lowest[1 Minute]",   data = 60 }, { description = "Lowered[2 Minutes]", data = 120 },
-            { description = "Default[3 Minutes]", data = 180 }, { description = "Raised[4 Minutes]", data = 240 },
-            { description = "Extended[8 Minutes]", data = 480 } },
+            { description = "Lower (1 Min.)",   data = 60 }, { description = "Default (2 Min.)", data = 120 },
+            { description = "Higher (3 Min.)", data = 180 }, { description = "Highest (4 Min.)", data = 240 } },
         default = 120
     },
     SkipSpace(),
