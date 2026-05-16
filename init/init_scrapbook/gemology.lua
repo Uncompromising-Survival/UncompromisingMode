@@ -5,7 +5,7 @@ local GEM_DEFS = require("gemology_defs").GEM_DEFS
 local scrapbook_prefabs = require("scrapbook_prefabs")
 local dataset = require("screens/redux/scrapbookdata")
 local UpvalueHacker = require("tools/upvaluehacker")
-
+local SPECIALINFO = STRINGS.SCRAPBOOK.SPECIALINFO
 require("um_gemology_geode_defs")
 require("simutil")
 
@@ -15,11 +15,13 @@ STRINGS.SCRAPBOOK.SUBCATS.GEMOLOGYGEM = "Strange Gem"
 STRINGS.SCRAPBOOK.SUBCATS.GEODE = "Geode"
 STRINGS.SCRAPBOOK.SUBCATS.GEMOLOGY = "Gemology"
 
-STRINGS.SCRAPBOOK.SPECIALINFO.GEMOLOGY_FORGE = "A forge found in the heart of the Magma Caves capable of enchanting tools and weapons with Strange Gems to amplify them with special effects.\n\nGem effects fade with usage."
-STRINGS.SCRAPBOOK.SPECIALINFO.GEMOLOGY_GEM = "Can be used at a " .. STRINGS.NAMES.UM_GEMOLOGYFORGE .. " to apply a special effect to a Tool or Weapon depending on the quality of the gem.\n\nGem Effects:\n\n"
-STRINGS.SCRAPBOOK.SPECIALINFO.UM_MOONGLASS_CEILING = "Breaks appart and drops Glass Geodes during earthquakes."
-STRINGS.SCRAPBOOK.SPECIALINFO.UM_SLIMESTONE_ROCK = "Falls from the Ceiling near Slime Pillars during Earthquakes while Nightmare Phase is active."
-STRINGS.SCRAPBOOK.SPECIALINFO.UM_SLIMESTONE_ROCK_GEMLESS = "Falls from the Ceiling near Slime Pillars during Earthquakes while Nightmare Phase is active."
+SPECIALINFO.GEMOLOGY_FORGE = "A forge found in the heart of the Magma Caves capable of enchanting tools and weapons with Strange Gems to amplify them with special effects.\n\nGem effects fade with usage."
+SPECIALINFO.GEMOLOGY_GEM = "Can be used at a " .. STRINGS.NAMES.UM_GEMOLOGYFORGE .. " to apply a special effect to a Tool or Weapon depending on the quality of the gem.\n\nGem Effects:\n\n"
+SPECIALINFO.UM_MOONGLASS_CEILING = "Breaks appart and drops Glass Geodes during earthquakes."
+SPECIALINFO.UM_SLIMESTONE_ROCK = "Falls from the Ceiling near Slime Pillars during Earthquakes while Nightmare Phase is active."
+SPECIALINFO.UM_SLIMESTONE_ROCK_GEMLESS = "Falls from the Ceiling near Slime Pillars during Earthquakes while Nightmare Phase is active."
+SPECIALINFO.PETRIFIED_MUSHTREE = "Petrifies at the end of its blooming season."
+--specialinfo for normal mushtrees done in init_scrapbook/changes
 
 --add gemology category
 table.insert(SCRAPBOOK_CATS, "gemology")
@@ -52,17 +54,6 @@ for k, v in pairs(dataset) do
 end
 
 --gems
-local function GetKnownNameFromGem(name)
-    local color = "DEFAULT"
-
-    if string.find(recipe_type, "um_gemology") ~= nil then --just UM has the color stuff idk if any addons will apply, so we'll use the default.
-        color = string.upper(string.gsub(string.gsub(recipe_type, "um_gemology", ""), "gem%d", ""))
-    end
-
-    return TheMineralLogbook:IsGemKnown(name) and STRINGS.NAMES[name] or STRINGS.NAMES.UM_GEMOLOGYGEM_UNKNOWN[color]
-end
-
-
 local function CreateGemologyEntryFromDefs(name, defs)
     STRINGS.SCRAPBOOK.SPECIALINFO[name] = name
     local data = {
@@ -194,9 +185,10 @@ for k, color in ipairs(colors) do
         tex = "um_" .. color .. "mushtree_gemless.tex",
         type = "thing",
         prefab = "um_" .. color .. "mushtree_gemless",
-        bank = "um_" .. color .. "mushtree_gem",
+        bank = "um_" .. color .. "mushtree_gemless",
         build = "um_" .. color .. "mushtree",
         anim = "empty_tall",
+        specialinfo = "PETRIFIED_MUSHTREE",
         workable = "MINE",
         deps = { "rocks", "flint", "nitre", "log", color .. "_cap", "mushtree_" .. color_map[color] }
     }
@@ -210,6 +202,7 @@ for k, color in ipairs(colors) do
         bank = "um_" .. color .. "mushtree_gem",
         build = "um_" .. color .. "mushtree",
         subcat = "gemology",
+        specialinfo = "PETRIFIED_MUSHTREE",
         anim = "gem_tall",
         workable = "MINE",
         deps = { "rocks", "flint", "nitre", "log", "um_gemology_geode_" .. color, "mushtree_" .. color_map[color] }

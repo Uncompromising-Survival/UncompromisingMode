@@ -11,13 +11,17 @@ local specialinfo_ovewrite = {
     blowdart_fire = "BLOWDART_FIRE",
     turf_dragonfly = "TURF_DRAGONFLY",
     premiumwateringcan = "PREMIUMWATERINGCAN",
-    wall_dreadstone = "WALL_DREADSTONE"
+    wall_dreadstone = "WALL_DREADSTONE",
+    mushtree_tall = "MUSHTREE",
+    mushtree_small = "MUSHTREE",
+    mushtree_medium = "MUSHTREE",
 }
 --define the original special info to the new one so it isn't an overwrite
 SPECIALINFO.BLOWDART_FIRE = SPECIALINFO.REDSTAFF
 SPECIALINFO.TURF_DRAGONFLY = SPECIALINFO.TURF
 SPECIALINFO.PREMIUMWATERINGCAN = SPECIALINFO.WATERINGCAN
 SPECIALINFO.WALL_DREADSTONE = SPECIALINFO.WALLS
+SPECIALINFO.MUSHTREE = SPECIALINFO.TREE
 
 --then change the special info.
 for k, v in pairs(specialinfo_ovewrite) do
@@ -147,6 +151,7 @@ local um_specialinfo = {
     TELEBASE = { "No longer requires gems per teleport. Acts as one of the possible destinations for Telelocator Staves.\nMay be renamed with a Feather Pencil.", true },
 
     --Other stuff TODO TODO TODO
+    MUSHTREE = "Petrifies at the end of its blooming season.",
     DRAGONFLY = "No longer drops scales mid-fight, instead drops all 3 on death.",
     SHIELDOFTERROR = "Negative food stats no longer contribute for repairs.\nIncreased stats.",
     KNIGHT = clockwork_str,
