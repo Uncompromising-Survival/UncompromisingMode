@@ -80,7 +80,7 @@ end
 
 -- Kaboom!
 local function DoExplosion(inst)
-    local explosion = SpawnPrefab("snaildrake_explosion")
+    local explosion = SpawnPrefab("um_snaildrake_explosion")
     explosion.Transform:SetPosition(inst.Transform:GetWorldPosition())
     explosion.snaildrake = inst
 end
@@ -330,7 +330,7 @@ local function magma_fn()
 
     inst.components.eater:SetOnEatFn(OnEatElementMagma)
 
-    inst.projectile_prefab = "snaildrake_magma_projectile"
+    inst.projectile_prefab = "um_snaildrake_magma_projectile"
 
     return inst
 end
@@ -347,7 +347,7 @@ local function slime_fn()
     inst.AnimState:SetBuild("snaildrake_holeshell")
     inst.components.eater:SetOnEatFn(OnEatElementSlime)
 
-    inst.projectile_prefab = "snaildrake_slime_projectile"
+    inst.projectile_prefab = "um_snaildrake_slime_projectile"
 
     return inst
 end

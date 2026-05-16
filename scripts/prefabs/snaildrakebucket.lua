@@ -104,8 +104,9 @@ end
 local function ondeploy(inst, pt, deployer)
     local effect
     if inst.contains == "lava" then
-        effect = SpawnPrefab("snaildrake_magma_sludge")
+        effect = SpawnPrefab("um_snaildrake_magma_sludge")
         effect.lobber = deployer
+        effect.persists = false
     elseif inst.contains == "water" then
         effect = SpawnPrefab("mudpuddle_splash")
         SpreadProtectionAtPoint(pt.x,pt.y,pt.z,4)
@@ -191,8 +192,9 @@ local function ExplodeContents(inst)
         if inst.contains == "water" and TheWorld.state.iswinter then
             SpawnPrefab("ice").Transform:SetPosition(inst.Transform:GetWorldPosition())
         elseif inst.contains == "lava" then
-            local sludge = SpawnPrefab("snaildrake_magma_sludge")
+            local sludge = SpawnPrefab("um_snaildrake_magma_sludge")
             sludge.Transform:SetPosition(inst.Transform:GetWorldPosition())
+            sludge.persists = false
             if sludge.removetask then
                 sludge.removetask:Cancel()
             end
@@ -206,11 +208,7 @@ end
 
 local function EvaluateFueledRate(inst,iswinter)
     if inst.contains and inst.contains == "water" and inst.uses ~= 0 then
-        if iswinter then
-            inst.components.fueled.rate = 20
-        else
-            inst.components.fueled.rate = 1
-        end
+        inst.components.fueled.rate = iswinter and 20 or 1
     end
 end
 

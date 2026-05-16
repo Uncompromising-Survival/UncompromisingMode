@@ -39,7 +39,7 @@ local prefabs = {
     "moonmaw_trap",
     "moonmaw_glassshards",
 
-    "lavaspit",
+    "um_lavaspit_projectiles",
     --"um_sandhill",
     "snowpile",
     --"sand",
@@ -534,9 +534,8 @@ local prefabs = {
     "um_astral_projector",
 
     -- Broiling Hills & Magma Caves
-    "snaildrake_explosion",
+    "um_snaildrake_explosion",
     "snaildrake_hole",
-    "snaildrake_projectiles",
     "snaildrake_slime_debuff",
     "snaildrake",
     "snapalm",

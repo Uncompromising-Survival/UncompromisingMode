@@ -181,7 +181,7 @@ local states =
                 inst.vomitfx.Transform:SetPosition(inst.Transform:GetWorldPosition())
                 inst.vomitfx.Transform:SetRotation(inst.Transform:GetRotation())
                 inst:DoTaskInTime(2.2, function(inst)
-                    inst.spittle = SpawnPrefab("lavaspit")
+                    inst.spittle = SpawnPrefab("um_lavaspit")
                     inst.spittle.Transform:SetPosition(inst.Transform:GetWorldPosition())
                     inst.spittle.Transform:SetRotation(inst.Transform:GetRotation())
                     inst.spittle.dragonflyspit = true

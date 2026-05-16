@@ -321,7 +321,7 @@ NAMES.CAVE_EXIT_MOON = NAMES.CAVE_EXIT
 NAMES.GORE_HORN_HAT = "Gore Horn"
 NAMES.SLOBBERLOBBER = "Slobber Lobber"
 NAMES.BEARGERCLAW = "Bearger Claw"
-NAMES.LAVASPIT_SLOBBER = NAMES.LAVASPIT
+NAMES.UM_LAVASPIT_SLOBBER = NAMES.LAVASPIT
 NAMES.WOODPECKER = "Woodpecker"
 NAMES.UM_BEAR_TRAP = "Snap-Trap"
 NAMES.UM_BEAR_TRAP_OLD = "Snap-Trap"
@@ -490,7 +490,7 @@ NAMES.BOAT_BUMPER_SLUDGE_KIT = "Sludge Bumper Kit"
 NAMES.BOAT_BUMPER_COPPER = "Copper Bumper"
 NAMES.BOAT_BUMPER_COPPER_KIT = "Copper Bumper Kit"
 NAMES.HERMIT_BUNDLE_LURES = "Lure Bundle"
-NAMES.LAVASPIT_SLUDGE = "Burning Pool of Sludge"
+NAMES.UM_LAVASPIT_SLUDGE = "Burning Pool of Sludge"
 
 NAMES.KELPSTACK = "Kelpy Seastack"
 NAMES.MOSSSTACK = "Mossy Seastack"
@@ -654,11 +654,11 @@ NAMES.SMOG = "suffocation"
 ------------------------
 -- Broiling Hills --
 ------------------------
-NAMES.SNAILDRAKE_EXPLOSION = "Snaildrake Explosion"
+NAMES.UM_SNAILDRAKE_EXPLOSION = "Snaildrake Explosion"
 NAMES.SNAILDRAKE_HOLE = "Crevasse"
 NAMES.SNAILDRAKE_MAGMA = "Snaildrake"
 NAMES.SNAILDRAKE_SLIME = "Snaildrake"
-NAMES.SNAILDRAKE_MAGMA_SLUDGE = "Magma Sludge"
+NAMES.UM_SNAILDRAKE_MAGMA_SLUDGE = "Magma Sludge"
 NAMES.SNAPALM = "Snapalm"
 NAMES.SNAILDRAKEHAT = "Snaily Horned Helm"
 NAMES.SNAILDRAKEBUCKET = "Snaildrake Basin"

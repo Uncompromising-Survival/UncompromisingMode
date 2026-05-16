@@ -62,4 +62,4 @@ local function fn()
     return inst
 end
 
-return Prefab("snaildrake_explosion", fn, assets, prefabs)
+return Prefab("um_snaildrake_explosion", fn, assets, prefabs)

@@ -59,7 +59,7 @@ local function LaunchSpit(caster, target)
 
     theta = theta * DEGREES
 
-    local projectile = SpawnPrefab("lavaspit_projectile")
+    local projectile = SpawnPrefab("um_lavaspit_projectile")
     projectile.coolingtime = 15
     projectile.Transform:SetPosition(x, y, z)
     projectile.lobber = caster
@@ -89,7 +89,7 @@ end
 local function createlight(staff, target, pos)
     if staff.components.rechargeable:IsCharged() then
         staff.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/vomit")
-        local spittarget = SpawnPrefab("lavaspit_target")
+        local spittarget = SpawnPrefab("um_lavaspit_target")
         local caster = staff.components.inventoryitem.owner
 
         if pos ~= nil then
