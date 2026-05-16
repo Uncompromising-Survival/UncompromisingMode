@@ -20,8 +20,32 @@ SPECIALINFO.GEMOLOGY_GEM = "Can be used at a " .. STRINGS.NAMES.UM_GEMOLOGYFORGE
 SPECIALINFO.UM_MOONGLASS_CEILING = "Breaks appart and drops Glass Geodes during earthquakes."
 SPECIALINFO.UM_SLIMESTONE_ROCK = "Falls from the Ceiling near Slime Pillars during Earthquakes while Nightmare Phase is active."
 SPECIALINFO.UM_SLIMESTONE_ROCK_GEMLESS = "Falls from the Ceiling near Slime Pillars during Earthquakes while Nightmare Phase is active."
-SPECIALINFO.PETRIFIED_MUSHTREE = "Petrifies at the end of its blooming season."
+SPECIALINFO.PETRIFIED_MUSHTREE = "Petrifies at the end of its blooming season." --normal ones are in in init_changes/changes
+SPECIALINFO.UM_GUANO_ROCK = "Builds up during Guano Rain."
+SPECIALINFO.UM_GUANO_ROCK_GEMLESS = "Builds up during Guano Rain."
+SPECIALINFO.UM_ROCKLOBSTER_ROCK = "Rock Lobster eggs. Rock Lobsters lay their eggs on flintless Boulders when Autumn begins\nIf there is no nearby Boulders, a new boulder is placed."
+SPECIALINFO.ROCK_FLINTLESS = "Rock Lobsters lay their eggs on this Boulder at the begining of Autumn"
+SPECIALINFO.UM_SINKMOUND_ROCK = "Houses a variety of creatures.\nRegrows after 10 days once mined."
+SPECIALINFO.UM_SINKMOUND_ROCK_GEMLESS = "Houses a variety of creatures.\nRegrows after 10 days once mined."
+--thermite init_changes/stuff in changes.lua
+
+
+--helper function to format tooltip strings into scrapbook special info.
+-- Turns "- Text.\n- like this."
+-- into "Text. Like this."
+---@param tooltip string
+function ParseTooltip(tooltip)
+    if tooltip ~= nil then
+        local str = string.gsub(tooltip, "[\n- ]", " ")
+        str = string.gsub(str, "- ", "")
+        return str
+    end
+    print("tooltip failed to create scrapbook data!")
+end
+
 --specialinfo for normal mushtrees done in init_scrapbook/changes
+SPECIALINFO.UM_MAGNIFIER = ParseTooltip(STRINGS.UNCOMP_TOOLTIP.UM_MAGNIFIER)
+SPECIALINFO.UM_MAGNIFIER_PURPLEGEM = ParseTooltip(STRINGS.UNCOMP_TOOLTIP.UM_MAGNIFIER_PURPLEGEM)
 
 --add gemology category
 table.insert(SCRAPBOOK_CATS, "gemology")
@@ -53,6 +77,31 @@ for k, v in pairs(dataset) do
     end
 end
 
+--magnifiers...
+local magnifiers = {
+    um_magnifier = { uses = 100, deps = { "ancient_altar", "fossil_piece", "thulecite" } },
+    um_magnifier_purplegem = { uses = 25, deps = { "researchlab3", "boneshard", "livinglog", "purplegem" } }
+}
+
+for name, data in pairs(magnifiers) do
+    local base_data = {
+        name = name,
+        tex = name .. ".tex",
+        type = "gemology",
+        prefab = name,
+        subcat = "tool",
+        build = name,
+        finiteuses = data.uses,
+        toolactions = { "SCAN_GEMOLOGY_GEM" },
+        bank = name,
+        anim = "idle",
+        deps = data.deps
+    }
+
+    scrapbook_prefabs[name] = true
+    dataset[name] = base_data
+end
+
 --gems
 local function CreateGemologyEntryFromDefs(name, defs)
     STRINGS.SCRAPBOOK.SPECIALINFO[name] = name
@@ -71,12 +120,10 @@ local function CreateGemologyEntryFromDefs(name, defs)
         workable = "HAMMER"
     }
 
-
-    printwrap("DATA FOR " .. name, data)
-    print()
-
     table.insert(dataset["ancientfruit_gem"].deps, name)
     table.insert(dataset["um_gemologyforge"].deps, name)
+    table.insert(dataset["um_magnifier"].deps, name)
+    table.insert(dataset["um_magnifier_purplegem"].deps, name)
 
     for k, v in pairs(GetGeodeSourcesFromGem(name)) do
         table.insert(data.deps, v)
@@ -84,9 +131,6 @@ local function CreateGemologyEntryFromDefs(name, defs)
 
     return data
 end
-
---DESPAIR DESPAIR DESPAIR
-
 
 for name, defs in pairs(GEM_DEFS) do
     local data = CreateGemologyEntryFromDefs(name, defs)
@@ -105,9 +149,7 @@ for name, defs in pairs(GEM_DEFS) do
     dataset[name] = data
 end
 
---geode sources
--- save that for
-
+--sources
 --geodes
 local function CreateGeodeEntryFromLootTable(name, defs)
     local buildbank = string.gsub(name, "gemology_", "")
@@ -151,8 +193,6 @@ end
 
 for name, defs in pairs(GEODE_LOOT_TABLE) do
     local data = CreateGeodeEntryFromLootTable(name, defs)
-    printwrap("data for " .. name, data)
-    printwrap("data.deps " .. name, data.deps)
 
     if name == "um_gemology_geode_vent" then
         table.insert(data.deps, "cave_vent_mite")
@@ -288,7 +328,8 @@ CreateGemSourceEntry("um_rocklobster_rock", "um_rocklobster_rock", "um_rocklobst
     "flint",
     "goldnugget",
     "um_gemology_geode_lobster",
-    "rocky"
+    "rocky",
+    "rock_flintless"
 })
 
 --glass

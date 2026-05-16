@@ -27,7 +27,7 @@ SPECIALINFO.MUSHTREE = SPECIALINFO.TREE
 for k, v in pairs(specialinfo_ovewrite) do
     scrapbookdata[k]["specialinfo"] = v
 end
- 
+
 --helper function to format tooltip strings into scrapbook special info.
 -- Turns "- Text.\n- like this."
 -- into "Text. Like this."
@@ -204,7 +204,7 @@ local um_specialinfo = {
     CACTUS = "No longer grows in Winter.",
     BANANABUSH = "No longer grows in Winter.",
     MARSH_BUSH = "No longer grows in Winter.",
-    ROCK_AVOCADO_BUSH = "No longer grows in Winter",
+    --ROCK_AVOCADO_BUSH = "No longer grows in Winter",
     CRAWLINGHORROR = "Drops shadow ink when teleporting.",
     TERRORBEAK = "More evasive, attempts to reposition itself to get an attack.",
     LAVAE = "Explodes after death.",
@@ -216,12 +216,13 @@ local um_specialinfo = {
     PIGMAN = "Has a new attack.",
     WALRUS = "Makes use of Snap Traps.",
     BEEFALO = "Has a new attack.",
-    SPIDERQUEEN = "Has a new attack.",
+    --SPIDERQUEEN = "Has a new attack.",
     EYEOFTERROR = "Has a new attack.",
     TWINOFTERROR1 = "Has new attacks, matching more closely to its source material.",
     TWINOFTERROR2 = "Has new attacks, matching more closely to its source material.",
-    BUTTERFLY = "Immune to aura damage.",
-    CRABKING = "Reworked fight.\nTakes damage from being rammed by boats, healing is interruped by cannons or by killing its claws. Main attack no longer creates leaks.",
+    BUTTERFLY = "Immune to aura damage.", --outdated
+    --CRABKING = "Reworked fight.\nTakes damage from being rammed by boats, healing is interruped by cannons or by killing its claws. Main attack no longer creates leaks.",
+    CAVE_VENT_MITE = "May ocassionally be dazzling."
 }
 
 --adds the addtional scrapbook info based on the table above.
@@ -242,7 +243,7 @@ local um_deps = {
     alterguardian_phase1 = { "blueprint" },
     lantern = { "winona_upgradekit_electrical" },
     minerhat = { "winona_upgradekit_electrical" },
-    krampus = {"klaus_sack"}
+    krampus = { "klaus_sack" }
 }
 
 for entry, deps in pairs(um_deps) do

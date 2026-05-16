@@ -41,7 +41,6 @@ local function CheckGuanoStatus(x,y,z)
 		end
 	end
 	return high, med, low, gems, impacted_rock, impacted_guano, too_close, guanos, guano_rocks
-	
 end
 
 local DAMAGE_ONEOF_TAGS = {"NPC_workable", "CHOP_workable", "HAMMER_workable", "MINE_workable", "DIG_workable" }
