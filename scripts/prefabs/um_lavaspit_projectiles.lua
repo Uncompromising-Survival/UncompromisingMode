@@ -452,8 +452,7 @@ local function SnaildrakeTrySlowdownMagma(inst, target)
         if target._lavavomit_speedmulttask ~= nil then
             target._lavavomit_speedmulttask:Cancel()
         end
-        target._lavavomit_speedmulttask = target:DoTaskInTime(0.6,
-            function(i)
+        target._lavavomit_speedmulttask = target:DoTaskInTime(0.6, function(i)
                 i.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey)
                 i._lavavomit_speedmulttask = nil
             end)
