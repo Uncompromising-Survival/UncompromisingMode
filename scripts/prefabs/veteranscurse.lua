@@ -2,7 +2,7 @@
 ---------------------- Attach and dettach functions ---------------------
 -------------------------------------------------------------------------
 ----------------------------------ATTACH---------------------------------
-local TARGET_MUST_TAGS = {"mime", "pinetreepioneer", "plantkin", "wathom", "shadowmagic", "winky"}
+local TARGET_MUST_TAGS = { "mime", "pinetreepioneer", "plantkin", "wathom", "shadowmagic", "winky" }
 
 local function ForceToTakeMoreDamage(inst)
     local self = inst.components.combat
@@ -92,33 +92,17 @@ local function oneat(inst, data)
         inst.modded_sanityabsorption = inst.components.eater.sanityabsorption
     end
 
-    inst.components.eater:SetAbsorptionModifiers(0, inst.wolfgang_vetcurse and 0 or inst.modded_hungerabsorption or 1, 0)
+    inst.components.eater:SetAbsorptionModifiers(0, inst.modded_hungerabsorption or 1, 0)
 
     local stack_mult = inst.components.eater.eatwholestack and data.food.components.stackable and data.food.components.stackable:StackSize() or 1
-
     local base_mult = inst.components.foodmemory and inst.components.foodmemory:GetFoodMultiplier(data.food.prefab) or 1
-    local maxhp_heal = string.find(data.food.prefab, "spice_salt") ~= nil
-
     local warlybuff = inst:HasTag("warlybuffed") and 1.2 or 1
 
-    local health_delta = 0
+    local health_delta = inst.components.health and (data.food.components.edible:GetHealth(inst) >= 0 or inst.components.eater:DoFoodEffects(data.food))
+        and data.food.components.edible:GetHealth(inst) * base_mult * inst.modded_healthabsorption * warlybuff or 0
+    local sanity_delta = inst.components.sanity and (data.food.components.edible:GetSanity(inst) >= 0 or inst.components.eater:DoFoodEffects(data.food))
+        and data.food.components.edible:GetSanity(inst) * base_mult * inst.modded_sanityabsorption * warlybuff or 0
     local hunger_delta = 0
-    local sanity_delta = 0
-
-    if inst.components.health and
-        (data.food.components.edible.healthvalue >= 0 or inst.components.eater:DoFoodEffects(data.food)) then
-        health_delta = data.food.components.edible:GetHealth(inst) * base_mult * inst.modded_healthabsorption * warlybuff
-    end
-
-    if inst.components.hunger and
-        (data.food.components.edible.hungervalue >= 0 or inst.components.eater:DoFoodEffects(data.food)) then
-        hunger_delta = data.food.components.edible:GetHunger(inst) * base_mult * inst.modded_hungerabsorption * warlybuff
-    end
-
-    if inst.components.sanity and
-        (data.food.components.edible.sanityvalue >= 0 or inst.components.eater:DoFoodEffects(data.food)) then
-        sanity_delta = data.food.components.edible:GetSanity(inst) * base_mult * inst.modded_sanityabsorption * warlybuff
-    end
 
     if inst.components.eater.custom_stats_mod_fn then
         health_delta, hunger_delta, sanity_delta = inst.components.eater.custom_stats_mod_fn(inst, health_delta, hunger_delta, sanity_delta, data.food, data.feeder)
@@ -127,24 +111,38 @@ local function oneat(inst, data)
     --[[local foodaffinitysanitybuff = inst:HasTag("playermerm") and (data.food.prefab == "kelp" or data.food.prefab == "kelp_cooked") and 0 or inst.components.foodaffinity:HasPrefabAffinity(data.food) and 15 or 0
     sanity_delta = sanity_delta + foodaffinitysanitybuff]]
 
-    if health_delta > 3 and not (inst:HasTag("ignores_foodregen") or inst:HasTag("ignores_healthregen")) then
-        inst.components.debuffable:AddDebuff("healthregenbuff_vetcurse_" .. data.food.prefab, "healthregenbuff_vetcurse", {duration = (health_delta * 0.1)})
-    else
-        inst.components.health:DoDelta(health_delta, nil, data.food.prefab)
+    if inst:HasTag("wathom") and inst.components.foodaffinity:HasPrefabAffinity(data.food) then
+        health_delta = health_delta + 20
     end
 
-    if inst.wolfgang_vetcurse then
-        if hunger_delta > 1 then
-            inst.components.debuffable:AddDebuff("hungerregenbuff_vetcurse_" .. data.food.prefab, "hungerregenbuff_vetcurse", {duration = (hunger_delta * 0.1)})
+    if TUNING.DSTU.WARLY_CHANGES ~= 0 then
+        if health_delta > 3 and not inst:HasAnyTag("ignores_foodregen", "ignores_healthregen") then
+            inst.components.debuffable:AddDebuff("healthregenbuff_vetcurse_" .. data.food.prefab, "healthregenbuff_vetcurse", { duration = (health_delta * 0.1) })
         else
-            inst.components.hunger:DoDelta(hunger_delta)
+            inst.components.health:DoDelta(health_delta, nil, data.food.prefab)
+        end
+
+        if string.find(data.food.prefab, "spice_salt") then
+            inst.components.health:DeltaPenalty(-0.125)
+        end
+    else
+        if health_delta > 3 and not inst:HasAnyTag("ignores_foodregen", "ignores_healthregen") then
+            inst.components.debuffable:AddDebuff("healthregenbuff_vetcurse_" .. data.food.prefab, "healthregenbuff_vetcurse", { duration = (health_delta * 0.1) })
+        else
+            inst.components.health:DoDelta(health_delta, nil, data.food.prefab)
         end
     end
 
-    if sanity_delta > 3 and not (inst:HasTag("ignores_foodregen") or inst:HasTag("ignores_sanityregen")) then
-        inst.components.debuffable:AddDebuff("sanityregenbuff_vetcurse_" .. data.food.prefab, "sanityregenbuff_vetcurse", {duration = (sanity_delta * 0.1)})
+    if sanity_delta > 3 and not inst:HasAnyTag("ignores_foodregen", "ignores_sanityregen") then
+        inst.components.debuffable:AddDebuff("sanityregenbuff_vetcurse_" .. data.food.prefab, "sanityregenbuff_vetcurse", { duration = (sanity_delta * 0.1) })
     else
         inst.components.sanity:DoDelta(sanity_delta, nil, data.food.prefab)
+    end
+
+    if inst.wolfgang_vetcurse then --unused but keeping this here if we ever re-use the concept.
+        if hunger_delta > 1 then
+            inst.components.debuffable:AddDebuff("hungerregenbuff_vetcurse_" .. data.food.prefab, "hungerregenbuff_vetcurse", { duration = (hunger_delta * 0.1) })
+        end
     end
 end
 
@@ -190,7 +188,7 @@ local function ForceWalterCurse_On(inst, target)
     target.walter_curse = target:ListenForEvent("attacked", function(target, data)
         if data and data.damage then
             local attacker = data.attacker and data.attacker.prefab or "_projectile_attack"
-            target.components.debuffable:AddDebuff("healthregenbuff_vetcurse_walter_curse" .. attacker, "healthregenbuff_vetcurse_walter_curse", {duration = data.damage * 0.05, negative_value = true})
+            target.components.debuffable:AddDebuff("healthregenbuff_vetcurse_walter_curse" .. attacker, "healthregenbuff_vetcurse_walter_curse", { duration = data.damage * 0.05, negative_value = true })
         end
     end)
 end
@@ -264,7 +262,7 @@ local function ForceWillowCurse_On(inst, target)
                 target.willow_curse = target:DoPeriodicTask(1, function(target)
                     if target.components.sanity and target.components.sanity:GetPercent() <= 0.4 then
                         local x, y, z = target.Transform:GetWorldPosition()
-                        local fires = TheSim:FindEntities(x, y, z, 3, {"um_shadowfire"})
+                        local fires = TheSim:FindEntities(x, y, z, 3, { "um_shadowfire" })
 
                         if #fires > 0 then
                             fire:AdvanceStage()
@@ -382,11 +380,11 @@ local function ForceWickerbottomCurse_On(inst, target)
 
                 if not target.vetcurse_sleepycd then
                     if target.vetcurse_sleepiness > 480 then
-                        target:PushEvent("yawn", {grogginess = 4, knockoutduration = target.vetcurse_sleepiness / 50})
+                        target:PushEvent("yawn", { grogginess = 4, knockoutduration = target.vetcurse_sleepiness / 50 })
                     elseif target.vetcurse_sleepiness <= 480 and target.vetcurse_sleepiness > 360 then
-                        target:PushEvent("yawn", {grogginess = 2, knockoutduration = 0})
+                        target:PushEvent("yawn", { grogginess = 2, knockoutduration = 0 })
                     elseif target.vetcurse_sleepiness <= 360 and target.vetcurse_sleepiness > 280 then
-                        target:PushEvent("yawn", {grogginess = 0, knockoutduration = 0})
+                        target:PushEvent("yawn", { grogginess = 0, knockoutduration = 0 })
                     end
 
                     if target.vetcurse_sleepiness > 280 then
@@ -476,8 +474,8 @@ local function ForceWixieCurse_Off(inst, target)
     end
 end
 
-local MUTANT_BIRD_MUST_HAVE = {"bird_mutant"}
-local MUTANT_BIRD_MUST_NOT_HAVE = {"INLIMBO"}
+local MUTANT_BIRD_MUST_HAVE = { "bird_mutant" }
+local MUTANT_BIRD_MUST_NOT_HAVE = { "INLIMBO" }
 
 
 local BIRDBLOCKER_TAGS = { "birdblocker" }
@@ -1036,7 +1034,7 @@ local function ToggleCursee(inst)
         local bodytext = STRINGS.VETSKULL.DEFAULT .. "\n" .. inst.skulldef_client.description --inst.SkullDescription
         local yes_box = { text = STRINGS.VETS_OK, cb = acceptance }
 
-        local bpds = BigPopupDialogScreen(title, bodytext, {yes_box})
+        local bpds = BigPopupDialogScreen(title, bodytext, { yes_box })
         bpds.title:SetPosition(0, 90, 0)
         bpds.text:SetPosition(0, -15, 0)
 
@@ -1057,7 +1055,7 @@ local function SkullTalk(inst, doer)
 
 
         --[[inst.talknum = 0
-        
+
         for i = 1, 4 do
             inst:DoTaskInTime(3 * (i - 1), function(inst)
                 inst.components.talker:Say(inst.skulldef.description[i])
@@ -1083,7 +1081,7 @@ local function skull_fn(skull_def)
 
     inst.skulldef_client = skull_def
     inst.skull_music = skull_def.music
-    
+
     inst.actiontype = STRINGS.ACTIONS.UM_ACTIVATABLE_ITEM.PONDER
 
     inst.Cursee = net_entity(inst.GUID, "SetCursee.plyr", "SetCurseedirty")
