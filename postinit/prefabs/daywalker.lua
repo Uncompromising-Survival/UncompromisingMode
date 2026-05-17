@@ -30,7 +30,7 @@ local function UpdateLoot(inst, lootdropper)
             if loot.prefab and lootitemstoremove[loot.prefab] then
                 table.remove(lootdropper.randomloot, id)
                 lootdropper.totalrandomweight = lootdropper.totalrandomweight - loot.weight
-                if not next(randomloot) then print("clear") lootdropper:ClearRandomLoot() end
+                if not next(randomloot) then lootdropper:ClearRandomLoot() end
             end
         end
 		
