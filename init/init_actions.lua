@@ -387,17 +387,17 @@ STORE_BOAT.fn = function(act)
     local boat, bottle = act.target, act.invobject
 
     if boat ~= nil and boat:HasTag("walkableplatform") and boat.components.walkableplatform ~= nil then
-        for k in pairs(boat.components.walkableplatform:GetEntitiesOnPlatform()) do
-            if k:HasTag("player") then
+        for ent in pairs(boat.components.walkableplatform:GetEntitiesOnPlatform()) do
+            if ent:HasAnyTag("player", "irreplaceable", "companion", "abigail", "shadowminion") or ent.components.follower ~= nil and ent.components.follower.leader:HasTag("player") then
                 return false, "PLAYER_ON_PLATFORM"
             end
 
-            if k.components.container ~= nil then
-                k.components.container:DropEverything()
+            if ent.components.container ~= nil then
+                ent.components.container:DropEverything()
             end
 
-            if k.components.inventory ~= nil then
-                k.components.inventory:DropEverything()
+            if ent.components.inventory ~= nil then
+                ent.components.inventory:DropEverything()
             end
         end
 
