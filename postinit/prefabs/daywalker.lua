@@ -1,13 +1,41 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-local function lootsetfn(lootdropper)
-    lootdropper:ClearRandomLoot()
+local _lootsetfn
+local function lootsetfn(lootdropper, ...)
+    local ret = _lootsetfn and _lootsetfn(lootdropper, ...)
+    --[[lootdropper:ClearRandomLoot()
     if TheWorld.components.riftspawner and TheWorld.components.riftspawner:GetLunarRiftsEnabled() then
         --lootdropper:AddRandomLoot("um_boatbottle_blueprint", 1)
     end
 
-    lootdropper.numrandomloot = 1
+    lootdropper.numrandomloot = 1]]
+    local inst = lootdropper.inst
+    if inst.UMUpdateLoot then inst:UMUpdateLoot(lootdropper) end
+    return ret
+end
+
+local lootitemstoremove = {
+    ["wagpunkhat_blueprint"] = true,
+    ["armorwagpunk_blueprint"] = true,
+    ["chestupgrade_stacksize_blueprint"] = true,
+    ["wagpunkbits_kit_blueprint"] = true,
+    ["wagpunkbits_kit"] = true
+}
+
+local function UpdateLoot(inst, lootdropper)
+    local randomloot = lootdropper.randomloot
+    if randomloot and next(randomloot) then
+        for id, loot in pairs(randomloot) do
+            if loot.prefab and lootitemstoremove[loot.prefab] then
+                table.remove(lootdropper.randomloot, id)
+                lootdropper.totalrandomweight = lootdropper.totalrandomweight - loot.weight
+                if not next(lootdropper.randomloot) then
+                    lootdropper:ClearRandomLoot()
+                end
+            end
+        end
+    end
 end
 
 SetSharedLootTable("um_daywalker2",
@@ -25,7 +53,7 @@ SetSharedLootTable("um_daywalker2",
         { "wagpunkhat_blueprint",             1 },
         { "um_boatbottle_blueprint",          1 },
         { "chestupgrade_stacksize_blueprint", 1 },
-		{ "wagpunkbits_kit_blueprint", 1 }		
+        { "wagpunkbits_kit_blueprint", 1 }        
     })
 
 
@@ -36,7 +64,12 @@ env.AddPrefabPostInit("daywalker2", function(inst)
 
     inst.components.lootdropper:SetChanceLootTable('um_daywalker2')
 
+    if not _lootsetfn then
+        _lootsetfn = inst.components.lootdropper.lootsetupfn
+    end
     inst.components.lootdropper:SetLootSetupFn(lootsetfn)
+
+    inst.UMUpdateLoot = UpdateLoot
 end)
 
 --technically not daywalker but i'm putting it here anyway
@@ -60,10 +93,10 @@ env.AddPrefabPostInit("wagstaff_machinery", function(inst)
     if not TheWorld.ismastersim then
         return
     end
-	
-	if inst.components.lootdropper then
-		inst.components.lootdropper:SetLootSetupFn(nil)
-	end
+    
+    if inst.components.lootdropper then
+        inst.components.lootdropper:SetLootSetupFn(nil)
+    end
 end)
 
 -- env.AddShardModRPCHandler("UncompromisingSurvival", "DayWalkerDeathPenalty", function(shardid, segs)
@@ -77,8 +110,8 @@ end)
 
 -- env.AddComponentPostInit("daywalkerspawner", function(self)
     -- if not TheWorld.ismastersim then 
-		-- return 
-	-- end
+        -- return 
+    -- end
 
     -- local _SpawnDayWalkerArena = self.SpawnDayWalkerArena
 
@@ -86,11 +119,11 @@ end)
         -- if ((math.random() > 0.5 and TUNING.DSTU.DAYWALKERSPAWN == "random") or TUNING.DSTU.DAYWALKERSPAWN == "surface") and not self.first_time then
             -- local daywalker = SpawnPrefab("daywalker")
             -- daywalker:DoTaskInTime(30, function(daywalker)
-				-- daywalker.components.lootdropper:SetLootSetupFn(nil)
-				-- daywalker.defeated = true
-				
-				-- daywalker.components.health:Kill()
-				-- SendModRPCToShard(GetShardModRPC("UncompromisingSurvival", "DayWalkerDeathPenalty"), nil)
+                -- daywalker.components.lootdropper:SetLootSetupFn(nil)
+                -- daywalker.defeated = true
+                
+                -- daywalker.components.health:Kill()
+                -- SendModRPCToShard(GetShardModRPC("UncompromisingSurvival", "DayWalkerDeathPenalty"), nil)
                 -- daywalker:Remove()
                 
             -- end)
