@@ -259,6 +259,7 @@ local prefab_post = {
     "strawhat",
     "monkey_smallhat",
     "cane",
+    "onemanband",
 }
 
 local stategraph_post = {
