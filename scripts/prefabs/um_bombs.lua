@@ -58,7 +58,6 @@ local function OnHitMutate(inst, attacker, target)
     if #ents > 0 then
         for i, v in pairs(ents) do
             if (not v:HasTag("player") or v == attacker) then
-
                 local mutated = false
                 if v.components.halloweenmoonmutable and mutation_count < mutation_limit then
                     mutated = true
