@@ -49,7 +49,12 @@ STRINGS.UNCOMP_TOOLTIP = {
     SEEDPOUCH = "- Halts seed spoilage inside it.\n- Can be upgraded with an Elastispacer.",
     ANTLIONHAT = "- Has infinite stack size inside.\n- Picks up nearby Turf on the ground.",
     KELPHAT = "- Wearer's wetness will slowly rise up to 33%.",
+    BOAT_BUMPER_KELP_KIT = "- Spoils over time.\n- Regenerates health in water.",
     BATHBOMB = "- Restores lost maximum health, if tossed in a certain larger spring in mainland.",
+    ONEMANBAND = "- Makes pigs and bunnymen leave their houses.\n- Reduced sanity drain.",
+    FIRESTAFFF = "- Creates controlled fires.",
+    LIGHTER = "- Recharges with embers.\n- Doesn't break at 0%.",
+    VOIDCLOTH_UMBRELLA = "-No longer repaired by acid rain.",
 
     __BREAK = "BREAK HERE",
     --uncomp content
