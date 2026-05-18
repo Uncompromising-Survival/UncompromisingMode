@@ -58,7 +58,7 @@ GEODE_LOOT_TABLE = {
         gemloot = {
             um_gemologyyellowgem2 = 1,
             um_gemologyredgem2 = 1,
-            um_gemologypurplegem2 = 0.5,
+            um_gemologyorangegem1 = 0.5,
             yellowgem = 0.1,
             redgem = 0.5,
         },
