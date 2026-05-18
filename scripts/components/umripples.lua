@@ -177,7 +177,7 @@ function Umripples:ShouldShowEffect()
     local inst = self.inst
     local x,y,z = inst.Transform:GetWorldPosition()
     if TheWorld.Map:GetTileAtPoint(x,0,z) == WORLD_TILES.UM_FLOODWATER_GROTTO and not (inst.sg and inst.sg:HasStateTag("flying")) then
-        if y > 0 then
+        if y > 0 and inst.components.inventoryitem then
             inst.umripples_falling = inst:DoPeriodicTask(FRAMES,CheckForY0)
             return false
         else
