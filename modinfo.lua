@@ -739,7 +739,7 @@ configuration_options = {
     BinaryConfig("horriblefood", "More Horrible Foods",
         "More items are considered as the horrible food type.", true),
     BinaryConfig("mushroom_changes", "Mushroom Changes",
-        "Mushroom Planter accepts more resources to replenish. Mushrooms now give spores, instead of caps. Mushtrees will give spores when off-season.", true),
+        "Mushroom Planter accepts more resources to replenish. Digging mushrooms now give spores, instead of caps. Mushtrees will give spores instead of caps when off-season.", true),
     BinaryConfig("rawcropsnerf", "Raw Crops Nerf",
         "Farm crops are nerfed in their base value when raw/cooked to incentivize using Crockpot recipes.", true),
 
