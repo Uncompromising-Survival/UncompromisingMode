@@ -7,7 +7,7 @@ end
 
 --MAJOR.MINOR.FIX
 --INCREASE THIS VERSION
-local _version = "4.3.1"
+local _version = "5.0.0"
 
 description = [[
     󰀔 ["On The Rocks!" v1.6  (Beta ver: v]] .. _version .. [[)]
@@ -27,7 +27,7 @@ Latest update features:
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
-version = "On The Rocks! Testing v" .. _version
+version = "On The Rocks! v1.6 Testing v" .. _version
 
 
 forumthread = "/topic/111892-announcement-uncompromising-mode/"
