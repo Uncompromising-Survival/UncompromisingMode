@@ -7,7 +7,7 @@ end
 
 --MAJOR.MINOR.FIX
 --INCREASE THIS VERSION
-local _version = "4.3.0"
+local _version = "4.3.1"
 
 description = [[
     󰀔 ["On The Rocks!" v1.6  (Beta ver: v]] .. _version .. [[)]
