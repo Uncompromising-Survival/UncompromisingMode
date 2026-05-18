@@ -92,7 +92,7 @@ AddUMGemDef("redgem2", {
                 target.components.health:DoFireDamage(burn_damage[tier], attacker, true)
                 SpawnPrefab("deer_fire_burst").Transform:SetPosition(target.Transform:GetWorldPosition())
                 if tier ~= 1 and target.components.burnable and target.components.burnable:IsBurning() then
-                    target.components.health:DoFireDamage(inst.components.weapon.damage * burn_portion[tier - 1], attacker, true)
+                    target.components.health:DoFireDamage(inst.components.weapon:GetDamage(attacker, target) * burn_portion[tier - 1], attacker, true)
                     target.components.burnable:ExtendBurning()
                 end
                 DamageInfiniteItemGem("redgem2", inst, 0.005)
@@ -116,7 +116,7 @@ AddUMGemDef("redgem1", {
             if tier ~= 1 and target:HasOneOfTags(devour_tags) and math.random() > 0.75 then -- arbitrarily said "a chance", I have no idea how common this should be
                 local mult = devour_mults[tier - 1]
                 attacker.components.combat:DoAttack(target, inst, nil, nil, mult, 0)        -- gotta use a bit more durability...
-                mult = inst.components.weapon.damage * mult
+                mult = inst.components.weapon:GetDamage(attacker, target) * mult
                 --owner.components.sanity:DoDelta(-mult)
                 attacker.components.hunger:DoDelta(mult / 2)
             end
@@ -215,7 +215,7 @@ local function SendShadowClone(item, owner, target, tier)
                 swilson.work = 1
                 swilson.LabWork(swilson, owner, newtarget)
             elseif target.components.health then
-                swilson.attack = item.components.weapon.damage
+                swilson.attack = item.components.weapon:GetDamage(attacker, target)
                 swilson.LabAttack(swilson, owner, newtarget)
             end
         end
@@ -393,7 +393,7 @@ local function FindEnemiesNearbyAndShockThem(inst, attacker, target, ShockAgain,
                     elseif tier == 3 then
                         mult = math.clamp(mult, 0.25, 1.5)
                     end
-                    local damage = inst.components.weapon.damage * mult
+                    local damage = inst.components.weapon:GetDamage(attacker, target) * mult
                     v.components.combat:GetAttacked(attacker, damage, nil, "electric")
                     v:AddTag("arcgrounded")
                     ShockAgain(inst, attacker, v)
@@ -427,8 +427,6 @@ local function ElectricAttack(inst, attacker, target, tier)
 
     DamageInfiniteItemGem("yellowgem2", inst, 0.005)
 end
-
-
 
 AddUMGemDef("yellowgem2", {
     color = RGB(255, 228, 153),
@@ -587,7 +585,7 @@ AddUMGemDef("purplegem1", {
         end,
         onattack = function(item, attacker, target, tier)
             if item.tier ~= 1 and item.components.weapon ~= nil then
-                local damage = item.components.weapon.damage
+                local damage = item.components.weapon:GetDamage(attacker, target)
                 if damage < 50 and item.prefab ~= "hambat" then
                     damage = damage * tier * 0.25
                     local stimuli = item.components.weapon.stimuli and item.components.weapon.stimuli or nil
@@ -670,7 +668,7 @@ local function BaseSitterAttack(item, attacker, target, tier)
     DamageInfiniteItemGem("orangegem1", item, 0.005)
 
     if tier ~= 1 then
-        local damage = item.components.weapon.damage
+        local damage = item.components.weapon:GetDamage(attacker, target)
         local fx = SpawnPrefab("sand_puff")
         fx.Transform:SetPosition(target.Transform:GetWorldPosition())
         fx.Transform:SetScale(0.05 + 2 * item.structurebonus, 0.05 + 2 * item.structurebonus, 0.05 + 2 * item.structurebonus)
