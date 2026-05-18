@@ -156,3 +156,13 @@ function FindPickupableItem(owner, radius, furthestfirst, positionoverride, igno
     end
     return _FindPickupableItem(owner, radius, furthestfirst, positionoverride, ignorethese, onlytheseprefabs, allowpickables, worker, extra_filter, inventoryoverride, ...)
 end
+
+local _CanEntitySeeInStorm = CanEntitySeeInStorm
+
+local function um_CanEntitySeeInStorm(inst)
+    return inst ~= nil and inst:IsValid() and inst.um_canseeinstorm ~= nil and inst.um_canseeinstorm:value()
+end
+
+function CanEntitySeeInStorm(inst, ...)
+    return _CanEntitySeeInStorm(inst, ...) or um_CanEntitySeeInStorm(inst)
+end
