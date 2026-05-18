@@ -216,7 +216,7 @@ configuration_options = {
     BinaryConfig("foodregen", "Over Time Food Stats",
         "Health and Sanity from foods is applied over time, each food acting as a seperate stackable health or sanity regen buff.",
         true),
-    BinaryConfig("rat_raids", "Rat Raids", "Rats will gain or lose points toward raiding your base depending on how much spoiled food you have in it, similar to Naughtiness.", true),
+    BinaryConfig("rat_raids", "Rat Raids", "Rats will gain or lose points toward raiding your base depending on spoiled food in it and Wild Burrows in your world, similar to Naughtiness.", true),
     {
         name = "vetcurse",
         label = "Veteran's Curse",
@@ -565,7 +565,7 @@ configuration_options = {
     {
         name = "ratgrace",
         label = "Grace Period",
-        hover = "Minimum grace period, during which Rats are unable to Raid.",
+        hover = "Minimum grace period, during which Rats are unable to raid.",
         options = {
             { description = "No Grace Period", data = 1 }, { description = "Low (15 Days)", data = 15 },
             { description = "Default (30 days)",     data = 30 }, { description = "Higher (45 days)", data = 45 },
@@ -575,7 +575,7 @@ configuration_options = {
     {
         name = "ratsnifftimer",
         label = "Sniffer Timer",
-        hover = "The rate at which your base is checked for spoiled food.",
+        hover = "The rate at which your base is checked for spoiled food and your world for Wild Burrows.",
         options = {
             { description = "Lower (1 Min.)",   data = 60 }, { description = "Default (2 Min.)", data = 120 },
             { description = "Higher (3 Min.)", data = 180 }, { description = "Highest (4 Min.)", data = 240 } },
@@ -674,10 +674,7 @@ configuration_options = {
     -----------------------------
     Header("Food"),
     -----------------------------
-    Header("Crockpot Recipes"),
-    BinaryConfig("crockpotmonstmeat", "Harder Monster Meat",
-        "Enables the new Monster Lagsana recipe; you can only make non-monster recipes if the meat value is greater than monster value.",
-        true),
+    BinaryConfig("crockpotmonstmeat", "Monster Meat", "Enables the new Monster Lasagna recipe; you can only make non-monster recipes if the meat value is greater than monster value.", true),
     BinaryConfig("newrecipes", "New Recipes",
         "UM adds a few new Crockpot recipes,\nTurn this off if you're using mods that can cause overlap, such as HoF.",
         true),
@@ -686,9 +683,6 @@ configuration_options = {
     BinaryConfig("generalcrockblocker", "Trash Filler Blocker",
         "Heavy use of certain low quality Crockpot ingredients, such as Twigs, Ice, Buttefly Wings, and other inedibles will result in Wet Goop.",
         true),
-    SkipSpace(),
-
-    Header("Crockpot Food Tweaks"),
     BinaryConfig("farmfoodredux", "Farmplot Food Redux",
         "Reallocates most dishes that involve Crock Pot foods. Typically a buff, but may exchange some stats.", true),
     BinaryConfig("sr_foodrebalance", "Fish Foods Rebalance", "Several fish based foods have their stats tweaked.", true),
@@ -716,9 +710,6 @@ configuration_options = {
             --{ description = "1 Veggie Value",   data = 1 }, { description = "Vanilla Value", data = 0.5 } },
         --default = 1.5
     --},
-    SkipSpace(),
-
-    Header("General Food Tweaks"),
     --{
         --name = "more perishing",
         --label = "Increased Food Spoilage",
