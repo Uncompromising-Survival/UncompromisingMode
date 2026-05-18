@@ -199,14 +199,14 @@ function c_um_spawnsunkenchest(royal)
         local treasure = messagebottletreasures.GenerateTreasure(pos)
         treasure.Transform:SetPosition(pos.x, pos.y, pos.z)
     elseif royal then
-        local messagebottletreasures_um = require("messagebottletreasures_um")
+        local um_messagebottletreasures = require("um_messagebottletreasures")
         print("spawning royal sunken chest at X:" .. pos.x .. " Z:" .. pos.z)
-        local treasure = messagebottletreasures_um.GenerateTreasure(pos, "sunkenchest_royal_random")
+        local treasure = um_messagebottletreasures.GenerateTreasure(pos, "sunkenchest_royal_random")
         treasure.Transform:SetPosition(pos.x, pos.y, pos.z)
     elseif not royal then
-        local messagebottletreasures_um = require("messagebottletreasures_um")
+        local um_messagebottletreasures = require("um_messagebottletreasures")
         print("spawning UM normal sunken chest at X:" .. pos.x .. " Z:" .. pos.z)
-        local treasure = messagebottletreasures_um.GenerateTreasure(pos, "sunkenchest")
+        local treasure = um_messagebottletreasures.GenerateTreasure(pos, "sunkenchest")
         treasure.Transform:SetPosition(pos.x, pos.y, pos.z)
     else
         print("failed to spawn sunken chest")

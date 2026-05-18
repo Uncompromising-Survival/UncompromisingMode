@@ -115,7 +115,7 @@ local function AddMinimapMarker(treasure, data)
 
     treasure:RemoveEventCallback("on_submerge", AddMinimapMarker)
 end
-local messagebottletreasures_um = require("messagebottletreasures_um")
+local um_messagebottletreasures = require("um_messagebottletreasures")
 local messagebottletreasures = require("messagebottletreasures")
 
 env.AddComponentPostInit("messagebottlemanager", function(self)
@@ -137,7 +137,7 @@ env.AddComponentPostInit("messagebottlemanager", function(self)
                         treasure.Transform:SetPosition(pos.x, pos.y, pos.z)
                         treasure:ListenForEvent("on_submerge", AddMinimapMarker)
                     else
-                        local treasure = messagebottletreasures_um.GenerateTreasure(pos, (math.random() > 0.25 and "sunkenchest" or "sunkenchest_royal_random"))
+                        local treasure = um_messagebottletreasures.GenerateTreasure(pos, (math.random() > 0.25 and "sunkenchest" or "sunkenchest_royal_random"))
                         treasure.Transform:SetPosition(pos.x, pos.y, pos.z)
                         treasure:ListenForEvent("on_submerge", AddMinimapMarker)
                     end

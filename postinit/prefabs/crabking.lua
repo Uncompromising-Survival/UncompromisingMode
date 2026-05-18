@@ -376,7 +376,7 @@ env.AddPrefabPostInit("crabking", function(inst)
 			--TheWorld.crabking_active = false
 
 			--local pos = inst:GetPosition()
-			--local messagebottletreasures = require("messagebottletreasures_um")
+			--local messagebottletreasures = require("um_messagebottletreasures")
 			--local pearl = inst.countgems(inst).pearl
 			--local red = inst.countgems(inst).red + pearl
 			--local blue = inst.countgems(inst).blue + pearl
