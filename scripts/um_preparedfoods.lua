@@ -455,7 +455,7 @@ local um_preparedfoods =
                     projectile.player = eater
                     projectile.components.complexprojectile:Launch(pt, inst, inst)
                 else
-                    if inst.count < 10 then
+                    if inst.count ~= nil and inst.count < 10 then
                         inst.count = inst.count + 1
                         inst:DoTaskInTime(0, SpawnEyes(inst, eater))
                     end
