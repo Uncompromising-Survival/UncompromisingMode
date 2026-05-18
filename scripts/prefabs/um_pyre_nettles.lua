@@ -150,7 +150,7 @@ local function SetStage(inst)
     inst.components.pickable.remove_when_picked = inst.stage == 1 or false
 
     -- Flammability stage properties.
-    inst.components.burnable:SetFXLevel(inst.stage > 3 and 3 or 2)
+   -- inst.components.burnable:SetFXLevel(inst.stage > 3 and 3 or 2)
     local multsize = .5 + (math.random() * .2)
     if inst.stage ~= 1 then
         multsize = .75 + (math.random() * .2)
@@ -291,11 +291,11 @@ local function StageSpawner(name, SpawnAtStage)
         inst:AddComponent("hauntable")
         inst.components.hauntable:SetOnHauntFn(OnPicked)
 
-        inst:AddComponent("burnable")
-        inst.components.burnable:AddBurnFX("character_fire", Vector3(0, 0, 0))
-        inst.components.burnable:SetBurnTime(6)
+        --inst:AddComponent("burnable")
+        --inst.components.burnable:AddBurnFX("character_fire", Vector3(0, 0, 0))
+        --inst.components.burnable:SetBurnTime(6)
 		
-        MakeSmallPropagator(inst)
+        --MakeSmallPropagator(inst)
 
         inst:AddComponent("timer")
         inst:ListenForEvent("timerdone", OnTimerDone)
