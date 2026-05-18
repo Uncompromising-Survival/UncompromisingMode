@@ -35,9 +35,23 @@ local Menu = require "widgets/menu"
 local Grid = require "widgets/grid"
 local TrueScrollArea = require "widgets/truescrollarea"
 local GEM_DEFS = require("gemology_defs").GEM_DEFS
-local function GetKnownNameFromGem(name)
-    print("get known name", name)
+local GEM_LOOKUP = require("gemology_defs").GEM_LOOKUP
 
+--TODO: MOVE THIS
+STRINGS.SCRAPBOOK.SPECIALINFO.GEM_UPGRADING = {
+    UM_GEMOLOGYREDGEM1 = "Quality may be increased by feeding a Snaildrake this gem.",
+    UM_GEMOLOGYREDGEM2 = "Quality may be increased by feeding a Snaildrake this gem.",
+    UM_GEMOLOGYGREENGEM1 = "Quality may be increased by feeding a Slurtle this gem.",
+    UM_GEMOLOGYGREENGEM2 = "Quality may be increased by feeding a Slurtle this gem.",
+    UM_GEMOLOGYORANGEGEM1 = "Quality may be increased by feeding Antlion this gem.",
+    UM_GEMOLOGYORANGEGEM2 = "Quality may be increased by feeding Antlion this gem.",
+    UM_GEMOLOGYPALEGEM1 = "Quality may be increased by feeding a Rock Lobster this gem.",
+    UM_GEMOLOGYPALEGEM2 = "Quality may be increased by feeding a Rock Lobster this gem.",
+    UM_GEMOLOGYBLUEGEM1 = "Quality may be increased by feeding an Abominamole this gem.",
+    UM_GEMOLOGYBLUEGEM2 = "Quality may be increased by feeding an Abominamole this gem.",
+}
+
+local function GetKnownNameFromGem(name)
     if GEM_DEFS[name] == nil then
         return STRINGS.NAMES[string.upper(name)]
     end
@@ -50,59 +64,62 @@ local function GetKnownNameFromGem(name)
 
     local known, tier = TheMineralLogbook:IsGemKnown(name)
 
-    print("original name", STRINGS.NAMES[string.upper(name)])
-    print("is known?", known)
-    print("unknown name", STRINGS.NAMES.UM_GEMOLOGYGEM_UNKNOWN[color])
-
     return known and STRINGS.NAMES[string.upper(name)] or STRINGS.NAMES.UM_GEMOLOGYGEM_UNKNOWN[color]
 end
 
 local function GetPeriodString(period)
-	local days = math.floor(period/60/8*100)/100
+    local days = math.floor(period / 60 / 8 * 100) / 100
 
-	if days < 1 then
-		local minutes = math.floor(period/60*100)/100
+    if days < 1 then
+        local minutes = math.floor(period / 60 * 100) / 100
 
-		if minutes < 1 then
-			return subfmt(STRINGS.SCRAPBOOK.DATA_TIME, { time = period, txt = STRINGS.SCRAPBOOK.DATA_SECONDS })
-		end
+        if minutes < 1 then
+            return subfmt(STRINGS.SCRAPBOOK.DATA_TIME, { time = period, txt = STRINGS.SCRAPBOOK.DATA_SECONDS })
+        end
 
-		return subfmt(STRINGS.SCRAPBOOK.DATA_TIME, { time = minutes, txt = (minutes <= 1 and STRINGS.SCRAPBOOK.DATA_MINUTE or STRINGS.SCRAPBOOK.DATA_MINUTES) })
-	else
-		return subfmt(STRINGS.SCRAPBOOK.DATA_TIME, { time = days, txt = (days <= 1 and STRINGS.SCRAPBOOK.DATA_DAY or STRINGS.SCRAPBOOK.DATA_DAYS) })
-	end
+        return subfmt(STRINGS.SCRAPBOOK.DATA_TIME, { time = minutes, txt = (minutes <= 1 and STRINGS.SCRAPBOOK.DATA_MINUTE or STRINGS.SCRAPBOOK.DATA_MINUTES) })
+    else
+        return subfmt(STRINGS.SCRAPBOOK.DATA_TIME, { time = days, txt = (days <= 1 and STRINGS.SCRAPBOOK.DATA_DAY or STRINGS.SCRAPBOOK.DATA_DAYS) })
+    end
 end
 
+
 local FUELTYPE_SUBICON_LOOKUP = {
-	[FUELTYPE.BURNABLE]  = "icon_fuel_burnable.tex",
-	[FUELTYPE.CAVE] 	 = "icon_fuel_cavelight.tex",
-	[FUELTYPE.CHEMICAL]  = "icon_fuel_chemical.tex",
-	[FUELTYPE.NIGHTMARE] = "icon_fuel_nightmare.tex",
-	[FUELTYPE.WORMLIGHT] = "icon_fuel_wormlight.tex",
+    [FUELTYPE.BURNABLE]  = "icon_fuel_burnable.tex",
+    [FUELTYPE.CAVE]      = "icon_fuel_cavelight.tex",
+    [FUELTYPE.CHEMICAL]  = "icon_fuel_chemical.tex",
+    [FUELTYPE.NIGHTMARE] = "icon_fuel_nightmare.tex",
+    [FUELTYPE.WORMLIGHT] = "icon_fuel_wormlight.tex",
 }
 
 local FUELTYPE_SUBICONS = table.getkeys(FUELTYPE_SUBICON_LOOKUP)
 
 
-local function GetGemDescription(name, knowntier)
-    name = string.upper(string.gsub(string.gsub(name, "um_gemology", ""), "gem", ""))
-
-    print("getting string from tier " .. knowntier)
+local function GetGemDescription(_name, knowntier)
+    local name = string.upper(string.gsub(string.gsub(_name, "um_gemology", ""), "gem", ""))
 
     local str = STRINGS.SCRAPBOOK.SPECIALINFO.GEMOLOGY_GEM
 
     if knowntier > 0 then
+        print("upgrade st")
+        if STRINGS.SCRAPBOOK.SPECIALINFO.GEM_UPGRADING[string.upper(_name)] ~= nil then
+            str = str .. "\n" .. STRINGS.SCRAPBOOK.SPECIALINFO.GEM_UPGRADING[string.upper(_name)]
+        end
+
+        str = str .. "\n\n"..STRINGS.SCRAPBOOK.SPECIALINFO.GEMOLOGY_GEM_EFFECTS.."\n\n"
+
         for _tier = 1, MAX_GEM_TIER do
             str = str .. STRINGS.NAMES.UM_GEMOLOGYGEM_PREFIX[_tier] .. ":\n"
             if knowntier >= _tier then
                 str = str .. STRINGS.UM_DESCRIPTOR.GEMOLOGY_GEM[string.upper(name)][_tier] .. "\n\n"
             else
-                str = str .. "Analyze this gem with a Gem Magnifier to discover its effects.\n\n"
+                str = str .. STRINGS.SCRAPBOOK.SPECIALINFO.GEMOLOGY_NEEDS_SCAN .. "\n\n"
             end
         end
     else
-        str = str .. "Analyze this gem with a Gem Magnifier to discover its effects."
+        str = str .. STRINGS.SCRAPBOOK.SPECIALINFO.GEMOLOGY_NEEDS_SCAN
     end
+
 
     return str
 end
@@ -1067,6 +1084,12 @@ env.AddClassPostConstruct("screens/redux/scrapbookscreen", function(self)
         end
 
         if specialinfo and data.knownlevel > 1 then
+            for k, v in pairs(GEM_LOOKUP) do
+                if string.find(specialinfo, v) then
+                    specialinfo = string.gsub(specialinfo, v, GetKnownNameFromGem(v))
+                end
+            end
+
             local body
             local shortblock = string.len(specialinfo) < 110
             height, body = setcustomblock(height, { str = specialinfo, minwidth = width - 100, leftoffset = 40, shortblock = shortblock })

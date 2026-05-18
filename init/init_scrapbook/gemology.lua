@@ -16,7 +16,7 @@ STRINGS.SCRAPBOOK.SUBCATS.GEODE = "Geode"
 STRINGS.SCRAPBOOK.SUBCATS.GEMOLOGY = "Gemology"
 
 SPECIALINFO.GEMOLOGY_FORGE = "A forge found in the heart of the Magma Caves capable of enchanting tools and weapons with Strange Gems to amplify them with special effects.\n\nGem effects fade with usage."
-SPECIALINFO.GEMOLOGY_GEM = "Can be used at a " .. STRINGS.NAMES.UM_GEMOLOGYFORGE .. " to apply a special effect to a Tool or Weapon depending on the quality of the gem.\n\nGem Effects:\n\n"
+SPECIALINFO.GEMOLOGY_GEM = "Can be used at a " .. STRINGS.NAMES.UM_GEMOLOGYFORGE .. " to apply a special effect to a Tool or Weapon depending on the quality of the gem."
 SPECIALINFO.UM_MOONGLASS_CEILING = "Breaks appart and drops Glass Geodes during earthquakes."
 SPECIALINFO.UM_SLIMESTONE_ROCK = "Falls from the Ceiling near Slime Pillars during Earthquakes while Nightmare Phase is active."
 SPECIALINFO.UM_SLIMESTONE_ROCK_GEMLESS = "Falls from the Ceiling near Slime Pillars during Earthquakes while Nightmare Phase is active."
@@ -27,6 +27,8 @@ SPECIALINFO.UM_ROCKLOBSTER_ROCK = "Rock Lobster eggs. Rock Lobsters lay their eg
 SPECIALINFO.ROCK_FLINTLESS = "Rock Lobsters lay their eggs on this Boulder at the begining of Autumn"
 SPECIALINFO.UM_SINKMOUND_ROCK = "Houses a variety of creatures.\nRegrows after 10 days once mined."
 SPECIALINFO.UM_SINKMOUND_ROCK_GEMLESS = "Houses a variety of creatures.\nRegrows after 10 days once mined."
+SPECIALINFO.GEMOLOGY_NEEDS_SCAN = "Analyze this gem with a Gem Magnifier to discover its effects."
+SPECIALINFO.GEMOLOGY_GEM_EFFECTS  = "Gem Effects:"
 --thermite init_changes/stuff in changes.lua
 
 
