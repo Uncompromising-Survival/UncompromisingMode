@@ -17,7 +17,7 @@ end
 local function ShouldRecoilIceShield(inst, attacker, weapon, damage)
     local shouldrecoil = inst:HasTag("ice_shielded") and not ShouldWeaponPierce(inst, weapon, attacker)
     if shouldrecoil and attacker and attacker.components.talker then
-        attacker.components.talker:Say(GetString(inst, "ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD"))
+        attacker.components.talker:Say(GetString(attacker, "ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD"))
     end
     return shouldrecoil, (ShouldWeaponPierce(inst, weapon, attacker) or not inst:HasTag("ice_shielded")) and damage or damage and damage / 2 or nil
 end
