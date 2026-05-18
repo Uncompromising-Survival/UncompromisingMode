@@ -100,15 +100,15 @@ return Class(function(self, inst)
                 destination.Transform:SetPosition(x_dest, 0, z_dest)
 
                 if x > 0 and z > 0 then
-                    destination.danumber = 90
+                    destination.danumber = 22.5  --90
                 elseif x > 0 and z < 0 then
-                    destination.danumber = -90
+                    destination.danumber = -22.5 -- -90
                     wise = -90
                 elseif x < 0 and z > 0 then
-                    destination.danumber = -90
+                    destination.danumber = -22.5 -- -90
                     wise = -90
                 else
-                    destination.danumber = 90
+                    destination.danumber = 22.5 --90
                 end
 
                 destination.marker = "um_tornado_destination_marker"
@@ -272,6 +272,6 @@ return Class(function(self, inst)
         self:WatchWorldState("season", OnSeasonChange)
         self.inst:ListenForEvent("forcetornado", PickAttackTarget)
     else
-        self.inst:ListenForEvent("spawncavetornado", SpawnCaveTornado)
+        --self.inst:ListenForEvent("spawncavetornado", SpawnCaveTornado)
     end
 end)
