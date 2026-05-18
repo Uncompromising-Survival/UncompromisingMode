@@ -573,25 +573,26 @@ InsertIngredientValues({ "um_spongeplant_item" }, { veggie = 0.5 }, true, false,
 if TUNING.DSTU.NEWRECIPES then
     --InsertIngredientValues({ "firenettles" }, { foliage = 1 }, true, false, false)
     --InsertIngredientValues({ "foliage" }, { foliage = 1 }, true, false, false)
-    InsertIngredientValues({ "greenfoliage" }, { foliage = 1 }, true, false, false)
-    InsertIngredientValues({ "foliage_dried" }, { foliage = 1 }, true, false, false)
-    InsertIngredientValues({ "petals_dried" }, { foliage = 1.5 }, true, false, false)
-    InsertIngredientValues({ "petals_evil_dried" }, { foliage = 1 }, true, false, false)
-    InsertIngredientValues({ "succulent_picked_dried" }, { foliage = 0.5 }, true, false, false)
-    InsertIngredientValues({ "moon_tree_blossom_dried" }, { foliage = 1 }, true, false, false)
-    InsertIngredientValues({ "firenettles_dried" }, { foliage = 1 }, true, false, false)
-    InsertIngredientValues({ "tillweed_dried" }, { foliage = 0.5 }, true, false, false)
-    InsertIngredientValues({ "forgetmelots_dried" }, { foliage = 1 }, true, false, false)
+    InsertIngredientValues({ "greenfoliage" }, { foliage = 1 }, false, false, false)
+    InsertIngredientValues({ "foliage_dried" }, { foliage = 1 }, false, false, false)
+    InsertIngredientValues({ "petals_dried" }, { foliage = 1.5 }, false, false, false)
+    InsertIngredientValues({ "petals_evil_dried" }, { foliage = 1 }, false, false, false)
+    InsertIngredientValues({ "succulent_picked_dried" }, { foliage = 0.5 }, false, false, false)
+    InsertIngredientValues({ "moon_tree_blossom_dried" }, { foliage = 1 }, false, false, false)
+    InsertIngredientValues({ "firenettles_dried" }, { foliage = 1 }, false, false, false)
+    InsertIngredientValues({ "tillweed_dried" }, { foliage = 0.5 }, false, false, false)
+    InsertIngredientValues({ "forgetmelots_dried" }, { foliage = 1 }, false, false, false)
 end
 --RegisterInventoryItemAtlas("images/inventoryimages/greenfoliage.xml", "greenfoliage.tex")
-InsertIngredientValues({ "horn" }, { meat = 1 }, true, false, false)
+InsertIngredientValues({ "horn" }, { inedible = 1 }, false, false, false)
 InsertIngredientValues({ "trunk_summer" }, { meat = 2 }, true, false, false)
 InsertIngredientValues({ "trunk_winter" }, { meat = 2 }, true, false, false)
-InsertIngredientValues({ "trunk_cooked" }, { meat = 2 }, true, false, false)
+InsertIngredientValues({ "trunk_cooked" }, { meat = 2 }, false, false, false)
+InsertIngredientValues({ "fig" }, { fruit = 1 }, true, false, false)
 
 
-InsertIngredientValues({ "um_meathoney" }, { sweetener = 1, meat = .5, monster = 2 }, true, false, false)
-InsertIngredientValues({ "um_meatcomb" }, { sweetener = 1, meat = .5, monster = 2 }, true, false, false)
+InsertIngredientValues({ "um_meathoney" }, { sweetener = 1, meat = .5, monster = GLOBAL.TUNING.DSTU.MONSTER_MEAT_DRIED_MONSTER_VALUE }, false, false, false)
+InsertIngredientValues({ "um_meatcomb" }, { sweetener = 1, meat = .5, monster = GLOBAL.TUNING.DSTU.MONSTER_MEAT_DRIED_MONSTER_VALUE }, false, false, false)
 
 if TUNING.DSTU.NEWRECIPES then
     local cookpots = {

@@ -383,23 +383,23 @@ local um_preparedfoods =
     um_sponge_cake =
     {
         test = function(cooker, names, tags)
-            return names.um_spongeplant_item and names.um_spongeplant_item >= 2 and tags.sweetener and tags.fruit and tags.fruit >= 1
+            return names.um_spongeplant_item and tags.egg and tags.fruit and tags.fruit >= 1 and not (names.giant_blueberry or names.watermelon or tags.frozen)
         end,
         hunger = 37.5,
-        health = -3,
+        health = 0,
         sanity = 33,
         priority = 10,
         weight = 1,
-        cooktime = .9,
+        cooktime = .75,
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 4 * TUNING.PERISH_TWO_DAY,
         oneatenfn = function(inst, eater)
             if eater.components.moisture then
-                eater.components.moisture:DoDelta(-33)
+                eater.components.moisture:DoDelta(-100)
             end
         end,
         floater = { "med", nil, .65 },
-        card_def = { ingredients = { { "giant_blueberry", 1 }, { "giant_blueberry", 1 }, { "honey", 1 } } },
+        card_def = { ingredients = { { "um_spongeplant_item", 2 }, { "berries", 2 } } },
     },
 
     snowcone =
@@ -455,7 +455,7 @@ local um_preparedfoods =
                     projectile.player = eater
                     projectile.components.complexprojectile:Launch(pt, inst, inst)
                 else
-                    if inst.count ~= nil and inst.count < 10 then
+                    if inst.count and inst.count < 10 then
                         inst.count = inst.count + 1
                         inst:DoTaskInTime(0, SpawnEyes(inst, eater))
                     end
@@ -653,7 +653,7 @@ local um_preparedfoods =
     {
         test = function(cooker, names, tags)
             return not tags.monster and not tags.inedible and UncompromisingFillers(tags)
-                and (names.zaspberry or (names.zaspberry_lesser and names.zaspberry_lesser >= 2)) and tags.sweetener and tags.dairy
+                and (names.zaspberry or (names.zaspberry_lesser and names.zaspberry_lesser >= 2)) and tags.egg and tags.sweetener -- for the lactose intolerant. -CB
         end,
         hunger = 37.5,
         health = 40,
@@ -662,7 +662,7 @@ local um_preparedfoods =
         weight = 1,
         cooktime = 1.8,
         foodtype = FOODTYPE.VEGGIE,
-        perishtime = 2 * TUNING.PERISH_TWO_DAY,
+        perishtime = 4 * TUNING.PERISH_TWO_DAY,
         floater = { nil, .1, .6 },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_ZASPBERRYPARFAIT,
         oneatenfn = function(inst, eater)

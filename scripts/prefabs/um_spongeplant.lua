@@ -129,7 +129,7 @@ end
 
 local function oneatenfn(inst, eater)
     if eater.components.moisture then
-        eater.components.moisture:DoDelta(-5)
+        eater.components.moisture:DoDelta(-10)
     end
 end
 

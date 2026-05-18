@@ -114,7 +114,7 @@ local function fn_common()
     inst.components.edible:SetOnEatenFn(oneatenfn)
 
     inst:AddComponent("perishable")
-    inst.components.perishable:SetPerishTime(3 * TUNING.PERISH_TWO_DAY)
+    inst.components.perishable:SetPerishTime(TUNING.PERISH_MED)
     inst.components.perishable:StartPerishing()
     inst.components.perishable.onperishreplacement = "spoiled_food"
 
@@ -138,11 +138,11 @@ local function fn_normal()
     end
 
     inst.AnimState:PlayAnimation("idle")
-    inst.components.edible.healthvalue = 20
-    inst.components.edible.hungervalue = 25
-    inst.components.edible.sanityvalue = -25
+    inst.components.edible.healthvalue = TUNING.HEALING_MED --20
+    inst.components.edible.hungervalue = TUNING.CALORIES_MED --25
+    inst.components.edible.sanityvalue = -TUNING.SANITY_MEDLARGE --20
     inst.components.edible.chargevalue = TUNING.WX78_CHARGE_MED
-    
+
     inst.components.fuel.fuelvalue = TUNING.LARGE_FUEL * 1.33
 
     return inst
@@ -156,9 +156,9 @@ local function fn_lesser()
     end
 
     inst.AnimState:PlayAnimation("idle_lesser")
-    inst.components.edible.healthvalue = 3
-    inst.components.edible.hungervalue = 12.5
-    inst.components.edible.sanityvalue = -15
+    inst.components.edible.healthvalue = TUNING.HEALING_SMALL * 2 --6
+    inst.components.edible.hungervalue = TUNING.CALORIES_SMALL --12.5
+    inst.components.edible.sanityvalue = -TUNING.SANITY_MED --15
     inst.components.edible.chargevalue = TUNING.WX78_CHARGE_SMALL
 
     inst.components.fuel.fuelvalue = TUNING.MED_FUEL
