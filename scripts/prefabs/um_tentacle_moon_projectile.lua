@@ -10,7 +10,7 @@ local shouldnt_hit = {"ghost","brightmare_gestalt","nightmarecreature","um_tenta
 
 local function OnLand(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    if not inst.nomine then
+    if not inst.nomine and TheWorld.Map:IsAboveGroundAtPoint(x,y,z) then
         local mine = SpawnPrefab("um_tentacle_moon_mine")
         if inst.attacker then
             mine.attacker = inst.attacker
