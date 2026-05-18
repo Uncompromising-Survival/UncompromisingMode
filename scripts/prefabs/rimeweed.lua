@@ -689,7 +689,7 @@ local function mainweed()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("health")
-    inst.components.health:SetMaxHealth(200)
+    inst.components.health:SetMaxHealth(600)
 
     inst.components.health:StartRegen(TUNING.BUNNYMAN_HEALTH_REGEN_AMOUNT, TUNING.BUNNYMAN_HEALTH_REGEN_PERIOD)
     inst:AddComponent("combat")
