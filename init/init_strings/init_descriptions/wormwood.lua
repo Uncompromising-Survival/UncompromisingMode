@@ -577,3 +577,4 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
     WINTER = "Very Yummy! ",
 }
 DESCRIBE.UM_BOOMBERRYPIE = "Funny boom belly stuff"
+DESCRIBE.UM_CHILES_EN_NOGADA = "Red baby has secret!"

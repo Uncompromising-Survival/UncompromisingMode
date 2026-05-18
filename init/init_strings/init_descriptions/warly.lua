@@ -617,3 +617,4 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
     WINTER = "The aftertaste is simply delightful.",
 }
 DESCRIBE.UM_BOOMBERRYPIE = "This would go great with some milk."
+DESCRIBE.UM_CHILES_EN_NOGADA = "Ah, the perfect harmony of sweet, savory, and spice!"

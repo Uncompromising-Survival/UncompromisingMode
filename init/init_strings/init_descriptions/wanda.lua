@@ -624,3 +624,4 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
     WINTER = "A taste of future treats, quite remarkable!",
 }
 DESCRIBE.UM_BOOMBERRYPIE = "In another timeline not too far from ours, this exploded in my face."
+DESCRIBE.UM_CHILES_EN_NOGADA = "It took ages to get the ingredients."

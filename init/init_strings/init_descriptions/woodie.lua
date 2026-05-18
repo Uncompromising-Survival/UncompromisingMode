@@ -611,3 +611,4 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
     WINTER = "Like a bit of sunshine right in the middle of a blizzard.",
 }
 DESCRIBE.UM_BOOMBERRYPIE = "I don't trust this pie."
+DESCRIBE.UM_CHILES_EN_NOGADA = "Never thought I'd say birchnuts look fancy, eh?"

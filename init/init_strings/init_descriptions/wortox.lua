@@ -601,3 +601,4 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
     WINTER = "A feast for a cold beast! My soul feels spiffy, hyuyu!",
 }
 DESCRIBE.UM_BOOMBERRYPIE = "Oh! What a delightful prank indeed!"
+DESCRIBE.UM_CHILES_EN_NOGADA = "Maybe Wurt won't mind it if the ingredients are a surprise, hyuyu!"
