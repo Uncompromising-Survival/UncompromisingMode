@@ -9,7 +9,7 @@ local function RetargetSnaildrakeFn(inst)
 
     local new_target = FindEntity(inst, TUNING.SNAILDRAKE_AGGRO_DIST, function(ent)
         return inst.components.combat:CanTarget(ent)
-    end, nil, {"snaildrake","player"}) -- AXE They like people now
+    end, nil, { "snaildrake", "player" })                                                                    -- AXE They like people now
 
     local follower = new_target and new_target.components.follower and new_target.components.follower or nil -- AXE Make them not aggro on your followers
     if new_target and not (follower and follower.leader and follower.leader:HasTag("player")) then
@@ -33,7 +33,7 @@ local function BeFriendlyToPlayers(inst)
     end
 end
 
-local function IfPlayerThenLoseFaithInHumanity(inst,data,override)
+local function IfPlayerThenLoseFaithInHumanity(inst, data, override)
     local attacker = data and data.attacker and data.attacker or nil
     local follower = attacker and attacker.components.follower and attacker.components.follower or nil
 
@@ -44,20 +44,20 @@ local function IfPlayerThenLoseFaithInHumanity(inst,data,override)
 end
 
 local function ShouldAcceptItem(inst, item, giver)
-    return item:HasTag("gemology_gem") 
+    return item:HasTag("gemology_gem")
 end
 
-local function ProduceItem(inst,prefab,num,tier)
-    for i = 1,(num and num or 1),1 do
+local function ProduceItem(inst, prefab, num, tier)
+    for i = 1, (num and num or 1), 1 do
         local item = SpawnPrefab(prefab)
         item.Transform:SetPosition(inst.Transform:GetWorldPosition())
         if tier then
             item:SetTier(tier)
         end
         if inst.trader and inst.trader:IsValid() then
-            LaunchAt(item, inst, inst.trader, 1, 1, nil, math.random(-10,10))
+            LaunchAt(item, inst, inst.trader, 1, 1, nil, math.random(-10, 10))
         else
-            Launch2(item, inst, 1, 0, 1, math.random(-10,10))
+            Launch2(item, inst, 1, 0, 1, math.random(-10, 10))
         end
     end
 end
@@ -72,46 +72,46 @@ local function GenerateLoot(inst)
     local generic_item = (inst.prefab == "slurtle" or inst.prefab == "snurtle") and "slurtleslime" or "snapalm"
 
 
-    if (itemtype == "um_gemology"..element.."gem1") or (itemtype == "um_gemology"..element.."gem2") then
+    if (itemtype == "um_gemology" .. element .. "gem1") or (itemtype == "um_gemology" .. element .. "gem2") then
         if tier == 1 then
             if math.random() > 0.75 then
-                ProduceItem(inst,itemtype,1,2)
+                ProduceItem(inst, itemtype, 1, 2)
             elseif math.random() > 0.25 then
-                ProduceItem(inst,itemtype,1,1)
+                ProduceItem(inst, itemtype, 1, 1)
             else
-                ProduceItem(inst,generic_item,math.random(3,5),nil)
+                ProduceItem(inst, generic_item, math.random(3, 5), nil)
             end
         end
         if tier == 2 then
             if math.random() > 0.9 then
-                ProduceItem(inst,itemtype,1,3)
+                ProduceItem(inst, itemtype, 1, 3)
             elseif math.random() > 0.7 then
-                ProduceItem(inst,itemtype,1,2)
+                ProduceItem(inst, itemtype, 1, 2)
             else
                 if (math.random() > 0.5 and element == "red") or (math.random() > 0.9 and element == "green") then
-                    ProduceItem(inst,element.."gem",1,nil) -- They can refine into their special gems.
+                    ProduceItem(inst, element .. "gem", 1, nil) -- They can refine into their special gems.
                 else
-                    ProduceItem(inst,generic_item,math.random(5,9),nil)
+                    ProduceItem(inst, generic_item, math.random(5, 9), nil)
                 end
             end
-        end        
+        end
         if tier == 3 then
             if math.random() > 0.75 then
-                ProduceItem(inst,itemtype,1,3)
+                ProduceItem(inst, itemtype, 1, 3)
             elseif math.random() > 0.5 then
-                ProduceItem(inst,itemtype,1,2)
+                ProduceItem(inst, itemtype, 1, 2)
             else
-                ProduceItem(inst,element.."gem",1,nil)
+                ProduceItem(inst, element .. "gem", 1, nil)
             end
-        end    
-    elseif itemtype == "um_gemology"..hated_element.."gem1" or itemtype == "um_gemology"..hated_element.."gem2" then
-        if hated_element == "blue" then -- Snaildrakes Only
-            inst.components.freezable:AddColdness(20) -- FREEZE
-            IfPlayerThenLoseFaithInHumanity(inst,nil,true) -- Override, make angry at player
+        end
+    elseif itemtype == "um_gemology" .. hated_element .. "gem1" or itemtype == "um_gemology" .. hated_element .. "gem2" then
+        if hated_element == "blue" then                    -- Snaildrakes Only
+            inst.components.freezable:AddColdness(20)      -- FREEZE
+            IfPlayerThenLoseFaithInHumanity(inst, nil, true) -- Override, make angry at player
         end
         if hated_element == "red" then
             inst.components.burnable:Ignite()
-        end   
+        end
         inst.traded_and_friendly = nil
         if inst.trader and inst.components.combat then
             inst.components.combat:SetTarget(inst.trader)
@@ -119,32 +119,32 @@ local function GenerateLoot(inst)
     else
         if tier == 1 then
             if math.random() > 0.9 then
-                ProduceItem(inst,itemtype,1,2)
+                ProduceItem(inst, itemtype, 1, 2)
             elseif math.random() > 0.5 then
-                ProduceItem(inst,generic_item,1,nil)
-                ProduceItem(inst,itemtype,1,1)
+                ProduceItem(inst, generic_item, 1, nil)
+                ProduceItem(inst, itemtype, 1, 1)
             else
-                ProduceItem(inst,generic_item,math.random(3,5),nil)
+                ProduceItem(inst, generic_item, math.random(3, 5), nil)
             end
         end
         if tier == 2 then
             if math.random() > 0.9 then
-                ProduceItem(inst,itemtype,1,2)
+                ProduceItem(inst, itemtype, 1, 2)
             elseif math.random() > 0.5 then
-                ProduceItem(inst,itemtype,1,1)
+                ProduceItem(inst, itemtype, 1, 1)
             else
-                ProduceItem(inst,generic_item,math.random(5,9),nil)
+                ProduceItem(inst, generic_item, math.random(5, 9), nil)
             end
-        end        
+        end
         if tier == 3 then
             if math.random() > 0.75 then
-                ProduceItem(inst,itemtype,1,2)
+                ProduceItem(inst, itemtype, 1, 2)
             elseif math.random() > 0.5 then
-                ProduceItem(inst,itemtype,1,1)
+                ProduceItem(inst, itemtype, 1, 1)
             else
-                ProduceItem(inst,generic_item,math.random(5,9),nil)
+                ProduceItem(inst, generic_item, math.random(5, 9), nil)
             end
-        end     
+        end
     end
 
     inst.itemquality = nil
@@ -162,7 +162,7 @@ local function OnAccept(inst, giver, item, count, name)
         --I eat food
         if item.components.edible ~= nil then
             --if inst.components.sleeper:IsAsleep() then -- AXE Funnily enough, snaildrakes and slurtles both don't sleep.
-                --inst.components.sleeper:WakeUp()
+            --inst.components.sleeper:WakeUp()
             --end
             inst.itemquality = item:GetTier()
             inst.itemtype = item.prefab
@@ -175,8 +175,8 @@ local function OnAccept(inst, giver, item, count, name)
 end
 
 -- Snaildrakes and Slurtles
-local snaildrakes = {"snaildrake_magma","snaildrake_slime","slurtle","snurtle"}
-for i,snaildrake in ipairs(snaildrakes) do
+local snaildrakes = { "snaildrake_magma", "snaildrake_slime", "slurtle", "snurtle" }
+for i, snaildrake in ipairs(snaildrakes) do
     env.AddPrefabPostInit(snaildrake, function(inst)
         if not TheWorld.ismastersim then
             return inst
@@ -185,31 +185,30 @@ for i,snaildrake in ipairs(snaildrakes) do
         local _OnSave = inst.OnSave
         local _OnLoad = inst.OnLoad
 
-        local function OnSave(inst,data)
+        local function OnSave(inst, data)
             local data = {}
             if inst.traded_and_friendly then
                 data.traded_and_friendly = true
             end
-            return _OnSave and _OnSave(inst,data) or data
+            return _OnSave and _OnSave(inst, data) or data
         end
-        local function OnLoad(inst,data)
+        local function OnLoad(inst, data)
             if data and data.traded_and_friendly then
                 inst.traded_and_friendly = true
-                inst:DoTaskInTime(0,BeFriendlyToPlayers)
+                inst:DoTaskInTime(0, BeFriendlyToPlayers)
             end
-            return _OnLoad and _OnLoad(inst,data) or nil
+            return _OnLoad and _OnLoad(inst, data) or nil
         end
         inst.OnSave = OnSave
         inst.OnLoad = OnLoad
-        
-        inst:ListenForEvent("attacked",IfPlayerThenLoseFaithInHumanity)
+
+        inst:ListenForEvent("attacked", IfPlayerThenLoseFaithInHumanity)
 
         inst:AddComponent("trader")
 
         inst.components.trader:SetAcceptTest(ShouldAcceptItem)
         inst.components.trader.onaccept = OnAccept
         inst.components.trader.deleteitemonaccept = true
-
     end)
 end
 
@@ -221,10 +220,10 @@ local function FindStealNode(self)
     for id, node in pairs(self.bt.root.children) do
         if node.getactionfn and node.getactionfn == _StealFoodAction then
             self.bt.root.children[id] = WhileNode(function() return not self.inst.traded_and_friendly end, "ShouldBeNice",
-            DoAction(self.inst, _StealFoodAction))
+                DoAction(self.inst, _StealFoodAction))
         end
     end
-end     
+end
 env.AddBrainPostInit("slurtlebrain", function(self)
     FindStealNode(self)
 end)
@@ -290,7 +289,7 @@ env.AddPrefabPostInit("antlion", function(inst)
     local _OnGivenItem = trader.onaccept
 
     local function AcceptTest(inst, item)
-        return item:HasTag("gemology_gem") or _AcceptTest(inst,item)
+        return item:HasTag("gemology_gem") or _AcceptTest(inst, item)
     end
 
     trader:SetAcceptTest(AcceptTest)
@@ -354,10 +353,9 @@ env.AddPrefabPostInit("antlion", function(inst)
     end
 
     inst.GiveReward = GiveReward
-
 end)
 
-local function AddFollowerTime(inst,giver)
+local function AddFollowerTime(inst, giver)
     if inst.components.combat:TargetIs(giver) then
         inst.components.combat:SetTarget(nil)
     elseif giver.components.leader ~= nil then
@@ -367,7 +365,7 @@ local function AddFollowerTime(inst,giver)
         end
         inst.components.follower:AddLoyaltyTime(
             (giver:HasTag("polite")
-            and TUNING.ROCKY_LOYALTY + TUNING.ROCKY_POLITENESS_LOYALTY_BONUS)
+                and TUNING.ROCKY_LOYALTY + TUNING.ROCKY_POLITENESS_LOYALTY_BONUS)
             or TUNING.ROCKY_LOYALTY
         )
         inst.sg:GoToState("rocklick")
@@ -375,8 +373,8 @@ local function AddFollowerTime(inst,giver)
 end
 
 
-local function GenerateRockyLoot(inst,giver,item)
-    local gem = item.prefab  
+local function GenerateRockyLoot(inst, giver, item)
+    local gem = item.prefab
     local tier = item:GetTier()
     local pale = (gem == "um_gemologypalegem1" or gem == "um_gemologypalegem2")
 
@@ -418,13 +416,13 @@ local function GenerateRockyLoot(inst,giver,item)
             item:SetTier(newtier)
         end
         if item and item:IsValid() and giver and giver:IsValid() then
-            LaunchAt(item, inst, giver, 1, 1, nil, math.random(-10,10))
+            LaunchAt(item, inst, giver, 1, 1, nil, math.random(-10, 10))
         else
-            Launch2(item, inst, 1, 0, 1, math.random(-10,10))
+            Launch2(item, inst, 1, 0, 1, math.random(-10, 10))
         end
         inst.sg:GoToState("rocklick")
     elseif giver then
-        AddFollowerTime(inst,giver)
+        AddFollowerTime(inst, giver)
     end
 end
 
@@ -440,56 +438,55 @@ env.AddPrefabPostInit("rocky", function(inst)
     local _OnGivenItem = trader.onaccept
 
     local function AcceptTest(inst, item)
-        return item:HasTag("gemology_gem") or _AcceptTest(inst,item)
+        return item:HasTag("gemology_gem") or _AcceptTest(inst, item)
     end
 
-    trader:SetAcceptTest(AcceptTest)  
-    local _OnGetItemFromPlayer =  trader.onaccept
+    trader:SetAcceptTest(AcceptTest)
+    local _OnGetItemFromPlayer = trader.onaccept
 
     local function OnGetItemFromPlayer(inst, giver, item)
         if item:HasTag("gemology_gem") then
-            GenerateRockyLoot(inst,giver,item)            
+            GenerateRockyLoot(inst, giver, item)
         else
-            _OnGetItemFromPlayer(inst,giver,item)         
+            _OnGetItemFromPlayer(inst, giver, item)
         end
     end
     trader.onaccept = OnGetItemFromPlayer
-
 end)
 
 local function TryGemologyLoot(inst)
     if inst.gem_level then
         local rnd = math.random()
         local chance = inst.gem_chance
-        local loot = SpawnPrefab("um_gemologybluegem"..math.random(1,2)) -- Random!
+        local loot = SpawnPrefab("um_gemologybluegem" .. math.random(1, 2)) -- Random!
         if inst.gem_level == 1 then
-            if 10*(rnd) < chance then
+            if 10 * (rnd) < chance then
                 loot:SetTier(2)
-            elseif 5*(rnd) < chance then
+            elseif 5 * (rnd) < chance then
                 loot:SetTier(1)
             else
                 loot:Remove()
-            end 
+            end
         elseif inst.gem_level == 2 then
-            if 30*(rnd) < chance  then
+            if 30 * (rnd) < chance then
                 loot:SetTier(3)
-            elseif 20*(rnd) < chance then
+            elseif 20 * (rnd) < chance then
                 loot:SetTier(2)
             else
                 loot:Remove()
-            end       
+            end
         elseif inst.gem_level == 3 then
             loot:Remove()
             loot = SpawnPrefab("bluegem") -- Purify
         end
         if loot and loot:IsValid() then
             loot.Transform:SetPosition(inst.Transform:GetWorldPosition())
-            Launch2(loot, inst, 1, 0, 1, math.random(0,360))
+            Launch2(loot, inst, 1, 0, 1, math.random(0, 360))
         end
     end
 end
 
-env.AddPrefabPostInit("snowmong",function(inst)
+env.AddPrefabPostInit("snowmong", function(inst)
     if not TheWorld.ismastersim then
         return inst
     end
