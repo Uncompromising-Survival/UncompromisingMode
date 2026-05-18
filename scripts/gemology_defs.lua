@@ -918,7 +918,7 @@ AddUMGemDef("bluegem2", {
                 end
                 if not old_perishtime then
                     item:RemoveComponent("perishable")
-                else
+                elseif item.components.perishable ~= nil then
                     item.components.perishable.perishtime = old_perishtime
                 end
                 if old_onfill then
