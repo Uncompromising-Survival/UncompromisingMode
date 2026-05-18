@@ -399,7 +399,7 @@ local um_preparedfoods =
             end
         end,
         floater = { "med", nil, .65 },
-        card_def = { ingredients = { { "um_spongeplant_item", 2 }, { "berries", 2 } } },
+        card_def = { ingredients = { { "um_spongeplant_item", 1 }, { "bird_egg", 1 }, { "berries", 2 } } },
     },
 
     snowcone =
@@ -672,7 +672,7 @@ local um_preparedfoods =
                 eater.components.debuffable:AddDebuff("buff_electricretaliation", "buff_electricretaliation")
             end
         end,
-        card_def = { ingredients = { { "zaspberry", 1 }, { "honey", 1 }, { "goatmilk", 1 } } },
+        card_def = { ingredients = { { "zaspberry", 1 }, { "honey", 1 }, { "bird_egg", 1 } } },
     },
 
 
