@@ -351,6 +351,8 @@ local function fnarenaturfer()
                 TheWorld.Map:SetTile(tx + i, tz + j, WORLD_TILES.UM_HOTSPRING_YELLOWROCK)
             end
         end
+
+        inst:Remove()
     end)
 
     return inst
