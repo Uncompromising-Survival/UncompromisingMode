@@ -13,11 +13,12 @@ SetSharedLootTable( 'um_lunartentacle',
     {'um_tentaclespike_moon', 1},
     {'um_tentaclespike_moon', 0.5},
     {'um_tentaclespike_moon', 0.5},
-    {'um_tentaclespot_moon', 0.33},
+    {'um_tentaclespot_moon', 0.5},
+    {'cave_banana', 0.01},
 })
 
 local RETARGET_MUST_TAGS = { "_combat", "_health" }
-local RETARGET_CANT_TAGS = { "prey" }
+local RETARGET_CANT_TAGS = { "prey", "swampbro" }
 local function retargetfn(inst)
     if not (inst.components.combat and inst.components.combat.target) then
         return FindEntity(
@@ -56,6 +57,9 @@ local function OnAttacked(inst, data)
     if current_target == nil then
         --Don't want to handle initiating attacks here;
         --We only want to handle switching targets.
+        if data.attacker:HasTag("swampbro") then
+            inst.components.combat:SetTarget(data.attacker)
+        end
         return
     elseif current_target == data.attacker then
         --Already targeting our attacker, just update the time
@@ -75,6 +79,10 @@ local function OnAttacked(inst, data)
     inst.components.combat:SetTarget(data.attacker)
     inst._last_attacker = data.attacker
     inst._last_attacked_time = time
+end
+
+local function CalcSanityAura(inst, observer)
+    return observer:HasTag("swampbro") and 0 or -TUNING.SANITYAURA_MED
 end
 
 local function fn()
@@ -122,7 +130,7 @@ local function fn()
     MakeLargeFreezableCharacter(inst)
 
     inst:AddComponent("sanityaura")
-    inst.components.sanityaura.aura = -TUNING.SANITYAURA_MED
+    inst.components.sanityaura.aurafn = CalcSanityAura
 
     inst:AddComponent("inspectable")
     inst:AddComponent("lootdropper")
