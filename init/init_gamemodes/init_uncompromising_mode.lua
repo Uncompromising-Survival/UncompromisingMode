@@ -259,6 +259,7 @@ end
 modimport("init/init_weather/init_ripples")
 modimport("init/init_weather/init_thicket")
 modimport("init/init_insightcompat")
+modimport("init/init_magmatiles")
 
 --need too load this AFTER strings, because scripts/gemology_defs needs to and (same with above)
 GLOBAL.TheMineralLogbook = require("mineral_logbook")()
