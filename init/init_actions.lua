@@ -153,21 +153,6 @@ createburrow.rmb = true
 createburrow.distance = 2
 createburrow.mount_valid = false
 
-local charge_powercell = AddAction("CHARGE_POWERCELL", GLOBAL.STRINGS.ACTIONS.CHARGE_POWERCELL, function(act)
-    local target = act.target or act.invobject
-
-    if (target ~= nil and target:HasTag("powercell")) and (act.doer ~= nil and act.doer:HasTag("batteryuser")) then
-        act.doer.components.batteryuser:ChargeFrom(target)
-        return true
-    else
-        return false
-    end
-end)
-
-charge_powercell.instant = true
-charge_powercell.rmb = true
-charge_powercell.priority = HIGH_ACTION_PRIORITY
-
 -- Rummaging is opening containers.
 -- Any character can open Warly's Portable Crock Pot.
 local _RummageFn = GLOBAL.ACTIONS.RUMMAGE.fn
@@ -738,8 +723,7 @@ um_forge_gem.rmb = true
 um_forge_gem.fn = function(act)
     if act.target.ForgeGem ~= nil then
         local success, reason = act.target:ForgeGem()
-        print("success?", success)
-        print("reason?", reason)
+
         if not success then
             --we need to run the talker code here because we're not in the stategraph
             --when called by the SG action handler it does actually give the action fail string, but when

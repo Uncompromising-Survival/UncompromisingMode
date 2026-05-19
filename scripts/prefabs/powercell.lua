@@ -37,20 +37,6 @@ local function OnBurnt(inst)
     end
     inst:Remove()
 end
-
---hacky workaround but the best way I could do it
---without having to mess with actions.
-local function ondeploy(inst, pt, deployer)
-    local cell = (inst.components.stackable and inst.components.stackable:Get(1)) or inst
-
-    if deployer:HasTag("batteryuser") then
-        deployer.components.batteryuser:ChargeFrom(cell)
-    else
-        deployer.components.inventory:GiveItem(cell)
-        return false
-    end
-end
-
 local function OnEaten(inst, eater)
     if not eater.components.inventory:IsInsulated() then
         eater.sg:GoToState("electrocute")

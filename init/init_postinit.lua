@@ -225,7 +225,6 @@ local prefab_post = {
     "mushtrees",
     "toolbox_items",
     "scrap_monoclehat",
-    "winona_telebrella",
     "otter",
     "stash_map",
     "monkeyhut",
@@ -288,7 +287,7 @@ local stategraph_post = {
 local class_post = {
     "components/inventoryitem_replica",
     --"screens/playerhud",
-    "widgets/itemtile",
+    --"widgets/itemtile",
     --"widgets/hoverer",
     "widgets/moisturemeter",
     "widgets/controls",
