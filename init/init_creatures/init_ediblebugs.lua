@@ -11,7 +11,7 @@ local EDIBLES =
 }
 
 local function IsEdibleToTarget(inst, target)
-    return target and target:HasAnyTag("OMNI_eater", "INSECT_eater")
+    return target and target:HasAnyTag("OMNI_eater", "INSECT_eater", "compostingbin_accepts_items")
         and (not target:HasTag("player") or target.prefab == "waxwell" or target.replica.inventory and target.replica.inventory:EquipHasTag("um_insect_eater"))
 end
 
