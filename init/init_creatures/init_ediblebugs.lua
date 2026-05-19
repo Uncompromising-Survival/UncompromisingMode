@@ -3,6 +3,7 @@ local EDIBLES =
     "mosquito",
     "bee",
     "killerbee",
+    "um_bee_moon",
     "butterfly",
     "um_buttery_fly",
     "moonbutterfly",
