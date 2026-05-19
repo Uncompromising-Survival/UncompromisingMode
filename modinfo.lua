@@ -47,7 +47,7 @@ icon_atlas = "modicon.xml"
 icon = "modicon.tex"
 
 server_filter_tags = { "uncomp", "UM", "uncompromising", "DSTU", "collab", "overhaul", "hard", "difficult", "madness", "challenge",
-    "hardcore" }
+    "hardcore", "um_beta"} --REMOVE THE UM_BETA TAG LATER
 
 priority = -10
 
