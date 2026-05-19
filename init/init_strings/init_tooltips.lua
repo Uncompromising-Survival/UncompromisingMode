@@ -375,7 +375,7 @@ if TUNING.DSTU.SLEEPINGBUFF > 1 then
 end
 
 if TUNING.DSTU.POCKET_POWERTRIP ~= 0 then
-    TOOLTIPS.TRUNKVEST_SUMMER = "- Now has pockets!\n- Slightly increased rain protection."
+    TOOLTIPS.TRUNKVEST_SUMMER = "- Now has pockets!\n- Slightly increased rain protection and insulation."
     TOOLTIPS.TRUNKVEST_WINTER = "- Now has pockets!"
     TOOLTIPS.REFLECTIVEVEST = "- Now has pockets!"
     TOOLTIPS.RAINCOAT = "- Now has pockets!"
