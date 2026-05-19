@@ -246,7 +246,7 @@ local prefab_post = {
     "walrus_camp",
     "firestaff",
     "worms",
-    "rabbitking",
+    --"rabbitking",
     "cave_vents",
     "cave_vent_mite",
     "bananabush",
