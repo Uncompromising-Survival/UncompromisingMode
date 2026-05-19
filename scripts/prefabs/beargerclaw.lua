@@ -113,18 +113,18 @@ local function getspawnlocation(inst, target)
 end
 
 local function createlight(staff, target, pos)
-        local spittarget = SpawnPrefab("lavaspit_target")
-        local caster = staff.components.inventoryitem.owner
-        
-        if pos ~= nil then
-            spittarget.Transform:SetPosition(pos:Get())
-            spittarget:DoTaskInTime(5, spittarget.Remove)
-            LaunchSpit(caster, spittarget)
-        elseif target ~= nil then
-            spittarget.Transform:SetPosition(getspawnlocation(staff, target))
-            spittarget:DoTaskInTime(5, spittarget.Remove)
-            LaunchSpit(caster, target)
-        end
+    local spittarget = SpawnPrefab("um_lavaspit_target")
+    local caster = staff.components.inventoryitem.owner
+    
+    if pos ~= nil then
+        spittarget.Transform:SetPosition(pos:Get())
+        spittarget:DoTaskInTime(5, spittarget.Remove)
+        LaunchSpit(caster, spittarget)
+    elseif target ~= nil then
+        spittarget.Transform:SetPosition(getspawnlocation(staff, target))
+        spittarget:DoTaskInTime(5, spittarget.Remove)
+        LaunchSpit(caster, target)
+    end
 end
 
 local function light_reticuletargetfn()

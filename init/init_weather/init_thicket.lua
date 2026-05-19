@@ -7,7 +7,7 @@ local function ThicketCheck(inst) -- AND POOFSHROOMS
     local x,y,z = inst.Transform:GetWorldPosition()
     local triggers = TheSim:FindEntities(x,y,z,1.5,nil,nil,{"briar_plants","trap"})
     for i,v in ipairs(triggers) do
-        if v.prefab == "hooded_fern" and not inst:HasAnyTag(cant_thicket) then
+        if v.prefab == "hooded_fern" and not inst:HasAnyTag(cant_thicket) and v.um_thicketnear then
             v.um_thicketnear(v, inst)
         end
         if v.prefab == "um_poofshroom" and v:GetDistanceSqToInst(inst) < 0.4^2 and not inst:HasAnyTag(cant_poof) and v.OnExplode then

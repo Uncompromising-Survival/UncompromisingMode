@@ -137,7 +137,7 @@ local function getspawnlocation(inst, target)
 end
 
 local function createtarget(inst, target, pos) -- Need a stand-in target incase the player targets the ground
-    local spittarget = SpawnPrefab("lavaspit_target")
+    local spittarget = SpawnPrefab("um_lavaspit_target")
     local caster = inst.components.inventoryitem.owner
 
     if pos ~= nil then

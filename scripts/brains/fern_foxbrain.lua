@@ -45,8 +45,8 @@ local function EatFoodAction(inst)
 end
 
 local HunterParams = {
-    tags = {"scarytoprey"},
-    notags = {"INLIMBO", "NOCLICK", "rabbitdisguise"},
+    tags = {"scarytoprey","insect"},
+    notags = {"INLIMBO", "NOCLICK"},
 }
 function Fern_FoxBrain:OnStart()
     local root = PriorityNode(
