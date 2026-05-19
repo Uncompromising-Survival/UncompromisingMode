@@ -410,7 +410,7 @@ local function fngoo()
 
             if inst.trailname ~= nil then
                 inst.AnimState:PlayAnimation(inst.trailname)
-                inst:ListenForEvent("animover", OnAnimOver)
+                --inst:ListenForEvent("animover", OnAnimOver)
                 inst.task = inst:DoPeriodicTask(0.25, OnUpdate, nil,
                 inst.Transform:GetWorldPosition(), data.scale or 1)
             else
