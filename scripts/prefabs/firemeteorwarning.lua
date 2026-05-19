@@ -7,7 +7,7 @@ local prefabs_firemeteorwarning =
 {
     "meteorwarning",
 }
-	
+    
 local assets =
 {
     Asset("ANIM", "anim/lavaarena_firestaff_meteor.zip"),
@@ -30,7 +30,7 @@ local prefabs_splash =
 }
 
 local function GetExcludeTags(inst)
-		return {"INLIMBO", "notarget", "playerghost"}
+    return {"INLIMBO", "notarget", "playerghost"}
 end
 
 ------------------------
@@ -117,15 +117,15 @@ local function fn()
 
         return inst
     end
-	
-	inst:DoTaskInTime(1, function(inst)
-	SpawnPrefab("firemeteor").Transform:SetPosition(inst:GetPosition():Get())
-		inst:DoTaskInTime(0.4, function(inst)
-		inst:Remove()
-		end)
-	end)
+    
+    inst:DoTaskInTime(1, function(inst)
+    SpawnPrefab("firemeteor").Transform:SetPosition(inst:GetPosition():Get())
+        inst:DoTaskInTime(0.4, function(inst)
+        inst:Remove()
+        end)
+    end)
 
-	
+    
     inst.SoundEmitter:PlaySound("dontstarve/common/meteor_spawn")
 
     inst.startfn = startshadow
@@ -152,30 +152,30 @@ local function firemeteorfn()
     inst:AddTag("notarget")
 
     inst.entity:SetPristine()
-	
+    
     if not TheWorld.ismastersim then
         return inst
     end
-	
+    
     inst:ListenForEvent("animover", function(inst)
-		inst:DoTaskInTime(FRAMES*3, function(inst)
-			SpawnPrefab("firemeteor_splash").Transform:SetPosition(inst:GetPosition():Get())
-			SpawnPrefab("firedrop").Transform:SetPosition(inst:GetPosition():Get())
-			ShakeAllCameras(CAMERASHAKE.FULL, .7, .02, .5, inst, 40)
-			
-			
-			local x, y, z = inst:GetPosition():Get()
-			
-			local ents = TheSim:FindEntities(x, y, z, TUNING.METEOR_RADIUS, nil, {"dragonfly", "mock_dragonfly", "shadow"}) --, NON_SMASHABLE_TAGS, SMASHABLE_TAGS
-			for i, v in ipairs(ents) do
-					SpawnPrefab("firemeteor_splashhit")
-					if v.components.combat ~= nil then
-					v.components.combat:GetAttacked(inst, TUNING.METEOR_DAMAGE * 2, nil)
-					end
-			end
-			inst:Remove()
-		end)
-	end)
+        inst:DoTaskInTime(FRAMES*3, function(inst)
+            SpawnPrefab("firemeteor_splash").Transform:SetPosition(inst:GetPosition():Get())
+            SpawnPrefab("firedrop").Transform:SetPosition(inst:GetPosition():Get())
+            ShakeAllCameras(CAMERASHAKE.FULL, .7, .02, .5, inst, 40)
+            
+            
+            local x, y, z = inst:GetPosition():Get()
+            
+            local ents = TheSim:FindEntities(x, y, z, TUNING.METEOR_RADIUS, nil, {"dragonfly", "mock_dragonfly", "shadow"}) --, NON_SMASHABLE_TAGS, SMASHABLE_TAGS
+            for i, v in ipairs(ents) do
+                    SpawnPrefab("firemeteor_splashhit")
+                    if v.components.combat ~= nil then
+                    v.components.combat:GetAttacked(inst, TUNING.METEOR_DAMAGE * 2, nil)
+                    end
+            end
+            inst:Remove()
+        end)
+    end)
 
     return inst
 end
@@ -202,16 +202,16 @@ local function splashfn()
     if not TheWorld.ismastersim then
         return inst
     end
-	
-	inst.persists = false
-	inst.SoundEmitter:PlaySound("dontstarve/impacts/lava_arena/meteor_strike")
-	inst:DoTaskInTime(0, function(inst)
-	local base = SpawnPrefab("firemeteor_splashbase")
-	base.Transform:SetPosition(inst:GetPosition():Get())
-	end)
-	
-	inst:ListenForEvent("animover", inst.Remove)
-	
+    
+    inst.persists = false
+    inst.SoundEmitter:PlaySound("dontstarve/impacts/lava_arena/meteor_strike")
+    inst:DoTaskInTime(0, function(inst)
+    local base = SpawnPrefab("firemeteor_splashbase")
+    base.Transform:SetPosition(inst:GetPosition():Get())
+    end)
+    
+    inst:ListenForEvent("animover", inst.Remove)
+    
 
     return inst
 end
@@ -222,7 +222,7 @@ local function splashbasefn()
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddNetwork()
-	
+    
 
     inst.AnimState:SetBank("lavaarena_fire_fx")
     inst.AnimState:SetBuild("lavaarena_fire_fx")
@@ -240,10 +240,10 @@ local function splashbasefn()
     if not TheWorld.ismastersim then
         return inst
     end
-	
+    
     inst.persists = false
-	
-	inst:ListenForEvent("animover", inst.Remove)
+    
+    inst:ListenForEvent("animover", inst.Remove)
 
     return inst
 end
@@ -270,15 +270,15 @@ local function splashhitfn()
     if not TheWorld.ismastersim then
         return inst
     end
-	
-	inst.persists = false
+    
+    inst.persists = false
     inst:ListenForEvent("animover", inst.Remove)
 
     return inst
 end
 
 return Prefab("firemeteorwarning", fn, assets_firemeteorwarning, prefabs_firemeteorwarning),
-	Prefab("firemeteor", firemeteorfn, assets, prefabs),
+    Prefab("firemeteor", firemeteorfn, assets, prefabs),
     Prefab("firemeteor_splash", splashfn, assets_splash, prefabs_splash),
     Prefab("firemeteor_splashbase", splashbasefn, assets_splash),
     Prefab("firemeteor_splashhit", splashhitfn, assets_splash)

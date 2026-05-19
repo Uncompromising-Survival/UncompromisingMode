@@ -23,7 +23,7 @@ local function OnHitFire(inst, attacker, target)
 	end
 	
 	if inst.dragonflyspit then
-		local spittle = SpawnPrefab("lavaspit")
+		local spittle = SpawnPrefab("um_lavaspit")
 		spittle.Transform:SetPosition(x, y, z)
 		spittle.dragonflyspit = true
 	end
