@@ -34,9 +34,8 @@ env.AddPrefabPostInit("lantern", function(inst)
             inst:SetPrefabNameOverride("LANTERN_ELECTRICAL")
             inst.components.upgradeable.upgradetype = nil
             inst.components.fueled.fueltype = FUELTYPE.BATTERYPOWER
-            inst.components.fueled.maxfuel = TUNING.LANTERN_LIGHTTIME * 2
-            inst.components.fueled:DoDelta(0) --do a 0delta to update the %, maybe?
             inst.components.named:SetName(STRINGS.NAMES.LANTERN_ELECTRICAL)
+            inst.components.fueled.rate_modifiers:SetModifier(inst, 0.75, "electricalefficiency")
 
             inst:AddComponent("batteryuser")
             inst.components.batteryuser:SetChargeMultFn(CalcBatteryChargeMult)
