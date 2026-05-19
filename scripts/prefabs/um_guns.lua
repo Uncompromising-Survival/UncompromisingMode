@@ -71,7 +71,9 @@ local function Flamethrower(inst, caster, target)
         local dx = 1.5 * math.sin((rot + 90) * DEGREES)
         local dz = 1.5 * math.cos((rot + 90) * DEGREES)
         fx.Transform:SetPosition(x + dx, 0, z + dz)
-        fx.Transform:SetScale(0.5, 0.5, 0.5)
+        fx.Transform:SetScale(.5, .5, .5)
+        fx.persists = false
+        fx:DoTaskInTime(1, fx.Remove)
 
         for i = 1, #pattern do
             local interval_rot = pattern[i]

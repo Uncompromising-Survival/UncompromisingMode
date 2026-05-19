@@ -10,20 +10,6 @@ local fxlist = {
         end,
     },
     {
-        name = "um_explosivehit",
-        bank = "explode",
-        build = "explode",
-        anim = "small_firecrackers",
-        sound = "dontstarve/common/blackpowder_explo",
-		transform = Vector3(1.25, 1.25, 1.25),
-        nofaced = true,
-        bloom = true,
-        fn = function(inst)
-            inst.AnimState:SetLightOverride(1)
-            inst.AnimState:SetFinalOffset(1)
-        end,
-    },
-    {
         name = "um_brokentool",
         bank = "broketool",
         build = "broken_tool",
