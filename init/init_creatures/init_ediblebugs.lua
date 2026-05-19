@@ -4,6 +4,7 @@ local EDIBLES =
     "bee",
     "killerbee",
     "butterfly",
+    "um_buttery_fly",
     "moonbutterfly",
     "aphid",
     "fruitfly",
@@ -45,7 +46,7 @@ local function IsAnActiveItemAndMounted(inst, doer)
     local rider = doer.replica.rider
     local mount = rider and rider:GetMount() or nil
     local isactiveitem = doer.replica.inventory and doer.replica.inventory:GetActiveItem() == inst
-    return mount and (isactiveitem or (not right and doer.components.playercontroller.isclientcontrollerattached)) and inst:UMIsEdibleToTarget(mount)
+    return mount and (isactiveitem or (not right and doer.components.playercontroller.isclientcontrollerattached)) and mount
 end
 
 local UpvalueHacker = require("tools/upvaluehacker")
@@ -66,21 +67,25 @@ AddSimPostInit(function()
             local _INVENTORY_edible_fn = INVENTORY["edible"]
             if _INVENTORY_edible_fn then
                 INVENTORY["edible"] = function(inst, doer, actions, right, ...)
-                    if inst.UMIsEdibleToTarget and not (IsAnActiveItemAndMounted(inst, doer) or inst:UMIsEdibleToTarget(doer)) then return end
+                    if inst.UMIsEdibleToTarget and not (inst:UMIsEdibleToTarget(IsAnActiveItemAndMounted(inst, doer)) or inst:UMIsEdibleToTarget(doer)) then return end
                     return _INVENTORY_edible_fn(inst, doer, actions, right, ...)
                 end
             end
             local _INVENTORY_health_fn = INVENTORY["health"]
             if _INVENTORY_health_fn then
                 INVENTORY["health"] = function(inst, doer, actions, ...)
-                    if inst.UMIsEdibleToTarget and (IsAnActiveItemAndMounted(inst, doer) or inst:UMIsEdibleToTarget(doer)) and doer.components.playercontroller and doer.components.playercontroller:IsControlPressed(CONTROL_FORCE_INSPECT) then return end
+                    local mount = IsAnActiveItemAndMounted(inst, doer)
+                    if inst.UMIsEdibleToTarget and (not mount and inst:UMIsEdibleToTarget(doer) or inst:UMIsEdibleToTarget(mount))
+                        and doer.components.playercontroller and doer.components.playercontroller:IsControlPressed(CONTROL_FORCE_INSPECT) then return end
                     return _INVENTORY_health_fn(inst, doer, actions, ...)
                 end
             end
             local _INVENTORY_murderable_fn = INVENTORY["murderable"]
             if _INVENTORY_murderable_fn then
                 INVENTORY["murderable"] = function(inst, doer, actions, ...)
-                    if inst.UMIsEdibleToTarget and (IsAnActiveItemAndMounted(inst, doer) or inst:UMIsEdibleToTarget(doer)) and doer.components.playercontroller and doer.components.playercontroller:IsControlPressed(CONTROL_FORCE_INSPECT) then return end
+                    local mount = IsAnActiveItemAndMounted(inst, doer)
+                    if inst.UMIsEdibleToTarget and (not mount and inst:UMIsEdibleToTarget(doer) or inst:UMIsEdibleToTarget(mount))
+                        and doer.components.playercontroller and doer.components.playercontroller:IsControlPressed(CONTROL_FORCE_INSPECT) then return end
                     return _INVENTORY_murderable_fn(inst, doer, actions, ...)
                 end
             end
