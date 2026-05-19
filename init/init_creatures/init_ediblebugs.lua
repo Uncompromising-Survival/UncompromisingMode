@@ -23,6 +23,9 @@ local function AddEdibles(prefab)
 
         inst:AddComponent("edible")
         inst.components.edible.foodtype = GLOBAL.FOODTYPE.INSECT
+        inst.components.edible.healthvalue = TUNING.HEALING_TINY
+        inst.components.edible.hungervalue = TUNING.CALORIES_TINY/2
+        inst:AddTag("sloweat")
     end)
 end
 

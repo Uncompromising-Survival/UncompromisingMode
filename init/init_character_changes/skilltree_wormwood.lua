@@ -383,7 +383,7 @@ local skills =
 
 	wormwood_blooming_trapbramble = {
 		title = SKILLTREESTRINGS.BLOOMING_TRAPBRAMBLE_TITLE,
-		desc = "Bramble traps spread thorns over a larger area. Reset nearby bramble traps while fully bloomed.",
+		desc = "Bramble Traps spread thorns over a larger area. Reset nearby Bramble Traps while fully bloomed.",
 		icon = "wormwood_blooming_trapbramble",
 		pos = {UI_VERTICAL_MIDDLE + 95, UI_BOTTOM + 115},
 
@@ -400,7 +400,7 @@ local skills =
 		desc = SKILLTREESTRINGS.ARMOR_BRAMBLE_DESC,
 		icon = "wormwood_armor_bramble",
 		pos = {UI_VERTICAL_MIDDLE + 137, UI_BOTTOM + 145},
-		
+
 
 		group = "gathering",
 		tags = {"blooming"},
@@ -414,17 +414,17 @@ local skills =
 		desc = "All bramble husk types trigger a second time when attacked.",
 		icon = "wormwood_armor_bramble2",
 		pos = {UI_VERTICAL_MIDDLE + 120, UI_BOTTOM + 187},
-		
+
 
 		group = "gathering",
 		tags = {"blooming"},
 	},
 
 	wormwood_mushroommadness = {
-		title = "Mushroom Madness", --"Berry Bush crafting" -> Mushroom Madness: Combines the Mushroom planter skills into 1.
-		desc = "Mushrooms you plant grow faster in the mushroom planter and produce more mushrooms.",
+		title = "Mushroom Madness", --"Berry Bush crafting" -> Mushroom Madness: Combines the Mushroom Planters skills into 1.
+		desc = "Mushrooms you plant grow faster in Mushroom Planters and produce a higher yield. Learn how to plant Mushtrees.",
 		icon = "wormwood_mushroomplanter_ratebonus2",
-		
+
 		pos = {UI_VERTICAL_MIDDLE + 43, UI_BOTTOM + 150},
 
 		group = "crafting",
@@ -486,7 +486,7 @@ local skills =
 	},
 	wormwood_moon_cap_eating = {
 		title = "Mooncap Savant", --"Mooncap eating" -> "Impeccable crops" Wild crops automatically tend themselves.
-		desc = "Plant mooncaps in the mushroom planter. Eat them for sleep-inducing spores. Dusk caps react strangely when ingested.",
+		desc = "Learn how to plant Moon Shrooms in Mushroom Planters and Lunar Mushtrees. Eat them for sleep-inducing spores. Dusk caps react strangely when ingested.",
 		icon = "wormwood_moon_cap_eating",
 		pos = {UI_LEFT - 14, UI_TOP + 60},
 
@@ -495,7 +495,7 @@ local skills =
 	},
 	wormwood_lunar_mutations = {
 		title = "Mutator Novice",
-		desc = "Learn to mutate carrots, dragonfruit, and lightbulbs into sentient allies.",
+		desc = "Tap into your lunar roots to transform Carrots, Dragon Fruit, and light Bulbs into sentient allies.",
 		icon = "wormwood_mutations",
 		pos = {UI_LEFT + 40, UI_TOP + 60},
 		group = "allegiance1",

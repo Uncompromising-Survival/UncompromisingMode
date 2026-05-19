@@ -332,22 +332,21 @@ for i, v in ipairs(mutation_skills) do
 end
 
 -- Lunar Mushtree Skills
-env.AddRecipe2("wormwood_mushtree_tall", { Ingredient("blue_cap", 1), Ingredient("spore_tall", 1), Ingredient("guano", 5) }, TECH.NONE, { placer = "wormwood_mushtree_tall_placer", builder_skill = "wormwood_mushroommadness", product = "mushtree_tall", nounlock = true, no_deconstruction = true, description = "wormwood_mushtree", image = "wormwood_mushtree_tall.tex" }, { "CHARACTER" })
-env.AddRecipe2("wormwood_mushtree_medium", { Ingredient("red_cap", 1), Ingredient("spore_medium", 1), Ingredient("guano", 5) }, TECH.NONE, { placer = "wormwood_mushtree_medium_placer", builder_skill = "wormwood_mushroommadness", product = "mushtree_medium", nounlock = true, no_deconstruction = true, description = "wormwood_mushtree", image = "wormwood_mushtree_medium.tex" }, { "CHARACTER" })
-env.AddRecipe2("wormwood_mushtree_small", { Ingredient("green_cap", 1), Ingredient("spore_small", 1), Ingredient("guano", 5) }, TECH.NONE, { placer = "wormwood_mushtree_small_placer", builder_skill = "wormwood_mushroommadness", product = "mushtree_small", nounlock = true, no_deconstruction = true, description = "wormwood_mushtree", image = "wormwood_mushtree_small.tex" }, { "CHARACTER" })
+env.AddRecipe2("wormwood_mushtree_tall", { Ingredient("blue_cap", 1), Ingredient("spore_tall", 1), Ingredient("guano", 5) }, TECH.NONE, { placer = "wormwood_mushtree_tall_placer", builder_skill = "wormwood_mushroommadness", product = "mushtree_tall", builder_tag = "plantkin", sg_state="spawn_mutated_creature", actionstr="GROW", no_deconstruction = true, description = "wormwood_mushtree", image = "wormwood_mushtree_tall.tex" }, { "CHARACTER" })
+env.AddRecipe2("wormwood_mushtree_medium", { Ingredient("red_cap", 1), Ingredient("spore_medium", 1), Ingredient("guano", 5) }, TECH.NONE, { placer = "wormwood_mushtree_medium_placer", builder_skill = "wormwood_mushroommadness", product = "mushtree_medium", builder_tag = "plantkin", sg_state="spawn_mutated_creature", actionstr="GROW", no_deconstruction = true, description = "wormwood_mushtree", image = "wormwood_mushtree_medium.tex" }, { "CHARACTER" })
+env.AddRecipe2("wormwood_mushtree_small", { Ingredient("green_cap", 1), Ingredient("spore_small", 1), Ingredient("guano", 5) }, TECH.NONE, { placer = "wormwood_mushtree_small_placer", builder_skill = "wormwood_mushroommadness", product = "mushtree_small", builder_tag = "plantkin", sg_state="spawn_mutated_creature", actionstr="GROW", no_deconstruction = true, description = "wormwood_mushtree", image = "wormwood_mushtree_small.tex" }, { "CHARACTER" })
+env.ChangeSortKey("wormwood_mushtree_tall", "wormwood_lureplant", "CHARACTER", true)
+env.ChangeSortKey("wormwood_mushtree_medium", "wormwood_mushtree_tall", "CHARACTER", true)
+env.ChangeSortKey("wormwood_mushtree_small", "wormwood_mushtree_medium", "CHARACTER", true)
 
-env.AllRecipes["wormwood_mushtree_tall"].builder_tag = "plantkin"
-env.AllRecipes["wormwood_mushtree_medium"].builder_tag = "plantkin"
-env.AllRecipes["wormwood_mushtree_small"].builder_tag = "plantkin"
-
-env.AddRecipe2("wormwood_mushtree_lunar", { Ingredient("moon_cap", 2), Ingredient("guano", 5) }, TECH.NONE, { placer = "wormwood_mushtree_lunar_placer", builder_skill = "wormwood_moon_cap_eating", product = "mushtree_moon", nounlock = true, no_deconstruction = true, description = "wormwood_mushtree", image = "wormwood_mushtree_lunar.tex" }, { "CHARACTER" })
-env.AllRecipes["wormwood_mushtree_lunar"].builder_tag = "plantkin"
+env.AddRecipe2("wormwood_mushtree_lunar", { Ingredient("moon_cap", 2), Ingredient("guano", 5) }, TECH.NONE, { placer = "wormwood_mushtree_lunar_placer", builder_skill = "wormwood_moon_cap_eating", product = "mushtree_moon", builder_tag = "plantkin", sg_state="spawn_mutated_creature", actionstr="GROW", no_deconstruction = true, description = "wormwood_mushtree", image = "wormwood_mushtree_lunar.tex" }, { "CHARACTER" })
+env.ChangeSortKey("wormwood_mushtree_lunar", "wormwood_mushtree_tall", "CHARACTER", false)
 --[[
 local plant_types = {"tomato","eggplant","potato","dragonfruit","pepper","carrot","pumpkin","onion","pomegranate","asparagus",
 "corn","durian","garlic","watermelon"}
 
 for i,v in ipairs(plant_types) do
-    env.AddRecipe2("wormwood_"..v.."_eqex", {Ingredient(v.."_seeds", 5),Ingredient(CHARACTER_INGREDIENT.HEALTH, 5   )}, TECH.NONE, {  numtogive = 5,  builder_skill = "wormwood_allegiance_lunar_eqex", product = v, nounlock = true,no_deconstruction=true, description="wormwood_eqex"}, {"CHARACTER"})
+    env.AddRecipe2("wormwood_"..v.."_eqex", {Ingredient(v.."_seeds", 5),Ingredient(CHARACTER_INGREDIENT.HEALTH, 5   )}, TECH.NONE, {  numtogive = 5,  builder_skill = "wormwood_allegiance_lunar_eqex", product = v,no_deconstruction=true, description="wormwood_eqex"}, {"CHARACTER"})
     env.AllRecipes["wormwood_"..v.."_eqex"].builder_tag = "plantkin"
 end
 -- AXE Exceptions... These don't correctly grab their images, probably because of Gorge.
@@ -357,14 +356,11 @@ env.AllRecipes["wormwood_onion_eqex"].image = "wormwood_onion.tex"]]
 local plants_1 = { "potato", "asparagus", "garlic", "pumpkin", "pomegranate", "dragonfruit", "watermelon" }
 local plants_2 = { "eggplant", "corn", "durian", "carrot", "onion", "pepper", "tomato" }
 for i, v in ipairs(plants_1) do
-    env.AddRecipe2("wormwood_" .. v .. "_eqex", { Ingredient(plants_2[i] .. "_seeds", 5), Ingredient(CHARACTER_INGREDIENT.HEALTH, 5) }, TECH.NONE, { numtogive = 4, builder_skill = "wormwood_allegiance_lunar_eqex", product = v .. "_seeds", nounlock = true, no_deconstruction = true, description = "wormwood_eqex" }, { "CHARACTER" })
-    env.AllRecipes["wormwood_" .. v .. "_eqex"].builder_tag = "plantkin"
-
-    env.AddRecipe2("wormwood_" .. plants_2[i] .. "_eqex", { Ingredient(v .. "_seeds", 5), Ingredient(CHARACTER_INGREDIENT.HEALTH, 5) }, TECH.NONE, { numtogive = 4, builder_skill = "wormwood_allegiance_lunar_eqex", product = plants_2[i] .. "_seeds", nounlock = true, no_deconstruction = true, description = "wormwood_eqex" }, { "CHARACTER" })
-    env.AllRecipes["wormwood_" .. plants_2[i] .. "_eqex"].builder_tag = "plantkin"
+    env.AddRecipe2("wormwood_" .. v .. "_eqex", { Ingredient(plants_2[i] .. "_seeds", 5), Ingredient(CHARACTER_INGREDIENT.HEALTH, 5) }, TECH.NONE, { numtogive = 4, builder_skill = "wormwood_allegiance_lunar_eqex", builder_tag = "plantkin", product = v .. "_seeds", actionstr="TRANSFORM", no_deconstruction = true, description = "wormwood_eqex" }, { "CHARACTER" })
+    env.ChangeSortKey("wormwood_" .. v .. "_eqex", "wormwood_mushtree_small", "CHARACTER", true)
+    env.AddRecipe2("wormwood_" .. plants_2[i] .. "_eqex", { Ingredient(v .. "_seeds", 5), Ingredient(CHARACTER_INGREDIENT.HEALTH, 5) }, TECH.NONE, { numtogive = 4, builder_skill = "wormwood_allegiance_lunar_eqex", builder_tag = "plantkin", product = plants_2[i] .. "_seeds", actionstr="TRANSFORM", no_deconstruction = true, description = "wormwood_eqex" }, { "CHARACTER" })
+    env.ChangeSortKey("wormwood_" .. plants_2[i] .. "_eqex", "wormwood_mushtree_small", "CHARACTER", true)
 end
-
-
 
 local levels =
 {
