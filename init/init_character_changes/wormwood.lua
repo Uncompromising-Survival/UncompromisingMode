@@ -113,12 +113,12 @@ env.AddPrefabPostInit("wormwood", function(inst)
     inst:RemoveTag("beebeacon")
     inst.beebeacon = nil
 
-    inst:ListenForEvent("healthdelta", function(inst, data)
+    --[[inst:ListenForEvent("healthdelta", function(inst, data)
         if data.cause == "fire" then
             local maxhealth = inst.components.health.maxhealth
             inst.components.health:DeltaPenalty(math.abs(data.amount / maxhealth / 2))
         end
-    end)
+    end)]]
 
 
     inst:AddTag("hayfever_immune")
