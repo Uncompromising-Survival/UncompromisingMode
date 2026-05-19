@@ -47,7 +47,7 @@ local function SpawnFx(inst, stage, scale)
     inst.SoundEmitter:PlaySoundWithParams("dontstarve/creatures/together/antlion/sfx/ground_break", { size = math.pow(stage / 3, 2) })
 end
 
-local function LaunchSpit(caster, target)
+local function LaunchSpit(caster, pos)
     local x, y, z = caster.Transform:GetWorldPosition()
     
     local ents = TheSim:FindEntities(x, y, z, 5, {"antlion_sinkhole"})
@@ -61,7 +61,7 @@ local function LaunchSpit(caster, target)
         end
     
         for i = 1, biggy and 1 or 4 do 
-            local targetpos = target:GetPosition()
+            local targetpos = pos
 
             local projectile = SpawnPrefab("beargerclaw_boulder")
             projectile.coolingtime = 8
@@ -106,25 +106,9 @@ local function LaunchSpit(caster, target)
     end
 end
 
-local function getspawnlocation(inst, target)
-    local x1, y1, z1 = inst.Transform:GetWorldPosition()
-    local x2, y2, z2 = target.Transform:GetWorldPosition()
-    return x1 + .15 * (x2 - x1), 0, z1 + .15 * (z2 - z1)
-end
-
 local function createlight(staff, target, pos)
-    local spittarget = SpawnPrefab("um_lavaspit_target")
     local caster = staff.components.inventoryitem.owner
-    
-    if pos ~= nil then
-        spittarget.Transform:SetPosition(pos:Get())
-        spittarget:DoTaskInTime(5, spittarget.Remove)
-        LaunchSpit(caster, spittarget)
-    elseif target ~= nil then
-        spittarget.Transform:SetPosition(getspawnlocation(staff, target))
-        spittarget:DoTaskInTime(5, spittarget.Remove)
-        LaunchSpit(caster, target)
-    end
+    LaunchSpit(caster, pos or target and target:GetPosition())
 end
 
 local function light_reticuletargetfn()
