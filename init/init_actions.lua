@@ -2,7 +2,7 @@ local UpvalueHacker = require("tools/upvaluehacker")
 -- Update for PAWN
 AddAction("LAVASPIT", "LAVASPIT", function(act)
     if act.doer and act.target and act.doer.prefab == "dragonfly" then
-        local spit = SpawnPrefab("lavaspit")
+        local spit = SpawnPrefab("um_lavaspit")
         local x, y, z = act.doer.Transform:GetWorldPosition()
         local downvec = TheCamera:GetDownVec()
         local offsetangle = math.atan2(downvec.z, downvec.x) * (180 / math.pi)
