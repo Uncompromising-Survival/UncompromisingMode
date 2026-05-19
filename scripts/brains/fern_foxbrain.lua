@@ -45,7 +45,7 @@ local function EatFoodAction(inst)
 end
 
 local HunterParams = {
-    tags = {"scarytoprey","insect"},
+    oneoftags = {"scarytoprey","insect"},
     notags = {"INLIMBO", "NOCLICK"},
 }
 function Fern_FoxBrain:OnStart()
