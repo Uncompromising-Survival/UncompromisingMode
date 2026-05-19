@@ -530,10 +530,10 @@ local function fn()
     inst.components.inventory.maxslots = 100
     inst:DoTaskInTime(0, Init)
 
-    inst:DoPeriodicTask(30, function(inst)
+    --[[inst:DoPeriodicTask(30, function(inst)
         local x, y, z = inst.Transform:GetWorldPosition()
         SpawnPrefab("um_tornado_destination_marker2").Transform:SetPosition(x, 0, z)
-    end)
+    end)]]
 
     inst:DoPeriodicTask(0.25, TornadoEnviromentTask)
 
@@ -768,10 +768,10 @@ local function destfn()
 
     inst:DoPeriodicTask(1, MoveDestination)
 
-    inst:DoPeriodicTask(30, function(inst)
+    --[[inst:DoPeriodicTask(30, function(inst)
         local x, y, z = inst.Transform:GetWorldPosition()
         SpawnPrefab(inst.marker).Transform:SetPosition(x, 0, z)
-    end)
+    end)]]
 
     inst.OnSave = OnSave_Dest
     inst.OnLoad = OnLoad_Dest
