@@ -927,8 +927,7 @@ configuration_options = {
     SkipSpace(),
 
     Header("Giants & Bosses"),
-    BinaryConfig("harder_deerclops", "Deerclops Mutations",
-        "Three different, harder variants of Deerclops can spawn, replacing the vanilla version.", true),
+	BinaryConfig("harder_deerclops", "Deerclops", "One of three different variants of Deerclops will spawn, replacing the vanilla version.", true),
     BinaryConfig("disable_megaflare", "Disable Hostile Flare", "Hostile Flares no longer spawn Deerclops.", true),
     BinaryConfig("harder_bearger", "Harder Bearger",
         "Enabling this option grants Bearger more attacks, and will make Bearger more actively seek you out.", true),
