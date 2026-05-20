@@ -219,6 +219,7 @@ local _id_to_state = {}
 local _centre_x, _, _centre_y
 local tile_w, tile_h
 local _debug_grid
+local _TileRendersOver
 
 --------------------------------------------------------------------------
 --[[ Private Member Functions ]]
@@ -434,6 +435,19 @@ function UM_InitializeParticleWorldTileState()
 
     _map = TheWorld.Map
 
+    if _map.TileRendersOver ~= nil then
+        _TileRendersOver = function(a, b) return _map:TileRendersOver(a, b) end
+    else
+        local ok, tiledefs = pcall(require, "worldtiledefs")
+        if ok and tiledefs and tiledefs.ground then
+            local order = {}
+            for i, v in ipairs(tiledefs.ground) do order[v[1]] = i end
+            _TileRendersOver = function(a, b) return (order[a] or 0) > (order[b] or 0) end
+        else
+            _TileRendersOver = function() return false end
+        end
+    end
+
     tile_w, tile_h = _map:GetSize()
     _tile_grid = DataGrid(tile_w, tile_h)
 
@@ -443,7 +457,7 @@ function UM_InitializeParticleWorldTileState()
         table.insert(_id_to_state, data)
         table.insert(_id_to_tile, tile)
     end
-    table.sort(_id_to_tile, function(a,b) return _map:TileRendersOver(b, a) end)
+    table.sort(_id_to_tile, function(a,b) return _TileRendersOver(b, a) end)
 
     _tile_to_id = {}
     for id, tile in pairs(_id_to_tile) do
@@ -569,7 +583,7 @@ function UM_OnAnyTerraformParticleWorldTileState(tiles_data)
             local _tile = _tile_grid:GetDataAtIndex(_index)
             local _id, _overhang_id = GetParticleTileID(_tile)
 
-            if _id ~= id and _overhang_id ~= nil and overhang_id ~= _overhang_id and _map:TileRendersOver(_tile, tile) then
+            if _id ~= id and _overhang_id ~= nil and overhang_id ~= _overhang_id and _TileRendersOver(_tile, tile) then
                 if overhang_data[_overhang_id] == nil then
                     overhang_data[_overhang_id] = {}
                 end
