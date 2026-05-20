@@ -30,29 +30,37 @@ local function DamageSurroundings(inst)
 end
 
 local function ListenForCrash(geode)
-    geode.listenfall = geode:DoPeriodicTask(.1, function(geode)
+    if geode.entity:IsAwake() then
+        geode.listenfall = geode:DoPeriodicTask(.1, function(geode)
+            local x,y,z = geode.Transform:GetWorldPosition()
+            if y < .5 then
+                DamageSurroundings(geode)
+                geode.listenfall:Cancel()
+                geode.listenfall = nil
+            end
+        end)
+    else
         local x,y,z = geode.Transform:GetWorldPosition()
-        if y < .5 then
-            DamageSurroundings(geode)
-            geode.listenfall:Cancel()
-            geode.listenfall = nil
-        end
-    end)
+        geode.Transform:SetPosition(x,0,z)
+        DamageSurroundings(geode)
+    end
 end
 
 local function DropLoot(inst)
-    if inst.fullness ~= 0 then
-        inst.fullness = inst.fullness - 1
-        inst.AnimState:PlayAnimation("empty",true)
-    end
+    if math.random() < 0.25 then
+        if inst.fullness ~= 0 then
+            inst.fullness = inst.fullness - 1
+            inst.AnimState:PlayAnimation("empty",true)
+        end
 
-    local x,y,z = inst.Transform:GetWorldPosition()
-    local geode = SpawnPrefab("um_gemology_geode_glass")
-    geode.Transform:SetPosition(x + math.random(-2, 2), y + 10, z + math.random(-2, 2))
-    ListenForCrash(geode)
+        local x,y,z = inst.Transform:GetWorldPosition()
+        local geode = SpawnPrefab("um_gemology_geode_glass")
+        geode.Transform:SetPosition(x, y + 10, z)
+        ListenForCrash(geode)
 
-    if inst.components.timer and not inst.components.timer:TimerExists("regrow") then
-        inst.components.timer:StartTimer("regrow", 80 * 8 * 5)
+        if inst.components.timer and not inst.components.timer:TimerExists("regrow") then
+            inst.components.timer:StartTimer("regrow", 80 * 8 * 5)
+        end
     end
 end
 

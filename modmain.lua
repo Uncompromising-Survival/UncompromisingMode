@@ -81,7 +81,6 @@ end)
 
 modimport("init/init_gamemodes/init_uncompromising_mode")
 modimport("init/init_wathom")
-modimport("init/init_magmatiles")
 
 local skilltree_defs = require("prefabs/skilltree_defs")
 local BuildSkillsData = require("prefabs/skilltree_wixie")

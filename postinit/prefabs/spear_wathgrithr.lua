@@ -59,7 +59,6 @@ env.AddPrefabPostInit("spear_wathgrithr", function(inst)
 
     inst.ApplySkillsChanges  = ApplySkillsChanges
     inst.RemoveSkillsChanges = RemoveSkillsChanges
-    
 end)
 
 local function onlightningground(inst)
@@ -77,7 +76,7 @@ local function Strike(owner)
         fx.Follower:FollowSymbol(owner.GUID, "swap_object", 0, -145, 0)
         local item = owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
         --if item ~= nil then
-            --item.components.finiteuses:Repair(TUNING.DSTU.SPEAR_WATHGRITHR_LIGHTNING_CHARGED_LIGHTNINGREPAIR)
+        --item.components.finiteuses:Repair(TUNING.DSTU.SPEAR_WATHGRITHR_LIGHTNING_CHARGED_LIGHTNINGREPAIR)
         --end
     end
 end
@@ -96,7 +95,7 @@ local function Lightning_OnLunged(inst, doer, startingpos, targetpos)
     local efficientuser = doer.components.efficientuser and doer.components.efficientuser:GetMultiplier(ACTIONS.ATTACK) or 1
     local durabilitymult = inst.components.weapon.attackwearmultipliers:Get() * efficientuser
 
-    
+
     if TUNING.DSTU.WATHGRITHR_REWORK.SPEAR_LUNGE_REPAIR and inst.components.upgradeable ~= nil then --if it can be upgraded (so not the charged one)
         if inst.components.finiteuses ~= nil then
             inst.components.finiteuses:Use(TUNING.DSTU.SPEAR_WATHGRITHR_LIGHTNING_LUNGE_USES * durabilitymult)
@@ -119,6 +118,23 @@ local function Lightning_OnLungedHit(inst, doer, target)
     end
 end
 
+local function CalcBatteryChargeMult(inst, battery)
+    local pct = inst.components.finiteuses:GetPercent()
+    return math.clamp(1 - pct, 0, 1)
+end
+
+local function OnBatteryUsed(inst, battery, mult)
+    if mult <= 0 or inst.components.finiteuses:GetUses() >= inst.components.finiteuses.total then
+        return false, "CHARGE_FULL"
+    end
+
+    local newpercent = math.clamp(inst.components.finiteuses:GetPercent() + mult, 0, 1)
+    inst.components.finiteuses:SetPercent(newpercent)
+    SpawnElectricHitSparks(inst, battery, true)
+
+    return true
+end
+
 env.AddPrefabPostInit("spear_wathgrithr_lightning", function(inst)
     inst:AddTag("electricaltool")
 
@@ -131,45 +147,10 @@ env.AddPrefabPostInit("spear_wathgrithr_lightning", function(inst)
     inst.components.aoeweapon_lunge:SetOnLungedFn(Lightning_OnLunged)
     inst.components.aoeweapon_lunge:SetOnHitFn(Lightning_OnLungedHit)
 
-    if inst.components.equippable ~= nil then
-        local OnEquip_old = inst.components.equippable.onequipfn
-        inst.components.equippable.onequipfn = function(inst, owner)
-            owner:AddTag("batteryuser")
-
-            owner.lightningpriority = 0
-            owner:ListenForEvent("lightningstrike", Strike, owner)
-            owner:RemoveTag("lightningrod")
-            owner.lightningpriority = nil
-            owner:RemoveEventCallback("lightningstrike", Strike)
-
-
-            if OnEquip_old ~= nil then
-                OnEquip_old(inst, owner)
-            end
-        end
-
-        local OnUnequip_old = inst.components.equippable.onunequipfn
-        inst.components.equippable.onunequipfn = function(inst, owner)
-            if not owner.UM_isBatteryUser then
-                local item = owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-
-                if item ~= nil then
-                    if not item:HasTag("electricaltool") and owner:HasTag("batteryuser") then
-                        owner:RemoveTag("batteryuser")
-                    end
-                else
-                    if owner:HasTag("batteryuser") then
-                        owner:RemoveTag("batteryuser")
-                    end
-                end
-            end
-
-            if OnUnequip_old ~= nil then
-                OnUnequip_old(inst, owner)
-            end
-        end
-    end
-    
+    inst:AddComponent("batteryuser")
+    inst.components.batteryuser:SetChargeMultFn(CalcBatteryChargeMult)
+    inst.components.batteryuser:SetOnBatteryUsedFn(OnBatteryUsed)
+    inst.components.batteryuser:SetAllowPartialCharge(true)
 end)
 
 -------------------------------------------------------------------------------------------------------
@@ -178,8 +159,6 @@ end)
 
 env.AddPrefabPostInit("spear_wathgrithr_lightning_charged", function(inst)
     inst:AddTag("electricaltool")
-
-    --GeneratorGroundCharging(inst) --fueled only.
 
     if not TheWorld.ismastersim then
         return
@@ -191,42 +170,8 @@ env.AddPrefabPostInit("spear_wathgrithr_lightning_charged", function(inst)
     inst.components.aoeweapon_lunge:SetOnLungedFn(Lightning_OnLunged)
     inst.components.aoeweapon_lunge:SetOnHitFn(Lightning_OnLungedHit)
 
-    if inst.components.equippable ~= nil then
-        local OnEquip_old = inst.components.equippable.onequipfn
-        inst.components.equippable.onequipfn = function(inst, owner)
-            owner:AddTag("batteryuser")
-
-            owner.lightningpriority = 0
-            owner:ListenForEvent("lightningstrike", Strike, owner)
-            owner:RemoveTag("lightningrod")
-            owner.lightningpriority = nil
-            owner:RemoveEventCallback("lightningstrike", Strike)
-
-
-            if OnEquip_old ~= nil then
-                OnEquip_old(inst, owner)
-            end
-        end
-
-        local OnUnequip_old = inst.components.equippable.onunequipfn
-        inst.components.equippable.onunequipfn = function(inst, owner)
-            if not owner.UM_isBatteryUser then
-                local item = owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-
-                if item ~= nil then
-                    if not item:HasTag("electricaltool") and owner:HasTag("batteryuser") then
-                        owner:RemoveTag("batteryuser")
-                    end
-                else
-                    if owner:HasTag("batteryuser") then
-                        owner:RemoveTag("batteryuser")
-                    end
-                end
-            end
-
-            if OnUnequip_old ~= nil then
-                OnUnequip_old(inst, owner)
-            end
-        end
-    end
+    inst:AddComponent("batteryuser")
+    inst.components.batteryuser:SetChargeMultFn(CalcBatteryChargeMult)
+    inst.components.batteryuser:SetOnBatteryUsedFn(OnBatteryUsed)
+    inst.components.batteryuser:SetAllowPartialCharge(true)
 end)

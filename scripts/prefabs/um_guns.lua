@@ -42,7 +42,7 @@ local pepperflake_pattern = { -30, -20, -10, 0, 10, 20, 30 } -- Not sure if I sh
 local nettle_pattern = { -10, 0, 10 }
 local twig_pattern = { 0 }
 
-local function Flamethrower(inst, caster, target)
+local function Flamethrower(inst, caster, pos)
     local ammo = ConsumeAmmo(inst)
     if ammo then
         if inst.components.finiteuses then
@@ -62,7 +62,7 @@ local function Flamethrower(inst, caster, target)
         if ammo == "um_ghost_pepper_item" or ammo == "um_rimeweed_itemvine" or ammo == "um_rimeweed_itemflower" or ammo == "um_ghost_fajita" then
             chilled = true
         end
-        local targetpos = target:GetPosition()
+        local targetpos = pos
         local rot = caster.Transform:GetRotation()
         local x, y, z = caster.Transform:GetWorldPosition()
 
@@ -71,7 +71,9 @@ local function Flamethrower(inst, caster, target)
         local dx = 1.5 * math.sin((rot + 90) * DEGREES)
         local dz = 1.5 * math.cos((rot + 90) * DEGREES)
         fx.Transform:SetPosition(x + dx, 0, z + dz)
-        fx.Transform:SetScale(0.5, 0.5, 0.5)
+        fx.Transform:SetScale(.5, .5, .5)
+        fx.persists = false
+        fx:DoTaskInTime(1, fx.Remove)
 
         for i = 1, #pattern do
             local interval_rot = pattern[i]
@@ -130,25 +132,9 @@ local function SpawnLaser(inst)
     return dist + 0.4
 end
 
-local function getspawnlocation(inst, target)
-    local x1, y1, z1 = inst.Transform:GetWorldPosition()
-    local x2, y2, z2 = target.Transform:GetWorldPosition()
-    return x1 + .15 * (x2 - x1), 0, z1 + .15 * (z2 - z1)
-end
-
-local function createtarget(inst, target, pos) -- Need a stand-in target incase the player targets the ground
-    local spittarget = SpawnPrefab("lavaspit_target")
+local function createtarget(inst, target, pos)
     local caster = inst.components.inventoryitem.owner
-
-    if pos ~= nil then
-        spittarget.Transform:SetPosition(pos:Get())
-        spittarget:DoTaskInTime(5, spittarget.Remove)
-        inst.Fire(inst, caster, spittarget)
-    elseif target ~= nil then
-        spittarget.Transform:SetPosition(getspawnlocation(inst, target))
-        spittarget:DoTaskInTime(5, spittarget.Remove)
-        inst.Fire(inst, caster, target)
-    end
+    inst:Fire(caster, pos or target and target:GetPosition())
 end
 
 local function light_reticuletargetfn()

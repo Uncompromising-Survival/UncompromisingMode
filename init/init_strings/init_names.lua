@@ -452,6 +452,7 @@ NAMES.ROCKJAWLEATHER = "Rocky Hide"
 
 NAMES.LANTERN_ELECTRICAL = "Electrical Lantern"
 NAMES.MINERHAT_ELECTRICAL = "Electrical Miner Hat"
+NAMES.MOLEHAT_ELECTRICAL = "Electrical Moggles"
 
 NAMES.POWERCELL = "Energy Cell" --Single-Use Battery
 

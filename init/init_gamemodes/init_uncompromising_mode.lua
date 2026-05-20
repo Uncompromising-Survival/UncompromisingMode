@@ -59,8 +59,6 @@ modimport("init/init_batterypower")
 modimport("init/init_rpctrackers")
 modimport("init/init_creatures/init_ediblebugs")
 modimport("init/init_creatures/init_bear_trap_immune")
-modimport("init/init_generatorcharging")
-modimport("init/init_generatorcharging2")
 modimport("init/init_inkubator_ingredients")
 --    [     Console Commands for tests !    ]    --
 
@@ -259,6 +257,7 @@ end
 modimport("init/init_weather/init_ripples")
 modimport("init/init_weather/init_thicket")
 modimport("init/init_insightcompat")
+modimport("init/init_magmatiles")
 
 --need too load this AFTER strings, because scripts/gemology_defs needs to and (same with above)
 GLOBAL.TheMineralLogbook = require("mineral_logbook")()

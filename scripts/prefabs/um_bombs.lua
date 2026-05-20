@@ -16,8 +16,11 @@ local ACTIONS_TO_WORK = {
 }
 local function OnHitFyre(inst, attacker, target)
     local x, y, z = inst.Transform:GetWorldPosition()
-    local fx = SpawnPrefab("um_explosivehit")
+    local fx = SpawnPrefab("explosivehit")
     fx.Transform:SetPosition(x, y, z)
+    fx.Transform:SetScale(1.25, 1.25, 1.25)
+    fx.persists = false
+    fx:DoTaskInTime(1, fx.Remove)
     local ents = TheSim:FindEntities(x, y, z, 3, nil, shouldnt_hit, should_hit)
     if #ents > 0 then
         for i, v in pairs(ents) do
@@ -63,10 +66,10 @@ local function OnHitMutate(inst, attacker, target)
                 end
                 if v.components.combat and v.components.health and not v.components.health:IsDead() and not mutated and not inst:HasAnyTag(shouldnt_hit) then
                     local mult = 1
-                    if v:HasAnyTag("shadow","shadowcreature","nightmarecreature","shadow_aligned") then
+                    if v:HasAnyTag("shadow","shadowcreature","nightmarecreature","shadow_aligned","player_shadow_aligned") then
                         mult = mult * 3 -- AXE Lunar bomb is exceptionally effective against shadow creatures
                     end
-                    if v:HasAnyTag("lunar_aligned") or v.components.halloweenmoonmutable then
+                    if v:HasAnyTag("lunar_aligned","player_lunar_aligned") or v.components.halloweenmoonmutable then
                         mult = mult * 0.33 -- AXE Lunar bomb is exceptionally less effective against lunar creatures, or those than can mutate
                     end
                     v.components.combat:GetAttacked(attacker, mult * 150)

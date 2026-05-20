@@ -7,7 +7,7 @@ end
 
 --MAJOR.MINOR.FIX
 --INCREASE THIS VERSION
-local _version = "5.0.0"
+local _version = "5.1.1"
 
 description = [[
     󰀔 ["On The Rocks!" v1.6  (Beta ver: v]] .. _version .. [[)]
@@ -47,7 +47,7 @@ icon_atlas = "modicon.xml"
 icon = "modicon.tex"
 
 server_filter_tags = { "uncomp", "UM", "uncompromising", "DSTU", "collab", "overhaul", "hard", "difficult", "madness", "challenge",
-    "hardcore" }
+    "hardcore", "um_beta"} --REMOVE THE UM_BETA TAG LATER
 
 priority = -10
 
@@ -365,7 +365,6 @@ configuration_options = {
     BinaryConfig("winona_items", "Winona - New Items",
         "Gives Winona a toolbox, Electrical Upgrade Kit and Powercells.", true),
     BinaryConfig("toolbox_tools", "Winona - Toolbox", "Allows tools to go in the Contraption Container.", false),
-    BinaryConfig("winona_overcharging", "Winona - Overcharging", "Winona can overcharge several different items to further enhance their effects.", true),
     {
         name = "warly_changes",
         label = "Warly",
@@ -928,8 +927,7 @@ configuration_options = {
     SkipSpace(),
 
     Header("Giants & Bosses"),
-    BinaryConfig("harder_deerclops", "Deerclops Mutations",
-        "Three different, harder variants of Deerclops can spawn, replacing the vanilla version.", true),
+	BinaryConfig("harder_deerclops", "Deerclops", "One of three different variants of Deerclops will spawn, replacing the vanilla version.", true),
     BinaryConfig("disable_megaflare", "Disable Hostile Flare", "Hostile Flares no longer spawn Deerclops.", true),
     BinaryConfig("harder_bearger", "Harder Bearger",
         "Enabling this option grants Bearger more attacks, and will make Bearger more actively seek you out.", true),

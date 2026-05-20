@@ -91,7 +91,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     ARMOR_CRAB_REGEN = "- Self-healing.",
     UM_ARMOR_PYRE_NETTLES = "- Stings user when worn.\n- Damages nearby miscreants.",
     WINONA_TOOLBOX = "- Portable storage for dismantled structures and all things engineering.",
-    WINONA_UPGRADEKIT_ELECTRICAL = "- Upgrades a Miner Hat or Latern to use electricity.\n- Increases max fuel.",
+    WINONA_UPGRADEKIT_ELECTRICAL = "- Upgrades Miner Hats, Lanterns or Moggles to use electricity as fuel.",
     CODEX_MANTRA = "- Will spawn Classic Shadows when read.\n- Acts as a Prestihatitator (Tier 1 Magic) when dropped.",
     --PACT_ARMOR_SANITY = "- Creates temporary Night Armor.\n- Disappears when unequipped.",
     --PACT_SWORD_SANITY = "- Creates a temporary Dark Sword.\n- Disappears when unequipped.",
@@ -209,10 +209,9 @@ STRINGS.WIXIE_TOOLTIP = {
 }
 
 STRINGS.ENGINEERING_TOOLTIP = {
-    MINERHAT = " - May be upgraded.\n- Can be overcharged, if upgraded.",
-    LANTERN = "- May be upgraded.\n- Can be overcharged, if upgraded.",
-    NIGHTSTICK = "- Can be overcharged.",
-    BUGZAPPER = "- Can be overcharged.",
+    MINERHAT = " - May be upgraded.",
+    LANTERN = "- May be upgraded.",
+    MOLEHAT = "- May be upgraded.",
     WINONA_TOOLBOX = "", --putting these here for the icon
     WINONA_UPGRADEKIT_ELECTRICAL = ""
 }
@@ -376,7 +375,7 @@ if TUNING.DSTU.SLEEPINGBUFF > 1 then
 end
 
 if TUNING.DSTU.POCKET_POWERTRIP ~= 0 then
-    TOOLTIPS.TRUNKVEST_SUMMER = "- Now has pockets!\n- Slightly increased rain protection."
+    TOOLTIPS.TRUNKVEST_SUMMER = "- Now has pockets!\n- Slightly increased rain protection and insulation."
     TOOLTIPS.TRUNKVEST_WINTER = "- Now has pockets!"
     TOOLTIPS.REFLECTIVEVEST = "- Now has pockets!"
     TOOLTIPS.RAINCOAT = "- Now has pockets!"

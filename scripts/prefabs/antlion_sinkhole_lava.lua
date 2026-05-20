@@ -173,7 +173,7 @@ local function donextcollapse(inst)
     end
 	
 	if isfinalstage then
-		SpawnPrefab("lavaspit").Transform:SetPosition(inst.Transform:GetWorldPosition())
+		SpawnPrefab("um_lavaspit").Transform:SetPosition(inst.Transform:GetWorldPosition())
 		inst:DoTaskInTime(1.5, inst:Remove())
 	end
 end

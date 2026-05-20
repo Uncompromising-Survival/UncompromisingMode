@@ -42,7 +42,7 @@ SetSharedLootTable('um_pyre_nettles_5',
     })
 
 local function TrySpawnSpore(inst)
-    if not inst:IsAsleep() and math.random() > 0.9 then
+    if not inst:IsAsleep() and math.random() > 0.5 then
         SpawnPrefab("um_smolder_spore").Transform:SetPosition(inst.Transform:GetWorldPosition())
     end
 end

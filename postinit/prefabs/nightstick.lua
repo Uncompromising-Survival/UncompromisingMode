@@ -141,12 +141,8 @@ local function onequip(inst, owner)
         inst.components.burnable:Ignite()
         turnon(inst)
         owner.AnimState:OverrideSymbol("swap_object", "swap_nightstick", "swap_nightstick")
-
-        if inst.overcharged then
-            inst.sparktask = inst:DoTaskInTime(math.random(), spark)
-        end
     end
-    owner:AddTag("batteryuser") -- from batteryuser component
+
     owner:AddTag("lightningrod")
     owner.lightningpriority = 0
     owner:ListenForEvent("lightningstrike", Strike, owner)
@@ -163,19 +159,6 @@ local function onunequip(inst, owner)
     owner:RemoveTag("lightningrod")
     owner.lightningpriority = nil
     owner:ListenForEvent("lightningstrike", nil)
-
-    if not owner.UM_isBatteryUser then
-        local item = owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
-        if item ~= nil then
-            if not item:HasTag("electricaltool") and owner:HasTag("batteryuser") then
-                owner:RemoveTag("batteryuser")
-            end
-        else
-            if owner:HasTag("batteryuser") then
-                owner:RemoveTag("batteryuser")
-            end
-        end
-    end
 
     if inst.sparktask ~= nil then
         inst.sparktask:Cancel()
@@ -211,32 +194,10 @@ end
 local function onattack(inst, attacker, target)
     if target and target:IsValid() and attacker and attacker:IsValid() and inst.components.weapon.stimuli == "electric" then
         SpawnPrefab("electrichitsparks"):AlignToTarget(target, attacker, true)
-        if inst.overcharged then
-            if not target:HasAnyTag("shadowthrall", "shadow", "shadowchesspiece", "trepidation", "shadowminion", "lunarthrall_plant", "brightmare") and (target:HasTag("smallepic") or not target:HasTag("epic")) then
-                target:AddDebuff("shockstundebuff", "shockstundebuff", {attacker = attacker})
-            end
-            if target:HasAnyTag("chess", "uncompromising_pawn", "twinofterror") and not target:HasTag("fleshyeye") and not (target.components.health and target.components.health:IsDead()) and not target.sg:HasStateTag("noattack") then
-                target.components.health:DoDelta(-17, false, attacker, false, attacker)
-            end
-        end
-    end
-end
-
-local function OnOvercharge(inst, toggle)
-    inst.overcharged = toggle
-    inst.components.fueled.rate = toggle and 2 or 1
-
-    if toggle and inst.sparktask == nil and inst.components.equippable:IsEquipped() then
-        inst.sparktask = inst:DoTaskInTime(math.random(), spark)
-    elseif not toggle and inst.sparktask ~= nil then
-        inst.sparktask:Cancel()
-        inst.sparktask = nil
     end
 end
 
 env.AddPrefabPostInit("nightstick", function(inst)
-    inst:AddTag("overchargeable")
-
     if not TheWorld.ismastersim then
         return
     end
@@ -267,32 +228,5 @@ env.AddPrefabPostInit("nightstick", function(inst)
     if inst.components.weapon ~= nil then
         inst.components.weapon:RemoveElectric()
         inst.components.weapon:SetOnAttack(onattack)
-    end
-
-    inst:AddTag("electricaltool")
-
-    inst:ListenForEvent("overcharged", OnOvercharge)
-
-    local _OnSave = inst.OnSave
-    local _OnLoad = inst.OnLoad
-
-    inst.OnSave = function(inst, data)
-        if data ~= nil then
-            data.actual_fuel = inst.components.fueled:GetPercent()
-        end
-
-        if _OnSave ~= nil then
-            return _OnSave(inst, data)
-        end
-    end
-
-    inst.OnLoad = function(inst, data)
-        if data ~= nil and data.actual_fuel ~= nil then
-            inst:DoTaskInTime(0, function() inst.components.fueled:SetPercent(data.actual_fuel) end)
-        end
-
-        if _OnLoad ~= nil then
-            return _OnLoad(inst, data)
-        end
     end
 end)

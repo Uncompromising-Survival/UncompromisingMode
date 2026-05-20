@@ -256,8 +256,6 @@ STRINGS.CHARACTER_SURVIVABILITY.wixie = "Grim"
 STRINGS.ACTIONS.TURNOFF.HARPOON = "Break Reel"
 STRINGS.ACTIONS.ACTIVATE.HARPOON = "Reel"
 STRINGS.ACTIONS.CASTSPELL.HARPOON = "Throw Magnerang"
-STRINGS.ACTIONS.CHARGE_POWERCELL = "Charge Equipment"
-STRINGS.ACTIONS.DEPLOY.POWERCELL = "Charge Equipment"
 STRINGS.ACTIONS.UPGRADE.SLUDGE_CORK = "Plug"
 STRINGS.ACTIONS.UPGRADE.SOUL_LUNAR = "Offer"
 STRINGS.ACTIONS.UPGRADE.SOUL = "Weave"
@@ -879,7 +877,7 @@ STRINGS.UM_LOADINGTIPS = {
     --character specific
     WARLY_BUTCHER = "\"Warly is a great friend to have. I have been capturing these creatures alive lately. He has a way with a knife that I cannot match.\" - W",
     WINONA_ELECTRICAL = "Winona expanded her electrical arsenal quite a bit! You should see her pack up her gizmos on the go.",
-    WINONA_OVERCHARGE = "\"If you ask Winona nicely, she may upgrade your Lanterns or Miner Hats to the electrical era. She can even set their batteries to over 100%!\" - W",
+    --WINONA_OVERCHARGE = "\"If you ask Winona nicely, she may upgrade your Lanterns or Miner Hats to the electrical era. She can even set their batteries to over 100%!\" - W",
     WIXIE_PUZZLE = "\"A mysterious wardrobe appeared, and I can't seem to get it open. Perhaps some outside assistance is required?\" - W",
     WENDY_SISTURN = "\"I have left Petals inside of the Sisturn out of respect. Something happened to them. They look ethereal now. I am afraid to ask Wendy about it.\" - W",
     WALTER_WOBY = "\"I taught Woby some new tricks! Look! She can grab what I command her and bark!\" - W",

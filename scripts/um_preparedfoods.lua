@@ -146,7 +146,6 @@ local um_preparedfoods =
         weight = 30,
         cooktime = 2.4,
         floater = { "med", nil, .6 },
-        tags = { "honeyed" },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_BEEFALOWINGS,
         oneatenfn = function(inst, eater)
             if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
@@ -220,6 +219,7 @@ local um_preparedfoods =
         cooktime = .5,
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 2*TUNING.PERISH_TWO_DAY,
+        tags = { "honeyed" },
         floater = {"small", nil, .6},
         card_def = {ingredients = {{"iceboomerang", 1}, {"honey", 1}}},
     },]]
@@ -374,6 +374,7 @@ local um_preparedfoods =
         oneatenfn = function(inst, eater)
             eater:AddDebuff("buff_boomberryattacks", "buff_boomberryattacks")
         end,
+        tags = { "honeyed" },
         floater = { "med", nil, .65 },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_BOOM_TART,
         card_def = { ingredients = { { "giant_blueberry", 1 }, { "giant_blueberry", 1 }, { "honey", 1 } } },
@@ -672,6 +673,7 @@ local um_preparedfoods =
                 eater.components.debuffable:AddDebuff("buff_electricretaliation", "buff_electricretaliation")
             end
         end,
+        tags = { "honeyed" },
         card_def = { ingredients = { { "zaspberry", 1 }, { "honey", 1 }, { "bird_egg", 1 } } },
     },
 
@@ -807,6 +809,7 @@ local um_preparedfoods =
         cooktime = 1,
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 6 * TUNING.PERISH_TWO_DAY,
+        tags = { "honeyed" },
         floater = { "med", .05, .65 },
         card_def = { ingredients = { { "rice1", 2 }, { "honey", 1 } } },
     },
