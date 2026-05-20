@@ -332,7 +332,6 @@ env.AddStategraphPostInit("worm", function(inst)
     end
 end)
 
-
 -- Flying Creatures
 local _RaiseFlyingCreature = RaiseFlyingCreature
 function RaiseFlyingCreature(inst)
@@ -357,13 +356,14 @@ end
 -- orange staff
 env.AddComponentPostInit("blinkstaff", function(self)
     local _Blink = self.Blink
-    function self:Blink(pt, caster)
-        _Blink(self, pt, caster)
+    function self:Blink(pt, caster, ...)
+        local ret = _Blink(self, pt, caster, ...)
         caster.blinktask_ripples = caster:DoTaskInTime(.26, function(caster)
             if caster.components.locomotor then
                 caster.components.locomotor:OnUpdate(0) --AXE call an update... get flooded tiles to work after teleporting
             end
         end)
+        return ret
     end
 end)
 
@@ -495,7 +495,7 @@ env.AddComponentPostInit("locomotor", function(self)
                 inst.um_floodcontinualcheck = inst:DoPeriodicTask(FRAMES, FloodContinualCheck)
                 inst.um_flood_moisture_ramp = inst:DoPeriodicTask(1, FloodMoistureRamp)
                 inst:ListenForEvent("equip", AdjustSpeed)
-                inst:ListenForEvent("unequip", AdjustSpeed) -- may fire twice, but that shouldn't matter, it's not doing a huge amount of computational work		
+                inst:ListenForEvent("unequip", AdjustSpeed) -- may fire twice, but that shouldn't matter, it's not doing a huge amount of computational work        
 
                 if not (inst.prefab == "mole" or inst:HasTag("worm")) then
                     local self = inst.components.locomotor
