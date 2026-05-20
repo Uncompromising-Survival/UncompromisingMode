@@ -385,6 +385,7 @@ if TUNING.DSTU.POCKET_POWERTRIP ~= 0 then
     TOOLTIPS.ARMOR_LIFEJACKET = "- Now has pockets!"
     TOOLTIPS.BLUBBERSUIT = "- Now has pockets!"
     TOOLTIPS.TARSUIT = "- Now has pockets!"
+    TOOLTIPS.BEARGERVEST = TOOLTIPS.BEARGERVEST .. "\n- Now has pockets!"	
 end
 
 if TUNING.DSTU.CANEDURABILITY then
