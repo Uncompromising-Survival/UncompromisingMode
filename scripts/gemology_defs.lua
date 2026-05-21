@@ -55,7 +55,7 @@ local function AddUMGemDef(name, def) --helper function to just skip some re-use
     def.build = "um_gemologygems"
     def.bank = "um_gemologygems"
     def.img = name .. ".tex"
-    def.atlas = name..".xml"
+    def.atlas = name .. ".xml"
     def.anim = name
     def.createprefab = true
 
@@ -188,6 +188,8 @@ local swilson_symbols_to_hide = {
 }
 
 local function SendShadowClone(item, owner, target, tier)
+    DamageInfiniteItemGem("greengem1", item, 0.005)             --damage on any attack/work because it speeds it up.
+
     if target:IsValid() and (tier - 1) * 0.3 > math.random() and tier > 1 then
         if owner:GetDistanceSqToInst(target) > 50 ^ 2 and owner.components.sanity then --Long ways away, it's taking from your mind to send swilsons there
             if target.components.combat then
@@ -202,8 +204,6 @@ local function SendShadowClone(item, owner, target, tier)
         local newtarget = GetRandomTargetOfSameType(owner, target)
         local angle = math.random(0, 614) / 200
         if newtarget ~= nil then
-            DamageInfiniteItemGem("greengem1", item, 0.005)
-
             local x, y, z = newtarget.Transform:GetWorldPosition()
             swilson.Transform:SetPosition(x + 1.5 * math.cos(angle), y, z + 1.5 * math.sin(angle))
             --swilson.green = 1 -- Tried making him green, it just looks goofy
@@ -463,7 +463,12 @@ AddUMGemDef("palegem1", {
             -- see init/init_gemology/special.lua
         end,
         onattack = function(item, attacker, target, tier)
-            if tier ~= 1 and AllRecipes ~= nil and (AllRecipes[item.prefab] == nil or AllRecipes[item.prefab] ~= nil and AllRecipes[item.prefab].is_deconstruction_recipe) and item.components.weapon ~= nil then
+            if tier ~= 1
+                and AllRecipes ~= nil
+                and (AllRecipes[item.prefab] == nil
+                    or AllRecipes[item.prefab] ~= nil
+                    and (AllRecipes[item.prefab].is_deconstruction_recipe or AllRecipes[item.prefab].no_deconstruct))
+                and item.components.weapon ~= nil then
                 local stimuli = item.components.weapon.stimuli and item.components.weapon.stimuli or nil
                 target.components.combat:GetAttacked(attacker, 34 / 2 * (tier - 1), nil, stimuli)
             end
@@ -503,7 +508,15 @@ AddUMGemDef("palegem2", {
                 item.components.perishable:SetPercent(pct)
             end
 
-            if item.components.finiteuses and AllRecipes ~= nil and (AllRecipes[item.prefab] == nil or AllRecipes[item.prefab] ~= nil and (AllRecipes[item.prefab].nounlock or AllRecipes[item.prefab].is_deconstruction_recipe)) then
+            if item.components.finiteuses
+                and AllRecipes ~= nil
+                and (AllRecipes[item.prefab] == nil
+                    or AllRecipes[item.prefab] ~= nil
+                    and (AllRecipes[item.prefab].nounlock
+                        or AllRecipes[item.prefab].is_deconstruction_recipe
+                        or not AllRecipes[item.prefab].no_deconstruct
+                    )
+                ) then
                 if tier ~= 1 then
                     local _Use = item.components.finiteuses.Use
                     item.volatile_gemology_data.um_gemologypalegem2.old_use = _Use
