@@ -228,6 +228,7 @@ configuration_options = {
         default =
         "default"
     },
+    BinaryConfig("limbo_leap", "Limbo Leap", "Allows dead players to teleport to the spawn portal.", true),
     SkipSpace(),
 
     Header("Shadow Creatures"),

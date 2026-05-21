@@ -23,8 +23,8 @@ modimport("init/init_tuning")
 modimport("init/init_strings/init_strings")
 modimport("init/init_strings/init_skilltree_strings")
 modimport("init/init_strings/init_names")
-modimport("init/init_strings/init_tooltips")--load before postinit please!
-modimport("init/init_bonusdescriptors") -- doesn't contain strings
+modimport("init/init_strings/init_tooltips") --load before postinit please!
+modimport("init/init_bonusdescriptors")      -- doesn't contain strings
 
 
 
@@ -162,7 +162,6 @@ end
 if GetModConfigData("hayfever_disable") then
     modimport("init/init_weather/init_hayfever")
     modimport("init/init_creatures/init_sneeze_hitters")
-
 end
 
 modimport("init/init_durability")
@@ -259,6 +258,12 @@ modimport("init/init_weather/init_ripples")
 modimport("init/init_weather/init_thicket")
 modimport("init/init_insightcompat")
 modimport("init/init_magmatiles")
+
+modimport("init/um_tree_rock_data")
+
+if GetModConfigData("limbo_leap") then
+    modimport("init/init_limbo_leap")
+end
 
 --need too load this AFTER strings, because scripts/gemology_defs needs to and (same with above)
 GLOBAL.TheMineralLogbook = require("mineral_logbook")()
