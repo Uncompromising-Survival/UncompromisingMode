@@ -76,7 +76,7 @@ local function DoDamageEffect(inst,target)
 end
 
 local should_hit = { "_health","_combat"}
-local shouldnt_hit = {"ghost","brightmare_gestalt","nightmarecreature"}
+local shouldnt_hit = {"ghost","brightmare_gestalt","nightmarecreature","shadowcreature","shadow"}
 
 local function OnExplode(inst, target)
 	inst.OnExplode = nil
@@ -168,7 +168,7 @@ end
 
 
 local function LookForEnts(inst)
-	if not inst.showing and FindEntity(inst,8,nil,{"_health"}) and not FindEntity(inst,2,nil,{"_health"}) then
+	if not inst.showing and FindEntity(inst,12,nil,{"_health"}) and not FindEntity(inst,2,nil,{"_health"}) then
 		inst.showing = true
 		inst:Show()
 		inst.AnimState:PlayAnimation(inst.color..inst.variant.."_show",false)
@@ -176,7 +176,7 @@ local function LookForEnts(inst)
 	elseif not inst.showing then
 		inst:Hide()
 		inst.showing = false
-	elseif not FindEntity(inst,12,nil,{"_health"}) then
+	elseif not FindEntity(inst,16,nil,{"_health"}) then
 		inst.AnimState:PlayAnimation(inst.color..inst.variant.."_hide",false)
 		inst:ListenForEvent("animover",HideAnim)
 	end
@@ -240,14 +240,14 @@ local function Init(inst)
 
 	if inst.entity:IsAwake() then
 		inst.showing = false
-		inst.looking = inst:DoPeriodicTask(math.random(20,30)/10,function(inst)
+		inst.looking = inst:DoPeriodicTask(3,function(inst)
 			LookForEnts(inst)
 		end)
 	end
 	
 	inst:ListenForEvent("entitywake",function(inst)
 		inst.showing = false
-		inst.looking = inst:DoPeriodicTask(math.random(20,30)/10,function(inst)
+		inst.looking = inst:DoPeriodicTask(3,function(inst)
 			LookForEnts(inst)
 		end)
 	end)

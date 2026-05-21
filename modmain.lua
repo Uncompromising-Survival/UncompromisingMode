@@ -316,9 +316,9 @@ end
 AddClientModRPCHandler("UncompromisingSurvival", "LearnGemologyGem", LearnGemologyGem)
 
 AddClientModRPCHandler("UncompromisingSurvival", "OnTerraform", function(data)
-    local data = DecodeAndUnzipString(data)
-    if TheWorld.components.um_localtilewatcher ~= nil then
-        TheWorld.components.um_localtilewatcher:OnTerraform(data)
+    local data = GLOBAL.DecodeAndUnzipString(data)
+    if GLOBAL.TheWorld and GLOBAL.TheWorld.components.um_localtilewatcher ~= nil then
+        GLOBAL.TheWorld.components.um_localtilewatcher:OnTerraform(data)
     end
 end)
 
