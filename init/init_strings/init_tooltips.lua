@@ -110,6 +110,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     UM_MAGNIFIER = "- Reveals the quality of Strange Gems.\n- Discovering new Strange Gems permenantly reveals the name\nand catalogues effects to the Scrapbook.",
     UM_MAGNIFIER_PURPLEGEM = "- Reveals the quality of Strange Gems.\n- Discovering new Strange Gems permenantly reveals the name\nand catalogues effects to the Scrapbook.",
     UM_MAGNIFIER_OBSIDIAN = "- Reveals the quality of Strange Gems.\n- Discovering new Strange Gems permenantly reveals the name\nand catalogues effects to the Scrapbook..",
+	UM_MAGNERANG = "- Temporarily pulls the target to where it got hit.",
 }
 local TOOLTIPS = STRINGS.UNCOMP_TOOLTIP
 
@@ -215,6 +216,8 @@ STRINGS.ENGINEERING_TOOLTIP = {
     WINONA_TOOLBOX = "", --putting these here for the icon
     WINONA_UPGRADEKIT_ELECTRICAL = ""
 }
+
+
 
 
 if TUNING.DSTU.TELESTAFF_REWORK then
