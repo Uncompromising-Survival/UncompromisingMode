@@ -21,6 +21,7 @@ modimport("init/init_tuning")
 
 --    [     Import Names and Descriptions    ]    --
 modimport("init/init_strings/init_strings")
+modimport("init/init_strings/init_skilltree_strings")
 modimport("init/init_strings/init_names")
 modimport("init/init_strings/init_tooltips")--load before postinit please!
 modimport("init/init_bonusdescriptors") -- doesn't contain strings

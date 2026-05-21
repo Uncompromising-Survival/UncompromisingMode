@@ -89,6 +89,19 @@ local function OnEat(inst)
     end)
 end
 
+local function OnWinter(inst)
+    inst:DoTaskInTime(math.random(3,8),function(inst) -- AXE Add some randomization to their removal
+        if TheWorld.state.iswinter then
+            if inst.entity:IsAwake() then
+                inst.sg:GoToState("flyintree")
+            else
+                inst:Remove()
+            end
+
+        end
+    end)
+end
+
 local function fn()
     local inst = CreateEntity()
 
@@ -189,7 +202,10 @@ local function fn()
         inst:AddComponent("appeasement")
         inst.components.appeasement.appeasementvalue = TUNING.TOTAL_DAY_TIME
     end
-	
+    
+    -- AXE if they spawn from a hole, we may want to consider removing this watch world state
+    inst:WatchWorldState("iswinter",OnWinter)
+
     return inst
 end
 

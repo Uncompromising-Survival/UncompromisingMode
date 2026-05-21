@@ -118,6 +118,7 @@ local function GenerateLoot(inst, picker)
     weighted_briar_loot["crop_seed"] = 0.2
     weighted_briar_loot["cutgrass"] = 0.4
     weighted_briar_loot["twigs"] = 0.15
+
     if not IsIslandWorld() then
         weighted_briar_loot["aphid"] = 0.025
     else
@@ -261,7 +262,7 @@ end
 
 local function onnear(inst, target)
     if inst.components.pickable and inst.components.pickable:CanBePicked() and not inst.BrushingTest and target then
-        if not (WearingThicketResist(target) or PrickAdept(target) or target.prefab == "fruitbat") then
+        if not (WearingThicketResist(target) or PrickAdept(target) or table.contains(TUNING.DSTU.NO_THICKET_APHIDS,target.prefab) or TheWorld.state.iswinter) then
             if math.random() > 0.95 then
                 if not IsIslandWorld() then
                     local total_aphids = GetNumAphidsWithWorldAge(TheWorld.state.cycles)

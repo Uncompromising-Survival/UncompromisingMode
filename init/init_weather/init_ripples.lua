@@ -15,18 +15,17 @@ local function RobustFloodCheck(inst) -- For players, check to see if they're on
     end
 end
 
-local ripple_blacklist_prefabs = { "webbedcreature"}
-for i, v in ipairs(ripple_blacklist_prefabs) do
+
+for i, v in ipairs(TUNING.DSTU.RIPPLE_BLACKLIST_PREFABS) do
     env.AddPrefabPostInit(v, function(inst)
         inst.um_ripple_blacklist = true
     end)
 end
 
-local ripple_blacklist_tags = {"projectile"}
 
 -- AXE Add ripples to plants, structures, and items
 env.AddPrefabPostInitAny(function(inst)
-    for i,v in ipairs(ripple_blacklist_tags) do
+    for i,v in ipairs(TUNING.DSTU.RIPPLE_BLACKLIST_TAGS) do
         if inst:HasTag(v) then
             inst.um_ripple_blacklist = true
         end
