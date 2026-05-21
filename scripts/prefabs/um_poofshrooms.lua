@@ -27,20 +27,50 @@ local function DoDamageEffect(inst,target)
 		end
 	end
 					
-	if not plague then
-        if target.components.combat and not target.components.health:IsDead() then
-            --target.components.combat:GetAttacked(inst,inst.color == "g" and 20 or inst.color == "r" and 20 or inst.color == "b" and 20 or 20)	
-			target.components.combat:GetAttacked(inst,30)
+	if target.components.locomotor and not target.components.health:IsDead() then
+		target.components.locomotor:SetExternalSpeedMultiplier(target, "poofshroom_speed", 1.3)
+		target._poofshroom_speedtime = math.min((target._poofshroom_speedtime or 0) + 10, 30)
+		if not target._poofshroom_speedtask then
+			target._poofshroom_speedtask = target:DoPeriodicTask(1, function(target)
+				target._poofshroom_speedtime = target._poofshroom_speedtime - 1
+
+				if target._poofshroom_speedtime <= 0 then
+					if target.components.locomotor then
+						target.components.locomotor:RemoveExternalSpeedMultiplier(target, "poofshroom_speed")
+					end
+
+						target._poofshroom_speedtask:Cancel()
+					target._poofshroom_speedtask = nil
+					target._poofshroom_speedtime = nil
+				end
+			end)
 		end
-		target:PushEvent("knockback", { knocker = inst, radius = 1.5, strengthmult = 1.5, forcelanded = true })
+	end
+
+	local x, y, z = target.Transform:GetWorldPosition()
+	local angle = target.Transform:GetRotation() * DEGREES
+	local forward_x = math.cos(angle)
+	local forward_z = -math.sin(angle)
+	local back_dist = 1
+	local fake_x = x - forward_x * back_dist
+	local fake_z = z - forward_z * back_dist
+
+	local fakeknocker = SpawnPrefab("shadow_despawn")
+	fakeknocker.Transform:SetPosition(fake_x, 0, fake_z)
+
+	target:PushEvent("knockback", { knocker = fakeknocker, radius = 1.5, strengthmult = 1.5, forcelanded = true, })
+
+	fakeknocker:DoTaskInTime(0, fakeknocker.Remove)
+		
+	if not plague then
         if target.components.sanity and inst.color == "g" then
-            target.components.sanity:DoDelta(-5*mult)
+            target.components.sanity:DoDelta(-15*mult)
         end
         if target.components.moisture and inst.color == "b" then
-            target.components.moisture:DoDelta(10*mult)
+            target.components.moisture:DoDelta(15*mult)
         end
         if target.components.hunger and inst.color == "r" then
-            target.components.hunger:DoDelta(-5*mult)
+            target.components.hunger:DoDelta(-15*mult)
         end
 	end
 end
@@ -80,7 +110,7 @@ local function OnExplode(inst, target)
 		for i, v in ipairs(ents) do
 			if v.components.perishable then
 				if v.components.inventoryitem and v.components.inventoryitem:IsHeld() then
-					v.components.perishable:SetPercent(v.components.perishable:GetPercent()-0.33)
+					v.components.perishable:SetPercent(v.components.perishable:GetPercent()-0.2)
 				else
 					v.components.perishable:SetPercent(0)
 				end

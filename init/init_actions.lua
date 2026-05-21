@@ -646,6 +646,32 @@ AddSimPostInit(function()
     end
 end)
 
+AddSimPostInit(function()
+    -- Workaround for a vanilla bug: if a mod only calls AddComponentAction server-side, connected clients receive the net var sync but have no entry in MOD_ACTION_COMPONENT_IDS -Deimos
+    local MOD_ACTION_COMPONENT_IDS = UpvalueHacker.GetUpvalue(GLOBAL.EntityScript.RegisterComponentActions, "MOD_ACTION_COMPONENT_IDS")
+    if not MOD_ACTION_COMPONENT_IDS then
+        return
+    end
+    local old_UnregisterComponentActions = GLOBAL.EntityScript.UnregisterComponentActions
+    function GLOBAL.EntityScript:UnregisterComponentActions(name)
+        if self.modactioncomponents ~= nil then
+            local stale = nil
+            for modname in pairs(self.modactioncomponents) do
+                if MOD_ACTION_COMPONENT_IDS[modname] == nil then
+                    if stale == nil then stale = {} end
+                    stale[#stale + 1] = modname
+                end
+            end
+            if stale ~= nil then
+                for i = 1, #stale do
+                    self.modactioncomponents[stale[i]] = nil
+                end
+            end
+        end
+        return old_UnregisterComponentActions(self, name)
+    end
+end)
+
 local _OldHarvest = GLOBAL.ACTIONS.HARVEST.fn
 GLOBAL.ACTIONS.HARVEST.fn = function(act)
     if act.target.prefab == "um_cookpot_wagstaff" then
