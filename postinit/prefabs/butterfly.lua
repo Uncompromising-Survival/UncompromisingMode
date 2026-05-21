@@ -40,11 +40,13 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
         local attacker = data.attacker
         local statename = inst.sg and inst.sg.currentstate.name
         local shouldslip = false
-        if doslip and attacker and attacker:IsValid() and not attacker:HasAnyTag(disallowedattackertags) and not ByStimuli(data.stimuli)
+        if attacker and attacker:IsValid() and not attacker:HasAnyTag(disallowedattackertags) and not ByStimuli(data.stimuli)
             and not SittingStill(statename) and not ByPassWeapon(data.weapon or attacker) then -- Can only attack when criteria is met.
-            inst.SoundEmitter:PlaySound("dontstarve/movement/slip_fall_whoop")
-            Slippy(attacker, inst)
-            if attacker:HasTag("player") then UMCommonFns.Say(attacker, GetString(attacker, "ANNOUNCE_BUTTERFLY_SLIP")) end
+            if doslip then
+                inst.SoundEmitter:PlaySound("dontstarve/movement/slip_fall_whoop")
+                Slippy(attacker, inst)
+                if attacker:HasTag("player") then UMCommonFns.Say(attacker, GetString(attacker, "ANNOUNCE_BUTTERFLY_SLIP")) end
+            end
             shouldslip = true
         end
         return shouldslip
