@@ -304,7 +304,7 @@ local function KillRopes(inst)
         local proj = SpawnPrefab("um_magnerang")
         if x then
             proj.Transform:SetPosition(x, 1.5, z)
-            proj.components.projectile:Throw(inst.target, inst)
+            proj.components.projectile:Throw(inst, inst)
             if inst.target.components and inst.target.components.combat and inst.uses then --Pass the uses from the magnerang
                 if proj.components.finiteuses then
                     proj.components.finiteuses.current = inst.uses
