@@ -110,7 +110,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     UM_MAGNIFIER = "- Reveals the quality of Strange Gems.\n- Discovering new Strange Gems permenantly reveals the name\nand catalogues effects to the Scrapbook.",
     UM_MAGNIFIER_PURPLEGEM = "- Reveals the quality of Strange Gems.\n- Discovering new Strange Gems permenantly reveals the name\nand catalogues effects to the Scrapbook.",
     UM_MAGNIFIER_OBSIDIAN = "- Reveals the quality of Strange Gems.\n- Discovering new Strange Gems permenantly reveals the name\nand catalogues effects to the Scrapbook..",
-	UM_MAGNERANG = "- Temporarily holds targets in place.",
+    UM_MAGNERANG = "- Temporarily holds targets in place.",
 }
 local TOOLTIPS = STRINGS.UNCOMP_TOOLTIP
 
@@ -388,7 +388,11 @@ if TUNING.DSTU.POCKET_POWERTRIP ~= 0 then
     TOOLTIPS.ARMOR_LIFEJACKET = "- Now has pockets!"
     TOOLTIPS.BLUBBERSUIT = "- Now has pockets!"
     TOOLTIPS.TARSUIT = "- Now has pockets!"
-    TOOLTIPS.BEARGERVEST = TOOLTIPS.BEARGERVEST .. "\n- Now has pockets!"	
+    if TOOLTIPS.BEARGERVEST then
+        TOOLTIPS.BEARGERVEST = TOOLTIPS.BEARGERVEST .. "\n- Now has pockets!"
+    else
+        TOOLTIPS.BEARGERVEST = "- Now has pockets!"
+    end
 end
 
 if TUNING.DSTU.CANEDURABILITY then
