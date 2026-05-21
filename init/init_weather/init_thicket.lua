@@ -1,8 +1,9 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-local cant_poof = {"notraptrigger","flying","spore","bat","shadowcreature","nightmarecreature","shadow","brightmare_gestalt"}
-local cant_thicket = {"smallcreature","bird","shadowcreature","ghost","playerghost","bat","shadowcreature","nightmarecreature","shadow","brightmare_gestalt"}
+local ghostlike_tags = UMCommonFns.GHOSTLIKE_TAGS
+local cant_poof = JoinArrays(ghostlike_tags, {"notraptrigger", "flying", "spore", "bat"})
+local cant_thicket = JoinArrays(ghostlike_tags, {"smallcreature", "bird", "bat"})
 local function ThicketAndPoofshroomsCheck(inst)
     local x,y,z = inst.Transform:GetWorldPosition()
     local triggers = TheSim:FindEntities(x,y,z,1.5,nil,nil,{"briar_plants","trap"})

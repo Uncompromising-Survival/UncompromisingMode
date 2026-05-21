@@ -92,8 +92,6 @@ local function teleport_continue(teleportee, locpos, inst)
     end
 end
 
-
-
 local destroy_prefabs = {
     "log",
     "cutgrass",
