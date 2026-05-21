@@ -240,14 +240,14 @@ local function Init(inst)
 
 	if inst.entity:IsAwake() then
 		inst.showing = false
-		inst.looking = inst:DoPeriodicTask(math.random(20,30)/10,function(inst)
+		inst.looking = inst:DoPeriodicTask(3,function(inst)
 			LookForEnts(inst)
 		end)
 	end
 	
 	inst:ListenForEvent("entitywake",function(inst)
 		inst.showing = false
-		inst.looking = inst:DoPeriodicTask(math.random(20,30)/10,function(inst)
+		inst.looking = inst:DoPeriodicTask(3,function(inst)
 			LookForEnts(inst)
 		end)
 	end)
