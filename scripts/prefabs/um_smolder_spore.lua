@@ -1,29 +1,29 @@
 local function FieryAftermath(inst)
-    local maxnum = math.random(6,7)
-    for i = 1,maxnum do
-        local x,y,z = inst.Transform:GetWorldPosition()
+    local maxnum = math.random(6, 7)
+    for i = 1, maxnum do
+        local x, y, z = inst.Transform:GetWorldPosition()
         local projectile = SpawnPrefab("um_fire_projectile")
-        local rot = (math.random(20+360/maxnum*(i-1),360*i/maxnum-20)+90)
-        projectile.Transform:SetPosition(x,1,z)
+        local rot = (math.random(20 + 360 / maxnum * (i - 1), 360 * i / maxnum - 20) + 90)
+        projectile.Transform:SetPosition(x, 1, z)
         projectile.Transform:SetRotation(rot)
         projectile.speed = 8
-        projectile.scale = 1 + math.random(0,10)/100 -- scale up sometimes.
+        projectile.scale = 1 + math.random(0, 10) / 100 -- scale up sometimes.
         projectile.damage = 1
     end
 end
 
 -- This prefab just isn't complicated enough to need seperate files for movement. One block of code suffices.
-local dont_target = {"pyre_toxin_immune","wall","chess"}
+local dont_target = { "pyre_toxin_immune", "wall", "chess" }
 local function SimpleWander(inst)
     if not inst:HasTag("BUSYSMOLDERSPORE") then
         inst.randdir = math.random(1, 359)
-        inst:DoPeriodicTask(10*FRAMES,function(inst)
-            local ent = FindEntity(inst,4,nil,{"_health"},dont_target)
+        inst:DoPeriodicTask(10 * FRAMES, function(inst)
+            local ent = FindEntity(inst, 4, nil, { "_health" }, dont_target)
             if ent then
                 inst:ForceFacePoint(ent:GetPosition())
             else
                 inst.components.locomotor:RunInDirection(inst.randdir)
-            end        
+            end
         end)
         inst.components.locomotor:RunForward()
         inst:DoTaskInTime(math.random(4, 5), function()
@@ -57,7 +57,7 @@ local function FireSpread(inst)
     end
 
     -- Slight AoE damage. Mainly to set off other nearby Smolder Spores.
-    inst.components.combat:DoAreaAttack(inst, 3, nil, nil, "fire", {"SmolderSporeAvoid", "BUSYSMOLDERSPORE", "INLIMBO", "invisible", "noattack"})
+    inst.components.combat:DoAreaAttack(inst, 3, nil, nil, "fire", { "SmolderSporeAvoid", "BUSYSMOLDERSPORE", "INLIMBO", "invisible", "noattack" })
 end
 
 -- Suddenly pop!
@@ -76,7 +76,6 @@ local function PopSpore(inst)
         inst:ListenForEvent("animover", function()
             inst:Hide()
         end)
-
     end
 end
 
@@ -110,7 +109,7 @@ local function TargetCheck(inst)
         and not nextvictim:HasTag("plantkin")
         and not (nextvictim.components.health ~= nil and nextvictim.components.health:IsDead())
         and not (nextvictim:HasTag("SmolderSporeAvoid") and math.random() > 0.01) -- This keeps them from constantly seeking pyre nettles.
-        and (nextvictim:HasTag("player") or math.random() > 0.5)            -- For anything but a player, chance to not activate.
+        and (nextvictim:HasTag("player") or math.random() > 0.5)                  -- For anything but a player, chance to not activate.
     then
         Divebomb(inst)
     end
@@ -204,11 +203,11 @@ end
 
 local function OnDropped(inst)
     inst.Light:Enable(true)
-    
+
     if inst.components.heater ~= nil then
         inst.components.heater.heat = 100
     end
-    
+
     inst.persists = false
     inst.OnEntitySleep = inst.Remove
 
@@ -224,7 +223,7 @@ local function OnDropped(inst)
             end
         end
     end
-    
+
     if inst._selfdestructtask ~= nil then
         inst._selfdestructtask:Cancel()
     end
@@ -240,11 +239,11 @@ end
 
 local function OnPickup(inst)
     inst.Light:Enable(false)
-    
+
     if inst.components.heater ~= nil then
         inst.components.heater.heat = 0
     end
-    
+
     inst.persists = true
     inst.OnEntitySleep = nil
 
@@ -258,7 +257,7 @@ local function OnPickup(inst)
             inst.components.perishable:SetLocalMultiplier(TUNING.SEG_TIME * 3 / TUNING.PERISH_SLOW) -- From mushtree_spores.lua.
         end
     end
-    
+
     if inst._selfdestructtask ~= nil then
         inst._selfdestructtask:Cancel()
         inst._selfdestructtask = nil
@@ -493,7 +492,7 @@ local function SS_OnHit(inst, attacker, target)
 
     SpawnPrefab("um_smolder_spore_pop").Transform:SetPosition(inst.Transform:GetWorldPosition()) -- Big badda boom.
 
-    -- Damage anything within a radius.    
+    -- Damage anything within a radius.
     local x, y, z = inst.Transform:GetWorldPosition()
     local ents = TheSim:FindEntities(x, y, z, 3, nil, { "SmolderSporeAvoid", "BUSYSMOLDERSPORE", "INLIMBO", "invisible", "noattack" })
     if #ents > 0 then

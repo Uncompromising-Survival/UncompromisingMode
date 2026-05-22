@@ -13,9 +13,14 @@ local function ChillSurroundings(inst)
     local burnables = TheSim:FindEntities(x, 0, z, inst.scale * 2, nil, inst.dont_hit_tags) -- There isn't a way to search for entities tagged as burnable.... (there is no burnable tag)
     local damage = inst.damage or 1
     for i, v in ipairs(burnables) do
+        if v.components.follower ~= nil and v.components.follower:GetLeader() ~= nil and v.components.follower:GetLeader():HasTag("player") then
+            return
+        end
+
         if v.components.burnable and not (v.prefab == "um_fire_projectile" and v.chilly) then
             v.components.burnable:Extinguish(true)
         end
+
         if v.components.health and v:IsValid() then
             v.components.health:DoDelta(-1, false, inst.damager)
         end
@@ -36,6 +41,12 @@ local function BurnSurroundings(inst)
     local burnables = TheSim:FindEntities(x, 0, z, inst.scale * 2, nil, inst.dont_hit_tags) -- There isn't a way to search for entities tagged as burnable.... (there is no burnable tag)
     local damage = inst.damage or 1
     for i, v in ipairs(burnables) do
+        if v.components.follower ~= nil and v.components.follower:GetLeader() ~= nil and v.components.follower:GetLeader() == inst.damager
+            or inst.damager ~= nil and inst.damager:HasTag("player") and v.components.follower ~= nil and v.components.follower:GetLeader() ~= nil and v.components.follower:GetLeader():HasTag("player")
+        then
+            return
+        end
+
         if v.components.burnable and v.components.burnable.canlight then
             v.components.burnable:Ignite(true, inst, inst.damager)
         end
