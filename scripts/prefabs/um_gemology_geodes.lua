@@ -73,6 +73,7 @@ local function geodemain(bankbuild)
 
     inst:AddTag("molebait")
     inst:AddTag("gemology_geode")
+	
     MakeInventoryPhysics(inst)
     MakeInventoryFloatable(inst, "med", nil, 0.68)
 

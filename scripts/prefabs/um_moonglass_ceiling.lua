@@ -18,7 +18,7 @@ local function DamageSurroundings(inst)
     local ents = TheSim:FindEntities(x, y, z, 2, nil, NON_DAMAGEABLE_TAGS, DAMAGEABLE_TAGS)
     for i, v in ipairs(ents) do
         if v ~= inst and v:IsValid() and not v:IsInLimbo() then
-            if v:HasAnyTag("quakedebris", "gemology_geode") then
+            if v:HasTag("quakedebris") then
                 local vx, vy, vz = v.Transform:GetWorldPosition()
                 SpawnPrefab("ground_chunks_breaking").Transform:SetPosition(vx, 0, vz)
                 v:Remove()
