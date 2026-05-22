@@ -40,6 +40,7 @@ end
 local function SetUpFire(inst, degrand, speed, scale, damage)
     local x, y, z = inst.Transform:GetWorldPosition()
     local projectile = SpawnPrefab("um_fire_projectile")
+    projectile.dont_hit_tags = JoinArrays(projectile.dont_hit_tags, { "hound" })
 
     local rot = inst.Transform:GetRotation()
     local dx = 1 * math.sin((rot + 90 + degrand) * DEGREES)
