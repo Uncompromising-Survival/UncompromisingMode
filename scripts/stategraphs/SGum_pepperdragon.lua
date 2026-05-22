@@ -75,7 +75,7 @@ local function PoofNearby(inst)
             local dz = z1 - z
             local distsq = dx * dx + dz * dz
             if distsq > 0 and distsq < range * range and DiffAngleRad(rot, math.atan2(-dz, dx)) < ARC then
-				if v.components.burnable then
+				if v.components.burnable and v.components.burnable.canlight then
 					v.components.burnable:Ignite()
 				end
 				if v.components.health then
@@ -89,7 +89,6 @@ end
 local function ShootFire(inst,total_flame)
 	for i = 1,total_flame do
 		inst:DoTaskInTime(0+math.random(1,15)*FRAMES,function(inst)
-			
 			local x,y,z = inst.Transform:GetWorldPosition()
 			local projectile = SpawnPrefab("um_fire_projectile")
 			if inst.coldfire then
@@ -109,7 +108,6 @@ local function ShootFire(inst,total_flame)
 			if not inst.coldfire then
 				PoofNearby(inst)
 			end
-			
 		end)
 	end
 end

@@ -995,7 +995,7 @@ local function OnMagmaAttacked(inst, data)
     if inst.sg and inst.sg:HasStateTag("charging") and attacker and attacker.components.health and not attacker.components.health:IsDead() and data.stimuli ~= "soul"
         and (not weapon or ((not weapon.components.weapon or not weapon.components.weapon.projectile) and not weapon.components.projectile)) and not attacker:HasTag("catapult") then
         attacker.components.health:DoFireDamage(5, inst, true)
-        if attacker.components.burnable then attacker.components.burnable:Ignite(true, inst, inst) end
+        if attacker.components.burnable and attacker.components.burnable.canlight then attacker.components.burnable:Ignite(true, inst, inst) end
     end
 end
 

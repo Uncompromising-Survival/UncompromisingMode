@@ -48,6 +48,7 @@ local inventoryitems =
     "um_exhumer_powered",
     "um_wingsuit",
     "silksack",
+    "silken_bundle_huge",
     "silken_bundle_large",
     "silken_bundle_medium",
     "silken_bundle_small",
@@ -1100,7 +1101,7 @@ Assets = {
     Asset("ANIM", "anim/widow1_backup.zip"),
     Asset("ANIM", "anim/widow2_backup.zip"),
 
-    Asset("ANIM", "anim/silken_bundle.zip"),
+    Asset("ANIM", "anim/um_silken_bundle.zip"),
 
     Asset("ANIM", "anim/sheeplet.zip"),
     Asset("ANIM", "anim/sheepletbomb.zip"),

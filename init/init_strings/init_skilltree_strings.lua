@@ -325,7 +325,6 @@ WORMSKILLS.PRICK_ADEPT_DESC                 = "Even without a bramble husk, worm
 WORMSKILLS.BLOOMING_TRAPBRAMBLE_DESC        = "Bramble Traps spread thorns over a larger area. Reset nearby Bramble Traps while fully bloomed."
 WORMSKILLS.ARMOR_BRAMBLEBURST_TITLE         = "Bramble burst"
 WORMSKILLS.ARMOR_BRAMBLEBURST_DESC          = "Bramble husk triggers a second time after a short delay if the user is attacked."
-WORMSKILLS.ARMOR_BRAMBLE_DESC               = "All bramble husk types trigger a second time when attacked."
 WORMSKILLS.MUSHMAD_TITLE                    = "Mushroom Madness"
 WORMSKILLS.MUSHMAD_DESC                     = "Mushrooms you plant grow faster in Mushroom Planters and produce a higher yield. Learn how to plant Mushtrees."
 WORMSKILLS.EQEX_TITLE                       = "Equivalent Exchange"

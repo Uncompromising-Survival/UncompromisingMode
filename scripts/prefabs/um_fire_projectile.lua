@@ -36,7 +36,7 @@ local function BurnSurroundings(inst)
     local burnables = TheSim:FindEntities(x, 0, z, inst.scale * 2, nil, inst.dont_hit_tags) -- There isn't a way to search for entities tagged as burnable.... (there is no burnable tag)
     local damage = inst.damage or 1
     for i, v in ipairs(burnables) do
-        if v.components.burnable then
+        if v.components.burnable and v.components.burnable.canlight then
             v.components.burnable:Ignite(true, inst, inst.damager)
         end
         if v.components.health and v:IsValid() then
@@ -54,7 +54,6 @@ local function BurnSurroundings(inst)
         end
     end
 end
-
 
 local function BeginScaleDown(inst)
     inst:DoTaskInTime(inst.time, function(inst)
@@ -75,7 +74,6 @@ local function Grow(inst)
     end
 end
 
-
 local function BeginScaleUp(inst, time)
     inst.scale = inst.scale / 6
     inst.Transform:SetScale(inst.scale, inst.scale, inst.scale)
@@ -89,6 +87,7 @@ local function SetupColdLight(inst)
     inst.Light:SetRadius(12)
     inst.Light:SetColour(64 / 255, 64 / 255, 208 / 255)
 end
+
 local function Shoot(inst)
     local speed = inst.speed or 10
     if not inst.time then
@@ -104,8 +103,6 @@ local function Shoot(inst)
     burnable:SetOnIgniteFn(nil)
     burnable:SetOnExtinguishFn(inst.Remove)
     burnable.fxdata[1].prefab = "character_fire"
-
-
 
     if inst.chilly then
         burnable.fxdata[1].prefab = "warg_mutated_breath_fx"
@@ -156,7 +153,6 @@ local function fn()
 
     inst:AddTag("FX")
     MakeInventoryPhysics(inst)
-
 
     --HASHEATER (from heater component) added to pristine state for optimization
     inst:AddTag("HASHEATER")

@@ -26,7 +26,7 @@ local function PoofNearby(inst)
             local dz = z1 - z
             local distsq = dx * dx + dz * dz
             if distsq > 0 and distsq < range * range and DiffAngleRad(rot, math.atan2(-dz, dx)) < ARC then
-                if v.components.burnable then
+                if v.components.burnable and v.components.burnable.canlight then
                     v.components.burnable:Ignite()
                 end
                 if v.components.health then
@@ -78,7 +78,7 @@ end
 local function OnHitOtherBurn(inst, data)
     local other = data.target
     local burntarget = other.components.rideable and other.components.rideable:GetRider() or other
-    if burntarget and not (burntarget.components.health and burntarget.components.health:IsDead()) and burntarget.components.burnable then
+    if burntarget and not (burntarget.components.health and burntarget.components.health:IsDead()) and burntarget.components.burnable and burntarget.components.burnable.canlight then
         burntarget.components.burnable:Ignite(true, inst, inst)
         FirePoof(burntarget)
     end
@@ -94,12 +94,14 @@ env.AddPrefabPostInit("firehound", function(inst)
             inst:ListenForEvent("onhitother", OnHitOtherBurn)
         end
     end
+
     inst:AddComponent("timer")
     inst:ListenForEvent("timerdone", RechargeSpitfireAttack)
 
     if not inst.spitfireready then -- If spawned, just give a small gap till it's time to spit again.
         inst:DoTaskInTime(math.random(4, 8), RechargeSpitfireAttack)
     end
+
     inst.ShootFire = ShootFire
     inst.components.health.fire_damage_scale = 0 --AXE Fire hounds are Immune to the damage from fire as well as not burnable
     inst.FirePoof = FirePoof

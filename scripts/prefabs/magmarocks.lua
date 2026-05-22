@@ -43,7 +43,7 @@ local function DamageSurroundings(inst)
         { "FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost" })
     if #ents > 0 then
         for i, v in pairs(ents) do
-            if v.components.burnable ~= nil then
+            if v.components.burnable and v.components.burnable.canlight then
                 v.components.burnable:Ignite()
             end
             if v.components.combat then
@@ -58,7 +58,8 @@ local function OnWork(inst, worker, workleft)
         local fx = SpawnPrefab("explosivehit")
         fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
         fx.Transform:SetScale(1.25, 1.25, 1.25)
-        fx:DoTaskInTime(2, function(fx) fx:Remove() end)
+        fx.persists = false
+        fx:DoTaskInTime(1, fx.Remove)
         DamageSurroundings(inst)
     end
 
@@ -151,10 +152,8 @@ local function baserock_fn(bank, build, anim, minimapicon, tag, multcolour)
     workable:SetWorkLeft(TUNING.ROCKS_MINE)
     workable:SetOnWorkCallback(OnWork)
 
-
     local colour = math.random(75, 100) * 0.01
     inst.AnimState:SetMultColour(colour, colour, colour, 1)
-
 
     inst:AddComponent("inspectable")
     inst.components.inspectable.nameoverride = "ROCK"
@@ -198,8 +197,11 @@ local function OnIsRainingFireChanged(inst)
         local fx = SpawnPrefab("explosivehit")
         fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
         fx.Transform:SetScale(1.25, 1.25, 1.25)
+        fx.persists = false
+        fx:DoTaskInTime(1, fx.Remove)
     end
 end
+
 local function rock2_spawner_fn()
     local inst = CreateEntity()
 
@@ -218,7 +220,6 @@ local function rock2_spawner_fn()
 
     return inst
 end
-
 
 return Prefab("magmarock1", rock1_fn, rock1_assets),
     Prefab("fyriterock", rock2_fn, rock1_assets),
