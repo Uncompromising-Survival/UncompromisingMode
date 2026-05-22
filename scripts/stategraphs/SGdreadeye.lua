@@ -34,7 +34,7 @@ local events =
 }
 
 local function FinishExtendedSound(inst, soundid)
-    inst.SoundEmitter:KillSound("sound_"..tostring(soundid))
+    inst.SoundEmitter:KillSound("sound_" .. tostring(soundid))
     inst.sg.mem.soundcache[soundid] = nil
     if inst.sg.statemem.readytoremove and not next(inst.sg.mem.soundcache) then
         inst:Remove()
@@ -49,7 +49,7 @@ local function PlayExtendedSound(inst, soundname)
         inst.sg.mem.soundid = inst.sg.mem.soundid + 1
     end
     inst.sg.mem.soundcache[inst.sg.mem.soundid] = true
-    inst.SoundEmitter:PlaySound(inst.sounds[soundname], "sound_"..tostring(inst.sg.mem.soundid))
+    inst.SoundEmitter:PlaySound(inst.sounds[soundname], "sound_" .. tostring(inst.sg.mem.soundid))
     inst:DoTaskInTime(5, FinishExtendedSound, inst.sg.mem.soundid)
 end
 
@@ -103,7 +103,7 @@ local function SpikeAoE(inst)
         end
     end)
 
-    for i = 2, ring_num do         -- ring
+    for i = 2, ring_num do          -- ring
         inst:DoTaskInTime(FRAMES * i * 3, function()
             for j = 1, spike_num do -- spike
                 local rad2 = rad + (math.pi * 2 * (j / spike_num))
@@ -130,9 +130,9 @@ end
 
 local states =
 {
-    State{
+    State {
         name = "idle_busy",
-        tags = {"idle" --[[, "canrotate"]]},
+        tags = { "idle" --[[, "canrotate"]] },
 
         onenter = function(inst)
             local dropped = TryDropTarget(inst)
@@ -154,9 +154,9 @@ local states =
         },
     },
 
-    State{
+    State {
         name = "idle",
-        tags = {"idle" --[[, "canrotate"]]},
+        tags = { "idle" --[[, "canrotate"]] },
 
         onenter = function(inst)
             local dropped = TryDropTarget(inst)
@@ -173,9 +173,9 @@ local states =
         end,
     },
 
-    State{
+    State {
         name = "disguise_pre",
-        tags = {"disguise", "busy", "disguised", "noattack"}, -- , "busy"
+        tags = { "disguise", "busy", "disguised", "noattack" }, -- , "busy"
 
         onenter = function(inst)
             PlayExtendedSound(inst, "death")
@@ -205,7 +205,7 @@ local states =
                         local offset = 25
                         x = x + math.random(2 * offset) - offset
                         z = z + math.random(2 * offset) - offset
-                        local playercheck = TheSim:FindEntities(x, y, z, 10, { "player", "antlion_sinkhole_blocker" })
+                        local playercheck = TheSim:FindEntities(x, y, z, 10, nil, nil, { "player", "antlion_sinkhole_blocker" })
                         if not TheWorld.Map:GetPlatformAtPoint(x, z) and (TheWorld.Map:IsOceanAtPoint(x, y, z) or TheWorld.Map:IsPassableAtPoint(x, y, z)) and (playercheck == nil or #playercheck == 0) then
                             inst.Physics:Teleport(x, y, z)
                             break
@@ -214,15 +214,15 @@ local states =
                 end
                 if inst.components.combat and inst.components.combat.target then
                     inst.components.combat.target = nil
-                end                
+                end
                 inst.sg:GoToState("disguise")
             end)
         },
     },
 
-    State{
+    State {
         name = "disguise",
-        tags = {"invisible", "disguise", "busy", "disguised", "noattack"},
+        tags = { "invisible", "disguise", "busy", "disguised", "noattack" },
 
         onenter = function(inst)
             inst.components.health:SetInvincible(true)
@@ -246,9 +246,9 @@ local states =
         end,
     },
 
-    State{
+    State {
         name = "disguise_teleport",
-        tags = {"busy"},
+        tags = { "busy" },
 
         onenter = function(inst)
             inst.Physics:Stop()
@@ -261,9 +261,9 @@ local states =
         },
     },
 
-    State{
+    State {
         name = "disguise_attack",
-        tags = {"attack", "disguise", "busy"},
+        tags = { "attack", "disguise", "busy" },
 
         onenter = function(inst)
             inst.Physics:Stop()
@@ -281,9 +281,9 @@ local states =
         },
     },
 
-    State{
+    State {
         name = "attack_teleport_pre",
-        tags = {"attack", "busy"},
+        tags = { "attack", "busy" },
 
         onenter = function(inst, target)
             PlayExtendedSound(inst, "death")
@@ -322,9 +322,9 @@ local states =
         end,
     },
 
-    State{
+    State {
         name = "attack_teleport",
-        tags = {"attack", "busy", "noattack"},
+        tags = { "attack", "busy", "noattack" },
 
         onenter = function(inst, target)
             inst.components.health:SetInvincible(true)
@@ -345,11 +345,11 @@ local states =
                 inst.sg:RemoveStateTag("noattack")
                 inst.components.health:SetInvincible(false)
                 local x, y, z = inst.Transform:GetWorldPosition()
-                local attackents = TheSim:FindEntities(x, y, z, 2.5, {"player"}, {"INLIMBO", "notarget", "invisible", "noattack", "flight", "playerghost"})
+                local attackents = TheSim:FindEntities(x, y, z, 2.5, { "player" }, { "INLIMBO", "notarget", "invisible", "noattack", "flight", "playerghost" })
                 for i, v in pairs(attackents) do
                     if v.components.health and not v.components.health:IsDead() and v.components.combat
                         and (inst.components.sanity and inst.components.sanity:IsInsane()
-                        or inst.components.combat.target and inst.components.combat.target == v) then
+                            or inst.components.combat.target and inst.components.combat.target == v) then
                         v.components.combat:GetAttacked(inst, 40, nil)
                     end
                 end
@@ -374,9 +374,9 @@ local states =
         end,
     },
 
-    State{
+    State {
         name = "attack",
-        tags = {"attack", "busy"},
+        tags = { "attack", "busy" },
 
         onenter = function(inst, target)
             inst.sg.statemem.target = target
@@ -415,9 +415,9 @@ local states =
         },
     },
 
-    State{
+    State {
         name = "hit",
-        tags = {"busy", "hit"}, --, "fading"
+        tags = { "busy", "hit" }, --, "fading"
 
         onenter = function(inst)
             inst.Physics:Stop()
@@ -471,17 +471,17 @@ local states =
                 end
                 --inst.Transform:SetRotation(math.random(360))
                 --if math.random() <= 0.33 then
-                    --inst.sg:GoToState("disguise")
+                --inst.sg:GoToState("disguise")
                 --else
-                    inst.sg:GoToState("appear")
+                inst.sg:GoToState("appear")
                 --end
             end),
         },
     },
 
-    State{
+    State {
         name = "taunt",
-        tags = {"busy"},
+        tags = { "busy" },
 
         onenter = function(inst)
             inst.Physics:Stop()
@@ -495,9 +495,9 @@ local states =
         },
     },
 
-    State{
+    State {
         name = "appear",
-        tags = {"busy", "moving"},
+        tags = { "busy", "moving" },
 
         onenter = function(inst)
             TryDropTarget(inst)
@@ -514,9 +514,9 @@ local states =
         },
     },
 
-    State{
+    State {
         name = "death",
-        tags = {"busy"},
+        tags = { "busy" },
 
         onenter = function(inst)
             PlayExtendedSound(inst, "death")
@@ -540,7 +540,7 @@ local states =
         end
     },
 
-    State{
+    State {
         name = "disappear",
         tags = { "busy", "noattack" },
 
@@ -561,7 +561,7 @@ local states =
         },
     },
 
-    State{
+    State {
         name = "teleport_disapper",
         tags = { "busy", "noattack" },
 
@@ -595,7 +595,7 @@ local states =
         },
     },
 
-    State{
+    State {
         name = "teleport_to",
         tags = { "busy", "moving" },
 
@@ -667,7 +667,7 @@ local states =
         },
     },
 
-    State{
+    State {
         name = "action",
         onenter = function(inst, playanim)
             inst.Physics:Stop()
@@ -682,18 +682,18 @@ local states =
 }
 
 CommonStates.AddWalkStates(states,
-{
-    walktimeline =
     {
-        TimeEvent(0 * FRAMES, function(inst)
-            local dropped = TryDropTarget(inst)
-            if TryDespawn(inst) then
-                return
-            elseif dropped then
-                inst.sg:GoToState("taunt")
-            end
-        end),
-    },
-})
+        walktimeline =
+        {
+            TimeEvent(0 * FRAMES, function(inst)
+                local dropped = TryDropTarget(inst)
+                if TryDespawn(inst) then
+                    return
+                elseif dropped then
+                    inst.sg:GoToState("taunt")
+                end
+            end),
+        },
+    })
 
 return StateGraph("dreadeye", states, events, "appear", actionhandlers)
