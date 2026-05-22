@@ -32,7 +32,7 @@ local function DamageSurroundings(inst)
                     v.components.burnable:Ignite()
                 end
                 if v.components.combat then
-                    v.components.combat:GetAttacked(inst, 50)
+                    v.components.combat:GetAttacked(inst, 20)
                 end
             end
         end
