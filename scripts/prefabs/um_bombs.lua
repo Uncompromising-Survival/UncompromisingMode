@@ -25,7 +25,7 @@ local function OnHitFyre(inst, attacker, target)
     if #ents > 0 then
         for i, v in pairs(ents) do
             if (not v:HasTag("player") or v == attacker) then
-                if v.components.burnable then
+                if v.components.burnable and v.components.burnable.canlight then
                     v.components.burnable:Ignite(true, inst, attacker)
                 end
                 if v.components.combat then
@@ -38,7 +38,6 @@ local function OnHitFyre(inst, attacker, target)
     end
     inst:Remove()
 end
-
 
 local function OnHitMutate(inst, attacker, target)
     local x,y,z = inst.Transform:GetWorldPosition()
@@ -189,8 +188,6 @@ local function common_fn(bank, build, anim, tag, isinventoryitem)
     if not TheWorld.ismastersim then
         return inst
     end
-
-    
 
     inst:AddComponent("locomotor")
 

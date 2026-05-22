@@ -1,7 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-
 -- Fire Nettle Fronds item.
 env.AddPrefabPostInit("firenettles", function(inst)
     if not TheWorld.ismastersim then
@@ -21,9 +20,5 @@ env.AddPrefabPostInit("firenettles", function(inst)
 
     inst.components.perishable.onperishreplacement = "ash"
 end)
-
-
-
-
 
 -- https://i.postimg.cc/bNfXKh0d/FRONDS.jpg
