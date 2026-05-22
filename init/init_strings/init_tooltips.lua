@@ -107,9 +107,9 @@ STRINGS.UNCOMP_TOOLTIP = {
     BEAKBASHER = "- Is a darn good hammer.",
     UM_HAT_LEAFWING = "- Speedier when worn.\n- Can breeze through Thickets.",
     UM_FEATHER_TOTEM = "- Stays with you post-mortem.\n- Consumes feathers inside on revival for maximum\nhealth loss prevention and other special effects.",
-    UM_MAGNIFIER = "- Reveals the quality of Strange Gems.\n- Discovering new Strange Gems permenantly reveals the name\nand catalogues effects to the Scrapbook.",
-    UM_MAGNIFIER_PURPLEGEM = "- Reveals the quality of Strange Gems.\n- Discovering new Strange Gems permenantly reveals the name\nand catalogues effects to the Scrapbook.",
-    UM_MAGNIFIER_OBSIDIAN = "- Reveals the quality of Strange Gems.\n- Discovering new Strange Gems permenantly reveals the name\nand catalogues effects to the Scrapbook..",
+    UM_MAGNIFIER = "- Reveals the quality of Strange Gems.\n- Discovering new Strange Gems permanently reveals the name\nand catalogues effects to the Scrapbook.",
+    UM_MAGNIFIER_PURPLEGEM = "- Reveals the quality of Strange Gems.\n- Discovering new Strange Gems permanently reveals the name\nand catalogues effects to the Scrapbook.",
+    UM_MAGNIFIER_OBSIDIAN = "- Reveals the quality of Strange Gems.\n- Discovering new Strange Gems permanently reveals the name\nand catalogues effects to the Scrapbook..",
     UM_MAGNERANG = "- Temporarily holds targets in place.",
 }
 local TOOLTIPS = STRINGS.UNCOMP_TOOLTIP
