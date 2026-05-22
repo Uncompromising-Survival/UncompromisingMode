@@ -41,7 +41,9 @@ local function BurnSurroundings(inst)
     local burnables = TheSim:FindEntities(x, 0, z, inst.scale * 2, nil, inst.dont_hit_tags) -- There isn't a way to search for entities tagged as burnable.... (there is no burnable tag)
     local damage = inst.damage or 1
     for i, v in ipairs(burnables) do
-        if v.components.follower ~= nil and v.components.follower:GetLeader() ~= nil and v.components.follower:GetLeader():HasTag("player") then
+        if v.components.follower ~= nil and v.components.follower:GetLeader() ~= nil and v.components.follower:GetLeader() == inst.damager
+            or inst.damager ~= nil and inst.damager:HasTag("player") and v.components.follower ~= nil and v.components.follower:GetLeader() ~= nil and v.components.follower:GetLeader():HasTag("player")
+        then
             return
         end
 
