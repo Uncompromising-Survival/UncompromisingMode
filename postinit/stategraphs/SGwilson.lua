@@ -132,7 +132,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 SpawnPrefab("round_puff_fx_sm").Transform:SetPosition(v.Transform:GetWorldPosition())
 
                 if v.components.combat ~= nil then
-                    inst.components.combat:DoAttack(v, nil, nil, nil, 1.5, 4)
+                    inst.components.combat:DoAttack(v, nil, nil, nil, 76.5/59.5, 4)
                 end
 
                 if v.components.locomotor ~= nil and not v:HasTag("stageusher") then
