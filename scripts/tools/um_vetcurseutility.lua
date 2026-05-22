@@ -119,7 +119,7 @@ local function oneat(inst, data)
 
     if TUNING.DSTU.WARLY_CHANGES ~= 0 then
         if health_delta > 3 and not inst:HasAnyTag("ignores_foodregen", "ignores_healthregen") then
-            inst.components.debuffable:AddDebuff("healthregenbuff_vetcurse_"..data.food.prefab, "healthregenbuff_vetcurse", {duration = (health_delta * .1)})
+            inst.components.debuffable:AddDebuff("healthregenbuff_vetcurse_" .. data.food.prefab, "healthregenbuff_vetcurse", { duration = (health_delta * .1) })
         else
             inst.components.health:DoDelta(health_delta, nil, data.food.prefab)
         end
@@ -129,21 +129,21 @@ local function oneat(inst, data)
         end
     else
         if health_delta > 3 and not inst:HasAnyTag("ignores_foodregen", "ignores_healthregen") then
-            inst.components.debuffable:AddDebuff("healthregenbuff_vetcurse_"..data.food.prefab, "healthregenbuff_vetcurse", {duration = (health_delta * .1)})
+            inst.components.debuffable:AddDebuff("healthregenbuff_vetcurse_" .. data.food.prefab, "healthregenbuff_vetcurse", { duration = (health_delta * .1) })
         else
             inst.components.health:DoDelta(health_delta, nil, data.food.prefab)
         end
     end
 
     if sanity_delta > 3 and not inst:HasAnyTag("ignores_foodregen", "ignores_sanityregen") then
-        inst.components.debuffable:AddDebuff("sanityregenbuff_vetcurse_"..data.food.prefab, "sanityregenbuff_vetcurse", {duration = (sanity_delta * .1)})
+        inst.components.debuffable:AddDebuff("sanityregenbuff_vetcurse_" .. data.food.prefab, "sanityregenbuff_vetcurse", { duration = (sanity_delta * .1) })
     else
         inst.components.sanity:DoDelta(sanity_delta, nil, data.food.prefab)
     end
 
     if inst.wolfgang_vetcurse then --unused but keeping this here if we ever re-use the concept.
         if hunger_delta > 1 then
-            inst.components.debuffable:AddDebuff("hungerregenbuff_vetcurse_"..data.food.prefab, "hungerregenbuff_vetcurse", {duration = (hunger_delta * .1)})
+            inst.components.debuffable:AddDebuff("hungerregenbuff_vetcurse_" .. data.food.prefab, "hungerregenbuff_vetcurse", { duration = (hunger_delta * .1) })
         end
     end
 end
@@ -192,6 +192,19 @@ local function AttachCurse(inst)
         ForceToTakeMoreHunger(inst)
         ForceOvertimeFoodEffects(inst)
         inst:AddTag("vetcurse")
+        inst:PushEvent("vetcurse_added")
+
+        print("doing item upgrades")
+        if inst.components.inventory ~= nil then
+            print("owner inv not nil")
+            for k, v in pairs(inst.components.inventory.equipslots) do
+                print("k,v", k, v)
+                print(v ~= nil and v.UpgradeItemVetcurse ~= nil and "has upgrade function " or "no upgrade function")
+                if v ~= nil and v.UpgradeItemVetcurse ~= nil then
+                    v:UpgradeItemVetcurse()
+                end
+            end
+        end
     end
 end
 
@@ -209,6 +222,20 @@ local function DetachCurse(inst)
         ForceToTakeUsualHunger(inst)
         ForceUsualFoodEffects(inst)
         inst:RemoveTag("vetcurse")
+        inst:PushEvent("vetcurse_removed")
+
+
+        print("doing item dwongrades")
+        if inst.components.inventory ~= nil then
+            print("owner inv not nil")
+            for k, v in pairs(inst.components.inventory.equipslots) do
+                print("k,v", k, v)
+                print(v ~= nil and v.RemoveItemVetcurse ~= nil and "has remove function " or "no remove function")
+                if v ~= nil and v.RemoveItemVetcurse ~= nil then
+                    v:RemoveItemVetcurse()
+                end
+            end
+        end
     end
 end
 

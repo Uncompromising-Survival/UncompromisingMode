@@ -118,8 +118,68 @@ env.AddStategraphPostInit("wilson", function(inst)
     local SLEEPREPEL_MUST_TAGS = { "_combat" }
     local SLEEPREPEL_CANT_TAGS = { "player", "companion", "abigail", "shadow", "playerghost", "INLIMBO", "wixieshoved", "invisible",
         "hiding", "NOTARGET", "flight", "toadstool" }
+    local SHIELD_CANT_TAGS = { "player", "companion", "abigail", "shadow", "playerghost", "INLIMBO", "wixieshoved", "invisible",
+        "hiding", "NOTARGET", "flight", "toadstool" }
 
-    local function Check_Bowling(inst)
+    local function CheckShield(inst)
+        if inst ~= nil then
+            local x, y, z = inst.Transform:GetWorldPosition()
+
+            local ents = TheSim:FindEntities(x, y, z, 3.5, SLEEPREPEL_MUST_TAGS, SHIELD_CANT_TAGS)
+
+            for i, v in ipairs(ents) do
+                v:AddTag("wixieshoved")
+                SpawnPrefab("round_puff_fx_sm").Transform:SetPosition(v.Transform:GetWorldPosition())
+
+                if v.components.combat ~= nil then
+                    inst.components.combat:DoAttack(v, nil, nil, nil, 1.5, 4)
+                end
+
+                if v.components.locomotor ~= nil and not v:HasTag("stageusher") then
+                    for i = 1, 50 do
+                        v:DoTaskInTime((i - 1) / 50, function(v)
+                            if v ~= nil and inst ~= nil then
+                                local x, y, z = inst.Transform:GetWorldPosition()
+                                local tx, ty, tz = v.Transform:GetWorldPosition()
+
+                                local rad = math.rad(inst:GetAngleToPoint(tx, ty, tz))
+                                local velx = math.cos(rad)  --* 4.5
+                                local velz = -math.sin(rad) --* 4.5
+
+                                local giantreduction = v:HasTag("epic") and 1.5 or v:HasTag("smallcreature") and 0.8 or 1
+                                local shovevalue = inst:HasTag("troublemaker") and 2 or 1
+
+                                local dx, dy, dz =
+                                    tx + (((shovevalue / (i + 3)) * velx) / giantreduction), ty,
+                                    tz + (((shovevalue / (i + 3)) * velz) / giantreduction)
+                                local ground = TheWorld.Map:IsPassableAtPoint(dx, dy, dz)
+                                local boat = TheWorld.Map:GetPlatformAtPoint(dx, dz)
+                                local ocean_collision = TheWorld.Map:IsOceanAtPoint(dx, dy, dz)
+
+                                if not (v.sg ~= nil and (v.sg:HasStateTag("swimming") or v.sg:HasStateTag("invisible"))) then
+                                    if v ~= nil and dx ~= nil and (ground or boat or ocean_collision and v.components.locomotor:CanPathfindOnWater() or v.components.tiletracker ~= nil and not v:HasTag("whale")) then
+                                        --[[if ocean_collision and v.components.amphibiouscreature and not v.components.amphibiouscreature.in_water then
+                                                v.components.amphibiouscreature:OnEnterOcean()
+                                            end]]
+                                        v.Transform:SetPosition(dx, dy, dz)
+                                    end
+                                end
+
+                                if i >= 50 then
+                                    v:RemoveTag("wixieshoved")
+                                end
+                            end
+                        end)
+                    end
+                    inst.sg.statemem.recoilstate = "attack_recoil"
+
+                    inst:PushEventImmediate("recoil_off", { target = v })
+                    break --only hit once
+                end
+            end
+        end
+    end
+    local function CheckBowling(inst)
         if inst ~= nil then
             local x, y, z = inst.Transform:GetWorldPosition()
 
@@ -219,6 +279,12 @@ env.AddStategraphPostInit("wilson", function(inst)
                     end
                 elseif action.invobject:HasTag("beegun") then
                     return "collectthebees"
+                elseif action.invobject:HasTag("shieldofterror") then
+                    if inst:HasTag("vetcurse") and action.invobject.components.rechargeable:IsCharged() and (inst.components.rider and not inst.components.rider:IsRiding() or inst.components.rider == nil) then
+                        return "um_shield_charge"
+                    else
+                        return
+                    end
                 end
             end
             return _OldSpellCast(inst, action, ...)
@@ -525,12 +591,12 @@ env.AddStategraphPostInit("wilson", function(inst)
     local _OldHeal                                           = inst.actionhandlers[ACTIONS.HEAL].deststate
     inst.actionhandlers[ACTIONS.HEAL].deststate              = function(inst, action, ...)
         local funcap = FindBlueFuncap(inst)
-        
+
         -- Drinking/Rubbing new healing items (Not yet...)
-        
+
         -- local new_item = action.invobject and action.inveobject.prefab
         -- if new_item == "um_firecream" then
-            
+
         -- end
         if funcap and funcap.charge > 0 then
             return "bluecap_general_action"
@@ -666,8 +732,8 @@ env.AddStategraphPostInit("wilson", function(inst)
         end)
     }
 
-    local _OldIdleState = inst.states["idle"].onenter
-    inst.states["idle"].onenter = function(inst, pushanim)
+    local _OldIdleState                            = inst.states["idle"].onenter
+    inst.states["idle"].onenter                    = function(inst, pushanim)
         if inst.wantstosneeze then
             inst.sg:GoToState("sneeze")
         else
@@ -675,8 +741,8 @@ env.AddStategraphPostInit("wilson", function(inst)
         end
     end
 
-    local _OldEatState = inst.states["eat"].onenter
-    inst.states["eat"].onenter = function(inst, foodinfo)
+    local _OldEatState                             = inst.states["eat"].onenter
+    inst.states["eat"].onenter                     = function(inst, foodinfo)
         if inst.wantstosneeze then
             inst.sg:GoToState("sneeze")
         else
@@ -684,13 +750,13 @@ env.AddStategraphPostInit("wilson", function(inst)
         end
     end
 
-    local _dolongaction_onexit = inst.states["dolongaction"].onexit
-    inst.states["dolongaction"].onexit = function(inst)
+    local _dolongaction_onexit                     = inst.states["dolongaction"].onexit
+    inst.states["dolongaction"].onexit             = function(inst)
         inst.AnimState:SetDeltaTimeMultiplier(1)
         _dolongaction_onexit(inst)
     end
 
-    local states = {
+    local states                                   = {
         State {
             name = "castspelllighter",
             tags = { "doing", "busy", "canrotate" },
@@ -849,7 +915,7 @@ env.AddStategraphPostInit("wilson", function(inst)
             end,
         },
 
-        State{
+        State {
             name = "curse_controlled_pst",
             tags = { "busy", "pausepredict", "nomorph", "nodangle" },
 
@@ -1919,7 +1985,93 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end
             end,
         },
+        State {
+            name = "um_shield_charge",
+            tags = { "canrotate", "busy" },
 
+            onenter = function(inst)
+                inst.components.locomotor:Stop()
+                inst.components.locomotor:EnableGroundSpeedMultiplier(false)
+
+                local buffaction = inst:GetBufferedAction()
+                if buffaction ~= nil and buffaction.pos ~= nil then
+                    inst:ForceFacePoint(buffaction:GetActionPoint():Get())
+                elseif buffaction ~= nil and buffaction.target ~= nil then
+                    inst:ForceFacePoint(buffaction.target:GetPosition())
+                end
+
+                inst:PerformBufferedAction()
+                --inst.AnimState:PlayAnimation("spearjab_pre")
+                --inst.AnimState:PushAnimation("spearjab", false)
+
+                inst.AnimState:PlayAnimation("punch")
+            end,
+
+            timeline =
+            {
+                TimeEvent(0 * FRAMES, function(inst)
+                    inst.SoundEmitter:PlaySound("terraria1/robo_eyeofterror/charge_eye")
+
+                    inst.Physics:SetMotorVelOverride(20, 0, 0)
+                    local fx = SpawnPrefab("slide_puff")
+                    fx.Transform:SetScale(1.3, 1.3, 1.3)
+                    fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
+
+                    CheckShield(inst)
+                end),
+
+                TimeEvent(5 * FRAMES, function(inst)
+                    inst.Physics:ClearMotorVelOverride()
+                    inst.Physics:SetMotorVelOverride(15, 0, 0)
+                    local fx = SpawnPrefab("slide_puff")
+                    fx.Transform:SetScale(1.3, 1.3, 1.3)
+                    fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
+
+                    CheckShield(inst)
+                end),
+
+                TimeEvent(10 * FRAMES, function(inst)
+                    inst.Physics:ClearMotorVelOverride()
+                    inst.Physics:SetMotorVelOverride(10, 0, 0)
+
+                    local fx = SpawnPrefab("slide_puff")
+                    fx.Transform:SetScale(1.3, 1.3, 1.3)
+                    fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
+
+                    CheckShield(inst)
+                end),
+
+                TimeEvent(15 * FRAMES, function(inst)
+                    inst.Physics:ClearMotorVelOverride()
+                    inst.Physics:SetMotorVelOverride(5, 0, 0)
+
+                    local fx = SpawnPrefab("slide_puff")
+                    fx.Transform:SetScale(1.3, 1.3, 1.3)
+                    fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
+
+                    CheckShield(inst)
+                end),
+
+                TimeEvent(18 * FRAMES, function(inst)
+                    inst.Physics:ClearMotorVelOverride()
+                    inst.components.locomotor:EnableGroundSpeedMultiplier(true)
+
+                    inst.sg:RemoveStateTag("busy")
+                end),
+            },
+
+            events =
+            {
+                EventHandler("animqueueover", function(inst)
+                    inst.sg:GoToState("idle")
+                end),
+            },
+
+            onexit = function(inst)
+                inst.components.locomotor:EnableGroundSpeedMultiplier(true)
+                inst.Physics:ClearMotorVelOverride()
+            end,
+        },
         State {
             name = "charles_charge",
             tags = { "canrotate", "busy" },
@@ -1954,25 +2106,25 @@ env.AddStategraphPostInit("wilson", function(inst)
 
                     inst.Physics:SetMotorVelOverride(20, 0, 0)
 
-                    Check_Bowling(inst)
+                    CheckBowling(inst)
                 end),
 
                 TimeEvent(5 * FRAMES, function(inst)
                     inst.Physics:ClearMotorVelOverride()
                     inst.Physics:SetMotorVelOverride(15, 0, 0)
-                    Check_Bowling(inst)
+                    CheckBowling(inst)
                 end),
 
                 TimeEvent(10 * FRAMES, function(inst)
                     inst.Physics:ClearMotorVelOverride()
                     inst.Physics:SetMotorVelOverride(10, 0, 0)
-                    Check_Bowling(inst)
+                    CheckBowling(inst)
                 end),
 
                 TimeEvent(15 * FRAMES, function(inst)
                     inst.Physics:ClearMotorVelOverride()
                     inst.Physics:SetMotorVelOverride(5, 0, 0)
-                    Check_Bowling(inst)
+                    CheckBowling(inst)
                 end),
 
                 TimeEvent(18 * FRAMES, function(inst)
@@ -2440,16 +2592,16 @@ env.AddStategraphPostInit("wilson", function(inst)
             end,
         },]]
 
-        State{
+        State {
             name = "um_usewaxwelljournal_pre",
-            tags = {"doing", "busy", "nocraftinginterrupt", "nomorph"},
+            tags = { "doing", "busy", "nocraftinginterrupt", "nomorph" },
 
             onenter = function(inst, repeatcast)
                 inst.components.locomotor:Stop()
                 inst.AnimState:SetDeltaTimeMultiplier(2)
                 inst.AnimState:PlayAnimation("action_uniqueitem_pre")
                 local suffix = inst.components.rider:IsRiding() and "_mount" or ""
-                inst.sg.statemem.book_fx = SpawnPrefab("waxwell_book_fx"..suffix)
+                inst.sg.statemem.book_fx = SpawnPrefab("waxwell_book_fx" .. suffix)
                 inst.sg.statemem.book_fx.AnimState:SetDeltaTimeMultiplier(2)
                 inst.sg.statemem.book_fx.entity:SetParent(inst.entity)
             end,
@@ -2459,7 +2611,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 EventHandler("animover", function(inst)
                     if inst.AnimState:AnimDone() then
                         inst.sg.statemem.not_interrupted = true
-                        inst.sg:GoToState("um_usewaxwelljournal", {book_fx = inst.sg.statemem.book_fx})
+                        inst.sg:GoToState("um_usewaxwelljournal", { book_fx = inst.sg.statemem.book_fx })
                     end
                 end),
             },
@@ -2476,15 +2628,15 @@ env.AddStategraphPostInit("wilson", function(inst)
             end,
         },
 
-        State{
+        State {
             name = "um_usewaxwelljournal",
-            tags = {"doing", "nocraftinginterrupt", "nomorph"},
+            tags = { "doing", "nocraftinginterrupt", "nomorph" },
 
             onenter = function(inst, data)
                 inst.AnimState:PlayAnimation("book")
                 if data then inst.sg.statemem.book_fx = data.book_fx end
                 local suffix = inst.components.rider:IsRiding() and "_mount" or ""
-                inst.sg.statemem.fx_shadow = SpawnPrefab("waxwell_shadow_book_fx"..suffix)
+                inst.sg.statemem.fx_shadow = SpawnPrefab("waxwell_shadow_book_fx" .. suffix)
                 inst.sg.statemem.fx_shadow.entity:SetParent(inst.entity)
                 inst.AnimState:OverrideSymbol("book_open", "book_maxwell", "book_open")
                 inst.AnimState:OverrideSymbol("book_closed", "book_maxwell", "book_closed")
@@ -4969,7 +5121,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
         State {
             name = "um_gunshooty", -- Stolen from wixie while she was lethargic
-            tags = {"doing", "canrotate", "busy", "keepchannelcasting"},
+            tags = { "doing", "canrotate", "busy", "keepchannelcasting" },
 
             onenter = function(inst)
                 inst.components.locomotor:Stop()
@@ -4994,12 +5146,12 @@ env.AddStategraphPostInit("wilson", function(inst)
             },
             onupdate = function(inst)
                 if inst.tornadopointx then
-                    inst:ForceFacePoint(Vector3(inst.tornadopointx,inst.tornadopointy,inst.tornadopointz)) -- allow mouse control while aiming
+                    inst:ForceFacePoint(Vector3(inst.tornadopointx, inst.tornadopointy, inst.tornadopointz)) -- allow mouse control while aiming
                 end
             end,
         },
-        
-        State{
+
+        State {
             name = "detonator_remotecast_trigger",
             tags = { "doing", "busy" },
 
@@ -5122,7 +5274,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst.AnimState:ClearOverrideSymbol("swap_remote")
             end,
         },
-        State{
+        State {
             name = "um_drinkpotion", -- inspired by wendy drinking state... make it not be forced into a single swap bank, we can't use that without rebuilding it, let it be generalized.
             tags = { "doing", "busy" },
 
@@ -5130,9 +5282,9 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst.components.locomotor:Stop()
 
                 inst.AnimState:PlayAnimation("drink_pre")
-                inst.AnimState:PushAnimation("drink_lag",false)
-                inst.AnimState:PushAnimation("drink",false)
-                
+                inst.AnimState:PushAnimation("drink_lag", false)
+                inst.AnimState:PushAnimation("drink", false)
+
                 inst.SoundEmitter:PlaySound("meta5/wendy/player_drink", "drink")
 
                 inst.sg.statemem.action = inst:GetBufferedAction()
@@ -5141,7 +5293,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                     local invobject = inst.sg.statemem.action.invobject
                     local elixir_type = invobject.elixir_buff_type
 
-                    inst.AnimState:OverrideSymbol("ghostly_elixirs_swap", "ghostly_elixirs", "ghostly_elixirs_".. elixir_type .."_swap")              
+                    inst.AnimState:OverrideSymbol("ghostly_elixirs_swap", "ghostly_elixirs", "ghostly_elixirs_" .. elixir_type .. "_swap")
                 end
 
                 inst.sg:SetTimeout(33 * FRAMES)
@@ -5171,11 +5323,11 @@ env.AddStategraphPostInit("wilson", function(inst)
 
             onexit = function(inst)
                 if inst.bufferedaction == inst.sg.statemem.action and
-                (inst.components.playercontroller == nil or inst.components.playercontroller.lastheldaction ~= inst.bufferedaction) then
+                    (inst.components.playercontroller == nil or inst.components.playercontroller.lastheldaction ~= inst.bufferedaction) then
                     inst:ClearBufferedAction()
                 end
             end,
-        },        
+        },
 
     }
 
