@@ -1,6 +1,16 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
+function DamageInfiniteItemGem(enchant, item, value)
+    if --[[not item.components.finiteuses
+        and not item.components.fueled
+        and not item.components.armor
+        and not item.components.perishable
+        and]] item.components.gem_enchantable:HasDurabilityEnabled("um_gemology" .. enchant) then
+        item.components.gem_enchantable:DoDurabilityDelta("um_gemology" .. enchant, -value)
+    end
+end
+
 -- Neurotic Peridot, increase the attack speed
 env.AddStategraphPostInit("wilson", function(inst) -- Plan on moving this to the other blue mushroomhat states, this is a way cleaner way of making a state play out faster
     local _onenter = inst.states["attack"].onenter
@@ -201,11 +211,12 @@ env.AddComponentPostInit("combat", function(self)
                 inst:DoTaskInTime(0, function(inst)
                     inst:AddDebuff("buff_furious" .. furious, "buff_furious" .. furious)
                 end)
+                DamageInfiniteItemGem("purplegem1", tool, 0.005)
             end
         end
-		if self.inst:HasTag("agony_gas") then
-			damage = damage * (self.inst:HasTag("EPIC") and 1.25 or 1.5)
-		end
+        if self.inst:HasTag("agony_gas") then
+            damage = damage * (self.inst:HasTag("EPIC") and 1.25 or 1.5)
+        end
         if weapon and weapon.components.gem_enchantable then
             local citrine = weapon.components.gem_enchantable.enchants["um_gemologyorangegem2"]
 
