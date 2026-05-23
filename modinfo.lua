@@ -617,7 +617,8 @@ configuration_options = {
             { description = "Off", data = 0 } },
         default = 1
     },
-    BinaryConfig("hambatnerf", "Ham Bat", "Spoils faster and minimum damage is lower.", true),	
+    BinaryConfig("hambatnerf", "Ham Bat", "Spoils faster and minimum damage is lower.", true),
+	BinaryConfig("disable_megaflare", "Hostile Flare", "Instead of spawning Deerclops, it makes seasonal bosses spawn earlier. Instead of a chance, it always spawn MacTusk and Pirate Raids.", true),
     BinaryConfig("townportal_rework", "Lazy Deserter Rework",
         "Makes the Lazy Deserter useful in singleplayer, by automatically harvesting nearby plants and objects.", true),
     BinaryConfig("cooldown_orangestaff", "Lazy Explorer",
@@ -929,7 +930,6 @@ configuration_options = {
 
     Header("Giants & Bosses"),
 	BinaryConfig("harder_deerclops", "Deerclops", "One of three different variants of Deerclops will spawn, replacing the vanilla version.", true),
-    BinaryConfig("disable_megaflare", "Disable Hostile Flare", "Hostile Flares no longer spawn Deerclops.", true),
     BinaryConfig("harder_bearger", "Harder Bearger",
         "Enabling this option grants Bearger more attacks, and will make Bearger more actively seek you out.", true),
     BinaryConfig("harder_moose", "Harder Goose",
