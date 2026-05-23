@@ -28,8 +28,8 @@ UMCommonFns.IsNotFriendly = function(attacker, target) -- Is the target an ally 
     local attackercombat = attacker and attacker.components.combat
     local leader = attacker and attacker.components.follower and attacker.components.follower:GetLeader()
     local leadercombat = leader and leader.components.combat
-    return attackercombat and attackercombat:CanTarget(target) and not attackercombat:IsAlly(target)
-        and (not leader or leadercombat and leadercombat:CanTarget(target) and not leadercombat:IsAlly(target))
+    return attackercombat and (attackercombat.target == target or attackercombat:CanTarget(target) and not attackercombat:IsAlly(target)
+        and (not leader or leadercombat and leadercombat:CanTarget(target) and not leadercombat:IsAlly(target)))
 end
 
 UMCommonFns.VetcurseUnequip = function(inst, owner, slot)
