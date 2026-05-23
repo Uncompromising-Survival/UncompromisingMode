@@ -452,7 +452,7 @@ local states=
 
     State{
         name = "frozen",
-        tags = {"busy", "frozen"},
+        tags = {"busy", "frozen","raised"},
 
         onenter = function(inst)
             if inst.components.locomotor then
@@ -470,7 +470,7 @@ local states=
 
     State{
         name = "thaw",
-        tags = {"busy", "thawing"},
+        tags = {"busy", "thawing","raised"},
 
         onenter = function(inst)
             if inst.components.locomotor then
