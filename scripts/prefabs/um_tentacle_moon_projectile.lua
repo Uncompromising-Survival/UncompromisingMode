@@ -120,13 +120,37 @@ local function DoDamageEffect(inst,target)
 	end
 end
 
+local function DeathSpoil(inst, mob)
+	if mob.death_spoil then
+		return
+	end
+
+	mob.death_spoil = true
+
+	mob:ListenForEvent("death", function(mob)
+		mob:DoTaskInTime(0, function(mob)
+			if mob.components.lootdropper then
+				local x, y, z = mob.Transform:GetWorldPosition()
+				local ents = TheSim:FindEntities(x, y, z, 4)
+
+				for _, item in ipairs(ents) do
+					if item.components.inventoryitem and item.components.perishable and not item.components.inventoryitem:IsHeld() then
+						item.components.perishable:SetPercent(0.01)
+					end
+				end
+			end
+		end)
+	end)
+end
+
 local function OnExplode(inst, target)
     inst.DynamicShadow:Enable(false)
     local x,y,z = inst.Transform:GetWorldPosition()
     local ents = TheSim:FindEntities(x, y, z, 3)
     for i, v in ipairs(ents) do
         if inst.attacker and v.prefab ~= inst.attacker.prefab and v:HasAllTags(should_hit) and not v:HasAnyTag(shouldnt_hit) and not (inst.attacker_faction and v:HasTag(inst.attacker_faction)) then
-            DoDamageEffect(inst,v)
+            DeathSpoil(inst, v)
+			DoDamageEffect(inst,v)
         end
     end
 	--inst:DoTaskInTime(0.1,function(inst) --AXE trigger the spoil after a delay, incase something was dropped from an enemy
