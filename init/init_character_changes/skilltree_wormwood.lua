@@ -133,8 +133,8 @@ local skills =
 	},
 
 	wormwood_flytrap = {
-		title = "Flytrap",
-		desc = "Grab insects and spores without a net.",
+		title = WORMSKILLS.FLYTRAP_TITLE,
+		desc = WORMSKILLS.FLYTRAP_DESC,
 		icon = "wormwood_flytrap",
 		pos = {UI_VERTICAL_MIDDLE - 115 - 120, UI_BOTTOM + 58},
 		onactivate = function(inst, fromload)

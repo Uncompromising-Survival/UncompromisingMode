@@ -89,16 +89,16 @@ AddTaskPreInit("MoonCaveForest", function(task)
     }
 end)
 
-local mushroom_rooms = {"MoonMushForest","MoonMushForest_entrance", -- Grotto
-}
+local mushroom_rooms = {"MoonMushForest","MoonMushForest_entrance"}
 
 for i,v in ipairs(mushroom_rooms) do
 	AddRoomPreInit(v, function(room)
 		if room.tags then
 			--table.insert(room.tags,"ForceDisconnected")
 			table.insert(room.tags,"not_mainland")
+			table.insert(room.tags,"um_grottowar")
 		else
-			room.tags = {"not_mainland"}
+			room.tags = {"not_mainland","um_grottowar"}
 		end
 		room.SafeFromDisconnect = true -- Thank you Klei, this is a very nice option to have
 	end)
@@ -149,7 +149,7 @@ AddTaskPreInit("ArchiveMaze", function(task)
 	task.entrance_room = "ArchiveMazeEntrance_Flooded"
     task.room_choices =
     {
-        ["ArchiveMazeRooms"] = math.random(8,12),
+        ["ArchiveMazeRooms"] = math.random(8,10),
     }
 end)
 	
@@ -181,78 +181,3 @@ end)
 AddRoomPreInit("MoonMushForest", function(room)
 	room.contents.distributeprefabs["um_mushroom_moon"] = 0.03
 end)
-
-
--- AXE POOFSHROOMS
---local red = {"RedMushForest","RedSpiderForest","RedMushPillars","StalagmiteForest","SpillagmiteMeadow","BGRedMush","BGRedMushRoom"}
---local blue = {"BlueMushForest","BlueMushMeadow","BlueSpiderForest","DropperDesolation","BGBlueMush","BGBlueMushRoom"}
---local green = {"GreenMushForest","GreenMushPonds","GreenMushSinkhole","GreenMushMeadow","GreenMushRabbits","GreenMushNoise","BGGreenMush","BGGreenMushRoom"}
---local mixed = {"FungusNoiseForest","FungusNoiseMeadow"}
-
---for i,v in ipairs(red) do
-	--AddRoomPreInit(v, function(room)
-		--if not room.contents.countprefabs then
-			--room.contents.countprefabs = {um_poofshroom_node_red = 3}
-		--else
-			--room.contents.countprefabs["um_poofshroom_node_red"] = 3
-		--end
-		--if room.tags then
-			--table.insert(room.tags,"um_poofshrooms")
-		--else
-			--room.tags = {"um_poofshrooms"}
-		--end
-	--end)
---end
-
---for i,v in ipairs(blue) do
-	--AddRoomPreInit(v, function(room)
-		--if not room.contents.countprefabs then
-			--room.contents.countprefabs = {um_poofshroom_node_blue = 3}
-		--else
-			--room.contents.countprefabs["um_poofshroom_node_blue"] = 3
-		--end
-		--if room.tags then
-			--table.insert(room.tags,"um_poofshrooms")
-		--else
-			--room.tags = {"um_poofshrooms"}
-		--end
-	--end)
---end
-
---for i,v in ipairs(green) do
-	--AddRoomPreInit(v, function(room) 
-		--if not room.contents.countprefabs then
-			--room.contents.countprefabs = {um_poofshroom_node_green = 3}
-		--else
-			--room.contents.countprefabs["um_poofshroom_node_green"] = 3
-		--end
-		--if room.tags then
-			--table.insert(room.tags,"um_poofshrooms")
-		--else
-			--room.tags = {"um_poofshrooms"}
-		--end
-	--end)
---end
-
---for i,v in ipairs(mixed) do
-	--AddRoomPreInit(v, function(room) 
-		--if not room.contents.countprefabs then
-			--room.contents.countprefabs = 
-			--{
-				--um_poofshroom_node_red = 1,
-				--um_poofshroom_node_blue = 1,
-				--um_poofshroom_node_green = 1,
-			
-			--}
-		--else
-			--room.contents.countprefabs["um_poofshroom_node_red"] = 1
-			--room.contents.countprefabs["um_poofshroom_node_blue"] = 1
-			--room.contents.countprefabs["um_poofshroom_node_green"] = 1
-		--end
-		--if room.tags then
-			--table.insert(room.tags,"um_poofshrooms")
-		--else
-			--room.tags = {"um_poofshrooms"}
-		--end
-	--end)
---end
