@@ -53,10 +53,10 @@ end
 -- BounceStuff used when he counters and dies
 
 local function PoofMouthFire(inst)
-	local fx = SpawnPrefab(inst.coldfire and "deer_ice_burst" or "deer_fire_burst")
-	fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
-	fx.entity:AddFollower()
-	fx.Follower:FollowSymbol(inst.GUID, "mouth_fire")
+    local fx = SpawnPrefab(inst.coldfire and "deer_ice_burst" or "deer_fire_burst")
+    fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
+    fx.entity:AddFollower()
+    fx.Follower:FollowSymbol(inst.GUID, "mouth_fire")
 end
 
 local ARC = 90 * DEGREES --degrees to each side
@@ -65,7 +65,7 @@ local function PoofNearby(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
     local rot = inst.Transform:GetRotation() * DEGREES
     local x0, z0
-	local radius = 4
+    local radius = 4
     for i, v in ipairs(TheSim:FindEntities(x, y, z, radius, nil, AOE_TARGET_CANT_TAGS)) do
         if v ~= inst and v:IsValid() and not v:IsInLimbo()
             and not (v.components.health ~= nil and v.components.health:IsDead()) then
@@ -75,41 +75,41 @@ local function PoofNearby(inst)
             local dz = z1 - z
             local distsq = dx * dx + dz * dz
             if distsq > 0 and distsq < range * range and DiffAngleRad(rot, math.atan2(-dz, dx)) < ARC then
-				if v.components.burnable and v.components.burnable.canlight then
-					v.components.burnable:Ignite()
-				end
-				if v.components.health then
-					v.components.health:DoFireDamage(10,nil,true)
-				end
-			end
+                if not v.components.fueled and v.components.burnable and not v.components.burnable:IsBurning() and not v:HasTag("burnt") then
+                    v.components.burnable:Ignite()
+                end
+                if v.components.health then
+                    v.components.health:DoFireDamage(10,nil,true)
+                end
+            end
         end
     end
 end
 
 local function ShootFire(inst,total_flame)
-	for i = 1,total_flame do
-		inst:DoTaskInTime(0+math.random(1,15)*FRAMES,function(inst)
-			local x,y,z = inst.Transform:GetWorldPosition()
-			local projectile = SpawnPrefab("um_fire_projectile")
-			if inst.coldfire then
-				projectile.chilly = true
-			end
-			local rot = inst.Transform:GetRotation() 
-			local degrand = 5
-			local dx = 4*math.sin((rot+ 90+degrand) * DEGREES)
-			local dz = 4*math.cos((rot+ 90+degrand) * DEGREES)
-			rot = rot + math.random(-20,20)
-			projectile.Transform:SetPosition(x + dx,2,z+dz)
-			projectile.Transform:SetRotation(rot)
-			projectile.speed = 15
-			projectile.scale = 1 + math.random(0,10)/100 -- scale up sometimes.
-			projectile.damage = 3
-			projectile.damager = inst
-			if not inst.coldfire then
-				PoofNearby(inst)
-			end
-		end)
-	end
+    for i = 1,total_flame do
+        inst:DoTaskInTime(0+math.random(1,15)*FRAMES,function(inst)
+            local x,y,z = inst.Transform:GetWorldPosition()
+            local projectile = SpawnPrefab("um_fire_projectile")
+            if inst.coldfire then
+                projectile.chilly = true
+            end
+            local rot = inst.Transform:GetRotation() 
+            local degrand = 5
+            local dx = 4*math.sin((rot+ 90+degrand) * DEGREES)
+            local dz = 4*math.cos((rot+ 90+degrand) * DEGREES)
+            rot = rot + math.random(-20,20)
+            projectile.Transform:SetPosition(x + dx,2,z+dz)
+            projectile.Transform:SetRotation(rot)
+            projectile.speed = 15
+            projectile.scale = 1 + math.random(0,10)/100 -- scale up sometimes.
+            projectile.damage = 3
+            projectile.damager = inst
+            if not inst.coldfire then
+                PoofNearby(inst)
+            end
+        end)
+    end
 end
 
 local actionhandlers =
@@ -123,29 +123,29 @@ local events=
 {
     CommonHandlers.OnAttacked(),
     EventHandler("doattack", function(inst)
-		if not (inst.components.health:IsDead() or inst.sg:HasStateTag("electrocute") or inst.sg:HasStateTag("busy")) then
+        if not (inst.components.health:IsDead() or inst.sg:HasStateTag("electrocute") or inst.sg:HasStateTag("busy")) then
             if inst.sg.mem.wantstostomp then
                 inst.sg.mem.wantstostomp = nil
                 inst.sg:GoToState("stomp")
-			elseif (inst.components.timer:TimerExists("pissedoff") and not inst.components.timer:TimerExists("flame_cd")) or inst.flamecount > 0 then
-				inst.sg:GoToState("flame_pre")
-			else
-				inst.sg:GoToState("attack")
-			end
-			
+            elseif (inst.components.timer:TimerExists("pissedoff") and not inst.components.timer:TimerExists("flame_cd")) or inst.flamecount > 0 then
+                inst.sg:GoToState("flame_pre")
+            else
+                inst.sg:GoToState("attack")
+            end
+            
         end
     end),
     EventHandler("death", function(inst) inst.sg:GoToState("death") end),
     CommonHandlers.OnSleep(),
     CommonHandlers.OnFreeze(),
-	CommonHandlers.OnElectrocute(),
+    CommonHandlers.OnElectrocute(),
     CommonHandlers.OnLocomote(false,true),
 }
 
 local states=
 {
 
-	State{
+    State{
         name = "death",
         tags = {"busy"},
 
@@ -156,13 +156,13 @@ local states=
             RemovePhysicsColliders(inst)
             inst.components.lootdropper:DropLoot(Vector3(inst.Transform:GetWorldPosition()))
         end,
-		
+        
         timeline=
         {
             TimeEvent(20*FRAMES, function(inst) 
-				TheWorld:PushEvent("ms_miniquake", { rad = 20, num = 20, duration = 2.5, target = inst })
+                TheWorld:PushEvent("ms_miniquake", { rad = 20, num = 20, duration = 2.5, target = inst })
                 BounceStuff(inst)
-			end),
+            end),
         },
 
 
@@ -239,38 +239,38 @@ local states=
         onenter = function(inst, cb)
             inst.Physics:Stop()
             inst.AnimState:PlayAnimation("flame_pre", false)
-			inst.flamecount = 0
-			inst.flamecount_total = math.random(7,9) -- Can retune this...
-			if inst.bellyfullness > 0 then
-				inst.bellyfullness = 0
-				inst.coldfire = true
-			end
+            inst.flamecount = 0
+            inst.flamecount_total = math.random(7,9) -- Can retune this...
+            if inst.bellyfullness > 0 then
+                inst.bellyfullness = 0
+                inst.coldfire = true
+            end
         end,
 
         timeline=
         {
-			TimeEvent(8*FRAMES, function(inst) 
-				inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/bearger/step_stomp")
-				inst.SoundEmitter:PlaySound("dontstarve/creatures/together/toad_stool/roar") 
-				PoofMouthFire(inst)
-			end),
+            TimeEvent(8*FRAMES, function(inst) 
+                inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/bearger/step_stomp")
+                inst.SoundEmitter:PlaySound("dontstarve/creatures/together/toad_stool/roar") 
+                PoofMouthFire(inst)
+            end),
             TimeEvent(14*FRAMES, function(inst) 
-				inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/bearger/step_stomp")
-				inst.SoundEmitter:PlaySound("dontstarve/creatures/together/toad_stool/roar") 
-				PoofMouthFire(inst)
-			end),
+                inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/bearger/step_stomp")
+                inst.SoundEmitter:PlaySound("dontstarve/creatures/together/toad_stool/roar") 
+                PoofMouthFire(inst)
+            end),
         },
-		onupdate = function(inst)
-			if inst.components.combat and inst.components.combat.target then
-				inst:ForceFacePoint(inst.components.combat.target:GetPosition())
-			end
-		end,
+        onupdate = function(inst)
+            if inst.components.combat and inst.components.combat.target then
+                inst:ForceFacePoint(inst.components.combat.target:GetPosition())
+            end
+        end,
         events=
         {
             EventHandler("animqueueover", function(inst) inst.sg:GoToState("flame") end),
         },
     },
-	
+    
     State{
         name = "flame",
         tags = {"attack", "busy"},
@@ -280,26 +280,26 @@ local states=
             inst.AnimState:PlayAnimation("flame_loop", false)
         end,
 
-		onupdate = function(inst)
-			if inst.components.combat and inst.components.combat.target then
-				inst:ForceFacePoint(inst.components.combat.target:GetPosition())
-			end
-		end,
+        onupdate = function(inst)
+            if inst.components.combat and inst.components.combat.target then
+                inst:ForceFacePoint(inst.components.combat.target:GetPosition())
+            end
+        end,
         timeline=
         {
-			TimeEvent(4*FRAMES, function(inst) ShootFire(inst,math.random(5,8))  end),
+            TimeEvent(4*FRAMES, function(inst) ShootFire(inst,math.random(5,8))  end),
         },
         events=
         {
             EventHandler("animqueueover", 
-				function(inst) 
-					inst.flamecount = inst.flamecount + 1
-					if inst.flamecount > inst.flamecount_total or (inst.components.combat and not inst.components.combat.target) then -- no target condition or after you're tired of breathing fire.
-						inst.sg:GoToState("flame_pst")
-					else
-						inst.sg:GoToState("flame") 
-					end
-				end),
+                function(inst) 
+                    inst.flamecount = inst.flamecount + 1
+                    if inst.flamecount > inst.flamecount_total or (inst.components.combat and not inst.components.combat.target) then -- no target condition or after you're tired of breathing fire.
+                        inst.sg:GoToState("flame_pst")
+                    else
+                        inst.sg:GoToState("flame") 
+                    end
+                end),
         },
     },
     State{
@@ -308,35 +308,35 @@ local states=
 
         onenter = function(inst, cb)
             inst.Physics:Stop()
-			inst.flamecount = 0
+            inst.flamecount = 0
             inst.AnimState:PlayAnimation("flame_pst", false)
-			inst.components.timer:StartTimer("flame_cd",20)
-			inst.components.combat:SetRange(3)
+            inst.components.timer:StartTimer("flame_cd",20)
+            inst.components.combat:SetRange(3)
         end,
 
         timeline=
         {
-			TimeEvent(8*FRAMES, function(inst) 
-				inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/bearger/step_stomp")
-				inst.SoundEmitter:PlaySound("dontstarve/creatures/together/toad_stool/roar") 
-				PoofMouthFire(inst)
-			end),
+            TimeEvent(8*FRAMES, function(inst) 
+                inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/bearger/step_stomp")
+                inst.SoundEmitter:PlaySound("dontstarve/creatures/together/toad_stool/roar") 
+                PoofMouthFire(inst)
+            end),
             TimeEvent(14*FRAMES, function(inst) 
-				inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/bearger/step_stomp")
-				inst.SoundEmitter:PlaySound("dontstarve/creatures/together/toad_stool/roar") 
-				PoofMouthFire(inst)
-			end),
+                inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/bearger/step_stomp")
+                inst.SoundEmitter:PlaySound("dontstarve/creatures/together/toad_stool/roar") 
+                PoofMouthFire(inst)
+            end),
         },
-		onexit = function(inst)
-			if inst.coldfire then
-				inst.coldfire = false
-			end
-		end,
-		onupdate = function(inst)
-			if inst.components.combat and inst.components.combat.target then
-				inst:ForceFacePoint(inst.components.combat.target:GetPosition())
-			end
-		end,
+        onexit = function(inst)
+            if inst.coldfire then
+                inst.coldfire = false
+            end
+        end,
+        onupdate = function(inst)
+            if inst.components.combat and inst.components.combat.target then
+                inst:ForceFacePoint(inst.components.combat.target:GetPosition())
+            end
+        end,
         events=
         {
             EventHandler("animqueueover", function(inst) inst.sg:GoToState("idle") end),
@@ -348,19 +348,19 @@ local states=
 
         onenter = function(inst)
             if not inst.sg.mem.wantstostomp then
-			    inst.tolerance = inst.tolerance + 0.3 + (math.random() * 0.2)
+                inst.tolerance = inst.tolerance + 0.3 + (math.random() * 0.2)
             end
             inst.SoundEmitter:PlaySound("dontstarve/creatures/together/toad_stool/hit")
             inst.AnimState:PlayAnimation("hit")
             inst.Physics:Stop()
-			CommonHandlers.UpdateHitRecoveryDelay(inst)
+            CommonHandlers.UpdateHitRecoveryDelay(inst)
             if inst.components.timer:TimerExists("pissedoff") then
                 inst.components.timer:StopTimer("pissedoff")
             end
             inst.components.timer:StartTimer("pissedoff",60) -- 1 minute of piss off time.
-			if not inst.components.timer:TimerExists("flame_cd") then
-				inst.components.combat:SetRange(8,3) --AXE He should be ready to breath fire, set his range to be longer than usual so he doesn't walk up to the player to start the attack
-			end
+            if not inst.components.timer:TimerExists("flame_cd") then
+                inst.components.combat:SetRange(8,3) --AXE He should be ready to breath fire, set his range to be longer than usual so he doesn't walk up to the player to start the attack
+            end
         end,
 
         events=
@@ -371,8 +371,8 @@ local states=
                     inst.sg.mem.wantstostomp = true
                     inst.components.combat:ResetCooldown()
                 end
-				inst.sg:GoToState("idle")
-			end),
+                inst.sg:GoToState("idle")
+            end),
         },
     },
 
@@ -407,12 +407,12 @@ local states=
         timeline=
         {
             TimeEvent(18*FRAMES, function(inst) 
-				if inst._hacky_eat_target then
-					inst.OnEatHack(inst,inst._hacky_eat_target)
-					inst._hacky_eat_target:Remove()
-					inst._hacky_eat_target = nil
-				end
-			end),
+                if inst._hacky_eat_target then
+                    inst.OnEatHack(inst,inst._hacky_eat_target)
+                    inst._hacky_eat_target:Remove()
+                    inst._hacky_eat_target = nil
+                end
+            end),
         },
 
         events=
@@ -420,73 +420,73 @@ local states=
             EventHandler("animover", function(inst) inst.sg:GoToState("idle") end ),
         },
     },
-	State{
-		name = "stomp",
-		tags = {"attack", "busy"},
+    State{
+        name = "stomp",
+        tags = {"attack", "busy"},
 
-		onenter = function(inst, target)
-			inst.sg.statemem.target = target
-			inst.SoundEmitter:PlaySound("dontstarve/creatures/together/toad_stool/roar")
-			inst.components.combat:StartAttack()
-			inst.components.locomotor:StopMoving()
-			inst.AnimState:PlayAnimation("pound", false)
-			inst.components.combat:SetAreaDamage(4, 1)
+        onenter = function(inst, target)
+            inst.sg.statemem.target = target
+            inst.SoundEmitter:PlaySound("dontstarve/creatures/together/toad_stool/roar")
+            inst.components.combat:StartAttack()
+            inst.components.locomotor:StopMoving()
+            inst.AnimState:PlayAnimation("pound", false)
+            inst.components.combat:SetAreaDamage(4, 1)
             inst.components.combat:SetDefaultDamage(225) -- AXE He's being killed by worms AAAA
-		end,
+        end,
 
-		timeline=
-		{
-			TimeEvent(36 * FRAMES, function(inst) 
-				SpawnPrefab("ground_chunks_breaking").Transform:SetPosition(inst.Transform:GetWorldPosition())
-				SpawnPrefab("ground_chunks_breaking").Transform:SetPosition(inst.Transform:GetWorldPosition())
-				SpawnPrefab("ground_chunks_breaking").Transform:SetPosition(inst.Transform:GetWorldPosition())
-				SpawnPrefab("ground_chunks_breaking").Transform:SetPosition(inst.Transform:GetWorldPosition())
-				inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/bearger/groundpound")
-				inst.components.combat:DoAttack(inst.sg.statemem.target) 
-				local ring = SpawnPrefab("groundpoundring_fx")
-				ring.Transform:SetPosition(inst.Transform:GetWorldPosition())
-				ring.Transform:SetScale(.7, .7, .7)
+        timeline=
+        {
+            TimeEvent(36 * FRAMES, function(inst) 
+                SpawnPrefab("ground_chunks_breaking").Transform:SetPosition(inst.Transform:GetWorldPosition())
+                SpawnPrefab("ground_chunks_breaking").Transform:SetPosition(inst.Transform:GetWorldPosition())
+                SpawnPrefab("ground_chunks_breaking").Transform:SetPosition(inst.Transform:GetWorldPosition())
+                SpawnPrefab("ground_chunks_breaking").Transform:SetPosition(inst.Transform:GetWorldPosition())
+                inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/bearger/groundpound")
+                inst.components.combat:DoAttack(inst.sg.statemem.target) 
+                local ring = SpawnPrefab("groundpoundring_fx")
+                ring.Transform:SetPosition(inst.Transform:GetWorldPosition())
+                ring.Transform:SetScale(.7, .7, .7)
                 TheWorld:PushEvent("ms_miniquake", { rad = 20, num = 20, duration = 2.5, target = inst })
                 BounceStuff(inst)
-				
-			end),
-		},
+                
+            end),
+        },
 
-		events =
-		{
-			EventHandler("animqueueover", function(inst)
-				inst.components.combat:SetAreaDamage()
+        events =
+        {
+            EventHandler("animqueueover", function(inst)
+                inst.components.combat:SetAreaDamage()
                 inst.components.combat:SetDefaultDamage(75)
-				inst.sg:GoToState("idle")
-			end),
-		},
-	},	
+                inst.sg:GoToState("idle")
+            end),
+        },
+    },    
 
 }
 
 CommonStates.AddWalkStates(states,
 {
-	walktimeline = {
-		TimeEvent(0*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/bearger/step_stomp") end ),
-		TimeEvent(12*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/bearger/step_stomp") end ),
-	},
+    walktimeline = {
+        TimeEvent(0*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/bearger/step_stomp") end ),
+        TimeEvent(12*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/bearger/step_stomp") end ),
+    },
 })
 
 CommonStates.AddSleepStates(states,
 {
-	starttimeline =
-	{
-		TimeEvent(0*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/together/toad_stool/roar") end ),
-	},
-	waketimeline =
-	{
-		TimeEvent(0*FRAMES, function(inst)
-			inst.SoundEmitter:PlaySound("dontstarve/creatures/together/toad_stool/roar") 
-			if inst.components.timer:TimerExists("bellyfull") then
-				inst.components.timer:StopTimer("bellyfull")
-			end
-		end ),
-	},
+    starttimeline =
+    {
+        TimeEvent(0*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/together/toad_stool/roar") end ),
+    },
+    waketimeline =
+    {
+        TimeEvent(0*FRAMES, function(inst)
+            inst.SoundEmitter:PlaySound("dontstarve/creatures/together/toad_stool/roar") 
+            if inst.components.timer:TimerExists("bellyfull") then
+                inst.components.timer:StopTimer("bellyfull")
+            end
+        end ),
+    },
 })
 
 CommonStates.AddSimpleActionState(states, "pick", "bite", 13 * FRAMES, { "busy" })

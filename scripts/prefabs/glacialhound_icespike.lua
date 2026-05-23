@@ -99,17 +99,9 @@ for action, _ in pairs(WORK_AMOUNTS) do
     table.insert(COLLAPSIBLE_TAGS, action .. "_workable")
 end
 
-local NON_COLLAPSIBLE_TAGS = { "hound", "flying", "shadow", "ghost", "playerghost", "FX", "NOCLICK", "DECOR", "INLIMBO", "groundspike", "trap" }
+local NON_COLLAPSIBLE_TAGS = { "flying", "shadow", "ghost", "playerghost", "FX", "NOCLICK", "DECOR", "INLIMBO", "groundspike", "trap" }
 local TOSSITEM_MUST_TAGS = { "_inventoryitem" }
 local TOSSITEM_CANT_TAGS = { "locomotor", "INLIMBO", "trap" }
-
-local function IsNotFriendly(attacker, target) -- Is the target an ally or my leader's ally?
-    local attackercombat = attacker and attacker.components.combat
-    local leader = attacker and attacker.components.follower and attacker.components.follower:GetLeader()
-    local leadercombat = leader and leader.components.combat
-    return attackercombat and attackercombat:CanTarget(target) and not attackercombat:IsAlly(target)
-        and (not leader or leadercombat and leadercombat:CanTarget(target) and not leadercombat:IsAlly(target))
-end
 
 local function TargetHasHealth(target)
     return target and target:IsValid() and target.components.health
@@ -172,7 +164,7 @@ local function DoDamage(inst)
     local ents = TheSim:FindEntities(x, 0, z, radius + DAMAGE_RADIUS_PADDING, nil, NON_COLLAPSIBLE_TAGS, COLLAPSIBLE_TAGS)
     for i, v in ipairs(ents) do
         if v ~= inst and not (inst.targets and inst.targets[v]) and v:IsValid() then
-            local attackable = IsNotFriendly(attacker, v)
+            local attackable = UMCommonFns.IsNotFriendly(attacker, v)
             if v.prefab == "ice" then
                 v:Remove()
             elseif v:HasTag("player") and attackable then

@@ -50,7 +50,7 @@ local function FireSpread(inst)
         { "FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost" })
     if #ents > 0 then
         for i, v in pairs(ents) do
-            if v.components.burnable and v.components.burnable.canlight then
+            if not v.components.fueled and v.components.burnable and not v.components.burnable:IsBurning() and not v:HasTag("burnt") then
                 v.components.burnable:Ignite()
             end
         end

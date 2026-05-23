@@ -616,7 +616,7 @@ end
 
 local function IsAlly(inst, guy)
     -- Prevents lightning from forking from a Lightning Hound's target to other Hounds and friends.
-    return inst.replica.combat:GetTarget() ~= guy and guy.replica.combat:GetTarget() ~= inst and inst:HasTag("lightninghound") and guy:HasAnyTag("hound", "houndfriend")
+    return UMCommonFns.IsAlly(inst, guy, {"hound", "houndfriend"})
 end
 
 local function fnlightning()
@@ -794,6 +794,8 @@ local function fnglacial()
     if not TheWorld.ismastersim then
         return inst
     end
+
+    inst.UMIsAlly = IsAlly
 
     inst:ListenForEvent("ice_shield_death", RemoveIceShield)
 
@@ -995,7 +997,9 @@ local function OnMagmaAttacked(inst, data)
     if inst.sg and inst.sg:HasStateTag("charging") and attacker and attacker.components.health and not attacker.components.health:IsDead() and data.stimuli ~= "soul"
         and (not weapon or ((not weapon.components.weapon or not weapon.components.weapon.projectile) and not weapon.components.projectile)) and not attacker:HasTag("catapult") then
         attacker.components.health:DoFireDamage(5, inst, true)
-        if attacker.components.burnable and attacker.components.burnable.canlight then attacker.components.burnable:Ignite(true, inst, inst) end
+        if not attacker.components.fueled and attacker.components.burnable and not attacker.components.burnable:IsBurning() and not attacker:HasTag("burnt") then
+            attacker.components.burnable:Ignite(true, inst, inst)
+        end
     end
 end
 
@@ -1005,6 +1009,8 @@ local function fnmagma()
     if not TheWorld.ismastersim then
         return inst
     end
+
+    inst.UMIsAlly = IsAlly
 
     if inst.sg ~= nil then
         inst.sg:GoToState("idle")
@@ -1035,8 +1041,8 @@ local function fnmagma()
     inst.foogley = 0
 
     inst.lightningshot = true
-	inst.components.health.fire_damage_scale = 0 --AXE Magma hounds should take zero damage from the fire damage stimuli
-	
+    inst.components.health.fire_damage_scale = 0 --AXE Magma hounds should take zero damage from the fire damage stimuli
+    
     return inst
 end
 

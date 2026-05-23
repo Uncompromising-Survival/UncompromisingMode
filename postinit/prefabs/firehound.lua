@@ -26,7 +26,7 @@ local function PoofNearby(inst)
             local dz = z1 - z
             local distsq = dx * dx + dz * dz
             if distsq > 0 and distsq < range * range and DiffAngleRad(rot, math.atan2(-dz, dx)) < ARC then
-                if v.components.burnable and v.components.burnable.canlight then
+                if not v.components.fueled and v.components.burnable and not v.components.burnable:IsBurning() and not v:HasTag("burnt") then
                     v.components.burnable:Ignite()
                 end
                 if v.components.health then
@@ -40,7 +40,7 @@ end
 local function SetUpFire(inst, degrand, speed, scale, damage)
     local x, y, z = inst.Transform:GetWorldPosition()
     local projectile = SpawnPrefab("um_fire_projectile")
-    projectile.dont_hit_tags = JoinArrays(projectile.dont_hit_tags, { "hound" })
+    projectile.damager = inst
 
     local rot = inst.Transform:GetRotation()
     local dx = 1 * math.sin((rot + 90 + degrand) * DEGREES)
@@ -79,16 +79,23 @@ end
 local function OnHitOtherBurn(inst, data)
     local other = data.target
     local burntarget = other.components.rideable and other.components.rideable:GetRider() or other
-    if burntarget and not (burntarget.components.health and burntarget.components.health:IsDead()) and burntarget.components.burnable and burntarget.components.burnable.canlight then
+    if burntarget and not (burntarget.components.health and burntarget.components.health:IsDead())
+        and not burntarget.components.fueled and burntarget.components.burnable and not burntarget.components.burnable:IsBurning() and not burntarget:HasTag("burnt") then
         burntarget.components.burnable:Ignite(true, inst, inst)
         FirePoof(burntarget)
     end
+end
+
+local function IsAlly(inst, guy)
+    return UMCommonFns.IsAlly(inst, guy, {"hound", "houndfriend"})
 end
 
 env.AddPrefabPostInit("firehound", function(inst)
     if not TheWorld.ismastersim then
         return
     end
+
+    inst.UMIsAlly = IsAlly
 
     if TUNING.DSTU.FIREBITEHOUNDS then
         if inst.components.combat then
@@ -122,5 +129,6 @@ env.AddPrefabPostInit("magmahound", function(inst)
     if inst.components.combat then
         inst:ListenForEvent("onhitother", OnHitOtherBurn)
     end
+
     inst.ShootFire = ShootFireMagmaHound
 end)

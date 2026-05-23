@@ -120,7 +120,7 @@ end
 
 local function IsAlly(inst, guy)
     -- Prevents lightning from forking from a Depth Eel's target to other Depth Worms.
-    return inst.replica.combat:GetTarget() ~= guy and guy.replica.combat:GetTarget() ~= inst and inst:HasTag("shockworm") and guy:HasTag("worm")
+    return UMCommonFns.IsAlly(inst, guy, {"worm"})
 end
 
 local function onpickedfn(inst, target)

@@ -78,11 +78,17 @@ local function OnHitOtherFreeze(inst, data)
     end
 end
 
+local function IsAlly(inst, guy)
+    return UMCommonFns.IsAlly(inst, guy, {"hound", "houndfriend"})
+end
+
 env.AddPrefabPostInit("icehound", function(inst)
     if not TheWorld.ismastersim then return end
     if TUNING.DSTU.FROSTBITEHOUNDS then
         inst:ListenForEvent("onhitother", OnHitOtherFreeze)
     end
+
+    inst.UMIsAlly = IsAlly
 
     inst:AddComponent("timer")
     inst:ListenForEvent("timerdone",RechargeIceSpikeAttack)
@@ -98,5 +104,4 @@ env.AddPrefabPostInit("icehound", function(inst)
         {'houndstooth', 1.0},
         {'bluegem',      0.3},
     })
-
 end)

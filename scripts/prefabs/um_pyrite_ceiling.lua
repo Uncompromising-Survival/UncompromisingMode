@@ -28,7 +28,7 @@ local function DamageSurroundings(inst)
                 SpawnPrefab("ground_chunks_breaking").Transform:SetPosition(vx, 0, vz)
                 v:Remove()
             elseif not v:HasAnyTag("epic", "wall") then
-                if v.components.burnable and v.components.burnable.canlight then
+                if not v.components.fueled and v.components.burnable and not v.components.burnable:IsBurning() and not v:HasTag("burnt") then
                     v.components.burnable:Ignite()
                 end
                 if v.components.combat then
