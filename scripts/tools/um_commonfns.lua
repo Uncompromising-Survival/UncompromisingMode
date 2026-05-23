@@ -1,11 +1,18 @@
 local UMCommonFns = {}
+UMCommonFns.GHOSTLIKE_TAGS = {"ghost", "playerghost", "shadow", "shadowcreature", "nightmarecreature", "shadowminion", "shadowthrall", "shadowchesspiece", "brightmare", "brightmareboss"}
 
 UMCommonFns.Say = function(inst, string)
     local talker = not inst:HasTag("mime") and inst.components.talker
     if talker then talker:Say(string) end
 end
 
-UMCommonFns.GHOSTLIKE_TAGS = {"ghost", "playerghost", "shadow", "shadowcreature", "nightmarecreature", "shadowminion", "shadowthrall", "shadowchesspiece", "brightmare", "brightmareboss"}
+UMCommonFns.RestartTimer = function(inst, data)
+    local timer = inst.components.timer
+    if not (timer and data) then return end
+    local name, time, paused, initialtime_override = data.name, data.time data.paused, data.initialtime_override
+    if timer:TimerExists(name) then timer:StopTimer(name) end
+    if time then timer:StartTimer(name, time, paused, initialtime_override) end
+end
 
 UMCommonFns.KNOCKBACK_CANT_TAGS = {"fat_gang", "foodknockbackimmune", "heavybody"}
 UMCommonFns.KNOCKBACK_ARMOR_CANT_TAGS = {"heavyarmor", "knockback_protection"}
