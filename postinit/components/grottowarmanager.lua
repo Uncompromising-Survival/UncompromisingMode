@@ -1,13 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
-
-
 local UpvalueHacker = require("tools/upvaluehacker")
-
--- Change this function
-
-
 
 env.AddComponentPostInit("grottowarmanager", function(self)
     local source = "scripts/components/grottowarmanager.lua"
