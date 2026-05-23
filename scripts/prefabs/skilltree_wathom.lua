@@ -97,7 +97,7 @@ local function BuildSkillsData(SkillTreeFns)
             tags = {"rampage"},
             pos = {-214+38+38+38+38,58},
             --pos = {1,-3},
-            --root = true,
+            root = true,
             connects = {
                 "rampage_2",
             },
@@ -113,7 +113,7 @@ local function BuildSkillsData(SkillTreeFns)
 
         amp_1 = {
             title = STRINGS.SKILLTREE.WATHOM.AMP_1_TITLE,
-            icon = "wathom_amp_1",
+            icon = "wathom_amp_1", --1 or 2? -CB
             desc = STRINGS.SKILLTREE.WATHOM.AMP_1_DESC,
             --icon = "wilson_alchemy_1",
             pos = {-214,58-38},
@@ -128,8 +128,8 @@ local function BuildSkillsData(SkillTreeFns)
         },
         amp_2 = {
             title = STRINGS.SKILLTREE.WATHOM.AMP_2_TITLE,
-            icon = "wathom_amp_2",
-            desc = STRINGS.SKILLTREE.WATHOM.AMP_2_DESC,
+            icon = "wathom_amp_3",
+            desc = STRINGS.SKILLTREE.WATHOM.AMP_3_DESC,
             --icon = "wilson_alchemy_1",
             pos = {-214,58+38-38},
             group = "amp",
@@ -137,10 +137,10 @@ local function BuildSkillsData(SkillTreeFns)
             onactivate = function(inst, fromload)
                 end,        
             connects = {
-                "amp_3",
+                "shadow_wathom_1",
             },
         },
-        amp_3 = {
+        --[[amp_3 = {
             title = STRINGS.SKILLTREE.WATHOM.AMP_3_TITLE,
             icon = "wathom_amp_3",
             desc = STRINGS.SKILLTREE.WATHOM.AMP_3_DESC,
@@ -153,7 +153,7 @@ local function BuildSkillsData(SkillTreeFns)
             connects = {
                 "shadow_wathom_1",
             },
-        }, 
+        }, ]]
         shadow_wathom_1 = {
             title = STRINGS.SKILLTREE.WATHOM.SHADOW_WATHOM_1_TITLE,
             icon = "wathom_shadow_wathom_1",
@@ -198,7 +198,7 @@ local function BuildSkillsData(SkillTreeFns)
             --pos = {0,-1},
             group = "digitigrade",
             tags = {"digitigrade"},
-            --root = true,
+            root = true,
             connects = {
                 "digitigrade_2",
             },
@@ -218,20 +218,24 @@ local function BuildSkillsData(SkillTreeFns)
             desc = STRINGS.SKILLTREE.WATHOM.BITE_1_DESC,
             icon = "wathom_bite_1",
             onactivate = function(inst, fromload)
-                --inst.watch_healthtask = inst:DoPeriodicTask(3,ShowLowHealth)
+                inst.watch_healthtask = inst:DoPeriodicTask(3,ShowLowHealth)
+                --inst.lowhealthvision:set(true)
                 inst.components.combat:SetDefaultDamage(TUNING.UNARMED_DAMAGE+2.5)
             end,
             ondeactivate = function(inst, fromload)
-                --[[if inst.watch_healthtask then
+                if inst.watch_healthtask then
                     inst.watch_healthtask:Cancel()
                     inst.watch_healthtask = nil
+                end
+                --[[if inst.lowhealthvision:value() then
+                    inst.lowhealthvision:set(false)
                 end]]
                 inst.components.combat:SetDefaultDamage(TUNING.UNARMED_DAMAGE)
             end,
             pos = {-214+38+38,58},
             group = "bite",
             tags = {"bite"},
-            --root = true,
+            root = true,
             connects = {
                 "bite_2",
             },
@@ -271,11 +275,11 @@ local function BuildSkillsData(SkillTreeFns)
         echolocation_1 = {
             title = STRINGS.SKILLTREE.WATHOM.ECHOLOCATION_1_TITLE,
             desc = STRINGS.SKILLTREE.WATHOM.ECHOLOCATION_1_DESC,
-            icon = "wathom_echolocation_1",
+            icon = "wathom_echolocation_2",
             pos = {-214+38,58},
             group = "echo",
             tags = {"echo"},
-            --root = true,
+            root = true,
             onactivate = function(inst, fromload)
                 inst:AddTag("echolocation")
                 if not inst.wathom_mapexplorerbonus then
@@ -298,10 +302,10 @@ local function BuildSkillsData(SkillTreeFns)
 
             end,
             connects = {
-                "echolocation_2",
+                --"echolocation_2",
             },
         },
-        echolocation_2 = {
+        --[[echolocation_2 = {
             title = STRINGS.SKILLTREE.WATHOM.ECHOLOCATION_2_TITLE,
             desc = STRINGS.SKILLTREE.WATHOM.ECHOLOCATION_2_DESC,
             icon = "wathom_echolocation_2",
@@ -317,7 +321,7 @@ local function BuildSkillsData(SkillTreeFns)
                     inst.wathom_houndtask = nil
                 end
             end,
-        },
+        },]]
         
         wathom_allegiance_lock_1a = {
             desc = STRINGS.SKILLTREE.WATHOM.WATHOM_ALLEGIANCE_LOCK_1A,
@@ -327,7 +331,7 @@ local function BuildSkillsData(SkillTreeFns)
             tags = {"allegiance","lock"},
             root = true,
             lock_open = function(prefabname, activatedskills, readonly) 
-                if SkillTreeFns.CountTags(prefabname, "shadow_wathom", activatedskills)    > 1 then
+                if SkillTreeFns.CountTags(prefabname, "shadow_wathom", activatedskills)    > 0 then
                     return true
                 end
             end,
@@ -344,7 +348,7 @@ local function BuildSkillsData(SkillTreeFns)
             tags = {"allegiance","lock"},
             root = true,
             lock_open = function(prefabname, activatedskills, readonly) 
-                if SkillTreeFns.CountTags(prefabname, "amp3", activatedskills) > 0 then
+                if SkillTreeFns.CountTags(prefabname, "artifacts", activatedskills) > 0 then
                     return true
                 end
             end,
@@ -354,7 +358,7 @@ local function BuildSkillsData(SkillTreeFns)
         },
 
         wathom_allegiance_lock_2 = {
-            desc = STRINGS.SKILLTREE.ALLEGIANCE_LOCK_2_DESC,
+            desc = STRINGS.SKILLTREE.WATHOM.ALLEGIANCE_SHADOW_LOCK_DESC,
             pos = {204-22+2-50,176-38},  
             --pos = {0,-1},
             group = "allegiance",
@@ -365,7 +369,7 @@ local function BuildSkillsData(SkillTreeFns)
                     return "question"
                 end
 
-                return TheGenericKV:GetKV("fuelweaver_killed") == "1"
+                return TheGenericKV:GetKV("wathom_yummy") == "1"
             end,
             connects = {
                 "wathom_allegiance_shadow",
@@ -380,7 +384,7 @@ local function BuildSkillsData(SkillTreeFns)
             tags = {"lock"},
             root = true,
             lock_open = function(prefabname, activatedskills, readonly) 
-                if SkillTreeFns.CountTags(prefabname, "bite", activatedskills) >= 2 and SkillTreeFns.CountTags(prefabname, "echo", activatedskills) >= 2 then
+                if SkillTreeFns.CountTags(prefabname, "bite", activatedskills) >= 2 and SkillTreeFns.CountTags(prefabname, "echo", activatedskills) >= 1 then
                     return true
                 end
             end,
@@ -406,7 +410,7 @@ local function BuildSkillsData(SkillTreeFns)
             },
         },
         
-        wathom_amp_lock = {
+        --[[wathom_amp_lock = {
             desc = STRINGS.SKILLTREE.WATHOM.WATHOM_AMP_LOCK,
             pos = {-214+38+38+38/2,58-38},
             --pos = {0.5,0},
@@ -419,7 +423,7 @@ local function BuildSkillsData(SkillTreeFns)
                 end
             end,
             connects = {
-                "echolocation_1","bite_1","rampage_1","digitigrade_1",
+                --"echolocation_1","bite_1","rampage_1","digitigrade_1",
             },
         },
         
@@ -438,7 +442,7 @@ local function BuildSkillsData(SkillTreeFns)
             connects = {
                 "wathom_magics","wathom_friends_1"
             },
-        },
+        },]]
 
         wathom_magics = {
             title = STRINGS.SKILLTREE.WATHOM.WATHOM_MAGICS_TITLE,
@@ -447,7 +451,7 @@ local function BuildSkillsData(SkillTreeFns)
             pos = {38,25+38},
             group = "ampfuel",
             tags = {"ampfuel"},
-            --root = true,
+            root = true,
             connects = {
                 "wathom_artifacts",
             },
@@ -459,7 +463,7 @@ local function BuildSkillsData(SkillTreeFns)
             icon = "wathom_artifacts",
             pos = {38+38,25+38},
             group = "ampfuel",
-            tags = {"ampfuel"},
+            tags = {"ampfuel", "artifacts"},
             --root = true,
         },
         
@@ -470,7 +474,7 @@ local function BuildSkillsData(SkillTreeFns)
             pos = {38,25},
             group = "rally",
             tags = {"rally"},
-            --root = true,
+            root = true,
             connects = {
                 "wathom_friends_2",
             },
@@ -627,13 +631,13 @@ local function BuildSkillsData(SkillTreeFns)
             group = "allegiance",
             tags = {"allegiance","shadow","shadow_favor"},
             onactivate = function(inst, fromload)
-        
+
             end,
             ondeactivate = function(inst, fromload)
 
-        
+
             end,
-        },          
+        }, 
 
         wathom_allegiance_lock_3 = {
             desc = STRINGS.SKILLTREE.ALLEGIANCE_LOCK_3_DESC,

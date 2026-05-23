@@ -1278,13 +1278,13 @@ AddPlayerPostInit(function(inst)
     if inst:HasTag("wathom") then
         inst.counter_max = GLOBAL.net_shortint(inst.GUID, "counter_max", "counter_maxdirty")
         inst.counter_current = GLOBAL.net_shortint(inst.GUID, "counter_current", "counter_currentdirty")
-    
-        
+
+
         if _G.TheWorld.ismastersim then
             inst.HoundTask = HoundTask
-            inst:AddComponent("adrenaline")    
+            inst:AddComponent("adrenaline")
         end
-        inst:ListenForEvent("onattackother", AttackOther)
+        inst:ListenForEvent("onattackother", AttackOther) --???????
     end
 end)
 
@@ -1373,6 +1373,25 @@ AddPrefabPostInit("cutlichen", function(inst)
 
     inst:AddComponent("edible")
     inst.components.edible.secondaryfoodtype = GLOBAL.FOODTYPE.LICHEN
+end)
+
+AddPrefabPostInit("shadowheart", function(inst)
+    if not _G.TheWorld.ismastersim then return end
+
+    local function oneatenfn(eater)
+        TheGenericKV:SetKV("wathom_yummy", "1")
+        -- Insert coolest Shadow fxs you can do, prob do the fuelweaver shadow stun too.
+        --[[eater:DoTaskInTime(.2,function() -- Want to simulate a beating heart with the regen :> -CB
+            eater.components.debuffable:AddDebuff("healthregenbuff_vetcurse_shadowheart2", "healthregenbuff_vetcurse", {duration = (inst.components.edible.healthvalue * 0.1)})
+        end)]]
+    end
+
+    inst:AddComponent("edible")
+    inst.components.edible.secondaryfoodtype = GLOBAL.FOODTYPE.LICHEN --Changing to its own thing that Wathom can eat...
+    inst.components.edible.healthvalue = 62.5
+    inst.components.edible.hungervalue = 25
+    inst.components.edible.sanityvalue = -60
+	inst.components.edible:SetOnEatenFn(oneatenfn)
 end)
 
 local UpvalueHacker = require("tools/upvaluehacker")
