@@ -8,6 +8,7 @@ local UMVetCurse = {}
 
 local function ForceToTakeMoreDamage(inst)
     local self = inst.components.combat
+    if not self then return end
     local _GetAttacked = self.GetAttacked
     if not inst.OldCombatGetAttacked then
         inst.OldCombatGetAttacked = _GetAttacked
@@ -25,6 +26,7 @@ end
 
 local function ForceToTakeMoreHunger(inst)
     local self = inst.components.hunger
+    if not self then return end
     local _DoDelta = self.DoDelta
     if not inst.OldHungerDoDelta then
         inst.OldHungerDoDelta = _DoDelta
@@ -42,6 +44,7 @@ end
 
 local function ForceToTakeMoreTime(inst)
     local self = inst.components.oldager
+    if not self then return end
     local _OnTakeDamage = self.OnTakeDamage
     if not inst.OldOldAgerOnTakeDamage then
         inst.OldOldAgerOnTakeDamage = _OnTakeDamage
@@ -59,6 +62,7 @@ end
 ----------------------------------DETACH---------------------------------
 local function ForceToTakeUsualDamage(inst)
     local self = inst.components.combat
+    if not self then return end
     if inst.OldCombatGetAttacked then
         self.GetAttacked = inst.OldCombatGetAttacked
         inst.OldCombatGetAttacked = nil
@@ -67,6 +71,7 @@ end
 
 local function ForceToTakeUsualHunger(inst)
     local self = inst.components.hunger
+    if not self then return end
     if inst.OldHungerDoDelta then
         self.DoDelta = inst.OldHungerDoDelta
         inst.OldHungerDoDelta = nil
@@ -75,6 +80,7 @@ end
 
 local function ForceToTakeUsualTime(inst)
     local self = inst.components.oldager
+    if not self then return end
     if inst.OldOldAgerOnTakeDamage then
         self.OnTakeDamage = inst.OldOldAgerOnTakeDamage
         inst.OldOldAgerOnTakeDamage = nil
@@ -149,24 +155,28 @@ local function oneat(inst, data)
 end
 
 local function ForceOvertimeFoodEffects(inst)
+    local eater = inst.components.eater
+    if not eater then return end
     if not inst.modded_healthabsorption then
-        inst.modded_healthabsorption = inst.components.eater.healthabsorption
+        inst.modded_healthabsorption = eater.healthabsorption
     end
 
     if not inst.modded_hungerabsorption then
-        inst.modded_hungerabsorption = inst.components.eater.hungerabsorption
+        inst.modded_hungerabsorption = eater.hungerabsorption
     end
 
     if not inst.modded_sanityabsorption then
-        inst.modded_sanityabsorption = inst.components.eater.sanityabsorption
+        inst.modded_sanityabsorption = eater.sanityabsorption
     end
 
-    inst.components.eater:SetAbsorptionModifiers(0, inst.wolfgang_vetcurse and 0 or inst.modded_hungerabsorption or 1, 0)
+    eater:SetAbsorptionModifiers(0, inst.wolfgang_vetcurse and 0 or inst.modded_hungerabsorption or 1, 0)
 
     inst:ListenForEvent("oneat", oneat)
 end
 
 local function ForceUsualFoodEffects(inst)
+    local eater = inst.components.eater
+    if not eater then return end
     inst.components.eater:SetAbsorptionModifiers(inst.modded_healthabsorption, inst.modded_hungerabsorption, inst.modded_sanityabsorption)
 
     inst:RemoveEventCallback("oneat", oneat)
@@ -183,7 +193,7 @@ local function AttachCurse(inst)
         --inst.components.combat.externaldamagemultipliers:SetModifier(inst, .75) -- Effect Removed
         inst.vetcurse = true
 
-        if inst.components and inst.components.oldager then
+        if inst.components.oldager then
             ForceToTakeMoreTime(inst)
         else
             ForceToTakeMoreDamage(inst)
@@ -193,18 +203,6 @@ local function AttachCurse(inst)
         ForceOvertimeFoodEffects(inst)
         inst:AddTag("vetcurse")
         inst:PushEvent("vetcurse_added")
-
-        print("doing item upgrades")
-        if inst.components.inventory ~= nil then
-            print("owner inv not nil")
-            for k, v in pairs(inst.components.inventory.equipslots) do
-                print("k,v", k, v)
-                print(v ~= nil and v.UpgradeItemVetcurse ~= nil and "has upgrade function " or "no upgrade function")
-                if v ~= nil and v.UpgradeItemVetcurse ~= nil then
-                    v:UpgradeItemVetcurse()
-                end
-            end
-        end
     end
 end
 
@@ -213,7 +211,7 @@ local function DetachCurse(inst)
         --inst.components.combat.externaldamagemultipliers:RemoveModifier(inst)
         inst.vetcurse = nil
 
-        if inst.components and inst.components.oldager then --taking a guess thats what her tag is, I swear, I actually don't know
+        if inst.components.oldager then --taking a guess thats what her tag is, I swear, I actually don't know
             ForceToTakeUsualTime(inst)
         else
             ForceToTakeUsualDamage(inst)
@@ -223,19 +221,6 @@ local function DetachCurse(inst)
         ForceUsualFoodEffects(inst)
         inst:RemoveTag("vetcurse")
         inst:PushEvent("vetcurse_removed")
-
-
-        print("doing item dwongrades")
-        if inst.components.inventory ~= nil then
-            print("owner inv not nil")
-            for k, v in pairs(inst.components.inventory.equipslots) do
-                print("k,v", k, v)
-                print(v ~= nil and v.RemoveItemVetcurse ~= nil and "has remove function " or "no remove function")
-                if v ~= nil and v.RemoveItemVetcurse ~= nil then
-                    v:RemoveItemVetcurse()
-                end
-            end
-        end
     end
 end
 
@@ -244,6 +229,11 @@ UMVetCurse.ToggleVetCurse = function(inst, toggle)
         AttachCurse(inst)
     else
         DetachCurse(inst)
+    end
+    if inst.components.inventory then
+        for k, v in pairs(inst.components.inventory.equipslots) do
+            if v.UMToggleItemVetcurse then v:UMToggleItemVetcurse(toggle) end
+        end
     end
     if inst.UMToggleUniqueVetCurse then inst:UMToggleUniqueVetCurse(toggle) end
 end

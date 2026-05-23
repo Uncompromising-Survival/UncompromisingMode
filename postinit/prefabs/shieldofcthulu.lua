@@ -109,30 +109,29 @@ local function can_cast_fn(doer, target, pos, inst)
     return inst.components.rechargeable:IsCharged()
 end
 
-local function UpgradeItemVetcurse(inst)
-    if not inst.components.equippable:IsEquipped() then return end
+local function ToggleItemVetcurse(inst, toggle)
+    if toggle then
+        if not inst.components.equippable:IsEquipped() then return end
 
-    inst.spelltype = "UM_SHIELD_BASH"
+        inst.spelltype = "UM_SHIELD_BASH"
 
+        inst:AddComponent("spellcaster")
+        inst.components.spellcaster:SetSpellFn(castspell)
+        inst.components.spellcaster:SetCanCastFn(can_cast_fn)
+        inst.components.spellcaster.canuseontargets = true
+        inst.components.spellcaster.canuseondead = true
+        inst.components.spellcaster.canuseonpoint = true
+        inst.components.spellcaster.canuseonpoint_water = true
+        inst.components.spellcaster.canusefrominventory = false
 
-    inst:AddComponent("spellcaster")
-    inst.components.spellcaster:SetSpellFn(castspell)
-    inst.components.spellcaster:SetCanCastFn(can_cast_fn)
-    inst.components.spellcaster.canuseontargets = true
-    inst.components.spellcaster.canuseondead = true
-    inst.components.spellcaster.canuseonpoint = true
-    inst.components.spellcaster.canuseonpoint_water = true
-    inst.components.spellcaster.canusefrominventory = false
+        inst._vetcurseupgraded:set(true)
 
-    inst._vetcurseupgraded:set(true)
-
-    --todo: visual stuff?
-end
-
-local function RemoveItemVetcurse(inst)
-    inst.spelltype = nil
-    inst:RemoveComponent("spellcaster")
-    inst._vetcurseupgraded:set(false)
+        --todo: visual stuff?
+    else
+        inst.spelltype = nil
+        inst:RemoveComponent("spellcaster")
+        inst._vetcurseupgraded:set(false)
+    end
 end
 
 local function ReticuleTargetFn(inst)
@@ -213,21 +212,18 @@ env.AddPrefabPostInit("shieldofterror", function(inst)
     local _onequip = inst.components.equippable.onequipfn
     local _onunequip = inst.components.equippable.onunequipfn
     local function OnEquip(inst, owner)
-        if owner:HasTag("vetcurse") then
-            UpgradeItemVetcurse(inst)
-        end
+        if owner:HasTag("vetcurse") and inst.UMToggleItemVetcurse then inst:UMToggleItemVetcurse(true) end
         _onequip(inst, owner)
     end
 
     local function OnUnequip(inst, owner)
-        RemoveItemVetcurse(inst)
+        if inst.UMToggleItemVetcurse then inst:UMToggleItemVetcurse() end
         _onunequip(inst, owner)
     end
 
     inst.components.equippable:SetOnEquip(OnEquip)
     inst.components.equippable:SetOnUnequip(OnUnequip)
-    inst.UpgradeItemVetcurse = UpgradeItemVetcurse
-    inst.RemoveItemVetcurse = RemoveItemVetcurse
+    inst.UMToggleItemVetcurse = ToggleItemVetcurse
 end)
 
 env.AddPrefabPostInit("eyemaskhat", function(inst)
