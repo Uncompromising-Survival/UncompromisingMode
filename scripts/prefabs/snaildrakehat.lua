@@ -5,7 +5,6 @@ local assets =
     Asset("IMAGE", "images/inventoryimages/snaildrakehat.tex"),
 }
 
-
 local function onequip(inst, owner)
     owner.AnimState:OverrideSymbol("swap_hat", "snaildrakehat", "swap_hat")
 
@@ -20,10 +19,12 @@ local function onequip(inst, owner)
         owner.AnimState:Show("HEAD_HAT_NOHELM")
         owner.AnimState:Hide("HEAD_HAT_HELM")
     end
-    
+
     if owner.components.health ~= nil then
         owner.components.health.externalfiredamagemultipliers:SetModifier(inst, 1 - TUNING.DSTU.SNAILDRAKEHAT_FIRE_RESIST)
     end
+
+    --owner:AddTag("um_firedodger")
 end
 
 local function onunequip(inst, owner)
@@ -43,6 +44,8 @@ local function onunequip(inst, owner)
     if owner.components.health ~= nil then
         owner.components.health.externalfiredamagemultipliers:RemoveModifier(inst)
     end
+
+    --owner:RemoveTag("um_firedodger")
 end
 
 local function fn()

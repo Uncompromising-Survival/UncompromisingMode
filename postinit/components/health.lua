@@ -251,6 +251,12 @@ env.AddComponentPostInit("health", function(self)
     local _DoFireDamage = self.DoFireDamage
     function self:DoFireDamage(...)
         if self.um_fireimmune then return end -- (not instant or mult > 0) in DoFireDamage means we are "takingfiredamage" when we shouldn't...
+        --[[if self.inst:HasTag("um_firedodger") and math.random() > 0.5 then
+            if self.inst.SoundEmitter then
+                self.inst.SoundEmitter:PlaySound("dontstarve/movement/slip_fall_whoop")
+            end
+            return
+        end]]
         return _DoFireDamage(self, ...)
     end
 
