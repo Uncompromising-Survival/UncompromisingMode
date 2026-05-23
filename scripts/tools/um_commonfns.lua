@@ -9,7 +9,7 @@ end
 UMCommonFns.RestartTimer = function(inst, data)
     local timer = inst.components.timer
     if not (timer and data) then return end
-    local name, time, paused, initialtime_override = data.name, data.time data.paused, data.initialtime_override
+    local name, time, paused, initialtime_override = data.name, data.time, data.paused, data.initialtime_override
     if timer:TimerExists(name) then timer:StopTimer(name) end
     if time then timer:StartTimer(name, time, paused, initialtime_override) end
 end
