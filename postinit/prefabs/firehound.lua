@@ -20,6 +20,8 @@ local function PoofNearby(inst)
     for i, v in ipairs(TheSim:FindEntities(x, y, z, radius, nil, AOE_TARGET_CANT_TAGS)) do
         if v ~= inst and v:IsValid() and not v:IsInLimbo()
             and not (v.components.health ~= nil and v.components.health:IsDead()) then
+            local attackable = UMCommonFns.IsNotFriendly(inst, v)
+            if not attackable then return end
             local range = radius + v:GetPhysicsRadius(0)
             local x1, y1, z1 = v.Transform:GetWorldPosition()
             local dx = x1 - x
