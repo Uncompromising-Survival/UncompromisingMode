@@ -33,7 +33,7 @@ local function StompHandler(inst, data)
         inst.components.health:SetPercent(0.49)
     end]]
     if inst.components.timer:GetTimeLeft("spawnguards_cd") and inst.components.timer:GetTimeLeft("spawnguards_cd") > 3 then
-        local newtime = inst.components.timer:GetTimeLeft("spawnguards_cd") - data.damage / 50 --new code to adjust bq to speed up the fight if player is going through her really quickly, need to make sure her abilities actually get the chance to proc.
+        local newtime = inst.components.timer:GetTimeLeft("spawnguards_cd") - (data.damage or 0) / 50 --new code to adjust bq to speed up the fight if player is going through her really quickly, need to make sure her abilities actually get the chance to proc.
         if newtime < 3 then
             newtime = 3
         end
@@ -44,7 +44,7 @@ local function StompHandler(inst, data)
         if inst.tiredcount then
             inst.tiredcount = inst.tiredcount - 0.5
         end
-        if data.damage >= 100 then
+        if data.damage and data.damage >= 100 then
             if inst.tiredcount then
                 inst.tiredcount = inst.tiredcount - 2
             end
