@@ -436,7 +436,7 @@ if TUNING.DSTU.WORTOXCHANGES then
                 if not inst.wortox_damage_recent then
                     inst.wortox_damage_recent = 0
                 end
-                inst.wortox_damage_recent = inst.wortox_damage_recent + data.damage        
+                inst.wortox_damage_recent = inst.wortox_damage_recent + (data.damage or 0)        
                 if inst.wortox_damage_recent >= 176 then
                     inst.wortox_damage_recent = 0
                     ReleaseSoul(inst,data.target,ref_item)
