@@ -24,7 +24,7 @@ local function OnLand(inst)
     local ents = TheSim:FindEntities(x, y, z, 1.5, should_hit, shouldnt_hit)
     for i, v in ipairs(ents) do
         if v.prefab ~= inst.attacker.prefab and not (inst.attacker_faction and v:HasTag(inst.attacker_faction)) then
-            v.components.combat:GetAttacked(inst.attacker and inst.attacker or nil,34,inst)
+            v.components.combat:GetAttacked(inst.attacker and inst.attacker or nil,20,inst)
         end
     end
     inst:Remove()
@@ -114,7 +114,7 @@ local function DoDamageEffect(inst,target)
 
 	if not plague then
         if target.components.combat and not target.components.health:IsDead() then
-            target.components.combat:GetAttacked(inst.attacker and inst.attacker or nil,34,inst)	
+            target.components.combat:GetAttacked(inst.attacker and inst.attacker or nil,20,inst)	
         end
 		target:PushEvent("knockback", { knocker = inst, radius = 1.5, strengthmult = 1.5, forcelanded = true })
 	end
@@ -129,18 +129,18 @@ local function OnExplode(inst, target)
             DoDamageEffect(inst,v)
         end
     end
-	inst:DoTaskInTime(0.1,function(inst) --AXE trigger the spoil after a delay, incase something was dropped from an enemy
+	--inst:DoTaskInTime(0.1,function(inst) --AXE trigger the spoil after a delay, incase something was dropped from an enemy
 		local ents = TheSim:FindEntities(x, y, z, TUNING.TRAP_TEETH_RADIUS)
 		for i, v in ipairs(ents) do
 			if v.components.inventoryitem and v.components.perishable then
 				if v.components.inventoryitem:IsHeld() then
-					v.components.perishable:SetPercent(v.components.perishable:GetPercent()-0.33)
+					v.components.perishable:SetPercent(v.components.perishable:GetPercent()-0.05)
 				else
 					v.components.perishable:SetPercent(0)
 				end
 			end
 		end
-	end)
+	--end)
     inst.SoundEmitter:PlaySound("dontstarve/common/together/infection_burst")
     inst.components.umripples:OnNoLongerLandedServer()
     inst.AnimState:PlayAnimation("explode")

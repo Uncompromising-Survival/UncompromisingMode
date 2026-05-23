@@ -122,7 +122,7 @@ local function fn()
 
     inst:AddComponent("combat")
     inst.components.combat:SetRange(28,3)
-    inst.components.combat:SetDefaultDamage(50)
+    inst.components.combat:SetDefaultDamage(34)
     inst.components.combat:SetAttackPeriod(3)
     inst.components.combat:SetRetargetFunction(GetRandomWithVariance(1, 0.5), retargetfn)
     inst.components.combat:SetKeepTargetFunction(shouldKeepTarget)
