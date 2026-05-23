@@ -52,7 +52,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     BOAT_BUMPER_KELP_KIT = "- Spoils over time.\n- Regenerates health in water.",
     BATHBOMB = "- Restores lost maximum health, if tossed in a certain larger spring in mainland.",
     ONEMANBAND = "- Makes pigs and bunnymen leave their houses.\n- Reduced sanity drain.",
-    FIRESTAFFF = "- Creates controlled fires.",
+    FIRESTAFF = "- Creates controlled fires.",
     LIGHTER = "- Recharges with embers.\n- Doesn't break at 0%.",
     VOIDCLOTH_UMBRELLA = "-No longer repaired by acid rain.",
 
