@@ -2,7 +2,7 @@
 AddRoom("RedMushForest_Petrified", {
     colour={r=0.8,g=0.1,b=0.1,a=0.9},
     value = WORLD_TILES.FUNGUSRED,
-    tags = {"Hutch_Fishbowl"}, --"um_poofshrooms"},
+    tags = {"Hutch_Fishbowl"},
     contents =  {
         distributepercent = .4,
         distributeprefabs=
@@ -27,7 +27,7 @@ AddRoom("RedMushForest_Petrified", {
 AddRoom("RedSpiderForest_Petrified", {
     colour={r=0.8,g=0.1,b=0.4,a=0.9},
     value = WORLD_TILES.FUNGUSRED,
-    tags = {"Hutch_Fishbowl"}, --"um_poofshrooms"},
+    tags = {"Hutch_Fishbowl"},
     contents =  {
         distributepercent = .4,
         distributeprefabs=
@@ -55,7 +55,7 @@ AddRoom("RedSpiderForest_Petrified", {
 AddRoom("GreenMushForest_Petrified", {
     colour={r=0.1,g=0.8,b=0.1,a=0.9},
     value = WORLD_TILES.FUNGUSGREEN,
-    tags = {"Hutch_Fishbowl"}, --"um_poofshrooms"},
+    tags = {"Hutch_Fishbowl"},
     contents =  {
         distributepercent = .7,
         distributeprefabs=
@@ -80,7 +80,7 @@ AddRoom("GreenMushForest_Petrified", {
 AddRoom("GreenMushRabbits_Petrified", {
     colour={r=0.1,g=0.8,b=0.3,a=0.9},
     value = WORLD_TILES.FUNGUSGREEN,
-    tags = {"Hutch_Fishbowl"}, --"um_poofshrooms"},
+    tags = {"Hutch_Fishbowl"},
     contents =  {
         countstaticlayouts={
             ["RabbitTown"]=1,
@@ -117,7 +117,7 @@ AddRoom("GreenMushRabbits_Petrified", {
 AddRoom("BlueMushForest_Petrified", {
     colour={r=0.1,g=0.1,b=0.8,a=0.9},
     value = WORLD_TILES.FUNGUS,
-    tags = {"Hutch_Fishbowl"}, --"um_poofshrooms"},
+    tags = {"Hutch_Fishbowl"},
     contents =  {
         distributepercent = .6,
         distributeprefabs=
@@ -141,7 +141,7 @@ AddRoom("BlueMushForest_Petrified", {
 AddRoom("BlueSpiderForest_Petrified", {
     colour={r=0.1,g=0.1,b=0.8,a=0.9},
     value = WORLD_TILES.FUNGUS,
-    tags = {"Hutch_Fishbowl"}, --"um_poofshrooms"},
+    tags = {"Hutch_Fishbowl"},
     contents =  {
         distributepercent = .7,
         distributeprefabs=
@@ -166,7 +166,7 @@ AddRoom("BlueSpiderForest_Petrified", {
 AddRoom("FungusNoiseForest_Petrified", {
     colour={r=1.0,g=1.0,b=1.0,a=0.9},
     value = WORLD_TILES.FUNGUS_NOISE,
-    tags = {"Hutch_Fishbowl"}, --"um_poofshrooms"},
+    tags = {"Hutch_Fishbowl"},
     type = NODE_TYPE.Room,
     contents =  {
         distributepercent = .4,
@@ -198,7 +198,7 @@ AddRoom("FungusNoiseForest_Petrified", {
 AddRoom("FungusNoiseMeadow_Petrified", {
     colour={r=1.0,g=1.0,b=1.0,a=0.9},
     value = WORLD_TILES.FUNGUS_NOISE,
-    tags = {"Hutch_Fishbowl"}, --"um_poofshrooms"},
+    tags = {"Hutch_Fishbowl"},
     type = NODE_TYPE.Room,
     contents =  {
         distributepercent = .25,
