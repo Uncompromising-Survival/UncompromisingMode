@@ -51,8 +51,8 @@ SetSharedLootTable("um_daywalker2",
         { "wagpunkhat_blueprint",             1 },
         { "um_boatbottle_blueprint",          1 },
         { "chestupgrade_stacksize_blueprint", 1 },
-        { "chesspiece_daywalker2_sketch",     1 },
-        { "wagpunkbits_kit_blueprint",        1 }
+        { "wagpunkbits_kit_blueprint",        1 },
+        { "chesspiece_daywalker2_sketch",     1 }
     })
 
 
