@@ -89,16 +89,16 @@ AddTaskPreInit("MoonCaveForest", function(task)
     }
 end)
 
-local mushroom_rooms = {"MoonMushForest","MoonMushForest_entrance", -- Grotto
-}
+local mushroom_rooms = {"MoonMushForest","MoonMushForest_entrance"}
 
 for i,v in ipairs(mushroom_rooms) do
 	AddRoomPreInit(v, function(room)
 		if room.tags then
 			--table.insert(room.tags,"ForceDisconnected")
 			table.insert(room.tags,"not_mainland")
+			table.insert(room.tags,"um_grottowar")
 		else
-			room.tags = {"not_mainland"}
+			room.tags = {"not_mainland","um_grottowar"}
 		end
 		room.SafeFromDisconnect = true -- Thank you Klei, this is a very nice option to have
 	end)
@@ -149,7 +149,7 @@ AddTaskPreInit("ArchiveMaze", function(task)
 	task.entrance_room = "ArchiveMazeEntrance_Flooded"
     task.room_choices =
     {
-        ["ArchiveMazeRooms"] = math.random(8,12),
+        ["ArchiveMazeRooms"] = math.random(8,10),
     }
 end)
 	

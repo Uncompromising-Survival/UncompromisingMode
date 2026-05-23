@@ -82,6 +82,9 @@ local function AddRipples(prefab, xscale, yscale, zscale, vert_offset) --AXE The
     end)
 end
 
+
+-- AXE TODO convert the many function calls to a table and a loop... would that even be cleaner though? It's already about as complex as a table...? What do you think?
+
 -- Tuned Ripples on Prefabs
 AddRipples("molebathill", 2)
 AddRipples("moonspider_spike", 0.5)
@@ -101,6 +104,7 @@ AddRipples("um_tentacle_moon_mine", 0.5)
 AddRipples("boulder_crab", 3)
 AddRipples("molebat", 1.1, 1.1, 1.1)
 AddRipples("frog", 1.1, 1.1, 1.1)
+AddRipples("lunarfrog", 1.1, 1.1, 1.1)
 AddRipples("worm", 1.4, 1.4, 1.4)
 AddRipples("viperworm", 1.4, 1.4, 1.4)
 AddRipples("shockworm", 1.4, 1.4, 1.4)
@@ -179,7 +183,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 end)
 
 -- AXE Add mobs that don't fly but still shouldn't be penalized
-local um_flood_speed_immune = { "frog", "molebat" }
+local um_flood_speed_immune = { "frog", "molebat","lunarfrog" }
 
 for i, v in ipairs(um_flood_speed_immune) do
     env.AddPrefabPostInit(v, function(inst)
