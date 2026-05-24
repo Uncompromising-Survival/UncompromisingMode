@@ -10,26 +10,25 @@ local function BecomeGemMite(inst)
     inst.components.lootdropper:AddChanceLoot("um_gemology_geode_vent", 1)
 end
 
+env.AddPrefabPostInit("world", function(inst) -- Supposedly, this is better since it's called once for each "world" prefab, which usually only spawns once per shard.
+    if not TheWorld.ismastersim then return end
+    local _SetUpChanceLoot = UpvalueHacker.SetUpvalue(Prefabs.cave_vent_mite.fn, "SetShield", "SetUpChanceLoot")
+    if _SetUpChanceLoot then
+        local function SetUpChanceLoot(inst, ...)
+            local ret = _SetUpChanceLoot(inst, ...)
+            --print("is geode?", inst.isGeode)
+            if inst.isGeode then
+                --print("add gem vent")
+                inst.components.lootdropper:AddChanceLoot("um_gemology_geode_vent", 1)
+            end
+            return ret
+        end
+        UpvalueHacker.SetUpvalue(inst.SetShield, SetUpChanceLoot, "SetUpChanceLoot")
+    end
+end)
+
 env.AddPrefabPostInit("cave_vent_mite", function(inst)
     if not TheWorld.ismastersim then return end
-
-    local function SetUpChanceLoot(inst)
-        inst.components.lootdropper.chanceloot = nil
-
-        inst.components.lootdropper:AddChanceLoot("rocks", inst.shielded and 1.0 or .5)
-
-        --print("is geode?", inst.isGeode)
-        if inst.isGeode then
-            --print("add gem vent")
-            inst.components.lootdropper:AddChanceLoot("um_gemology_geode_vent", 1)
-        end
-
-        if inst.components.planarentity then
-            inst.components.lootdropper:AddChanceLoot("horrorfuel", .5)
-        end
-    end
-
-    UpvalueHacker.SetUpvalue(inst.SetShield, SetUpChanceLoot, "SetUpChanceLoot")
 
     inst:DoTaskInTime(0, function(inst)
         if math.random() > .5 and not inst.isGeode then

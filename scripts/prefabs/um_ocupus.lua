@@ -33,7 +33,7 @@ end
 
 local function SpawnLoot(inst,x,y,z,item,spoiled)
     local loot = SpawnPrefab(item)
-    if loot == nil then return end
+    if not loot then return end
     local offset = FindSwimmableOffset(inst:GetPosition(), math.random() * PI * 2, math.random(1,12))
     if offset then
         x = offset.x + x
