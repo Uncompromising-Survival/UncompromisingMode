@@ -110,11 +110,12 @@ AddRipples("lunarfrog", 1.1, 1.1, 1.1)
 AddRipples("worm", 1.4, 1.4, 1.4)
 AddRipples("viperworm", 1.4, 1.4, 1.4)
 AddRipples("shockworm", 1.4, 1.4, 1.4)
-AddRipples("pigman", 1.2, 1.2, 1.2, 0.2)
-AddRipples("bunnyman", 1.2, 1.2, 1.2, 0.2)
-AddRipples("merm", 1.2, 1.2, 1.2, 0.2)
 AddRipples("carrat", 1.1, 1.1, 1.1, 0.2)
 AddRipples("mushgnome", 0.8, 0.8, 0.8, 0.2)
+local pigmanlike_minions = { "pigman", "bunnyman", "merm", "mermguard", "merm_lunar", "mermguard_lunar" }
+for _, v in ipairs(pigmanlike_minions) do
+    AddRipples(v, 1.2, 1.2, 1.2, 0.2)
+end
 --
 
 

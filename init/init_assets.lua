@@ -487,6 +487,7 @@ local minimap_icons = {
     "uncompromising_winkyhomeburrow",
     "winky",
     "telebase_active",
+    "wathom",
     "wixie",
     "um_pyre_nettles_map",
     "um_tornado_map",
