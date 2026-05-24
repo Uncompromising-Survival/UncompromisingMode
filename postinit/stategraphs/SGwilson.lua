@@ -2004,7 +2004,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 --inst.AnimState:PlayAnimation("spearjab_pre")
                 --inst.AnimState:PushAnimation("spearjab", false)
 
-                inst.AnimState:PlayAnimation("punch")
+                inst.AnimState:PlayAnimation("toolpunch")
             end,
 
             timeline =
