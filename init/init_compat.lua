@@ -97,52 +97,47 @@ local function hacked(inst, data)
     inst:RemoveEventCallback("hacked", hacked)
 end
 
-local DoScythe_old
+local function ScytheFunctions(inst)
+    if not inst.DoScythe then return end
+    local DoScythe_old = inst.DoScythe
+    local function DoScythe(inst, target, doer, ...)
+        if target.components.pickable or target.components.hackable then
+            local harvested = nil
+            local doer_pos = doer:GetPosition()
+            local x, y, z = doer_pos:Get()
 
-local function DoScythe(inst, target, doer, ...)
-    if target.components.pickable or target.components.hackable then
-        local harvested = nil
-        local doer_pos = doer:GetPosition()
-        local x, y, z = doer_pos:Get()
+            local doer_rotation = doer.Transform:GetRotation()
 
-        local doer_rotation = doer.Transform:GetRotation()
-
-        local ents = TheSim:FindEntities(x, y, z, TUNING.VOIDCLOTH_SCYTHE_HARVEST_RADIUS * 1.2, nil, HARVEST_CANTTAGS, HARVEST_ONEOFTAGS)
-        for _, ent in pairs(ents) do
-            if ent:IsValid() and ent:HasOneOfTags(HARVEST_AFTERFINDINGONEOFTAGS) and inst:IsEntityInFront(ent, doer_rotation, doer_pos) then
-                if ent.components.pickable ~= nil then
-                    inst:HarvestPickable(ent, doer)
-                    harvested = true
-                elseif ent.components.hackable ~= nil then
-                    local workamount = 3 * doer.components.workmultiplier:GetMultiplier(ACTIONS.HACK)
-                    if ent.components.hackable.hacksleft <= workamount then
-                        ent:ListenForEvent("hacked", hacked)
+            local ents = TheSim:FindEntities(x, y, z, TUNING.VOIDCLOTH_SCYTHE_HARVEST_RADIUS * 1.2, nil, HARVEST_CANTTAGS, HARVEST_ONEOFTAGS)
+            for _, ent in pairs(ents) do
+                if ent:IsValid() and ent:HasOneOfTags(HARVEST_AFTERFINDINGONEOFTAGS) and inst:IsEntityInFront(ent, doer_rotation, doer_pos) then
+                    if ent.components.pickable ~= nil then
+                        inst:HarvestPickable(ent, doer)
+                        harvested = true
+                    elseif ent.components.hackable ~= nil then
+                        local workamount = 3 * doer.components.workmultiplier:GetMultiplier(ACTIONS.HACK)
+                        if ent.components.hackable.hacksleft <= workamount then
+                            ent:ListenForEvent("hacked", hacked)
+                        end
+                        ent.components.hackable:Hack(doer, workamount, nil, nil, true)
+                        harvested = true
                     end
-                    ent.components.hackable:Hack(doer, workamount, nil, nil, true)
-                    harvested = true
                 end
             end
+            if harvested then
+                inst:PushEvent("um_scythed", { doer = doer })
+            end
         end
-        if harvested then
-            inst:PushEvent("um_scythed", { doer = doer })
-        end
-    end
 
-    return DoScythe_old(inst, target, doer, ...)
+        return DoScythe_old(inst, target, doer, ...)
+    end
+    inst.DoScythe = DoScythe
 end
 
 env.AddPrefabPostInitAny(function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
-    if inst.DoScythe then
-        if not DoScythe_old then
-            DoScythe_old = inst.DoScythe
-        end
-        inst.DoScythe = DoScythe
-    end
+    if not TheWorld.ismastersim then return end
+    ScytheFunctions(inst)
 end)
-
 
 local _makeemptyfn
 local function makeemptyfn(inst, ...)
@@ -181,8 +176,6 @@ local function onregenfn(inst, ...)
     inst.components.hackable:Regen()
     return _onregenfn and _onregenfn(inst, ...)
 end
-
-
 
 env.AddPrefabPostInit("hooded_fern", function(inst)
     if not TheWorld.ismastersim or not (IsSWEnabled() or IsHAMEnabled()) then return end
