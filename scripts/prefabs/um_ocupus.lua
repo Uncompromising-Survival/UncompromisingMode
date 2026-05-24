@@ -33,6 +33,7 @@ end
 
 local function SpawnLoot(inst,x,y,z,item,spoiled)
     local loot = SpawnPrefab(item)
+    if loot == nil then return end
     local offset = FindSwimmableOffset(inst:GetPosition(), math.random() * PI * 2, math.random(1,12))
     if offset then
         x = offset.x + x
@@ -59,9 +60,9 @@ local random_loot = {
     cookiecutters = {num = 11, items = {"monstersmallmeat","cookiecuttershell"}, counts = {4,5}},
     cookiecutters_salty = {num = 12, items = {"monstersmallmeat","cookiecuttershell","saltrock"}, counts = {2,1,5}},
     bumper_boat = {num = 13, items = {"boatpatch","boat_bumper_shell_kit"}, counts = {4,3}},
-    not_so_floaty = {num = 14, items = {"flotationcushion","boneshard","spoiledfood"}, counts = {1,2,4}},
+    not_so_floaty = {num = 14, items = {"flotationcushion","boneshard","spoiled_food"}, counts = {1,2,4}},
     monkey_captain = {num = 15, items = {"meat","monkey_mediumhat","stash_map","oar_monkey"}, counts = {1,1,1,1}},
-    monkey_crew = {num = 16, items = {"boards","monkey_smallhat","banana"}, counts = {4,2,3}},
+    monkey_crew = {num = 16, items = {"boards","monkey_smallhat","cave_banana"}, counts = {4,2,3}},
     sail_boat = {num = 17, items = {"boards","rope","silk"}, counts = {8,3,4}},
     turbine_boat = {num = 18, items = {"boards","transistor","mastupgrade_windturbine_item"}, counts = {6,2,1}},
 }
