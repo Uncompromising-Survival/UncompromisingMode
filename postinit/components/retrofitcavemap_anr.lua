@@ -14,6 +14,9 @@ local function RetrofitArchivesBridge()
 	if #centers == 0 then
 		return false
 	end
+	if #start == 0 then
+		return false
+	end
 	local dist = 120
 	local minidx = 1
 	for i,v in ipairs(centers) do

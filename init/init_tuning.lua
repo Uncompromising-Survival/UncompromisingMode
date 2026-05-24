@@ -250,6 +250,7 @@ TUNING.DSTU = {
     WORMWOOD_CONFIG_FIRE = GetModConfigData("wormwood_fire"),
     WORMWOOD_CONFIG_PLANTS = GetModConfigData("wormwood_plants"),
     WORMWOOD_CONFIG_TRAPS = GetModConfigData("wormwood_trapbuffs"),
+    WORMWOOD_PHOTOSYNTHESIS = GetModConfigData("wormwood_photosynthesis"),
     -- Warly
     WARLY_CHANGES = GetModConfigData("warly_changes"),
     --WARLY_FOOD_TASTE = GetModConfigData("warly_food_taste_"),
