@@ -218,7 +218,7 @@ local function CheckTimeRegrow(inst)
 end
 
 local function start_reset_task(inst)
-    inst.components.timer:StartTimer("regrow", 3840)
+    UMCommonFns.RestartTimer(inst, {name = "regrow", time = 3840})
 end
 
 local function on_explode(inst, target)

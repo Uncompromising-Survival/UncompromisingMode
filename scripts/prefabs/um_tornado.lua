@@ -97,7 +97,7 @@ local destroy_prefabs = {
     "cutgrass",
     "pinecone",
     "twigs",
-    "spoiledfood",
+    "spoiled_food",
     "poop",
 }
 

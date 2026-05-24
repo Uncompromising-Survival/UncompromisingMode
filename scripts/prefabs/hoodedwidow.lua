@@ -123,11 +123,11 @@ end
 local edible_creatures = {"spider","aphid","hound","spider_trapdoor","spider_trapdoor_hooded"}
 
 local function ThisIsEdible(other)
-	for i,v in ipairs(edible_creatures) do
-		if v == other.prefab then
-			return true
-		end
-	end
+    for i,v in ipairs(edible_creatures) do
+        if v == other.prefab then
+            return true
+        end
+    end
 end
 
 local function OnHitOther(inst, data)
@@ -306,14 +306,6 @@ local function FindTreeToShake(inst)
     end
 end
 
-local function RestartTimer(inst, name, time)
-    if inst.components.timer:TimerExists(name) then
-        inst.components.timer:SetTimeLeft(name, time)
-    else
-        inst.components.timer:StartTimer(name, time)
-    end
-end
-
 local function fn()
     local inst = CreateEntity()
 
@@ -364,7 +356,7 @@ local function fn()
     inst:AddComponent("healthtrigger")
 
     local function PrepareTreeToShake(inst) -- Give a small delay
-		inst.should_taunt_health_thresh = true
+        inst.should_taunt_health_thresh = true
         if not inst.searching_for_tree then
             if inst.lasttrigger then
                 if inst.components.health:GetPercent() < inst.lasttrigger then
@@ -440,8 +432,8 @@ local function fn()
     inst.combo = 1
     inst:AddComponent("timer")
     inst:ListenForEvent("timerdone", TryPowerMove)
-    RestartTimer(inst, "pounce", 10 + math.random(-3, 1))
-    RestartTimer(inst, "mortar", 20 + math.random(-1, 5))
+    UMCommonFns.RestartTimer(inst, {name = "pounce", time = 10 + math.random(-3, 1)})
+    UMCommonFns.RestartTimer(inst, {name = "mortar", time = 20 + math.random(-1, 5)})
     inst:DoPeriodicTask(3, EpicsCheck)
     inst.ShouldDodge = ShouldDodge
     inst.combosucceed = true

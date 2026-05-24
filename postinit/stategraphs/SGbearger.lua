@@ -88,8 +88,7 @@ env.AddStategraphPostInit("bearger", function(inst)
                         local sandpuff = SpawnPrefab("sand_puff")
                         sandpuff.Transform:SetPosition(x, 0, z)
                         sandpuff.Transform:SetScale(2, 2, 2)
-                        inst.components.timer:StopTimer("RockThrow")
-                        inst.components.timer:StartTimer("RockThrow", TUNING.BEARGER_NORMAL_GROUNDPOUND_COOLDOWN * 1.4)
+                        UMCommonFns.RestartTimer(inst, {name = "RockThrow", time = TUNING.BEARGER_NORMAL_GROUNDPOUND_COOLDOWN * 1.4})
                     end
                 end),
             },

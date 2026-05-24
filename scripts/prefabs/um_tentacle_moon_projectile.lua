@@ -6,7 +6,7 @@ local assets =
 }
 
 local should_hit = { "_health","_combat"}
-local shouldnt_hit = {"ghost","brightmare_gestalt","nightmarecreature","um_tentacle_moon"}
+local shouldnt_hit = {"playerghost", "brightmare_gestalt", "nightmarecreature", "um_tentacle_moon"}
 
 local function OnLand(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
@@ -89,82 +89,84 @@ local function lobbedprojectilefn()
 end
 -- Projectile functions above
 
-local function DoDamageEffect(inst,target)
-	
-	local mult = 1
-	local plague
-	if target.components.inventory then
-		if target.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD) then
-			if target.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD).prefab == "plaguemask" then
-				plague = true
-			end
-			if target.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD).prefab == "um_hat_nettlemask" then
-				mult = mult * 0.25
-			end
-			if target.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD).prefab == "gasmask" then
-				mult = mult * 0.25
-			end
-		end
-		if target.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) then
-			if target.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS).prefab == "minifan" then
-				mult = mult * 0.25
-			end
-		end
-	end
-
-	if not plague then
-        if target.components.combat and not target.components.health:IsDead() then
-            target.components.combat:GetAttacked(inst.attacker and inst.attacker or nil,20,inst)	
-        end
-		target:PushEvent("knockback", { knocker = inst, radius = 1.5, strengthmult = 1.5, forcelanded = true })
-	end
+local function SpoilLoot(inst, data)
+    local loot = data.loot
+    if loot.components.inventoryitem and loot.components.perishable and not loot.components.inventoryitem:IsHeld() then
+        loot.components.perishable:SetPercent(.01)
+    end
 end
 
-local function DeathSpoil(inst, mob)
-	if mob.death_spoil then
-		return
-	end
+local function OnEntityDropLoot(inst, data)
+    local victim = data.inst
+    if victim and victim:IsValid() and victim == inst then
+        victim.death_spoil = nil
+        if victim.um_spoilcleanupfn then
+            victim:RemoveEventCallback("entity_droploot", victim.um_spoilcleanupfn, TheWorld)
+            victim.um_spoilcleanupfn = nil
+        end
+    end
+end
 
-	mob.death_spoil = true
+local function DeathSpoil(inst)
+    if not inst.components.lootdropper or inst.death_spoil and not inst.components.health:IsDead() then return end
+    inst.death_spoil = true
+    inst:ListenForEvent("loot_prefab_spawned", SpoilLoot)
+    if not inst.um_spoilcleanupfn then
+        inst.um_spoilcleanupfn = function(src, data) OnEntityDropLoot(inst, data) end
+        inst:ListenForEvent("entity_droploot", inst.um_spoilcleanupfn, TheWorld)
+    end
+end
 
-	mob:ListenForEvent("death", function(mob)
-		mob:DoTaskInTime(0, function(mob)
-			if mob.components.lootdropper then
-				local x, y, z = mob.Transform:GetWorldPosition()
-				local ents = TheSim:FindEntities(x, y, z, 4)
+local function DoDamageEffect(inst, target)
+    local mult = 1
+    local plague
+    if target.components.inventory then
+        if target.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD) then
+            if target.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD).prefab == "plaguemask" then
+                plague = true
+            end
+            if target.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD).prefab == "um_hat_nettlemask" then
+                mult = mult * 0.25
+            end
+            if target.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD).prefab == "gasmask" then
+                mult = mult * 0.25
+            end
+        end
+        if target.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) then
+            if target.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS).prefab == "minifan" then
+                mult = mult * 0.25
+            end
+        end
+    end
 
-				for _, item in ipairs(ents) do
-					if item.components.inventoryitem and item.components.perishable and not item.components.inventoryitem:IsHeld() then
-						item.components.perishable:SetPercent(0.01)
-					end
-				end
-			end
-		end)
-	end)
+    if not plague then
+        if target.components.combat and not target.components.health:IsDead() then
+            target.components.combat:GetAttacked(inst.attacker and inst.attacker or nil, 20, inst)
+            DeathSpoil(target)
+        end
+        target:PushEvent("knockback", { knocker = inst, radius = 1.5, strengthmult = 1.5, forcelanded = true })
+    end
 end
 
 local function OnExplode(inst, target)
     inst.DynamicShadow:Enable(false)
     local x,y,z = inst.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, 3)
+    local ents = TheSim:FindEntities(x, y, z, 3, should_hit, shouldnt_hit)
     for i, v in ipairs(ents) do
-        if inst.attacker and v.prefab ~= inst.attacker.prefab and v:HasAllTags(should_hit) and not v:HasAnyTag(shouldnt_hit) and not (inst.attacker_faction and v:HasTag(inst.attacker_faction)) then
-            DeathSpoil(inst, v)
-			DoDamageEffect(inst,v)
+        if inst.attacker and v.prefab ~= inst.attacker.prefab and not (inst.attacker_faction and v:HasTag(inst.attacker_faction)) then
+            DoDamageEffect(inst, v)
         end
     end
-	--inst:DoTaskInTime(0.1,function(inst) --AXE trigger the spoil after a delay, incase something was dropped from an enemy
-		local ents = TheSim:FindEntities(x, y, z, TUNING.TRAP_TEETH_RADIUS)
-		for i, v in ipairs(ents) do
-			if v.components.inventoryitem and v.components.perishable then
-				if v.components.inventoryitem:IsHeld() then
-					v.components.perishable:SetPercent(v.components.perishable:GetPercent()-0.05)
-				else
-					v.components.perishable:SetPercent(0)
-				end
-			end
-		end
-	--end)
+    local ents = TheSim:FindEntities(x, y, z, TUNING.TRAP_TEETH_RADIUS)
+    for i, v in ipairs(ents) do
+        if v.components.inventoryitem and v.components.perishable then
+            if v.components.inventoryitem:IsHeld() then
+                v.components.perishable:SetPercent(v.components.perishable:GetPercent() - .05)
+            else
+                v.components.perishable:SetPercent(0)
+            end
+        end
+    end
     inst.SoundEmitter:PlaySound("dontstarve/common/together/infection_burst")
     inst.components.umripples:OnNoLongerLandedServer()
     inst.AnimState:PlayAnimation("explode")

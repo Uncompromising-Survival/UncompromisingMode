@@ -63,14 +63,6 @@ local function EndLeapFunction(inst, attack)
     --this code makes it to where it moves the queen right back to where the end of the jump left it off.
 end
 
-local function RestartTimer(inst, name, time)
-    if inst.components.timer:TimerExists(name) then
-        inst.components.timer:SetTimeLeft(name, time)
-    else
-        inst.components.timer:StartTimer(name, time)
-    end
-end
-
 local events =
 {
     EventHandler("attacked", function(inst, data)
@@ -79,18 +71,18 @@ local events =
                 return
             elseif inst.components.sleeper and inst.components.sleeper:IsAsleep() then
                 inst.components.sleeper:WakeUp()
-			elseif inst.should_taunt_health_thresh then
-				inst.should_taunt_health_thresh = nil
-				inst.sg:GoToState("taunt")
+            elseif inst.should_taunt_health_thresh then
+                inst.should_taunt_health_thresh = nil
+                inst.sg:GoToState("taunt")
             elseif inst.sg:HasStateTag("charge") and (inst._bear_trap_speedmulttask or inst.components.sleeper.sleepiness > 0) then
                 inst.sg:GoToState("chargeover")
             elseif not inst.sg:HasStateTag("electrocute") then
                 if not inst.sg:HasStateTag("ability") and not inst.sg:HasStateTag("attack") and not RunningForAbility(inst) then
                     inst.sg:GoToState("hit")
                 end
-                if inst.sg:HasStateTag("eating") then                 -- If we're eating we definately need to go to hit
-                    RestartTimer(inst, "pounce", math.random(3, 5))   --Restart Pounce (Make her do it soon)
-                    RestartTimer(inst, "mortar", math.random(20, 30)) --Restart Mortar
+                if inst.sg:HasStateTag("eating") then -- If we're eating we definately need to go to hit
+                    UMCommonFns.RestartTimer(inst, {name = "pounce", time = math.random(3, 5)}) --Restart Pounce (Make her do it soon)
+                    UMCommonFns.RestartTimer(inst, {name = "mortar", time = math.random(20, 30)}) --Restart Mortar
                     inst.sg:GoToState("hit")
                 end
             end
@@ -140,20 +132,20 @@ local function WebMortar(inst, angle)
         if not angle then
             angle = 0
         end
-		
-		local range = math.sqrt(inst:GetDistanceSqToInst(target)) or 15
-		local speed = math.sqrt(inst:GetDistanceSqToInst(target))
-		if angle ~= 0 then
-			range = range + math.random(-10,15)
-			speed = math.clamp(range,10,35)
-		end
+        
+        local range = math.sqrt(inst:GetDistanceSqToInst(target)) or 15
+        local speed = math.sqrt(inst:GetDistanceSqToInst(target))
+        if angle ~= 0 then
+            range = range + math.random(-10,15)
+            speed = math.clamp(range,10,35)
+        end
         local theta = inst.Transform:GetRotation() + angle
         theta = theta * DEGREES
         targetpos.x = targetpos.x + 15 * math.cos(theta)
         targetpos.z = targetpos.z - 15 * math.sin(theta)
 
         projectile.components.complexprojectile:SetHorizontalSpeed(speed)
-		projectile.components.complexprojectile:SetGravity(-35)
+        projectile.components.complexprojectile:SetGravity(-35)
         projectile.components.complexprojectile:Launch(targetpos, inst, inst)
     end
 end
@@ -646,7 +638,8 @@ local states =
                 WebMortar(inst, 0)
                 WebMortar(inst, -30)
                 WebMortar(inst, 30)
-                RestartTimer(inst, "mortar", (inst.components.health:GetPercent() < 0.5 and 25 or 30) + math.random(-3, 5)) --Under half health she speeeeds up
+
+                UMCommonFns.RestartTimer(inst, {name = "mortar", time = inst.components.health:GetPercent() < .5 and 25 or 30) + math.random(-3, 5)}) --Under half health she speeeeds up
             end),
         },
 
@@ -770,7 +763,7 @@ local states =
         {
             EventHandler("animover", function(inst)
                 inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/scream_short")
-                RestartTimer(inst, "pounce", (inst.components.health:GetPercent() < 0.5 and 15 or 20) + math.random(-3, 5)) --Under half health she speeeeds up
+                UMCommonFns.RestartTimer(inst, {name = "pounce", time = inst.components.health:GetPercent() < .5 and 15 or 20) + math.random(-3, 5)}) --Under half health she speeeeds up
                 if inst.oldtarget and inst.oldtarget:IsValid() and inst.components.combat then
                     inst.components.combat:SuggestTarget(inst.oldtarget)
                 end
@@ -1202,7 +1195,7 @@ local states =
         },
 
         onexit = function(inst)
-            RestartTimer(inst, "pounce", math.random(40, 60))       -- Charging has a long cooldown
+            UMCommonFns.RestartTimer(inst, {name = "pounce", time = math.random(40, 60)}) -- Charging has a long cooldown
             if not inst.components.timer:TimerExists("mortar") then --If Widow is still planning on Mortaring, we need to get a new dodge position
                 inst.ShouldDodge(inst)
             end
@@ -1491,8 +1484,8 @@ local states =
             inst.Transform:SetPosition(x, y, z)
             inst.AnimState:SetBank("widow")
             inst.AnimState:PlayAnimation("charge_pst", false)
-            RestartTimer(inst, "pounce", math.random(40, 60)) -- Charging has a long cooldown
-            inst.sg:SetTimeout(0.8)                           --Won't leave?
+            UMCommonFns.RestartTimer(inst, {name = "pounce", time = math.random(40, 60)}) -- Charging has a long cooldown
+            inst.sg:SetTimeout(.8) -- Won't leave?
         end,
 
         timeline =

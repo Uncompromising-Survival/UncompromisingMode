@@ -14,9 +14,7 @@ env.AddPrefabPostInit("world", function(inst) -- AXE Assuming Max said this -> S
         _SpewHotSteam(inst)
         -- Cancel existing timer before calling SpewMiasma to avoid duplicates
         -- Fixes a stack overflow crash -Deimos
-        if inst.components.timer and inst.components.timer:TimerExists("spew_miasma") then
-            inst.components.timer:StopTimer("spew_miasma")
-        end
+        UMCommonFns.RestartTimer(inst, {name = "spew_miasma"})
         SpewMiasma(inst)
     end
     UpvalueHacker.SetUpvalue(_G.Prefabs.cave_vent_rock.fn, SpewHotSteam, "OnTimerDone","SpewHotSteam")
