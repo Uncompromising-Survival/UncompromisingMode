@@ -99,7 +99,7 @@ end
 local function OnEntityDropLoot(inst, data)
     local victim = data.inst
     if victim and victim:IsValid() and victim == inst then
-        if victim.death_spoil then victim.death_spoil = nil end
+        victim.death_spoil = nil
         if victim.um_spoilcleanupfn then
             victim:RemoveEventCallback("entity_droploot", victim.um_spoilcleanupfn, TheWorld)
             victim.um_spoilcleanupfn = nil
