@@ -1,6 +1,8 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
+local um_flood_speed_immune_TAGS = { "turfrunner_279", "turfrunner_280", "turfrunner_281", "swampbro", "playermerm", "woosegoose", "merm" }
+
 local function RobustFloodCheck(inst) -- For players, check to see if they're on the edge of a tile, you can walk on the "Void" to avoid the effects of the tile you're standing on, similar to spider webbings
     --IsVisualGroundAtPoint(x,y,z)... not sure how this can help?
     local x, y, z = inst.Transform:GetWorldPosition()
@@ -402,6 +404,7 @@ local function CheckClothing(inst, table_check)
 end
 
 local function AdjustSpeed(inst)
+    if inst:HasAnyTag(um_flood_speed_immune_TAGS) then return end
     local mod = 0.5 -- Nothing
     if CheckClothing(inst, flood_equipment_high) then
         mod = 1.2 -- Shark Vest
@@ -411,9 +414,6 @@ local function AdjustSpeed(inst)
         mod = 0.75 -- Reed Suit
     elseif CheckClothing(inst, flood_equipment_verylow) then
         mod = 0.6 -- Oddballs, like summer vest
-    end
-    if inst.prefab == "wurt" and mod < 1 then
-        mod = 1
     end
 
     inst.components.locomotor:SetExternalSpeedMultiplier(inst, "um_floodedwater", mod)
@@ -458,7 +458,7 @@ local function RemoveFloodCheck(inst)
     if inst.components.umripples then --AXE check if should update ripples
         inst.components.umripples:OnNoLongerLandedServer()
     end
-    if inst.prefab ~= "wurt" then
+    if not inst:HasAnyTag("playermerm", "woosegoose", "swampbro") then --Wurt's Swamp Pathfinder kinda bugs this out so can't use um_flood_speed_immune_TAGS
         inst:PushEvent("carefulwalking", { careful = false })
     end
 end
@@ -481,9 +481,9 @@ env.AddComponentPostInit("locomotor", function(self)
     local _OnUpdate = self.OnUpdate
     function self:OnUpdate(dt, arrive_check_only)
         local inst = self.inst
-        if not inst:HasAnyTag("merm", "flying", "ghost", "playerghost", "shadowcreature", "nightmarecreature", "brightmare_gestalt", "shadowminion", "shadowchesspiece", "turfrunner_279", "turfrunner_280", "turfrunner_281") and not (inst.components.umripples and inst.components.umripples.speed_immune) then
+        if not inst:HasAnyTag("flying", "ghost", "playerghost", "shadowcreature", "nightmarecreature", "brightmare_gestalt", "shadowminion", "shadowchesspiece") and not (inst.components.umripples and inst.components.umripples.speed_immune) then
             if RobustFloodCheck(self.inst) and not inst.um_floodcontinualcheck then
-                if inst.prefab ~= "wurt" then
+                if not inst:HasAnyTag(um_flood_speed_immune_TAGS) then
                     inst:PushEvent("carefulwalking", { careful = true })
                 end
                 FloodMoistureRamp(inst)

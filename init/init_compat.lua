@@ -2,6 +2,28 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
+env.AddPrefabPostInit("woose", function(inst)
+    if not TheWorld.ismastersim then
+        return
+    end
+
+    local WOOSE_PATHFINDER_TILES_UM = {
+        WORLD_TILES.UM_FLOODWATER,
+        WORLD_TILES.UM_FLOODWATER_GROTTO,
+        WORLD_TILES.UM_FLOODWATER_BROILING,
+    }
+    local function UMWooseSkillCheck(inst, data)
+        if inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated("woose_ocean_2") then
+            for _, tile in ipairs(WOOSE_PATHFINDER_TILES_UM) do
+                inst.components.locomotor:SetFasterOnGroundTile(tile, true)
+            end
+        end
+    end
+
+    inst:ListenForEvent("onactivateskill_server", UMWooseSkillCheck)
+    inst:ListenForEvent("ms_skilltreeinitialized", UMWooseSkillCheck)
+end)
+
 env.AddPrefabPostInit("wonderwhy", function(inst)
     if not TheWorld.ismastersim then
         return
