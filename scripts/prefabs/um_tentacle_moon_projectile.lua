@@ -108,7 +108,7 @@ local function OnEntityDropLoot(inst, data)
 end
 
 local function DeathSpoil(inst)
-    if inst.death_spoil and not inst.components.health:IsDead() then return end
+    if inst.isplayer or inst.death_spoil and not inst.components.health:IsDead() then return end
     inst.death_spoil = true
     inst:ListenForEvent("loot_prefab_spawned", SpoilLoot)
     if not inst.um_spoilcleanupfn then
