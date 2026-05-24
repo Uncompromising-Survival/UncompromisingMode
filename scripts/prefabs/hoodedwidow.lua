@@ -123,11 +123,7 @@ end
 local edible_creatures = {"spider","aphid","hound","spider_trapdoor","spider_trapdoor_hooded"}
 
 local function ThisIsEdible(other)
-    for i,v in ipairs(edible_creatures) do
-        if v == other.prefab then
-            return true
-        end
-    end
+    return table.contains(edible_creatures, other.prefab)
 end
 
 local function OnHitOther(inst, data)

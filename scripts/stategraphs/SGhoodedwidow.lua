@@ -200,8 +200,8 @@ local function Charge_ReAssess(inst)
     end
 
     -- Decide what to do
-    inst.sg:GoToState(should_exit and "chargeover" or should_turnaround and (not inst.treetarget or not inst.treetarget:IsValid()) and "chargeturnaround"
-        or should_attack and (not inst.treetarget or not inst.treetarget:IsValid()) and "chargeattack" or "charge")
+    inst.sg:GoToState(should_exit and "chargeover" or not (inst.treetarget and inst.treetarget:IsValid())
+        and (should_turnaround and "chargeturnaround" or should_attack and "chargeattack") or "charge")
 end
 
 local function ChargeTurn(inst)
@@ -1443,7 +1443,7 @@ local states =
         end,
 
         onupdate = function(inst)
-            if inst.components.combat and inst.components.combat.target and (not inst.treetarget or not inst.treetarget:IsValid()) then
+            if inst.components.combat and inst.components.combat.target and not (inst.treetarget and inst.treetarget:IsValid()) then
                 inst:ForceFacePoint(inst.components.combat.target:GetPosition())
             end
         end,
