@@ -6,7 +6,7 @@ local assets =
 }
 
 local should_hit = { "_health","_combat"}
-local shouldnt_hit = {"ghost","brightmare_gestalt","nightmarecreature","um_tentacle_moon"}
+local shouldnt_hit = {"playerghost", "brightmare_gestalt", "nightmarecreature", "um_tentacle_moon"}
 
 local function OnLand(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
@@ -151,9 +151,9 @@ end
 local function OnExplode(inst, target)
     inst.DynamicShadow:Enable(false)
     local x,y,z = inst.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, 3)
+    local ents = TheSim:FindEntities(x, y, z, 3, should_hit, shouldnt_hit)
     for i, v in ipairs(ents) do
-        if inst.attacker and v.prefab ~= inst.attacker.prefab and v:HasAllTags(should_hit) and not v:HasAnyTag(shouldnt_hit) and not (inst.attacker_faction and v:HasTag(inst.attacker_faction)) then
+        if inst.attacker and v.prefab ~= inst.attacker.prefab and not (inst.attacker_faction and v:HasTag(inst.attacker_faction)) then
             DoDamageEffect(inst, v)
         end
     end
