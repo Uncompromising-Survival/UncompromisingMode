@@ -306,7 +306,7 @@ env.AddPlayerPostInit(function(inst)
         for k, v in pairs(inst.components.leader.followers) do
             if ((k:HasTag("spider") and not TUNING.DSTU.TREATS_FOR_WEBBER) or
                     k:HasTag("pig") or k:HasTag("raidrat") or
-                    k:HasTag("winky_rat") or k.prefab == "eyeofterror_mini_ally") or
+                    k:HasTag("winky_rat") or k:HasTag("merm") or k.prefab == "eyeofterror_mini_ally") or
                 k.prefab == "smallbird" or k.prefab == "teenbird" or k.prefab ==
                 "lightflier" then -- exluding things that can't/shouldn't/already do
                 local savedata = k:GetSaveRecord()
