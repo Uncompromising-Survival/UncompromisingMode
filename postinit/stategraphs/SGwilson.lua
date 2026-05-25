@@ -119,7 +119,7 @@ env.AddStategraphPostInit("wilson", function(inst)
     local SLEEPREPEL_CANT_TAGS = { "player", "companion", "abigail", "shadow", "playerghost", "INLIMBO", "wixieshoved", "invisible",
         "hiding", "NOTARGET", "flight", "toadstool" }
     local SHIELD_CANT_TAGS = { "player", "companion", "abigail", "shadow", "playerghost", "INLIMBO", "wixieshoved", "invisible",
-        "hiding", "NOTARGET", "flight", "toadstool" }
+        "hiding", "NOTARGET", "flight", "toadstool", "bird"}
 
     local function CheckShield(inst)
         if inst ~= nil then
@@ -132,7 +132,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 SpawnPrefab("round_puff_fx_sm").Transform:SetPosition(v.Transform:GetWorldPosition())
 
                 if v.components.combat ~= nil then
-                    inst.components.combat:DoAttack(v, nil, nil, nil, 76.5/59.5, 4)
+                    inst.components.combat:DoAttack(v, nil, nil, nil, 76.5 / 59.5, 4)
                 end
 
                 if v.components.locomotor ~= nil and not v:HasTag("stageusher") then
@@ -164,18 +164,19 @@ env.AddStategraphPostInit("wilson", function(inst)
                                         v.Transform:SetPosition(dx, dy, dz)
                                     end
                                 end
-
-                                if i >= 50 then
-                                    v:RemoveTag("wixieshoved")
-                                end
                             end
                         end)
                     end
-                    inst.sg.statemem.recoilstate = "attack_recoil"
-
-                    inst:PushEventImmediate("recoil_off", { target = v })
-                    break --only hit once
                 end
+
+                v:DoTaskInTime(1, function(v)
+                    v:RemoveTag("wixieshoved")
+                end)
+
+
+                inst.sg.statemem.recoilstate = "attack_recoil"
+                inst:PushEventImmediate("recoil_off", { target = v })
+                break --only hit once
             end
         end
     end
