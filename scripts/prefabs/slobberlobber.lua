@@ -102,20 +102,7 @@ local function createlight(staff, target, pos)
             LaunchSpit(caster, target)
         end
 
-        local x1, y1, z1 = staff.Transform:GetWorldPosition()
-
-        local owner = staff.components.inventoryitem.owner
-
-        for i, v in pairs(TheSim:FindEntities(x1, y1, z1, 8, { "slobberlobber" })) do
-            if v ~= staff then
-                local vowner = v.components.inventoryitem:GetGrandOwner()
-                if vowner ~= nil and (vowner == owner or not vowner:HasTag("player")) or vowner == nil then
-                    v.components.rechargeable:Discharge(45)
-                end
-            end
-        end
-
-        staff.components.rechargeable:Discharge(45) --whatever, do what you want with that number
+        staff.components.rechargeable:Discharge(TUNING.DSTU.SLOBBERLOBBER_COOLDOWN) --whatever, do what you want with that number
     else
         staff.SoundEmitter:PlaySound("dontstarve/common/teleportworm/sick_cough")
     end
@@ -141,6 +128,11 @@ local function onequip(inst, owner)
     owner.AnimState:OverrideSymbol("swap_object", "swap_slobberlobber", "swap_slobberlobber")
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
+
+    local rechargeable = inst.components.rechargeable
+    if rechargeable and rechargeable:GetTimeToCharge() < TUNING.DSTU.SLOBBERLOBBER_COOLDOWN_ONEQUIP then
+        rechargeable:Discharge(TUNING.DSTU.SLOBBERLOBBER_COOLDOWN_ONEQUIP)
+    end
 end
 
 local function onunequip(inst, owner)
