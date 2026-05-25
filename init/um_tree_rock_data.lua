@@ -82,23 +82,23 @@ local WEIGHTED_LOOT = {
         ["moonglass"]               = 5,
         ["um_gemology_geode_glass"] = 2.5,
     },
-    --[[["RUINS_ENTRANCE_AREA"] = {
-        ["rocks"]               = 8,
-        ["fossil_piece"]        = 0.15,
-        ["poop"]                = 5,
-        ["flint"]               = 3,
-        ["silk"]                = 2,
-        ["cutlichen"]           = 10,
-        ["thulecite_pieces"]    = 5,
-        ["redgem"]              = 0.2,
-        ["bluegem"]             = 0.2,
-        ["purplegem"]           = 0.1,
-        ["yellowgem"]           = 0.02,
-        ["orangegem"]           = 0.02,
-        ["greengem"]            = 0.02,
-        ["wormlight"]           = 0.5,
+    ["RUINS_ENTRANCE_AREA"] = {
+        ["rocks"]                   = 8,
+        ["fossil_piece"]            = 0.15,
+        ["poop"]                    = 5,
+        ["flint"]                   = 3,
+        ["silk"]                    = 2,
+        ["cutlichen"]               = 10,
+        ["thulecite_pieces"]        = 5,
+        ["redgem"]                  = 0.2,
+        ["bluegem"]                 = 0.2,
+        ["purplegem"]               = 0.1,
+        ["yellowgem"]               = 0.02,
+        ["orangegem"]               = 0.02,
+        ["greengem"]                = 0.02,
+        ["wormlight"]               = 0.5,
         ["um_gemology_geode_slime"] = 0.5,
-    },]]
+    },
     ["ROCKYLAND_AREA"] = {
         ["rocks"]                     = 10,
         ["flint"]                     = 10,
@@ -174,7 +174,7 @@ local LOOT_DATA = {
     ["um_gemology_geode_green"] = { build = "um_tree_rock_swaps", symbols = { "swap_geode_green" } },
     ["um_gemology_geode_blue"] = { build = "um_tree_rock_swaps", symbols = { "swap_geode_blue" } },
     ["um_gemology_geode_glass"] = { build = "um_tree_rock_swaps", symbols = { "swap_geode_glass" } },
-    --["um_gemology_geode_slime"] = {build = "um_tree_rock_swaps", symbols = {"swap_geode_slime"}},
+    ["um_gemology_geode_slime"] = { build = "um_tree_rock_swaps", symbols = { "swap_geode_slime" } },
     ["um_gemology_geode_lobster"] = { build = "um_tree_rock_swaps", symbols = { "swap_geode_lobster" } },
     ["um_gemology_geode_guano"] = { build = "um_tree_rock_swaps", symbols = { "swap_geode_guano" } },
     ["um_gemology_geode_ruins"] = { build = "um_tree_rock_swaps", symbols = { "swap_geode_ruins" } },
@@ -201,7 +201,7 @@ local TASKS = {
     ["MagmaCaves"]                  = "UM_MAGMA_AREA",
     ["MagmaCavesEntrance"]          = "UM_MAGMA_AREA",
     ["MagmaSacred"]                 = "UM_MAGMA_AREA",
-    ["MagmaOcean"]                 = "UM_MAGMA_AREA",
+    ["MagmaOcean"]                  = "UM_MAGMA_AREA",
 
     --grotto
     ["GrottoEntrance"]              = "MOON_GROTTO_AREA",
@@ -217,6 +217,7 @@ local TASKS = {
     ["UMMakeABeehat"]               = "GRASS_AREA",
     ["GiantTrees_IA"]               = "UM_HOODED_FOREST_AREA",
 
+    ["Vacant"]                      = "RUINS_ENTRANCE_AREA"
     --[[
     ["SwampySinkhole"] = "UM_CAVE_SWAMP",
     ["CaveSwamp"] = "UM_CAVE_SWAMP",
