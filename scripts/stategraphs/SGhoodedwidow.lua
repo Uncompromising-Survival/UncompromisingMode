@@ -639,7 +639,7 @@ local states =
                 WebMortar(inst, -30)
                 WebMortar(inst, 30)
 
-                UMCommonFns.RestartTimer(inst, {name = "mortar", time = inst.components.health:GetPercent() < .5 and 25 or 30) + math.random(-3, 5)}) --Under half health she speeeeds up
+                UMCommonFns.RestartTimer(inst, {name = "mortar", time = (inst.components.health:GetPercent() < .5 and 25 or 30) + math.random(-3, 5)}) --Under half health she speeeeds up
             end),
         },
 
@@ -763,7 +763,7 @@ local states =
         {
             EventHandler("animover", function(inst)
                 inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/scream_short")
-                UMCommonFns.RestartTimer(inst, {name = "pounce", time = inst.components.health:GetPercent() < .5 and 15 or 20) + math.random(-3, 5)}) --Under half health she speeeeds up
+                UMCommonFns.RestartTimer(inst, {name = "pounce", time = (inst.components.health:GetPercent() < .5 and 15 or 20) + math.random(-3, 5)}) --Under half health she speeeeds up
                 if inst.oldtarget and inst.oldtarget:IsValid() and inst.components.combat then
                     inst.components.combat:SuggestTarget(inst.oldtarget)
                 end
