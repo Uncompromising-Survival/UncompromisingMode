@@ -80,26 +80,16 @@ end
 
 local function DoAreaSlow(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    if inst.dragonflyspit then
-        local ents = TheSim:FindEntities(x, y, z, inst.components.aura.radius, nil, AURA_EXCLUDE_TAGS_DRAGONFLY)
-        for i, v in ipairs(ents) do
-            if v.components ~= nil and v.components.locomotor ~= nil then
-                TrySlowdown(inst, v)
-            end
-        end
-    else
-        local ents = TheSim:FindEntities(x, y, z, inst.components.aura.radius, nil, AURA_EXCLUDE_TAGS)
-        for i, v in ipairs(ents) do
-            if v.components ~= nil and v.components.locomotor ~= nil then
-                TrySlowdown(inst, v)
-            end
+    local ents = TheSim:FindEntities(x, y, z, inst.components.aura.radius, nil, inst.dragonflyspit and AURA_EXCLUDE_TAGS_DRAGONFLY or AURA_EXCLUDE_TAGS)
+    for i, v in ipairs(ents) do
+        if v.entity:IsVisible() and v.components.locomotor then
+            TrySlowdown(inst, v)
         end
     end
 
     local walls = TheSim:FindEntities(x, y, z, inst.components.aura.radius, { "wall" }, { "INLIMBO", "_inventoryitem" })
-
     for i, v in ipairs(walls) do
-        if v.components ~= nil then
+        if v.entity:IsVisible() then
             TrySlowdown(inst, v)
         end
     end
