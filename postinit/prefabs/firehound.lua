@@ -89,7 +89,7 @@ local function OnHitOtherBurn(inst, data)
 end
 
 local function IsAlly(inst, guy)
-    return UMCommonFns.IsAlly(inst, guy, {"hound", "houndfriend"})
+    return UMCommonFns.IsAlly(inst, guy, {"hound", "houndfriend", "houndmound"})
 end
 
 env.AddPrefabPostInit("firehound", function(inst)

@@ -41,7 +41,7 @@ end
 
 AddClassPostConstruct("screens/playerhud", function(inst)
     local SnowOver = require("widgets/snowover")
-    local SnowDustOver = require("widgets/sanddustover")
+    local SnowDustOver = require("widgets/snowdustover")
     local Um_StormOver = require("widgets/um_stormover")
     local HeatwaveOver = require("widgets/heatwaveover")
 
