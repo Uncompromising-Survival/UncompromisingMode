@@ -561,6 +561,8 @@ local function blueberrypuddle()
     inst.AnimState:PlayAnimation("pre_idle", false)
     inst.AnimState:PushAnimation("idle", false)
 
+    inst.Transform:SetRotation(math.random(360))
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
