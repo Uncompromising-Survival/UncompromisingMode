@@ -532,6 +532,7 @@ local minimap_icons = {
     "tarsuit",
     "trunkvest_winter",
     "trunkvest_summer",
+    "beargervest",
     "sludge_sack",
     "hawaiianshirt",
     "skullchest",
