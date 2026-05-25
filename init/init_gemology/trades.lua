@@ -11,7 +11,7 @@ local function RetargetSnaildrakeFn(inst)
         return inst.components.combat:CanTarget(ent)
     end, nil, { "snaildrake", "player" })                                                                    -- AXE They like people now
 
-    local follower = new_target and new_target.components.follower and new_target.components.follower or nil -- AXE Make them not aggro on your followers
+    local follower = new_target and new_target.components.follower or nil -- AXE Make them not aggro on your followers
     if new_target and not (follower and follower.leader and follower.leader:HasTag("player")) then
         inst.components.combat:SuggestTarget(new_target)
     end
@@ -22,20 +22,19 @@ local function BeFriendlyToPlayers(inst)
 
     -- Old Values
     self._targetfn = self.targetfn
-    self._retargetperiod = self._retargetperiod
     if inst.prefab == "snaildrake_slime" or inst.prefab == "snaildrake_magma" then
         inst.components.combat:SetRetargetFunction(3, RetargetSnaildrakeFn)
     end
 
-    local combat = inst.components.combat and inst.components.combat or nil
+    local combat = inst.components.combat
     if combat and combat.target then -- AXE Drop target if traded
         combat:SetTarget(nil)
     end
 end
 
 local function IfPlayerThenLoseFaithInHumanity(inst, data, override)
-    local attacker = data and data.attacker and data.attacker or nil
-    local follower = attacker and attacker.components.follower and attacker.components.follower or nil
+    local attacker = data and data.attacker or nil
+    local follower = attacker and attacker.components.follower or nil
 
     if (attacker and attacker:HasTag("player") or (follower and follower.leader and follower.leader:HasTag("player"))) or override then
         local self = inst.components.combat
@@ -66,7 +65,6 @@ local function GenerateLoot(inst)
     local tier = inst.itemquality
     local itemtype = inst.itemtype
     local rnd = math.random()
-
     local element = (inst.prefab == "slurtle" or inst.prefab == "snurtle") and "green" or "red"
     local hated_element = (inst.prefab == "slurtle" or inst.prefab == "snurtle") and "red" or "blue"
     local generic_item = (inst.prefab == "slurtle" or inst.prefab == "snurtle") and "slurtleslime" or "snapalm"
@@ -74,21 +72,21 @@ local function GenerateLoot(inst)
 
     if (itemtype == "um_gemology" .. element .. "gem1") or (itemtype == "um_gemology" .. element .. "gem2") then
         if tier == 1 then
-            if math.random() > 0.75 then
+            if rnd > 0.75 then
                 ProduceItem(inst, itemtype, 1, 2)
-            elseif math.random() > 0.25 then
+            elseif rnd > 0.20 then
                 ProduceItem(inst, itemtype, 1, 1)
             else
                 ProduceItem(inst, generic_item, math.random(3, 5), nil)
             end
         end
         if tier == 2 then
-            if math.random() > 0.9 then
+            if math.random() > 0.75 then
                 ProduceItem(inst, itemtype, 1, 3)
-            elseif math.random() > 0.7 then
+            elseif math.random() > 0.4 then
                 ProduceItem(inst, itemtype, 1, 2)
             else
-                if (math.random() > 0.5 and element == "red") or (math.random() > 0.9 and element == "green") then
+                if math.random() > 0.5 then
                     ProduceItem(inst, element .. "gem", 1, nil) -- They can refine into their special gems.
                 else
                     ProduceItem(inst, generic_item, math.random(5, 9), nil)
@@ -96,9 +94,9 @@ local function GenerateLoot(inst)
             end
         end
         if tier == 3 then
-            if math.random() > 0.75 then
+            if rnd > 0.75 then
                 ProduceItem(inst, itemtype, 1, 3)
-            elseif math.random() > 0.5 then
+            elseif rnd > 0.35 then
                 ProduceItem(inst, itemtype, 1, 2)
             else
                 ProduceItem(inst, element .. "gem", 1, nil)
@@ -137,9 +135,9 @@ local function GenerateLoot(inst)
             end
         end
         if tier == 3 then
-            if math.random() > 0.75 then
+            if rnd > 0.75 then
                 ProduceItem(inst, itemtype, 1, 2)
-            elseif math.random() > 0.5 then
+            elseif rnd > 0.35 then
                 ProduceItem(inst, itemtype, 1, 1)
             else
                 ProduceItem(inst, generic_item, math.random(5, 9), nil)
@@ -241,7 +239,7 @@ local function GetAntlionReward(inst)
     local itemname
     local newtier
     if tier == 3 then
-        if (rnd > 0.9 and orange) or rnd > 0.75 then
+        if rnd > 0.75 then
             itemname = gem
             newtier = 2
         elseif rnd > 0.1 and orange then
@@ -250,10 +248,10 @@ local function GetAntlionReward(inst)
             itemname = "townportaltalisman"
         end
     elseif tier == 2 then
-        if (rnd > 0.9 and orange) then
+        if (rnd > 0.75 and orange) or rnd > 0.85 then
             itemname = gem
             newtier = 3
-        elseif (rnd > 0.4 and orange) or rnd > 0.7 then
+        elseif (rnd > 0.2 and orange) or rnd > 0.4 then
             itemname = gem
             newtier = 2
         else
@@ -382,17 +380,17 @@ local function GenerateRockyLoot(inst, giver, item)
     local itemname
     local newtier
     if tier == 3 then
-        if (rnd > 0.9 and pale) or rnd > 0.75 then
+        if rnd > 0.75 then
             itemname = gem
             newtier = 2
         else
             itemname = "friendship"
         end
     elseif tier == 2 then
-        if (rnd > 0.9 and pale) then
+        if (rnd > 0.75 and pale) then
             itemname = gem
             newtier = 3
-        elseif (rnd > 0.4 and pale) or rnd > 0.7 then
+        elseif (rnd > 0.25 and pale) or rnd > 0.4 then
             itemname = gem
             newtier = 2
         else
@@ -435,7 +433,6 @@ env.AddPrefabPostInit("rocky", function(inst)
     local trader = inst.components.trader
 
     local _AcceptTest = trader.test
-    local _OnGivenItem = trader.onaccept
 
     local function AcceptTest(inst, item)
         return item:HasTag("gemology_gem") or _AcceptTest(inst, item)
