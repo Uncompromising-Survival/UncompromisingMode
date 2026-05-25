@@ -76,6 +76,10 @@ local function OnHitMutate(inst, attacker, target)
                 if v.components.sanity then
                     v.components.sanity:DoDelta(50)
                 end
+
+                if v.components.werebeast ~= nil and not v.components.werebeast:IsInWereState() then
+                    v.components.werebeast:SetWere(1)
+                end
             end
         end
     end
