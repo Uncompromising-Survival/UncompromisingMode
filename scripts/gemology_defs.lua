@@ -215,7 +215,7 @@ local function SendShadowClone(item, owner, target, tier)
                 swilson.work = 1
                 swilson.LabWork(swilson, owner, newtarget)
             elseif target.components.health then
-                swilson.attack = item.components.weapon:GetDamage(attacker, target)
+                swilson.attack = item.components.weapon:GetDamage(owner, target)
                 swilson.LabAttack(swilson, owner, newtarget)
             end
         end
