@@ -492,27 +492,17 @@ TUNING.DSTU = {
         APRIL_FOOLS = Date(1, 4),
     },
 
+    SHIELDOFTERROR_COOLDOWN = 3,
+    SHIELDOFTERROR_COOLDOWN_ONEQUIP = 3,
+
     -- Shadow Damage tuning
     RUINSNIGHTMARE_DAMAGE = 75,
     HERMITCRAB_MOONTREEBLOSSOMTEA_SHADOWCREATURE_DAMAGE = 75,
-
 
     NO_THICKET_APHIDS = {"tumbleweed","beefalo","fruitbat"}, --AXE Add more as needed, most things >should< spawn aphids though.
 
     RIPPLE_BLACKLIST_PREFABS = {"webbedcreature","rainometer"}, -- AXE Many cases would like "structure" tag still count for ripples, but many structures are incompatible, so we do a prefab based blacklist as well
     RIPPLE_BLACKLIST_TAGS = {"projectile"} -- AXE other cases are universal, projectiles shouldn't really ever have ripples
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 -- [              DST Related Overrides              ]
