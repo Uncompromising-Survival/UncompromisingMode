@@ -569,7 +569,7 @@ if GetModConfigData("smog") then
     table.insert(component_post, "geyserfx")
 end
 
-if GetModConfigData("infinite_blueprints") then
+if GetModConfigData("infinite_blueprints_") then
     table.insert(component_post, "teacher")
 end
 
