@@ -181,7 +181,7 @@ local _RummageStrFn = GLOBAL.ACTIONS.RUMMAGE.strfn
 GLOBAL.ACTIONS.RUMMAGE.strfn = function(act, ...)
     local str = _RummageStrFn(act, ...)
     local targ = act.target or act.invobject
-    if targ ~= nil then
+    if targ then
         local container = targ.replica.container
 
         if targ:HasTag("gem_forge") then
@@ -190,6 +190,23 @@ GLOBAL.ACTIONS.RUMMAGE.strfn = function(act, ...)
             else
                 return "GEM_FORGE"
             end
+        end
+    end
+
+    return str
+end
+
+local _StartChannelingStrFn = GLOBAL.ACTIONS.STARTCHANNELING.strfn
+GLOBAL.ACTIONS.STARTCHANNELING.strfn = function(act, ...)
+    local str = _StartChannelingStrFn(act, ...)
+    local targ = act.target or act.invobject
+    if targ then
+        if targ:HasTag("winky_storage") then
+            return "RECRUITRAT"
+        elseif targ:HasTag("um_astral_projector") then
+            return "UM_PROJECTION"
+        elseif targ:HasTag("um_astral_projector_target") then
+            return "UM_UNPROJECTION"
         end
     end
 
