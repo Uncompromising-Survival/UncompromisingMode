@@ -461,19 +461,31 @@ AddUMGemDef("palegem1", {
         onapply = function(item, tier)
             -- stuff is handled elsewhere
             -- see init/init_gemology/special.lua
-        end,
-        onattack = function(item, attacker, target, tier)
+
             if tier ~= 1
                 and AllRecipes ~= nil
                 and (AllRecipes[item.prefab] == nil
                     or AllRecipes[item.prefab] ~= nil
                     and (AllRecipes[item.prefab].is_deconstruction_recipe))
                 and item.components.weapon ~= nil then
-                local stimuli = item.components.weapon.stimuli and item.components.weapon.stimuli or nil
-                target.components.combat:GetAttacked(attacker, 34 / 2 * (tier - 1), nil, stimuli)
+                local damage = item.components.weapon.damage
+                item.volatile_gemology_data.um_gemologypalegem1 = damage
+                if type(damage) == "function" then
+                    item.components.weapon:SetDamage(function(inst, attacker, target)
+                        return damage(inst, attacker, target) + (34 / 2 * (tier - 1))
+                    end)
+                else
+                    item.components.weapon.damage = damage + (34 / 2 * (tier - 1))
+                end
             end
-
+        end,
+        onattack = function(item, attacker, target, tier)
             DamageInfiniteItemGem("palegem1", item, 0.005)
+        end,
+        onremove = function(item, tier)
+            if item.volatile_gemology_data.um_gemologypalegem1 then
+                item.components.weapon.damage = item.volatile_gemology_data.um_gemologypalegem1
+            end
         end
     }
 })
