@@ -106,7 +106,7 @@ local function GetGemDescription(_name, knowntier)
             str = str .. "\n" .. STRINGS.SCRAPBOOK.SPECIALINFO.GEM_UPGRADING[string.upper(_name)]
         end
 
-        str = str .. "\n\n"..STRINGS.SCRAPBOOK.SPECIALINFO.GEMOLOGY_GEM_EFFECTS.."\n\n"
+        str = str .. "\n\n" .. STRINGS.SCRAPBOOK.SPECIALINFO.GEMOLOGY_GEM_EFFECTS .. "\n\n"
 
         for _tier = 1, MAX_GEM_TIER do
             str = str .. STRINGS.NAMES.UM_GEMOLOGYGEM_PREFIX[_tier] .. ":\n"
@@ -801,6 +801,14 @@ env.AddClassPostConstruct("screens/redux/scrapbookscreen", function(self)
                 end
                 if data.notes.lunar_aligned then
                     makeentry("icon_moonaligned.tex", STRINGS.SCRAPBOOK.NOTE_LUNAR_ALIGNED)
+                end
+                if data.notes.cursed_item then
+                    makeentry("icon_curseditem.tex", "CURSED") --MOVE THESE STRINGS!!!!
+                    makesubentry("BE CURSED TO WIELD THIS")
+                end
+                if data.notes.cursed_enhanced_item then
+                    makeentry("icon_curseditem.tex", "CURSED")
+                    makesubentry("BE CURSED TO EMPOWER THIS")
                 end
             end
 

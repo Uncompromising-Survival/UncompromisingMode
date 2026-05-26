@@ -27,6 +27,8 @@ SPECIALINFO.MUSHTREE = SPECIALINFO.TREE
 for k, v in pairs(specialinfo_ovewrite) do
     scrapbookdata[k]["specialinfo"] = v
 end
+--idfk where to put this
+scrapbookdata["shieldofterror"].notes = {cursed_enhanced_item = true}
 
 --helper function to format tooltip strings into scrapbook special info.
 -- Turns "- Text.\n- like this."
