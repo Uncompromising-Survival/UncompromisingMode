@@ -211,6 +211,19 @@ GLOBAL.ACTIONS.UPGRADE.strfn = function(act)
     return _UpgradeStrFn(act)
 end
 
+local _StartChannelingStrFn = GLOBAL.ACTIONS.STARTCHANNELING.strfn
+GLOBAL.ACTIONS.STARTCHANNELING.strfn = function(act, ...)
+    local str = _StartChannelingStrFn(act, ...)
+    local targ = act.target or act.invobject
+    if targ then
+        if targ:HasTag("winky_storage") then
+            return "RECRUITRAT"
+        end
+    end
+
+    return str
+end
+
 local _AddFuelFn = GLOBAL.ACTIONS.ADDFUEL.fn
 local _AddWetFuelFn = GLOBAL.ACTIONS.ADDWETFUEL.fn
 
