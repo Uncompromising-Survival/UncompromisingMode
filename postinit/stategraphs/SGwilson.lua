@@ -137,7 +137,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                     if v.components.locomotor ~= nil and not v:HasTag("stageusher") then
                         for i = 1, 50 do
                             v:DoTaskInTime((i - 1) / 50, function(v)
-                                if v ~= nil and inst ~= nil then
+                                if v and v:IsValid() and inst then
                                     local x, y, z = inst.Transform:GetWorldPosition()
                                     local tx, ty, tz = v.Transform:GetWorldPosition()
 
@@ -197,7 +197,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 if v.components.locomotor ~= nil and not v:HasTag("stageusher") then
                     for i = 1, 50 do
                         v:DoTaskInTime((i - 1) / 50, function(v)
-                            if v ~= nil and inst ~= nil then
+                            if v and v:IsValid() and inst then
                                 local x, y, z = inst.Transform:GetWorldPosition()
                                 local tx, ty, tz = v.Transform:GetWorldPosition()
 
