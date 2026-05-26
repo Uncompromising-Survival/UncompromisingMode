@@ -107,7 +107,8 @@ end
 function GemEnchantable:SetDurability(enchantment, durability)
     durability = math.clamp(durability, 0, 1)
 
-    if durability <= 0 then
+    --check for HasEnchantment in case something does a delayed durability delta.
+    if durability <= 0 and self:HasEnchantment(enchantment) then
         if self.inst.SoundEmitter then
             self.inst.SoundEmitter:PlaySound("dontstarve/common/gem_shatter")
         end
