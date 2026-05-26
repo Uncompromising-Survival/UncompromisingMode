@@ -1695,7 +1695,14 @@ env.AddClassPostConstruct("screens/redux/scrapbookscreen", function(self)
                 widget.item_root.catname:Hide()
                 widget.item_root.inv_image:Hide()
 
-                if data.type == "item" or data.type == "food" or data.use_bg then
+                
+
+                if data.use_bg then
+                    widget.item_root.image:SetTexture("images/scrapbook.xml", "inv_item_background.tex")
+                    widget.item_root.image:ScaleToSize(imagesize, imagesize)
+                    widget.item_root.inv_image:Show()
+                    widget.item_root.inv_image:SetTexture(GetScrapbookIconAtlas(data.tex) or GetScrapbookIconAtlas("cactus.tex"), data.tex or "cactus.tex")
+                elseif data.type == "item" or data.type == "food" then
                     widget.item_root.image:SetTexture("images/scrapbook.xml", "inv_item_background.tex")
                     widget.item_root.image:ScaleToSize(imagesize, imagesize)
                     widget.item_root.inv_image:Show()
