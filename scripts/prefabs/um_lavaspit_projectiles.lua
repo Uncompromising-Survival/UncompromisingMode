@@ -35,7 +35,7 @@ end
 
 local function TrySlowdown(inst, target)
     local debuffkey = inst.prefab
-    if inst.prefab ~= "um_lavaspit_slobber" then
+    --if inst.prefab ~= "um_lavaspit_slobber" then
         if (not target:HasTag("player") or target == inst.lobber) and target.components.locomotor ~= nil then
             if target._lavavomit_speedmulttask ~= nil then
                 target._lavavomit_speedmulttask:Cancel()
@@ -47,7 +47,7 @@ local function TrySlowdown(inst, target)
 
             target.components.locomotor:SetExternalSpeedMultiplier(target, debuffkey, 0.5)
         end
-    end
+    --end
 
     if (not target:HasTag("player") or target == inst.lobber) and (inst.prefab ~= "um_lavaspit_slobber" and inst.components.propagator ~= nil or inst.prefab == "um_lavaspit_slobber") and target.components.combat ~= nil and target.components.health ~= nil and
         not target:HasTag("dragonfly") and not target:HasTag("lavae") and target.components.burnable ~= nil then

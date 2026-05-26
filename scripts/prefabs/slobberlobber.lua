@@ -52,9 +52,9 @@ local function fuelme(inst)
 	end
 end
 ]]
-local function LaunchSpit(caster, target)
+local function LaunchSpit(caster, pos)
     local x, y, z = caster.Transform:GetWorldPosition()
-    local targetpos = target:GetPosition()
+    local targetpos = pos
     local theta = caster.Transform:GetRotation()
 
     theta = theta * DEGREES
@@ -89,17 +89,20 @@ end
 local function createlight(staff, target, pos)
     if staff.components.rechargeable:IsCharged() then
         staff.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/vomit")
-        local spittarget = SpawnPrefab("um_lavaspit_target")
         local caster = staff.components.inventoryitem.owner
+        LaunchSpit(caster, pos or target and target:GetPosition())
 
-        if pos ~= nil then
-            spittarget.Transform:SetPosition(pos:Get())
-            spittarget:DoTaskInTime(5, spittarget.Remove)
-            LaunchSpit(caster, spittarget)
-        elseif target ~= nil then
-            spittarget.Transform:SetPosition(getspawnlocation(staff, target))
-            spittarget:DoTaskInTime(5, spittarget.Remove)
-            LaunchSpit(caster, target)
+        local x1, y1, z1 = staff.Transform:GetWorldPosition()
+
+        local owner = staff.components.inventoryitem.owner
+
+        for i, v in pairs(TheSim:FindEntities(x1, y1, z1, 8, { "slobberlobber" })) do
+            if v ~= staff then
+                local vowner = v.components.inventoryitem:GetGrandOwner()
+                if vowner ~= nil and (vowner == owner or not vowner:HasTag("player")) or vowner == nil then
+                    v.components.rechargeable:Discharge(TUNING.DSTU.SLOBBERLOBBER_COOLDOWN)
+                end
+            end
         end
 
         staff.components.rechargeable:Discharge(TUNING.DSTU.SLOBBERLOBBER_COOLDOWN) --whatever, do what you want with that number
@@ -128,11 +131,6 @@ local function onequip(inst, owner)
     owner.AnimState:OverrideSymbol("swap_object", "swap_slobberlobber", "swap_slobberlobber")
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
-
-    local rechargeable = inst.components.rechargeable
-    if rechargeable and rechargeable:GetTimeToCharge() < TUNING.DSTU.SLOBBERLOBBER_COOLDOWN_ONEQUIP then
-        rechargeable:Discharge(TUNING.DSTU.SLOBBERLOBBER_COOLDOWN_ONEQUIP)
-    end
 end
 
 local function onunequip(inst, owner)
