@@ -529,9 +529,6 @@ AddUMGemDef("palegem2", {
                 end
             end
         end,
-        onattack = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("palegem2", item, 0.005)
-        end,
         onremove = function(item, tier)
             local old_finite = item.volatile_gemology_data.um_gemologypalegem2.old_finite
             local old_fueled = item.volatile_gemology_data.um_gemologypalegem2.old_fueled
