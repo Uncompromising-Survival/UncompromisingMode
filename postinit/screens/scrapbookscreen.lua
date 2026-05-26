@@ -1188,7 +1188,7 @@ env.AddClassPostConstruct("screens/redux/scrapbookscreen", function(self)
                     if depdata.knownlevel == 0 then
                         button:SetTextures(GetScrapbookIconAtlas("unknown.tex"), "unknown.tex")
                         button:SetOnClick(function() end)
-                    elseif table.contains(needs_img_types, depdata.type) then
+                    elseif table.contains(needs_img_types, depdata.type) or depdata.use_bg then
                         button:SetTextures("images/scrapbook.xml", "inv_item_background.tex")
 
                         atlas = GetInventoryItemAtlas(tex)
@@ -1695,7 +1695,7 @@ env.AddClassPostConstruct("screens/redux/scrapbookscreen", function(self)
                 widget.item_root.catname:Hide()
                 widget.item_root.inv_image:Hide()
 
-                if data.type == "item" or data.type == "food" then
+                if data.type == "item" or data.type == "food" or data.use_bg then
                     widget.item_root.image:SetTexture("images/scrapbook.xml", "inv_item_background.tex")
                     widget.item_root.image:ScaleToSize(imagesize, imagesize)
                     widget.item_root.inv_image:Show()

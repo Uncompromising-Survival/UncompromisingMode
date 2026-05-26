@@ -5,9 +5,10 @@ local scrapbook_prefabs = require("scrapbook_prefabs")
 local scrapbookdata = require("screens/redux/scrapbookdata")
 local um_scrapbookdata = require("um_scrapbookdata")
 
-for k,v in pairs(um_scrapbookdata) do
-    scrapbook_prefabs[k] = true
-    scrapbookdata[k] = v
+for name, data in pairs(um_scrapbookdata) do
+    data.use_bg = true --automatically adds the inv icon BG.
+    scrapbook_prefabs[name] = true
+    scrapbookdata[name] = data
 end
 
 local S = STRINGS.SCRAPBOOK.SPECIALINFO
@@ -15,7 +16,7 @@ local S = STRINGS.SCRAPBOOK.SPECIALINFO
 local specinfo = {
     --Tooltips for UM stuff. Usually more in-depth tooltips. TODO MOST OF THESE ARE JUST TOOLTIPS. PLEASE ADD DETAIL
     RAT_WHIP = "Stronger when the user is well fed.",
-    AIR_CONDITIONER = "Can crush up Mushrooms for helpful stat clouds.", 
+    AIR_CONDITIONER = "Can crush up Mushrooms for helpful stat clouds.",
     ANCIENT_AMULET_RED = "Drops soul orbs when attacked, which will replenish lost health when picked up.\nRevives players when haunted.",
     ARMOR_GLASSMAIL = "Summons spinning Glass Shards when attacking enemies. Loses shards when damage is taken.",
     SALTPACK = "Drops piles of salt, preventing buildup of Snow Piles.",
@@ -30,7 +31,7 @@ local specinfo = {
     GASMASK = "Provides protection against spore clouds, smog and hayfever.",
     PLAGUEMASK = "Provides protection against spore clouds, smog and hayfever.",
     FLORAL_BANDAGE = "Restores extra health over time.",
-	UM_RIMEWEED_ICEPACK = "Cools the user down.",
+    UM_RIMEWEED_ICEPACK = "Cools the user down.",
     DISEASECUREBOMB = "Fertilizes plants and get those ready for harvest.",
     SLUDGE_OIL = "Multi-use fuel for fires and lanterns alike.",
     ARMOR_SHARKSUIT_UM =
@@ -45,6 +46,6 @@ local specinfo = {
 }
 
 
-for k,v in pairs(specinfo) do
+for k, v in pairs(specinfo) do
     S[k] = v
 end
