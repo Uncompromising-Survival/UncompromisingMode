@@ -1,27 +1,40 @@
-AddTile("HOODEDFOREST", -- tile_name 1
-    "LAND",             -- tile_range 2
-    {
-        -- tile_data 3
-        ground_name = "hoodedmoss",
-    }, {
-        -- ground_tile_def 4 -- Looking for the atlas here, which is hoodedmoss.xml
-        name = "hoodedmoss",
-        noise_texture = "noise_hoodedmoss",
-        runsound = "dontstarve/movement/walk_grass",
-        walksound = "dontstarve/movement/walk_grass",
-        snowsound = "dontstarve/movement/run_snow",
-        mudsound = "dontstarve/movement/run_mud",
-        colors = GROUND_OCEAN_COLOR
-    }, {
-        -- minimap_tile_def 5
-        name = "hoodedmoss",
-        noise_texture = "mini_noise_hoodedmoss.tex"
-    }, {
-        -- turf_def 6
-        name = "hoodedmoss",
-        anim = "hoodedmoss",
-        bank_build = "hfturf"
-    })
+-- Prevent duplicate tile definitions
+if GLOBAL.rawget(GLOBAL, "UM_TILEDEFS_LOADED") then
+    print("[Uncompromising Mode] tiledefs.lua already loaded, skipping...")
+    return
+end
+GLOBAL.UM_TILEDEFS_LOADED = true
+
+-- Check if tile is already defined to avoid redefinition errors
+local tile_defs = GLOBAL.rawget(GLOBAL, "TILE_DEFINITIONS")
+if not tile_defs or not tile_defs["HOODEDFOREST"] then
+    AddTile("HOODEDFOREST", -- tile_name 1
+        "LAND",             -- tile_range 2
+        {
+            -- tile_data 3
+            ground_name = "hoodedmoss",
+        }, {
+            -- ground_tile_def 4 -- Looking for the atlas here, which is hoodedmoss.xml
+            name = "hoodedmoss",
+            noise_texture = "noise_hoodedmoss",
+            runsound = "dontstarve/movement/walk_grass",
+            walksound = "dontstarve/movement/walk_grass",
+            snowsound = "dontstarve/movement/run_snow",
+            mudsound = "dontstarve/movement/run_mud",
+            colors = GROUND_OCEAN_COLOR
+        }, {
+            -- minimap_tile_def 5
+            name = "hoodedmoss",
+            noise_texture = "mini_noise_hoodedmoss.tex"
+        }, {
+            -- turf_def 6
+            name = "hoodedmoss",
+            anim = "hoodedmoss",
+            bank_build = "hfturf"
+        })
+else
+    print("[Uncompromising Mode] HOODEDFOREST tile already defined, skipping...")
+end
 
 AddTile("ANCIENTHOODEDFOREST",
     "LAND",
@@ -719,5 +732,3 @@ local function Initialize(...)
     end
     return _Initialize(...)
 end
-
-GroundTiles.Initialize = Initialize
