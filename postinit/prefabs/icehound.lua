@@ -84,9 +84,8 @@ end
 
 env.AddPrefabPostInit("icehound", function(inst)
     if not TheWorld.ismastersim then return end
-    if TUNING.DSTU.FROSTBITEHOUNDS then
-        inst:ListenForEvent("onhitother", OnHitOtherFreeze)
-    end
+        
+	inst:ListenForEvent("onhitother", OnHitOtherFreeze)
 
     inst.UMIsAlly = IsAlly
 

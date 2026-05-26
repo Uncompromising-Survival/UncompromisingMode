@@ -95,8 +95,6 @@ local prefab_post = {
     "amulet",
     "cave_entrance_open",
     "catcoon",
-    "icehound",
-    "firehound",
     "forest",
     "cave",
     "world",
@@ -453,6 +451,14 @@ if GetModConfigData("walrus") then
 end
 if GetModConfigData("harder_beefalo") then
     table.insert(stategraph_post, "Beefalo")
+end
+
+if GetModConfigData("firehound") then
+    table.insert(prefab_post, "firehound")
+end
+	
+if GetModConfigData("icehound") then
+    table.insert(prefab_post, "icehound")	
 end
 
 if TUNING.DSTU.HARDER_SPIDERQUEEN then

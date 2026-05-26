@@ -752,15 +752,13 @@ configuration_options = {
     Header("Monsters"),
     -----------------------------
     Header("New Hounds"),
+    BinaryConfig("firehound", "Fire Hound", "Red Hounds breath fire and ignite players on attack. Drop chance of red gem increased by 10%.", true),
+    BinaryConfig("icehound", "Ice Hound", "Blue Hounds breath ice and freeze players on attack. Drop chance of blue gem increased by 10%.", true),	
     BinaryConfig("glacialhounds", "Glacial Hounds", "Glacial Hounds are part of Hound waves.", true),
     BinaryConfig("lightninghounds", "Lightning Hounds", "Lightning Hounds are part of Hound waves.", true),
     BinaryConfig("magmahounds", "Magma Hounds", "Magma Hounds are part of Hound waves.", true),
     BinaryConfig("sporehounds", "Spore Hounds", "Spore Hounds are part of Hound waves.", true),
-    SkipSpace(),
 
-    Header("Harder Hounds"),
-    BinaryConfig("firebitehounds", "Fiery Bite", "Red Hounds set players on fire when they attack.", true),
-    BinaryConfig("frostbitehounds", "Frozen Bite", "Blue Hounds freeze players when they attack.", true),
     SkipSpace(),
 
     Header("Wave Changes"),
