@@ -430,6 +430,7 @@ AddDeconstructRecipe("snappy_jaw", { Ingredient("flint", 3), Ingredient("rope", 
 AddDeconstructRecipe("pied_piper_flute", { Ingredient("twigs", 3), Ingredient("goldnugget", 1) })
 AddDeconstructRecipe("skullflask", { Ingredient("boneshard", 2), Ingredient("nightmarefuel", 6), Ingredient("livinglog", 1) })
 AddDeconstructRecipe("skullflask_empty", { Ingredient("boneshard", 2), Ingredient("nightmarefuel", 1), Ingredient("livinglog", 1) })
+AddDeconstructRecipe("tentaclespike", { Ingredient("tentaclespots", 1) })
 AddDeconstructRecipe("corvushat", { Ingredient("silk", 6), Ingredient("feather_robin", 2), Ingredient("seeds", 1) }) --:)
 
 --Vet Curse Deconstruct Recipes

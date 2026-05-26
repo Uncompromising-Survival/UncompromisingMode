@@ -40,7 +40,8 @@ local specinfo = {
     ARMOR_CRAB_MAXHP = "Increases maximum health when worn.",
     ARMOR_CRAB_REGEN = "Self-healing.",
     UM_ARMOR_PYRE_NETTLES = "Panics and damages nearby miscreants.\nIgnores tiny, shadow, or fire-aligned creatures.",
-    WIXIEPUZZLE = "Part of something larger. External help is required to unlock its secrets."
+    WIXIEPUZZLE = "Part of something larger. External help is required to unlock its secrets.",
+    CURSED_ANTLER = "100 damage on cooldown. Veteran's Curse Item.",
 }
 
 

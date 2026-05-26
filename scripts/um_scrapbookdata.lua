@@ -11,5 +11,8 @@ return {
     anchor_item = {name="anchor_item", tex="anchor_item.tex", subcat="seafaring", type="item", prefab="anchor_item", build="seafarer_anchor", bank="seafarer_anchor", anim="idle", fueltype="BURNABLE", fuelvalue=180, burnable=true, deps={"anchor", "boards", "cutstone", "rope"}},
     battlesong_shadowaligned = {name="battlesong_shadowaligned", tex="battlesong_shadowaligned.tex", subcat="battlesong", type="item", prefab="battlesong_shadowaligned", build="battlesongs", bank="battlesongs", anim="battlesong_shadowaligned", fueltype="BURNABLE", fuelvalue=15, burnable=true, craftingprefab="wathgrithr", deps={"featherpencil", "horrorfuel", "papyrus"}},
     ]]
+    cursed_antler = {name="cursed_antler", tex="cursed_antler.tex", subcat="veteranscurse", type="item", prefab="cursed_antler", weapondamage=34, build="cursed_antler", bank="cursed_antler", anim="idle", deps={"boneshard", "deerclops"}, specialinfo="CURSED_ANTLER"},
 
+
+    um_bee_moon = {name="um_bee_moon", tex="um_bee_moon.tex", subcat="insect", type="creature", prefab="um_bee_moon", health=100, damage=10, stacksize=20, build="bee_angry_build", bank="bee", anim="idle", animoffsety=150, perishable=960, workable="NET", deps={"um_meathoney", "houndstooth"}},
 }

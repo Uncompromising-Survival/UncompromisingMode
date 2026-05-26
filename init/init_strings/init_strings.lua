@@ -88,9 +88,9 @@ RECIPE_DESC.UM_BLOWDART_RIME = "Chilly ranged assault."
 RECIPE_DESC.BOAT_ANCIENT_ITEM = "They don't build them like they used to."
 RECIPE_DESC.BOAT_ANCIENT_ITEM_BLUEPRINT = "There is always something to learn from the past."
 
--- Veteran Shrine Crafts
+-- Veteran Shrine Crafts [UNUSED]
 
-RECIPE_DESC.CURSED_ANTLER = "Freeze, crush, kill."
+--[[RECIPE_DESC.CURSED_ANTLER = "Freeze, crush, kill."
 RECIPE_DESC.BEARGERCLAW = "Fling some rocks!"
 RECIPE_DESC.KLAUS_AMULET = "Double slap!"
 RECIPE_DESC.SILKSACK = "Wrap up your valuables."
@@ -102,7 +102,7 @@ RECIPE_DESC.UM_BEEGUN = "Bullet Bees!"
 RECIPE_DESC.UM_WINGSUIT = "Take flight!"
 RECIPE_DESC.UM_EXHUMER = "Judge, jury, resurrector."
 RECIPE_DESC.UM_BEEGUN_CHERRY = "Poisonous bullet bees!"
-RECIPE_DESC.UM_MOONFLY_LANTERN = "Light the path, lead the way!"
+RECIPE_DESC.UM_MOONFLY_LANTERN = "Light the path, lead the way!"]]
 
 RECIPE_DESC.WINONA_CATAPULT_ITEM_UM = RECIPE_DESC.WINONA_CATAPULT
 RECIPE_DESC.WINONA_SPOTLIGHT_ITEM_UM = RECIPE_DESC.WINONA_SPOTLIGHT
