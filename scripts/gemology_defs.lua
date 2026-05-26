@@ -467,7 +467,7 @@ AddUMGemDef("palegem1", {
                 and AllRecipes ~= nil
                 and (AllRecipes[item.prefab] == nil
                     or AllRecipes[item.prefab] ~= nil
-                    and (AllRecipes[item.prefab].is_deconstruction_recipe or AllRecipes[item.prefab].no_deconstruct))
+                    and (AllRecipes[item.prefab].is_deconstruction_recipe))
                 and item.components.weapon ~= nil then
                 local stimuli = item.components.weapon.stimuli and item.components.weapon.stimuli or nil
                 target.components.combat:GetAttacked(attacker, 34 / 2 * (tier - 1), nil, stimuli)
@@ -513,9 +513,7 @@ AddUMGemDef("palegem2", {
                 and (AllRecipes[item.prefab] == nil
                     or AllRecipes[item.prefab] ~= nil
                     and (AllRecipes[item.prefab].nounlock
-                        or AllRecipes[item.prefab].is_deconstruction_recipe
-                        or not AllRecipes[item.prefab].no_deconstruct
-                    )
+                        or AllRecipes[item.prefab].is_deconstruction_recipe)
                 ) then
                 if tier ~= 1 then
                     local _Use = item.components.finiteuses.Use
