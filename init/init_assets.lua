@@ -597,7 +597,8 @@ local scrapbook_icons = {
     "um_sinkmound_rock",
     "um_sinkmound_rock_gemless",
     "um_slimestone_rock",
-    "um_slimestone_rock_gemless"
+    "um_slimestone_rock_gemless",
+    "icon_curseditem"
 }
 
 for _, item in ipairs(scrapbook_icons) do
