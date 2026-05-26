@@ -553,9 +553,10 @@ local function OnStartChanneling_Target(inst, channeler)
     end
     StartSoundLoop(inst)
 
-    if home == nil or not home:IsValid() then return end
-    if not channeler.um_astral_projected then return end
-    if channeler.um_astral_target ~= inst then return end
+    if (home == nil or not home:IsValid()) or not channeler.um_astral_projected or channeler.um_astral_target ~= inst then
+        channeler.components.talker:Say(GetActionFailString(channeler, "GENERIC"))
+        return
+    end
 
     -- store home on the receptionator for use during the return trip, since we're about to clear it from the player, fooshizzle
     inst.active_home = home
@@ -725,6 +726,7 @@ local function TargetFn()
 
     inst:AddComponent("channelable")
     inst.components.channelable:SetChannelingFn(OnStartChanneling_Target, OnStopChanneling_Target)
+    --inst.components.channelable:SetEnabled(false)
 
     inst:AddComponent("teleporter")
     inst.components.teleporter.onActivate       = OnStartTeleporting_Target
