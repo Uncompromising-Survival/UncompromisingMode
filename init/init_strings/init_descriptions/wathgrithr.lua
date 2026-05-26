@@ -596,3 +596,4 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = { --Vegan Wigfrid real?
     WINTER = "It was... almost worthy.",
 }
 DESCRIBE.UM_BOOMBERRYPIE = "I wouldn't even if I could!"
+DESCRIBE.UM_CHILES_EN_NOGADA = "A soft disguise hiding the flesh of conquest!"

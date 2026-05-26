@@ -600,3 +600,4 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
     WINTER = "Oooh, tastes best cold!",
 }
 DESCRIBE.UM_BOOMBERRYPIE = "This yummy, but... looks kinda scary, glurp."
+DESCRIBE.UM_CHILES_EN_NOGADA = "Wicker-lady told me not to eat but impy did..."

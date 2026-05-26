@@ -61,7 +61,9 @@ local valid_data = {
 }
 
 AddPrefabPostInit("world", function(inst)
-    inst:DoTaskInTime(0, function()
+    -- this broke and we lost access to data generation :((((((
+    -- (well, sort of. I can't be assed to fix this)
+    --[[inst:DoTaskInTime(0, function()
         for entry, data in pairs(vanilla) do
             for k, datatype in ipairs(valid_data) do
                 if uncomp[entry] ~= nil and uncomp[entry][datatype] ~= nil and uncomp[entry][datatype] ~= vanilla[entry][datatype] then
@@ -69,7 +71,8 @@ AddPrefabPostInit("world", function(inst)
                 end
             end
         end
-    end)
+    end)]]
+
     GLOBAL.TheWorld:AddTag("um_beta") -- Added so it's easy to tell if the um beta is active
     if not inst.ismastersim then
         return
@@ -78,7 +81,6 @@ end)
 
 modimport("init/init_gamemodes/init_uncompromising_mode")
 modimport("init/init_wathom")
-modimport("init/init_magmatiles")
 
 local skilltree_defs = require("prefabs/skilltree_defs")
 local BuildSkillsData = require("prefabs/skilltree_wixie")
@@ -110,6 +112,7 @@ GLOBAL.UPGRADETYPES.ELECTRICAL = "ELECTRICAL"
 GLOBAL.UPGRADETYPES.SLUDGE_CORK = "SLUDGE_CORK"
 GLOBAL.UPGRADETYPES.SOUL_SHADOW = "SOUL_SHADOW"
 GLOBAL.UPGRADETYPES.SOUL_LUNAR = "SOUL_LUNAR"
+
 GLOBAL.MATERIALS.SLUDGE = "sludge"
 GLOBAL.MATERIALS.COPPER = "copper"
 
@@ -314,9 +317,9 @@ end
 AddClientModRPCHandler("UncompromisingSurvival", "LearnGemologyGem", LearnGemologyGem)
 
 AddClientModRPCHandler("UncompromisingSurvival", "OnTerraform", function(data)
-    local data = DecodeAndUnzipString(data)
-    if TheWorld.components.um_localtilewatcher ~= nil then
-        TheWorld.components.um_localtilewatcher:OnTerraform(data)
+    local data = GLOBAL.DecodeAndUnzipString(data)
+    if GLOBAL.TheWorld and GLOBAL.TheWorld.components.um_localtilewatcher ~= nil then
+        GLOBAL.TheWorld.components.um_localtilewatcher:OnTerraform(data)
     end
 end)
 
@@ -508,4 +511,3 @@ AddSimPostInit(function()
     end
 end)
 
-modimport("init/um_tree_rock_data")

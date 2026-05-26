@@ -2,7 +2,6 @@ local cannonball_assets = {
     Asset("ANIM", "anim/cannonball_sludge.zip"),
 }
 
-
 local PROJECTILE_MUST_ONE_OF_TAGS = { "_combat", "_health", "blocker" }
 local PROJECTILE_EXCLUDE_TAGS = { "INLIMBO", "notarget", "noattack", "invisible", "playerghost" }
 
@@ -36,7 +35,6 @@ local function launch_away(inst, position, use_variant_angle)
     end
 end
 
-
 local function OnHit(inst, attacker, target)
     -- Do splash damage upon hitting the ground
     inst.components.combat:DoAreaAttack(inst, TUNING.CANNONBALL_SPLASH_RADIUS, nil, nil, nil, AREAATTACK_EXCLUDE_TAGS)
@@ -53,7 +51,6 @@ local function OnHit(inst, attacker, target)
         target:PushEvent("spawnnewboatleak", { pt = hitpos, leak_size = "med_leak", playsoundfx = true, cause = "cannonball" })
         target.components.health:DoDelta(-TUNING.CANNONBALL_DAMAGE / 2)
     end
-
 
     -- Look for stuff on the ocean/ground and launch them
     local x, y, z = inst.Transform:GetWorldPosition()
@@ -125,7 +122,7 @@ local function OnHit(inst, attacker, target)
 
         if target ~= nil and target.components.burnable ~= nil and inst:HasTag("cannonball_incendiary") then
             target.components.burnable:Ignite()
-            local lava = SpawnPrefab("lavaspit_sludge")
+            local lava = SpawnPrefab("um_lavaspit_sludge")
             lava.Transform:SetPosition(inst.Transform:GetWorldPosition())
         end
     
@@ -152,7 +149,6 @@ local function OnUpdateProjectile(inst)
             if target.components.burnable ~= nil and inst:HasTag("cannonball_incendiary") then
                 target.components.burnable:Ignite()
             end
-    
 
             -- Do damage to entities with health
             if target.components.combat and GetTime() - target.components.combat.lastwasattackedtime > TUNING.CANNONBALL_PASS_THROUGH_TIME_BUFFER then

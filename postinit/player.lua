@@ -168,7 +168,7 @@ local SCRAPBOOK_CANT_TAGS = { "FX", "INLIMBO" }
 local function UpdateMineralLog(inst)
     --assert(inst = ThePlayer)
     local x, y, z = inst.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, TUNING.SCRAPBOOK_UPDATERADIUS, {"gemology_gem"}, SCRAPBOOK_CANT_TAGS) 
+    local ents = TheSim:FindEntities(x, y, z, TUNING.SCRAPBOOK_UPDATERADIUS, { "gemology_gem" }, SCRAPBOOK_CANT_TAGS)
     for _, ent in ipairs(ents) do
         local learnt, tier = TheMineralLogbook:IsGemKnown(ent.prefab)
         if not learnt or tier == nil then
@@ -209,6 +209,17 @@ env.AddPlayerPostInit(function(inst)
     if inst.components.areaaware then
         inst.components.areaaware:StartWatchingTile(WORLD_TILES.UM_FLOODWATER)
     end
+
+    inst.um_canseeinstorm = net_bool(inst.GUID, "UMCanSeeInstorm.enabled", "UMCanSeeInstorm.dirty")
+
+    inst:ListenForEvent("UMCanSeeInstorm.dirty", function(inst)
+        local enabled = inst.um_canseeinstorm:value()
+
+        if inst.components.playervision ~= nil then
+            inst.components.playervision:ForceGoggleVision(enabled)
+        end
+    end)
+
 
     if not TheWorld.ismastersim then
         inst:DoPeriodicTask(0.5, function(inst)
@@ -295,7 +306,7 @@ env.AddPlayerPostInit(function(inst)
         for k, v in pairs(inst.components.leader.followers) do
             if ((k:HasTag("spider") and not TUNING.DSTU.TREATS_FOR_WEBBER) or
                     k:HasTag("pig") or k:HasTag("raidrat") or
-                    k:HasTag("winky_rat") or k.prefab == "eyeofterror_mini_ally") or
+                    k:HasTag("winky_rat") or k:HasTag("merm") or k.prefab == "eyeofterror_mini_ally") or
                 k.prefab == "smallbird" or k.prefab == "teenbird" or k.prefab ==
                 "lightflier" then -- exluding things that can't/shouldn't/already do
                 local savedata = k:GetSaveRecord()
@@ -372,7 +383,7 @@ env.AddPlayerPostInit(function(inst)
         if inst.starting_inventory then
             table.insert(inst.starting_inventory, "razor")
         else
-            inst.starting_inventory = {"razor"}
+            inst.starting_inventory = { "razor" }
         end
     end
 end)

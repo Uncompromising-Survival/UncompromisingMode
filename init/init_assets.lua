@@ -48,6 +48,7 @@ local inventoryitems =
     "um_exhumer_powered",
     "um_wingsuit",
     "silksack",
+    "silken_bundle_huge",
     "silken_bundle_large",
     "silken_bundle_medium",
     "silken_bundle_small",
@@ -463,6 +464,9 @@ local inventoryitems =
     "um_hat_nettlemask",
     "um_thulecite_razor",
     "uncompromising_winkyhomeburrow",
+    "um_scrapper",
+    "um_astral_projector",
+    "um_astral_projector_target",
 }
 
 local minimap_icons = {
@@ -483,6 +487,7 @@ local minimap_icons = {
     "uncompromising_winkyhomeburrow",
     "winky",
     "telebase_active",
+    "wathom",
     "wixie",
     "um_pyre_nettles_map",
     "um_tornado_map",
@@ -527,6 +532,7 @@ local minimap_icons = {
     "tarsuit",
     "trunkvest_winter",
     "trunkvest_summer",
+    "beargervest",
     "sludge_sack",
     "hawaiianshirt",
     "skullchest",
@@ -539,12 +545,66 @@ local minimap_icons = {
     "um_spongeplant",
     "blueberryplant",
     "sludgestack",
-    "sludgestack_corked"
+    "sludgestack_corked",
+    "um_scrapper",
+    "um_astral_projector",
+    "um_astral_projector_target"
 }
 
 for _, item in ipairs(inventoryitems) do
     RegisterInventoryItemAtlas(GLOBAL.resolvefilepath("images/inventoryimages/" .. item .. ".xml"), item .. ".tex")
 end
+
+local scrapbook_icons = {
+    "um_gemologyforge",
+    "um_gemology_geode_blue",
+    "um_gemology_geode_red",
+    "um_gemology_geode_green",
+    "um_gemology_geode_glass",
+    "um_gemology_geode_guano",
+    "um_gemology_geode_lobster",
+    "um_gemology_geode_ruins",
+    "um_gemology_geode_sink",
+    "um_gemology_geode_slime",
+    "um_gemology_geode_vent",
+    "um_gemologybluegem1",
+    "um_gemologybluegem2",
+    "um_gemologyredgem1",
+    "um_gemologyredgem2",
+    "um_gemologygreengem1",
+    "um_gemologygreengem2",
+    "um_gemologyorangegem1",
+    "um_gemologyorangegem2",
+    "um_gemologypalegem1",
+    "um_gemologypalegem2",
+    "um_gemologypurplegem1",
+    "um_gemologypurplegem2",
+    "um_gemologyyellowgem1",
+    "um_gemologyyellowgem2",
+    "um_bluemushtree_gem",
+    "um_bluemushtree_gemless",
+    "um_redmushtree_gem",
+    "um_redmushtree_gemless",
+    "um_greenmushtree_gem",
+    "um_greenmushtree_gemless",
+    "um_guano_rock",
+    "um_guano_rock_gemless",
+    "um_magnifier",
+    "um_magnifier_purplegem",
+    --"um_magnifier_obsidian",
+    "um_moonglass_ceiling",
+    "um_rocklobster_rock",
+    "um_sinkmound_rock",
+    "um_sinkmound_rock_gemless",
+    "um_slimestone_rock",
+    "um_slimestone_rock_gemless"
+}
+
+for _, item in ipairs(scrapbook_icons) do
+    RegisterScrapbookIconAtlas(GLOBAL.resolvefilepath("images/scrapbook/" .. item .. ".xml"), item .. ".tex")
+end
+
+
 
 Assets = {
     -- Cookbook HQ Icons
@@ -1043,7 +1103,7 @@ Assets = {
     Asset("ANIM", "anim/widow1_backup.zip"),
     Asset("ANIM", "anim/widow2_backup.zip"),
 
-    Asset("ANIM", "anim/silken_bundle.zip"),
+    Asset("ANIM", "anim/um_silken_bundle.zip"),
 
     Asset("ANIM", "anim/sheeplet.zip"),
     Asset("ANIM", "anim/sheepletbomb.zip"),
@@ -1332,6 +1392,7 @@ Assets = {
 
     --FX
     Asset("ANIM", "anim/electric_explosion.zip"),
+    Asset("ANIM", "anim/um_lunar_explosion.zip"),
 
     Asset("ANIM", "anim/um_harpoonhitfx.zip"),
 
@@ -1906,6 +1967,11 @@ for _, asset in pairs(inventoryitems) do
     table.insert(Assets, Asset("ATLAS_BUILD", "images/inventoryimages/" .. asset .. ".xml", 256))
 end
 
+for _, asset in pairs(scrapbook_icons) do
+    table.insert(Assets, Asset("IMAGE", "images/scrapbook/" .. asset .. ".tex"))
+    table.insert(Assets, Asset("ATLAS", "images/scrapbook/" .. asset .. ".xml"))
+end
+
 for _, asset in pairs(minimap_icons) do
     table.insert(Assets, Asset("IMAGE", "images/map_icons/" .. asset .. ".tex"))
     table.insert(Assets, Asset("ATLAS", "images/map_icons/" .. asset .. ".xml"))
@@ -1913,3 +1979,15 @@ for _, asset in pairs(minimap_icons) do
 end
 
 GLOBAL.UM_AddAssetsParticleWorldTileState(Assets)
+
+-- Limbo Leap portal button UI images
+local limboleap_ui = {
+    "images/limboleap/portal_button",
+    "images/limboleap/portal_button_hover",
+    "images/limboleap/moonrock_portal_button",
+    "images/limboleap/moonrock_portal_button_hover",
+}
+for _, path in ipairs(limboleap_ui) do
+    table.insert(Assets, Asset("IMAGE", path .. ".tex"))
+    table.insert(Assets, Asset("ATLAS", path .. ".xml"))
+end

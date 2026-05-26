@@ -2,7 +2,6 @@ local assets =
 {
     Asset("ANIM", "anim/um_gemologygems.zip"),
 }
-local gems = { "bluegem", "redgem", "purplegem", "orangegem", "yellowgem", "palegem" }
 local GEM_DEFS = require("gemology_defs").GEM_DEFS
 local function OnSave(inst, data)
     data.tier = inst:GetTier()
@@ -10,7 +9,7 @@ local function OnSave(inst, data)
 end
 
 local function OnLoad(inst, data)
-    if data and data.tier then
+    if data then
         if data.tier ~= nil then
             inst:SetTier(data.tier)
         end
@@ -49,7 +48,7 @@ local function GetMainName(inst)
     --only reveal name
 
     local color = "DEFAULT"
-    if string.find(inst.prefab, "um_gemology") ~= nil then     --just UM has the color stuff idk if any addons will apply, so we'll use the default.
+    if string.find(inst.prefab, "um_gemology") ~= nil then --just UM has the color stuff idk if any addons will apply, so we'll use the default.
         color = string.upper(string.gsub(string.gsub(inst.prefab, "um_gemology", ""), "gem%d", ""))
     end
 
@@ -110,7 +109,13 @@ local function OnWorked(inst)
 
     inst:Remove()
 end
-local function MakeGem(gem, bank, build, anim)
+
+local function OnDestack(new, inst)
+    new:SetTier(inst:GetTier())
+    new:SetRevealed(inst:IsRevealed())
+end
+
+local function MakeGem(gem, bank, build, anim, postfn)
     local function fncommon()
         local inst = CreateEntity()
 
@@ -154,6 +159,11 @@ local function MakeGem(gem, bank, build, anim)
             end
         end
 
+        inst:DoTaskInTime(0, function(inst)
+            if postfn ~= nil then
+                postfn(inst)
+            end
+        end)
 
         if not TheWorld.ismastersim then
             return inst
@@ -185,6 +195,8 @@ local function MakeGem(gem, bank, build, anim)
         inst:AddComponent("inventoryitem")
         inst:AddComponent("stackable")
         inst.components.stackable.maxsize = 10 --? idk.
+        inst.components.stackable:SetOnDeStack(OnDestack)
+
 
         inst:AddComponent("tradable")
         inst.components.tradable.rocktribute = 8
@@ -193,12 +205,13 @@ local function MakeGem(gem, bank, build, anim)
         inst.components.edible.foodtype = FOODTYPE.ELEMENTAL
         inst.components.edible.hungervalue = 10
 
-
         MakeHauntableLaunch(inst)
 
         inst.OnSave = OnSave
         inst.OnLoad = OnLoad
         inst.OnEntityWake = OnEntityWake
+
+
 
         return inst
     end
@@ -209,8 +222,9 @@ end
 local prefabs = {}
 
 for gem, defs in pairs(GEM_DEFS) do
-    table.insert(prefabs, MakeGem(gem, defs.bank, defs.build, defs.anim)) --hmm, should I move this asset to the defs file so any mod can import their assets?
+    if defs.createprefab then
+        table.insert(prefabs, MakeGem(gem, defs.bank, defs.build, defs.anim, defs.postfn))
+    end
 end
-
 
 return unpack(prefabs)

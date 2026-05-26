@@ -92,14 +92,12 @@ local function teleport_continue(teleportee, locpos, inst)
     end
 end
 
-
-
 local destroy_prefabs = {
     "log",
     "cutgrass",
     "pinecone",
     "twigs",
-    "spoiledfood",
+    "spoiled_food",
     "poop",
 }
 
@@ -200,23 +198,23 @@ local function TornadoEnviromentTask(inst)
         local items_pick = TheSim:FindEntities(x, y, z, 6, { "_inventoryitem" }, --no dome check because dome component adds nosucky tag.
             { "irreplaceable", "tornado_nosucky", "trap", "INLIMBO", "heavy", "backpack" })
         for k, v in ipairs(items_pick) do
-			if v.prefab == "staff_tornado" then
-				if not v.empowered then
-					v.ChargeUp(v)
-					SpawnPrefab("lightning").Transform:SetPosition(v.Transform:GetWorldPosition())
-				end
-			else
-				if v.components.inventoryitem ~= nil and v.prefab ~= "bullkelp_beachedroot" then
-					if config == "reduced" and v:IsAsleep() then
-						return
-					end
-					if table.contains(destroy_prefabs, v.prefab) and math.random() > 0.5 then
-						v:Remove()
+            if v.prefab == "staff_tornado" then
+                if not v.empowered then
+                    v.ChargeUp(v)
+                    SpawnPrefab("lightning").Transform:SetPosition(v.Transform:GetWorldPosition())
+                end
+            else
+                if v.components.inventoryitem ~= nil and v.prefab ~= "bullkelp_beachedroot" then
+                    if config == "reduced" and v:IsAsleep() then
+                        return
+                    end
+                    if table.contains(destroy_prefabs, v.prefab) and math.random() > 0.5 then
+                        v:Remove()
                     elseif v.components.inventoryitem.canbepickedup then
-						PickItem(v, inst)
-					end
-				end
-			end
+                        PickItem(v, inst)
+                    end
+                end
+            end
         end
     end
 
@@ -268,7 +266,7 @@ local function TornadoTask(inst)
                 local lightning = SpawnPrefab("hound_lightning")
 
                 lightning.Transform:SetPosition(_x, _y, _z)
-                lightning.NoTags = JoinArrays(lightning.NoTags, {"companion", "abigail", "bird", "prey"})
+                lightning.NoTags = JoinArrays(lightning.NoTags, { "companion", "abigail", "bird", "prey" })
                 lightning.Delay = 1.25 + math.random() / 2
             end
         end
@@ -296,7 +294,7 @@ local function TornadoTask(inst)
                     if (v.prefab == "wes" and rand > 0.95 or rand > 0.99) then
                         local lightning_targeted = SpawnPrefab("hound_lightning")
                         lightning_targeted.Transform:SetPosition(px + math.random(-5, 5), 0, pz + math.random(-5, 5))
-                        lightning_targeted.NoTags = JoinArrays(lightning_targeted.NoTags, {"companion", "abigail", "bird", "prey"})
+                        lightning_targeted.NoTags = JoinArrays(lightning_targeted.NoTags, { "companion", "abigail", "bird", "prey" })
                         lightning_targeted.Delay = 1.5
                     end
 
@@ -696,7 +694,13 @@ local function MoveDestination(inst)
         end
 
         local x, y, z = inst.Transform:GetWorldPosition()
-        local theta = (inst:GetAngleToPoint(0, 0, 0) + inst.danumber) * DEGREES
+        local tx, ty, tz = 0, 0, 0
+
+        if inst:GetNearestPlayer() ~= nil then
+            tx, ty, tz = inst:GetNearestPlayer().Transform:GetWorldPosition()
+        end
+
+        local theta = ((inst:GetAngleToPoint(tx, ty, tz)) + inst.danumber) * DEGREES
 
         x = x + 7.5 * math.cos(theta)
         z = z - 7.5 * math.sin(theta)

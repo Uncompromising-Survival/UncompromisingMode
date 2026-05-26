@@ -95,14 +95,6 @@ local function NearPoint(inst)
     end
 end
 
-local function RestartTimer(inst, name, time)
-    if inst.components.timer:TimerExists(name) then
-        inst.components.timer:SetTimeLeft(name, time)
-    else
-        inst.components.timer:StartTimer(name, time)
-    end
-end
-
 local function DoSpecial(inst)
     if inst.components.health and not inst.components.health:IsDead() then
         if inst.repositionlimittask then
@@ -124,8 +116,8 @@ local function DoSpecial(inst)
                 return inst.sg:GoToState("lobprojectile")
             end
         else
-            RestartTimer(inst, "pounce", math.random(15, 20)) --Restart Pounce
-            RestartTimer(inst, "mortar", math.random(20, 30)) --Restart Mortar
+            UMCommonFns.RestartTimer(inst, {name = "pounce", time = math.random(15, 20)}) -- Restart Pounce
+            UMCommonFns.RestartTimer(inst, {name = "mortar", time = math.random(20, 30)}) -- Restart Mortar
         end
     end
 end

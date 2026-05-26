@@ -683,3 +683,4 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
 }
 DESCRIBE.UM_RICE_PUDDING = "I kind of liked the crunch it used to have."
 DESCRIBE.UM_BOOMBERRYPIE = "The slime will make my claws sticky forever."
+DESCRIBE.UM_CHILES_EN_NOGADA = "Smells like the good trash!"

@@ -1,4 +1,4 @@
-local loot_table = {
+GEODE_LOOT_TABLE = {
 
     ["um_gemology_geode_red"] =
     {
@@ -22,7 +22,7 @@ local loot_table = {
             green_cap = 1,
             rocks = 1,
             log = 0.5,
-            spore_short = 0.5,
+            spore_small = 0.5,
         },
         gemloot = {
             um_gemologygreengem1 = 1,
@@ -58,7 +58,7 @@ local loot_table = {
         gemloot = {
             um_gemologyyellowgem2 = 1,
             um_gemologyredgem2 = 1,
-            um_gemologypurplegem2 = 0.5,
+            um_gemologyorangegem1 = 0.5,
             yellowgem = 0.1,
             redgem = 0.5,
         },
@@ -146,7 +146,7 @@ local loot_table = {
             um_gemologyorangegem1 = 1,
             orangegem = 0.1,
             greengem = 0.05,
-            yellowgemgem = 0.05,
+            yellowgem = 0.05,
         },
     },
     ["um_gemology_geode_vent"] =
@@ -164,15 +164,17 @@ local loot_table = {
         },
     },
 }
-local function GetGeodeSourcesFromGem(gem_name)
+function GetGeodeSourcesFromGem(gem_name)
     local sources = {}
-    for geode,data in pairs(loot_table) do
+    for geode, data in pairs(GEODE_LOOT_TABLE) do
         local gemloot = data.gemloot
 
         if gemloot[gem_name] then
             table.insert(sources, geode)
         end
     end
+
+    return sources
 end
 
-return loot_table, GetGeodeSourcesFromGem
+return GEODE_LOOT_TABLE

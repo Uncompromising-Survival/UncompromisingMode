@@ -195,7 +195,7 @@ local characters = {
     WEBBER = {
         loot = {
             Item("silk", 6),
-            Item("silk", 2, .5),
+            Item("silk", 6, .5),
             Item("spidereggsack"),
             Item("healingsalve", 3),
             Item("healingsalve", 3, .5),
@@ -540,6 +540,7 @@ local default = {
             Item("monstermeat", 1, .5),
             Item("silk"),
             Item("silk", 1, .5),
+            Item("spidereggsack", 1, .25),
         }
     },
     BEEFALO = {
@@ -963,7 +964,7 @@ AddCompatCharacterCocoon("2618885209", "whimsy", {
 })
 
 --whiskey
-local algae = TUNING.DSTU.ISLAND_ADVENTURES and "seaweed" or "kelp"
+local algae = TUNING.DSTU.ISLAND_ADVENTURES and "seaweed" or "kelp" -- Reminded to copy this idea for every modded character!
 local seamaterial = TUNING.DSTU.ISLAND_ADVENTURES and "bamboo" or "driftwood_log"
 local boatkit = TUNING.DSTU.ISLAND_ADVENTURES and "boatrepairkit" or "boatpatch_sludge"
 local sail = TUNING.DSTU.ISLAND_ADVENTURES and "ironwind" or "mast_malbatross_item"
@@ -1048,5 +1049,91 @@ AddCompatCharacterCocoon("2978133982", "whispy", {
     Item("hareball", 1, 1, true),
     Item("slipper", 1, .25),
 })
+
+AddCompatCharacterCocoon("618785273", "womp", {
+    Item(function() return RandomItem("kelphat", "watermelonhat", "icehat") end, 1, 1, true),
+    Item("monstermeat", 6, 1, true),
+    Item("waterballoon", 4, 1),
+    Item("cutreeds", 16, 1),
+    Item("tentaclespots", 2, 1),
+    Item(function() return RandomItem("tentaclespots", "um_tentaclespot_moon") end, 1, .2),
+    Item("tentaclespike", 2, 1, true),
+    Item("tentaclespike", 2, .5, true),
+})
+
+AddCompatCharacterCocoon("3620352512", "weetie", {
+    Item("taffy", 2, 1, true),
+    Item("honey", 2, 1, true),
+    Item("royal_jelly", 4, 1, true),
+    Item("weetie_honeybutter", 4, 1, true),
+    Item("honeycomb", 4, 1),
+    Item("killerbee", 20, 1, true),
+    Item("weetie_royalbee", 10, .1, true),
+})
+
+AddCompatCharacterCocoon("3221411434", "welina", {
+    Item(function() return RandomItem("rat_tail","shroom_skin","phlegm","spoiled_fish","spoiled_fish_small","wetgoop","rottenegg","spoiled_food","slurper_pelt",
+        "yotpfood2","wintersfeastfuel","pigskin","manrabbit_tail","winter_food4") end, 3, 1), --Vomit Inducers List
+    Item(function() return RandomItem("trinket_22","welina_cattoy","balloons_empty","trinket_24","trinket_1","trinket_7","canary_poisoned","rabbit","mole",
+        "bearger_fur","crow","robin","puffin","rat_tail","robin_winter","canary","mandrake","sewing_kit","spidereggsack","pondfish","pondeel","slurper_pelt","papyrus","furtuft",
+        "featherpencil","feather_crow","goose_feather","malbatross_feather","malbatross_feathered_weave","feather_robin","feather_robin_winter","feather_canary",
+        "turf_carpetfloor","turf_beard_rug","steelwool","wetgoop","rope","winter_food1","tallbirdegg","butterflywings","lightbulb","cutgrass","cutreeds","beardhair",
+        "bird_egg","twigs","silk","foliage","beefalowool","acorn","pinecone","twiggy_nut") end, 3, 1), --Play Sanity List, minus Deerclops Eye, Bernie(s), whiskyyarn, celestial orb, maybe others
+    Item("pondfish", 1, 1, true),
+    Item(function() return RandomItem("pondfish", "pondeel") end, 3, .5, true),
+    Item("trinket_22", 1, 1),
+    Item("coontail", 3, 1),
+    Item("coontail", 3, .5),
+    Item("rat_tail", 6, 1),
+    Item("welina_catnip", 1, 1),
+    Item("snowgoggles", 1, 1),
+})
+
+AddCompatCharacterCocoon("2858309592", "whisky", {
+    Item(function() return RandomItem("whiskysunhat", "whiskysunglasses", "whiskyribbon") end, 1, 1, true),
+    Item("whiskyyarn", 3, 1),
+    Item("whiskyyarn", 3, .5),
+    Item("whiskybundlewrap", 4, .5),
+    Item("silk", 6, 1),
+    Item("silk", 4, .5),
+    Item("spidergland", 4, 1),
+    Item("spidergland", 4, .5),
+    Item("red_cap", 6, 1, true),
+    Item(function() return RandomItem("spider", "spider_dropper", "spider_healer", "spider_hider", "spider_moon", "spider_spitter", "spider_trapdoor", "spider_trapdoor_hooded",
+        "spider_warrior", "spider_water") end, 2, 1),
+})
+
+AddCompatCharacterCocoon("3021568491", "wildcard", {
+    Item("nightmarefuel", 2, 1),
+    Item("nightmarefuel", 14, .5),
+    Item("rabbit", 4, 1, true),
+    Item("manrabbit_tail", 4, 1),
+    Item("wcard_throwingcard", 4, 1),
+    Item("wcard_throwingcard", 4, .5),
+    Item("papyrus", 1, 1),
+    Item("tophat", 1, 1, true),
+    Item(function() return RandomItem("feather_crow", "feather_robin", "feather_robin_winter", "feather_canary", "goose_feather", "malbatross_feather") end, 6, 1),
+})
+
+--[[AddCompatCharacterCocoon("3385306425", "warrick", {
+    Item("feather_canary", 1, 1),
+    Item("silk", 5, 1),
+    Item("horn", 1, 1),
+})
+
+-- Wandering Done -- Is crashing for some reason, sooo gonna have to keep this out
+AddCompatCharacterCocoon("3385306425", "tvheadguy", {
+    Item("cctrinket_freddo", 1, 1),
+})]]
+
+--[[AddCompatCharacterCocoon("???", "warne", {
+    Item(function() return RandomItem("warnebone_generic", "warnebone_arm", "warnebone_leg", "warnebone_ribcage", "warnebone_skull") end, 4, 1, true),
+    Item("boneshard", 6, 1),
+    Item("boneshard", 6, .5),
+    Item("purplegem", 1, 1),
+    Item("purplegem", 1, .5),
+    Item("nightmarefuel", 8, 1),
+    Item("nightmarefuel", 6, .5),
+})]]
 
 return COCOON_DEFS

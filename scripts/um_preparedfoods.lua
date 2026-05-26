@@ -146,7 +146,6 @@ local um_preparedfoods =
         weight = 30,
         cooktime = 2.4,
         floater = { "med", nil, .6 },
-        tags = { "honeyed" },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_BEEFALOWINGS,
         oneatenfn = function(inst, eater)
             if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
@@ -220,6 +219,7 @@ local um_preparedfoods =
         cooktime = .5,
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 2*TUNING.PERISH_TWO_DAY,
+        tags = { "honeyed" },
         floater = {"small", nil, .6},
         card_def = {ingredients = {{"iceboomerang", 1}, {"honey", 1}}},
     },]]
@@ -374,6 +374,7 @@ local um_preparedfoods =
         oneatenfn = function(inst, eater)
             eater:AddDebuff("buff_boomberryattacks", "buff_boomberryattacks")
         end,
+        tags = { "honeyed" },
         floater = { "med", nil, .65 },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_BOOM_TART,
         card_def = { ingredients = { { "giant_blueberry", 1 }, { "giant_blueberry", 1 }, { "honey", 1 } } },
@@ -383,23 +384,23 @@ local um_preparedfoods =
     um_sponge_cake =
     {
         test = function(cooker, names, tags)
-            return names.um_spongeplant_item and names.um_spongeplant_item >= 2 and tags.sweetener and tags.fruit and tags.fruit >= 1
+            return names.um_spongeplant_item and tags.egg and tags.fruit and tags.fruit >= 1 and not (names.giant_blueberry or names.watermelon or tags.frozen)
         end,
         hunger = 37.5,
-        health = -3,
+        health = 0,
         sanity = 33,
         priority = 10,
         weight = 1,
-        cooktime = .9,
+        cooktime = .75,
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 4 * TUNING.PERISH_TWO_DAY,
         oneatenfn = function(inst, eater)
             if eater.components.moisture then
-                eater.components.moisture:DoDelta(-33)
+                eater.components.moisture:DoDelta(-100)
             end
         end,
         floater = { "med", nil, .65 },
-        card_def = { ingredients = { { "giant_blueberry", 1 }, { "giant_blueberry", 1 }, { "honey", 1 } } },
+        card_def = { ingredients = { { "um_spongeplant_item", 1 }, { "bird_egg", 1 }, { "berries", 2 } } },
     },
 
     snowcone =
@@ -455,7 +456,7 @@ local um_preparedfoods =
                     projectile.player = eater
                     projectile.components.complexprojectile:Launch(pt, inst, inst)
                 else
-                    if inst.count < 10 then
+                    if inst.count and inst.count < 10 then
                         inst.count = inst.count + 1
                         inst:DoTaskInTime(0, SpawnEyes(inst, eater))
                     end
@@ -570,65 +571,82 @@ local um_preparedfoods =
         perishtime = 10 * TUNING.PERISH_TWO_DAY,
         floater = { nil, .1, .6 },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_VIPERJAM,
-        oneatenfn = function(inst, eater)
-            local function GetWorms(inst)
-                local x, y, z = inst.Transform:GetWorldPosition()
-                local worms = TheSim:FindEntities(x, y, z, 40, { "viperlingfriend" })
-                local worm_friends = {}
-                for i, v in ipairs(worms) do
-                    if inst.components.leader and inst.components.leader:IsFollower(v) then
-                        table.insert(worm_friends, v)
-                    end
-                end
-                for i, v in ipairs(worm_friends) do -- need specifically *that players* worms
-                    SpawnPrefab("shadow_despawn").Transform:SetPosition(v.Transform:GetWorldPosition())
-                    local more_time = v.components.timer:GetTimeLeft("despawn") or 0
-                    v.components.timer:SetTimeLeft("despawn", 60 + more_time)
-                end
-                local nworms = #worm_friends
-                if #worm_friends > 6 then
-                    nworms = 6
-                end
-                return 6 - nworms
-            end
+		oneatenfn = function(inst, eater)
+			local function RemoveFriend(friend)
+				if friend ~= nil and friend:IsValid() then
+					local x, y, z = friend.Transform:GetWorldPosition()
+					SpawnPrefab("shadow_despawn").Transform:SetPosition(x, y, z)
+					friend:Remove()
+				end
+			end
 
+			local function MakeFriend(eater)
+				local x, y, z = eater.Transform:GetWorldPosition()
+				local worms = TheSim:FindEntities(x, y, z, 40, { "viperlingfriend" }, { "INLIMBO" })
+				local worm_friends = {}
 
-            local function SpawnVipers(inst)
-                local x, y, z = inst.Transform:GetWorldPosition()
-                local projectile = SpawnPrefab("viperprojectile")
-                projectile.Transform:SetPosition(x, y, z)
-                local pt = inst:GetPosition()
-                pt.x = pt.x + math.random(-3, 3)
-                pt.z = pt.z + math.random(-3, 3)
-                local speed = easing.linear(3, 7, 3, 10)
-                projectile:AddTag("canthit")
-                projectile:AddTag("friendly")
-                --projectile.components.wateryprotection.addwetness = TUNING.WATERBALLOON_ADD_WETNESS/2
-                projectile.components.complexprojectile:SetHorizontalSpeed(speed + math.random(4, 9))
-                projectile.eater = inst
-                projectile.max_worms = 6
-                if TheWorld.Map:IsAboveGroundAtPoint(pt.x, 0, pt.z) or TheWorld.Map:GetPlatformAtPoint(pt.x, pt.z) ~= nil then
-                    inst.count = 0
-                    projectile.components.complexprojectile:Launch(pt, inst, inst)
-                else
-                    if inst.count < 10 then
-                        inst.count = inst.count + 1
-                        inst:DoTaskInTime(0, SpawnVipers(inst))
-                    end
-                    projectile:Remove()
-                end
-            end
+				if eater.components.leader == nil then
+					return worm_friends
+				end
 
-            inst.count = 0
-            if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
-                not (eater.components.health ~= nil and eater.components.health:IsDead()) and
-                not eater:HasTag("playerghost") then
-                local i = GetWorms(eater)
-                for k = 1, i do
-                    eater:DoTaskInTime(0, SpawnVipers(eater))
-                end
-            end
-        end,
+				for _, v in ipairs(worms) do
+					if v:IsValid() and eater.components.leader:IsFollower(v) then
+						table.insert(worm_friends, v)
+					end
+				end
+
+				table.sort(worm_friends, function(a, b)
+					return (a.despawn_time or 0) < (b.despawn_time or 0)
+				end)
+
+				return worm_friends
+			end
+
+			local function SpawnFriend(eater)
+				if eater == nil or not eater:IsValid() then
+					return
+				end
+
+				local x, y, z = eater.Transform:GetWorldPosition()
+				local projectile = SpawnPrefab("viperprojectile")
+				projectile.Transform:SetPosition(x, y, z)
+
+				local pt = eater:GetPosition()
+				pt.x = pt.x + math.random(-3, 3)
+				pt.z = pt.z + math.random(-3, 3)
+
+				if TheWorld.Map:IsAboveGroundAtPoint(pt.x, 0, pt.z) or TheWorld.Map:GetPlatformAtPoint(pt.x, pt.z) ~= nil then
+
+					local speed = easing.linear(3, 7, 3, 10)
+
+					projectile:AddTag("canthit")
+					projectile:AddTag("friendly")
+					projectile.eater = eater
+					projectile.max_worms = 6
+
+					projectile.components.complexprojectile:SetHorizontalSpeed(speed + math.random(4, 9))
+					projectile.components.complexprojectile:Launch(pt, eater, eater)
+				else
+					projectile:Remove()
+				end
+			end
+
+			if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and not (eater.components.health ~= nil and eater.components.health:IsDead()) and not eater:HasTag("playerghost") then
+
+				local friends = MakeFriend(eater)
+				local replace_count = math.min(#friends, 6)
+
+				for i = 1, replace_count do
+					RemoveFriend(friends[i])
+				end
+
+				for i = 1, 6 do
+					eater:DoTaskInTime(0, function()
+						SpawnFriend(eater)
+					end)
+				end
+			end
+		end,
         card_def = { ingredients = { { "viperfruit", 1 }, { "giant_blueberry", 1 } } },
     },
 
@@ -636,7 +654,7 @@ local um_preparedfoods =
     {
         test = function(cooker, names, tags)
             return not tags.monster and not tags.inedible and UncompromisingFillers(tags)
-                and (names.zaspberry or (names.zaspberry_lesser and names.zaspberry_lesser >= 2)) and tags.sweetener and tags.dairy
+                and (names.zaspberry or (names.zaspberry_lesser and names.zaspberry_lesser >= 2)) and tags.egg and tags.sweetener -- for the lactose intolerant. -CB
         end,
         hunger = 37.5,
         health = 40,
@@ -645,7 +663,7 @@ local um_preparedfoods =
         weight = 1,
         cooktime = 1.8,
         foodtype = FOODTYPE.VEGGIE,
-        perishtime = 2 * TUNING.PERISH_TWO_DAY,
+        perishtime = 4 * TUNING.PERISH_TWO_DAY,
         floater = { nil, .1, .6 },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_ZASPBERRYPARFAIT,
         oneatenfn = function(inst, eater)
@@ -655,7 +673,8 @@ local um_preparedfoods =
                 eater.components.debuffable:AddDebuff("buff_electricretaliation", "buff_electricretaliation")
             end
         end,
-        card_def = { ingredients = { { "zaspberry", 1 }, { "honey", 1 }, { "goatmilk", 1 } } },
+        tags = { "honeyed" },
+        card_def = { ingredients = { { "zaspberry", 1 }, { "honey", 1 }, { "bird_egg", 1 } } },
     },
 
 
@@ -790,6 +809,7 @@ local um_preparedfoods =
         cooktime = 1,
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 6 * TUNING.PERISH_TWO_DAY,
+        tags = { "honeyed" },
         floater = { "med", .05, .65 },
         card_def = { ingredients = { { "rice1", 2 }, { "honey", 1 } } },
     },

@@ -52,14 +52,14 @@ local function fuelme(inst)
 	end
 end
 ]]
-local function LaunchSpit(caster, target)
+local function LaunchSpit(caster, pos)
     local x, y, z = caster.Transform:GetWorldPosition()
-    local targetpos = target:GetPosition()
+    local targetpos = pos
     local theta = caster.Transform:GetRotation()
 
     theta = theta * DEGREES
 
-    local projectile = SpawnPrefab("lavaspit_projectile")
+    local projectile = SpawnPrefab("um_lavaspit_projectile")
     projectile.coolingtime = 15
     projectile.Transform:SetPosition(x, y, z)
     projectile.lobber = caster
@@ -89,18 +89,8 @@ end
 local function createlight(staff, target, pos)
     if staff.components.rechargeable:IsCharged() then
         staff.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/vomit")
-        local spittarget = SpawnPrefab("lavaspit_target")
         local caster = staff.components.inventoryitem.owner
-
-        if pos ~= nil then
-            spittarget.Transform:SetPosition(pos:Get())
-            spittarget:DoTaskInTime(5, spittarget.Remove)
-            LaunchSpit(caster, spittarget)
-        elseif target ~= nil then
-            spittarget.Transform:SetPosition(getspawnlocation(staff, target))
-            spittarget:DoTaskInTime(5, spittarget.Remove)
-            LaunchSpit(caster, target)
-        end
+        LaunchSpit(caster, pos or target and target:GetPosition())
 
         local x1, y1, z1 = staff.Transform:GetWorldPosition()
 
@@ -110,12 +100,12 @@ local function createlight(staff, target, pos)
             if v ~= staff then
                 local vowner = v.components.inventoryitem:GetGrandOwner()
                 if vowner ~= nil and (vowner == owner or not vowner:HasTag("player")) or vowner == nil then
-                    v.components.rechargeable:Discharge(45)
+                    v.components.rechargeable:Discharge(TUNING.DSTU.SLOBBERLOBBER_COOLDOWN)
                 end
             end
         end
 
-        staff.components.rechargeable:Discharge(45) --whatever, do what you want with that number
+        staff.components.rechargeable:Discharge(TUNING.DSTU.SLOBBERLOBBER_COOLDOWN) --whatever, do what you want with that number
     else
         staff.SoundEmitter:PlaySound("dontstarve/common/teleportworm/sick_cough")
     end

@@ -16,7 +16,7 @@ local function spark(inst)
         fx.entity:AddFollower()
         fx.Follower:FollowSymbol(owner.GUID, "swap_object", 0, -145, 0)
         fx.Transform:SetScale(.66, .66, .66)
-        if math.random() >= (inst.overcharged and 0 or 0.15) then
+        if math.random() >= (0.15) then
             inst.sparktask = inst:DoTaskInTime(math.random() * 0.5, spark)
         else
             inst.sparktask = inst:DoTaskInTime(math.random() + 5, spark)
@@ -27,7 +27,7 @@ local function spark(inst)
         fx.Transform:SetPosition(0, 1, 0)
         fx.Transform:SetScale(.66, .66, .66)
         --fx.Follower:FollowSymbol(inst.GUID, inst, 0, -150, 0)
-        if math.random()  <= (inst.overcharged and 0 or 0.15) then
+        if math.random() <= (0.15) then
             inst.sparktask = inst:DoTaskInTime(math.random() * 0.5, spark)
         else
             inst.sparktask = inst:DoTaskInTime(math.random() + 5, spark)
@@ -91,7 +91,6 @@ local function onequip(inst, owner)
     if inst.components.fueled ~= nil and not inst.components.fueled:IsEmpty() then
         turnon(inst)
     end
-    owner:AddTag("batteryuser") -- from batteryuser component
 end
 
 local function onunequip(inst, owner)
@@ -102,19 +101,6 @@ local function onunequip(inst, owner)
         inst.sparktask:Cancel()
     end
     inst.sparktask = nil
-
-    if not owner.UM_isBatteryUser then
-        local item = owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
-        if item ~= nil then
-            if not item:HasTag("electricaltool") and owner:HasTag("batteryuser") then
-                owner:RemoveTag("batteryuser")
-            end
-        else
-            if owner:HasTag("batteryuser") then
-                owner:RemoveTag("batteryuser")
-            end
-        end
-    end
 end
 
 local function nofuel(inst)
@@ -159,7 +145,7 @@ local function onattack(inst, attacker, target)
                 if v ~= inst and v ~= target and v:IsValid() and not v:IsInLimbo() then
                     if (v.components.health ~= nil and not v.components.health:IsDead()) and not v.sg:HasStateTag("noattack") then
                         --v.components.health:DoDelta( -10, false, attacker, false, attacker)
-                        v.components.combat:GetAttacked(attacker, not inst.overcharged and 5 or 25, nil)
+                        v.components.combat:GetAttacked(attacker, 5, nil)
                         SpawnPrefab("electrichitsparks"):AlignToTarget(v, attacker, true)
                     end
                 end
@@ -183,7 +169,7 @@ local function onattack(inst, attacker, target)
                 if v ~= inst and v ~= target and v:IsValid() and not v:IsInLimbo() then
                     if (v.components.health ~= nil and not v.components.health:IsDead()) and v.components.combat ~= nil and not v.sg:HasStateTag("noattack") then
                         --v.components.health:DoDelta( -10, false, attacker, false, attacker)
-                        v.components.combat:GetAttacked(attacker, not inst.overcharged and 5 or 25, nil)
+                        v.components.combat:GetAttacked(attacker, 5, nil)
                         SpawnPrefab("electrichitsparks"):AlignToTarget(v, attacker, true)
                     end
                 end
@@ -194,11 +180,22 @@ local function onattack(inst, attacker, target)
     end
 end
 
-local function OnOvercharge(inst, toggle)
-    inst.overcharged = toggle
-    inst.components.fueled.rate = toggle and 2 or 1
+local function CalcBatteryChargeMult(inst, battery)
+    local pct = inst.components.fueled:GetPercent()
+    return math.clamp(1 - pct, 0, 1)
 end
 
+local function OnBatteryUsed(inst, battery, mult)
+    if mult <= 0 or inst.components.fueled:IsFull() then
+        return false, "CHARGE_FULL"
+    end
+
+    local newpercent = math.clamp(inst.components.fueled:GetPercent() + mult, 0, 1)
+    inst.components.fueled:SetPercent(newpercent)
+    SpawnElectricHitSparks(inst, battery, true)
+
+    return true
+end
 local function fn()
     local inst = CreateEntity()
 
@@ -214,10 +211,8 @@ local function fn()
     inst.AnimState:PlayAnimation("idle")
 
     inst:AddTag("light")
-    inst:AddTag("electricaltool")
-    inst:AddTag("overchargeable")
     inst:AddTag("donotautopick")
-    
+
     MakeInventoryFloatable(inst, "med", 0.2, 0.65)
 
     inst.entity:SetPristine()
@@ -257,7 +252,7 @@ local function fn()
     inst._onownerequip = function(owner, data)
         if data.item ~= inst and
             (data.eslot == EQUIPSLOTS.HANDS or
-            (data.eslot == EQUIPSLOTS.BODY and data.item:HasTag("heavy"))
+                (data.eslot == EQUIPSLOTS.BODY and data.item:HasTag("heavy"))
             ) then
             turnoff(inst)
         end
@@ -272,20 +267,10 @@ local function fn()
 
     inst.OnRemoveEntity = OnRemove
 
-    inst:ListenForEvent("overcharged", OnOvercharge)
-
-    inst.OnSave = function(inst, data)
-        if data ~= nil then
-            data.actual_fuel = inst.components.fueled:GetPercent()
-        end
-    end
-
-    inst.OnLoad = function(inst, data)
-        if data ~= nil and data.actual_fuel ~= nil then
-            inst:DoTaskInTime(0, function() inst.components.fueled:SetPercent(data.actual_fuel) end)
-        end
-    end
-
+    inst:AddComponent("batteryuser")
+    inst.components.batteryuser:SetChargeMultFn(CalcBatteryChargeMult)
+    inst.components.batteryuser:SetOnBatteryUsedFn(OnBatteryUsed)
+    inst.components.batteryuser:SetAllowPartialCharge(true)
 
     return inst
 end

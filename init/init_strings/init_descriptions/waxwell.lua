@@ -589,3 +589,4 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
     WINTER = "Durians at this time of the year? Such a luxury.",
 }
 DESCRIBE.UM_BOOMBERRYPIE = "Ugh, next time go easy on the berries."
+DESCRIBE.UM_CHILES_EN_NOGADA = "Finally, a dish with a modicum of sophistication."

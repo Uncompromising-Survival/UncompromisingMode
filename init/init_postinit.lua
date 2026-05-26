@@ -75,7 +75,8 @@ local component_post = {
     "pickable",
     "actionqueuer",
     "wavemanager",
-    "seamlessplayerswapper"
+    "seamlessplayerswapper",
+    "grottowarmanager"
 }
 
 local prefab_post = {
@@ -94,8 +95,6 @@ local prefab_post = {
     "amulet",
     "cave_entrance_open",
     "catcoon",
-    "icehound",
-    "firehound",
     "forest",
     "cave",
     "world",
@@ -225,7 +224,6 @@ local prefab_post = {
     "mushtrees",
     "toolbox_items",
     "scrap_monoclehat",
-    "winona_telebrella",
     "otter",
     "stash_map",
     "monkeyhut",
@@ -246,7 +244,7 @@ local prefab_post = {
     "walrus_camp",
     "firestaff",
     "worms",
-    "rabbitking",
+    --"rabbitking",
     "cave_vents",
     "cave_vent_mite",
     "bananabush",
@@ -257,6 +255,10 @@ local prefab_post = {
     "slurper",
     "kelphat",
     "strawhat",
+    "monkey_smallhat",
+    "cane",
+    "onemanband",
+    "cursed_monkey_token"
 }
 
 local stategraph_post = {
@@ -284,7 +286,7 @@ local stategraph_post = {
 local class_post = {
     "components/inventoryitem_replica",
     --"screens/playerhud",
-    "widgets/itemtile",
+    --"widgets/itemtile",
     --"widgets/hoverer",
     "widgets/moisturemeter",
     "widgets/controls",
@@ -292,7 +294,8 @@ local class_post = {
     "widgets/bloodover",
     "widgets/inventorybar",
     "widgets/containerwidget",
-    "widgets/statusdisplays"
+    "widgets/statusdisplays",
+    "screens/scrapbookscreen"
 }
 
 local brain_post = {
@@ -304,6 +307,7 @@ local brain_post = {
     "mossling",
     "perd",
     --"catcoon",
+    "walrus",
     "deer",
     "shadowwaxwell",
     "hound",
@@ -426,10 +430,6 @@ if GetModConfigData("pinelings") then
     table.insert(prefab_post, "evergreen_stump")
 end
 
-if GetModConfigData("canedurability") then
-    table.insert(prefab_post, "cane")
-end
-
 if GetModConfigData("angrypenguins") then
     table.insert(prefab_post, "penguin")
     table.insert(prefab_post, "penguin_ice") -- I think that should go too?  idk right here
@@ -445,12 +445,20 @@ if GetModConfigData("angry_werepigs") then
     table.insert(brain_post, "werepig")
 end
 
-if GetModConfigData("harder_walrus") then
+if GetModConfigData("walrus") then
     table.insert(prefab_post, "walrus")
     table.insert(stategraph_post, "walrus")
 end
 if GetModConfigData("harder_beefalo") then
     table.insert(stategraph_post, "Beefalo")
+end
+
+if GetModConfigData("firehound") then
+    table.insert(prefab_post, "firehound")
+end
+	
+if GetModConfigData("icehound") then
+    table.insert(prefab_post, "icehound")	
 end
 
 if TUNING.DSTU.HARDER_SPIDERQUEEN then
@@ -567,7 +575,7 @@ if GetModConfigData("smog") then
     table.insert(component_post, "geyserfx")
 end
 
-if GetModConfigData("infinite_blueprints") then
+if GetModConfigData("infinite_blueprints_") then
     table.insert(component_post, "teacher")
 end
 

@@ -134,6 +134,10 @@ env.AddPrefabPostInit("raincoat", function(inst)
     DoPockets(inst, "puffvest")
 end)
 
+env.AddPrefabPostInit("beargervest", function(inst)
+    DoPockets(inst, "puffvest")
+end)
+
 env.AddPrefabPostInit("premiumwateringcan", function(inst)
     if not TheWorld.ismastersim then
         inst.OnEntityReplicated = function(inst)

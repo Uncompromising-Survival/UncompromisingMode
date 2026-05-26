@@ -25,49 +25,97 @@ local function create_light(eater, lightprefab)
     end
 end
 
-local function spawnfriends(inst,count)
-    local x, y, z = inst.Transform:GetWorldPosition()
-    local projectile = SpawnPrefab("viperprojectile")
-    projectile.Transform:SetPosition(x, y, z)
-    local pt = inst:GetPosition()
-    pt.x = pt.x + math.random(-3, 3)
-    pt.z = pt.z + math.random(-3, 3)
-    local speed = easing.linear(3, 7, 3, 10)
-    projectile:AddTag("canthit")
-    projectile:AddTag("friendly")
-    --projectile.components.wateryprotection.addwetness = TUNING.WATERBALLOON_ADD_WETNESS/2
-	projectile.max_worms = count
-	projectile.eater = inst
-    projectile.components.complexprojectile:SetHorizontalSpeed(speed + math.random(4, 9))
-    if TheWorld.Map:IsAboveGroundAtPoint(pt.x, 0, pt.z) or TheWorld.Map:GetPlatformAtPoint(pt.x, pt.z) ~= nil then
-        projectile.components.complexprojectile:Launch(pt, inst, inst)
-    else
-        inst:DoTaskInTime(0, spawnfriends(inst,count))
-        projectile:Remove()
-    end
+local function GetPendingVipers(eater)
+	return eater.pending_viperling_spawns or 0
 end
 
-local function GetWorms(inst,count,time_to_add)
-	local x,y,z = inst.Transform:GetWorldPosition()
-	local worms = TheSim:FindEntities(x,y,z,40,{"viperlingfriend"})
-	local worm_friends = {}
-	for i,v in ipairs(worms) do
-		if inst.components.leader and inst.components.leader:IsFollower(v) then
-			table.insert(worm_friends,v)
+local function RemoveFriend(friend)
+	if friend ~= nil and friend:IsValid() then
+		local x, y, z = friend.Transform:GetWorldPosition()
+		SpawnPrefab("shadow_despawn").Transform:SetPosition(x, y, z)
+		friend:Remove()
+	end
+end
+
+local function MakeFriend(eater)
+	local x, y, z = eater.Transform:GetWorldPosition()
+	local ents = TheSim:FindEntities(x, y, z, 40, { "viperlingfriend" }, { "INLIMBO" })
+	local friends = {}
+
+	if eater.components.leader == nil then
+		return friends
+	end
+
+	for _, v in ipairs(ents) do
+		if v:IsValid() and eater.components.leader:IsFollower(v) then
+			table.insert(friends, v)
 		end
 	end
-	for i,v in ipairs(worm_friends) do -- need specifically *that players* worms
-		SpawnPrefab("shadow_despawn").Transform:SetPosition(v.Transform:GetWorldPosition())
-		local more_time = v.components.timer:GetTimeLeft("despawn") or 0
-		v.components.timer:SetTimeLeft("despawn", time_to_add + more_time)
-	end
-	local nworms = #worm_friends
-	if #worm_friends > count then
-		nworms = count
-	end
-	return count-nworms
+
+	return friends
 end
 
+local function SpawnFriend(eater, count)
+	if eater ~= nil and eater:IsValid() then
+
+		local x, y, z = eater.Transform:GetWorldPosition()
+		local projectile = SpawnPrefab("viperprojectile")
+		projectile.Transform:SetPosition(x, y, z)
+
+		local pt = eater:GetPosition()
+		pt.x = pt.x + math.random(-3, 3)
+		pt.z = pt.z + math.random(-3, 3)
+
+		if TheWorld.Map:IsAboveGroundAtPoint(pt.x, 0, pt.z) or TheWorld.Map:GetPlatformAtPoint(pt.x, pt.z) ~= nil then
+
+			local speed = easing.linear(3, 7, 3, 10)
+
+			projectile:AddTag("canthit")
+			projectile:AddTag("friendly")
+
+			projectile.max_worms = 6
+			projectile.eater = eater
+
+			projectile:ListenForEvent("onremove", function()
+				if eater ~= nil and eater:IsValid() then
+					eater.pending_viperling_spawns = math.max(0, (eater.pending_viperling_spawns or 1) - 1)
+				end
+			end)
+
+			projectile.components.complexprojectile:SetHorizontalSpeed(speed + math.random(4, 9))
+			projectile.components.complexprojectile:Launch(pt, eater, eater)
+		else
+			projectile:Remove()
+			eater:DoTaskInTime(0, function()
+				SpawnFriend(eater, count)
+			end)
+		end
+	end
+end
+
+local function ReplaceFriend(eater, desired_count)
+	local friends = MakeFriend(eater)
+
+	table.sort(friends, function(a, b)
+		return (a.despawn_time or 0) < (b.despawn_time or 0)
+	end)
+
+	local MAX_VIPERS = 6
+	local pending = GetPendingVipers(eater)
+	local overflow = math.max(0, (#friends + pending + desired_count) - MAX_VIPERS)
+
+	for i = 1, overflow do
+		RemoveFriend(friends[i])
+	end
+
+	for i = 1, desired_count do
+		eater.pending_viperling_spawns = (eater.pending_viperling_spawns or 0) + 1
+
+		eater:DoTaskInTime(0, function()
+			SpawnFriend(eater, desired_count)
+		end)
+	end
+end
 
 local function oneatenfn(inst, eater)
     if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
@@ -75,15 +123,9 @@ local function oneatenfn(inst, eater)
         not eater:HasTag("playerghost") then
         create_light(eater, "wormlight_light")
 		if inst.prefab == "viperfruit" then
-			local i = GetWorms(eater,3,30)
-			for k = 1, i do
-				eater:DoTaskInTime(0, spawnfriends(eater,3))
-			end
+			ReplaceFriend(eater, 3)
 		else
-			local i = GetWorms(eater,1,15)
-			if i > 0 then 
-				eater:DoTaskInTime(0, spawnfriends(eater,1)) -- Lesser only spawns 1.
-			end
+			ReplaceFriend(eater, 1)
 		end
     end
 end
@@ -161,14 +203,14 @@ local function fn()
     inst:AddComponent("inventoryitem")
 
     inst:AddComponent("edible")
-    inst.components.edible.healthvalue = 3
-    inst.components.edible.hungervalue = 25
-    inst.components.edible.sanityvalue = -30
+    inst.components.edible.healthvalue = TUNING.HEALING_MOREMEDSMALL --15
+    inst.components.edible.hungervalue = TUNING.CALORIES_LARGE --37.5
+    inst.components.edible.sanityvalue = -TUNING.SANITY_LARGE --33
     inst.components.edible.foodtype = FOODTYPE.VEGGIE
     inst.components.edible:SetOnEatenFn(oneatenfn)
 
     inst:AddComponent("perishable")
-    inst.components.perishable:SetPerishTime(3 * TUNING.PERISH_TWO_DAY)
+    inst.components.perishable:SetPerishTime(TUNING.PERISH_MED)
     inst.components.perishable:StartPerishing()
     inst.components.perishable.onperishreplacement = "spoiled_food"
 
@@ -225,14 +267,14 @@ local function fnlesser()
     inst:AddComponent("inventoryitem")
 
     inst:AddComponent("edible")
-    inst.components.edible.healthvalue = 3
-    inst.components.edible.hungervalue = 12.5
-    inst.components.edible.sanityvalue = -15
+    inst.components.edible.healthvalue = TUNING.HEALING_SMALL --3
+    inst.components.edible.hungervalue = TUNING.CALORIES_MEDSMALL --18.8
+    inst.components.edible.sanityvalue = -TUNING.SANITY_MED --15
     inst.components.edible.foodtype = FOODTYPE.VEGGIE
     inst.components.edible:SetOnEatenFn(oneatenfn)
 
     inst:AddComponent("perishable")
-    inst.components.perishable:SetPerishTime(3 * TUNING.PERISH_TWO_DAY)
+    inst.components.perishable:SetPerishTime(TUNING.PERISH_MED)
     inst.components.perishable:StartPerishing()
     inst.components.perishable.onperishreplacement = "spoiled_food"
 

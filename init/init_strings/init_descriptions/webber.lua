@@ -605,3 +605,4 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
     WINTER = "We've never felt so fancy in the snow!",
 }
 DESCRIBE.UM_BOOMBERRYPIE = "I don't think that's our tummy rumbling."
+DESCRIBE.UM_CHILES_EN_NOGADA = "A spicy party in our mouth!"

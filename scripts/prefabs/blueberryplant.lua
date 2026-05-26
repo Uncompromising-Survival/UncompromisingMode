@@ -218,7 +218,7 @@ local function CheckTimeRegrow(inst)
 end
 
 local function start_reset_task(inst)
-    inst.components.timer:StartTimer("regrow", 3840)
+    UMCommonFns.RestartTimer(inst, {name = "regrow", time = 3840})
 end
 
 local function on_explode(inst, target)
@@ -560,6 +560,8 @@ local function blueberrypuddle()
     inst.AnimState:SetLayer(LAYER_BACKGROUND)
     inst.AnimState:PlayAnimation("pre_idle", false)
     inst.AnimState:PushAnimation("idle", false)
+
+    inst.Transform:SetRotation(math.random(360))
 
     inst.entity:SetPristine()
 

@@ -156,8 +156,8 @@ TUNING.DSTU = {
     ICECROCKBLOCKER = GetModConfigData("icecrockblocker"),
     -- Crockpot Dish Changes
 
-    MEATBALL = GetModConfigData("meatball_"),
-    PIEROGI = GetModConfigData("perogi"),
+    --MEATBALL = GetModConfigData("meatball_"),
+    --PIEROGI = GetModConfigData("perogi"),
     FARMFOODREDUX = GetModConfigData("farmfoodredux"),
     ICECREAMBUFF = GetModConfigData("icecream_buff"),
     BONESTEW = GetModConfigData("bonestew_nerf"),
@@ -188,8 +188,8 @@ TUNING.DSTU = {
     GLACIALHOUNDS = GetModConfigData("glacialhounds"),
     LIGHTNINGHOUNDS = GetModConfigData("lightninghounds"),
     MAGMAHOUNDS = GetModConfigData("magmahounds"),
-    FIREBITEHOUNDS = GetModConfigData("firebitehounds"),
-    FROSTBITEHOUNDS = GetModConfigData("frostbitehounds"),
+    --FIREBITEHOUNDS = GetModConfigData("firebitehounds"),
+    --FROSTBITEHOUNDS = GetModConfigData("frostbitehounds"),
     VARGWAVES = false,           -- GetModConfigData("vargwaves"),
     VARGWAVES_BOSS_GRACE = 15,   -- GetModConfigData("vargwaves grace"),
     VARGWAVES_DELAY_PERIOD = 15, -- GetModConfigData("vargwaves delay"),
@@ -354,6 +354,7 @@ TUNING.DSTU = {
     ORANGESTAFF_DISTANCE_2 = 16,
     KOALEFANT_HEALTH = 2000,
     KOALEFANT_STOMP_COUNTERATTACK = {MIN = 8, MAX = 12},
+	SNAILDRAKEHAT_FIRE_RESIST = 0.75,
 
     ----------------------------------------------------------------------------
     -- Dynamic Boss Resistance
@@ -437,7 +438,8 @@ TUNING.DSTU = {
     HARDER_TREPIDATION = GetModConfigData("nodespawn_trepidation"),
     TELESTAFF_REWORK = GetModConfigData("telestaff_rework"),
     BEEBOX_NERF = GetModConfigData("beebox_nerf"),
-    CANEDURABILITY = GetModConfigData("canedurability"),
+    CANEDURABILITY = GetModConfigData("cane_durability"),
+	COOLDOWN_ORANGESTAFF = GetModConfigData("cooldown_orangestaff"),
     --AC_COOLING = GetModConfigData("ac_does_ac"),
     HARDER_SPIDERQUEEN = GetModConfigData("harder_spider_queen"),
     HARDER_MOOSE = GetModConfigData("harder_moose"),
@@ -490,9 +492,26 @@ TUNING.DSTU = {
         APRIL_FOOLS = Date(1, 4),
     },
 
+    CURSED_ANTLER_COOLDOWN = 5,
+    CURSED_ANTLER_COOLDOWN_ONEQUIP = 2,
+
+    SLOBBERLOBBER_COOLDOWN = 45,
+    SLOBBERLOBBER_COOLDOWN_ONEQUIP = 5,
+
+    CRYSTAL_CURSED_ANTLER_COOLDOWN = 5,
+    CRYSTAL_CURSED_ANTLER_COOLDOWN_ONEQUIP = 2,
+
+    SHIELDOFTERROR_COOLDOWN = 5,
+    SHIELDOFTERROR_COOLDOWN_ONEQUIP = 2,
+
     -- Shadow Damage tuning
     RUINSNIGHTMARE_DAMAGE = 75,
-    HERMITCRAB_MOONTREEBLOSSOMTEA_SHADOWCREATURE_DAMAGE = 75
+    HERMITCRAB_MOONTREEBLOSSOMTEA_SHADOWCREATURE_DAMAGE = 75,
+
+    NO_THICKET_APHIDS = {"tumbleweed","beefalo","fruitbat"}, --AXE Add more as needed, most things >should< spawn aphids though.
+
+    RIPPLE_BLACKLIST_PREFABS = {"webbedcreature","rainometer"}, -- AXE Many cases would like "structure" tag still count for ripples, but many structures are incompatible, so we do a prefab based blacklist as well
+    RIPPLE_BLACKLIST_TAGS = {"projectile"} -- AXE other cases are universal, projectiles shouldn't really ever have ripples
 }
 
 -- [              DST Related Overrides              ]

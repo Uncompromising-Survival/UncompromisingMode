@@ -629,3 +629,4 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
     WINTER = "Feels like a vacation in the middle of a shift.",
 }
 DESCRIBE.UM_BOOMBERRYPIE = "Was this pie made in a bomb factory?"
+DESCRIBE.UM_CHILES_EN_NOGADA = "Hope it tastes as good as it looks!"

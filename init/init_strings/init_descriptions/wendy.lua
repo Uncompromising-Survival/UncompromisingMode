@@ -611,3 +611,4 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
     WINTER = "I liked it... yet nothing truly special ever lasts.",
 }
 DESCRIBE.UM_BOOMBERRYPIE = "The pie cries out in pain. Its creation was a mistake."
+DESCRIBE.UM_CHILES_EN_NOGADA = "It wears a veil of cream to hide its spicy heart."

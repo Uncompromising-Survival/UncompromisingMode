@@ -83,6 +83,7 @@ local function fn()
     inst:AddTag("donotautopick")
     inst:AddTag("show_spoilage")
     inst:AddTag("icebox_valid")
+    inst:AddTag("um_insect_eater")
 	
     MakeInventoryFloatable(inst, "small", 0.2, 0.80)
 

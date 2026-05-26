@@ -22,9 +22,13 @@ The values are:
         [2] = "Description for tier 2 gem"
         ...and so forth
     }
-    build = "string" --build name
-    bank = "string" --bank name  --should these be the inv img instead??? probably.
+    createprefab = boolean --whether the item prefab is automatically created.
+    build = "string" --build name - even if you don't generate the prefab, you need this for scrapbook/mineral logbook.
+    bank = "string" --bank name
     anim = "string" --anim name   -- defaults to "idle"
+    img = "string.tex" --texture name --for scrapbook only.
+    atlas = "string.xml" --atlas name
+    postfn = function(inst) -- function that runs when the prefab is created on the common side on post-init.
 }
 
 Additional note:
@@ -50,7 +54,10 @@ end
 local function AddUMGemDef(name, def) --helper function to just skip some re-used things we do.
     def.build = "um_gemologygems"
     def.bank = "um_gemologygems"
+    def.img = name .. ".tex"
+    def.atlas = name .. ".xml"
     def.anim = name
+    def.createprefab = true
 
     def.desc = STRINGS.UM_DESCRIPTOR.GEM_ENCHANTABLE[string.upper(string.gsub(name, "gem", ""))]
 
@@ -85,7 +92,7 @@ AddUMGemDef("redgem2", {
                 target.components.health:DoFireDamage(burn_damage[tier], attacker, true)
                 SpawnPrefab("deer_fire_burst").Transform:SetPosition(target.Transform:GetWorldPosition())
                 if tier ~= 1 and target.components.burnable and target.components.burnable:IsBurning() then
-                    target.components.health:DoFireDamage(inst.components.weapon.damage * burn_portion[tier - 1], attacker, true)
+                    target.components.health:DoFireDamage(inst.components.weapon:GetDamage(attacker, target) * burn_portion[tier - 1], attacker, true)
                     target.components.burnable:ExtendBurning()
                 end
                 DamageInfiniteItemGem("redgem2", inst, 0.005)
@@ -109,7 +116,7 @@ AddUMGemDef("redgem1", {
             if tier ~= 1 and target:HasOneOfTags(devour_tags) and math.random() > 0.75 then -- arbitrarily said "a chance", I have no idea how common this should be
                 local mult = devour_mults[tier - 1]
                 attacker.components.combat:DoAttack(target, inst, nil, nil, mult, 0)        -- gotta use a bit more durability...
-                mult = inst.components.weapon.damage * mult
+                mult = inst.components.weapon:GetDamage(attacker, target) * mult
                 --owner.components.sanity:DoDelta(-mult)
                 attacker.components.hunger:DoDelta(mult / 2)
             end
@@ -181,6 +188,8 @@ local swilson_symbols_to_hide = {
 }
 
 local function SendShadowClone(item, owner, target, tier)
+    DamageInfiniteItemGem("greengem1", item, 0.005) --damage on any attack/work because it speeds it up.
+
     if target:IsValid() and (tier - 1) * 0.3 > math.random() and tier > 1 then
         if owner:GetDistanceSqToInst(target) > 50 ^ 2 and owner.components.sanity then --Long ways away, it's taking from your mind to send swilsons there
             if target.components.combat then
@@ -195,8 +204,6 @@ local function SendShadowClone(item, owner, target, tier)
         local newtarget = GetRandomTargetOfSameType(owner, target)
         local angle = math.random(0, 614) / 200
         if newtarget ~= nil then
-            DamageInfiniteItemGem("greengem1", item, 0.005)
-
             local x, y, z = newtarget.Transform:GetWorldPosition()
             swilson.Transform:SetPosition(x + 1.5 * math.cos(angle), y, z + 1.5 * math.sin(angle))
             --swilson.green = 1 -- Tried making him green, it just looks goofy
@@ -208,7 +215,7 @@ local function SendShadowClone(item, owner, target, tier)
                 swilson.work = 1
                 swilson.LabWork(swilson, owner, newtarget)
             elseif target.components.health then
-                swilson.attack = item.components.weapon.damage
+                swilson.attack = item.components.weapon:GetDamage(owner, target)
                 swilson.LabAttack(swilson, owner, newtarget)
             end
         end
@@ -369,14 +376,14 @@ AddUMGemDef("yellowgem1", {
 
 local static_mods = { 10, 15, 20 }
 
-local combat_health = { "_health", "_combat" }
-local arc_player = { "player", "arcgrounded" }
+local arc_cantarget = { "_health", "_combat" }
+local arc_canttarget = { "player", "playerghost", "arcgrounded", "wall", "INLIMBO", "companion", "abigail", "invisible", "hiding", "notarget", "noattack" }
 local function FindEnemiesNearbyAndShockThem(inst, attacker, target, ShockAgain, tier)
     local x, y, z = target.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, 4, combat_health, arc_player)
+    local ents = TheSim:FindEntities(x, y, z, 4, arc_cantarget, arc_canttarget)
 
     for i, v in ipairs(ents) do
-        if not v.components.health:IsDead() then
+        if not v.components.health:IsDead() and not attacker.components.combat:IsAlly(v) and attacker.components.combat:CanTarget(v) then
             local dist = math.sqrt(target:GetDistanceSqToInst(v))
             v:DoTaskInTime(dist / 5, function(v)
                 if v.components.health and not v.components.health:IsDead() and not v:HasTag("arcgrounded") then -- we check these again because they could have already died or been shocked once
@@ -386,7 +393,7 @@ local function FindEnemiesNearbyAndShockThem(inst, attacker, target, ShockAgain,
                     elseif tier == 3 then
                         mult = math.clamp(mult, 0.25, 1.5)
                     end
-                    local damage = inst.components.weapon.damage * mult
+                    local damage = inst.components.weapon:GetDamage(attacker, target) * mult
                     v.components.combat:GetAttacked(attacker, damage, nil, "electric")
                     v:AddTag("arcgrounded")
                     ShockAgain(inst, attacker, v)
@@ -411,7 +418,6 @@ local function ElectricAttack(inst, attacker, target, tier)
     end
 
     if target.components.combat then
-
         target.components.combat:GetAttacked(attacker, static_mods[tier], nil, "electric")
     end
 
@@ -421,8 +427,6 @@ local function ElectricAttack(inst, attacker, target, tier)
 
     DamageInfiniteItemGem("yellowgem2", inst, 0.005)
 end
-
-
 
 AddUMGemDef("yellowgem2", {
     color = RGB(255, 228, 153),
@@ -457,14 +461,31 @@ AddUMGemDef("palegem1", {
         onapply = function(item, tier)
             -- stuff is handled elsewhere
             -- see init/init_gemology/special.lua
+
+            if tier ~= 1
+                and AllRecipes ~= nil
+                and (AllRecipes[item.prefab] == nil
+                    or AllRecipes[item.prefab] ~= nil
+                    and (AllRecipes[item.prefab].is_deconstruction_recipe))
+                and item.components.weapon ~= nil then
+                local damage = item.components.weapon.damage
+                item.volatile_gemology_data.um_gemologypalegem1 = damage
+                if type(damage) == "function" then
+                    item.components.weapon:SetDamage(function(inst, attacker, target)
+                        return damage(inst, attacker, target) + (34 / 2 * (tier - 1))
+                    end)
+                else
+                    item.components.weapon.damage = damage + (34 / 2 * (tier - 1))
+                end
+            end
         end,
         onattack = function(item, attacker, target, tier)
-            if tier ~= 1 and AllRecipes ~= nil and (AllRecipes[item.prefab] == nil or AllRecipes[item.prefab] ~= nil and AllRecipes[item.prefab].is_deconstruction_recipe) and item.components.weapon ~= nil then
-                local stimuli = item.components.weapon.stimuli and item.components.weapon.stimuli or nil
-                target.components.combat:GetAttacked(attacker, 34 / 2 * (tier - 1), nil, stimuli)
-            end
-
             DamageInfiniteItemGem("palegem1", item, 0.005)
+        end,
+        onremove = function(item, tier)
+            if item.volatile_gemology_data.um_gemologypalegem1 then
+                item.components.weapon.damage = item.volatile_gemology_data.um_gemologypalegem1
+            end
         end
     }
 })
@@ -499,7 +520,13 @@ AddUMGemDef("palegem2", {
                 item.components.perishable:SetPercent(pct)
             end
 
-            if item.components.finiteuses and AllRecipes ~= nil and (AllRecipes[item.prefab] == nil or AllRecipes[item.prefab] ~= nil and (AllRecipes[item.prefab].nounlock or AllRecipes[item.prefab].is_deconstruction_recipe)) then
+            if item.components.finiteuses
+                and AllRecipes ~= nil
+                and (AllRecipes[item.prefab] == nil
+                    or AllRecipes[item.prefab] ~= nil
+                    and (AllRecipes[item.prefab].nounlock
+                        or AllRecipes[item.prefab].is_deconstruction_recipe)
+                ) then
                 if tier ~= 1 then
                     local _Use = item.components.finiteuses.Use
                     item.volatile_gemology_data.um_gemologypalegem2.old_use = _Use
@@ -513,8 +540,12 @@ AddUMGemDef("palegem2", {
             end
         end,
         onattack = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("palegem2", item, 0.005)
+            DamageInfiniteItemGem("palegem2", item, 0.0025)
         end,
+        onwork = function(item, attacker, target, tier)
+            DamageInfiniteItemGem("palegem2", item, 0.0025)
+        end,
+
         onremove = function(item, tier)
             local old_finite = item.volatile_gemology_data.um_gemologypalegem2.old_finite
             local old_fueled = item.volatile_gemology_data.um_gemologypalegem2.old_fueled
@@ -581,7 +612,7 @@ AddUMGemDef("purplegem1", {
         end,
         onattack = function(item, attacker, target, tier)
             if item.tier ~= 1 and item.components.weapon ~= nil then
-                local damage = item.components.weapon.damage
+                local damage = item.components.weapon:GetDamage(attacker, target)
                 if damage < 50 and item.prefab ~= "hambat" then
                     damage = damage * tier * 0.25
                     local stimuli = item.components.weapon.stimuli and item.components.weapon.stimuli or nil
@@ -664,7 +695,7 @@ local function BaseSitterAttack(item, attacker, target, tier)
     DamageInfiniteItemGem("orangegem1", item, 0.005)
 
     if tier ~= 1 then
-        local damage = item.components.weapon.damage
+        local damage = item.components.weapon:GetDamage(attacker, target)
         local fx = SpawnPrefab("sand_puff")
         fx.Transform:SetPosition(target.Transform:GetWorldPosition())
         fx.Transform:SetScale(0.05 + 2 * item.structurebonus, 0.05 + 2 * item.structurebonus, 0.05 + 2 * item.structurebonus)
@@ -802,7 +833,7 @@ AddUMGemDef("bluegem1", {
                 target.components.freezable:SpawnShatterFX()
                 if target.sg and target.sg:HasStateTag("frozen") and math.random() < (tier - 1) * 0.25 and tier ~= 1 then
                     local iceShield = SpawnPrefab("um_ice_shield")
-                    iceShield:Init(attacker, "swap_body", .5 + (tier * 0.25))
+                    iceShield:Init(attacker, "swap_body", .25 + (tier * 0.125))
                 end
                 DamageInfiniteItemGem("bluegem1", item, 0.005)
             end
@@ -912,7 +943,7 @@ AddUMGemDef("bluegem2", {
                 end
                 if not old_perishtime then
                     item:RemoveComponent("perishable")
-                else
+                elseif item.components.perishable ~= nil then
                     item.components.perishable.perishtime = old_perishtime
                 end
                 if old_onfill then

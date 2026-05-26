@@ -148,4 +148,4 @@ end
 
 return Prefab( "ratpoisonbottle", itemfn, itemassets, itemprefabs),
     Prefab("ratpoison", fn, assets),
-    MakePlacer("ratpoisonbottle_placer",  "um_goo", "um_goo", "true_idle") 
+    MakePlacer("ratpoisonbottle_placer",  "um_goo", "um_goo", "true_idle", true)

@@ -30,7 +30,7 @@ local function OnAttached(inst, target)
         end
         inst.exploded = true
         local x, y, z = inst.Transform:GetWorldPosition()
-        local explosion = SpawnPrefab("snaildrake_explosion")
+        local explosion = SpawnPrefab("um_snaildrake_explosion")
         explosion.Transform:SetPosition(x, y, z)
         if target.components.pinnable and target.components.pinnable:IsStuck() then
             target.components.pinnable:Unstick()

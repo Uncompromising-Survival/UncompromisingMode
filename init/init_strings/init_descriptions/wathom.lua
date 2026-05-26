@@ -699,3 +699,4 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
 }
 DESCRIBE.UM_RICE_PUDDING = "And yet, no."
 DESCRIBE.UM_BOOMBERRYPIE = "Writhing, suspicious..."
+DESCRIBE.UM_CHILES_EN_NOGADA = "Organic compounds... unexpectedly palatable."

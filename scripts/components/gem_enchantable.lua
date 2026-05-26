@@ -1,7 +1,7 @@
-local DEFS = require("gemology_defs")
-local GEM_DEFS, GEM_LOOKUP  = DEFS.GEM_DEFS, DEFS.GEM_LOOKUP
-local GEM_UPDATE_RATE = 1
-local DEFAULT_SLOTS = 1
+local DEFS                 = require("gemology_defs")
+local GEM_DEFS, GEM_LOOKUP = DEFS.GEM_DEFS, DEFS.GEM_LOOKUP
+local GEM_UPDATE_RATE      = 1
+local DEFAULT_SLOTS        = 1
 
 local function on_enchants(self, flag)
     if self.dirty then
@@ -11,7 +11,7 @@ local function on_enchants(self, flag)
 
         for k, v in pairs(enchants) do
             if not table.contains(self.hidden_enchants, k) then --only sync non-hidden gems.
-                enchant_data[k] = {t = v, d = self.enchant_durabilty[k]}
+                enchant_data[k] = { t = v, d = self.enchant_durabilty[k] }
             end
         end
 
@@ -107,19 +107,16 @@ end
 function GemEnchantable:SetDurability(enchantment, durability)
     durability = math.clamp(durability, 0, 1)
 
-    if durability <= 0 then
+    --check for HasEnchantment in case something does a delayed durability delta.
+    if durability <= 0 and self:HasEnchantment(enchantment) then
         if self.inst.SoundEmitter then
             self.inst.SoundEmitter:PlaySound("dontstarve/common/gem_shatter")
         end
-        self:RemoveEnchantment(enchantment)
 
-        durability = 0
+        self:RemoveEnchantment(enchantment)
     end
 
-
     self.enchant_durabilty[enchantment] = durability
-
-
     self.dirty = true
 end
 
@@ -216,7 +213,7 @@ function GemEnchantable:OnLoad(data)
     self.enchant_durabilty = data.durability
 
     self.inst:DoTaskInTime(0, function(inst)
-    self.enchant_durabilty = data.durability
+        self.enchant_durabilty = data.durability
         self.dirty = true
         self.loading = false
     end)

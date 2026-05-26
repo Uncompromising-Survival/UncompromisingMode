@@ -122,12 +122,14 @@ local function MakeBundle(name, onesize, variations, loot, tossloot, setupdata, 
             if onesize then
                 table.insert(assets, Asset("INV_IMAGE", (inventoryimage or name)..tostring(i)))
             else
+                table.insert(assets, Asset("INV_IMAGE", (inventoryimage or name).."_tiny"..tostring(i)))
                 table.insert(assets, Asset("INV_IMAGE", (inventoryimage or name).."_small"..tostring(i)))
                 table.insert(assets, Asset("INV_IMAGE", (inventoryimage or name).."_medium"..tostring(i)))
                 table.insert(assets, Asset("INV_IMAGE", (inventoryimage or name).."_large"..tostring(i)))
             end
         end
     elseif not onesize then
+        table.insert(assets, Asset("INV_IMAGE", (inventoryimage or name).."_tiny"))
         table.insert(assets, Asset("INV_IMAGE", (inventoryimage or name).."_small"))
         table.insert(assets, Asset("INV_IMAGE", (inventoryimage or name).."_medium"))
         table.insert(assets, Asset("INV_IMAGE", (inventoryimage or name).."_large"))
@@ -174,10 +176,10 @@ local function MakeBundle(name, onesize, variations, loot, tossloot, setupdata, 
     local function OnWrapped(inst, num, doer)
         local suffix =
             (onesize and "_onesize") or
+            (num > 5 and "_huge") or
             (num > 3 and "_large") or
             (num > 1 and "_medium") or
             "_small"
-
         inst.suffix = suffix
 
         UpdateInventoryImage(inst)
@@ -312,62 +314,5 @@ local function MakeBundle(name, onesize, variations, loot, tossloot, setupdata, 
     return Prefab(name, fn)
 end
 
-local wetpouch =
-{
-    loottable =
-    {
-        antliontrinket = 0,
-        trinket_1 = 1, -- marbles
-        trinket_3 = 1, -- knot
-        trinket_8 = 1, -- plug
-        trinket_9 = 1, -- buttons
-        trinket_26 = .1, -- potatocup
-        TOOLS_blueprint = .05,
-        LIGHT_blueprint = .05,
-        SURVIVAL_blueprint = .05,
-        FARM_blueprint = .05,
-        SCIENCE_blueprint = .05,
-        REFINE_blueprint = .05,
-        DRESS_blueprint = .05,
-    },
-
-    UpdateLootBlueprint = function(loottable, doer)
-    end,
-
-    lootfn = function(inst, doer)
-        inst.setupdata.UpdateLootBlueprint(inst.setupdata.loottable, doer)
-
-        local total = 0
-        for _,v in pairs(inst.setupdata.loottable) do
-            total = total + v
-        end
-
-        local item = weighted_random_choice(inst.setupdata.loottable)
-
-        if IsSpecialEventActive(SPECIAL_EVENTS.WINTERS_FEAST) and
-            string.sub(item, 1, 7) == "trinket" and
-            item ~= "trinket_26" then
-            --chance to replace trinkets (but not potatocup)
-            local rnd = math.random(6)
-            if rnd == 1 then
-                item = GetRandomBasicWinterOrnament()
-            elseif rnd == 2 then
-                item = GetRandomFancyWinterOrnament()
-            elseif rnd == 3 then
-                item = GetRandomLightWinterOrnament()
-            end
-        end
-
-        return { item }
-    end,
-
-    master_postinit = function(inst, setupdata)
-        inst.build = "wetpouch"
-        inst.setupdata = setupdata
-        inst.wet_prefix = STRINGS.WET_PREFIX.POUCH
-        inst.components.inventoryitem:InheritMoisture(100, true)
-    end,
-}
-
-return MakeBundle("ratacombs_junkpouch", true, nil, JoinArrays(table.invert(wetpouch.loottable), GetAllWinterOrnamentPrefabs()), false, wetpouch,"wetpouch","wetpouch"),
-MakeBundle("silken_bundle", false, nil,nil,nil,nil,"bundle")
+return --MakeBundle("ratacombs_junkpouch", true, nil, JoinArrays(table.invert(wetpouch.loottable), GetAllWinterOrnamentPrefabs()), false, wetpouch,"wetpouch","wetpouch"),
+MakeBundle("silken_bundle", false, nil,nil,nil,nil,"um_silken_bundle","um_silken_bundle")

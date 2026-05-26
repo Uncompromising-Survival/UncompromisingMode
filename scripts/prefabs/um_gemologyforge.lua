@@ -132,8 +132,13 @@ local function fn()
 
     inst:AddTag("structure")
     inst:AddTag("gem_forge")
-    
+
     MakeSnowCoveredPristine(inst)
+
+    if not TheNet:IsDedicated() then
+        inst:AddComponent("pointofinterest")
+        inst.components.pointofinterest:SetHeight(-1)
+    end
 
     inst.entity:SetPristine()
 

@@ -525,7 +525,7 @@ end)
 local chester_lookalikes = {"chester","hutch"}
 for i,v in ipairs(chester_lookalikes) do
 	env.AddPrefabPostInit(v, function(inst)
-		inst:AddTag("notraptrigger") -- AXE Do not let them clear mines - snaptraps, poofshrooms
+		inst:AddTag("notraptrigger") -- AXE Do not let them clear mines - snaptraps
 	end)
 end
 ----------------------------------------------------------------

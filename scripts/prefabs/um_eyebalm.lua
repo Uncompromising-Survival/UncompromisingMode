@@ -37,7 +37,7 @@ local function fn()
     inst:AddComponent("healer")
     inst.components.healer:SetHealthAmount(8)
     inst.components.healer:SetOnHealFn(OnHealFn)
-	
+
     MakeHauntableLaunch(inst)
 
     return inst
@@ -52,15 +52,12 @@ local function buff_OnAttached(inst, target)
         inst.components.debuff:Stop()
     end, target)
 
-    if target.components.playervision then
-		target.components.playervision:ForceGoggleVision(true)
-	end
+    target.um_canseeinstorm:set(true)
 end
 
 local function buff_OnDetached(inst, target)
-    if target ~= nil and target:IsValid() and target.components.playervision.forcegogglevision then
-		target.components.playervision.forcegogglevision = false
-        target:PushEvent("gogglevision", { enabled = target.components.playervision.forcegogglevision })
+    if target ~= nil then
+        target.um_canseeinstorm:set(false)
     end
     inst:Remove()
 end
@@ -76,7 +73,7 @@ local function buff_OnExtended(inst)
         inst.task:Cancel()
         inst.task = nil
     end
-    inst.task = inst:DoTaskInTime(60*8, buff_Expire)
+    inst.task = inst:DoTaskInTime(60 * 8, buff_Expire)
 end
 
 local function buff_OnSave(inst, data)
@@ -132,4 +129,4 @@ local function fn_eyebuff()
 end
 
 return Prefab("um_eyebalm", fn, assets),
-Prefab("um_eyebalm_buff", fn_eyebuff)
+    Prefab("um_eyebalm_buff", fn_eyebuff)

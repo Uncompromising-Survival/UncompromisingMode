@@ -39,7 +39,7 @@ local prefabs = {
     "moonmaw_trap",
     "moonmaw_glassshards",
 
-    "lavaspit",
+    "um_lavaspit_projectiles",
     --"um_sandhill",
     "snowpile",
     --"sand",
@@ -125,7 +125,6 @@ local prefabs = {
     "skeletonmeat",
     "um_shadow_characters",
     "um_shadow_characters_temp",
-    --"veteranscurse",
     "healthregenbuff_vetcurse",
     "antlion_sinkhole_boat",
     "riceplantspawner",
@@ -534,9 +533,8 @@ local prefabs = {
     "um_astral_projector",
 
     -- Broiling Hills & Magma Caves
-    "snaildrake_explosion",
+    "um_snaildrake_explosion",
     "snaildrake_hole",
-    "snaildrake_projectiles",
     "snaildrake_slime_debuff",
     "snaildrake",
     "snapalm",
@@ -636,7 +634,6 @@ local prefabs = {
     "wormwood_mushtrees", -- AXE This is needed to make several placers for wormwood's skill.
     "um_thulecite_razor",
     "gemology_book",
-    "um_poofshrooms",
     "magma_tile",
 }
 

@@ -173,10 +173,12 @@ local function redgem()
     if not TheWorld.ismastersim then
         return inst
     end
+
 	inst.animname = "gem"
     inst.components.lootdropper:SetChanceLootTable('um_petmushtree')
 	inst.components.lootdropper:AddChanceLoot("um_gemology_geode_red", 1)
 	inst.components.lootdropper:AddChanceLoot("um_gemology_geode_red", 0.1)
+
     return inst
 end
 

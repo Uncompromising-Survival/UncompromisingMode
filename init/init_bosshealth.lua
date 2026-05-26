@@ -154,6 +154,188 @@ local function Duplicator(inst, n)
     MultiplyLoot(inst, m)
 end
 
+local function ExtraRoll(mult)
+	local whole = math.floor(mult - 1)
+	local frac = (mult - 1) % 1
+
+	return whole + ((frac > 0 and math.random() < frac) and 1 or 0)
+end
+
+local function ExtraChestFX(chest)
+	local x, y, z = chest.Transform:GetWorldPosition()
+
+	if chest.SoundEmitter ~= nil then
+		chest.SoundEmitter:PlaySound("dontstarve/common/ghost_spawn")
+	end
+
+	local fx = SpawnPrefab("statue_transition_2")
+	if fx ~= nil then
+		fx.Transform:SetPosition(x, y, z)
+		fx.Transform:SetScale(1, 2, 1)
+	end
+
+	fx = SpawnPrefab("statue_transition")
+	if fx ~= nil then
+		fx.Transform:SetPosition(x, y, z)
+		fx.Transform:SetScale(1, 1.5, 1)
+	end
+end
+
+local function OverflowChest(mainchest)
+	if mainchest.overflow ~= nil and mainchest.overflow:IsValid() and mainchest.overflow.components.container ~= nil then
+		return mainchest.overflow
+	end
+
+	local x, y, z = mainchest.Transform:GetWorldPosition()
+	local chest = SpawnPrefab("minotaurchest")
+
+	if chest ~= nil then
+		chest.Transform:SetPosition(x + 2.5, 0, z)
+
+		chest.multiplication_done = true
+		mainchest.overflow = chest
+
+		ExtraChestFX(chest)
+	end
+
+	return chest
+end
+
+local function FillChest(mainchest, item)
+	if item == nil then
+		return
+	end
+
+	if mainchest.components.container:GiveItem(item) then
+		return
+	end
+
+	local overflow = OverflowChest(mainchest)
+
+	if overflow ~= nil and overflow.components.container ~= nil and overflow.components.container:GiveItem(item) then
+		return
+	end
+
+	local x, y, z = mainchest.Transform:GetWorldPosition()
+	item.Transform:SetPosition(x, y, z)
+end
+
+AddPrefabPostInit("minotaurchest", function(inst)
+	if not TheWorld.ismastersim then
+		return
+	end
+
+	local _OnSave = inst.OnSave
+	inst.OnSave = function(inst, data)
+		if _OnSave ~= nil then
+			_OnSave(inst, data)
+		end
+
+		data.multiplication_done = inst.multiplication_done
+	end
+
+	local _OnLoad = inst.OnLoad
+	inst.OnLoad = function(inst, data)
+		if _OnLoad ~= nil then
+			_OnLoad(inst, data)
+		end
+
+		if data ~= nil and data.multiplication_done then
+			inst.multiplication_done = true
+		end
+	end
+
+	inst:DoTaskInTime(0, function()
+		if inst.components.container == nil then
+			return
+		end
+
+		if inst.multiplication_done then
+			return
+		end
+
+		inst.multiplication_done = true
+
+		local n = GetModConfigData("minotaur_health_") or 1
+		local mult = 1 + (n - 1) / 2
+
+		if mult <= 1 then
+			return
+		end
+
+		local items = inst.components.container:FindItems(function(item)
+			return item.prefab ~= "atrium_key"
+		end)
+
+		for _, item in ipairs(items) do
+			local extra = ExtraRoll(mult)
+
+			for i = 1, extra do
+				local saved = item:GetSaveRecord()
+				local copy = saved ~= nil and SpawnSaveRecord(saved) or SpawnPrefab(item.prefab)
+
+				if copy ~= nil then
+					FillChest(inst, copy)
+				end
+			end
+		end
+	end)
+end)
+
+local function CopyKlaus(item)
+	if type(item) == "table" then
+		return { item[1], item[2] }
+	end
+	return item
+end
+
+local function MultiplyKlaus(items, mult)
+	local final = {}
+
+	for _, item in ipairs(items) do
+		table.insert(final, CopyKlaus(item))
+
+		local whole = math.floor(mult - 1)
+		local frac = (mult - 1) % 1
+
+		for i = 1, whole do
+			table.insert(final, CopyKlaus(item))
+		end
+
+		if frac > 0 and math.random() < frac then
+			table.insert(final, CopyKlaus(item))
+		end
+	end
+
+	return final
+end
+
+AddComponentPostInit("klaussackloot", function(self)
+	if self._bosslootmult_klaus_patched then return end
+	self._bosslootmult_klaus_patched = true
+
+	local _GetLoot = self.GetLoot
+
+	self.GetLoot = function(self, ...)
+		local loot = _GetLoot(self, ...)
+
+		local n = GetModConfigData("klaus_health_") or 1
+		local mult = 1 + (n - 1) / 2
+
+		if mult <= 1 then
+			return loot
+		end
+
+		local final = {}
+
+		for _, bundle_items in ipairs(loot) do
+			table.insert(final, MultiplyKlaus(bundle_items, mult))
+		end
+
+		return final
+	end
+end)
+
 for _, bossname in ipairs(bosses) do
     AddPrefabPostInit(string.lower(bossname), function(inst)
         if not TheWorld.ismastersim then return end

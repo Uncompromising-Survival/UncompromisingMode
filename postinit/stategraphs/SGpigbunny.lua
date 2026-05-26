@@ -1,8 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-local KNOCKBACK_CANT_TAGS = {"fat_gang", "foodknockbackimmune", "heavybody"}
-local KNOCKBACK_ARMOR_CANT_TAGS = {"heavyarmor", "knockback_protection"}
 local function DoCounterAttack(inst)
     local target = inst.components.combat.target
     if target and distsq(target:GetPosition(), inst:GetPosition()) <= inst.components.combat:CalcAttackRangeSq(target) then

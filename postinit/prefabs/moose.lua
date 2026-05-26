@@ -49,6 +49,27 @@ local function EnterPhase2TriggerMoose(inst)
 	end
 end
 
+local function FightingCheck(inst)
+    local combat = inst.components.combat
+    local target = combat ~= nil and combat.target or nil
+
+    return target ~= nil and target:IsValid() and not (target.components.health ~= nil and target.components.health:IsDead())
+end
+
+local function DoNotDespawn(inst)
+    local old_OnEntitySleep = inst.OnEntitySleep
+
+    inst.OnEntitySleep = function(inst)
+        if FightingCheck(inst) then
+            return
+        end
+
+        if old_OnEntitySleep ~= nil then
+            old_OnEntitySleep(inst)
+        end
+    end
+end
+
 env.AddPrefabPostInit("moose", function(inst)
 	inst.Physics:SetCollisionCallback(OnCollide)
 
@@ -56,6 +77,8 @@ env.AddPrefabPostInit("moose", function(inst)
 		return
 	end
 
+    DoNotDespawn(inst)
+	
 	if inst.components.combat ~= nil then
 		local function isnotmossling(ent)
 			if ent ~= nil and not ent:HasTag("mossling") and not ent:HasTag("moose") then -- fix to friendly AOE: refer for later AOE mobs -Axe
@@ -142,6 +165,8 @@ env.AddPrefabPostInit("mothergoose", function(inst)
 	if not TheWorld.ismastersim then
 		return
 	end
+	
+    DoNotDespawn(inst)	
 
 	if inst.components.combat ~= nil then
 		local function isnotmossling(ent)

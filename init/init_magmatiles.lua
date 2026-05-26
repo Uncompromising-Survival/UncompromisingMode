@@ -1,11 +1,36 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
+local function GetClosestLavaTileDist(x, y, z)
+    local map = TheWorld.Map
+    if map.GetClosestTileDist ~= nil then
+        return map:GetClosestTileDist(x, y, z, WORLD_TILES.UM_MAGMA_LAVAMOLTEN, 8)
+    end
+    local tx, ty = map:GetTileXYAtPoint(x, y, z)
+    local tile = WORLD_TILES.UM_MAGMA_LAVAMOLTEN
+    for r = 1, 8 do
+        if tile == map:GetTile(tx - r, ty) or tile == map:GetTile(tx + r, ty) or tile == map:GetTile(tx, ty - r) or tile == map:GetTile(tx, ty + r) then
+            return r
+        end
+        for i = 1, r - 1 do
+            if tile == map:GetTile(tx + r, ty + i) or tile == map:GetTile(tx + r, ty - i) or tile == map:GetTile(tx - r, ty + i) or tile == map:GetTile(tx - r, ty - i)
+                or tile == map:GetTile(tx + i, ty + r) or tile == map:GetTile(tx + i, ty - r) or tile == map:GetTile(tx - i, ty + r) or tile == map:GetTile(tx - i, ty - r)
+            then
+                return math.sqrt(r * r + i * i)
+            end
+        end
+        if tile == map:GetTile(tx + r, ty + r) or tile == map:GetTile(tx + r, ty - r) or tile == map:GetTile(tx - r, ty + r) or tile == map:GetTile(tx - r, ty - r) then
+            return math.sqrt(2) * r
+        end
+    end
+    return math.huge
+end
+
 env.AddComponentPostInit("temperature", function(self)
     local _OnUpdate = self.OnUpdate
     function self:OnUpdate(dt, ...)
         local x, y, z = self.inst.Transform:GetWorldPosition()
-        local lava_dist = TheWorld.Map:GetClosestTileDist(x, y, z, WORLD_TILES.UM_MAGMA_LAVAMOLTEN, 8)
+        local lava_dist = GetClosestLavaTileDist(x, y, z)
         if lava_dist <= 8 then
             self:SetModifier("um_magma_heat", 240)
         else

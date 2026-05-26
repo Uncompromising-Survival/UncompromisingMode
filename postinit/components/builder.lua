@@ -6,14 +6,14 @@ local TechTree = require("techtree")
 
 local PROTOTYPER_TAGS = {"prototyper"}
 
-local BLOCKCRAFTING_FNNAMES = {"MakeRecipeFromMenu", "MakeRecipeAtPoint", "BufferBuild"}
+--[[local BLOCKCRAFTING_FNNAMES = {"MakeRecipeFromMenu", "MakeRecipeAtPoint", "BufferBuild"}
 local function CraftCancellingBlockout(self, fnname)
     local _OldFunction = self[fnname]
     self[fnname] = function(self, ...)
         if self.inst.sg and self.inst.sg:HasStateTag("busy") then return end
         return _OldFunction(self, ...)
     end
-end
+end]]
 
 local old_ischaringred = IsCharacterIngredient
 IsCharacterIngredient = function(ingredienttype)
@@ -30,9 +30,9 @@ env.AddComponentPostInit("builder", function(self)
         end
     end
 
-    for _, fnname in pairs(BLOCKCRAFTING_FNNAMES) do
+    --[[for _, fnname in pairs(BLOCKCRAFTING_FNNAMES) do
         CraftCancellingBlockout(self, fnname)
-    end
+    end]]
 
     -- The code below up until the AddClassPostConstruct("components/builder_replica") is all from the character mod "The Sniper (DST)"
     -- I had no idea how to do this on my own so all credits goes to Daniel. -Carlos

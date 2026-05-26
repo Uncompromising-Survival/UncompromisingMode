@@ -41,10 +41,8 @@ local function TriggerPocketResurrection(self, item)
     if self.inst.components.timer and self.inst:HasTag("wathom") then
         if self.inst.components.timer:TimerExists("shadowwathomcooldown") then
             self.inst.components.timer:StopTimer("shadowwathomcooldown")
-            self.inst.components.timer:StartTimer("shadowwathomcooldown", TUNING.TOTAL_DAY_TIME)
-        else
-            self.inst.components.timer:StartTimer("shadowwathomcooldown", TUNING.TOTAL_DAY_TIME)
         end
+        self.inst.components.timer:StartTimer("shadowwathomcooldown", TUNING.TOTAL_DAY_TIME)
     end
 
     if item.prefab == "amulet" then    
@@ -165,7 +163,7 @@ local function TriggerRose(self)
 
     self.inst.components.sanity:SetPercent(.5, true)
     self.inst.components.hunger:SetPercent(2 / 3, true)
-    self.inst.components.temperature:SetTemp(TUNING.STARTING_TEMP)
+    self.inst.components.temperature:SetTemperature(TUNING.STARTING_TEMP)
     self:DeltaPenalty(.25)
     self:SetPercent(.5)
     self.inst:PushEvent("PocketResurrection")
@@ -248,6 +246,18 @@ env.AddComponentPostInit("health", function(self)
             return
         end
         return _SetPenalty(self, penalty, ...)
+    end
+
+    local _DoFireDamage = self.DoFireDamage
+    function self:DoFireDamage(...)
+        if self.um_fireimmune then return end -- (not instant or mult > 0) in DoFireDamage means we are "takingfiredamage" when we shouldn't...
+        --[[if self.inst:HasTag("um_firedodger") and math.random() > 0.5 then
+            if self.inst.SoundEmitter then
+                self.inst.SoundEmitter:PlaySound("dontstarve/movement/slip_fall_whoop")
+            end
+            return
+        end]]
+        return _DoFireDamage(self, ...)
     end
 
     if TUNING.DSTU.ONEHP == true then-- All this code is here

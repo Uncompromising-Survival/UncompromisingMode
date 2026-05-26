@@ -97,6 +97,7 @@ function MineralLogbook:AddNewGem(gem, tier)
 
     if tier > 0 then
         TheFocalPoint.SoundEmitter:PlaySound("dontstarve/HUD/get_gold")
+        ThePlayer:PushEvent("scrapbookupdated")
     end
 
     self.known_gems[gem] = tier

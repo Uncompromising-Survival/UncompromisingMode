@@ -424,8 +424,7 @@ env.AddStategraphPostInit("deerclops", function(inst)
                     inst.sg.statemem.target = target
                 end
                 inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/charge")
-                inst.components.timer:StopTimer("laserbeam_cd")
-                inst.components.timer:StartTimer("laserbeam_cd", TUNING.DEERCLOPS_ATTACK_PERIOD * (math.random(0.8, 1.7)))
+                UMCommonFns.RestartTimer(inst, {name = "laserbeam_cd", time = TUNING.DEERCLOPS_ATTACK_PERIOD * math.random(0.8, 1.7)})
             end,
 
             onupdate = function(inst)
@@ -533,8 +532,7 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 inst.Physics:Stop()
                 inst.AnimState:PlayAnimation("ring_pre")
                 inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/charge")
-                inst.components.timer:StopTimer("laserbeam_cd")
-                inst.components.timer:StartTimer("laserbeam_cd", TUNING.DEERCLOPS_ATTACK_PERIOD * (math.random(3) - .5))
+                UMCommonFns.RestartTimer(inst, {name = "laserbeam_cd", time = TUNING.DEERCLOPS_ATTACK_PERIOD * (math.random(3) - .5)})
             end,
 
             timeline =
@@ -741,8 +739,7 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 inst.AnimState:SetBuild("deerclops_build_old")
                 inst.Physics:Stop()
                 inst.AnimState:PlayAnimation("fortresscast_pst")
-                inst.components.timer:StopTimer("auratime")
-                inst.components.timer:StartTimer("auratime", 24 + math.random(1, 11))
+                UMCommonFns.RestartTimer(inst, {name = "auratime", time = 24 + math.random(1, 11)})
             end,
 
             timeline =
@@ -848,8 +845,7 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 inst.Physics:Stop()
                 inst.AnimState:PlayAnimation("uppercut")
                 inst.components.combat:StartAttack()
-                inst.components.timer:StopTimer("uppercuttime")
-                inst.components.timer:StartTimer("uppercuttime", TUNING.DEERCLOPS_ATTACK_PERIOD * (math.random(1, 3)))
+                UMCommonFns.RestartTimer(inst, {name = "uppercuttime", time = TUNING.DEERCLOPS_ATTACK_PERIOD * math.random(1, 3)})
                 inst.components.combat:SetDefaultDamage(1.5 * TUNING.DEERCLOPS_DAMAGE)
             end,
 
@@ -923,8 +919,7 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 inst.Physics:Stop()
                 inst.AnimState:PlayAnimation("uppercutcombo")
                 inst.components.combat:StartAttack()
-                inst.components.timer:StopTimer("uppercuttime")
-                inst.components.timer:StartTimer("uppercuttime", TUNING.DEERCLOPS_ATTACK_PERIOD * (math.random(2, 5)))
+                UMCommonFns.RestartTimer(inst, {name = "uppercuttime", time = TUNING.DEERCLOPS_ATTACK_PERIOD * math.random(2, 5)})
                 inst.components.combat:SetDefaultDamage(1.5 * TUNING.DEERCLOPS_DAMAGE)
 
                 if inst.components.combat.target ~= nil then

@@ -34,4 +34,7 @@ env.AddPrefabPostInit("molebat", function(inst)
     inst.OnSave = OnSave
     _OnLoad = inst.OnLoad
     inst.OnLoad = OnLoad
+    if inst.components.lootdropper then
+        inst.components.lootdropper:SetLoot({"batnose", "monstersmallmeat"})
+    end
 end)

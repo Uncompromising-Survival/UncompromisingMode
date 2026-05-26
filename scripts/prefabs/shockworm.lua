@@ -120,7 +120,7 @@ end
 
 local function IsAlly(inst, guy)
     -- Prevents lightning from forking from a Depth Eel's target to other Depth Worms.
-    return inst.replica.combat:GetTarget() ~= guy and guy.replica.combat:GetTarget() ~= inst and inst:HasTag("shockworm") and guy:HasTag("worm")
+    return UMCommonFns.IsAlly(inst, guy, {"worm"})
 end
 
 local function onpickedfn(inst, target)
@@ -210,12 +210,13 @@ local function ShockWormOnAttacked(inst, data)
     if attacker then
         if attacker.components.health and not attacker.components.health:IsDead() and data.stimuli ~= "soul"
             and (not weapon or ((not weapon.components.weapon or not weapon.components.weapon.projectile) and not weapon.components.projectile))
-            and not (attacker.components.inventory and attacker.components.inventory:IsInsulated()) and not attacker:HasTag("catapult") then
+            and not (attacker.components.inventory and attacker.components.inventory:IsInsulated()) and not attacker:HasTag("catapult") 
+            and not (weapon and (weapon.components.complexprojectile or weapon:HasTag("trap"))) then
             local damage_mult = 1
             if not IsEntityElectricImmune(attacker) then
                 damage_mult = TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * attacker:GetWetMultiplier()
             end
-            attacker.components.combat:GetAttacked(inst, damage_mult * TUNING.WORM_DAMAGE, nil, "electric")
+            attacker.components.combat:GetAttacked(inst, damage_mult * TUNING.WORM_DAMAGE / 5, nil, "electric")
         end
 
         inst.components.combat:SetTarget(attacker)
@@ -374,6 +375,8 @@ local function fn()
             inst:Remove()
         end
     end)
+
+    inst:AddComponent("um_electrifies_tiles")
 
     return inst
 end

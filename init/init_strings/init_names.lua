@@ -321,7 +321,8 @@ NAMES.CAVE_EXIT_MOON = NAMES.CAVE_EXIT
 NAMES.GORE_HORN_HAT = "Gore Horn"
 NAMES.SLOBBERLOBBER = "Slobber Lobber"
 NAMES.BEARGERCLAW = "Bearger Claw"
-NAMES.LAVASPIT_SLOBBER = NAMES.LAVASPIT
+NAMES.UM_LAVASPIT = NAMES.LAVASPIT
+NAMES.UM_LAVASPIT_SLOBBER = NAMES.LAVASPIT
 NAMES.WOODPECKER = "Woodpecker"
 NAMES.UM_BEAR_TRAP = "Snap-Trap"
 NAMES.UM_BEAR_TRAP_OLD = "Snap-Trap"
@@ -452,6 +453,7 @@ NAMES.ROCKJAWLEATHER = "Rocky Hide"
 
 NAMES.LANTERN_ELECTRICAL = "Electrical Lantern"
 NAMES.MINERHAT_ELECTRICAL = "Electrical Miner Hat"
+NAMES.MOLEHAT_ELECTRICAL = "Electrical Moggles"
 
 NAMES.POWERCELL = "Energy Cell" --Single-Use Battery
 
@@ -490,7 +492,7 @@ NAMES.BOAT_BUMPER_SLUDGE_KIT = "Sludge Bumper Kit"
 NAMES.BOAT_BUMPER_COPPER = "Copper Bumper"
 NAMES.BOAT_BUMPER_COPPER_KIT = "Copper Bumper Kit"
 NAMES.HERMIT_BUNDLE_LURES = "Lure Bundle"
-NAMES.LAVASPIT_SLUDGE = "Burning Pool of Sludge"
+NAMES.UM_LAVASPIT_SLUDGE = "Burning Pool of Sludge"
 
 NAMES.KELPSTACK = "Kelpy Seastack"
 NAMES.MOSSSTACK = "Mossy Seastack"
@@ -654,11 +656,11 @@ NAMES.SMOG = "suffocation"
 ------------------------
 -- Broiling Hills --
 ------------------------
-NAMES.SNAILDRAKE_EXPLOSION = "Snaildrake Explosion"
+NAMES.UM_SNAILDRAKE_EXPLOSION = "Snaildrake Explosion"
 NAMES.SNAILDRAKE_HOLE = "Crevasse"
 NAMES.SNAILDRAKE_MAGMA = "Snaildrake"
 NAMES.SNAILDRAKE_SLIME = "Snaildrake"
-NAMES.SNAILDRAKE_MAGMA_SLUDGE = "Magma Sludge"
+NAMES.UM_SNAILDRAKE_MAGMA_SLUDGE = "Magma Sludge"
 NAMES.SNAPALM = "Snapalm"
 NAMES.SNAILDRAKEHAT = "Snaily Horned Helm"
 NAMES.SNAILDRAKEBUCKET = "Snaildrake Basin"
@@ -715,7 +717,7 @@ NAMES.SNAPPY_JAW = "Snappy Jaw"
 NAMES.UM_BOATBOTTLE = "Boat Bottle"
 NAMES.BOAT_ANCIENT_ITEM_BLUEPRINT = "Archaic Boat Kit Blueprint"
 NAMES.UM_BUTTERY_FLY = "Buttery Fly"
-NAMES.UM_HAT_LEAFWING = "Elated Helm"
+NAMES.UM_HAT_LEAFWING = "Elated Leafy Helm"
 NAMES.UM_LEAFWING = "Leafy Wing"
 NAMES.UM_DETONATOR = "Universal Detonator"
 
@@ -825,12 +827,12 @@ NAMES.UM_GEMOLOGY_GEODE_SINK = "Mossy Geode"
 NAMES.UM_BOOMBERRY_BOMB = "Boomberry Bomb"
 NAMES.UM_BOOMBERRYPIE = "Boomberry Pie"
 
-NAMES.UM_REDMUSHTREE_GEM = "Petrified Mushtree"
-NAMES.UM_REDMUSHTREE_GEMLESS = "Petrified Mushtree"
-NAMES.UM_GREENMUSHTREE_GEM = "Petrified Mushtree"
-NAMES.UM_GREENMUSHTREE_GEMLESS = "Petrified Mushtree"
-NAMES.UM_BLUEMUSHTREE_GEM = "Petrified Mushtree"
-NAMES.UM_BLUEMUSHTREE_GEMLESS = "Petrified Mushtree"
+NAMES.UM_REDMUSHTREE_GEM = "Petrified Red Mushtree"
+NAMES.UM_REDMUSHTREE_GEMLESS = "Petrified Red Mushtree"
+NAMES.UM_GREENMUSHTREE_GEM = "Petrified Green Mushtree"
+NAMES.UM_GREENMUSHTREE_GEMLESS = "Petrified Green Mushtree"
+NAMES.UM_BLUEMUSHTREE_GEM = "Petrified Blue Mushtree"
+NAMES.UM_BLUEMUSHTREE_GEMLESS = "Petrified Blue Mushtree"
 
 NAMES.UM_GUANO_ROCK = "Coprolite Outcrop"
 NAMES.UM_GUANO_ROCK_GEMLESS = "Coprolite Outcrop"
@@ -840,7 +842,7 @@ NAMES.UM_ROCKLOBSTER_ROCK = "Gestating Rock"
 NAMES.UM_SINKMOUND_ROCK = "Unassuming Den"
 NAMES.UM_SINKMOUND_ROCK_GEMLESS = "Unassuming Den"
 NAMES.GLACIALHOUND_ICESPIKE = "Ice Spike"
-
+NAMES.UM_MOONGLASS_CEILING = "Moonglass Stalactite"
 NAMES.UM_FEATHER_TOTEM = "Feather Idol"
 NAMES.UM_GEMOLOGY_POUCH = "Gemology Pouch"
 NAMES.UM_MAGNIFIER = "Ancient Gem Magnifier"

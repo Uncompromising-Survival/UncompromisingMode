@@ -82,14 +82,13 @@ env.AddStategraphPostInit("bearger", function(inst)
                 end),
                 TimeEvent(25 * FRAMES, function(inst)
                     if inst.components.combat and inst.sg.statemem.target and inst.sg.statemem.target:IsValid() then
-                        inst.LaunchProjectile(inst, inst.sg.statemem.target)
+                        inst:LaunchProjectile(inst.sg.statemem.target)
                         local x, y, z = inst.Transform:GetWorldPosition()
                         SpawnPrefab("groundpound_fx").Transform:SetPosition(x, 0, z)
                         local sandpuff = SpawnPrefab("sand_puff")
                         sandpuff.Transform:SetPosition(x, 0, z)
                         sandpuff.Transform:SetScale(2, 2, 2)
-                        inst.components.timer:StopTimer("RockThrow")
-                        inst.components.timer:StartTimer("RockThrow", TUNING.BEARGER_NORMAL_GROUNDPOUND_COOLDOWN * 1.4)
+                        UMCommonFns.RestartTimer(inst, {name = "RockThrow", time = TUNING.BEARGER_NORMAL_GROUNDPOUND_COOLDOWN * 1.4})
                     end
                 end),
             },

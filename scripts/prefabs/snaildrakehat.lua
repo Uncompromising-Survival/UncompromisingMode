@@ -5,7 +5,6 @@ local assets =
     Asset("IMAGE", "images/inventoryimages/snaildrakehat.tex"),
 }
 
-
 local function onequip(inst, owner)
     owner.AnimState:OverrideSymbol("swap_hat", "snaildrakehat", "swap_hat")
 
@@ -20,10 +19,12 @@ local function onequip(inst, owner)
         owner.AnimState:Show("HEAD_HAT_NOHELM")
         owner.AnimState:Hide("HEAD_HAT_HELM")
     end
-    
+
     if owner.components.health ~= nil then
-        owner.components.health.externalfiredamagemultipliers:SetModifier(inst, 1 - TUNING.ARMORDRAGONFLY_FIRE_RESIST)
+        owner.components.health.externalfiredamagemultipliers:SetModifier(inst, 1 - TUNING.DSTU.SNAILDRAKEHAT_FIRE_RESIST)
     end
+
+    --owner:AddTag("um_firedodger")
 end
 
 local function onunequip(inst, owner)
@@ -43,6 +44,8 @@ local function onunequip(inst, owner)
     if owner.components.health ~= nil then
         owner.components.health.externalfiredamagemultipliers:RemoveModifier(inst)
     end
+
+    --owner:RemoveTag("um_firedodger")
 end
 
 local function fn()
@@ -73,7 +76,7 @@ local function fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("armor")
-    inst.components.armor:InitCondition(TUNING.ARMOR_SLURTLEHAT, 0.8)
+    inst.components.armor:InitCondition(TUNING.ARMOR_SLURTLEHAT, 0.7)
 
     inst:AddComponent("equippable")
     inst.components.equippable.equipslot = EQUIPSLOTS.HEAD

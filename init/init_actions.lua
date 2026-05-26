@@ -2,7 +2,7 @@ local UpvalueHacker = require("tools/upvaluehacker")
 -- Update for PAWN
 AddAction("LAVASPIT", "LAVASPIT", function(act)
     if act.doer and act.target and act.doer.prefab == "dragonfly" then
-        local spit = SpawnPrefab("lavaspit")
+        local spit = SpawnPrefab("um_lavaspit")
         local x, y, z = act.doer.Transform:GetWorldPosition()
         local downvec = TheCamera:GetDownVec()
         local offsetangle = math.atan2(downvec.z, downvec.x) * (180 / math.pi)
@@ -152,21 +152,6 @@ createburrow.priority = HIGH_ACTION_PRIORITY
 createburrow.rmb = true
 createburrow.distance = 2
 createburrow.mount_valid = false
-
-local charge_powercell = AddAction("CHARGE_POWERCELL", GLOBAL.STRINGS.ACTIONS.CHARGE_POWERCELL, function(act)
-    local target = act.target or act.invobject
-
-    if (target ~= nil and target:HasTag("powercell")) and (act.doer ~= nil and act.doer:HasTag("batteryuser")) then
-        act.doer.components.batteryuser:ChargeFrom(target)
-        return true
-    else
-        return false
-    end
-end)
-
-charge_powercell.instant = true
-charge_powercell.rmb = true
-charge_powercell.priority = HIGH_ACTION_PRIORITY
 
 -- Rummaging is opening containers.
 -- Any character can open Warly's Portable Crock Pot.
@@ -387,17 +372,17 @@ STORE_BOAT.fn = function(act)
     local boat, bottle = act.target, act.invobject
 
     if boat ~= nil and boat:HasTag("walkableplatform") and boat.components.walkableplatform ~= nil then
-        for k in pairs(boat.components.walkableplatform:GetEntitiesOnPlatform()) do
-            if k:HasTag("player") then
+        for ent in pairs(boat.components.walkableplatform:GetEntitiesOnPlatform()) do
+            if ent:HasAnyTag("player", "irreplaceable", "companion", "abigail", "shadowminion") or ent.components.follower ~= nil and ent.components.follower.leader:HasTag("player") then
                 return false, "PLAYER_ON_PLATFORM"
             end
 
-            if k.components.container ~= nil then
-                k.components.container:DropEverything()
+            if ent.components.container ~= nil then
+                ent.components.container:DropEverything()
             end
 
-            if k.components.inventory ~= nil then
-                k.components.inventory:DropEverything()
+            if ent.components.inventory ~= nil then
+                ent.components.inventory:DropEverything()
             end
         end
 
@@ -661,6 +646,32 @@ AddSimPostInit(function()
     end
 end)
 
+AddSimPostInit(function()
+    -- Workaround for a vanilla bug: if a mod only calls AddComponentAction server-side, connected clients receive the net var sync but have no entry in MOD_ACTION_COMPONENT_IDS -Deimos
+    local MOD_ACTION_COMPONENT_IDS = UpvalueHacker.GetUpvalue(GLOBAL.EntityScript.RegisterComponentActions, "MOD_ACTION_COMPONENT_IDS")
+    if not MOD_ACTION_COMPONENT_IDS then
+        return
+    end
+    local old_UnregisterComponentActions = GLOBAL.EntityScript.UnregisterComponentActions
+    function GLOBAL.EntityScript:UnregisterComponentActions(name)
+        if self.modactioncomponents ~= nil then
+            local stale = nil
+            for modname in pairs(self.modactioncomponents) do
+                if MOD_ACTION_COMPONENT_IDS[modname] == nil then
+                    if stale == nil then stale = {} end
+                    stale[#stale + 1] = modname
+                end
+            end
+            if stale ~= nil then
+                for i = 1, #stale do
+                    self.modactioncomponents[stale[i]] = nil
+                end
+            end
+        end
+        return old_UnregisterComponentActions(self, name)
+    end
+end)
+
 local _OldHarvest = GLOBAL.ACTIONS.HARVEST.fn
 GLOBAL.ACTIONS.HARVEST.fn = function(act)
     if act.target.prefab == "um_cookpot_wagstaff" then
@@ -738,8 +749,7 @@ um_forge_gem.rmb = true
 um_forge_gem.fn = function(act)
     if act.target.ForgeGem ~= nil then
         local success, reason = act.target:ForgeGem()
-        print("success?", success)
-        print("reason?", reason)
+
         if not success then
             --we need to run the talker code here because we're not in the stategraph
             --when called by the SG action handler it does actually give the action fail string, but when

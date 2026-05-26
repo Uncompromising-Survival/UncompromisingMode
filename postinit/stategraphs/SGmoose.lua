@@ -115,8 +115,7 @@ env.AddStategraphPostInit("moose", function(inst)
                 if math.random() <= .3 or inst.doublesuperhop > 1 then
                     inst.doublesuperhop = 0
                     inst.superhop = false
-                    inst.components.timer:StopTimer("SuperHop")
-                    inst.components.timer:StartTimer("SuperHop", 10)
+                    UMCommonFns.RestartTimer(inst, {name = "SuperHop", time = 10})
                 end
             end,
 

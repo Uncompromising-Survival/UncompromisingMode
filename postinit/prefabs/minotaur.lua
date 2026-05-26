@@ -12,19 +12,11 @@ local function Health_And_Combat_Check(inst, percent)
     end
 end
 
-local function RestartTimer(inst, name, time)
-    if inst.components.timer:TimerExists(name) then
-        inst.components.timer:SetTimeLeft(name, time)
-    else
-        inst.components.timer:StartTimer(name, time)
-    end
-end
-
 local function CheckForceJump(inst,data) -- Secondary means to force the leap if for some reason the player isn't in a position for it to happen naturally
     if data.name == "forceleapattack" and Health_And_Combat_Check(inst) then
         inst.forceleap = true
     elseif data.name == "forceleapattack" or not inst.components.timer:TimerExists("forceleapattack") then
-        RestartTimer(inst, "forceleapattack", math.random(30, 45))
+        UMCommonFns.RestartTimer(inst, {name = "forceleapattack", time = math.random(30, 45)})
     end
 
     -- This is actually the only way the belch happens.
@@ -34,7 +26,7 @@ local function CheckForceJump(inst,data) -- Secondary means to force the leap if
         --end
         inst.forcebelch = true
     elseif data.name == "forcebelch" or not inst.components.timer:TimerExists("forcebelch") then
-        RestartTimer(inst, "forcebelch", math.random(30, 45))
+        UMCommonFns.RestartTimer(inst, {name = "forcebelch", time = math.random(30, 45)})
     end
 end
 
@@ -59,19 +51,19 @@ local function ShootProjectile(inst)
         local a, b, c = target.Transform:GetWorldPosition()
         if a ~= nil then
             local targetpos = target:GetPosition()
-			--if not projectile.organ then
-			targetpos.x = targetpos.x + math.random(-4, 4)
-			targetpos.z = targetpos.z + math.random(-4, 4)
-			--end
+            --if not projectile.organ then
+            targetpos.x = targetpos.x + math.random(-4, 4)
+            targetpos.z = targetpos.z + math.random(-4, 4)
+            --end
             local dx = a - x
             local dz = c - z
             local rangesq = dx * dx + dz * dz
             local maxrange = 20
             local bigNum = 15
             local speed = easing.linear(rangesq, bigNum, 3, maxrange * maxrange * 2)
-			--if not projectile.organ then
-			speed = speed+math.random(4, 9)
-			--end
+            --if not projectile.organ then
+            speed = speed+math.random(4, 9)
+            --end
             projectile:AddTag("canthit")
             projectile.components.complexprojectile:SetHorizontalSpeed(speed)
             projectile.components.complexprojectile:Launch(targetpos, inst, inst)
@@ -140,11 +132,9 @@ local function MinotaurFunctions(inst)
 
     inst.combo = 0
 
-    if not inst.components.timer then
-        inst:AddComponent("timer") -- In case it's somehow not real.
-    end
-    RestartTimer(inst, "forceleapattack", math.random(30, 45))
-    RestartTimer(inst, "forcebelch", math.random(30, 45))
+    local timer = inst.components.timer or inst:AddComponent("timer")
+    UMCommonFns.RestartTimer(inst, {name = "forceleapattack", time = math.random(30, 45)})
+    UMCommonFns.RestartTimer(inst, {name = "forcebelch", time = math.random(30, 45)})
 
     inst:ListenForEvent("timerdone", CheckForceJump)
 
@@ -164,6 +154,16 @@ local function MinotaurFunctions(inst)
     end)
 
     inst:DoPeriodicTask(5, HomeCheck)
+
+    inst:ListenForEvent("death", function(inst)
+        local x, y, z = inst.Transform:GetWorldPosition()
+
+        for _, v in ipairs(TheSim:FindEntities(x, y, z, 8, { "um_washable_goo" })) do
+            if v.OnStartFade then
+                v:OnStartFade()
+            end
+        end
+    end)
 end
 
 env.AddPrefabPostInit("world", function(inst) -- Supposedly, this is better since it's called once for each "world" prefab, which usually only spawns once per shard.
@@ -181,16 +181,5 @@ end)
 
 env.AddPrefabPostInit("minotaur", function(inst)
     if not TheWorld.ismastersim then return end
-    
-	MinotaurFunctions(inst)
-
-	inst:ListenForEvent("death", function(inst)
-		local x, y, z = inst.Transform:GetWorldPosition()
-
-		for _, v in ipairs(TheSim:FindEntities(x, y, z, 8, { "um_washable_goo" })) do
-			if v.OnStartFade then
-				v:OnStartFade()
-			end
-		end
-	end)
+    MinotaurFunctions(inst)
 end)

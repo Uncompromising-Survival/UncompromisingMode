@@ -149,11 +149,6 @@ local _OldDeathEvent = inst.events["death"].fn
             function(inst, action)
                 return "dolongaction"
             end),
-        ActionHandler(ACTIONS.CHARGE_POWERCELL,
-            function(inst, action)
-                return action.invobject ~= nil
-                    and action.invobject:HasTag("powercell") and "doshortaction"
-            end),
         ActionHandler(ACTIONS.SET_CUSTOM_NAME, "doshortaction"), -- set_custom_name...?
         ActionHandler(ACTIONS.UM_GUNSHOOTY, function(inst, action)
             if Profile:GetMovementPredictionEnabled() then

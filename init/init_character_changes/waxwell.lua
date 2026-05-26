@@ -76,8 +76,9 @@ env.AddPrefabPostInit("waxwelljournal", function(inst)
 end)]]
 
 local function CalculateMaxHealthLoss(inst, data)
-    if inst:HasTag("vetcurse") and inst.components.health and not inst.components.health:IsDead() then
-        local healthloss = ((data.damageresolved or data.damage) * .5) / 75
+    local damage = data.damageresolved or data.damage
+    if inst:HasTag("vetcurse") and damage and inst.components.health and not inst.components.health:IsDead() then
+        local healthloss = (damage * .5) / 75
         inst.components.health:DeltaPenalty(healthloss)
     end
 end

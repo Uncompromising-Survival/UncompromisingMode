@@ -7,7 +7,7 @@ end
 
 --MAJOR.MINOR.FIX
 --INCREASE THIS VERSION
-local _version = "4.2.4"
+local _version = "5.4.1"
 
 description = [[
     󰀔 ["On The Rocks!" v1.6  (Beta ver: v]] .. _version .. [[)]
@@ -27,7 +27,7 @@ Latest update features:
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
-version = "On The Rocks! Testing v" .. _version
+version = "On The Rocks! v1.6 Testing v" .. _version
 
 
 forumthread = "/topic/111892-announcement-uncompromising-mode/"
@@ -47,7 +47,7 @@ icon_atlas = "modicon.xml"
 icon = "modicon.tex"
 
 server_filter_tags = { "uncomp", "UM", "uncompromising", "DSTU", "collab", "overhaul", "hard", "difficult", "madness", "challenge",
-    "hardcore" }
+    "hardcore", "um_beta"} --REMOVE THE UM_BETA TAG LATER
 
 priority = -10
 
@@ -216,7 +216,7 @@ configuration_options = {
     BinaryConfig("foodregen", "Over Time Food Stats",
         "Health and Sanity from foods is applied over time, each food acting as a seperate stackable health or sanity regen buff.",
         true),
-    BinaryConfig("rat_raids", "Rat Raids", "Rats will periodically be attracted to your base.", true),
+    BinaryConfig("rat_raids", "Rat Raids", "Rats will gain or lose points toward raiding your base depending on spoiled food in it and Wild Burrows in your world, similar to Naughtiness.", true),
     {
         name = "vetcurse",
         label = "Veteran's Curse",
@@ -228,6 +228,7 @@ configuration_options = {
         default =
         "default"
     },
+    BinaryConfig("limbo_leap", "Limbo Leap", "Allows dead players to teleport to the spawn portal.", true),
     SkipSpace(),
 
     Header("Shadow Creatures"),
@@ -365,7 +366,6 @@ configuration_options = {
     BinaryConfig("winona_items", "Winona - New Items",
         "Gives Winona a toolbox, Electrical Upgrade Kit and Powercells.", true),
     BinaryConfig("toolbox_tools", "Winona - Toolbox", "Allows tools to go in the Contraption Container.", false),
-    BinaryConfig("winona_overcharging", "Winona - Overcharging", "Winona can overcharge several different items to further enhance their effects.", true),
     {
         name = "warly_changes",
         label = "Warly",
@@ -549,39 +549,36 @@ configuration_options = {
     ------------------------------
     -- Rats --
     ------------------------------
-    Header("Rats"),
+    Header("Rat Raids"),
     ------------------------------
     --BinaryConfig("itemcheck", "Item Score", "Equippable items and mole bait items increase the \'rat score\' value.",
         --true),
     {
         name = "rattimer",
-        label = "Rat Raid Cooldown",
-        hover = "The cooldown between Rat Raids!",
+        label = "Points",
+        hover = "How many points are needed for a Rat Raid.",
         options = {
-            { description = "As soon as possible.", data = 10 }, { description = "Half", data = 4800 },
-            { description = "Default",              data = 9600 }, { description = "Double", data = 14400 } },
+            { description = "Almost None (10)", data = 10 }, { description = "Half (4.800)", data = 4800 },
+            { description = "Default (9.600)", data = 9600 }, { description = "Double (19.200)", data = 19200 } },
         default = 9600
     },
     {
         name = "ratgrace",
-        label = "Rat Raid Grace Period",
-        hover =
-        "Minimum grace period, during which Rats are unable to invade!",
+        label = "Grace Period",
+        hover = "Minimum grace period, during which Rats are unable to raid.",
         options = {
-            { description = "As soon as possible.", data = 1 }, { description = "Low[15 days]", data = 15 },
-            { description = "Default[30 days]",     data = 30 }, { description = "Medium[45 days]", data = 45 },
-            { description = "High[60 days]", data = 60 } },
+            { description = "No Grace Period", data = 1 }, { description = "Low (15 Days)", data = 15 },
+            { description = "Default (30 days)",     data = 30 }, { description = "Higher (45 days)", data = 45 },
+            { description = "Highest (60 days)", data = 60 } },
         default = 30
     },
     {
         name = "ratsnifftimer",
-        label = "Rat Sniff Timer",
-        hover =
-        "The rate at which your base is checked for messiness.",
+        label = "Sniffer Timer",
+        hover = "The rate at which your base is checked for spoiled food and your world for Wild Burrows.",
         options = {
-            { description = "Lowest[1 Minute]",   data = 60 }, { description = "Lowered[2 Minutes]", data = 120 },
-            { description = "Default[3 Minutes]", data = 180 }, { description = "Raised[4 Minutes]", data = 240 },
-            { description = "Extended[8 Minutes]", data = 480 } },
+            { description = "Lower (1 Min.)",   data = 60 }, { description = "Default (2 Min.)", data = 120 },
+            { description = "Higher (3 Min.)", data = 180 }, { description = "Highest (4 Min.)", data = 240 } },
         default = 120
     },
     SkipSpace(),
@@ -593,24 +590,14 @@ configuration_options = {
     -----------------------------
 
     BinaryConfig("inventory_backpacks", "Backpacks and Alikes", "When empty, backpacks can be stored in chests and inventories.", true),
-    BinaryConfig("infinite_blueprints", "Blueprints", "Blueprints are no longer consumed when reading.", true),
+    BinaryConfig("infinite_blueprints_", "Blueprints", "Blueprints are no longer consumed when reading.", false),
     BinaryConfig("funcap_fun", "Funcap Rework", "Changes Funcaps to have a bone crushing surprise, aside from Lunar Funcap.", true),
     BinaryConfig("celestialitems_revert", "Celestial Altar Item Changes", "Glass tools can not be prototyped. Recipes are more expensive.", true),
-    --BinaryConfig("ac_does_ac", "Air Conditioning Air Conditioner", "Air Conditioner works as a reverse furnace, cooling in a small area, and removes smog around it.", false),
-    BinaryConfig("canedurability", "Cane Durability",
-        "Cane loses durability similarly to a Whirly Fan. Note that MacTusks will drop Tusks 100% of the time with this on.",
-    true),--false),
-    BinaryConfig("cooldown_orangestaff_", "Cooldown Based Lazy Explorer",
-        "Lazy Explorer no longer has durabilty, but instead has cooldown, like Wanda's watches.\nSuggested by Lux.",
-    true),--false),
-        
+    --BinaryConfig("ac_does_ac", "Air Conditioning Air Conditioner", "Air Conditioner works as a reverse furnace, cooling in a small area, and removes smog around it.", false),        
     BinaryConfig("pocket_powertrip_", "Clothing Pockets", "Gives some underused dress items pockets.", true),
-
-    
     BinaryConfig("compostoverrot", "Compost Replaces Rot", "Compost replaces Rot in most recipes. Keep in mind the Composting Bin is buffed.\nBooster Shots take Red Caps instead.", true),
     BinaryConfig("cookiecutterhat", "Cookie Cutter Hat",
         "Cookie Cutter Caps now reflects some damage back at the attacker.", true),
-
     {
         name = "electricalmishap",
         label = "Electrical Weapon Retune",
@@ -630,10 +617,13 @@ configuration_options = {
             { description = "Off", data = 0 } },
         default = 1
     },
-    BinaryConfig("hambatnerf", "Ham Bat Nerf", "Spoils faster and minimum damage is lower.", true),
-
+    BinaryConfig("hambatnerf", "Ham Bat", "Spoils faster and minimum damage is lower.", true),
+	BinaryConfig("disable_megaflare", "Hostile Flare", "Instead of spawning Deerclops, it makes seasonal bosses spawn earlier. Instead of a chance, it always spawn MacTusk and Pirate Raids.", true),
     BinaryConfig("townportal_rework", "Lazy Deserter Rework",
         "Makes the Lazy Deserter useful in singleplayer, by automatically harvesting nearby plants and objects.", true),
+    BinaryConfig("cooldown_orangestaff", "Lazy Explorer",
+        "Lazy Explorer loses durability similarly to a Whirly Fan. Telepoof doesn't waste durability and has cooldown, like Wanda's watches.",
+    false),		
     BinaryConfig("lifeamulet", "Life Giving Amulet Rework",
         "The Amulet won't revive ghosts, but it now interrupts death upon taking a fatal hit while wearing it.\nIts hunger > health conversion ticks much faster.",
         true),
@@ -673,6 +663,9 @@ configuration_options = {
     },
     BinaryConfig("insul_thermalstone", "Thermal Stone Rework",
         "Thermal Stones now have less insulation, but inherit some insulation from clothing.", true),
+    BinaryConfig("cane_durability", "Walking Cane",
+        "Walking Cane loses durability similarly to a Whirly Fan.",
+    false),		
     BinaryConfig("watering_thermal", "Watering Can Temperature",
         "Watering Cans don't reduce temperature, removing its exploit with Thermal Stones.", true),
 
@@ -682,10 +675,7 @@ configuration_options = {
     -----------------------------
     Header("Food"),
     -----------------------------
-    Header("Crockpot Recipes"),
-    BinaryConfig("crockpotmonstmeat", "Harder Monster Meat",
-        "Enables the new Monster Lagsana recipe; you can only make non-monster recipes if the meat value is greater than monster value.",
-        true),
+    BinaryConfig("crockpotmonstmeat", "Monster Meat", "Enables the new Monster Lasagna recipe; you can only make non-monster recipes if the meat value is greater than monster value.", true),
     BinaryConfig("newrecipes", "New Recipes",
         "UM adds a few new Crockpot recipes,\nTurn this off if you're using mods that can cause overlap, such as HoF.",
         true),
@@ -694,15 +684,12 @@ configuration_options = {
     BinaryConfig("generalcrockblocker", "Trash Filler Blocker",
         "Heavy use of certain low quality Crockpot ingredients, such as Twigs, Ice, Buttefly Wings, and other inedibles will result in Wet Goop.",
         true),
-    SkipSpace(),
-
-    Header("Crockpot Food Tweaks"),
     BinaryConfig("farmfoodredux", "Farmplot Food Redux",
         "Reallocates most dishes that involve Crock Pot foods. Typically a buff, but may exchange some stats.", true),
     BinaryConfig("sr_foodrebalance", "Fish Foods Rebalance", "Several fish based foods have their stats tweaked.", true),
     BinaryConfig("goodies_nerf", "Goodies Food Type Changes", "The food type of more avaliable Goodies were changed into either Veggie or Generic.", true),
     BinaryConfig("icecream_buff", "Ice Cream Buff", "Ice Cream now restores 100 sanity.", true),
-    BinaryConfig("meatball_", "Meatball Nerf", "Meatballs restore 50 hunger instead of 62.5.", false),
+    --BinaryConfig("meatball_", "Meatball Nerf", "Meatballs restore 50 hunger instead of 62.5.", false),
     --BinaryConfig("bonestew_nerf", "Meaty Stew Rework", "Makes meaty stew require 3.5 meat value to be cooked.", true),
     {
         name = "bonestew_nerf",
@@ -715,18 +702,15 @@ configuration_options = {
         },
         default = "bone_appetit"
     },
-    {
-        name = "perogi",
-        label = "Pierogi Recipe Nerf",
-        hover = "Pierogis require more veggies to cook.",
-        options = {
-            { description = "1.5 Veggie Value", data = 1.5 }, { description = "2 Veggie Value", data = 2 },
-            { description = "1 Veggie Value",   data = 1 }, { description = "Vanilla Value", data = 0.5 } },
-        default = 1.5
-    },
-    SkipSpace(),
-
-    Header("General Food Tweaks"),
+    --{
+        --name = "perogi",
+        --label = "Pierogi Recipe Nerf",
+        --hover = "Pierogis require more veggies to cook.",
+        --options = {
+            --{ description = "1.5 Veggie Value", data = 1.5 }, { description = "2 Veggie Value", data = 2 },
+            --{ description = "1 Veggie Value",   data = 1 }, { description = "Vanilla Value", data = 0.5 } },
+        --default = 1.5
+    --},
     --{
         --name = "more perishing",
         --label = "Increased Food Spoilage",
@@ -756,7 +740,7 @@ configuration_options = {
     BinaryConfig("horriblefood", "More Horrible Foods",
         "More items are considered as the horrible food type.", true),
     BinaryConfig("mushroom_changes", "Mushroom Changes",
-        "Mushroom Planter accepts more resources to replenish. Mushrooms now give spores, instead of caps. Mushtrees will give spores when off-season.", true),
+        "Mushroom Planter accepts more resources to replenish. Digging mushrooms now give spores, instead of caps. Mushtrees will give spores instead of caps when off-season.", true),
     BinaryConfig("rawcropsnerf", "Raw Crops Nerf",
         "Farm crops are nerfed in their base value when raw/cooked to incentivize using Crockpot recipes.", true),
 
@@ -768,15 +752,13 @@ configuration_options = {
     Header("Monsters"),
     -----------------------------
     Header("New Hounds"),
+    BinaryConfig("firehound", "Fire Hound", "Red Hounds breath fire and ignite players on attack. Drop chance of red gem increased by 10%.", true),
+    BinaryConfig("icehound", "Ice Hound", "Blue Hounds breath ice and freeze players on attack. Drop chance of blue gem increased by 10%.", true),	
     BinaryConfig("glacialhounds", "Glacial Hounds", "Glacial Hounds are part of Hound waves.", true),
     BinaryConfig("lightninghounds", "Lightning Hounds", "Lightning Hounds are part of Hound waves.", true),
     BinaryConfig("magmahounds", "Magma Hounds", "Magma Hounds are part of Hound waves.", true),
     BinaryConfig("sporehounds", "Spore Hounds", "Spore Hounds are part of Hound waves.", true),
-    SkipSpace(),
 
-    Header("Harder Hounds"),
-    BinaryConfig("firebitehounds", "Fiery Bite", "Red Hounds set players on fire when they attack.", true),
-    BinaryConfig("frostbitehounds", "Frozen Bite", "Blue Hounds freeze players when they attack.", true),
     SkipSpace(),
 
     Header("Wave Changes"),
@@ -891,9 +873,9 @@ configuration_options = {
     BinaryConfig("cowardfrogs", "Frog Anti-cheese", "Frogs flee from bosses to prevent cheesing.", true),
     BinaryConfig("harder_beefalo", "Harder Beefalo", "Beefalo ocasionally charge after a telegraph.", true),
     BinaryConfig("harder_koalefants", "Harder Koalefants", "Koalefants have brand new attacks and doubled health.", true),
-    BinaryConfig("harder_walrus", "Harder MacTusk", "MacTusk has a counter attack and can throw traps.", true),
     BinaryConfig("harder_pigs", "Harder Pigs", "Pigs have a new counter and charge attack.", true),
     BinaryConfig("hungryfrogs", "Hungry Frogs", "Frogs eat anything left on the floor.", true),
+    BinaryConfig("walrus", "MacTusk", "MacTusk won't return home when in combat, has a counter attack and can throw traps. His drops chances are doubled.", true),	
     BinaryConfig("mermtweaks", "Merm Tweaks", "Regular Merms can now leave their houses during winter, Merm Guards respawn slower.", true),
     BinaryConfig("sharpshooter_monkeys_", "Sharpshooter Powder Monkeys", "Powder monkeys actually aim their cannons and fire at anything they may consider 'fun' shooting at.", false),
     BinaryConfig("fiendforcedmetodothis", "Slurtle Tweaks", "Slurtles attack faster, have less health and drop Shellmets more often.", true),
@@ -945,9 +927,7 @@ configuration_options = {
     SkipSpace(),
 
     Header("Giants & Bosses"),
-    BinaryConfig("harder_deerclops", "Deerclops Mutations",
-        "Three different, harder variants of Deerclops can spawn, replacing the vanilla version.", true),
-    BinaryConfig("disable_megaflare", "Disable Hostile Flare", "Hostile Flares no longer spawn Deerclops.", true),
+	BinaryConfig("harder_deerclops", "Deerclops", "One of three different variants of Deerclops will spawn, replacing the vanilla version.", true),
     BinaryConfig("harder_bearger", "Harder Bearger",
         "Enabling this option grants Bearger more attacks, and will make Bearger more actively seek you out.", true),
     BinaryConfig("harder_moose", "Harder Goose",

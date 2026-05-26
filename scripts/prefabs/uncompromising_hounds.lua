@@ -192,10 +192,12 @@ local function Charge(inst)
     inst.task = inst:DoPeriodicTask(0.15, function(inst) Charging(inst) end)
 end
 
-
 local function ShouldWakeUp(inst)
-    return DefaultWakeTest(inst) or
-        (inst.components.follower and inst.components.follower.leader and not inst.components.follower:IsNearLeader(WAKE_TO_FOLLOW_DISTANCE))
+    if DefaultWakeTest(inst) then
+        return true
+    end
+    local leader = inst.components.follower and inst.components.follower:GetLeader()
+    return leader and not inst.components.follower:IsNearLeader(WAKE_TO_FOLLOW_DISTANCE)
 end
 
 local function ShouldSleep(inst)
@@ -212,12 +214,22 @@ local function OnNewTarget(inst, data)
     end
 end
 
-local RETARGET_CANT_TAGS = { "wall", "houndmound", "hound", "houndfriend", "groundspike" }
+local RETARGET_CANT_TAGS = {"wall", "houndmound", "hound", "houndfriend"}
+local function IsValidTarget(guy, inst)
+    -- Horror hounds won't attack our reviver! (Crystal-Crested Buzzards)
+    if inst:HasTag("lunar_aligned") and guy:HasTag("mutantdominant") then
+        return false
+    end
+    --
+    local leader = inst.components.follower and inst.components.follower:GetLeader()
+    return guy ~= leader and inst.components.combat:CanTarget(guy)
+end
+
 local function retargetfn(inst)
-    if inst.sg ~= nil and inst.sg:HasStateTag("statue") then
+    if inst.sg:HasStateTag("statue") then
         return
     end
-    local leader = inst.components.follower.leader
+    local leader = inst.components.follower and inst.components.follower:GetLeader()
     if leader ~= nil and leader.sg ~= nil and leader.sg:HasStateTag("statue") then
         return
     end
@@ -226,23 +238,15 @@ local function retargetfn(inst)
     return (leader == nil or
             (ispet and not playerleader) or
             inst:IsNear(leader, TUNING.HOUND_FOLLOWER_AGGRO_DIST))
-        and FindEntity(
-            inst,
-            (ispet or leader ~= nil) and TUNING.HOUND_FOLLOWER_TARGET_DIST or TUNING.HOUND_TARGET_DIST,
-            function(guy)
-                return guy ~= leader and inst.components.combat:CanTarget(guy)
-            end,
-            nil,
-            RETARGET_CANT_TAGS
-        )
+        and FindEntity(inst, (ispet or leader ~= nil) and TUNING.HOUND_FOLLOWER_TARGET_DIST or TUNING.HOUND_TARGET_DIST, IsValidTarget, nil, RETARGET_CANT_TAGS)
         or nil
 end
 
 local function KeepTarget(inst, target)
-    if inst.sg ~= nil and inst.sg:HasStateTag("statue") then
+    if inst.sg:HasStateTag("statue") then
         return false
     end
-    local leader = inst.components.follower.leader
+    local leader = inst.components.follower and inst.components.follower:GetLeader()
     local playerleader = leader ~= nil and leader:HasTag("player")
     local ispet = inst:HasTag("pet_hound")
     return (leader == nil or
@@ -285,7 +289,7 @@ local function OnAttacked(inst, data)
         function(dude)
             return not (dude.components.health ~= nil and dude.components.health:IsDead())
                 and (dude:HasTag("hound") or dude:HasTag("houndfriend"))
-                and data.attacker ~= (dude.components.follower ~= nil and dude.components.follower.leader or nil)
+                and data.attacker ~= (dude.components.follower ~= nil and dude.components.follower:GetLeader() or nil)
         end, 5)
 end
 
@@ -294,14 +298,14 @@ local function OnAttackOther(inst, data)
         function(dude)
             return not (dude.components.health ~= nil and dude.components.health:IsDead())
                 and (dude:HasTag("hound") or dude:HasTag("houndfriend"))
-                and data.target ~= (dude.components.follower ~= nil and dude.components.follower.leader or nil)
+                and data.target ~= (dude.components.follower ~= nil and dude.components.follower:GetLeader() or nil)
         end, 5)
 end
 
 local function GetReturnPos(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
     local rad = 2
-    local angle = math.random() * 2 * PI
+    local angle = math.random() * TWOPI
     return x + rad * math.cos(angle), y, z - rad * math.sin(angle)
 end
 
@@ -335,6 +339,22 @@ local function OnSpawnedFromHaunt(inst)
     end
 end
 
+local function OnEnterWater(inst)
+    inst.landspeed = inst.components.locomotor.runspeed
+    inst.components.locomotor.runspeed = TUNING.HOUND_SWIM_SPEED
+    inst.hop_distance = inst.components.locomotor.hop_distance
+    inst.components.locomotor.hop_distance = 4
+end
+
+local function OnExitWater(inst)
+    if inst.landspeed then
+        inst.components.locomotor.runspeed = inst.landspeed
+    end
+    if inst.hop_distance then
+        inst.components.locomotor.hop_distance = inst.hop_distance
+    end
+end
+
 local function OnSave(inst, data)
     data.ispet = inst:HasTag("pet_hound") or nil
 end
@@ -349,7 +369,7 @@ local function OnLoad(inst, data)
 end
 
 local function GetStatus(inst)
-    return (inst.sg ~= nil and inst.sg:HasStateTag("statue") and "STATUE")
+    return (inst.sg:HasStateTag("statue") and "STATUE")
         or nil
 end
 
@@ -421,24 +441,51 @@ local function RestoreLeader(inst)
     end
 end
 
-local function OnStopFollowing(inst)
+local function OnStopFollowing(inst, data)
     inst.leader_offset = nil
+    local leader = inst.components.entitytracker:GetEntity("leader")
     if not inst.components.health:IsDead() then
-        local leader = inst.components.entitytracker:GetEntity("leader")
         if leader ~= nil and not leader.components.health:IsDead() then
             inst.leadertask = inst:DoTaskInTime(.2, RestoreLeader)
+        end
+    else
+        --temp bridge until replaced by an actual hound_corpse.
+        --otherwise, there's a tiny window during the death anim for too many
+        --hounds to be summoned.
+        if leader == nil and data ~= nil and data.leader ~= nil and data.leader:IsValid() then
+            leader = data.leader
+        end
+        if leader.RememberFollowerCorpse ~= nil and inst:IsValid() then
+            leader:RememberFollowerCorpse(inst)
         end
     end
 end
 
-local function CanMutateFromCorpse(inst)
-    if (inst.components.amphibiouscreature == nil or not inst.components.amphibiouscreature.in_water)
-        and math.random() <= TUNING.MUTATEDHOUND_SPAWN_CHANCE
-        and TheWorld.Map:IsVisualGroundAtPoint(inst.Transform:GetWorldPosition()) then
-        local node = TheWorld.Map:FindNodeAtPoint(inst.Transform:GetWorldPosition())
-        return node ~= nil and node.tags ~= nil and table.contains(node.tags, "lunacyarea")
+local function OnChangedLeader(inst, new, old)
+    --ignore if new is nil, (always nil upon death)
+    if new ~= nil then
+        if new.prefab == "mutatedwarg" then
+            inst.forcemutate = true
+            inst.wargleader = new
+            inst.components.follower:KeepLeaderOnAttacked()
+        else
+            inst.forcemutate = nil
+            inst.wargleader = nil
+            inst.components.follower:LoseLeaderOnAttacked()
+        end
     end
-    return false
+end
+
+local function SaveCorpseData(inst, corpse)
+    if inst.wargleader ~= nil and inst.wargleader:IsValid() and not inst.wargleader.components.health:IsDead() then
+        corpse.components.entitytracker:TrackEntity("warg", inst.wargleader)
+        inst.wargleader:RememberFollowerCorpse(corpse)
+    end
+
+    local home = inst.components.homeseeker and inst.components.homeseeker:GetHome()
+    if home ~= nil then
+        corpse.components.entitytracker:TrackEntity("hound_home", home)
+    end
 end
 
 local function fncommon(bank, build, morphlist, custombrain, stategraph, tags, data)
@@ -468,9 +515,12 @@ local function fncommon(bank, build, morphlist, custombrain, stategraph, tags, d
         for _, tag in pairs(tags) do
             inst:AddTag(tag)
             if tag == "clay" then
-                inst:RemoveTag("canbestartled")
+                inst:AddTag("electricdamageimmune")
+
                 --inst._eyeflames = net_bool(inst.GUID, "magmahound._eyeflames", "eyeflamesdirty")   Eye flame no work :(
                 --inst:ListenForEvent("eyeflamesdirty", OnEyeFlamesDirty)
+            elseif tag == "lunar_aligned" then
+                inst:AddTag("soulless") -- no wortox souls
             end
         end
     end
@@ -478,6 +528,11 @@ local function fncommon(bank, build, morphlist, custombrain, stategraph, tags, d
     inst.AnimState:SetBank(bank)
     inst.AnimState:SetBuild(build)
     inst.AnimState:PlayAnimation("idle")
+
+    if data.amphibious and build ~= "hound_ocean" then
+        inst.AnimState:OverrideSymbol("shadow_ripple", "hound_ocean", "shadow_ripple")
+        inst.AnimState:OverrideSymbol("water_ripple", "hound_ocean", "water_ripple")
+    end
 
     inst:AddComponent("spawnfader")
 
@@ -487,8 +542,6 @@ local function fncommon(bank, build, morphlist, custombrain, stategraph, tags, d
         return inst
     end
 
-    inst._CanMutateFromCorpse = data.canmutatefn
-
     inst.sounds = sounds
 
     inst:AddComponent("locomotor") -- locomotor must be constructed before the stategraph
@@ -496,6 +549,7 @@ local function fncommon(bank, build, morphlist, custombrain, stategraph, tags, d
 
     inst:SetStateGraph(stategraph or "SGhound")
     inst.sg.mem.nocorpse = true
+    inst.sg.mem.nolunarmutate = not data.canlunarmutate
 
     if data.amphibious then
         inst:AddComponent("embarker")
@@ -505,23 +559,9 @@ local function fncommon(bank, build, morphlist, custombrain, stategraph, tags, d
         inst.components.locomotor:SetAllowPlatformHopping(true)
 
         inst:AddComponent("amphibiouscreature")
-        inst.components.amphibiouscreature:SetBanks(bank, bank .. "_water")
-        inst.components.amphibiouscreature:SetEnterWaterFn(
-            function(inst)
-                inst.landspeed = inst.components.locomotor.runspeed
-                inst.components.locomotor.runspeed = TUNING.HOUND_SWIM_SPEED
-                inst.hop_distance = inst.components.locomotor.hop_distance
-                inst.components.locomotor.hop_distance = 4
-            end)
-        inst.components.amphibiouscreature:SetExitWaterFn(
-            function(inst)
-                if inst.landspeed then
-                    inst.components.locomotor.runspeed = inst.landspeed
-                end
-                if inst.hop_distance then
-                    inst.components.locomotor.hop_distance = inst.hop_distance
-                end
-            end)
+        inst.components.amphibiouscreature:SetBanks(bank, bank.."_water")
+        inst.components.amphibiouscreature:SetEnterWaterFn(OnEnterWater)
+        inst.components.amphibiouscreature:SetExitWaterFn(OnExitWater)
 
         inst.components.locomotor.pathcaps = { allowocean = true }
     end
@@ -529,6 +569,8 @@ local function fncommon(bank, build, morphlist, custombrain, stategraph, tags, d
     inst:SetBrain(custombrain or brain)
 
     inst:AddComponent("follower")
+    inst.components.follower.OnChangedLeader = OnChangedLeader
+
     inst:AddComponent("entitytracker")
 
     inst:AddComponent("health")
@@ -543,6 +585,7 @@ local function fncommon(bank, build, morphlist, custombrain, stategraph, tags, d
     inst.components.combat:SetRetargetFunction(3, retargetfn)
     inst.components.combat:SetKeepTargetFunction(KeepTarget)
     inst.components.combat:SetHurtSound(inst.sounds.hurt)
+    inst.components.combat.lastwasattackedtime = -math.huge --for brain
 
     inst:AddComponent("lootdropper")
     inst.components.lootdropper:SetChanceLootTable('hound')
@@ -560,7 +603,7 @@ local function fncommon(bank, build, morphlist, custombrain, stategraph, tags, d
         inst:AddComponent("eater")
         inst.components.eater:SetDiet({ FOODTYPE.MEAT }, { FOODTYPE.MEAT })
         inst.components.eater:SetCanEatHorrible()
-        inst.components.eater.strongstomach = true -- can eat monster meat!
+        inst.components.eater:SetStrongStomach(true) -- can eat monster meat!
 
         inst:AddComponent("sleeper")
         inst.components.sleeper:SetResistance(3)
@@ -580,6 +623,8 @@ local function fncommon(bank, build, morphlist, custombrain, stategraph, tags, d
 
     inst:WatchWorldState("stopday", OnStopDay)
     inst.OnEntitySleep = OnEntitySleep
+
+    inst.SaveCorpseData = SaveCorpseData
 
     inst.OnSave = OnSave
     inst.OnLoad = OnLoad
@@ -616,7 +661,7 @@ end
 
 local function IsAlly(inst, guy)
     -- Prevents lightning from forking from a Lightning Hound's target to other Hounds and friends.
-    return inst.replica.combat:GetTarget() ~= guy and guy.replica.combat:GetTarget() ~= inst and inst:HasTag("lightninghound") and guy:HasAnyTag("hound", "houndfriend")
+    return UMCommonFns.IsAlly(inst, guy, {"hound", "houndfriend", "houndmound"})
 end
 
 local function fnlightning()
@@ -794,6 +839,8 @@ local function fnglacial()
     if not TheWorld.ismastersim then
         return inst
     end
+
+    inst.UMIsAlly = IsAlly
 
     inst:ListenForEvent("ice_shield_death", RemoveIceShield)
 
@@ -995,20 +1042,25 @@ local function OnMagmaAttacked(inst, data)
     if inst.sg and inst.sg:HasStateTag("charging") and attacker and attacker.components.health and not attacker.components.health:IsDead() and data.stimuli ~= "soul"
         and (not weapon or ((not weapon.components.weapon or not weapon.components.weapon.projectile) and not weapon.components.projectile)) and not attacker:HasTag("catapult") then
         attacker.components.health:DoFireDamage(5, inst, true)
-        if attacker.components.burnable then attacker.components.burnable:Ignite(true, inst, inst) end
+        if not attacker.components.fueled and attacker.components.burnable and not attacker.components.burnable:IsBurning() and not attacker:HasTag("burnt") then
+            attacker.components.burnable:Ignite(true, inst, inst)
+        end
     end
 end
 
 local function fnmagma()
-    local inst = fncommon("clayhound", "magmahound", nil, nil, nil, { "magmahound", "clay", "electricdamageimmune" })
+    local inst = fncommon("clayhound", "magmahound", nil, nil, nil, { "magmahound", "clay" })
 
     if not TheWorld.ismastersim then
         return inst
     end
 
-    if inst.sg ~= nil then
+    inst.UMIsAlly = IsAlly
+
+    --[[if inst.sg ~= nil then
         inst.sg:GoToState("idle")
-    end
+    end]]
+
     --MakeMediumFreezableCharacter(inst, "hound_body") No freeze bc haha FIRE
     inst.Transform:SetScale(1.2, 1.2, 1.2)
     inst:AddComponent("timer")
@@ -1035,8 +1087,8 @@ local function fnmagma()
     inst.foogley = 0
 
     inst.lightningshot = true
-	inst.components.health.fire_damage_scale = 0 --AXE Magma hounds should take zero damage from the fire damage stimuli
-	
+    inst.components.health.fire_damage_scale = 0 --AXE Magma hounds should take zero damage from the fire damage stimuli
+    
     return inst
 end
 

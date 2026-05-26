@@ -8,7 +8,7 @@ local assets =
 local prefabs =
 {
     "explode_small",
-    "snaildrake_magma_sludge",
+    "um_snaildrake_magma_sludge",
 }
 
 TUNING.SNAPALM_EXPLODE_DAMAGE = 50
@@ -19,7 +19,7 @@ local function OnExplodeFn(inst)
     inst.SoundEmitter:KillSound("hiss")
     local x, y, z = inst.Transform:GetWorldPosition()
     SpawnPrefab("explode_small").Transform:SetPosition(x, y, z)
-    SpawnPrefab("snaildrake_magma_sludge").Transform:SetPosition(x, y, z)
+    SpawnPrefab("um_snaildrake_magma_sludge").Transform:SetPosition(x, y, z)
 end
 
 local function fn()

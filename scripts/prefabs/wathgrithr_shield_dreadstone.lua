@@ -226,9 +226,9 @@ local function CalcDapperness(inst, owner)
         if armor~=nil and armor.regentask ~= nil then is_other_regenerating = true end
     end
 
-    -- If one or both armor pieces are regenerating the dapperness will be -20. Set this one to 0 to keep it as -20.
+    -- If one or both armor pieces are regenerating the dapperness will be -20. Set this one to 0 to keep it as -20
 	if is_other_regenerating then return 0
-    -- Current dapperness is 0. Set to -20 if this is regenerating or keep it at 0 if not.    
+    -- Current dapperness is 0. Set to -20 if this is regenerating or keep it at 0 if not   
     else return inst.regentask ~= nil and TUNING.CRAZINESS_MED or 0 end
 end
 

@@ -48,14 +48,6 @@ local function SetUpProjectiles(inst)
     end
 end
 
-local function RestartTimer(inst, name, time)
-    if inst.components.timer:TimerExists(name) then
-        inst.components.timer:SetTimeLeft(name, time)
-    else
-        inst.components.timer:StartTimer(name, time)
-    end
-end
-
 env.AddStategraphPostInit("minotaur", function(inst)
     local events =
     {
@@ -137,7 +129,7 @@ env.AddStategraphPostInit("minotaur", function(inst)
         else
             inst.components.groundpounder.numRings = 2
             inst.combo = 0
-            RestartTimer(inst, "forceleapattack", 30 + math.random(0, 15)) -- Secondary means to force the leap if the player is never in position for it to happen naturally.
+            UMCommonFns.RestartTimer(inst, {name = "forceleapattack", time = 30 + math.random(0, 15)}) -- Secondary means to force the leap if the player is never in position for it to happen naturally.
             if inst.jumpland(inst) then
                 inst.sg:GoToState("leap_attack_pst")
                 inst.SoundEmitter:PlaySound("ancientguardian_rework/minotaur2/groundpound")
@@ -158,7 +150,7 @@ env.AddStategraphPostInit("minotaur", function(inst)
             tags = {"attack", "busy", "leapattack", "newbuild"},
 
             onenter = function(inst)
-                RestartTimer(inst, "leapattack_cooldown", 15)
+                UMCommonFns.RestartTimer(inst, {name = "leapattack_cooldown", time = 15})
                 inst.components.locomotor:Stop()
                 inst.AnimState:SetBank("um_minotaur_actions")
                 inst.AnimState:SetBuild("um_minotaur_actions")
@@ -208,7 +200,7 @@ env.AddStategraphPostInit("minotaur", function(inst)
 
             onenter = function(inst)
                 inst.forcebelch = false
-                RestartTimer(inst, "forcebelch", math.random(20, 40))
+                UMCommonFns.RestartTimer(inst, {name = "forcebelch", time = math.random(20, 40)})
                 inst.components.locomotor:Stop()
                 inst.AnimState:SetBank("um_minotaur_actions")
                 inst.AnimState:SetBuild("um_minotaur_actions")

@@ -123,11 +123,7 @@ end
 local edible_creatures = {"spider","aphid","hound","spider_trapdoor","spider_trapdoor_hooded"}
 
 local function ThisIsEdible(other)
-	for i,v in ipairs(edible_creatures) do
-		if v == other.prefab then
-			return true
-		end
-	end
+    return table.contains(edible_creatures, other.prefab)
 end
 
 local function OnHitOther(inst, data)
@@ -266,15 +262,16 @@ local function ShakeTree(inst, tree)
             end
 
             -- Watch your head
-            for i = 1, 4 do
-                tree.SpawnDebris(tree, player, impact_loot, player, true)
+            for i = 1, 3 do
+                tree.SpawnDebris(tree, nil, minion_loot, player)
+                --tree.SpawnDebris(tree, player, impact_loot, player, true)
             end
 
             -- Enemies
             --tree.SpawnDebris(tree, target, minion_loot, target)
             --tree.SpawnDebris(tree, target, minion_loot, target)
 
-            tree.SpawnDebris(tree, nil, minion_loot, player)
+            
         end
     end
 end
@@ -302,14 +299,6 @@ local function FindTreeToShake(inst)
         inst.sg:GoToState("leaptotree_shake_pre")
     else
         inst.searching_for_tree = inst:DoTaskInTime(2, FindTreeToShake)
-    end
-end
-
-local function RestartTimer(inst, name, time)
-    if inst.components.timer:TimerExists(name) then
-        inst.components.timer:SetTimeLeft(name, time)
-    else
-        inst.components.timer:StartTimer(name, time)
     end
 end
 
@@ -363,7 +352,7 @@ local function fn()
     inst:AddComponent("healthtrigger")
 
     local function PrepareTreeToShake(inst) -- Give a small delay
-		inst.should_taunt_health_thresh = true
+        inst.should_taunt_health_thresh = true
         if not inst.searching_for_tree then
             if inst.lasttrigger then
                 if inst.components.health:GetPercent() < inst.lasttrigger then
@@ -439,8 +428,8 @@ local function fn()
     inst.combo = 1
     inst:AddComponent("timer")
     inst:ListenForEvent("timerdone", TryPowerMove)
-    RestartTimer(inst, "pounce", 10 + math.random(-3, 1))
-    RestartTimer(inst, "mortar", 20 + math.random(-1, 5))
+    UMCommonFns.RestartTimer(inst, {name = "pounce", time = 10 + math.random(-3, 1)})
+    UMCommonFns.RestartTimer(inst, {name = "mortar", time = 20 + math.random(-1, 5)})
     inst:DoPeriodicTask(3, EpicsCheck)
     inst.ShouldDodge = ShouldDodge
     inst.combosucceed = true

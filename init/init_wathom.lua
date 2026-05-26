@@ -212,56 +212,54 @@ local SLEEPREPEL_CANT_TAGS = {"player", "companion", "abigail", "shadowminion", 
     "hiding", "notarget", "noattack", "flight", "wall"}
 local NO_SHOVE_TAGS = {"stageusher", "toadstool"}
 local function Check_Bowling(inst, target)
-    if inst ~= nil then
-        local x, y, z = inst.Transform:GetWorldPosition()
-        local ents = TheSim:FindEntities(x, y, z, 2, SLEEPREPEL_MUST_TAGS, SLEEPREPEL_CANT_TAGS)
-        for i, v in ipairs(ents) do
-            if inst.components.combat:CanTarget(v) and not inst.components.combat:IsAlly(v) then --(not target) or (target and v ~= target)
-                v:AddTag("wixieshoved")
-                SpawnPrefab("round_puff_fx_sm").Transform:SetPosition(v.Transform:GetWorldPosition())
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local ents = TheSim:FindEntities(x, y, z, 2, SLEEPREPEL_MUST_TAGS, SLEEPREPEL_CANT_TAGS)
+    for i, v in ipairs(ents) do
+        if inst.components.combat:CanTarget(v) and not inst.components.combat:IsAlly(v) then --(not target) or (target and v ~= target)
+            v:AddTag("wixieshoved")
+            SpawnPrefab("round_puff_fx_sm").Transform:SetPosition(v.Transform:GetWorldPosition())
 
-                if not (v.components.health and v.components.health:IsDead()) then
-                    local damage = HasSkill(inst, "rampage_2") and inst.components.adrenaline and (inst:HasTag("amped") and 25 or 12.5 + 2 * 12.5 * inst.components.adrenaline:GetPercent()) or 0  
-                    v.components.combat:GetAttacked(inst, damage)
-                end
+            if not (v.components.health and v.components.health:IsDead()) then
+                local damage = HasSkill(inst, "rampage_2") and inst.components.adrenaline and (inst:HasTag("amped") and 25 or 12.5 + 2 * 12.5 * inst.components.adrenaline:GetPercent()) or 0  
+                v.components.combat:GetAttacked(inst, damage)
+            end
 
-                if v.components.locomotor ~= nil and not v:HasAnyTag(NO_SHOVE_TAGS) then
-                    for i = 1, 50 do
-                        v:DoTaskInTime((i - 1) / 50, function(v)
-                            if v ~= nil and inst ~= nil then
-                                local x, y, z = inst.Transform:GetWorldPosition()
-                                local tx, ty, tz = v.Transform:GetWorldPosition()
+            if v.components.locomotor ~= nil and not v:HasAnyTag(NO_SHOVE_TAGS) then
+                for i = 1, 50 do
+                    v:DoTaskInTime((i - 1) / 50, function(v)
+                        if v ~= nil and inst ~= nil then
+                            local x, y, z = inst.Transform:GetWorldPosition()
+                            local tx, ty, tz = v.Transform:GetWorldPosition()
 
-                                local rad = math.rad(inst:GetAngleToPoint(tx, ty, tz))
-                                local velx = math.cos(rad)  --* 4.5
-                                local velz = -math.sin(rad) --* 4.5
+                            local rad = math.rad(inst:GetAngleToPoint(tx, ty, tz))
+                            local velx = math.cos(rad)  --* 4.5
+                            local velz = -math.sin(rad) --* 4.5
 
-                                local giantreduction = v:HasTag("epic") and 1.5 or v:HasTag("smallcreature") and .8 or 1
-                                local cursemultiplier = v:HasDebuff("wixiecurse_debuff") and 1.75 or 1.25
-                                local shovevalue = GetAdrenalShove(inst)
+                            local giantreduction = v:HasTag("epic") and 1.5 or v:HasTag("smallcreature") and .8 or 1
+                            local cursemultiplier = v:HasDebuff("wixiecurse_debuff") and 1.75 or 1.25
+                            local shovevalue = GetAdrenalShove(inst)
 
-                                local dx, dy, dz =
-                                    tx + (((shovevalue / (i + 3)) * velx) / giantreduction) * cursemultiplier, ty,
-                                    tz + (((shovevalue / (i + 3)) * velz) / giantreduction) * cursemultiplier
-                                local ground = GLOBAL.TheWorld.Map:IsPassableAtPoint(dx, dy, dz)
-                                local boat = GLOBAL.TheWorld.Map:GetPlatformAtPoint(dx, dz)
-                                local ocean_collision = GLOBAL.TheWorld.Map:IsOceanAtPoint(dx, dy, dz)
+                            local dx, dy, dz =
+                                tx + (((shovevalue / (i + 3)) * velx) / giantreduction) * cursemultiplier, ty,
+                                tz + (((shovevalue / (i + 3)) * velz) / giantreduction) * cursemultiplier
+                            local ground = GLOBAL.TheWorld.Map:IsPassableAtPoint(dx, dy, dz)
+                            local boat = GLOBAL.TheWorld.Map:GetPlatformAtPoint(dx, dz)
+                            local ocean_collision = GLOBAL.TheWorld.Map:IsOceanAtPoint(dx, dy, dz)
 
-                                if not (v.sg and v.sg:HasAnyStateTag("swimming", "invisible")) then
-                                    if v ~= nil and dx ~= nil and (ground or boat or ocean_collision and v.components.locomotor:CanPathfindOnWater() or v.components.tiletracker ~= nil and not v:HasTag("whale")) then
-                                        --[[if ocean_collision and v.components.amphibiouscreature and not v.components.amphibiouscreature.in_water then
-                                                v.components.amphibiouscreature:OnEnterOcean()
-                                            end]]
-                                        v.Transform:SetPosition(dx, dy, dz)
-                                    end
-                                end
-
-                                if i >= 50 then
-                                    v:RemoveTag("wixieshoved")
+                            if not (v.sg and v.sg:HasAnyStateTag("swimming", "invisible")) then
+                                if v ~= nil and dx ~= nil and (ground or boat or ocean_collision and v.components.locomotor:CanPathfindOnWater() or v.components.tiletracker ~= nil and not v:HasTag("whale")) then
+                                    --[[if ocean_collision and v.components.amphibiouscreature and not v.components.amphibiouscreature.in_water then
+                                            v.components.amphibiouscreature:OnEnterOcean()
+                                        end]]
+                                    v.Transform:SetPosition(dx, dy, dz)
                                 end
                             end
-                        end)
-                    end
+
+                            if i >= 50 then
+                                v:RemoveTag("wixieshoved")
+                            end
+                        end
+                    end)
                 end
             end
         end

@@ -1,6 +1,8 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
+local um_flood_speed_immune_TAGS = { "turfrunner_279", "turfrunner_280", "turfrunner_281", "swampbro", "playermerm", "woosegoose", "merm" }
+
 local function RobustFloodCheck(inst) -- For players, check to see if they're on the edge of a tile, you can walk on the "Void" to avoid the effects of the tile you're standing on, similar to spider webbings
     --IsVisualGroundAtPoint(x,y,z)... not sure how this can help?
     local x, y, z = inst.Transform:GetWorldPosition()
@@ -15,8 +17,8 @@ local function RobustFloodCheck(inst) -- For players, check to see if they're on
     end
 end
 
-local ripple_blacklist = { "webbedcreature" }
-for i, v in ipairs(ripple_blacklist) do
+
+for i, v in ipairs(TUNING.DSTU.RIPPLE_BLACKLIST_PREFABS) do
     env.AddPrefabPostInit(v, function(inst)
         inst.um_ripple_blacklist = true
     end)
@@ -25,6 +27,12 @@ end
 
 -- AXE Add ripples to plants, structures, and items
 env.AddPrefabPostInitAny(function(inst)
+    for i,v in ipairs(TUNING.DSTU.RIPPLE_BLACKLIST_TAGS) do
+        if inst:HasTag(v) then
+            inst.um_ripple_blacklist = true
+        end
+    end
+
     if (inst:HasAnyTag("structure", "boulder", "plant") or inst.components.inventoryitem) and not inst.um_ripple_blacklist then
         if not inst.components.umripples then
             inst:AddComponent("umripples")
@@ -45,6 +53,10 @@ env.AddPrefabPostInitAny(function(inst)
             umripples.bob_percent = floater.bob_percent
             umripples.splash = floater.splash
         end
+        if inst.components.inventoryitem and not inst.components.floatable then
+            local umripples = inst.components.umripples
+            umripples.vert_offset = 0.1
+        end
     end
 end)
 
@@ -52,6 +64,10 @@ end)
 env.AddClassPostConstruct("components/inventoryitem_replica", function(self) --AXE Add the ripples to the client side of items
     if not self.inst.components.umripples then
         self.inst:AddComponent("umripples")
+        if not self.inst.components.floatable then
+            local umripples = self.inst.components.umripples
+            umripples.vert_offset = 0.1
+        end
     end
 end)
 
@@ -68,6 +84,9 @@ local function AddRipples(prefab, xscale, yscale, zscale, vert_offset) --AXE The
     end)
 end
 
+
+-- AXE TODO convert the many function calls to a table and a loop... would that even be cleaner though? It's already about as complex as a table...? What do you think?
+
 -- Tuned Ripples on Prefabs
 AddRipples("molebathill", 2)
 AddRipples("moonspider_spike", 0.5)
@@ -82,17 +101,21 @@ AddRipples("skeleton", 2.25, 2, 2.25, 0.2)
 AddRipples("hound", 2)
 AddRipples("icehound", 2)
 AddRipples("firehound", 2)
-AddRipples("um_tentacle_moon", 1.5, 1.5, 1.5)
+AddRipples("um_tentacle_moon", 1.5, 1.5, 1.5,0.2)
 AddRipples("um_tentacle_moon_mine", 0.5)
 AddRipples("boulder_crab", 3)
 AddRipples("molebat", 1.1, 1.1, 1.1)
 AddRipples("frog", 1.1, 1.1, 1.1)
+AddRipples("lunarfrog", 1.1, 1.1, 1.1)
 AddRipples("worm", 1.4, 1.4, 1.4)
 AddRipples("viperworm", 1.4, 1.4, 1.4)
 AddRipples("shockworm", 1.4, 1.4, 1.4)
-AddRipples("pigman", 1.2, 1.2, 1.2, 0.2)
-AddRipples("bunnyman", 1.2, 1.2, 1.2, 0.2)
-AddRipples("merm", 1.2, 1.2, 1.2, 0.2)
+AddRipples("carrat", 1.1, 1.1, 1.1, 0.2)
+AddRipples("mushgnome", 0.8, 0.8, 0.8, 0.2)
+local pigmanlike_minions = { "pigman", "bunnyman", "merm", "mermguard", "merm_lunar", "mermguard_lunar" }
+for _, v in ipairs(pigmanlike_minions) do
+    AddRipples(v, 1.2, 1.2, 1.2, 0.2)
+end
 --
 
 
@@ -163,7 +186,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 end)
 
 -- AXE Add mobs that don't fly but still shouldn't be penalized
-local um_flood_speed_immune = { "frog", "molebat" }
+local um_flood_speed_immune = { "frog", "molebat","lunarfrog" }
 
 for i, v in ipairs(um_flood_speed_immune) do
     env.AddPrefabPostInit(v, function(inst)
@@ -315,7 +338,6 @@ env.AddStategraphPostInit("worm", function(inst)
     end
 end)
 
-
 -- Flying Creatures
 local _RaiseFlyingCreature = RaiseFlyingCreature
 function RaiseFlyingCreature(inst)
@@ -340,13 +362,14 @@ end
 -- orange staff
 env.AddComponentPostInit("blinkstaff", function(self)
     local _Blink = self.Blink
-    function self:Blink(pt, caster)
-        _Blink(self, pt, caster)
+    function self:Blink(pt, caster, ...)
+        local ret = _Blink(self, pt, caster, ...)
         caster.blinktask_ripples = caster:DoTaskInTime(.26, function(caster)
             if caster.components.locomotor then
                 caster.components.locomotor:OnUpdate(0) --AXE call an update... get flooded tiles to work after teleporting
             end
         end)
+        return ret
     end
 end)
 
@@ -361,7 +384,6 @@ env.AddStategraphPostInit("wilson", function(inst)
         _onexit(inst, ...)
     end
 end)
-
 
 ---------------------------
 -- [ Flooded Tile Handling] -- AXE
@@ -383,6 +405,7 @@ local function CheckClothing(inst, table_check)
 end
 
 local function AdjustSpeed(inst)
+    if inst:HasAnyTag(um_flood_speed_immune_TAGS) then return end
     local mod = 0.5 -- Nothing
     if CheckClothing(inst, flood_equipment_high) then
         mod = 1.2 -- Shark Vest
@@ -392,9 +415,6 @@ local function AdjustSpeed(inst)
         mod = 0.75 -- Reed Suit
     elseif CheckClothing(inst, flood_equipment_verylow) then
         mod = 0.6 -- Oddballs, like summer vest
-    end
-    if inst.prefab == "wurt" and mod < 1 then
-        mod = 1
     end
 
     inst.components.locomotor:SetExternalSpeedMultiplier(inst, "um_floodedwater", mod)
@@ -439,7 +459,7 @@ local function RemoveFloodCheck(inst)
     if inst.components.umripples then --AXE check if should update ripples
         inst.components.umripples:OnNoLongerLandedServer()
     end
-    if inst.prefab ~= "wurt" then
+    if not inst:HasAnyTag("playermerm", "woosegoose", "swampbro") then --Wurt's Swamp Pathfinder kinda bugs this out so can't use um_flood_speed_immune_TAGS
         inst:PushEvent("carefulwalking", { careful = false })
     end
 end
@@ -462,9 +482,9 @@ env.AddComponentPostInit("locomotor", function(self)
     local _OnUpdate = self.OnUpdate
     function self:OnUpdate(dt, arrive_check_only)
         local inst = self.inst
-        if not inst:HasAnyTag("merm", "flying", "ghost", "playerghost", "shadowcreature", "nightmarecreature", "brightmare_gestalt", "shadowminion", "shadowchesspiece", "turfrunner_279", "turfrunner_280", "turfrunner_281") and not (inst.components.umripples and inst.components.umripples.speed_immune) then
+        if not inst:HasAnyTag("flying", "ghost", "playerghost", "shadowcreature", "nightmarecreature", "brightmare_gestalt", "shadowminion", "shadowchesspiece") and not (inst.components.umripples and inst.components.umripples.speed_immune) then
             if RobustFloodCheck(self.inst) and not inst.um_floodcontinualcheck then
-                if inst.prefab ~= "wurt" then
+                if not inst:HasAnyTag(um_flood_speed_immune_TAGS) then
                     inst:PushEvent("carefulwalking", { careful = true })
                 end
                 FloodMoistureRamp(inst)
@@ -479,7 +499,7 @@ env.AddComponentPostInit("locomotor", function(self)
                 inst.um_floodcontinualcheck = inst:DoPeriodicTask(FRAMES, FloodContinualCheck)
                 inst.um_flood_moisture_ramp = inst:DoPeriodicTask(1, FloodMoistureRamp)
                 inst:ListenForEvent("equip", AdjustSpeed)
-                inst:ListenForEvent("unequip", AdjustSpeed) -- may fire twice, but that shouldn't matter, it's not doing a huge amount of computational work		
+                inst:ListenForEvent("unequip", AdjustSpeed) -- may fire twice, but that shouldn't matter, it's not doing a huge amount of computational work        
 
                 if not (inst.prefab == "mole" or inst:HasTag("worm")) then
                     local self = inst.components.locomotor

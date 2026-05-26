@@ -76,9 +76,6 @@ local function SpawnRimeweeds()
     end
 end
 
-
-
-
 local function StopSnowstorm()
     _storming = false
 
@@ -104,7 +101,7 @@ local function StartStorming()
     _storming = true
 
     TheWorld:PushEvent("ms_forceprecipitation", true)
-    local frametime = TheWorld.snowinstant and 0 or 60
+    local frametime = TheWorld.um_snowinstant and 0 or 60
     for i, v in ipairs(AllPlayers) do
         v:DoTaskInTime(math.random() * 4, function(inst)
             if inst.components.talker then
@@ -209,24 +206,16 @@ function SnowstormInitiator:OnSave()
     return data
 end
 
-function SnowstormInitiator:ToggleSnowstorm(toggle)
-    if toggle == nil or type(toggle) ~= "boolean" then
-        if not _storming then
-            StartStorming()
-            return true
-        else
-            StopSnowstorm()
-            return false
-        end
+function SnowstormInitiator:ToggleSnowstorm(instant)
+    if instant then TheWorld.um_snowinstant = true end
+    if not _storming then
+        StartStorming()
+        return true
     else
-        if toggle then
-            StartStorming()
-            return true
-        else
-            StopSnowstorm()
-            return false
-        end
+        StopSnowstorm()
+        return false
     end
+    if instant then TheWorld.um_snowinstant = nil end
 end
 
 function SnowstormInitiator:OnLoad(data)

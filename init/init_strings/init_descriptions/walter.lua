@@ -633,3 +633,4 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
     WINTER = "Eating this in the snow is like a tropical expedition!",
 }
 DESCRIBE.UM_BOOMBERRYPIE = "Y'know, I got fourth place in a pie eating contest. This'll be easy as pie!"
+DESCRIBE.UM_CHILES_EN_NOGADA = "The colors represent a whole country!"

@@ -72,13 +72,13 @@ local function debuff_OnAttached(inst, target, followsymbol, followoffset, data)
 			end
 			
 			-- Panic.
-			if target.components.hauntable ~= nil and target.components.hauntable.panicable then
-				if target:HasTag("epic") then
-					target.components.hauntable:Panic(3)
-				else
-					target.components.hauntable:Panic(5)
-				end
-			end
+			--if target.components.hauntable ~= nil and target.components.hauntable.panicable then
+				--if target:HasTag("epic") then
+					--target.components.hauntable:Panic(3)
+				--else
+					--target.components.hauntable:Panic(5)
+				--end
+			--end
 			-- Trying to figure out how to do it without relying on hauntable...
 			--if target.brain ~= nil then
 			--	target.brain:PanicTrigger(target)

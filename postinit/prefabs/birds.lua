@@ -111,5 +111,7 @@ local function RemoveMorsel(inst)
 end
 
 AddPrefabPostInitAny(function(inst)
-    inst:DoTaskInTime(0, RemoveMorsel)
+    if GLOBAL.TheWorld.ismastersim and inst:HasTag("bird") then
+        inst:DoTaskInTime(0, RemoveMorsel)
+    end
 end)

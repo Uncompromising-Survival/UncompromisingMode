@@ -159,7 +159,6 @@ local function fn_ice()
     inst.AnimState:PlayAnimation("idle")
 
     inst:AddTag("hat")
-    inst:AddTag("overchargeable")
 
     MakeInventoryFloatable(inst)
 
