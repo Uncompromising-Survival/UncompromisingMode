@@ -110,15 +110,15 @@ local function fn()
     inst:AddComponent("inventoryitem")
 	inst.components.inventoryitem.atlasname = "images/inventoryimages/zaspberry.xml"
     inst:AddComponent("edible")
-    inst.components.edible.healthvalue = 20
-    inst.components.edible.hungervalue = 25
-    inst.components.edible.sanityvalue = -25
+    inst.components.edible.healthvalue = TUNING.HEALING_MED --20
+    inst.components.edible.hungervalue = TUNING.CALORIES_MED --25
+    inst.components.edible.sanityvalue = -TUNING.SANITY_MEDLARGE --20
     inst.components.edible.foodtype = FOODTYPE.VEGGIE
     inst.components.edible.chargevalue = TUNING.WX78_CHARGE_MED
     inst.components.edible:SetOnEatenFn(oneatenfn)
 
     inst:AddComponent("perishable")
-    inst.components.perishable:SetPerishTime(3*TUNING.PERISH_TWO_DAY)
+    inst.components.perishable:SetPerishTime(TUNING.PERISH_MED)
     inst.components.perishable:StartPerishing()
     inst.components.perishable.onperishreplacement = "spoiled_food"
 
