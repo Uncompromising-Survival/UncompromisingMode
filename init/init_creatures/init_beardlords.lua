@@ -354,7 +354,8 @@ env.AddPrefabPostInit("world", function(inst) -- Supposedly, this is better sinc
             inst.um_blocksetbuild = true
             local ret = _SetForcedBeardLord(inst, duration, ...)
             if not wasbeardlord and not timercheck then
-                inst:PushEvent("um_transform", {toggle = true, setbuild = true, nostate = inst:IsAsleep()})
+                print(inst.um_onload, inst:IsAsleep())
+                inst:PushEvent("um_transform", {toggle = true, setbuild = true, nostate = inst.um_onload or inst:IsAsleep()})
             end
             inst.um_blocksetbuild = nil
             return ret
@@ -429,6 +430,14 @@ local function OnEntitySleep(inst, ...)
     return ret
 end
 
+local _OnLoad
+local function OnLoad(inst, ...)
+    inst.um_onload = true
+    local ret = _OnLoad and _OnLoad(inst, ...)
+    inst.um_onload = nil
+    return ret
+end
+
 local function BunnymanFunctions(inst)
     BeardlordAnimations(inst)
     inst.UMShouldBeBeardlord = ShouldBeBeardlord
@@ -444,6 +453,10 @@ local function BunnymanFunctions(inst)
         _OnEntitySleep = inst.OnEntitySleep
     end
     inst.OnEntitySleep = OnEntitySleep
+    if not _OnLoad then
+        _OnLoad = inst.OnLoad
+    end
+    inst.OnLoad = OnLoad
 end
 
 env.AddPrefabPostInit("bunnyman", function(inst)
