@@ -758,7 +758,7 @@ configuration_options = {
     -----------------------------
     -- Monsters --
     -----------------------------
-    Header("Monsters"),
+    Header("Monsters", false),
     -----------------------------
     Header("New Hounds"),
     BinaryConfig("firehound", "Fire Hound", "Red Hounds breath fire and ignite players on attack. Drop chance of red gem increased by 10%.", true),
@@ -768,9 +768,9 @@ configuration_options = {
     BinaryConfig("magmahounds", "Magma Hounds", "Magma Hounds are part of Hound waves.", true),
     BinaryConfig("sporehounds", "Spore Hounds", "Spore Hounds are part of Hound waves.", true),
 
-    SkipSpace(),
+    --SkipSpace(),
 
-    Header("Wave Changes"),
+    --Header("Wave Changes"),
 
     --[[ This section has overlap with a vanilla update.
     BinaryConfig("vargwaves", "Vargs in Hound Waves", "In the lategame, vargs will accompany hounds in houndwaves.", true),
