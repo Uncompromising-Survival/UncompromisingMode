@@ -199,6 +199,7 @@ RECIPE_DESC.UM_GEMOLOGY_POUCH = "Holds Strange Gems and geodes. Bigger on the in
 RECIPE_DESC.WORMWOOD_MUSHTREE = "Create your very own fungus among us."
 RECIPE_DESC.WORMWOOD_EQEX = "Friends come and go."
 RECIPE_DESC.UM_BOMB_MOON = "Create freaks scorched by the moon's light!"
+RECIPE_DESC.UM_BLUEPRINTING_KIT = "Write down what you know and copy what others wrote before you."
 
 RECIPE_DESC.UM_THULECITE_RAZOR = "Essential for the ancient technique of \"shaving\" "
 -- [              DSTU Related Overrides                  ]
