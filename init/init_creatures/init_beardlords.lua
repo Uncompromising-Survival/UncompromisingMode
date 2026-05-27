@@ -354,7 +354,6 @@ env.AddPrefabPostInit("world", function(inst) -- Supposedly, this is better sinc
             inst.um_blocksetbuild = true
             local ret = _SetForcedBeardLord(inst, duration, ...)
             if not wasbeardlord and not timercheck then
-                print(inst.um_onload, inst:IsAsleep())
                 inst:PushEvent("um_transform", {toggle = true, setbuild = true, nostate = inst.um_onload or inst:IsAsleep()})
             end
             inst.um_blocksetbuild = nil
