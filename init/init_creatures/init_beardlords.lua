@@ -61,27 +61,19 @@ end
 
 --[[local BunnymanBrain = require("brains/bunnymanbrain")
 local hunterparams_scarer = UpvalueHacker.GetUpvalue(BunnymanBrain.OnStart, "hunterparams_scarer")
-
-local function FindActionNode(self)
-    for id, node in pairs(self.bt.root.children) do
-        if node.getactionfn and node.getactionfn == _PlayAction then
-            table.insert(self.bt.root.children, id, DoAction(self.inst, PlayAction_Inventory, "steal", true))
-            return
-        end
-    end
-end
-
-env.AddBrainPostInit("catcoonbrain", function(self)
+env.AddBrainPostInit("bunnymanbrain", function(self)
 end)]]
 
 env.AddStategraphPostInit("bunnyman", function(inst)
     local events = {
         EventHandler("um_transform", function(inst, data)
-            if not (inst.sg:HasStateTag("busy") or inst.components.health and inst.components.health:IsDead()) then
-                inst.sg:GoToState("um_transform", data)
-                return
+            if not (inst.components.health and inst.components.health:IsDead()) then
+                if not inst.sg:HasStateTag("busy") then
+                    inst.sg:GoToState("um_transform", data)
+                    return
+                end
+                if data and inst.UMToggleBeardlord then inst:UMToggleBeardlord({toggle = data.toggle, setbuild = data.setbuild}) end
             end
-            if data and inst.UMToggleBeardlord then inst:UMToggleBeardlord({toggle = data.toggle, setbuild = data.setbuild}) end
         end),
     }
 
@@ -331,9 +323,7 @@ env.AddPrefabPostInit("world", function(inst) -- Supposedly, this is better sinc
     local _CalcSanityAura = UpvalueHacker.GetUpvalue(Prefabs.bunnyman.fn, "CalcSanityAura")
     if _CalcSanityAura then
         local function CalcSanityAura(inst, observer, ...)
-            if inst.beardlord and IsForcedNightmare and not IsForcedNightmare(inst) then
-                return -TUNING.SANITYAURA_MED
-            end
+            if inst.beardlord and IsForcedNightmare and not IsForcedNightmare(inst) then return -TUNING.SANITYAURA_MED end
             return _CalcSanityAura(inst, observer, ...)
         end
         UpvalueHacker.SetUpvalue(Prefabs.bunnyman.fn, CalcSanityAura, "CalcSanityAura")
@@ -341,12 +331,17 @@ env.AddPrefabPostInit("world", function(inst) -- Supposedly, this is better sinc
     local _OnTimerDone = UpvalueHacker.GetUpvalue(Prefabs.bunnyman.fn, "OnForceNightmareState", "SetForcedBeardLord", "OnTimerDone")
     if _OnTimerDone then
         local function OnTimerDone(inst, data, ...)
-            inst.um_blocksetbuild = true
+            if data and data.name == "forcenightmare" then
+                if inst.um_observedbeardlord and not inst.clearbeardlordtask then inst.clearbeardlordtask = {Cancel = function() end} end
+                inst.um_blocksetbuild = true
+            end
             local ret = _OnTimerDone(inst, data, ...)
             if data and data.name == "forcenightmare" and not inst.clearbeardlordtask and (not inst.sg:HasStateTag("busy") or inst.sg:HasStateTag("sleeping")) then
                 inst:PushEvent("um_transform", {setbuild = true})
             end
             inst.um_blocksetbuild = nil
+            if inst.clearbeardlordtask then inst.clearbeardlordtask:Cancel() end
+            inst.clearbeardlordtask = nil
             return ret
         end
         UpvalueHacker.SetUpvalue(Prefabs.bunnyman.fn, OnTimerDone, "OnForceNightmareState", "SetForcedBeardLord", "OnTimerDone")
@@ -408,6 +403,7 @@ local function ShouldBeBeardlord(inst)
     local becomebeardlord = FindEntity(inst, ENTITY_POPOUT_RADIUS, inst.UMFindPlayer, {"_sanity", "player"}, {"playerghost", "isdead"}) and true or nil
     if inst.beardlord ~= becomebeardlord then
         inst.beardlord = becomebeardlord
+        inst.um_observedbeardlord = becomebeardlord
         inst:PushEvent("um_transform", {toggle = becomebeardlord, setbuild = true})
     end
 end
