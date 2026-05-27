@@ -67,12 +67,12 @@ end)]]
 env.AddStategraphPostInit("bunnyman", function(inst)
     local events = {
         EventHandler("um_transform", function(inst, data)
-            if not (inst.components.health and inst.components.health:IsDead()) then
-                if not inst.sg:HasStateTag("busy") then
+            if not (inst.components.health and inst.components.health:IsDead()) and data then
+                if not inst.sg:HasStateTag("busy") and not data.nostate then
                     inst.sg:GoToState("um_transform", data)
                     return
                 end
-                if data and inst.UMToggleBeardlord then inst:UMToggleBeardlord({toggle = data.toggle, setbuild = data.setbuild}) end
+                if inst.UMToggleBeardlord then inst:UMToggleBeardlord({toggle = data.toggle, setbuild = data.setbuild}) end
             end
         end),
     }
@@ -337,7 +337,7 @@ env.AddPrefabPostInit("world", function(inst) -- Supposedly, this is better sinc
             end
             local ret = _OnTimerDone(inst, data, ...)
             if data and data.name == "forcenightmare" and not inst.clearbeardlordtask and (not inst.sg:HasStateTag("busy") or inst.sg:HasStateTag("sleeping")) then
-                inst:PushEvent("um_transform", {setbuild = true})
+                inst:PushEvent("um_transform", {setbuild = true, nostate = inst:IsAsleep()})
             end
             inst.um_blocksetbuild = nil
             if inst.clearbeardlordtask then inst.clearbeardlordtask:Cancel() end
@@ -354,7 +354,7 @@ env.AddPrefabPostInit("world", function(inst) -- Supposedly, this is better sinc
             inst.um_blocksetbuild = true
             local ret = _SetForcedBeardLord(inst, duration, ...)
             if not wasbeardlord and not timercheck then
-                inst:PushEvent("um_transform", {toggle = true, setbuild = true})
+                inst:PushEvent("um_transform", {toggle = true, setbuild = true, nostate = inst:IsAsleep()})
             end
             inst.um_blocksetbuild = nil
             return ret
@@ -398,21 +398,52 @@ local function FindPlayer(inst)
     return not IsEntityDeadOrGhost(inst) and inst.entity:IsVisible() and IsCrazyGuy and IsCrazyGuy(inst)
 end
 
-local function ShouldBeBeardlord(inst)
+local function ShouldBeBeardlord(inst, data)
     if inst.components.health and inst.components.health:IsDead() or inst.components.timer and inst.components.timer:TimerExists("forcenightmare") then return end
-    local becomebeardlord = FindEntity(inst, ENTITY_POPOUT_RADIUS, inst.UMFindPlayer, {"_sanity", "player"}, {"playerghost", "isdead"}) and true or nil
+    local becomebeardlord = not (data and data.forcefail) and FindEntity(inst, ENTITY_POPOUT_RADIUS + 1, inst.UMFindPlayer, {"_sanity", "player"}, {"playerghost", "isdead"}) and true or nil
     if inst.beardlord ~= becomebeardlord then
         inst.beardlord = becomebeardlord
         inst.um_observedbeardlord = becomebeardlord
-        inst:PushEvent("um_transform", {toggle = becomebeardlord, setbuild = true})
+        inst:PushEvent("um_transform", {toggle = becomebeardlord, setbuild = true, nostate = data and data.nostate})
     end
+end
+
+local _OnEntityWake
+local function OnEntityWake(inst, ...)
+    local ret = _OnEntityWake and _OnEntityWake(inst, ...)
+    inst:UMShouldBeBeardlord({nostate = true})
+    if not inst.um_shouldbebeardlord then
+        inst.um_shouldbebeardlord = inst:DoPeriodicTask(FRAMES, inst.UMShouldBeBeardlord)
+    end
+    return ret
+end
+
+local _OnEntitySleep
+local function OnEntitySleep(inst, ...)
+    local ret = _OnEntitySleep and _OnEntitySleep(inst, ...)
+    inst:UMShouldBeBeardlord({forcefail = true, nostate = true})
+    if inst.um_shouldbebeardlord then
+        inst.um_shouldbebeardlord:Cancel()
+        inst.um_shouldbebeardlord = nil
+    end
+    return ret
 end
 
 local function BunnymanFunctions(inst)
     BeardlordAnimations(inst)
-    inst.um_shouldbebeardlord = inst:DoPeriodicTask(FRAMES, ShouldBeBeardlord)
+    inst.UMShouldBeBeardlord = ShouldBeBeardlord
+    inst.um_shouldbebeardlord = inst:DoPeriodicTask(FRAMES, inst.UMShouldBeBeardlord, 0)
     inst.UMFindPlayer = FindPlayer
     inst.UMToggleBeardlord = ToggleBeardlord
+
+    if not _OnEntityWake then
+        _OnEntityWake = inst.OnEntityWake
+    end
+    inst.OnEntityWake = OnEntityWake
+    if not _OnEntitySleep then
+        _OnEntitySleep = inst.OnEntitySleep
+    end
+    inst.OnEntitySleep = OnEntitySleep
 end
 
 env.AddPrefabPostInit("bunnyman", function(inst)
