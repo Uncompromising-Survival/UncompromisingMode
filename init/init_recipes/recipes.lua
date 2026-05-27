@@ -658,6 +658,8 @@ AddRecipe2("um_gemology_pouch", { Ingredient("um_gemologyorangegem2", 1), Ingred
 ChangeSortKey("um_gemology_pouch", "skullchest_child", "MAGIC", false)
 ChangeSortKey("um_gemology_pouch", "winona_toolbox", "CONTAINERS", false)
 
+AddRecipe2("um_blueprinting_kit", { Ingredient("walrus_tusk", 1), Ingredient("malbatross_feather", 1), Ingredient("papyrus", 2) }, TECH.SCIENCE_TWO, {}, { "PROTOTYPERS", "TOOLS" })
+
 if TUNING.DSTU.SHAVE_MODE then
     AddRecipe2("um_thulecite_razor", { Ingredient("razor", 1), Ingredient("thulecite", 2), Ingredient("nightmarefuel", 2) }, TECH.ANCIENT_TWO, { nounlock = true, no_builder_skill = "wathom_allegiance_neutral", forward_ingredients = { "wathom_um_thulecite_razor" } }, { "CRAFTING_STATION", "TOOLS" })
     ChangeSortKey("um_thulecite_razor", "multitool_axe_pickaxe", "CRAFTING_STATION", true)

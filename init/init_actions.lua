@@ -793,3 +793,26 @@ ENV.AddComponentAction("SCENE", "gem_forge", function(inst, doer, actions, right
 end)
 
 ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.UM_FORGE_GEM, "doshortaction"))
+
+
+local MAKE_BLUEPRINT = Action({ mount_valid = false, priority = 10, rmb = false })
+MAKE_BLUEPRINT.id = "MAKE_BLUEPRINT"
+MAKE_BLUEPRINT.str = "Sketch Blueprint"
+ENV.AddAction(MAKE_BLUEPRINT)
+MAKE_BLUEPRINT.fn = function(act)
+    local target = act.target
+    if act.invobject.components.blueprinter ~= nil
+        and (act.doer.components.builder ~= nil and act.doer.components.builder:CanLearn(target.prefab) and act.doer.components.builder:KnowsRecipe(target.prefab, false)
+            or target.components.teacher ~= nil) then
+        return act.invobject.components.blueprinter:OnUsed(target, act.doer)
+    end
+    return false
+end
+
+ENV.AddComponentAction("USEITEM", "blueprinter", function(inst, doer, target, actions, right)
+    if target ~= nil and (doer.replica.builder ~= nil and doer.replica.builder:KnowsRecipe(target.prefab) and PrefabExists(target.prefab.."_blueprint") or string.find(target.prefab, "blueprint")) then
+        table.insert(actions, ACTIONS.MAKE_BLUEPRINT)
+    end
+end)
+
+ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.MAKE_BLUEPRINT, "dolongaction"))
