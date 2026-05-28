@@ -24,7 +24,7 @@ end
 local function SpreadGoo(inst,number)
     local circle = number*2+3
     local x,y,z = inst.Transform:GetWorldPosition()
-    local radius = number*2
+    local radius = number*3
     for i = 1,circle do
         local x1 = x+radius*math.cos(2*3.14*i/circle)
         local z1 = z+radius*math.sin(2*3.14*i/circle)

@@ -297,7 +297,7 @@ AddRecipe2("plaunt_manny", { Ingredient("mandrake", 1), Ingredient("livinglog", 
 ChangeSortKey("plaunt_manny", "firesuppressor", "STRUCTURES", true)
 ChangeSortKey("plaunt_manny", "magician_chest", "MAGIC", true)
 
-AddRecipe2("skullchest_child", { Ingredient("fossil_piece", 2), Ingredient("nightmarefuel", 4), Ingredient("boards", 3) }, TECH.LOST, { placer = "skullchest_child_placer" }, { "STRUCTURES", "CONTAINERS", "MAGIC" })
+AddRecipe2("skullchest_child", { Ingredient("fossil_piece", 2), Ingredient("nightmarefuel", 4), Ingredient("boards", 3) }, TECH.LOST, { placer = "skullchest_child_placer", min_spacing=1 }, { "STRUCTURES", "CONTAINERS", "MAGIC" })
 ChangeSortKey("skullchest_child", "magician_chest", "STRUCTURES", true)
 ChangeSortKey("skullchest_child", "magician_chest", "CONTAINERS", true)
 ChangeSortKey("skullchest_child", "magician_chest", "MAGIC", true)
