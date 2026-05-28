@@ -121,6 +121,7 @@ local function fn()
     inst:AddTag("backpack")
     inst:AddTag("pocketbackpack")
     inst:AddTag("vetcurse_item")
+    inst:AddTag("silksack")
     inst:AddTag("donotautopick")
 
     MakeInventoryFloatable(inst, "med", 0.1, 0.65)
