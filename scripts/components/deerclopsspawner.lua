@@ -2,6 +2,7 @@
 --[[ Dependencies ]]
 --------------------------------------------------------------------------
 local easing = require("easing")
+local UMCommonFns = require("tools/um_commonfns")
 
 --------------------------------------------------------------------------
 --[[ Deerclopsspawner class definition ]]
@@ -45,7 +46,6 @@ local _attackdelay = ((TheWorld.state.winterlength - 1) * TUNING.TOTAL_DAY_TIME 
 local _timetoattack
 
 local _activeplayers = {}
-local um_overridespawn = false
 --------------------------------------------------------------------------
 --[[ Private member functions ]]
 --------------------------------------------------------------------------
@@ -114,8 +114,8 @@ end
 local function TryStartAttacks(killed)
     if AllowedToAttack() then
         if _activehassler == nil and _attacksperseason > 0 and _worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME) == nil then
-            local attackdelay = killed == true and _attackdelay * HASSLER_KILLED_DELAY_MULT or _attackdelay
-            _worldsettingstimer:StartTimer(DEERCLOPS_TIMERNAME, attackdelay*math.random(20,40)/10)
+            local attackdelay = killed == true and _attackdelay * HASSLER_KILLED_DELAY_MULT or _attackdelay * math.random(20,40)/10
+            _worldsettingstimer:StartTimer(DEERCLOPS_TIMERNAME, attackdelay)
         end
 
         _worldsettingstimer:ResumeTimer(DEERCLOPS_TIMERNAME)
@@ -260,25 +260,15 @@ end
 
 local function OnMegaFlare(src, data)
 	if data.sourcept and TheWorld.Map:IsVisualGroundAtPoint(data.sourcept.x, data.sourcept.y, data.sourcept.z) and TheWorld.state.iswinter then
-		um_overridespawn = true
 		if not _activehassler then
-            if _worldsettingstimer:ActiveTimerExists(DEERCLOPS_TIMERNAME) then
-                TheNet:Announce(_worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME))
-            end
-			if _worldsettingstimer:ActiveTimerExists(DEERCLOPS_TIMERNAME) and _worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME) > 480*1.8 then -- Cannot advance any more if it's within two days
-				local time = _worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME)
-				if time > 480*8 then
-					time = time - 480*math.random(2,3)
-				elseif time > 480*4 then
-					time = time - 480*math.random(1,2)
-				else
-					time = time - 480*math.random(1,1.5)
-				end
+			if _worldsettingstimer:ActiveTimerExists(DEERCLOPS_TIMERNAME) and _worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME) > 480 then -- Cannot advance any more if it's within one day
+				local time = UMCommonFns.MegaFlareTimerReduction(_worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME))
 				_worldsettingstimer:SetTimeLeft(DEERCLOPS_TIMERNAME, time)
+				TheNet:Announce("Deerclops timer: " .. tostring(time))
+				TheNet:Announce("Deerclops timer: " .. tostring(time/480) .. " days")
 			elseif not _worldsettingstimer:ActiveTimerExists(DEERCLOPS_TIMERNAME) then
 				_worldsettingstimer:StartTimer(DEERCLOPS_TIMERNAME, 480*math.random(6,8))
-			else
-				--TheNet:Announce(_worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME))
+				TryStartAttacks()
 			end
 		end
 	end
