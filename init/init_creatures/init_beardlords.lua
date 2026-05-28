@@ -52,10 +52,45 @@ function SoundEmitter:PlaySound(sound, ...)
     return _PlaySound(self, sound, ...)
 end
 
---[[local BunnymanBrain = require("brains/bunnymanbrain")
+local BunnymanBrain = require("brains/bunnymanbrain")
 local hunterparams_scarer = UpvalueHacker.GetUpvalue(BunnymanBrain.OnStart, "hunterparams_scarer")
+if hunterparams_scarer then
+    local _ShouldRunAway = hunterparams_scarer.fn
+    local function ShouldRunAway(hunter, inst, ...)
+        if inst.beardlord then return end
+        return not _ShouldRunAway or _ShouldRunAway(hunter, inst, ...)
+    end
+    hunterparams_scarer.fn = ShouldRunAway
+end
+
+local function FindAndReplaceNode(self)
+    for id, node in pairs(self.bt.root.children) do
+        if node.name == "Parallel" and node.children then
+            for _, node2 in pairs(node.children) do
+                if node2.name == "PanicScared" then
+                    self.bt.root.children[id] = WhileNode(function() return not self.inst.beardlord end, "ShouldPanicWhenScared", node)
+                    return
+                end
+            end
+        end
+    end
+    if hunterparams_scarer then
+        for id, node in pairs(self.bt.root.children) do
+            if node.name == "ChattyNode" and node.children then
+                for _, node2 in pairs(node.children) do
+                    if node2.hunterseeequipped == hunterparams_scarer.hunterseeequipped then
+                        self.bt.root.children[id] = WhileNode(function() return not self.inst.beardlord end, "ShouldRunAwayFromScarer", node)
+                        return
+                    end
+                end
+            end
+        end
+    end
+end
+
 env.AddBrainPostInit("bunnymanbrain", function(self)
-end)]]
+    FindAndReplaceNode(self)
+end)
 
 env.AddStategraphPostInit("bunnyman", function(inst)
     local events = {
@@ -291,7 +326,8 @@ local function ToggleBeardlord(inst, data)
         inst.components.combat:SetDefaultDamage(TUNING.BUNNYMAN_DAMAGE)
         inst.components.combat:SetAttackPeriod(TUNING.BUNNYMAN_ATTACK_PERIOD)
         inst.components.combat.panic_thresh = TUNING.BUNNYMAN_PANIC_THRESH
-        inst.components.sleeper:SetDefaultTests()
+        inst.components.sleeper.sleeptestfn = NocturnalSleepTest
+        inst.components.sleeper.waketestfn = NocturnalWakeTest
     end
 end
 
