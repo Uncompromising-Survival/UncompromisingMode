@@ -46,6 +46,18 @@ local function ShouldAcceptItem(inst, item, giver)
     return item:HasTag("gemology_gem")
 end
 
+local PURE_GEM_MAP = {
+    um_gemologyredgem1    = "redgem",    um_gemologyredgem2    = "redgem",
+    um_gemologygreengem1  = "greengem",  um_gemologygreengem2  = "greengem",
+    um_gemologybluegem1   = "bluegem",   um_gemologybluegem2   = "bluegem",
+    um_gemologyyellowgem1 = "yellowgem", um_gemologyyellowgem2 = "yellowgem",
+    um_gemologyorangegem1 = "orangegem", um_gemologyorangegem2 = "orangegem",
+    um_gemologypurplegem1 = "purplegem", um_gemologypurplegem2 = "purplegem",
+}
+local function GetPureGem(gemtype)
+    return PURE_GEM_MAP[gemtype]
+end
+
 local function ProduceItem(inst, prefab, num, tier)
     for i = 1, (num and num or 1), 1 do
         local item = SpawnPrefab(prefab)
@@ -81,25 +93,35 @@ local function GenerateLoot(inst)
             end
         end
         if tier == 2 then
-            if math.random() > 0.75 then
+            if rnd > 0.75 then
                 ProduceItem(inst, itemtype, 1, 3)
-            elseif math.random() > 0.4 then
+            elseif rnd > 0.30 then
                 ProduceItem(inst, itemtype, 1, 2)
+            elseif rnd > 0.25 and element == "green" then
+                ProduceItem(inst, element .. "gem", 1, nil)
+            elseif rnd > 0.10 and element == "red" then
+                ProduceItem(inst, element .. "gem", 1, nil)
             else
-                if math.random() > 0.5 then
-                    ProduceItem(inst, element .. "gem", 1, nil) -- They can refine into their special gems.
-                else
-                    ProduceItem(inst, generic_item, math.random(5, 9), nil)
-                end
+                ProduceItem(inst, generic_item, math.random(5, 9), nil)
             end
         end
         if tier == 3 then
-            if rnd > 0.75 then
-                ProduceItem(inst, itemtype, 1, 3)
-            elseif rnd > 0.35 then
-                ProduceItem(inst, itemtype, 1, 2)
+            if element == "green" then
+                if rnd > 0.60 then
+                    ProduceItem(inst, itemtype, 1, 3)
+                elseif rnd > 0.10 then
+                    ProduceItem(inst, itemtype, 1, 2)
+                else
+                    ProduceItem(inst, element .. "gem", 1, nil)
+                end
             else
-                ProduceItem(inst, element .. "gem", 1, nil)
+                if rnd > 0.75 then
+                    ProduceItem(inst, itemtype, 1, 3)
+                elseif rnd > 0.25 then
+                    ProduceItem(inst, itemtype, 1, 2)
+                else
+                    ProduceItem(inst, element .. "gem", 1, nil)
+                end
             end
         end
     elseif itemtype == "um_gemology" .. hated_element .. "gem1" or itemtype == "um_gemology" .. hated_element .. "gem2" then
@@ -126,10 +148,13 @@ local function GenerateLoot(inst)
             end
         end
         if tier == 2 then
-            if math.random() > 0.9 then
+            local pure = GetPureGem(itemtype)
+            if rnd > 0.90 then
                 ProduceItem(inst, itemtype, 1, 2)
-            elseif math.random() > 0.5 then
+            elseif rnd > 0.45 then
                 ProduceItem(inst, itemtype, 1, 1)
+            elseif rnd > 0.40 and pure then
+                ProduceItem(inst, pure, 1, nil)
             else
                 ProduceItem(inst, generic_item, math.random(5, 9), nil)
             end
@@ -239,21 +264,24 @@ local function GetAntlionReward(inst)
     local itemname
     local newtier
     if tier == 3 then
-        if rnd > 0.75 then
+        if (rnd > 0.65 and orange) or rnd > 0.75 then
             itemname = gem
             newtier = 2
-        elseif rnd > 0.1 and orange then
+        elseif rnd > 0.40 and orange then
             itemname = "orangegem"
         else
             itemname = "townportaltalisman"
         end
     elseif tier == 2 then
+        local pure = GetPureGem(gem)
         if (rnd > 0.75 and orange) or rnd > 0.85 then
             itemname = gem
             newtier = 3
         elseif (rnd > 0.2 and orange) or rnd > 0.4 then
             itemname = gem
             newtier = 2
+        elseif (rnd > 0.15 and orange) or rnd > 0.35 then
+            itemname = pure or "townportaltalisman"
         else
             itemname = "townportaltalisman"
         end
@@ -387,7 +415,7 @@ local function GenerateRockyLoot(inst, giver, item)
             itemname = "friendship"
         end
     elseif tier == 2 then
-        if (rnd > 0.75 and pale) then
+        if rnd > 0.75 and pale then
             itemname = gem
             newtier = 3
         elseif (rnd > 0.25 and pale) or rnd > 0.4 then
