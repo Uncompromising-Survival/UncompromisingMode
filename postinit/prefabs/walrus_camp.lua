@@ -64,15 +64,66 @@ local function NameTheDog(inst)
 	end)
 end
 
+local function SaveName(inst, data)
+	if inst.Name then
+		data.WalrusHoundName = inst.Name
+	end
+end
+
+local function LoadName(inst, data)
+	if data and data.WalrusHoundName then
+		if inst.components.named == nil then
+			inst:AddComponent("named")
+		end
+
+		inst.Name = data.WalrusHoundName
+		USED_NAMES[inst.Name] = true
+		inst.components.named:SetName(inst.Name)
+
+		inst:ListenForEvent("onremove", function()
+			ReleaseName(inst)
+		end)
+	end
+end
+
+local function AddSavedName(prefab)
+	env.AddPrefabPostInit(prefab, function(inst)
+		if not TheWorld.ismastersim then
+			return
+		end
+
+		local _OnSave = inst.OnSave
+		inst.OnSave = function(inst, data, ...)
+			if _OnSave then
+				_OnSave(inst, data, ...)
+			end
+
+			SaveName(inst, data)
+		end
+
+		local _OnLoad = inst.OnLoad
+		inst.OnLoad = function(inst, data, ...)
+			if _OnLoad then
+				_OnLoad(inst, data, ...)
+			end
+
+			LoadName(inst, data)
+		end
+	end)
+end
+
+AddSavedName("icehound")
+AddSavedName("glacialhound")
+
 local function RemoveIceShield(varglet)
 	if not (varglet and varglet:IsValid()) then
 		return
 	end
 
-	if varglet.IceShield and varglet.IceShield:IsValid() then
-		varglet.IceShield._silent_remove = true
-		varglet.IceShield:Remove()
-		varglet.IceShield = nil
+	if varglet.ice_shield and varglet.ice_shield:IsValid() then
+		varglet.ice_shield._silent_remove = true
+		varglet.ice_shield:Remove()
+		varglet.ice_shield = nil
 	end
 
 	if varglet.shield_fx and varglet.shield_fx:IsValid() then
@@ -177,7 +228,7 @@ local function DespawnVarglet(camp)
 end
 
 local function SetupVarglet(camp, varglet, leader)
-	varglet.persists = false
+	varglet.persists = true
 	varglet:AddTag("pet_hound")
 	varglet:AddTag("flare_summoned")
 
@@ -410,4 +461,52 @@ env.AddPrefabPostInit("walrus_camp", function(inst)
 		ClearTag(inst)
 		DespawnVarglet(inst)
 	end)
+	
+	local _OnSave = inst.OnSave
+	inst.OnSave = function(inst, data, ...)
+		local refs = _OnSave and _OnSave(inst, data, ...) or nil
+
+		if inst.GlacialVarglet and inst.GlacialVarglet:IsValid() then
+			data.GlacialVarglet = inst.GlacialVarglet.GUID
+			data.VargletSpawned = inst.VargletSpawned or nil
+
+			if refs == nil then
+				refs = {}
+			end
+
+			table.insert(refs, inst.GlacialVarglet.GUID)
+		end
+
+		return refs
+	end
+
+	local _OnLoad = inst.OnLoad
+	inst.OnLoad = function(inst, data, ...)
+		local ret = _OnLoad and _OnLoad(inst, data, ...)
+
+		inst.SavedVarglet = data and data.GlacialVarglet or nil
+		inst.VargletSpawned = data and data.VargletSpawned or nil
+
+		return ret
+	end
+
+	local _OnLoadPostPass = inst.OnLoadPostPass
+	inst.OnLoadPostPass = function(inst, newents, data, ...)
+		local ret = _OnLoadPostPass and _OnLoadPostPass(inst, newents, data, ...)
+
+		if inst.SavedVarglet and newents[inst.SavedVarglet] and newents[inst.SavedVarglet].entity then
+
+			inst.GlacialVarglet = newents[inst.SavedVarglet].entity
+
+			local leader = GetLeader(inst)
+			if leader and leader:IsValid() then
+				SetupVarglet(inst, inst.GlacialVarglet, leader)
+			end
+		end
+
+		inst.SavedVarglet = nil
+
+		return ret
+	end
+	
 end)
