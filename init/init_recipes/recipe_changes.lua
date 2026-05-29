@@ -271,6 +271,12 @@ if TUNING.DSTU.WOLFGANG_HUNGERMIGHTY then
 end
 
 if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then
+    AllRecipes["wathgrithr_improvedhat"].ingredients = {
+        Ingredient("wathgrithrhat", 1),
+        Ingredient("beefalowool", 3),
+        Ingredient("marble", 2),
+    }
+
     AllRecipes["battlesong_shadowaligned"] = nil
     --AllRecipes["battlesong_lunaraligned"] = nil
     --AllRecipes["battlesong_shadowaligned"].builder_skill ="wathgrithr_allegiance_lunar"  

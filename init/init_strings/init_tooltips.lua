@@ -15,7 +15,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     NIGHTLIGHT = "- Fuels itself at night by taking nearby players sanity.",
     ARMOR_SANITY = "- Reduced sanity drain on damage taken.",
     TOPHAT = "- Reduces sanity loss from various magic items.",
-    MOONDIAL = "- Fills watering cans.\n- When socketed with a Moon Tear, mutates offered items under the light of the full \"Moon\".",
+    MOONDIAL = "- Source of water for Watering Cans.", --\n- When socketed with a Moon Tear, mutates offered items under the light of the full \"Moon\".
     ARMORDRAGONFLY = "- Summons mini Lavae allies when worn.",
     FEATHERHAT = "- Provides safety from territorial Pengulls.",
     YELLOWAMULET = "- No longer breaks when empty.",
@@ -24,9 +24,9 @@ STRINGS.UNCOMP_TOOLTIP = {
     PIGGYBACK = "- No Passive -10% movement speed while worn.\n- Decreases Player speed by 1% per item held.",
     PREMIUMWATERINGCAN = "- Can contain and preserve ocean fish.",
     RAINHAT = "- Slightly increased rain protection.",
-    ARMORMARBLE = "- Prevents knockback effects.",
+    ARMORMARBLE = "- Prevents knockback effects. \n- Reduces speed by only 20%.",
     TURF_DRAGONFLY = "- Speeds up player movement.",
-    BLOWDART_YELLOW = "- Stuns certain mechanical enemies.",
+    --BLOWDART_YELLOW = "- Shocks creatures for longer.",
     DRAGONFLYCHEST = "- Has even more item slots.",
     WARDROBE = "- Can store a lot of equipment.",
     WINONA_SPOTLIGHT = "- Significantly increased range.\n- Doubled radius.",
@@ -104,7 +104,10 @@ STRINGS.UNCOMP_TOOLTIP = {
     UM_ICE_SICLE = "- Reaps plants and freezes enemies.\n- Lowers temperature on reaping and even more on attacking.\n- Clothing helps resist the cold.",
     JAWED_SCYTHE = "- Reaps plants.",
     HOUNDIOUS_OBSERVIOUS = "- Warns of incoming giants or hounds.",
+    BRUSH = "- Provides more domestication and obedience.",
     BEAKBASHER = "- Is a darn good hammer.",
+    UM_ASTRAL_PROJECTOR = "- Projects your body to the nearest receptionator.",
+    UM_ASTRAL_PROJECTOR_TARGET = "- Returns your body back to the projectinator.",
     UM_HAT_LEAFWING = "- Speedier when worn.\n- Can breeze through Thickets.",
     UM_FEATHER_TOTEM = "- Stays with you post-mortem.\n- Consumes feathers inside on revival for maximum\nhealth loss prevention and other special effects.",
     UM_MAGNIFIER = "- Reveals the quality of Strange Gems.\n- Discovering new Strange Gems permanently reveals the name\nand catalogues effects to the Scrapbook.",
@@ -433,7 +436,7 @@ if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then
 end
 
 if TUNING.DSTU.DISABLE_MEGAFLARE then
-    TOOLTIPS.MEGAFLARE = "- No longer summons Deerclops."
+    TOOLTIPS.MEGAFLARE = "- Makes the current season's boss arrive sooner."
 end
 
 

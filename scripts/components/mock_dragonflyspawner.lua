@@ -220,20 +220,14 @@ return Class(function(self, inst)
 			if data.sourcept and TheWorld.Map:IsVisualGroundAtPoint(data.sourcept.x, data.sourcept.y, data.sourcept.z) and TheWorld.state.issummer then
 				um_overridespawn = true
 				if not _activehassler then
-					if _worldsettingstimer:ActiveTimerExists(MOCKFLY_TIMERNAME) and _worldsettingstimer:GetTimeLeft(MOCKFLY_TIMERNAME) > 480*1.8 then -- Cannot advance any more if it's within two days
-						local time = _worldsettingstimer:GetTimeLeft(MOCKFLY_TIMERNAME)
-						if time > 480*8 then
-							time = time - 480*math.random(2,3)
-						elseif time > 480*4 then
-							time = time - 480*math.random(1,2)
-						elseif time > 480*2 then
-							time = time - 240*math.random(1,3) 
-						else
-							time = time - 480*math.random(1,1.5)
-						end
+					if _worldsettingstimer:ActiveTimerExists(MOCKFLY_TIMERNAME) and _worldsettingstimer:GetTimeLeft(MOCKFLY_TIMERNAME) > 480 then -- Cannot advance any more if it's within one day
+						local time = UMCommonFns.MegaFlareTimerReduction(_worldsettingstimer:GetTimeLeft(MOCKFLY_TIMERNAME))
 						_worldsettingstimer:SetTimeLeft(MOCKFLY_TIMERNAME, time)
+						--TheNet:Announce("Dragonfly timer: " .. tostring(time))
+						--TheNet:Announce("Dragonfly timer: " .. tostring(time/480) .. " days")
 					elseif not _worldsettingstimer:ActiveTimerExists(MOCKFLY_TIMERNAME) then
 						_worldsettingstimer:StartTimer(MOCKFLY_TIMERNAME, 480*math.random(6,8))
+						TryStartAttacks()
 					end
 				end
 			end
@@ -421,6 +415,7 @@ return Class(function(self, inst)
                 warning = _warning,
                 storedhassler = _storedhassler,
                 spawmmoonmaw = _spawnmoonmaw,
+                watchingcycles = self.inst.watchingcycles or nil,
             }
 
             local ents = {}
@@ -435,10 +430,13 @@ return Class(function(self, inst)
         function self:OnLoad(data)
             _warning = data.warning or false
             _storedhassler = data.storedhassler
-            _spawnmoonmaw = data.spawmmoonmaw
+            _spawnmoonmaw = data.spawmmoonmaw ~= false
 
             if data.timetoattack then
                 _timetoattack = data.timetoattack
+            end
+            if data.watchingcycles then
+                self.inst.watchingcycles = true
             end
         end
 

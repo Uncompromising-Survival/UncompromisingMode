@@ -115,7 +115,7 @@ local function TryStartAttacks(killed)
             -- Then add one to _attacksperwinter to shift the attacks so the last attack isn't right when the season changes to spring
             --local attackdelay = (TheWorld.state.summerlength - 1) * TUNING.TOTAL_DAY_TIME / (_attacksperseason + 1) 
 			local attackdelay = killed == true and _attackdelay * HASSLER_KILLED_DELAY_MULT or _attackdelay
-			
+
 			_worldsettingstimer:StartTimer(MOTHERGOOSE_TIMERNAME, attackdelay)
         end
 
@@ -199,20 +199,16 @@ end
 --------------------------------------------------------------------------
 
 local function OnMegaFlare(src, data)
-	if data.sourcept and TheWorld.Map:IsVisualGroundAtPoint(data.sourcept.x, data.sourcept.y, data.sourcept.z) and TheWorld.state.issummer then
+	if data.sourcept and TheWorld.Map:IsVisualGroundAtPoint(data.sourcept.x, data.sourcept.y, data.sourcept.z) and TheWorld.state.isspring then
 		if not _activehassler then
-			if _worldsettingstimer:ActiveTimerExists(MOTHERGOOSE_TIMERNAME) and _worldsettingstimer:GetTimeLeft(MOTHERGOOSE_TIMERNAME) > 480*1.8 then -- Cannot advance any more if it's within two days
-				local time = _worldsettingstimer:GetTimeLeft(MOTHERGOOSE_TIMERNAME)
-				if time > 480*8 then
-					time = time - 480*math.random(2,3)
-				elseif time > 480*4 then
-					time = time - 480*math.random(1,2)
-				else
-					time = time - 480*math.random(1,1.5)
-				end
+			if _worldsettingstimer:ActiveTimerExists(MOTHERGOOSE_TIMERNAME) and _worldsettingstimer:GetTimeLeft(MOTHERGOOSE_TIMERNAME) > 480 then -- Cannot advance any more if it's within one day
+				local time = UMCommonFns.MegaFlareTimerReduction(_worldsettingstimer:GetTimeLeft(MOTHERGOOSE_TIMERNAME))
 				_worldsettingstimer:SetTimeLeft(MOTHERGOOSE_TIMERNAME, time)
+				--TheNet:Announce("Moose/Goose timer: " .. tostring(time))
+				--TheNet:Announce("Moose/Goose timer: " .. tostring(time/480) .. " days")
 			elseif not _worldsettingstimer:ActiveTimerExists(MOTHERGOOSE_TIMERNAME) then
 				_worldsettingstimer:StartTimer(MOTHERGOOSE_TIMERNAME, 480*math.random(6,8))
+				TryStartAttacks()
 			end
 		end
 	end
@@ -302,7 +298,7 @@ function self:OnPostInit()
     if not IsIslandOrVolcanoWorld() then
     -- Shorten the time used for winter to account for the time deerclops spends stomping around
     -- Then add one to _attacksperseason to shift the attacks so the last attack isn't right when the season changes to spring
-    _attackdelay = (TheWorld.state.springlength - 1) * TUNING.TOTAL_DAY_TIME / (_attacksperseason + 1) 
+    _attackdelay = (TheWorld.state.springlength - 1) * TUNING.TOTAL_DAY_TIME / (_attacksperseason + 1)
 	_worldsettingstimer:AddTimer(MOTHERGOOSE_TIMERNAME, _attackdelay, true, OnMotherGooseTimerDone)
 
     if _timetoattack then

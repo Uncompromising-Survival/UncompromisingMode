@@ -73,4 +73,17 @@ UMCommonFns.VetcurseUnequip = function(inst, owner, slot)
     end
 end
 
+-- Unified megaflare timer reduction used by all seasonal boss spawners
+UMCommonFns.MegaFlareTimerReduction = function(time)
+    if time > 480 * 8 then
+        return time - 480 * math.random(4, 6)
+    elseif time > 480 * 4 then
+        return time - 480 * math.random(2, 4)
+    elseif time > 480 * 2.5 then
+        return time - 480 * 2
+    else
+        return time - 240
+    end
+end
+
 return UMCommonFns

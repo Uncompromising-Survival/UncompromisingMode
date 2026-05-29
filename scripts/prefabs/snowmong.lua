@@ -29,8 +29,6 @@ SetSharedLootTable( 'snowmong_melting',
 	
 })
 
-local SEE_VICTIM_DIST = 25
-
 local function SetUnder(inst)
 	inst.State = true
 	inst:AddTag("notdrawable")
@@ -52,14 +50,20 @@ local function CanBeAttacked(inst, attacker)
 	return inst.State == false
 end
 
+local AGGRO_RANGE = 30
+local AGGRO_RANGE_SQ = AGGRO_RANGE * AGGRO_RANGE
+
 local function Retarget(inst)
-    local targetDist = 30
     local notags = {"FX", "NOCLICK","INLIMBO", "playerghost", "shadowcreature","webbedcreature","wall","structure","companion","snowish"}
-    return FindEntity(inst, targetDist, function(guy) return inst.components.combat:CanTarget(guy) and not guy.components.health:IsDead() end, nil, notags)
+    return FindEntity(inst, AGGRO_RANGE, function(guy)
+        return guy:HasTag("player") and inst.components.combat:CanTarget(guy) and not guy.components.health:IsDead()
+    end, nil, notags)
 end
 
 local function KeepTarget(inst, target)
-    return inst.components.combat:CanTarget(target)
+    return target:IsValid()
+        and inst.components.combat:CanTarget(target)
+        and inst:GetDistanceSqToInst(target) <= AGGRO_RANGE_SQ
 end
 
 local function OnSleep(inst)
@@ -84,43 +88,74 @@ local function melting(inst)
 end
 
 local function OnAttacked(inst, data)
-	if data.attacker and data.attacker:IsValid() and data.attacker.components.health and not data.attacker.components.health:IsDead() then
-        inst.components.combat:SetTarget(data.attacker)
+    local attacker = data and data.attacker
+    if attacker and attacker:IsValid()
+        and attacker.components.health and not attacker.components.health:IsDead() then
+        if inst.components.health:GetPercent() > 0.3 then
+            inst.components.combat:SetTarget(attacker)
+        else
+            inst.components.combat:SetTarget(nil)
+        end
     end
 end
 
-local function SetLevel(inst,level)
-	level = math.clamp(level,1,30)
+local function SetLevel(inst, level, no_fx)
+	level = math.clamp(level, 1, 30)
+	local current_hp = inst.components.health.currenthealth
 	inst.components.health:SetMaxHealth(50*(level-1)+250)
-	inst.components.health:SetPercent(1)
+	inst.components.health:SetPercent(current_hp / inst.components.health.maxhealth)
 	inst.Transform:SetScale(2*(level)^0.1, 2*(level)^0.1, 2*math.sqrt(level)^0.1)
 	inst.components.combat:SetDefaultDamage(30*(level)^0.25)
 	local range = 2 + (level-1)/29*2
 	inst.components.combat:SetRange(range, range)
+	if not no_fx then
+		local icefx = SpawnPrefab("deer_ice_flakes")
+		if icefx then
+			local x, y, z = inst.Transform:GetWorldPosition()
+			icefx.Transform:SetPosition(x, y, z)
+			icefx.Transform:SetScale(0.7, 1.2, 1.2)
+			icefx.AnimState:PlayAnimation("idle")
+			icefx:DoTaskInTime(0, icefx.KillFX)
+		end
+	end
 end
 
 local function IntegrateSnowStuff(inst) --AXE I'm using the mole's steal action as a psuedo eat action so I don't need to assign a food type for specifically 3 items
 	local buffaction = inst:GetBufferedAction()
 	local item = buffaction and buffaction.target and buffaction.target or nil
-	if item then
+	if item and item:IsValid() and not (item.components.inventoryitem and item.components.inventoryitem:IsHeld()) then
 		local level = 0
+		local heal = 200
 		if item.prefab == "um_gemologybluegem1" or item.prefab == "um_gemologybluegem2" then
-			local tier = item:GetTier()
-			inst.gem_level = math.clamp(tier,inst.gem_level and inst.gem_level or 0,3)
-			inst.gem_chance = (inst.gem_chance and inst.gem_chance or 0) + tier
-
-			inst.upgrade_level = inst.upgrade_level + 10
+			local tier = math.max(item:GetTier(), 1)
+			local stacksize = (item.components.stackable and item.components.stackable:StackSize()) or 1
+			local current_eaten = inst.gems_eaten or 0
+			local gems_to_add = math.min(stacksize, 10 - current_eaten)
+			if gems_to_add > 0 then
+				inst.gem_level = math.clamp(tier, inst.gem_level and inst.gem_level or 0, 3)
+				inst.gem_chance = (inst.gem_chance and inst.gem_chance or 0) + tier * gems_to_add
+				inst.upgrade_level = (inst.upgrade_level or 1) + 10 * gems_to_add
+				inst.gems_eaten = current_eaten + gems_to_add
+				inst.gem_tier_list = inst.gem_tier_list or {}
+				for i = 1, gems_to_add do
+					table.insert(inst.gem_tier_list, { prefab = item.prefab, tier = tier })
+				end
+				heal = heal * 1.25
+			end
 		end
 		if item.prefab == "bluegem" then
-			inst.upgrade_level = inst.upgrade_level + 10	
+			inst.upgrade_level = (inst.upgrade_level or 1) + 10
+			heal = heal * 1.25
 		end
 		if item.prefab == "ice" then
-			inst.upgrade_level = inst.upgrade_level + 3	
+			inst.upgrade_level = (inst.upgrade_level or 1) + 3
 		end
 		if item.prefab == "snowball_item" then
-			inst.upgrade_level = inst.upgrade_level + 1
+			inst.upgrade_level = (inst.upgrade_level or 1) + 1
+			heal = 200
 		end
 		SetLevel(inst,inst.upgrade_level)
+		inst.components.health:DoDelta(heal)
 		SpawnPrefab("splash_snow_fx").Transform:SetPosition(inst.Transform:GetWorldPosition())
 		item:Remove() -- Mong ate the item, it's part of 'em now
 		inst:ClearBufferedAction()
@@ -132,6 +167,12 @@ local function OnSave(inst)
 	if inst.gem_level then
 		data.gem_level = inst.gem_level
 		data.gem_chance = inst.gem_chance
+	end
+	if inst.gems_eaten then
+		data.gems_eaten = inst.gems_eaten
+	end
+	if inst.gem_tier_list then
+		data.gem_tier_list = inst.gem_tier_list
 	end
 	if inst.upgrade_level then
 		data.upgrade_level = inst.upgrade_level
@@ -145,9 +186,15 @@ local function OnLoad(inst,data)
 			inst.gem_level = data.gem_level
 			inst.gem_chance = data.gem_chance
 		end
+		if data.gems_eaten then
+			inst.gems_eaten = data.gems_eaten
+		end
+		if data.gem_tier_list then
+			inst.gem_tier_list = data.gem_tier_list
+		end
 		if data.upgrade_level then
 			inst.upgrade_level = data.upgrade_level
-			SetLevel(inst,inst.upgrade_level)
+			SetLevel(inst, inst.upgrade_level, true)
 		end
 	end
 end
@@ -241,7 +288,7 @@ local function fn(Sim)
 	inst:DoTaskInTime(0,function(inst)
 		if not inst.upgrade_level then
 			inst.upgrade_level = 1
-			SetLevel(inst,inst.upgrade_level)
+			SetLevel(inst, inst.upgrade_level, true)
 		end
 	end)
 	return inst	

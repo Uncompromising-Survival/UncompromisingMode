@@ -91,6 +91,12 @@ end
 local function ExplodeSpellFn(inst, doer, pos)
 	local ents = TheSim:FindEntities(pos.x,pos.y,pos.z,4)
 	for i,v in ipairs(ents) do
+		if v:HasTag("INLIMBO") and v.components.inventoryitem and not TheNet:GetPVPEnabled() then
+			local owner = v.components.inventoryitem:GetGrandOwner()
+			if owner:HasTag("player") and owner ~= doer then
+				return
+			end
+		end
 		if v.prefab == "spore_moon" then -- Spores
 			inst.components.finiteuses:Use(1)
 			v.sg:GoToState("pre_pop")
@@ -101,8 +107,9 @@ local function ExplodeSpellFn(inst, doer, pos)
 		end
 		if IsExplosiveEnemy(v.prefab) then -- Exploding enemies, mostly UM
 			if v.prefab == "snaildrake_magma" or v.prefab == "snaildrake_slime" then -- These guys have different handling
-				inst.components.finiteuses:Use(1)
+				inst.components.finiteuses:Use(50)
 				v:DoExplosion()
+				v.components.combat:GetAttacked(doer, 100, nil)
 			elseif v.components.explosive then
 				inst.components.finiteuses:Use(50)
 				v.components.explosive:OnBurnt()
