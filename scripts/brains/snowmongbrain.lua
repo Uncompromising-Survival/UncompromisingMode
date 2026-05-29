@@ -12,6 +12,8 @@ local SnowMongBrain = Class(Brain, function(self, inst)
 end)
 
 
+local ABANDON_CHASE_FOR_FOOD_DISTSQ = 20 * 20
+
 local abominamole_wants = {"um_gemologybluegem1","um_gemologybluegem2","bluegem","ice","snowball_item"}
 local function IsAbominaMoleBait(inst)
 	for i,v in ipairs(abominamole_wants) do
@@ -31,6 +33,13 @@ end
 local function TakeBaitAction(inst)
     -- Don't look for bait if just spawned, busy making a new home, or has full inventory
     if inst:GetTimeAlive() < 3 or inst.sg:HasStateTag("busy") then
+        return
+    end
+    -- Target is close and snowmong is healthy: keep fighting, skip food
+    local target = inst.components.combat.target
+    if target and target:IsValid()
+        and inst:GetDistanceSqToInst(target) <= ABANDON_CHASE_FOR_FOOD_DISTSQ
+        and inst.components.health:GetPercent() > 0.3 then
         return
     end
 

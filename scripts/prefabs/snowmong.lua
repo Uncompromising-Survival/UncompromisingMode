@@ -84,15 +84,19 @@ local function melting(inst)
 end
 
 local function OnAttacked(inst, data)
-	if data.attacker and data.attacker:IsValid() and data.attacker.components.health and not data.attacker.components.health:IsDead() then
-        inst.components.combat:SetTarget(data.attacker)
+    if data.attacker and data.attacker:IsValid() and data.attacker.components.health and not data.attacker.components.health:IsDead() then
+        if inst.components.health:GetPercent() > 0.3 then
+            inst.components.combat:SetTarget(data.attacker)
+        else
+            inst.components.combat:SetTarget(nil)
+        end
     end
 end
 
 local function SetLevel(inst,level)
 	level = math.clamp(level,1,30)
 	inst.components.health:SetMaxHealth(50*(level-1)+250)
-	inst.components.health:SetPercent(1)
+	inst.components.health:DoDelta(200)
 	inst.Transform:SetScale(2*(level)^0.1, 2*(level)^0.1, 2*math.sqrt(level)^0.1)
 	inst.components.combat:SetDefaultDamage(30*(level)^0.25)
 	local range = 2 + (level-1)/29*2
@@ -102,7 +106,7 @@ end
 local function IntegrateSnowStuff(inst) --AXE I'm using the mole's steal action as a psuedo eat action so I don't need to assign a food type for specifically 3 items
 	local buffaction = inst:GetBufferedAction()
 	local item = buffaction and buffaction.target and buffaction.target or nil
-	if item then
+	if item and item:IsValid() and not (item.components.inventoryitem and item.components.inventoryitem:IsHeld()) then
 		local level = 0
 		if item.prefab == "um_gemologybluegem1" or item.prefab == "um_gemologybluegem2" then
 			local tier = item:GetTier()
