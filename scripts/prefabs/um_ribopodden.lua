@@ -116,7 +116,7 @@ local function den()
 
     inst.components.childspawner:SetSpawnPeriod(TUNING.FROG_POND_SPAWN_TIME)
     inst.components.childspawner:SetRegenPeriod(TUNING.FROG_POND_REGEN_TIME)
-	
+
 
 	inst.components.childspawner:SetMaxChildren(3)
 
@@ -128,7 +128,7 @@ local function den()
     inst.task = inst:DoTaskInTime(0, OnInit)
 
     inst.OnPreLoad = OnPreLoad
-	
+
     inst:AddComponent("lootdropper")
     inst:AddComponent("workable")
     inst.components.workable:SetWorkAction(ACTIONS.HAMMER)
@@ -136,7 +136,7 @@ local function den()
     inst.components.workable:SetOnFinishCallback(onhammered)
     inst.components.workable:SetOnWorkCallback(onhit)
 
-	
+
 	inst:ListenForEvent("onbuilt", onbuilt)
 
     return inst

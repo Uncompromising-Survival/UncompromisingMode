@@ -4,7 +4,6 @@ GLOBAL.setfenv(1, GLOBAL)
 
 local function onlightningground(inst)
     inst.components.fueled:DoDelta(TUNING.MED_FUEL)
-    inst.components.fueled.ontakefuelfn(inst, TUNING.SMALL_FUEL)
     if inst.components.fueled:GetPercent() > 1 then
         inst.components.fueled:SetPercent(1)
     end
@@ -22,7 +21,7 @@ local function Strike(owner)
         --fx.Transform:SetScale(.66, .66, .66)
         local item = owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
         item.components.fueled:DoDelta(TUNING.MED_FUEL)
-        item.components.fueled.ontakefuelfn(item, TUNING.SMALL_FUEL)
+        item.SoundEmitter:PlaySound("dontstarve/common/lightningrod")
         if item.components.fueled:GetPercent() > 1 then
             item.components.fueled:SetPercent(1)
         end
