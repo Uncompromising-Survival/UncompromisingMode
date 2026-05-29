@@ -52,6 +52,11 @@ local function onequip(inst, owner)
 
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
+
+    local rechargeable = inst.components.rechargeable
+    if rechargeable and rechargeable:GetTimeToCharge() < TUNING.DSTU.CURSED_ANTLER_COOLDOWN_ONEQUIP then
+        rechargeable:Discharge(TUNING.DSTU.CURSED_ANTLER_COOLDOWN_ONEQUIP)
+    end
 end
 
 local function onunequip(inst, owner)
@@ -66,20 +71,7 @@ end
 
 local function onattack(inst, attacker, target)
     if target and target:IsValid() and attacker and attacker:IsValid() and inst.components.rechargeable:IsCharged() then
-        local x1, y1, z1 = inst.Transform:GetWorldPosition()
-
-        local owner = inst.components.inventoryitem:GetGrandOwner()
-
-        for i, v in pairs(TheSim:FindEntities(x1, y1, z1, 8, {"cursedantler"})) do
-            if v ~= inst then
-                local vowner = v.components.inventoryitem:GetGrandOwner()
-                if vowner and (vowner == owner or not vowner:HasTag("player")) or vowner == nil then
-                    v.components.rechargeable:Discharge(5)
-                end
-            end
-        end
-
-        inst.components.rechargeable:Discharge(5)
+        inst.components.rechargeable:Discharge(TUNING.DSTU.CURSED_ANTLER_COOLDOWN)
 
         local x, y, z = target.Transform:GetWorldPosition()
         for i = 1, 4 do

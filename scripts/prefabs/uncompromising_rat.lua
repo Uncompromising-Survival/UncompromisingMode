@@ -1481,7 +1481,7 @@ local function fn_winkyburrow()
 
     if not POPULATING then AttachShadowContainer(inst) end
 
-    inst:DoTaskInTime(90, WinkyBurrowDespawn)
+    inst:DoTaskInTime(180, WinkyBurrowDespawn)
 
     return inst
 end

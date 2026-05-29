@@ -227,7 +227,7 @@ env.AddStategraphPostInit("beequeen", function(inst)
 
             timeline =
             {
-                CommonHandlers.OnNoSleepTimeEvent(47 * FRAMES, DoStomp),
+                CommonHandlers.OnNoSleepTimeEvent(46 * FRAMES, DoStomp),
             },
 
             events =

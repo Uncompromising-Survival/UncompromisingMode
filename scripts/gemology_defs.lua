@@ -188,7 +188,7 @@ local swilson_symbols_to_hide = {
 }
 
 local function SendShadowClone(item, owner, target, tier)
-    DamageInfiniteItemGem("greengem1", item, 0.005)             --damage on any attack/work because it speeds it up.
+    DamageInfiniteItemGem("greengem1", item, 0.005) --damage on any attack/work because it speeds it up.
 
     if target:IsValid() and (tier - 1) * 0.3 > math.random() and tier > 1 then
         if owner:GetDistanceSqToInst(target) > 50 ^ 2 and owner.components.sanity then --Long ways away, it's taking from your mind to send swilsons there
@@ -215,7 +215,7 @@ local function SendShadowClone(item, owner, target, tier)
                 swilson.work = 1
                 swilson.LabWork(swilson, owner, newtarget)
             elseif target.components.health then
-                swilson.attack = item.components.weapon:GetDamage(attacker, target)
+                swilson.attack = item.components.weapon:GetDamage(owner, target)
                 swilson.LabAttack(swilson, owner, newtarget)
             end
         end
@@ -376,14 +376,14 @@ AddUMGemDef("yellowgem1", {
 
 local static_mods = { 10, 15, 20 }
 
-local combat_health = { "_health", "_combat" }
-local arc_player = { "player", "arcgrounded" }
+local arc_cantarget = { "_health", "_combat" }
+local arc_canttarget = { "player", "playerghost", "arcgrounded", "wall", "INLIMBO", "companion", "abigail", "invisible", "hiding", "notarget", "noattack" }
 local function FindEnemiesNearbyAndShockThem(inst, attacker, target, ShockAgain, tier)
     local x, y, z = target.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, 4, combat_health, arc_player)
+    local ents = TheSim:FindEntities(x, y, z, 4, arc_cantarget, arc_canttarget)
 
     for i, v in ipairs(ents) do
-        if not v.components.health:IsDead() then
+        if not v.components.health:IsDead() and not attacker.components.combat:IsAlly(v) and attacker.components.combat:CanTarget(v) then
             local dist = math.sqrt(target:GetDistanceSqToInst(v))
             v:DoTaskInTime(dist / 5, function(v)
                 if v.components.health and not v.components.health:IsDead() and not v:HasTag("arcgrounded") then -- we check these again because they could have already died or been shocked once
@@ -461,19 +461,31 @@ AddUMGemDef("palegem1", {
         onapply = function(item, tier)
             -- stuff is handled elsewhere
             -- see init/init_gemology/special.lua
-        end,
-        onattack = function(item, attacker, target, tier)
+
             if tier ~= 1
                 and AllRecipes ~= nil
                 and (AllRecipes[item.prefab] == nil
                     or AllRecipes[item.prefab] ~= nil
-                    and (AllRecipes[item.prefab].is_deconstruction_recipe or AllRecipes[item.prefab].no_deconstruct))
+                    and (AllRecipes[item.prefab].is_deconstruction_recipe))
                 and item.components.weapon ~= nil then
-                local stimuli = item.components.weapon.stimuli and item.components.weapon.stimuli or nil
-                target.components.combat:GetAttacked(attacker, 34 / 2 * (tier - 1), nil, stimuli)
+                local damage = item.components.weapon.damage
+                item.volatile_gemology_data.um_gemologypalegem1 = damage
+                if type(damage) == "function" then
+                    item.components.weapon:SetDamage(function(inst, attacker, target)
+                        return damage(inst, attacker, target) + (34 / 2 * (tier - 1))
+                    end)
+                else
+                    item.components.weapon.damage = damage + (34 / 2 * (tier - 1))
+                end
             end
-
+        end,
+        onattack = function(item, attacker, target, tier)
             DamageInfiniteItemGem("palegem1", item, 0.005)
+        end,
+        onremove = function(item, tier)
+            if item.volatile_gemology_data.um_gemologypalegem1 then
+                item.components.weapon.damage = item.volatile_gemology_data.um_gemologypalegem1
+            end
         end
     }
 })
@@ -513,9 +525,7 @@ AddUMGemDef("palegem2", {
                 and (AllRecipes[item.prefab] == nil
                     or AllRecipes[item.prefab] ~= nil
                     and (AllRecipes[item.prefab].nounlock
-                        or AllRecipes[item.prefab].is_deconstruction_recipe
-                        or not AllRecipes[item.prefab].no_deconstruct
-                    )
+                        or AllRecipes[item.prefab].is_deconstruction_recipe)
                 ) then
                 if tier ~= 1 then
                     local _Use = item.components.finiteuses.Use
@@ -530,8 +540,12 @@ AddUMGemDef("palegem2", {
             end
         end,
         onattack = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("palegem2", item, 0.005)
+            DamageInfiniteItemGem("palegem2", item, 0.0025)
         end,
+        onwork = function(item, attacker, target, tier)
+            DamageInfiniteItemGem("palegem2", item, 0.0025)
+        end,
+
         onremove = function(item, tier)
             local old_finite = item.volatile_gemology_data.um_gemologypalegem2.old_finite
             local old_fueled = item.volatile_gemology_data.um_gemologypalegem2.old_fueled

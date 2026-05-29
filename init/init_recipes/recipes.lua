@@ -302,7 +302,7 @@ ChangeSortKey("skullchest_child", "magician_chest", "STRUCTURES", true)
 ChangeSortKey("skullchest_child", "magician_chest", "CONTAINERS", true)
 ChangeSortKey("skullchest_child", "magician_chest", "MAGIC", true)
 
-AddRecipe2("um_ribopodden", { Ingredient("boneshard", 8), Ingredient("um_ribopod", 6), Ingredient("rocks", 12) }, TECH.SCIENCE_TWO, { placer = "um_ribopodden_placer" }, { "STRUCTURES" })
+AddRecipe2("um_ribopodden", { Ingredient("boneshard", 8), Ingredient("um_ribopod", 3), Ingredient("rocks", 12) }, TECH.SCIENCE_TWO, { placer = "um_ribopodden_placer" }, { "STRUCTURES" })
 ChangeSortKey("um_ribopodden", "rabbithouse", "STRUCTURES", true)
 
 --[[
@@ -430,6 +430,7 @@ AddDeconstructRecipe("snappy_jaw", { Ingredient("flint", 3), Ingredient("rope", 
 AddDeconstructRecipe("pied_piper_flute", { Ingredient("twigs", 3), Ingredient("goldnugget", 1) })
 AddDeconstructRecipe("skullflask", { Ingredient("boneshard", 2), Ingredient("nightmarefuel", 6), Ingredient("livinglog", 1) })
 AddDeconstructRecipe("skullflask_empty", { Ingredient("boneshard", 2), Ingredient("nightmarefuel", 1), Ingredient("livinglog", 1) })
+AddDeconstructRecipe("tentaclespike", { Ingredient("tentaclespots", 1) })
 AddDeconstructRecipe("corvushat", { Ingredient("silk", 6), Ingredient("feather_robin", 2), Ingredient("seeds", 1) }) --:)
 
 --Vet Curse Deconstruct Recipes
@@ -656,6 +657,8 @@ ChangeSortKey("um_magnifier_purplegem", "sentryward", "TOOLS", false)
 AddRecipe2("um_gemology_pouch", { Ingredient("um_gemologyorangegem2", 1), Ingredient("pigskin", 4), Ingredient("nightmarefuel", 2) }, TECH.MAGIC_TWO, {}, { "MAGIC", "CONTAINERS" })
 ChangeSortKey("um_gemology_pouch", "skullchest_child", "MAGIC", false)
 ChangeSortKey("um_gemology_pouch", "winona_toolbox", "CONTAINERS", false)
+
+AddRecipe2("um_blueprinting_kit", { Ingredient("walrus_tusk", 1), Ingredient("malbatross_feather", 1), Ingredient("papyrus", 2) }, TECH.SCIENCE_TWO, {}, { "PROTOTYPERS", "TOOLS" })
 
 if TUNING.DSTU.SHAVE_MODE then
     AddRecipe2("um_thulecite_razor", { Ingredient("razor", 1), Ingredient("thulecite", 2), Ingredient("nightmarefuel", 2) }, TECH.ANCIENT_TWO, { nounlock = true, no_builder_skill = "wathom_allegiance_neutral", forward_ingredients = { "wathom_um_thulecite_razor" } }, { "CRAFTING_STATION", "TOOLS" })

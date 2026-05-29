@@ -40,7 +40,7 @@ env.AddClassPostConstruct("widgets/containerwidget", function(self, owner)
     local _Close = self.Close
     function self:Close()
         _Close(self)
-        if not self.isopen and self.button == nil then
+        if self.inst:HasTag("silksack") and not self.isopen and self.button == nil then
             self.button = {
                 ["Hide"] = function() return end,
                 ["Kill"] = function() return end,

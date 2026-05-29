@@ -363,6 +363,9 @@ if GetModConfigData("pocket_powertrip_") then
 
     AddRecipeToFilter("trunkvest_summer", "CONTAINERS")
     ChangeSortKey("trunkvest_summer", "sporepack", "CONTAINERS", true)
+
+    AddRecipeToFilter("beargervest", "CONTAINERS")
+    ChangeSortKey("beargervest", "trunkvest_summer", "CONTAINERS", true)
 end
 
 AddRecipeToFilter("wardrobe", "CONTAINERS")

@@ -199,6 +199,7 @@ RECIPE_DESC.UM_GEMOLOGY_POUCH = "Holds Strange Gems and geodes. Bigger on the in
 RECIPE_DESC.WORMWOOD_MUSHTREE = "Create your very own fungus among us."
 RECIPE_DESC.WORMWOOD_EQEX = "Friends come and go."
 RECIPE_DESC.UM_BOMB_MOON = "Create freaks scorched by the moon's light!"
+RECIPE_DESC.UM_BLUEPRINTING_KIT = "Write down what you know and copy what others wrote before you."
 
 RECIPE_DESC.UM_THULECITE_RAZOR = "Essential for the ancient technique of \"shaving\" "
 -- [              DSTU Related Overrides                  ]
@@ -236,7 +237,7 @@ STRINGS.SKIN_DESCRIPTIONS.winky_none = "She's a fan of shiny things."
 
 STRINGS.ACTIONS.CREATE_BURROW = "Make Burrow"
 STRINGS.ACTIONS.RAT_ORDER = "Gather Order!"
-STRINGS.ACTIONS.ACTIVATE.RECRUITRAT = "Recruit A Rat"
+STRINGS.ACTIONS.STARTCHANNELING.RECRUITRAT = "Recruit a Rat"
 STRINGS.ACTIONS.RUMMAGE.GEM_FORGE = "Use"
 STRINGS.ACTIONS.RUMMAGE.CLOSE_GEM_FORGE = "Stop using"
 STRINGS.ACTIONS.STORE.GEM_FORGE = "Forge"
@@ -252,6 +253,8 @@ STRINGS.ACTIONS.UM_ACTIVATABLE_ITEM = {
 -- Wixie
 STRINGS.CHARACTER_SURVIVABILITY.wixie = "Grim"
 
+STRINGS.ACTIONS.STARTCHANNELING.UM_PROJECTION = "Astral Projectinate"
+STRINGS.ACTIONS.STARTCHANNELING.UM_UNPROJECTION = "Return to Body"
 
 STRINGS.ACTIONS.TURNOFF.HARPOON = "Break Reel"
 STRINGS.ACTIONS.ACTIVATE.HARPOON = "Reel"

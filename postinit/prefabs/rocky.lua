@@ -42,7 +42,7 @@ local function Repopulate(inst)
 			rock = "rock_flintless"
 		end
 		local rockprefab = SpawnPrefab(rock)
-		rockprefab.Transform:SetPosition(x + pos.x,0,z + pos.z)
+		rockprefab.Transform:SetPosition(x + offset.x,0,z + offset.z)
 	end
 end
 

@@ -102,6 +102,7 @@ local function fn()
     inst:AddTag("wet")
     inst:AddTag("WORM_DANGER")
 	inst:AddTag("tentacle")
+    inst:AddTag("shadow_aligned")
 
     inst.entity:SetPristine()
 
@@ -121,7 +122,7 @@ local function fn()
     inst.components.combat:SetAttackPeriod(TUNING.TENTACLE_ATTACK_PERIOD)
     inst.components.combat:SetRetargetFunction(GetRandomWithVariance(2, 0.5), retargetfn)
     inst.components.combat:SetKeepTargetFunction(shouldKeepTarget)
-	
+
     inst:AddComponent("inspectable")
     inst:AddComponent("lootdropper")
     inst.components.lootdropper:SetChanceLootTable('wicker_tentacle')
@@ -132,9 +133,9 @@ local function fn()
     inst:SetStateGraph("SGtentacle")
 
     inst:ListenForEvent("attacked", OnAttacked)
-	
+
 	inst.task = inst:DoPeriodicTask(4.8, degenerate)
-	
+
     inst.persists = false
 
 	inst:ListenForEvent("ondeath", idleremovecheck)
