@@ -644,6 +644,25 @@ AddStategraphPostInit("wilson", function(inst)
                 --                inst.components.talker:Say("Can't... Breathe...", nil, true) -- I can't think of something cool for Wathom to say, so away this goes.
 
                 inst.AnimState:PlayAnimation("sing_fail", false)
+                if inst.components.adrenaline:GetPercent() < 0.25 and not inst:HasAnyTag("amped", "deathamp") then
+                    local health = inst.components.health
+                    if health and not health:IsDead() then
+                        if health.currenthealth > 5 or TUNING.DSTU.DATES.APRIL_FOOLS then
+                            print(health.currenthealth)
+                            health:DoDelta(-5, nil, "DEATHAMP", nil, nil, true)
+                        end
+                        inst.components.adrenaline:DoDelta(25)
+                        inst.components.grogginess.grog_amount = 0
+                        local x, y, z = inst.Transform:GetWorldPosition()
+                        SpawnPrefab("minotaur_blood3").Transform:SetPosition(x, y, z)
+                        inst:DoTaskInTime(.5, function()
+                            SpawnPrefab("minotaur_blood3").Transform:SetPosition(x, y, z)
+                            if health.currenthealth > 5 or TUNING.DSTU.DATES.APRIL_FOOLS then
+                                health:DoDelta(-5, nil, "DEATHAMP", nil, nil, true)
+                            end
+                        end)
+                    end
+                end
 
                 inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/leap") -- maybe make something new later?
             end,
@@ -1378,7 +1397,8 @@ AddPrefabPostInit("shadowheart", function(inst)
 
     local function oneatenfn(eater)
         TheGenericKV:SetKV("wathom_yummy", "1")
-        -- Insert coolest Shadow fxs you can do, prob do the fuelweaver shadow stun too.
+        -- Insert coolest Shadow fxs you can do, prob do the fuelweaver shadow stun too. 
+        --eater.sg:GoToState("curse_controlled")
         --[[eater:DoTaskInTime(.2,function() -- Want to simulate a beating heart with the regen :> -CB
             eater.components.debuffable:AddDebuff("healthregenbuff_vetcurse_shadowheart2", "healthregenbuff_vetcurse", {duration = (inst.components.edible.healthvalue * 0.1)})
         end)]]
