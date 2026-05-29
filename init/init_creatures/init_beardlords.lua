@@ -256,7 +256,9 @@ env.AddStategraphPostInit("bunnyman", function(inst)
             events =
             {
                 EventHandler("animqueueover", function(inst)
-                    inst.sg:GoToState("idle")
+                    if inst.AnimState:AnimDone() then
+                        inst.sg:GoToState("idle")
+                    end
                 end),
             },
 
