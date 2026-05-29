@@ -1110,7 +1110,7 @@ local wathombark = AddAction(
             doer.components.adrenaline:DoDelta(doer:HasTag("amped") and 8 or -25, 2)
             --        doer.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/bark") Commented out for now since it already plays the sound before this code is performed
 
-            local pos = act:GetActionPoint()
+            local pos = act:GetActionPoint() -- Cursor Position Bark
             local ents = GLOBAL.TheSim:FindEntities(pos.x, pos.y, pos.z, 10, {"_combat"}, {"companion", "INLIMBO", "notarget", "noattack", "player", "playerghost", "wall", "abigail", "shadowminion", "shadow"}) --added playertags because of the taunt.
             for i, v in ipairs(ents) do
                 if v ~= doer and v.entity:IsVisible()
@@ -1131,7 +1131,7 @@ local wathombark = AddAction(
                 end
             end
             --also scare enemies near wathom, at a smaller radius
-            local x, y, z = doer.Transform:GetWorldPosition()
+            local x, y, z = doer.Transform:GetWorldPosition() -- Wathom Position Bark
             ents = GLOBAL.TheSim:FindEntities(x, y, z, 4, {"_combat"}, {"companion", "INLIMBO", "notarget", "noattack", "player", "playerghost", "wall", "abigail", "shadowminion", "shadow", "trap"}) --added playertags because of the taunt.
             for i, v in ipairs(ents) do
                 if v ~= doer and v.entity:IsVisible()

@@ -89,36 +89,15 @@ local function ShowLowHealth(inst)
 end
 
 local function BuildSkillsData(SkillTreeFns)
-    local skills = 
+    local skills =
     {
-        rampage_1 = {
-            title = STRINGS.SKILLTREE.WATHOM.RAMPAGE_1_TITLE,
-            icon = "wathom_rampage_1",
-            desc = STRINGS.SKILLTREE.WATHOM.RAMPAGE_1_DESC,
-            group = "rampage",
-            tags = {"rampage"},
-            pos = {-214+38+38+38+38,58},
-            --pos = {1,-3},
-            root = true,
-            connects = {
-                "rampage_2",
-            },
-        },
-        rampage_2 = {
-            title = STRINGS.SKILLTREE.WATHOM.RAMPAGE_2_TITLE,
-            icon = "wathom_rampage_2",
-            desc = STRINGS.SKILLTREE.WATHOM.RAMPAGE_2_DESC,
-            group = "rampage",
-            tags = {"rampage"},
-            pos = {-214+38+38+38+38,58+38},
-        },
-
+        -- Amp Path
         amp_1 = {
             title = STRINGS.SKILLTREE.WATHOM.AMP_1_TITLE,
-            icon = "wathom_amp_1", --1 or 2? -CB
+            icon = "wathom_amp_2", --1 or 2? -CB
             desc = STRINGS.SKILLTREE.WATHOM.AMP_1_DESC,
             --icon = "wilson_alchemy_1",
-            pos = {-214,58-38},
+            pos = {-214,58},
             group = "amp",
             tags = {"amp"},
             onactivate = function(inst, fromload)
@@ -133,7 +112,7 @@ local function BuildSkillsData(SkillTreeFns)
             icon = "wathom_amp_3",
             desc = STRINGS.SKILLTREE.WATHOM.AMP_3_DESC,
             --icon = "wilson_alchemy_1",
-            pos = {-214,58+38-38},
+            pos = {-214,58+38},
             group = "amp",
             tags = {"amp"},
             onactivate = function(inst, fromload)
@@ -161,7 +140,7 @@ local function BuildSkillsData(SkillTreeFns)
             icon = "wathom_shadow_wathom_1",
             desc = STRINGS.SKILLTREE.WATHOM.SHADOW_WATHOM_1_DESC,
             --icon = "wilson_torch_brightness_1",
-            pos = {-214,58+38+38-38+38},    
+            pos = {-214,58+38*2},
             --pos = {1,0},
             onactivate = function(inst, fromload)
                 end,
@@ -177,7 +156,7 @@ local function BuildSkillsData(SkillTreeFns)
             icon = "wathom_shadow_wathom_2",
             desc = STRINGS.SKILLTREE.WATHOM.SHADOW_WATHOM_2_DESC,
             --icon = "wilson_torch_brightness_2",
-            pos = {-214,58+38+38-38+38+38},
+            pos = {-214,58+38*3},
             --pos = {1,-1},
             onactivate = function(inst, fromload)
                 inst._skeleton_prefab = inst.skeleton_prefab
@@ -192,89 +171,12 @@ local function BuildSkillsData(SkillTreeFns)
             tags = {"shadow_wathom"},
         },
 
-        digitigrade_1 = {
-            title = STRINGS.SKILLTREE.WATHOM.DIGITIGRADE_1_TITLE,
-            desc = STRINGS.SKILLTREE.WATHOM.DIGITIGRADE_1_DESC,
-            icon = "wathom_digitigrade_1",
-            pos = {-214+38+38+38,58},
-            --pos = {0,-1},
-            group = "digitigrade",
-            tags = {"digitigrade"},
-            root = true,
-            connects = {
-                "digitigrade_2",
-            },
-        },
-        digitigrade_2 = {
-            title = STRINGS.SKILLTREE.WATHOM.DIGITIGRADE_2_TITLE,
-            icon = "wathom_digitigrade_2",
-            desc = STRINGS.SKILLTREE.WATHOM.DIGITIGRADE_2_DESC,
-            group = "digitigrade",
-            tags = {"digitigrade"},
-            --icon = "wilson_alchemy_1",
-            pos = {-214+38+38+38,58+38},
-        },
-
-        bite_1 = {
-            title = STRINGS.SKILLTREE.WATHOM.BITE_1_TITLE,
-            desc = STRINGS.SKILLTREE.WATHOM.BITE_1_DESC,
-            icon = "wathom_bite_1",
-            onactivate = function(inst, fromload)
-                inst.watch_healthtask = inst:DoPeriodicTask(6,ShowLowHealth)
-                inst.components.combat:SetDefaultDamage(TUNING.UNARMED_DAMAGE+2.5)
-            end,
-            ondeactivate = function(inst, fromload)
-                if inst.watch_healthtask then
-                    inst.watch_healthtask:Cancel()
-                    inst.watch_healthtask = nil
-                end
-                inst.components.combat:SetDefaultDamage(TUNING.UNARMED_DAMAGE)
-            end,
-            pos = {-214+38+38,58},
-            group = "bite",
-            tags = {"bite"},
-            root = true,
-            connects = {
-                "bite_2",
-            },
-        },
-        bite_2 = {
-            title = STRINGS.SKILLTREE.WATHOM.BITE_2_TITLE,
-            desc = STRINGS.SKILLTREE.WATHOM.BITE_2_DESC,
-            icon = "wathom_bite_2",
-            pos = {-214+38+38,58+38},
-            group = "bite",
-            tags = {"bite"},
-        },
-
-        bite_mastery = {
-            title = STRINGS.SKILLTREE.WATHOM.BITE_MASTERY_TITLE,
-            desc = STRINGS.SKILLTREE.WATHOM.BITE_MASTERY_DESC,
-            icon = "wathom_bite_mastery",
-            onactivate = function(inst, fromload)
-                inst.components.eater:SetDiet({FOODGROUP.OMNI}, {FOODTYPE.MEAT, FOODTYPE.GOODIES, FOODTYPE.LICHEN})
-                inst.components.eater:SetStrongStomach(true) -- Monster Meat, now edible.
-                --inst.components.eater:SetCanEatRawMeat(true) -- Comment out when we want to invert insanity.
-            end,
-            pos = {-214+38+38/2,58+38+38+38},
-            group = "bite",
-            tags = {"bite"},
-        },
-
-        bark_mastery = {
-            title = STRINGS.SKILLTREE.WATHOM.BARK_MASTERY_TITLE,
-            desc = STRINGS.SKILLTREE.WATHOM.BARK_MASTERY_DESC,
-            icon = "wathom_bark_mastery",
-            pos = {-214+38+38+38+38/2,58+38+38+38},
-            group = "bark",
-            tags = {"bark"},
-        },
-
+        -- Adapted Metabolism Path
         echolocation_1 = {
             title = STRINGS.SKILLTREE.WATHOM.ECHOLOCATION_1_TITLE,
             desc = STRINGS.SKILLTREE.WATHOM.ECHOLOCATION_1_DESC,
             icon = "wathom_echolocation_2",
-            pos = {-214+38,58},
+            pos = {-214+38*2,58+38/2},
             group = "echo",
             tags = {"echo"},
             root = true,
@@ -320,7 +222,188 @@ local function BuildSkillsData(SkillTreeFns)
                 end
             end,
         },]]
-        
+
+        bite_1 = {
+            title = STRINGS.SKILLTREE.WATHOM.BITE_1_TITLE,
+            desc = STRINGS.SKILLTREE.WATHOM.BITE_1_DESC,
+            icon = "wathom_bite_1",
+            onactivate = function(inst, fromload)
+                inst.watch_healthtask = inst:DoPeriodicTask(6,ShowLowHealth)
+                inst.components.combat:SetDefaultDamage(TUNING.UNARMED_DAMAGE+2.5)
+            end,
+            ondeactivate = function(inst, fromload)
+                if inst.watch_healthtask then
+                    inst.watch_healthtask:Cancel()
+                    inst.watch_healthtask = nil
+                end
+                inst.components.combat:SetDefaultDamage(TUNING.UNARMED_DAMAGE)
+            end,
+            pos = {-214+38*3,58},
+            group = "bite",
+            tags = {"bite"},
+            root = true,
+            connects = {
+                "bite_2",
+            },
+        },
+        bite_2 = {
+            title = STRINGS.SKILLTREE.WATHOM.BITE_2_TITLE,
+            desc = STRINGS.SKILLTREE.WATHOM.BITE_2_DESC,
+            icon = "wathom_bite_2",
+            pos = {-214+38*3,58+38},
+            group = "bite",
+            tags = {"bite"},
+        },
+
+        wathom_bite_lock = {
+            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_BITE_LOCK,
+            pos = {-214+38*2+38/2,58+38*2},
+            group = "bite",
+            --pos = {0,-1},
+            tags = {"lock"},
+            root = true,
+            lock_open = function(prefabname, activatedskills, readonly) 
+                if SkillTreeFns.CountTags(prefabname, "bite", activatedskills) >= 2 and SkillTreeFns.CountTags(prefabname, "echo", activatedskills) >= 1 then
+                    return true
+                end
+            end,
+            connects = {
+                "bite_mastery",
+            },
+        },
+
+        bite_mastery = { -- Adapted Metabolism
+            title = STRINGS.SKILLTREE.WATHOM.BITE_MASTERY_TITLE,
+            desc = STRINGS.SKILLTREE.WATHOM.BITE_MASTERY_DESC,
+            icon = "wathom_bite_mastery",
+            onactivate = function(inst, fromload)
+                inst.components.eater:SetDiet({FOODGROUP.OMNI}, {FOODTYPE.MEAT, FOODTYPE.GOODIES, FOODTYPE.LICHEN})
+                inst.components.eater:SetStrongStomach(true) -- Monster Meat, now edible.
+                --inst.components.eater:SetCanEatRawMeat(true) -- Comment out when we want to invert insanity.
+            end,
+            pos = {-214+38*2+38/2,58+38*3},
+            group = "bite",
+            tags = {"bite"},
+        },
+
+        -- Overwhelming Presence Path
+        wathom_friends_1 = {
+            title = STRINGS.SKILLTREE.WATHOM.WATHOM_FRIENDS_1_TITLE,
+            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_FRIENDS_1_DESC,
+            icon = "wathom_friends_1",
+            pos = {-214+38*4+38/2,58},
+            group = "rally",
+            tags = {"rally"},
+            root = true,
+            connects = {
+                "wathom_friends_2",
+            },
+        },
+
+        wathom_friends_2 = {
+            title = STRINGS.SKILLTREE.WATHOM.WATHOM_FRIENDS_2_TITLE,
+            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_FRIENDS_2_DESC,
+            icon = "wathom_friends_2",
+            pos = {-214+38*4+38/2,58+38},
+            group = "rally",
+            tags = {"rally"},
+        },
+
+        rampage_1 = {
+            title = STRINGS.SKILLTREE.WATHOM.RAMPAGE_1_TITLE,
+            icon = "wathom_rampage_1",
+            desc = STRINGS.SKILLTREE.WATHOM.RAMPAGE_1_DESC,
+            group = "rampage",
+            tags = {"rampage"},
+            pos = {-214+38*5+38/2,58},
+            --pos = {1,-3},
+            root = true,
+            connects = {
+                "rampage_2",
+            },
+        },
+        rampage_2 = {
+            title = STRINGS.SKILLTREE.WATHOM.RAMPAGE_2_TITLE,
+            icon = "wathom_rampage_2",
+            desc = STRINGS.SKILLTREE.WATHOM.RAMPAGE_2_DESC,
+            group = "rampage",
+            tags = {"rampage"},
+            pos = {-214+38*5+38/2,58+38},
+        },
+
+        wathom_bark_lock = {
+            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_BARK_LOCK,
+            pos = {-214+38*5,58+38*2},
+            group = "bite",
+            --pos = {0,-1},
+            tags = {"lock"},
+            root = true,
+            lock_open = function(prefabname, activatedskills, readonly) 
+                if SkillTreeFns.CountTags(prefabname, "rampage", activatedskills) >= 2 and SkillTreeFns.CountTags(prefabname, "rally", activatedskills) >= 2 then
+                    return true
+                end
+            end,
+            connects = {
+                "bark_mastery",
+            },
+        },
+
+        bark_mastery = { -- Overwhelming Presence
+            title = STRINGS.SKILLTREE.WATHOM.BARK_MASTERY_TITLE,
+            desc = STRINGS.SKILLTREE.WATHOM.BARK_MASTERY_DESC,
+            icon = "wathom_bark_mastery",
+            pos = {-214+38*5,58+38*3},
+            group = "bark",
+            tags = {"bark"},
+        },
+
+        --Miscellaneous Skills
+        wathom_magics = {
+            title = STRINGS.SKILLTREE.WATHOM.WATHOM_MAGICS_TITLE,
+            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_MAGICS_DESC,
+            icon = "wathom_magics",
+            pos = {204-22+2-50,58},
+            group = "ampfuel",
+            tags = {"ampfuel"},
+            root = true,
+            connects = {
+                "wathom_artifacts",
+            },
+        },
+
+        wathom_artifacts = {
+            title = STRINGS.SKILLTREE.WATHOM.WATHOM_ARTIFACTS_TITLE,
+            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_ARTIFACTS_DESC,
+            icon = "wathom_artifacts",
+            pos = {204+22+2-50,58},
+            group = "ampfuel",
+            tags = {"ampfuel", "artifacts"},
+            --root = true,
+        },
+
+        digitigrade_1 = {
+            title = STRINGS.SKILLTREE.WATHOM.DIGITIGRADE_1_TITLE,
+            desc = STRINGS.SKILLTREE.WATHOM.DIGITIGRADE_1_DESC,
+            icon = "wathom_digitigrade_1",
+            pos = {204-22+2-50,58-38},
+            --pos = {0,-1},
+            group = "digitigrade",
+            tags = {"digitigrade"},
+            root = true,
+            connects = {
+                "digitigrade_2",
+            },
+        },
+        digitigrade_2 = {
+            title = STRINGS.SKILLTREE.WATHOM.DIGITIGRADE_2_TITLE,
+            icon = "wathom_digitigrade_2",
+            pos = {204+22+2-50,58-38},
+            desc = STRINGS.SKILLTREE.WATHOM.DIGITIGRADE_2_DESC,
+            group = "digitigrade",
+            tags = {"digitigrade"},
+        },
+
+        -- Abyssal Terror Alignment
         wathom_allegiance_lock_1a = {
             desc = STRINGS.SKILLTREE.WATHOM.WATHOM_ALLEGIANCE_LOCK_1A,
             pos = {204-22+2-50,176},
@@ -338,20 +421,22 @@ local function BuildSkillsData(SkillTreeFns)
             },
         },
 
-        wathom_allegiance_lock_1b = {
-            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_ALLEGIANCE_LOCK_1B,
-            pos = {204+22+2-50,176},
-            --pos = {0.5,0},
+        wathom_allegiance_lock_4 = {
+            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_ALLEGIANCE_LOCK_4,
+            pos = {204-22+2-50,176-38-38},  
+            --pos = {0,-1},
             group = "allegiance",
             tags = {"allegiance","lock"},
             root = true,
-            lock_open = function(prefabname, activatedskills, readonly) 
-                if SkillTreeFns.CountTags(prefabname, "artifacts", activatedskills) > 0 then
+            lock_open = function(prefabname, activatedskills, readonly)
+                if SkillTreeFns.CountTags(prefabname, "neutrality", activatedskills) == 0 then
                     return true
                 end
+
+                return nil -- Important to return nil and not false.
             end,
             connects = {
-                "wathom_allegiance_neutral",
+                "wathom_allegiance_shadow",
             },
         },
 
@@ -373,138 +458,6 @@ local function BuildSkillsData(SkillTreeFns)
                 "wathom_allegiance_shadow",
             },
         },
-    
-        wathom_bite_lock = {
-            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_BITE_LOCK,
-            pos = {-214+38+38/2,58-38+38+38+38},  
-            group = "bite",
-            --pos = {0,-1},
-            tags = {"lock"},
-            root = true,
-            lock_open = function(prefabname, activatedskills, readonly) 
-                if SkillTreeFns.CountTags(prefabname, "bite", activatedskills) >= 2 and SkillTreeFns.CountTags(prefabname, "echo", activatedskills) >= 1 then
-                    return true
-                end
-            end,
-            connects = {
-                "bite_mastery",
-            },
-        },
-    
-        wathom_bark_lock = {
-            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_BARK_LOCK,
-            pos = {-214+38+38+38+38/2,58-38+38+38+38},  
-            group = "bite",
-            --pos = {0,-1},
-            tags = {"lock"},
-            root = true,
-            lock_open = function(prefabname, activatedskills, readonly) 
-                if SkillTreeFns.CountTags(prefabname, "rampage", activatedskills) >= 2 and SkillTreeFns.CountTags(prefabname, "digitigrade", activatedskills) >= 2 then
-                    return true
-                end
-            end,
-            connects = {
-                "bark_mastery",
-            },
-        },
-        
-        --[[wathom_amp_lock = {
-            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_AMP_LOCK,
-            pos = {-214+38+38+38/2,58-38},
-            --pos = {0.5,0},
-            group = "amp",
-            tags = {"lock"},
-            root = true,
-            lock_open = function(prefabname, activatedskills, readonly) 
-                if SkillTreeFns.CountTags(prefabname, "amp3", activatedskills)    > 0 then
-                    return true
-                end
-            end,
-            connects = {
-                --"echolocation_1","bite_1","rampage_1","digitigrade_1",
-            },
-        },
-        
-        wathom_undying_lock = {
-            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_UNDYING_LOCK,
-            pos = {0,25+38/2},
-            --pos = {0.5,0},
-            group = "undying",
-            tags = {"undying","lock"},
-            root = true,
-            lock_open = function(prefabname, activatedskills, readonly) 
-                if SkillTreeFns.CountTags(prefabname, "amp3", activatedskills) > 0 then
-                    return true
-                end
-            end,
-            connects = {
-                "wathom_magics","wathom_friends_1"
-            },
-        },]]
-
-        wathom_magics = {
-            title = STRINGS.SKILLTREE.WATHOM.WATHOM_MAGICS_TITLE,
-            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_MAGICS_DESC,
-            icon = "wathom_magics",
-            pos = {38,25+38},
-            group = "ampfuel",
-            tags = {"ampfuel"},
-            root = true,
-            connects = {
-                "wathom_artifacts",
-            },
-        },
-        
-        wathom_artifacts = {
-            title = STRINGS.SKILLTREE.WATHOM.WATHOM_ARTIFACTS_TITLE,
-            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_ARTIFACTS_DESC,
-            icon = "wathom_artifacts",
-            pos = {38+38,25+38},
-            group = "ampfuel",
-            tags = {"ampfuel", "artifacts"},
-            --root = true,
-        },
-        
-        wathom_friends_1 = {
-            title = STRINGS.SKILLTREE.WATHOM.WATHOM_FRIENDS_1_TITLE,
-            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_FRIENDS_1_DESC,
-            icon = "wathom_friends_1",
-            pos = {38,25},
-            group = "rally",
-            tags = {"rally"},
-            root = true,
-            connects = {
-                "wathom_friends_2",
-            },
-        },
-        
-        wathom_friends_2 = {
-            title = STRINGS.SKILLTREE.WATHOM.WATHOM_FRIENDS_2_TITLE,
-            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_FRIENDS_2_DESC,
-            icon = "wathom_friends_2",
-            pos = {38+38,25},
-            group = "rally",
-            tags = {"rally"},
-        },
-        
-        wathom_allegiance_lock_4 = {
-            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_ALLEGIANCE_LOCK_4,
-            pos = {204-22+2-50,176-38-38},  
-            --pos = {0,-1},
-            group = "allegiance",
-            tags = {"allegiance","lock"},
-            root = true,
-            lock_open = function(prefabname, activatedskills, readonly)
-                if SkillTreeFns.CountTags(prefabname, "neutrality", activatedskills) == 0 then
-                    return true
-                end
-    
-                return nil -- Important to return nil and not false.
-            end,
-            connects = {
-                "wathom_allegiance_shadow",
-            },
-        },    
 
         wathom_allegiance_shadow = {
             title = STRINGS.SKILLTREE.WATHOM.WATHOM_ALLEGIANCE_SHADOW_TITLE,
@@ -518,7 +471,7 @@ local function BuildSkillsData(SkillTreeFns)
             locks = {"wathom_allegiance_lock_1a", "wathom_allegiance_lock_2", "wathom_allegiance_lock_4"},
             onactivate = function(inst, fromload)
                 STRINGS._STATUS_ANNOUNCEMENTS.WATHOM.SANITY = STRINGS._STATUS_ANNOUNCEMENTS.WATHOM.LUNACY
-                
+
                 if inst.components.sanity then
                     local _OldRate
                     if inst.components.sanity.custom_rate_fn then
@@ -541,13 +494,13 @@ local function BuildSkillsData(SkillTreeFns)
                 if inst.components.eater then
                     inst.components.eater:SetCanEatRawMeat(false)
                 end
-                
+
                 -- if not inst.wathom_freebee_sanity then
                     -- local pct = inst.components.sanity:GetPercent()
                     -- inst.components.sanity:SetPercent(1-pct)
                     -- inst.wathom_freebee_sanity = true
                 -- end
-                
+
                 inst.components.sanity:EnableLunacy(true, "ancientterror")
                 inst:AddTag("skill_wathom_allegiance_shadow")
                 inst:AddTag("player_shadow_aligned")
@@ -564,7 +517,7 @@ local function BuildSkillsData(SkillTreeFns)
                 inst.pissygestalts = inst:DoPeriodicTask(5,PissOfGestalts)
             end,
             ondeactivate = function(inst, fromload)
-                STRINGS._STATUS_ANNOUNCEMENTS.WATHOM.SANITY = STRINGS._STATUS_ANNOUNCEMENTS.WATHOM.SANITY
+                --STRINGS._STATUS_ANNOUNCEMENTS.WATHOM.SANITY = STRINGS._STATUS_ANNOUNCEMENTS.WATHOM.SANITY --This no worky
                 inst.components.sanity.night_drain_mult=1
                 inst.components.sanity.dapperness=0
                 inst.components.sanity.light_drain_immune = true
@@ -596,7 +549,7 @@ local function BuildSkillsData(SkillTreeFns)
             connects = {
                 "ancient_terror_2",
             },
-        }, 
+        },
 
         ancient_terror_2 = {
             title = STRINGS.SKILLTREE.WATHOM.ANCIENT_TERROR_2_TITLE,
@@ -607,18 +560,15 @@ local function BuildSkillsData(SkillTreeFns)
             group = "allegiance",
             tags = {"allegiance","shadow","shadow_favor"},
             onactivate = function(inst, fromload)
-        
+
             end,
             ondeactivate = function(inst, fromload)
 
-        
             end,
             connects = {
                 "ancient_terror_3",
             },
-        },  
-
-
+        },
 
         ancient_terror_3 = {
             title = STRINGS.SKILLTREE.WATHOM.ANCIENT_TERROR_3_TITLE,
@@ -636,6 +586,24 @@ local function BuildSkillsData(SkillTreeFns)
 
             end,
         }, 
+
+        -- Ancient Kinship Alignment
+        wathom_allegiance_lock_1b = {
+            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_ALLEGIANCE_LOCK_1B,
+            pos = {204+22+2-50,176},
+            --pos = {0.5,0},
+            group = "allegiance",
+            tags = {"allegiance","lock"},
+            root = true,
+            lock_open = function(prefabname, activatedskills, readonly) 
+                if SkillTreeFns.CountTags(prefabname, "artifacts", activatedskills) > 0 then
+                    return true
+                end
+            end,
+            connects = {
+                "wathom_allegiance_neutral",
+            },
+        },
 
         wathom_allegiance_lock_3 = {
             desc = STRINGS.SKILLTREE.ALLEGIANCE_LOCK_3_DESC,
@@ -667,7 +635,7 @@ local function BuildSkillsData(SkillTreeFns)
                 if SkillTreeFns.CountTags(prefabname, "shadow_favor", activatedskills) == 0 then
                     return true
                 end
-    
+
                 return nil -- Important to return nil and not false.
             end,
             connects = {
@@ -695,7 +663,7 @@ local function BuildSkillsData(SkillTreeFns)
                 "ancient_kinship_2",
             },
         },
-        
+
         ancient_kinship_2 = {
             title = STRINGS.SKILLTREE.WATHOM.ANCIENT_KINSHIP_2_TITLE,
             desc = STRINGS.SKILLTREE.WATHOM.ANCIENT_KINSHIP_2_DESC,
@@ -743,7 +711,41 @@ local function BuildSkillsData(SkillTreeFns)
             --pos = {0,-2},
             group = "allegiance",
             tags = {"allegiance"},--,"lunar","lunar_favor"},
-        },        
+        },
+
+        --[[wathom_amp_lock = {
+            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_AMP_LOCK,
+            pos = {-214+38+38+38/2,58-38},
+            --pos = {0.5,0},
+            group = "amp",
+            tags = {"lock"},
+            root = true,
+            lock_open = function(prefabname, activatedskills, readonly) 
+                if SkillTreeFns.CountTags(prefabname, "amp3", activatedskills)    > 0 then
+                    return true
+                end
+            end,
+            connects = {
+                --"echolocation_1","bite_1","rampage_1","digitigrade_1",
+            },
+        },
+        
+        wathom_undying_lock = {
+            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_UNDYING_LOCK,
+            pos = {0,25+38/2},
+            --pos = {0.5,0},
+            group = "undying",
+            tags = {"undying","lock"},
+            root = true,
+            lock_open = function(prefabname, activatedskills, readonly) 
+                if SkillTreeFns.CountTags(prefabname, "amp3", activatedskills) > 0 then
+                    return true
+                end
+            end,
+            connects = {
+                "wathom_magics","wathom_friends_1"
+            },
+        },]]
     }
 
     -- for name, data in pairs(skills) do
