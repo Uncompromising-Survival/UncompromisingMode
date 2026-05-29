@@ -14,6 +14,22 @@ UMCommonFns.RestartTimer = function(inst, data)
     if time then timer:StartTimer(name, time, paused, initialtime_override) end
 end
 
+UMCommonFns.StartRechargeableCooldown = function(inst, data)
+    if not data then return end
+    local cooldown = data.cooldown or 5
+    local x1, y1, z1 = inst.Transform:GetWorldPosition()
+    local owner = inst.components.inventoryitem.owner
+    for i, v in pairs(TheSim:FindEntities(x1, y1, z1, 8, data.tags or {})) do
+        if v ~= inst then
+            local vowner = v.components.inventoryitem:GetGrandOwner()
+            if vowner and (vowner == owner or not vowner:HasTag("player")) or not vowner then
+                v.components.rechargeable:Discharge(cooldown)
+            end
+        end
+    end
+    inst.components.rechargeable:Discharge(cooldown)
+end
+
 UMCommonFns.KNOCKBACK_CANT_TAGS = {"fat_gang", "foodknockbackimmune", "heavybody"}
 UMCommonFns.KNOCKBACK_ARMOR_CANT_TAGS = {"heavyarmor", "knockback_protection"}
 UMCommonFns.ShouldKnockback = function(inst)

@@ -102,7 +102,7 @@ local function OnAttack(inst, attacker, target)
 end
 
 local function castspell(inst, target, pos, doer)
-    inst.components.rechargeable:Discharge(TUNING.DSTU.SHIELDOFTERROR_COOLDOWN)
+    UMCommonFns.StartRechargeableCooldown(inst, {cooldown = TUNING.DSTU.SHIELDOFTERROR_COOLDOWN, tags = {"shieldofterror"}})
 end
 
 local function can_cast_fn(doer, target, pos, inst)
@@ -178,13 +178,7 @@ env.AddPrefabPostInit("shieldofterror", function(inst)
     inst._vetcurseupgraded:set(false)
 
     inst:ListenForEvent("vetcursedirty", function(inst)
-        local toggle = inst._vetcurseupgraded:value()
-
-        if toggle then
-            inst.spelltype = "UM_SHIELD_BASH"
-        else
-            inst.spelltype = nil
-        end
+        inst.spelltype = inst._vetcurseupgraded:value() and "UM_SHIELD_BASH" or nil
     end)
 
     local reticule = inst.components.reticule or inst:AddComponent("reticule")
@@ -215,20 +209,7 @@ env.AddPrefabPostInit("shieldofterror", function(inst)
 
     CommonFunctions(inst, "eye_shield", "idle")
 
-    local reticule = inst.components.rechargeable or inst:AddComponent("rechargeable")
-
-    local _OnEquip = inst.components.equippable.onequipfn
-    local function OnEquip(inst, owner, ...)
-        if owner:HasTag("vetcurse") and inst._vetcurseupgraded and inst._vetcurseupgraded:value() then
-            local rechargeable = inst.components.rechargeable
-            if rechargeable and rechargeable:GetTimeToCharge() < TUNING.DSTU.SHIELDOFTERROR_COOLDOWN_ONEQUIP then
-                rechargeable:Discharge(TUNING.DSTU.SHIELDOFTERROR_COOLDOWN_ONEQUIP)
-            end
-        end
-        return _OnEquip(inst, owner, ...)
-    end
-
-    inst.components.equippable:SetOnEquip(OnEquip)
+    local rechargeable = inst.components.rechargeable or inst:AddComponent("rechargeable")
 
     inst.UMToggleItemVetcurse = ToggleItemVetcurse
 
