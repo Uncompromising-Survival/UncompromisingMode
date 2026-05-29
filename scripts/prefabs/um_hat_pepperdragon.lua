@@ -71,6 +71,7 @@ local function fn()
 	inst.components.fueled.fueltype = FUELTYPE.USAGE
 	inst.components.fueled:InitializeFuelLevel(TUNING.STRAWHAT_PERISHTIME)
 	inst.components.fueled:SetDepletedFn(--[[generic_perish]]inst.Remove)
+	inst.components.fueled.no_sewing = true	
 
     inst:AddComponent("waterproofer")
     inst.components.waterproofer:SetEffectiveness(TUNING.WATERPROOFNESS_SMALL)
