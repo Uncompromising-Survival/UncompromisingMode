@@ -45,11 +45,6 @@ local function onequip(inst, owner)
     owner.AnimState:OverrideSymbol("swap_object", "swap_crystal_cursed_antler", "swap_crystal_cursed_antler")
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
-
-    local rechargeable = inst.components.rechargeable
-    if rechargeable and rechargeable:GetTimeToCharge() < TUNING.DSTU.CRYSTAL_CURSED_ANTLER_COOLDOWN_ONEQUIP then
-        rechargeable:Discharge(TUNING.DSTU.CRYSTAL_CURSED_ANTLER_COOLDOWN_ONEQUIP)
-    end
 end
 
 local function onunequip(inst, owner)
@@ -64,7 +59,7 @@ end
 
 local function onattack(inst, attacker, target)
     if target and target:IsValid() and attacker and attacker:IsValid() and inst.components.rechargeable:IsCharged() then
-        inst.components.rechargeable:Discharge(TUNING.DSTU.CRYSTAL_CURSED_ANTLER_COOLDOWN)
+        UMCommonFns.StartRechargeableCooldown(inst, {cooldown = TUNING.DSTU.CURSED_ANTLER_COOLDOWN, tags = {"cursedantler"}})
 
         if inst.components.planardamage then
             inst.components.planardamage:SetBaseDamage(17)
