@@ -21,6 +21,7 @@ local function Strike(owner)
         --fx.Transform:SetScale(.66, .66, .66)
         local item = owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
         item.components.fueled:DoDelta(TUNING.MED_FUEL)
+        item.SoundEmitter:PlaySound("dontstarve/common/lightningrod")
         if item.components.fueled:GetPercent() > 1 then
             item.components.fueled:SetPercent(1)
         end
