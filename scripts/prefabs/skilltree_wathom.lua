@@ -338,7 +338,7 @@ local function BuildSkillsData(SkillTreeFns)
             --pos = {0,-1},
             tags = {"lock"},
             root = true,
-            lock_open = function(prefabname, activatedskills, readonly) 
+            lock_open = function(prefabname, activatedskills, readonly)
                 if SkillTreeFns.CountTags(prefabname, "rampage", activatedskills) >= 2 and SkillTreeFns.CountTags(prefabname, "rally", activatedskills) >= 2 then
                     return true
                 end
@@ -362,7 +362,7 @@ local function BuildSkillsData(SkillTreeFns)
             title = STRINGS.SKILLTREE.WATHOM.WATHOM_MAGICS_TITLE,
             desc = STRINGS.SKILLTREE.WATHOM.WATHOM_MAGICS_DESC,
             icon = "wathom_magics",
-            pos = {204-22+2-50,58},
+            pos = {204+22+2-50,58-38},
             group = "ampfuel",
             tags = {"ampfuel"},
             root = true,
@@ -397,7 +397,7 @@ local function BuildSkillsData(SkillTreeFns)
         digitigrade_2 = {
             title = STRINGS.SKILLTREE.WATHOM.DIGITIGRADE_2_TITLE,
             icon = "wathom_digitigrade_2",
-            pos = {204+22+2-50,58-38},
+            pos = {204-22+2-50,58},
             desc = STRINGS.SKILLTREE.WATHOM.DIGITIGRADE_2_DESC,
             group = "digitigrade",
             tags = {"digitigrade"},
