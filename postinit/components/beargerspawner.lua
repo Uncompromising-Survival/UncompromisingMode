@@ -3,10 +3,6 @@ GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 local BEARGER_TIMERNAME = "bearger_timetospawn"
 local UpvalueHacker = require("tools/upvaluehacker")
-local UMCommonFns = require("tools/um_commonfns")
-
-
-
 
 env.AddComponentPostInit("beargerspawner", function(self)
 	local um_overridespawn = false
@@ -53,13 +49,13 @@ env.AddComponentPostInit("beargerspawner", function(self)
 				if _worldsettingstimer:ActiveTimerExists(BEARGER_TIMERNAME) and _worldsettingstimer:GetTimeLeft(BEARGER_TIMERNAME) > 480 then -- Cannot advance any more if it's within one day
 					local time = UMCommonFns.MegaFlareTimerReduction(_worldsettingstimer:GetTimeLeft(BEARGER_TIMERNAME))
 					_worldsettingstimer:SetTimeLeft(BEARGER_TIMERNAME, time)
-					TheNet:Announce("Bearger timer: " .. tostring(time))
-					TheNet:Announce("Bearger timer: " .. tostring(time/480) .. " days")
+					--TheNet:Announce("Bearger timer: " .. tostring(time))
+					--TheNet:Announce("Bearger timer: " .. tostring(time/480) .. " days")
 				elseif not _worldsettingstimer:ActiveTimerExists(BEARGER_TIMERNAME) then
 					local time = 480*math.random(10,12)
 					_worldsettingstimer:StartTimer(BEARGER_TIMERNAME, time)
-					TheNet:Announce("Bearger timer started: " .. tostring(time))
-					TheNet:Announce("Bearger timer started: " .. tostring(time/480) .. " days")
+					--TheNet:Announce("Bearger timer started: " .. tostring(time))
+					--TheNet:Announce("Bearger timer started: " .. tostring(time/480) .. " days")
 					um_overridespawn = true
 				else
 					--

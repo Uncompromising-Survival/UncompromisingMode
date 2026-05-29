@@ -2,7 +2,6 @@
 --[[ Dependencies ]]
 --------------------------------------------------------------------------
 local easing = require("easing")
-local UMCommonFns = require("tools/um_commonfns")
 
 --------------------------------------------------------------------------
 --[[ Gmoosespawner class definition ]]
@@ -205,8 +204,8 @@ local function OnMegaFlare(src, data)
 			if _worldsettingstimer:ActiveTimerExists(MOTHERGOOSE_TIMERNAME) and _worldsettingstimer:GetTimeLeft(MOTHERGOOSE_TIMERNAME) > 480 then -- Cannot advance any more if it's within one day
 				local time = UMCommonFns.MegaFlareTimerReduction(_worldsettingstimer:GetTimeLeft(MOTHERGOOSE_TIMERNAME))
 				_worldsettingstimer:SetTimeLeft(MOTHERGOOSE_TIMERNAME, time)
-				TheNet:Announce("Moose/Goose timer: " .. tostring(time))
-				TheNet:Announce("Moose/Goose timer: " .. tostring(time/480) .. " days")
+				--TheNet:Announce("Moose/Goose timer: " .. tostring(time))
+				--TheNet:Announce("Moose/Goose timer: " .. tostring(time/480) .. " days")
 			elseif not _worldsettingstimer:ActiveTimerExists(MOTHERGOOSE_TIMERNAME) then
 				_worldsettingstimer:StartTimer(MOTHERGOOSE_TIMERNAME, 480*math.random(6,8))
 				TryStartAttacks()

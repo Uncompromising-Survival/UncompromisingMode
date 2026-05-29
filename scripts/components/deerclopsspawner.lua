@@ -2,7 +2,6 @@
 --[[ Dependencies ]]
 --------------------------------------------------------------------------
 local easing = require("easing")
-local UMCommonFns = require("tools/um_commonfns")
 
 --------------------------------------------------------------------------
 --[[ Deerclopsspawner class definition ]]
@@ -264,8 +263,8 @@ local function OnMegaFlare(src, data)
 			if _worldsettingstimer:ActiveTimerExists(DEERCLOPS_TIMERNAME) and _worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME) > 480 then -- Cannot advance any more if it's within one day
 				local time = UMCommonFns.MegaFlareTimerReduction(_worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME))
 				_worldsettingstimer:SetTimeLeft(DEERCLOPS_TIMERNAME, time)
-				TheNet:Announce("Deerclops timer: " .. tostring(time))
-				TheNet:Announce("Deerclops timer: " .. tostring(time/480) .. " days")
+				--TheNet:Announce("Deerclops timer: " .. tostring(time))
+				--TheNet:Announce("Deerclops timer: " .. tostring(time/480) .. " days")
 			elseif not _worldsettingstimer:ActiveTimerExists(DEERCLOPS_TIMERNAME) then
 				_worldsettingstimer:StartTimer(DEERCLOPS_TIMERNAME, 480*math.random(6,8))
 				TryStartAttacks()
