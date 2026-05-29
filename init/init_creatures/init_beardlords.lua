@@ -470,7 +470,8 @@ env.AddPrefabPostInit("world", function(inst) -- Supposedly, this is better sinc
     local _LootSetupFunction = UpvalueHacker.GetUpvalue(Prefabs.bunnyman.fn, "LootSetupFunction")
     if _LootSetupFunction then
         local function LootSetupFunction(lootdropper, ...)
-            if lootdropper.inst.beardlord and IsForcedNightmare and not IsForcedNightmare(lootdropper.inst) then
+            local inst = lootdropper.inst
+            if inst.beardlord and IsForcedNightmare and not IsForcedNightmare(inst) then
                 lootdropper:SetLoot(beardlordloot)
                 return
             end
