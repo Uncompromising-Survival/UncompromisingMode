@@ -271,11 +271,6 @@ if TUNING.DSTU.WOLFGANG_HUNGERMIGHTY then
 end
 
 if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then
-    AllRecipes["wathgrithrhat"].ingredients = {
-        Ingredient("goldnugget", 3),
-        Ingredient("rocks", 4),
-        Ingredient("marble", 2),
-    }
     AllRecipes["wathgrithr_improvedhat"].ingredients = {
         Ingredient("wathgrithrhat", 1),
         Ingredient("beefalowool", 3),
