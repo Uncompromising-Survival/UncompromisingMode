@@ -88,11 +88,11 @@ local states=
         end,
 
         ontimeout = function(inst)
-			if inst.getting_angry then
-				inst.sg:GoToState("getting_pissed")
-			else
+			--if inst.getting_angry then
+				--inst.sg:GoToState("getting_pissed")
+			--else
 				inst.sg:GoToState("bleet")
-			end
+			--end
         end,
 
         onexit= function(inst)
@@ -296,9 +296,9 @@ local states=
             inst.AnimState:PushAnimation("taunt")
             inst.AnimState:PushAnimation("taunt_pst", false)
 			
-			if inst.pissed_count < 2 then
-				inst.pissed_count = inst.pissed_count + 1
-			end
+			--if inst.pissed_count < 2 then
+				--inst.pissed_count = inst.pissed_count + 1
+			--end
         end,
 
         timeline =
@@ -343,11 +343,11 @@ local states=
         events =
         {
             EventHandler("animover", function(inst)
-				if inst.getting_angry then
+				--if inst.getting_angry then
 					inst.sg:GoToState("getting_pissed")
-				else
-					inst.sg:GoToState("idle")
-				end
+				--else
+					--inst.sg:GoToState("idle")
+				--end
 			end),
         },
     },
@@ -376,11 +376,11 @@ local states=
         events =
         {
             EventHandler("animover", function(inst)
-				if inst.getting_angry then
-					inst.sg:GoToState("getting_pissed")
-				else
+				--if inst.getting_angry then
+					--inst.sg:GoToState("getting_pissed")
+				--else
 					inst.sg:GoToState("idle")
-				end
+				--end
 			end),
         },
     },

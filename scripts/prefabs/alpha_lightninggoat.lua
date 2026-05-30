@@ -31,7 +31,7 @@ local RETARGET_CANT_TAGS = { "lightninggoat", "wall" }
 local RETARGET_WALL_MUST_TAGS = { "_combat", "wall" }
 local RETARGET_WALL_CANT_TAGS = { "lightninggoat" }
 local function RetargetFn(inst)
-    if inst.charged or inst.pissed_count >= 2 then
+    --if inst.charged or inst.pissed_count >= 2 then
         local function CheckTarget(guy)
             return inst.components.combat:CanTarget(guy)
         end
@@ -53,7 +53,7 @@ local function RetargetFn(inst)
                 RETARGET_WALL_CANT_TAGS)
             or
             nil
-    end
+    --end
 end
 
 local function KeepTargetFn(inst, target)
@@ -197,8 +197,8 @@ local function fn()
         return inst
     end
 
-	inst.getting_angry = false
-	inst.pissed_count = 0
+	--inst.getting_angry = false
+	--inst.pissed_count = 0
 
     ------------------------------------------
 
@@ -270,13 +270,13 @@ local function fn()
     inst.OnSave = OnSave
     inst.OnLoad = OnLoad
 	
-	inst:DoPeriodicTask(10, function(inst)
-		if not inst.getting_angry and not inst.components.combat:HasTarget() then
-			if inst.pissed_count > 0 then
-				inst.pissed_count = inst.pissed_count - 1
-			end
-		end
-	end)
+	--inst:DoPeriodicTask(10, function(inst)
+		--if not inst.getting_angry and not inst.components.combat:HasTarget() then
+			--if inst.pissed_count > 0 then
+				--inst.pissed_count = inst.pissed_count - 1
+			--end
+		--end
+	--end)
 	
 	inst.Recharge = function(inst)
 		TheNet:Announce("StartRecharge")
