@@ -400,6 +400,15 @@ AddPrefabPostInit("alterguardian_phase3dead", function(inst)
 	end)
 end)
 
+AddPrefabPostInit("daywalker_pillar", function(inst)
+	if not TheWorld.ismastersim then return end
+
+	inst:DoTaskInTime(0, function()
+		local n = GetModConfigData("daywalker_health_") or 1
+		Duplicator(inst, n)
+	end)
+end)
+
 AddPrefabPostInit("leif_sparse", function(inst)
     if not TheWorld.ismastersim then return end
     inst:DoTaskInTime(0, Duplicator, GetModConfigData("leif_health_"))
