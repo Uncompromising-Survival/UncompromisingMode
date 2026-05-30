@@ -5,13 +5,30 @@ return Class(function(self, inst)
 
 	self.guano_nodes = {} --AXE This is a list of hidden "nodes" in the world where the guano rain is handled.
 	
+	function self:TellBatsToLeave()
+		for i, ent in pairs(Ents) do
+			if ent.prefab == "bat" and ent.um_guano_rain_temporary then
+				if ent.entity:IsAwake() then
+					ent:DoTaskInTime(math.random(1,5),function(ent)
+						ent.sg:GoToState("flyaway")
+						ent:DoTaskInTime(2,function(ent) ent:Remove() end) -- This state doesn't have an automatic remove.
+					end)
+				else
+					ent:Remove()
+				end
+			end
+		end
+	end
+
 	function self:EndRaining()
 		for i,v in ipairs(self.guano_nodes) do
 			v.Deactivate(v)
 		end
 		local time = math.random(8,12)*480 --AXE subsequent guano rain has a bigger gap
 		self.inst.components.timer:StartTimer("begin_guano_rain", time)
+		self:TellBatsToLeave()
 	end
+
 	function self:BeginRaining()
 		for i,v in ipairs(self.guano_nodes) do
 			v.Activate(v)

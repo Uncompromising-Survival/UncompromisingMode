@@ -166,10 +166,8 @@ configuration_options = {
 
     Header("In Development"),
     --BinaryConfig("ck_loot", "Additional Crab King Loot",
-    --"Crab King now drops unique loot based on the gems used.\nMissing art assets.", false),
-
-    BinaryConfig("shadow_items", "Shadow Character Items",
-        "Shadow Characters drop Unique Items", false),
+        --"Crab King now drops unique loot based on the gems used.\nMissing art assets.", false),
+    BinaryConfig("nightterrors", "Night Terrors", "New Moons are accompanied by a maddening nightmare fog.\nEvents occur based on player sanity.", false),
     BinaryConfig("food_stats", "Dynamic Food Stats", "Makes crockpot dishes take into account the ingredients it was made with.\nMakes crockpot dishes unstacklable.", false),
     BinaryConfig("armorrework", "Armor Rework",
         "Armor provides significantly less protection, with higher absorption armor being weakened more than lower absorption armor.",
@@ -185,7 +183,6 @@ configuration_options = {
     --true),
     BinaryConfig("no_winter_growing_", "No Winter Growing",
         "Makes a few food sources such as Kelp and Stone Fruit not grow in Winter.", true),
-    BinaryConfig("nightterrors", "Night Terrors [EXTREMELY UNFINISHED]", "The Fog is coming.", false),
     BinaryConfig("beefalo_nerf", "Beefalo Nerf", "Players will take half of the damage that the Beefalo takes.", true),
     {
         name = "fireloot",
