@@ -539,7 +539,7 @@ return{
     ANNOUNCE_NOWARDROBEONFIRE = "Really?",
     ANNOUNCE_NODANGERGIFT = "What? No!",
     ANNOUNCE_NOMOUNTEDGIFT = "... Mistake. Right.",
-	ANNOUNCE_NODANGERSLEEP = "NOT GOOD WEAPON!",
+	ANNOUNCE_NODANGERSLEEP = "NOT GOOD WEAPON!", --What. change it at some point -CB
 	ANNOUNCE_NODAYSLEEP = "Too advantageous, predators.",
 	ANNOUNCE_NODAYSLEEP_CAVE = "Too advantageous, predators.",
 	ANNOUNCE_NOHUNGERSLEEP = "Refusal, lay down, die.",

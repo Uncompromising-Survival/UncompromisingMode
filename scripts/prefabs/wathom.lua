@@ -687,6 +687,18 @@ local function WathomWarnsEarly(inst, threattype)
     inst.owner.components.talker:Say("Others can't hear, "..threattype.." is coming.")
 end
 
+local AMP_TAGS = {"amped", "deathamp"}
+
+local function CanSleepInBagFn(wathom, bed)
+    print(wathom)
+    if not wathom:HasAnyTag(AMP_TAGS) then
+        print("AAAAAAAAAAAAAAAA")
+        return true
+    else
+        return false, "ANNOUNCE_NOHUNGERSLEEP"
+    end
+end
+
 -- This initializes for the server only. Components are added here.
 local function master_postinit(inst)
     --    inst.components.sanity:EnableLunacy(true, "wathomlunacy")
@@ -723,6 +735,8 @@ local function master_postinit(inst)
     inst.components.health:SetMaxHealth(TUNING.WATHOM_HEALTH)
     inst.components.hunger:SetMax(TUNING.WATHOM_HUNGER)
     inst.components.sanity:SetMax(TUNING.WATHOM_SANITY)
+
+    inst.components.sleepingbaguser:SetCanSleepFn(CanSleepInBagFn)
 
     --    inst.components.sanity.neg_aura_absorb = TUNING.ARMOR_HIVEHAT_SANITY_ABSORPTION -- Reverses insanity auras and reduces by 50%
 
