@@ -379,6 +379,27 @@ local function MultiplyShadowLoot(inst, mult)
     end)
 end
 
+local function MultiplyBeargerShedder(inst, config)
+	inst:DoTaskInTime(0, function()
+		if inst.components.shedder == nil then return end
+		if inst._bosslootmult_shedder_patched then return end
+		inst._bosslootmult_shedder_patched = true
+
+		local old_DoSingleShed = inst.components.shedder.DoSingleShed
+		inst.components.shedder.DoSingleShed = function(self, ...)
+			old_DoSingleShed(self, ...)
+
+			local n = GetModConfigData(config) or 1
+			local mult = 1 + (n - 1) / 2
+			local extra = ExtraRoll(mult)
+
+			for i = 1, extra do
+				old_DoSingleShed(self, ...)
+			end
+		end
+	end)
+end
+
 for _, prefab in ipairs(shadowpieces) do
     AddPrefabPostInit(prefab, function(inst)
         if not TheWorld.ismastersim then return end
@@ -428,6 +449,16 @@ AddPrefabPostInit("malbatross", function(inst)
 			end
 		end
 	end)
+end)
+
+AddPrefabPostInit("bearger", function(inst)
+	if not TheWorld.ismastersim then return end
+	MultiplyBeargerShedder(inst, "bearger_health_")
+end)
+
+AddPrefabPostInit("mutatedbearger", function(inst)
+	if not TheWorld.ismastersim then return end
+	MultiplyBeargerShedder(inst, "mutated_bearger_health_")
 end)
 
 AddPrefabPostInit("leif_sparse", function(inst)
