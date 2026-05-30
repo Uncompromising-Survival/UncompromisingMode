@@ -409,6 +409,27 @@ AddPrefabPostInit("daywalker_pillar", function(inst)
 	end)
 end)
 
+AddPrefabPostInit("malbatross", function(inst)
+	if not TheWorld.ismastersim then return end
+
+	inst:DoTaskInTime(0, function()
+		local old_spawnfeather = inst.spawnfeather
+		if old_spawnfeather == nil then return end
+
+		inst.spawnfeather = function(inst, time)
+			old_spawnfeather(inst, time)
+
+			local n = GetModConfigData("malbatross_health_") or 1
+			local mult = 1 + (n - 1) / 2
+			local extra = ExtraRoll(mult)
+
+			for i = 1, extra do
+				old_spawnfeather(inst, time)
+			end
+		end
+	end)
+end)
+
 AddPrefabPostInit("leif_sparse", function(inst)
     if not TheWorld.ismastersim then return end
     inst:DoTaskInTime(0, Duplicator, GetModConfigData("leif_health_"))
