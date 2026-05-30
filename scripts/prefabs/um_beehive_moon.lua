@@ -176,12 +176,13 @@ local function fn()
     inst.AnimState:SetBuild("um_beehive_moon")
 	inst.AnimState:PlayAnimation("enter", false)
     inst.AnimState:PushAnimation("idle", true)
-	
+
     inst:AddTag("structure")
 	inst:AddTag("lifedrainable") -- by batbat (since it normally doesn't drain from structures)
     inst:AddTag("beaverchewable") -- by werebeaver
     inst:AddTag("hive")
     inst:AddTag("beehive")
+    inst:AddTag("lunar_aligned")
 
     MakeSnowCoveredPristine(inst)
 
@@ -204,11 +205,11 @@ local function fn()
     inst.components.childspawner.canemergencyspawn = true
     inst.components.childspawner:SetMaxEmergencyChildren(2)
     inst.components.childspawner:SetEmergencyRadius(TUNING.BEEHIVE_EMERGENCY_RADIUS)
-	
+
 	inst.components.childspawner:SetRegenPeriod(60*4)
 	inst.components.childspawner:SetSpawnPeriod(2)
 	inst.components.childspawner:SetMaxChildren(3)
-			
+
 	inst:DoTaskInTime(0,function(inst) inst.components.childspawner:StartSpawning() end)
     -- if not TUNING.BEEHIVE_ENABLED then
         -- inst.components.childspawner.childreninside = 0
@@ -256,7 +257,7 @@ local function fn()
 	inst.BeginDegrade = BeginDegrade
 	inst:AddComponent("timer")
 	inst:ListenForEvent("timerdone",Revert)
-	
+
     return inst
 end
 

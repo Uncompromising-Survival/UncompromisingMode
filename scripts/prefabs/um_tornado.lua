@@ -696,10 +696,6 @@ local function MoveDestination(inst)
         local x, y, z = inst.Transform:GetWorldPosition()
         local tx, ty, tz = 0, 0, 0
 
-        if inst:GetNearestPlayer() ~= nil then
-            tx, ty, tz = inst:GetNearestPlayer().Transform:GetWorldPosition()
-        end
-
         local theta = ((inst:GetAngleToPoint(tx, ty, tz)) + inst.danumber) * DEGREES
 
         x = x + 7.5 * math.cos(theta)

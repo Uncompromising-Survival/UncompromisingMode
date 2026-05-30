@@ -35,7 +35,7 @@ end
 
 local function TrySlowdown(inst, target)
     local debuffkey = inst.prefab
-    if inst.prefab ~= "um_lavaspit_slobber" then
+    --if inst.prefab ~= "um_lavaspit_slobber" then
         if (not target:HasTag("player") or target == inst.lobber) and target.components.locomotor ~= nil then
             if target._lavavomit_speedmulttask ~= nil then
                 target._lavavomit_speedmulttask:Cancel()
@@ -47,7 +47,7 @@ local function TrySlowdown(inst, target)
 
             target.components.locomotor:SetExternalSpeedMultiplier(target, debuffkey, 0.5)
         end
-    end
+    --end
 
     if (not target:HasTag("player") or target == inst.lobber) and (inst.prefab ~= "um_lavaspit_slobber" and inst.components.propagator ~= nil or inst.prefab == "um_lavaspit_slobber") and target.components.combat ~= nil and target.components.health ~= nil and
         not target:HasTag("dragonfly") and not target:HasTag("lavae") and target.components.burnable ~= nil then
@@ -80,26 +80,16 @@ end
 
 local function DoAreaSlow(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    if inst.dragonflyspit then
-        local ents = TheSim:FindEntities(x, y, z, inst.components.aura.radius, nil, AURA_EXCLUDE_TAGS_DRAGONFLY)
-        for i, v in ipairs(ents) do
-            if v.components ~= nil and v.components.locomotor ~= nil then
-                TrySlowdown(inst, v)
-            end
-        end
-    else
-        local ents = TheSim:FindEntities(x, y, z, inst.components.aura.radius, nil, AURA_EXCLUDE_TAGS)
-        for i, v in ipairs(ents) do
-            if v.components ~= nil and v.components.locomotor ~= nil then
-                TrySlowdown(inst, v)
-            end
+    local ents = TheSim:FindEntities(x, y, z, inst.components.aura.radius, nil, inst.dragonflyspit and AURA_EXCLUDE_TAGS_DRAGONFLY or AURA_EXCLUDE_TAGS)
+    for i, v in ipairs(ents) do
+        if v.entity:IsVisible() and v.components.locomotor then
+            TrySlowdown(inst, v)
         end
     end
 
     local walls = TheSim:FindEntities(x, y, z, inst.components.aura.radius, { "wall" }, { "INLIMBO", "_inventoryitem" })
-
     for i, v in ipairs(walls) do
-        if v.components ~= nil then
+        if v.entity:IsVisible() then
             TrySlowdown(inst, v)
         end
     end

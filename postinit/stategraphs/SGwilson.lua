@@ -116,29 +116,25 @@ env.AddStategraphPostInit("wilson", function(inst)
 
 
     local SLEEPREPEL_MUST_TAGS = { "_combat" }
-    local SLEEPREPEL_CANT_TAGS = { "player", "companion", "abigail", "shadow", "playerghost", "INLIMBO", "wixieshoved", "invisible",
+    local SLEEPREPEL_CANT_TAGS = { "player", "companion", "abigail", "shadowminion", "shadow", "playerghost", "INLIMBO", "wixieshoved", "invisible",
         "hiding", "NOTARGET", "flight", "toadstool" }
-    local SHIELD_CANT_TAGS = { "player", "companion", "abigail", "shadow", "playerghost", "INLIMBO", "wixieshoved", "invisible",
-        "hiding", "NOTARGET", "flight", "toadstool" }
-
+    local SHIELD_CANT_TAGS = { "player", "companion", "abigail", "playerghost", "INLIMBO", "wixieshoved", "invisible",
+        "hiding", "NOTARGET", "flight", "toadstool", "bird", "wall" }
+    local NO_SHOVE_TAGS = {"stageusher", "toadstool"}
     local function CheckShield(inst)
-        if inst ~= nil then
-            local x, y, z = inst.Transform:GetWorldPosition()
-
-            local ents = TheSim:FindEntities(x, y, z, 3.5, SLEEPREPEL_MUST_TAGS, SHIELD_CANT_TAGS)
-
-            for i, v in ipairs(ents) do
+        local x, y, z = inst.Transform:GetWorldPosition()
+        local ents = TheSim:FindEntities(x, y, z, 3.5, SLEEPREPEL_MUST_TAGS, SHIELD_CANT_TAGS)
+        for i, v in ipairs(ents) do
+            if inst.components.combat:CanTarget(v) and not inst.components.combat:IsAlly(v) then
                 v:AddTag("wixieshoved")
                 SpawnPrefab("round_puff_fx_sm").Transform:SetPosition(v.Transform:GetWorldPosition())
 
-                if v.components.combat ~= nil then
-                    inst.components.combat:DoAttack(v, nil, nil, nil, 76.5/59.5, 4)
-                end
+                inst.components.combat:DoAttack(v, nil, nil, nil, 76.5 / 59.5, 4)
 
-                if v.components.locomotor ~= nil and not v:HasTag("stageusher") then
+                if v.components.locomotor ~= nil and not v:HasAnyTag(NO_SHOVE_TAGS) then
                     for i = 1, 50 do
                         v:DoTaskInTime((i - 1) / 50, function(v)
-                            if v ~= nil and inst ~= nil then
+                            if v and v:IsValid() and inst then
                                 local x, y, z = inst.Transform:GetWorldPosition()
                                 local tx, ty, tz = v.Transform:GetWorldPosition()
 
@@ -159,44 +155,44 @@ env.AddStategraphPostInit("wilson", function(inst)
                                 if not (v.sg ~= nil and (v.sg:HasStateTag("swimming") or v.sg:HasStateTag("invisible"))) then
                                     if v ~= nil and dx ~= nil and (ground or boat or ocean_collision and v.components.locomotor:CanPathfindOnWater() or v.components.tiletracker ~= nil and not v:HasTag("whale")) then
                                         --[[if ocean_collision and v.components.amphibiouscreature and not v.components.amphibiouscreature.in_water then
-                                                v.components.amphibiouscreature:OnEnterOcean()
-                                            end]]
+                                            v.components.amphibiouscreature:OnEnterOcean()
+                                        end]]
                                         v.Transform:SetPosition(dx, dy, dz)
                                     end
-                                end
-
-                                if i >= 50 then
-                                    v:RemoveTag("wixieshoved")
                                 end
                             end
                         end)
                     end
-                    inst.sg.statemem.recoilstate = "attack_recoil"
-
-                    inst:PushEventImmediate("recoil_off", { target = v })
-                    break --only hit once
                 end
+
+                v:DoTaskInTime(1, function(v)
+                    v:RemoveTag("wixieshoved")
+                end)
+
+
+                inst.sg.statemem.recoilstate = "attack_recoil"
+                inst:PushEventImmediate("recoil_off", { target = v })
+                break --only hit once
             end
         end
     end
+
     local function CheckBowling(inst)
-        if inst ~= nil then
-            local x, y, z = inst.Transform:GetWorldPosition()
-
-            local ents = TheSim:FindEntities(x, y, z, 3.5, SLEEPREPEL_MUST_TAGS, SLEEPREPEL_CANT_TAGS)
-
-            for i, v in ipairs(ents) do
+        local x, y, z = inst.Transform:GetWorldPosition()
+        local ents = TheSim:FindEntities(x, y, z, 3.5, SLEEPREPEL_MUST_TAGS, SLEEPREPEL_CANT_TAGS)
+        for i, v in ipairs(ents) do
+            if inst.components.combat:CanTarget(v) and not inst.components.combat:IsAlly(v) then
                 v:AddTag("wixieshoved")
                 SpawnPrefab("round_puff_fx_sm").Transform:SetPosition(v.Transform:GetWorldPosition())
 
-                if v.components.combat ~= nil then
+                if v.components.combat then
                     v.components.combat:GetAttacked(inst, 0)
                 end
 
-                if v.components.locomotor ~= nil and not v:HasTag("stageusher") then
+                if v.components.locomotor ~= nil and not v:HasAnyTag(NO_SHOVE_TAGS) then
                     for i = 1, 50 do
                         v:DoTaskInTime((i - 1) / 50, function(v)
-                            if v ~= nil and inst ~= nil then
+                            if v and v:IsValid() and inst then
                                 local x, y, z = inst.Transform:GetWorldPosition()
                                 local tx, ty, tz = v.Transform:GetWorldPosition()
 

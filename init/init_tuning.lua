@@ -188,8 +188,8 @@ TUNING.DSTU = {
     GLACIALHOUNDS = GetModConfigData("glacialhounds"),
     LIGHTNINGHOUNDS = GetModConfigData("lightninghounds"),
     MAGMAHOUNDS = GetModConfigData("magmahounds"),
-    FIREBITEHOUNDS = GetModConfigData("firebitehounds"),
-    FROSTBITEHOUNDS = GetModConfigData("frostbitehounds"),
+    --FIREBITEHOUNDS = GetModConfigData("firebitehounds"),
+    --FROSTBITEHOUNDS = GetModConfigData("frostbitehounds"),
     VARGWAVES = false,           -- GetModConfigData("vargwaves"),
     VARGWAVES_BOSS_GRACE = 15,   -- GetModConfigData("vargwaves grace"),
     VARGWAVES_DELAY_PERIOD = 15, -- GetModConfigData("vargwaves delay"),
@@ -250,6 +250,7 @@ TUNING.DSTU = {
     WORMWOOD_CONFIG_FIRE = GetModConfigData("wormwood_fire"),
     WORMWOOD_CONFIG_PLANTS = GetModConfigData("wormwood_plants"),
     WORMWOOD_CONFIG_TRAPS = GetModConfigData("wormwood_trapbuffs"),
+    WORMWOOD_PHOTOSYNTHESIS = GetModConfigData("wormwood_photosynthesis"),
     -- Warly
     WARLY_CHANGES = GetModConfigData("warly_changes"),
     --WARLY_FOOD_TASTE = GetModConfigData("warly_food_taste_"),
@@ -491,10 +492,14 @@ TUNING.DSTU = {
         APRIL_FOOLS = Date(1, 4),
     },
 
+    CURSED_ANTLER_COOLDOWN = 5,
+    SLOBBERLOBBER_COOLDOWN = 45,
+    CRYSTAL_CURSED_ANTLER_COOLDOWN = 5,
+    SHIELDOFTERROR_COOLDOWN = 5,
+
     -- Shadow Damage tuning
     RUINSNIGHTMARE_DAMAGE = 75,
     HERMITCRAB_MOONTREEBLOSSOMTEA_SHADOWCREATURE_DAMAGE = 75,
-
 
     NO_THICKET_APHIDS = {"tumbleweed","beefalo","fruitbat"}, --AXE Add more as needed, most things >should< spawn aphids though.
 

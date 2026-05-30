@@ -200,15 +200,15 @@ local function WearingThicketResist(inst)
 end
 
 local function OutOfTheWoodsYet(target)
-	local x,y,z = target.Transform:GetWorldPosition()
-	local bushes = TheSim:FindEntities(x,y,z, 1.75, { "briar_plants" })
-	local out_of_woods = true
-	for i,v in ipairs(bushes) do
-		if v.components.pickable and v.components.pickable.canbepicked then
-			out_of_woods = false
-		end	
-	end
-	if out_of_woods or WearingThicketResist(target) or PrickAdept(target) then
+    local x,y,z = target.Transform:GetWorldPosition()
+    local bushes = TheSim:FindEntities(x,y,z, 1.75, { "briar_plants" })
+    local out_of_woods = true
+    for i,v in ipairs(bushes) do
+        if v.components.pickable and v.components.pickable.canbepicked then
+            out_of_woods = false
+        end    
+    end
+    if out_of_woods or WearingThicketResist(target) or PrickAdept(target) then
         target.components.locomotor:RemoveExternalSpeedMultiplier(target, "thicket")
         target.thicketcheck:Cancel()
         target.thicketcheck = nil
@@ -240,6 +240,7 @@ local function AphidStorm(inst,num,unfortunate_soul)
         local thicket = FindEntity(inst,12,function(ent) return
             ent.prefab == "hooded_fern" and not ent.cant_aphid and inst:GetDistanceSqToInst(ent) > 4^2
         end)
+        if not thicket then return end
         local aphid = SpawnPrefab("aphid")
         aphid.Transform:SetPosition(thicket.Transform:GetWorldPosition())
         aphid.components.combat:SuggestTarget(unfortunate_soul)

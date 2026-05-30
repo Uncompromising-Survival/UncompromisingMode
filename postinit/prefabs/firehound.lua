@@ -89,7 +89,7 @@ local function OnHitOtherBurn(inst, data)
 end
 
 local function IsAlly(inst, guy)
-    return UMCommonFns.IsAlly(inst, guy, {"hound", "houndfriend"})
+    return UMCommonFns.IsAlly(inst, guy, {"hound", "houndfriend", "houndmound"})
 end
 
 env.AddPrefabPostInit("firehound", function(inst)
@@ -99,10 +99,8 @@ env.AddPrefabPostInit("firehound", function(inst)
 
     inst.UMIsAlly = IsAlly
 
-    if TUNING.DSTU.FIREBITEHOUNDS then
-        if inst.components.combat then
-            inst:ListenForEvent("onhitother", OnHitOtherBurn)
-        end
+    if inst.components.combat then
+		inst:ListenForEvent("onhitother", OnHitOtherBurn)
     end
 
     inst:AddComponent("timer")

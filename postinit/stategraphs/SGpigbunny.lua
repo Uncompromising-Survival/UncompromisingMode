@@ -286,8 +286,6 @@ end
 
 local werepigs = {"moonpig","werepig"}
 for i,werepig in ipairs(werepigs) do
-
-                
     env.AddStategraphPostInit(werepig, function(inst)
         local states = {
             State{

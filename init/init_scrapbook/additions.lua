@@ -3,31 +3,19 @@ GLOBAL.setfenv(1, GLOBAL)
 
 local scrapbook_prefabs = require("scrapbook_prefabs")
 local scrapbookdata = require("screens/redux/scrapbookdata")
+local um_scrapbookdata = require("um_scrapbookdata")
 
-local UM_SCRAPBOOK_DEFS = require("screens/redux/um_scrapbookdata")
-
---don't do this. Not yet. The current data (as of writing) is hella outdated.
---[[
-for k, v in pairs(UM_SCRAPBOOK_DEFS) do
-    if v.anim ~= nil then
-        v.name = v.name or k
-        v.prefab = k
-        v.tex = v.tex or k .. ".tex"
-        v.type = v.type or "thing"
-        v.deps = v.deps or {}
-        v.notes = v.notes or {}
-
-        scrapbook_prefabs[k] = true
-        scrapbookdata[k] = v
-    end 
-end]]
+for k,v in pairs(um_scrapbookdata) do
+    scrapbook_prefabs[k] = true
+    scrapbookdata[k] = v
+end
 
 local S = STRINGS.SCRAPBOOK.SPECIALINFO
 
 local specinfo = {
     --Tooltips for UM stuff. Usually more in-depth tooltips. TODO MOST OF THESE ARE JUST TOOLTIPS. PLEASE ADD DETAIL
     RAT_WHIP = "Stronger when the user is well fed.",
-    AIR_CONDITIONER = "Can crush up Mushrooms for helpful stat clouds.",
+    AIR_CONDITIONER = "Can crush up Mushrooms for helpful stat clouds.", 
     ANCIENT_AMULET_RED = "Drops soul orbs when attacked, which will replenish lost health when picked up.\nRevives players when haunted.",
     ARMOR_GLASSMAIL = "Summons spinning Glass Shards when attacking enemies. Loses shards when damage is taken.",
     SALTPACK = "Drops piles of salt, preventing buildup of Snow Piles.",

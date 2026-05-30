@@ -66,20 +66,7 @@ end
 
 local function onattack(inst, attacker, target)
     if target and target:IsValid() and attacker and attacker:IsValid() and inst.components.rechargeable:IsCharged() then
-        local x1, y1, z1 = inst.Transform:GetWorldPosition()
-
-        local owner = inst.components.inventoryitem:GetGrandOwner()
-
-        for i, v in pairs(TheSim:FindEntities(x1, y1, z1, 8, {"cursedantler"})) do
-            if v ~= inst then
-                local vowner = v.components.inventoryitem:GetGrandOwner()
-                if vowner and (vowner == owner or not vowner:HasTag("player")) or vowner == nil then
-                    v.components.rechargeable:Discharge(5)
-                end
-            end
-        end
-
-        inst.components.rechargeable:Discharge(5)
+        UMCommonFns.StartRechargeableCooldown(inst, {cooldown = TUNING.DSTU.CURSED_ANTLER_COOLDOWN, tags = {"cursedantler"}})
 
         local x, y, z = target.Transform:GetWorldPosition()
         for i = 1, 4 do

@@ -102,12 +102,13 @@ local function fn()
     inst.AnimState:PlayAnimation("idle_retreated")
     inst.scrapbook_anim ="atk_idle"
     --inst.AnimState:SetScale(-1,1)
-    
+
     inst:AddTag("monster")
     inst:AddTag("hostile")
     inst:AddTag("WORM_DANGER")
 	inst:AddTag("tentacle")
     inst:AddTag("NPCcanaggro")
+    inst:AddTag("lunar_aligned")
 
     inst.entity:SetPristine()
 

@@ -12,7 +12,7 @@ end
 
 env.AddPrefabPostInit("world", function(inst) -- Supposedly, this is better since it's called once for each "world" prefab, which usually only spawns once per shard.
     if not TheWorld.ismastersim then return end
-    local _SetUpChanceLoot = UpvalueHacker.SetUpvalue(Prefabs.cave_vent_mite.fn, "SetShield", "SetUpChanceLoot")
+    local _SetUpChanceLoot = UpvalueHacker.GetUpvalue(Prefabs.cave_vent_mite.fn, "SetShield", "SetUpChanceLoot")
     if _SetUpChanceLoot then
         local function SetUpChanceLoot(inst, ...)
             local ret = _SetUpChanceLoot(inst, ...)
@@ -23,7 +23,7 @@ env.AddPrefabPostInit("world", function(inst) -- Supposedly, this is better sinc
             end
             return ret
         end
-        UpvalueHacker.SetUpvalue(inst.SetShield, SetUpChanceLoot, "SetUpChanceLoot")
+        UpvalueHacker.SetUpvalue(Prefabs.cave_vent_mite.fn, SetUpChanceLoot, "SetShield", "SetUpChanceLoot")
     end
 end)
 

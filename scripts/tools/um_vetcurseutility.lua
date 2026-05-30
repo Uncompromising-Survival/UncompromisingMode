@@ -230,11 +230,7 @@ UMVetCurse.ToggleVetCurse = function(inst, toggle)
     else
         DetachCurse(inst)
     end
-    if inst.components.inventory then
-        for k, v in pairs(inst.components.inventory.equipslots) do
-            if v.UMToggleItemVetcurse then v:UMToggleItemVetcurse(toggle) end
-        end
-    end
+    if inst.components.inventory then inst.components.inventory:ForEachItem(function(item) if item.UMToggleItemVetcurse then item:UMToggleItemVetcurse(toggle) end end) end
     if inst.UMToggleUniqueVetCurse then inst:UMToggleUniqueVetCurse(toggle) end
 end
 

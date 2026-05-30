@@ -102,7 +102,7 @@ local function OnAttack(inst, attacker, target)
 end
 
 local function castspell(inst, target, pos, doer)
-    inst.components.rechargeable:Discharge(5)
+    UMCommonFns.StartRechargeableCooldown(inst, {cooldown = TUNING.DSTU.SHIELDOFTERROR_COOLDOWN, tags = {"shieldofterror"}})
 end
 
 local function can_cast_fn(doer, target, pos, inst)
@@ -110,8 +110,9 @@ local function can_cast_fn(doer, target, pos, inst)
 end
 
 local function ToggleItemVetcurse(inst, toggle)
+    if inst._vetcurseupgraded and inst._vetcurseupgraded:value() ~= not toggle then return end
     if toggle then
-        if not inst.components.equippable:IsEquipped() then return end
+        inst._vetcurseupgraded:set(true)
 
         inst.spelltype = "UM_SHIELD_BASH"
 
@@ -124,13 +125,12 @@ local function ToggleItemVetcurse(inst, toggle)
         inst.components.spellcaster.canuseonpoint_water = true
         inst.components.spellcaster.canusefrominventory = false
 
-        inst._vetcurseupgraded:set(true)
-
         --todo: visual stuff?
     else
+        inst._vetcurseupgraded:set(false)
+
         inst.spelltype = nil
         inst:RemoveComponent("spellcaster")
-        inst._vetcurseupgraded:set(false)
     end
 end
 
@@ -162,6 +162,14 @@ local function ReticuleUpdatePositionFn(inst, pos, reticule, ease, smoothing, dt
     reticule.Transform:SetRotation(rot)
 end
 
+local function ReticuleShouldHideFn(inst)
+    return inst._vetcurseupgraded and not inst._vetcurseupgraded:value()
+end
+
+local function OnPutInInventory(inst, owner)
+    if inst.UMToggleItemVetcurse then inst:UMToggleItemVetcurse(owner:HasTag("vetcurse")) end
+end
+
 env.AddPrefabPostInit("shieldofterror", function(inst)
     CommonClientFunctions(inst)
     inst:AddTag("shieldofterror")
@@ -170,29 +178,23 @@ env.AddPrefabPostInit("shieldofterror", function(inst)
     inst._vetcurseupgraded:set(false)
 
     inst:ListenForEvent("vetcursedirty", function(inst)
-        local toggle = inst._vetcurseupgraded:value()
-
-        if toggle then
-            inst.spelltype = "UM_SHIELD_BASH"
-
-            inst:AddComponent("reticule")
-            inst.components.reticule.reticuleprefab = "reticuleline2"
-            inst.components.reticule.pingprefab = "reticulelongping"
-            -- inst.components.reticule.reticuleprefab = "reticuleline2"
-            -- inst.components.reticule.pingprefab = "reticulelineping"
-            inst.components.reticule.targetfn = ReticuleTargetFn
-            inst.components.reticule.mousetargetfn = ReticuleMouseTargetFn
-            inst.components.reticule.updatepositionfn = ReticuleUpdatePositionFn
-            inst.components.reticule.validcolour = { 1, 1, 1, 1 }
-            inst.components.reticule.invalidcolour = { .5, 0, 0, 1 }
-            inst.components.reticule.ease = true
-            inst.components.reticule.mouseenabled = true
-            inst.components.reticule.ispassableatallpoints = true
-        else
-            inst.spelltype = nil
-            inst:RemoveComponent("reticule")
-        end
+        inst.spelltype = inst._vetcurseupgraded:value() and "UM_SHIELD_BASH" or nil
     end)
+
+    local reticule = inst.components.reticule or inst:AddComponent("reticule")
+    inst.components.reticule.reticuleprefab = "reticuleline2"
+    inst.components.reticule.pingprefab = "reticulelongping"
+    -- inst.components.reticule.reticuleprefab = "reticuleline2"
+    -- inst.components.reticule.pingprefab = "reticulelineping"
+    inst.components.reticule.targetfn = ReticuleTargetFn
+    inst.components.reticule.mousetargetfn = ReticuleMouseTargetFn
+    inst.components.reticule.updatepositionfn = ReticuleUpdatePositionFn
+    inst.components.reticule.shouldhidefn = ReticuleShouldHideFn
+    inst.components.reticule.validcolour = { 1, 1, 1, 1 }
+    inst.components.reticule.invalidcolour = { .5, 0, 0, 1 }
+    inst.components.reticule.ease = true
+    inst.components.reticule.mouseenabled = true
+    inst.components.reticule.ispassableatallpoints = true
 
     if not TheWorld.ismastersim then return end
 
@@ -207,23 +209,11 @@ env.AddPrefabPostInit("shieldofterror", function(inst)
 
     CommonFunctions(inst, "eye_shield", "idle")
 
-    inst:AddComponent("rechargeable")
+    local rechargeable = inst.components.rechargeable or inst:AddComponent("rechargeable")
 
-    local _onequip = inst.components.equippable.onequipfn
-    local _onunequip = inst.components.equippable.onunequipfn
-    local function OnEquip(inst, owner)
-        if owner:HasTag("vetcurse") and inst.UMToggleItemVetcurse then inst:UMToggleItemVetcurse(true) end
-        _onequip(inst, owner)
-    end
-
-    local function OnUnequip(inst, owner)
-        if inst.UMToggleItemVetcurse then inst:UMToggleItemVetcurse() end
-        _onunequip(inst, owner)
-    end
-
-    inst.components.equippable:SetOnEquip(OnEquip)
-    inst.components.equippable:SetOnUnequip(OnUnequip)
     inst.UMToggleItemVetcurse = ToggleItemVetcurse
+
+    inst:ListenForEvent("onputininventory", OnPutInInventory)
 end)
 
 env.AddPrefabPostInit("eyemaskhat", function(inst)

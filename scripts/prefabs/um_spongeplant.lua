@@ -12,7 +12,7 @@ local function OnRegen(inst)
     if not inst.components.pickable then
         inst:AddComponent("pickable")
         inst.components.pickable:SetUp(nil)
-	    inst.components.pickable:SetStuck(true)
+        inst.components.pickable:SetStuck(true)
     end
 end
 
@@ -72,6 +72,7 @@ local function plant(name, stage)
         inst:AddTag("plant")
         inst:AddTag("lunarplant_target")
         inst:AddTag("bearded")
+        inst:AddTag("event_trigger")
 
         inst.entity:SetPristine()
 
@@ -90,8 +91,8 @@ local function plant(name, stage)
         shaveable.on_shaved = OnShaved
 
         inst:AddComponent("pickable")
-	    inst.components.pickable:SetUp(nil)
-	    inst.components.pickable:SetStuck(true)
+        inst.components.pickable:SetUp(nil)
+        inst.components.pickable:SetStuck(true)
 
         --[[inst:AddComponent("witherable")
 

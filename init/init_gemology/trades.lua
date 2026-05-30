@@ -11,7 +11,7 @@ local function RetargetSnaildrakeFn(inst)
         return inst.components.combat:CanTarget(ent)
     end, nil, { "snaildrake", "player" })                                                                    -- AXE They like people now
 
-    local follower = new_target and new_target.components.follower and new_target.components.follower or nil -- AXE Make them not aggro on your followers
+    local follower = new_target and new_target.components.follower or nil -- AXE Make them not aggro on your followers
     if new_target and not (follower and follower.leader and follower.leader:HasTag("player")) then
         inst.components.combat:SuggestTarget(new_target)
     end
@@ -22,20 +22,19 @@ local function BeFriendlyToPlayers(inst)
 
     -- Old Values
     self._targetfn = self.targetfn
-    self._retargetperiod = self._retargetperiod
     if inst.prefab == "snaildrake_slime" or inst.prefab == "snaildrake_magma" then
         inst.components.combat:SetRetargetFunction(3, RetargetSnaildrakeFn)
     end
 
-    local combat = inst.components.combat and inst.components.combat or nil
+    local combat = inst.components.combat
     if combat and combat.target then -- AXE Drop target if traded
         combat:SetTarget(nil)
     end
 end
 
 local function IfPlayerThenLoseFaithInHumanity(inst, data, override)
-    local attacker = data and data.attacker and data.attacker or nil
-    local follower = attacker and attacker.components.follower and attacker.components.follower or nil
+    local attacker = data and data.attacker or nil
+    local follower = attacker and attacker.components.follower or nil
 
     if (attacker and attacker:HasTag("player") or (follower and follower.leader and follower.leader:HasTag("player"))) or override then
         local self = inst.components.combat
@@ -45,6 +44,18 @@ end
 
 local function ShouldAcceptItem(inst, item, giver)
     return item:HasTag("gemology_gem")
+end
+
+local PURE_GEM_MAP = {
+    um_gemologyredgem1    = "redgem",    um_gemologyredgem2    = "redgem",
+    um_gemologygreengem1  = "greengem",  um_gemologygreengem2  = "greengem",
+    um_gemologybluegem1   = "bluegem",   um_gemologybluegem2   = "bluegem",
+    um_gemologyyellowgem1 = "yellowgem", um_gemologyyellowgem2 = "yellowgem",
+    um_gemologyorangegem1 = "orangegem", um_gemologyorangegem2 = "orangegem",
+    um_gemologypurplegem1 = "purplegem", um_gemologypurplegem2 = "purplegem",
+}
+local function GetPureGem(gemtype)
+    return PURE_GEM_MAP[gemtype]
 end
 
 local function ProduceItem(inst, prefab, num, tier)
@@ -66,50 +77,55 @@ local function GenerateLoot(inst)
     local tier = inst.itemquality
     local itemtype = inst.itemtype
     local rnd = math.random()
-
     local element = (inst.prefab == "slurtle" or inst.prefab == "snurtle") and "green" or "red"
-    local hated_element = (inst.prefab == "slurtle" or inst.prefab == "snurtle") and "red" or "blue"
-    local generic_item = (inst.prefab == "slurtle" or inst.prefab == "snurtle") and "slurtleslime" or "snapalm"
+    local hated_element = element == "green" and "red" or "blue"
+    local generic_item = element == "green" and "slurtleslime" or "snapalm"
 
-
-    if (itemtype == "um_gemology" .. element .. "gem1") or (itemtype == "um_gemology" .. element .. "gem2") then
+    if itemtype == "um_gemology" .. element .. "gem1" or itemtype == "um_gemology" .. element .. "gem2" then
         if tier == 1 then
-            if math.random() > 0.75 then
+            if rnd > 0.75 then
                 ProduceItem(inst, itemtype, 1, 2)
-            elseif math.random() > 0.25 then
+            elseif rnd > 0.20 then
                 ProduceItem(inst, itemtype, 1, 1)
             else
                 ProduceItem(inst, generic_item, math.random(3, 5), nil)
             end
-        end
-        if tier == 2 then
-            if math.random() > 0.9 then
+        elseif tier == 2 then
+            if rnd > 0.75 then
                 ProduceItem(inst, itemtype, 1, 3)
-            elseif math.random() > 0.7 then
+            elseif rnd > 0.30 then
                 ProduceItem(inst, itemtype, 1, 2)
+            elseif rnd > 0.25 and element == "green" then
+                ProduceItem(inst, element .. "gem", 1, nil)
+            elseif rnd > 0.10 and element == "red" then
+                ProduceItem(inst, element .. "gem", 1, nil)
             else
-                if (math.random() > 0.5 and element == "red") or (math.random() > 0.9 and element == "green") then
-                    ProduceItem(inst, element .. "gem", 1, nil) -- They can refine into their special gems.
+                ProduceItem(inst, generic_item, math.random(5, 9), nil)
+            end
+        elseif tier == 3 then
+            if element == "green" then
+                if rnd > 0.60 then
+                    ProduceItem(inst, itemtype, 1, 3)
+                elseif rnd > 0.10 then
+                    ProduceItem(inst, itemtype, 1, 2)
                 else
-                    ProduceItem(inst, generic_item, math.random(5, 9), nil)
+                    ProduceItem(inst, element .. "gem", 1, nil)
+                end
+            else
+                if rnd > 0.75 then
+                    ProduceItem(inst, itemtype, 1, 3)
+                elseif rnd > 0.25 then
+                    ProduceItem(inst, itemtype, 1, 2)
+                else
+                    ProduceItem(inst, element .. "gem", 1, nil)
                 end
             end
         end
-        if tier == 3 then
-            if math.random() > 0.75 then
-                ProduceItem(inst, itemtype, 1, 3)
-            elseif math.random() > 0.5 then
-                ProduceItem(inst, itemtype, 1, 2)
-            else
-                ProduceItem(inst, element .. "gem", 1, nil)
-            end
-        end
     elseif itemtype == "um_gemology" .. hated_element .. "gem1" or itemtype == "um_gemology" .. hated_element .. "gem2" then
-        if hated_element == "blue" then                    -- Snaildrakes Only
-            inst.components.freezable:AddColdness(20)      -- FREEZE
-            IfPlayerThenLoseFaithInHumanity(inst, nil, true) -- Override, make angry at player
-        end
-        if hated_element == "red" then
+        if hated_element == "blue" then
+            inst.components.freezable:AddColdness(20)
+            IfPlayerThenLoseFaithInHumanity(inst, nil, true)
+        elseif hated_element == "red" then
             inst.components.burnable:Ignite()
         end
         inst.traded_and_friendly = nil
@@ -126,20 +142,21 @@ local function GenerateLoot(inst)
             else
                 ProduceItem(inst, generic_item, math.random(3, 5), nil)
             end
-        end
-        if tier == 2 then
-            if math.random() > 0.9 then
+        elseif tier == 2 then
+            local pure = GetPureGem(itemtype)
+            if rnd > 0.90 then
                 ProduceItem(inst, itemtype, 1, 2)
-            elseif math.random() > 0.5 then
+            elseif rnd > 0.45 then
                 ProduceItem(inst, itemtype, 1, 1)
+            elseif rnd > 0.40 and pure then
+                ProduceItem(inst, pure, 1, nil)
             else
                 ProduceItem(inst, generic_item, math.random(5, 9), nil)
             end
-        end
-        if tier == 3 then
-            if math.random() > 0.75 then
+        elseif tier == 3 then
+            if rnd > 0.75 then
                 ProduceItem(inst, itemtype, 1, 2)
-            elseif math.random() > 0.5 then
+            elseif rnd > 0.35 then
                 ProduceItem(inst, itemtype, 1, 1)
             else
                 ProduceItem(inst, generic_item, math.random(5, 9), nil)
@@ -241,21 +258,24 @@ local function GetAntlionReward(inst)
     local itemname
     local newtier
     if tier == 3 then
-        if (rnd > 0.9 and orange) or rnd > 0.75 then
+        if (rnd > 0.65 and orange) or rnd > 0.75 then
             itemname = gem
             newtier = 2
-        elseif rnd > 0.1 and orange then
+        elseif rnd > 0.40 and orange then
             itemname = "orangegem"
         else
             itemname = "townportaltalisman"
         end
     elseif tier == 2 then
-        if (rnd > 0.9 and orange) then
+        local pure = GetPureGem(gem)
+        if (rnd > 0.75 and orange) or rnd > 0.85 then
             itemname = gem
             newtier = 3
-        elseif (rnd > 0.4 and orange) or rnd > 0.7 then
+        elseif (rnd > 0.2 and orange) or rnd > 0.4 then
             itemname = gem
             newtier = 2
+        elseif (rnd > 0.15 and orange) or rnd > 0.35 then
+            itemname = pure or "townportaltalisman"
         else
             itemname = "townportaltalisman"
         end
@@ -382,17 +402,17 @@ local function GenerateRockyLoot(inst, giver, item)
     local itemname
     local newtier
     if tier == 3 then
-        if (rnd > 0.9 and pale) or rnd > 0.75 then
+        if rnd > 0.75 then
             itemname = gem
             newtier = 2
         else
             itemname = "friendship"
         end
     elseif tier == 2 then
-        if (rnd > 0.9 and pale) then
+        if rnd > 0.75 and pale then
             itemname = gem
             newtier = 3
-        elseif (rnd > 0.4 and pale) or rnd > 0.7 then
+        elseif (rnd > 0.25 and pale) or rnd > 0.4 then
             itemname = gem
             newtier = 2
         else
@@ -435,7 +455,6 @@ env.AddPrefabPostInit("rocky", function(inst)
     local trader = inst.components.trader
 
     local _AcceptTest = trader.test
-    local _OnGivenItem = trader.onaccept
 
     local function AcceptTest(inst, item)
         return item:HasTag("gemology_gem") or _AcceptTest(inst, item)
@@ -455,35 +474,45 @@ env.AddPrefabPostInit("rocky", function(inst)
 end)
 
 local function TryGemologyLoot(inst)
-    if inst.gem_level then
-        local rnd = math.random()
-        local chance = inst.gem_chance
-        local loot = SpawnPrefab("um_gemologybluegem" .. math.random(1, 2)) -- Random!
-        if inst.gem_level == 1 then
-            if 10 * (rnd) < chance then
-                loot:SetTier(2)
-            elseif 5 * (rnd) < chance then
-                loot:SetTier(1)
-            else
-                loot:Remove()
-            end
-        elseif inst.gem_level == 2 then
-            if 30 * (rnd) < chance then
-                loot:SetTier(3)
-            elseif 20 * (rnd) < chance then
-                loot:SetTier(2)
-            else
-                loot:Remove()
-            end
-        elseif inst.gem_level == 3 then
-            loot:Remove()
-            loot = SpawnPrefab("bluegem") -- Purify
-        end
-        if loot and loot:IsValid() then
-            loot.Transform:SetPosition(inst.Transform:GetWorldPosition())
-            Launch2(loot, inst, 1, 0, 1, math.random(0, 360))
+    local list = inst.gem_tier_list
+    if not list or #list == 0 then
+        if inst.gem_level then
+            list = {{ prefab = "um_gemologybluegem" .. math.random(1, 2), tier = inst.gem_level }}
+        else
+            return
         end
     end
+
+    local x, y, z = inst.Transform:GetWorldPosition()
+
+    for _, entry in ipairs(list) do
+        local rnd = math.random()
+        local loot
+        local tier = math.max(entry.tier, 1)
+
+        if tier == 1 then
+            loot = SpawnPrefab(entry.prefab)
+            loot:SetTier(rnd < 0.40 and 2 or 1)
+        elseif tier == 2 then
+            if rnd < 0.40 then
+                loot = SpawnPrefab(entry.prefab)
+                loot:SetTier(3)
+            elseif rnd < 0.45 then
+                loot = SpawnPrefab("bluegem")
+            else
+                loot = SpawnPrefab(entry.prefab)
+                loot:SetTier(2)
+            end
+        elseif tier == 3 then
+            loot = SpawnPrefab("bluegem")
+        end
+
+        if loot and loot:IsValid() then
+            loot.Transform:SetPosition(x, y, z)
+            loot.Physics:SetVel(math.random(-2, 2), 8, math.random(-2, 2))
+        end
+    end
+
 end
 
 env.AddPrefabPostInit("snowmong", function(inst)

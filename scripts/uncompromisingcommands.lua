@@ -1,9 +1,9 @@
 require "webbedcreatureloot"
 
 -- toggle snowstorm
-function c_um_snowstorm()
+function c_um_snowstorm(instant)
     if TheWorld.components.um_snow_stormspawner ~= nil and TheWorld.state.iswinter then
-        if TheWorld.components.um_snow_stormspawner:ToggleSnowstorm() then
+        if TheWorld.components.um_snow_stormspawner:ToggleSnowstorm(instant) then
             print("starting snowstorm...")
         else
             print("stopping snowstorm...")

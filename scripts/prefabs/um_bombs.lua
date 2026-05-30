@@ -7,8 +7,8 @@ local assets =
     Asset("ANIM", "anim/um_bomb_moon.zip"),
 }
 
-local should_hit = {"_combat", "CHOP_workable", "MINE_workable", "HAMMER_workable", "DIG_workable"}
-local shouldnt_hit = {"INLIMBO", "notarget", "noattack", "playerghost"}
+local should_hit = { "_combat", "CHOP_workable", "MINE_workable", "HAMMER_workable", "DIG_workable" }
+local shouldnt_hit = { "INLIMBO", "notarget", "noattack", "playerghost" }
 local ACTIONS_TO_WORK = {
     [ACTIONS.CHOP] = 15,
     [ACTIONS.HAMMER] = 4,
@@ -28,7 +28,7 @@ local function OnHitFyre(inst, attacker, target)
                 if not v.components.fueled and v.components.burnable and not v.components.burnable:IsBurning() and not v:HasTag("burnt") then
                     v.components.burnable:Ignite(true, inst, attacker)
                 end
-                if v.components.combat then
+                if v.components.combat and v.components.combat:CanBeAttacked(attacker) then
                     v.components.combat:GetAttacked(attacker, TUNING.DSTU.PYREBOMB_DAMAGE)
                 end
             end
@@ -40,17 +40,17 @@ local function OnHitFyre(inst, attacker, target)
 end
 
 local function OnHitMutate(inst, attacker, target)
-    local x,y,z = inst.Transform:GetWorldPosition()
+    local x, y, z = inst.Transform:GetWorldPosition()
     local fx = SpawnPrefab("um_lunar_explosion")
     fx.AnimState:HideSymbol("fx_icon")
-    fx.Transform:SetPosition(x,y,z)
+    fx.Transform:SetPosition(x, y, z)
     --fx.Transform:SetScale(1.25, 1.25, 1.25)
     fx.persists = false
     --fx.AnimState:PlayAnimation("impact3_special")
     --fx.hideanim:set(true)
     fx.SoundEmitter:PlaySound("meta4/winona_catapult/lunar_projectile_explode")
     fx:ListenForEvent("animover", fx.Remove)
-    
+
     local ents = TheSim:FindEntities(x, y, z, 5)
     local mutation_count = 0
     local mutation_limit = 12
@@ -63,18 +63,22 @@ local function OnHitMutate(inst, attacker, target)
                     mutation_count = mutation_count + 1
                     v.components.halloweenmoonmutable:Mutate()
                 end
-                if v.components.combat and v.components.health and not v.components.health:IsDead() and not mutated and not inst:HasAnyTag(shouldnt_hit) then
+                if v.components.combat and v.components.health and not v.components.health:IsDead() and not mutated and not inst:HasAnyTag(shouldnt_hit) and v.components.combat:CanBeAttacked(attacker) then
                     local mult = 1
-                    if v:HasAnyTag("shadow","shadowcreature","nightmarecreature","shadow_aligned","player_shadow_aligned") then
+                    if v:HasAnyTag("shadow", "shadowcreature", "nightmarecreature", "shadow_aligned", "player_shadow_aligned") then
                         mult = mult * 3 -- AXE Lunar bomb is exceptionally effective against shadow creatures
                     end
-                    if v:HasAnyTag("lunar_aligned","player_lunar_aligned") or v.components.halloweenmoonmutable then
+                    if v:HasAnyTag("lunar_aligned", "player_lunar_aligned") or v.components.halloweenmoonmutable then
                         mult = mult * 0.33 -- AXE Lunar bomb is exceptionally less effective against lunar creatures, or those than can mutate
                     end
                     v.components.combat:GetAttacked(attacker, mult * 150)
                 end
                 if v.components.sanity then
                     v.components.sanity:DoDelta(50)
+                end
+
+                if v.components.werebeast ~= nil and not v.components.werebeast:IsInWereState() then
+                    v.components.werebeast:SetWere(1)
                 end
             end
         end
@@ -83,7 +87,7 @@ local function OnHitMutate(inst, attacker, target)
 end
 
 local function onequip(inst, owner)
-    owner.AnimState:OverrideSymbol("swap_object", "swap_"..inst.bank, "swap_"..inst.bank)
+    owner.AnimState:OverrideSymbol("swap_object", "swap_" .. inst.bank, "swap_" .. inst.bank)
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
 end
@@ -224,8 +228,8 @@ local function fyre_bomb_fn()
     if not TheWorld.ismastersim then
         return inst
     end
- 
-    inst.components.complexprojectile:SetOnHit(OnHitFyre) 
+
+    inst.components.complexprojectile:SetOnHit(OnHitFyre)
 
     return inst
 end
@@ -258,9 +262,9 @@ local function explosionfn()
     inst.Light:SetFalloff(1)
     inst.Light:SetColour(1, 1, 1)
 
-	inst.entity:SetPristine()
+    inst.entity:SetPristine()
 
-	
+
     if not TheWorld.ismastersim then
         return inst
     end
@@ -269,13 +273,13 @@ local function explosionfn()
     inst.AnimState:SetBuild("um_lunar_explosion")
     inst.AnimState:SetBank("um_lunar_explosion")
     inst.AnimState:PlayAnimation("impact3_special")
-    inst.Transform:SetScale(1,1,1)
-	inst.Light:Enable(true)
+    inst.Transform:SetScale(1, 1, 1)
+    inst.Light:Enable(true)
     inst:ListenForEvent("animover", function(inst) inst:Remove() end)
 
     return inst
 end
 
 return Prefab("um_fyre_bomb", fyre_bomb_fn, assets),
-Prefab("um_bomb_moon", moon_bomb_fn, assets),
-Prefab("um_lunar_explosion", explosionfn)
+    Prefab("um_bomb_moon", moon_bomb_fn, assets),
+    Prefab("um_lunar_explosion", explosionfn)

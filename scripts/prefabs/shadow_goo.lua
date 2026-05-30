@@ -125,6 +125,8 @@ local function mainprojectilefn(anim)
     inst.entity:AddPhysics()
     inst.entity:AddNetwork()
 
+    inst:AddTag("projectile")
+
     inst.AnimState:SetBank(anim)
     inst.AnimState:SetBuild(anim)
     inst.AnimState:PushAnimation("spin_loop", true)

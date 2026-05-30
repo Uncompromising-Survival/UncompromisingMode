@@ -32,29 +32,29 @@ local function OnCharged(inst)
 end
 --[[
 local function fuelme(inst)
-	if inst.components.fueled:GetPercent() < 1 then
-		inst.components.fueled:DoDelta(5)
-		if inst.components.fueled:GetPercent() >= 1 then
-			inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/angry", nil, 0.6)
+    if inst.components.fueled:GetPercent() < 1 then
+        inst.components.fueled:DoDelta(5)
+        if inst.components.fueled:GetPercent() >= 1 then
+            inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/angry", nil, 0.6)
 
-			charged(inst)
-			
-			if inst.task ~= nil then
-				inst.task:Cancel()
-				inst.task = nil
-			end
-		end
-	else
-		if inst.task ~= nil then
-			inst.task:Cancel()
-			inst.task = nil
-		end
-	end
+            charged(inst)
+            
+            if inst.task ~= nil then
+                inst.task:Cancel()
+                inst.task = nil
+            end
+        end
+    else
+        if inst.task ~= nil then
+            inst.task:Cancel()
+            inst.task = nil
+        end
+    end
 end
 ]]
-local function LaunchSpit(caster, target)
+local function LaunchSpit(caster, pos)
     local x, y, z = caster.Transform:GetWorldPosition()
-    local targetpos = target:GetPosition()
+    local targetpos = pos
     local theta = caster.Transform:GetRotation()
 
     theta = theta * DEGREES
@@ -89,33 +89,10 @@ end
 local function createlight(staff, target, pos)
     if staff.components.rechargeable:IsCharged() then
         staff.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/vomit")
-        local spittarget = SpawnPrefab("um_lavaspit_target")
         local caster = staff.components.inventoryitem.owner
+        LaunchSpit(caster, pos or target and target:GetPosition())
 
-        if pos ~= nil then
-            spittarget.Transform:SetPosition(pos:Get())
-            spittarget:DoTaskInTime(5, spittarget.Remove)
-            LaunchSpit(caster, spittarget)
-        elseif target ~= nil then
-            spittarget.Transform:SetPosition(getspawnlocation(staff, target))
-            spittarget:DoTaskInTime(5, spittarget.Remove)
-            LaunchSpit(caster, target)
-        end
-
-        local x1, y1, z1 = staff.Transform:GetWorldPosition()
-
-        local owner = staff.components.inventoryitem.owner
-
-        for i, v in pairs(TheSim:FindEntities(x1, y1, z1, 8, { "slobberlobber" })) do
-            if v ~= staff then
-                local vowner = v.components.inventoryitem:GetGrandOwner()
-                if vowner ~= nil and (vowner == owner or not vowner:HasTag("player")) or vowner == nil then
-                    v.components.rechargeable:Discharge(45)
-                end
-            end
-        end
-
-        staff.components.rechargeable:Discharge(45) --whatever, do what you want with that number
+        UMCommonFns.StartRechargeableCooldown(staff, {cooldown = TUNING.DSTU.SLOBBERLOBBER_COOLDOWN, tags = {"slobberlobber"}})
     else
         staff.SoundEmitter:PlaySound("dontstarve/common/teleportworm/sick_cough")
     end

@@ -55,7 +55,6 @@ local feather_defs =
 }
 
 local function SpawnThorns(inst, feather, owner, damage)
-
     local owner = inst.components.inventoryitem.owner
     local impactfx = SpawnPrefab("impact")
     inst.fxscale = 1
@@ -96,7 +95,10 @@ local function SpawnThorns(inst, feather, owner, damage)
                             v._wingsuit_speedmulttask:Cancel()
                         end
                         v._wingsuit_speedmulttask = v:DoTaskInTime(5,
-                            function(i) i.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey) i._wingsuit_speedmulttask = nil end)
+                            function(i)
+                                i.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey)
+                                i._wingsuit_speedmulttask = nil
+                            end)
 
                         local slowamount = 0.7
 
@@ -152,7 +154,6 @@ local function SpawnThorns(inst, feather, owner, damage)
     owner.components.locomotor:SetExternalSpeedMultiplier(inst, "wingsuit", 1.5 + inst.speedboost)
     owner:DoTaskInTime(1.5 + inst.speedboost,
         function(owner) owner.components.locomotor:RemoveExternalSpeedMultiplier(inst, "wingsuit") end)
-
 end
 
 local function charged(inst)
@@ -193,18 +194,18 @@ local function OnBlocked(owner, data, inst)
             inst.components.useableitem.inuse = true
             inst._cdtask = inst:DoTaskInTime(0.33, OnCooldown)
             inst.components.rechargeable:Discharge(0.33)
-            
+
             for i, v in ipairs(feather_defs) do
                 if v.name == inst.feather.prefab then
                     SpawnThorns(inst, v.name, owner, v.damage)
-                    SpawnPrefab("spikes_"..v.name).entity:SetParent(owner.entity)
+                    SpawnPrefab("spikes_" .. v.name).entity:SetParent(owner.entity)
                     inst.SoundEmitter:PlaySound(v.sound)
                     if owner.SoundEmitter ~= nil then
                         owner.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
                     end
                 end
             end
-            
+
             local item = inst.components.container:RemoveItem(inst.components.container:GetItemInSlot(1), false)
             item:Remove()
         end
@@ -217,21 +218,21 @@ local function OnUse(inst)
     if inst ~= nil then
         if inst.feather ~= nil and inst._cdtask == nil then
             --V2C: tiny CD to limit chain reactions
-            
+
             inst._cdtask = inst:DoTaskInTime(.33, OnCooldown)
             inst.components.rechargeable:Discharge(.33)
-            
+
             for i, v in ipairs(feather_defs) do
                 if v.name == inst.feather.prefab then
                     SpawnThorns(inst, v.name, owner, v.damage)
-                    SpawnPrefab("spikes_"..v.name).entity:SetParent(owner.entity)
+                    SpawnPrefab("spikes_" .. v.name).entity:SetParent(owner.entity)
                     inst.SoundEmitter:PlaySound(v.sound)
                     if owner.SoundEmitter ~= nil then
                         owner.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
                     end
                 end
             end
-            
+
             local item = inst.components.container:RemoveItem(inst.components.container:GetItemInSlot(1), false)
             item:Remove()
         end
@@ -285,39 +286,52 @@ end
 
 local function OnAmmoLoaded(inst, data)
     local feather = inst.components.container:GetItemInSlot(1)
-    
+
     if feather ~= nil then
         for i, v in ipairs(feather_defs) do
             if v.name == feather.prefab then
                 inst.feather = feather
                 inst.frock_damage_reduction = v.damage_reduction
-                
+
                 return
             end
         end
     end
-    
+
     inst.feather = nil
     inst.frock_damage_reduction = 0
 end
 
 local function OnAmmoUnloaded(inst, data)
     local feather = inst.components.container:GetItemInSlot(1)
-    
+
     if feather ~= nil then
         for i, v in ipairs(feather_defs) do
             if v.name == feather.prefab then
                 inst.feather = feather
                 inst.frock_damage_reduction = v.damage_reduction
-                
+
                 return
             end
         end
     end
-    
+
     inst.feather = nil
     inst.frock_damage_reduction = 0
 end
+
+local feather_res_lookup = {}
+
+for k,v in pairs(feather_defs) do
+    feather_res_lookup[v.name] = v.damage
+end
+
+local function GetDisplayName(inst)
+    local feather = inst.replica.container ~= nil and inst.replica.container:GetItemInSlot(1) or nil
+    --todo move that flat dmg reduction to a string. 
+    return feather ~= nil and STRINGS.NAMES.FEATHER_FROCK.."\nFlat Damage Reduction: "..feather_res_lookup[feather.prefab] or STRINGS.NAMES.FEATHER_FROCK
+end
+
 
 local function frockfn()
     local inst = CreateEntity()
@@ -340,6 +354,8 @@ local function frockfn()
     inst:AddTag("um_feather_frock")
     --inst.foleysound = "dontstarve/movement/foley/cactus_armor"
 
+    inst.displaynamefn = GetDisplayName --TEMP UNTIL SCRAPBOOK.
+
     MakeInventoryFloatable(inst)
 
     inst.entity:SetPristine()
@@ -350,7 +366,7 @@ local function frockfn()
         end
         return inst
     end
-    
+
     inst.feather = nil
     inst.frock_damage_reduction = 0
 

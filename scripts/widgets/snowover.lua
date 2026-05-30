@@ -38,14 +38,11 @@ local SnowOver = Class(Widget, function(self, owner, dustlayer)
     self.bg:SetScaleMode(SCALEMODE_PROPORTIONAL)
     self.bg = self.bg:AddChild(UIAnim())
     self.bg:GetAnimState():SetBank("sand_over")
-    self.bg:GetAnimState():SetBuild("sand_over")
+    self.bg:GetAnimState():SetBuild("snow_over")
     self.bg:GetAnimState():PlayAnimation("blind_loop", true)
-    self.bg:GetAnimState():SetAddColour(1, 1, 1, 1)
     self.bg:GetAnimState():AnimateWhilePaused(false)
-    --self.bg:SetTint(1,1,1,.8)
 
     self.dust = dustlayer
-    self.dust:GetAnimState():SetAddColour(1, 1, 1, 1)
     self.dust:Hide()
 
     self.alphaquation = 0
