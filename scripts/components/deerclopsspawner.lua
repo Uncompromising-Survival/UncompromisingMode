@@ -259,9 +259,14 @@ end
 
 local function OnMegaFlare(src, data)
 	if data.sourcept and TheWorld.Map:IsVisualGroundAtPoint(data.sourcept.x, data.sourcept.y, data.sourcept.z) and TheWorld.state.iswinter then
-		if not _activehassler then
-			if _worldsettingstimer:ActiveTimerExists(DEERCLOPS_TIMERNAME) and _worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME) > 480 then -- Cannot advance any more if it's within one day
-				local time = UMCommonFns.MegaFlareTimerReduction(_worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME))
+		if _activehassler then
+			TheWorld:PushEvent("megaflare_guardmet", {sourcept = data.sourcept, iswinter = true})
+		else
+			local currentTime = _worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME)
+			if currentTime ~= nil and currentTime <= 480 then
+				TheWorld:PushEvent("megaflare_guardmet", {sourcept = data.sourcept, iswinter = true})
+			elseif currentTime ~= nil and currentTime > 480 then -- Cannot advance any more if it's within one day
+				local time = UMCommonFns.MegaFlareTimerReduction(currentTime)
 				_worldsettingstimer:SetTimeLeft(DEERCLOPS_TIMERNAME, time)
 				--TheNet:Announce("Deerclops timer: " .. tostring(time))
 				--TheNet:Announce("Deerclops timer: " .. tostring(time/480) .. " days")
