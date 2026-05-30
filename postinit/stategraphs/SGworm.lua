@@ -1,43 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-local function DoAreaDamageEffect(inst)
-    local dodamageRadius = 5.5
-    inst.components.groundpounder.destructionRings = 1
-    inst.components.groundpounder.platformPushingRings = 1
-    inst.components.groundpounder.numRings = 1
-    
-    local ringfx = SpawnPrefab("firering_fx")
-    ringfx.Transform:SetPosition(inst.Transform:GetWorldPosition())
-    ringfx.Transform:SetScale(0.8, 0.8, 0.8)
-    
-    inst.components.groundpounder.destructionRings = 1
-    inst.components.groundpounder.platformPushingRings = 1
-    inst.components.groundpounder.numRings = 1
-    inst.components.groundpounder:GroundPound()
-    
-    local x, y, z = inst.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, dodamageRadius, { "_combat" }, { "playerghost", "worm", "ghost", "prey", "bird", "shadowcreature" })
-    
-    for i, ent in ipairs(ents) do
-        if ent.components.health ~= nil and not ent.components.health:IsDead() then
-            local insulated = (ent:HasTag("electricdamageimmune") or
-                (ent.components.inventory ~= nil and ent.components.inventory:IsInsulated()))
-                
-            local mult = ent:HasTag("player") and not insulated
-                and TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * (ent.components.moisture ~= nil and ent.components.moisture:GetMoisturePercent() or (ent:GetIsWet() and 1 or 0))
-                or 1
-                
-            ent.components.combat:GetAttacked(inst, (TUNING.LIGHTNING_GOAT_DAMAGE * 1.5) * mult, nil, "electric")
-                
-            if ent:HasTag("player") and ent.sg ~= nil and not ent.sg:HasStateTag("nointerrupt") and not insulated and not
-                (ent.components.health ~= nil and not ent.components.health:IsDead()) then
-                ent.sg:GoToState("electrocute")
-            end
-        end
-    end
-end
-
 local function Charging(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
 
@@ -94,6 +57,7 @@ env.AddStategraphPostInit("worm", function(inst)
             tags = {"attack", "canrotate", "busy"},
 
             onenter = function(inst, target)
+                inst.shocktargetpoint = nil
                 inst.Physics:Stop()
                 inst.AnimState:PlayAnimation("shocking_pre")
                 inst.SoundEmitter:KillAllSounds()
@@ -123,10 +87,7 @@ env.AddStategraphPostInit("worm", function(inst)
                     inst.shock_loop = 0
                 end
 
-                -- Extend to 4 more tiles
-                for i = 1,4 do
-                    inst.components.um_electrifies_tiles:ExtendTiles()
-                end
+
             end,
 
             --onupdate = function(inst) end,
@@ -138,8 +99,8 @@ env.AddStategraphPostInit("worm", function(inst)
                     inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/lightninggoat/shocked_electric")
                     SpawnPrefab("electricchargedfx").Transform:SetPosition(inst.Transform:GetWorldPosition())
                     -- Only shock the tiles 4 times, on these frames
-                    if inst.shock_loop == 2 or inst.shock_loop == 5 or inst.shock_loop == 8 or inst.shock_loop == 12 then
-                        inst.components.um_electrifies_tiles:ElectrifyMyTiles()
+                    if inst.shock_loop == 1 or inst.shock_loop == 4 or inst.shock_loop == 8 or inst.shock_loop == 12 then
+                        inst.TryShockingTargets(inst)
                     end
                 end),
             },
@@ -162,6 +123,9 @@ env.AddStategraphPostInit("worm", function(inst)
             tags = {"attack", "canrotate", "busy"},
 
             onenter = function(inst, target)
+                inst.components.timer:StartTimer("prepare_shock",math.random(20,30)) -- AXE longer CD if I just did it
+                
+                inst.shock_targets = {}
                 inst.Physics:Stop()
                 inst.AnimState:PlayAnimation("shocking_pst_1")
                 inst.AnimState:PushAnimation("taunt",false)
@@ -170,7 +134,6 @@ env.AddStategraphPostInit("worm", function(inst)
                 if inst.loop_sound then
                     inst.SoundEmitter:PlaySound(inst.loop_sound, "custom_loop")
                 end
-                inst.components.um_electrifies_tiles:ClearAllMyTiles()
             end,
             events =
             {

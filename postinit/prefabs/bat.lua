@@ -16,4 +16,32 @@ env.AddPrefabPostInit("bat", function(inst)
 	if inst.components.lootdropper ~= nil then
 		inst.components.lootdropper:SetChanceLootTable('batty')
 	end
+
+	local _OnLoad = inst.OnLoad
+	local _OnSave = inst.OnSave
+
+	local function OnLoad(inst,data)
+		if data then
+			if data.um_guano_rain_temporary then
+				inst.um_guano_rain_temporary = true
+			end
+		end
+		if _OnLoad then
+			_OnLoad(inst,data)
+		end
+	end
+
+	local function OnSave(inst)
+		local data 
+		if _OnSave then
+			data = _OnSave(inst) 
+		else
+			data = {}
+		end
+		data.um_guano_rain_temporary = true
+		return data
+	end
+
+	inst.OnLoad = OnLoad
+	inst.OnSave = OnSave
 end)

@@ -225,6 +225,8 @@ local function MoreBATS(inst)
 			local bat = SpawnPrefab("bat")
 			bat.Transform:SetPosition(x+offset.x,y,z+offset.z)
 			bat.sg:GoToState("flyback")
+
+			bat.um_guano_rain_temporary = true -- AXE this guy should fly away after guano rain ends
 		end
 	end
 end
