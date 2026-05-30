@@ -106,7 +106,7 @@ local spookyskeletons_items = {
     shadowheart = true,
 }
 
-local unique_loot = {}
+local unique_loot = { "fruitflyfruit", }
 
 local function MultiplyLoot(inst, mult)
     local lootdropper = inst.components.lootdropper
@@ -126,7 +126,7 @@ local function MultiplyLoot(inst, mult)
                 multiply = false
             end
 
-            if unique_loot[prefab] then
+			if table.contains(unique_loot, prefab) then
                 multiply = false
             end
                 
@@ -399,6 +399,40 @@ local function MultiplyBeargerShedder(inst, config)
 		end
 	end)
 end
+
+local function MultiplyWormBossBodyLoot(inst)
+	if not TheWorld.ismastersim then return end
+
+	inst:DoTaskInTime(0, function()
+		if inst.components.lootdropper == nil then return end
+		if inst._bosslootmult_wormbody_patched then return end
+		inst._bosslootmult_wormbody_patched = true
+
+		local old_FlingItem = inst.components.lootdropper.FlingItem
+
+		inst.components.lootdropper.FlingItem = function(self, item, ...)
+			old_FlingItem(self, item, ...)
+
+			if item == nil or item.prefab == "lucky_goldnugget" then
+				return
+			end
+
+			local n = GetModConfigData("worm_boss_health_") or 1
+			local mult = 1 + (n - 1) / 2
+			local extra = ExtraRoll(mult)
+
+			for i = 1, extra do
+				local copy = SpawnPrefab(item.prefab)
+				if copy ~= nil then
+					old_FlingItem(self, copy, ...)
+				end
+			end
+		end
+	end)
+end
+
+AddPrefabPostInit("worm_boss_segment", MultiplyWormBossBodyLoot)
+AddPrefabPostInit("worm_boss", MultiplyWormBossBodyLoot)
 
 for _, prefab in ipairs(shadowpieces) do
     AddPrefabPostInit(prefab, function(inst)
