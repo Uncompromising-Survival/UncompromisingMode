@@ -101,7 +101,6 @@ local function GetGemDescription(_name, knowntier)
     local str = STRINGS.SCRAPBOOK.SPECIALINFO.GEMOLOGY_GEM
 
     if knowntier > 0 then
-        print("upgrade st")
         if STRINGS.SCRAPBOOK.SPECIALINFO.GEM_UPGRADING[string.upper(_name)] ~= nil then
             str = str .. "\n" .. STRINGS.SCRAPBOOK.SPECIALINFO.GEM_UPGRADING[string.upper(_name)]
         end
@@ -114,10 +113,10 @@ local function GetGemDescription(_name, knowntier)
                 str = str .. STRINGS.UM_DESCRIPTOR.GEMOLOGY_GEM[string.upper(name)][_tier] .. "\n\n"
             else
                 str = str .. STRINGS.SCRAPBOOK.SPECIALINFO.GEMOLOGY_NEEDS_SCAN .. "\n\n"
-            end
+            end 
         end
     else
-        str = str .. STRINGS.SCRAPBOOK.SPECIALINFO.GEMOLOGY_NEEDS_SCAN
+        str = str .."\n" .. STRINGS.SCRAPFBOOK.SPECIALINFO.GEMOLOGY_NEEDS_SCAN
     end
 
 
