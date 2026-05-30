@@ -600,7 +600,7 @@ env.AddClassPostConstruct("screens/redux/scrapbookscreen", function(self)
                 end
             end
 
-            if data.type == "item" or data.type == "food" then
+            if data.type == "item" or data.type == "food" or data.type == "gemology" then
                 if data.stacksize then
                     makeentry("icon_stack.tex", data.stacksize .. STRINGS.SCRAPBOOK.DATA_STACK)
                 end
