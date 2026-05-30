@@ -17,6 +17,16 @@ local fxlist = {
         sound = "dontstarve/wilson/use_break",
         nofaced = true,
     },
+    {
+        name = "wathom_wound_vfx",
+        bank = "wathom_wound_vfx",
+        build = "wathom_wound_vfx",
+        anim = "idle1",
+        nofaced = true,
+        fn = function(inst)
+            inst.AnimState:SetDeltaTimeMultiplier(.8)
+        end,
+    },
 }
 
 local fxprefabs = require("fx")

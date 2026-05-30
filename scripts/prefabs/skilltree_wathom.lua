@@ -71,20 +71,32 @@ local function PissOfGestalts(inst)
     CheckForMORE(inst)
 end
 
+local WARNING_MUST_TAGS = {"_health", "_combat"}
+local WARNING_MUST_NOT_TAGS = {"player", "wall", "soulless"}
+
 local function ShowLowHealth(inst)
-    --if inst.components.skilltreeupdater and not inst.components.skilltreeupdater:IsActivated("bite_1") then return end
-    local WARNING_MUST_TAGS = {"_health", "_combat"}
-    local WARNING_MUST_NOT_TAGS = {"player", "wall", "soulless"}
     local x,y,z = inst.Transform:GetWorldPosition()
     local creatures = TheSim:FindEntities(x, y, z, 24, WARNING_MUST_TAGS, WARNING_MUST_NOT_TAGS)
     for i,creature in ipairs(creatures) do
         if creature.components.health and not creature.components.health:IsDead()
             and (creature.components.health:GetPercent() <= 0.3 and not creature:HasTag("epic"))
             or (creature.components.health:GetPercent() <= 0.1 and creature:HasTag("epic")) then
-            local fx = SpawnPrefab("ratmask_stinklines") --TBD: Wacky Scar effect.
+            local fx = SpawnPrefab("wathom_wound_vfx")
+            fx.Transform:SetScale(1.3,1.3,1.3)
             fx.entity:SetParent(creature.entity)
             fx.Network:SetClassifiedTarget(inst)
         end
+    end
+end
+
+local function ShowLowHealth_OnAttack(inst, data)
+    if data.target and data.target.components.health and not data.target.components.health:IsDead()
+        and data.target:HasAnyTag(WARNING_MUST_TAGS) and not data.target:HasAnyTag(WARNING_MUST_NOT_TAGS)
+        and (data.target.components.health:GetPercent() <= 0.3 and not data.target:HasTag("epic"))
+        or (data.target.components.health:GetPercent() <= 0.1 and data.target:HasTag("epic")) then
+        local fx = SpawnPrefab("wathom_wound_vfx")
+        fx.entity:SetParent(data.target.entity)
+        fx.Network:SetClassifiedTarget(inst)
     end
 end
 
@@ -228,7 +240,8 @@ local function BuildSkillsData(SkillTreeFns)
             desc = STRINGS.SKILLTREE.WATHOM.BITE_1_DESC,
             icon = "wathom_bite_1",
             onactivate = function(inst, fromload)
-                inst.watch_healthtask = inst:DoPeriodicTask(6,ShowLowHealth)
+                inst.watch_healthtask = inst:DoPeriodicTask(4,ShowLowHealth)
+                inst:ListenForEvent("onattackother", ShowLowHealth_OnAttack)
                 inst.components.combat:SetDefaultDamage(TUNING.UNARMED_DAMAGE+2.5)
             end,
             ondeactivate = function(inst, fromload)
@@ -236,6 +249,7 @@ local function BuildSkillsData(SkillTreeFns)
                     inst.watch_healthtask:Cancel()
                     inst.watch_healthtask = nil
                 end
+                inst:RemoveEventCallback("onattackother", ShowLowHealth_OnAttack)
                 inst.components.combat:SetDefaultDamage(TUNING.UNARMED_DAMAGE)
             end,
             pos = {-214+38*3,58},

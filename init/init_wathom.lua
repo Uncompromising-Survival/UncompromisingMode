@@ -1392,23 +1392,38 @@ AddPrefabPostInit("cutlichen", function(inst)
     inst.components.edible.secondaryfoodtype = GLOBAL.FOODTYPE.LICHEN
 end)
 
+local function oneatenfn(inst, eater)
+    -- Insert coolest Shadow fxs you can do, prob do the fuelweaver shadow stun too. DONE -CB
+    eater.sg:GoToState("curse_controlled")
+    eater.SoundEmitter:PlaySound("dontstarve/creatures/together/stalker/mindcontrol_LP", "mindcontrol")
+    eater:DoTaskInTime(1,function() eater.SoundEmitter:KillSound("mindcontrol") end)
+    eater:DoTaskInTime(.2,function() -- Want to simulate a beating heart with the regen :> -CB
+        eater.components.debuffable:AddDebuff("healthregenbuff_vetcurse_shadowheart2", "healthregenbuff_vetcurse", {duration = (inst.components.edible.healthvalue * 0.1)})
+    end)
+    eater.fuelleaking = eater:DoPeriodicTask(0.125, function()
+        local x, y, z = eater.Transform:GetWorldPosition()
+        local xoffset = math.random(-10, 10) / 10
+        local zoffset = math.random(-10, 10) / 10
+        SpawnPrefab("cane_ancient_fx").Transform:SetPosition(x + xoffset, y, z + zoffset)
+    end)
+    eater:DoTaskInTime(2,function()
+        if eater.fuelleaking then
+            eater.fuelleaking:Cancel()
+            eater.fuelleaking = nil
+        end
+        eater.components.talker:Say(GetString(eater, "ANNOUNCE_POCKETWATCH_MARK"))
+    end)
+    TheGenericKV:SetKV("wathom_yummy", "1")
+end
+
 AddPrefabPostInit("shadowheart", function(inst)
     if not _G.TheWorld.ismastersim then return end
 
-    local function oneatenfn(eater)
-        TheGenericKV:SetKV("wathom_yummy", "1")
-        -- Insert coolest Shadow fxs you can do, prob do the fuelweaver shadow stun too. 
-        --eater.sg:GoToState("curse_controlled")
-        --[[eater:DoTaskInTime(.2,function() -- Want to simulate a beating heart with the regen :> -CB
-            eater.components.debuffable:AddDebuff("healthregenbuff_vetcurse_shadowheart2", "healthregenbuff_vetcurse", {duration = (inst.components.edible.healthvalue * 0.1)})
-        end)]]
-    end
-
     inst:AddComponent("edible")
     inst.components.edible.secondaryfoodtype = GLOBAL.FOODTYPE.LICHEN --Changing to its own thing that Wathom can eat...
-    inst.components.edible.healthvalue = 62.5
-    inst.components.edible.hungervalue = 25
-    inst.components.edible.sanityvalue = -60
+    inst.components.edible.healthvalue = 62.5 -- Actually heals 125
+    inst.components.edible.hungervalue = TUNING.CALORIES_LARGE --37.5
+    inst.components.edible.sanityvalue = -75
 	inst.components.edible:SetOnEatenFn(oneatenfn)
 end)
 
