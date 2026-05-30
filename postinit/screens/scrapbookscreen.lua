@@ -116,7 +116,7 @@ local function GetGemDescription(_name, knowntier)
             end 
         end
     else
-        str = str .."\n" .. STRINGS.SCRAPFBOOK.SPECIALINFO.GEMOLOGY_NEEDS_SCAN
+        str = str .."\n" .. STRINGS.SCRAPBOOK.SPECIALINFO.GEMOLOGY_NEEDS_SCAN
     end
 
 
