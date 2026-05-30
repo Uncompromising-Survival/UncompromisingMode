@@ -201,8 +201,9 @@ end
 local function OnMegaFlare(src, data)
 	if data.sourcept and TheWorld.Map:IsVisualGroundAtPoint(data.sourcept.x, data.sourcept.y, data.sourcept.z) and TheWorld.state.isspring then
 		if not _activehassler then
-			if _worldsettingstimer:ActiveTimerExists(MOTHERGOOSE_TIMERNAME) and _worldsettingstimer:GetTimeLeft(MOTHERGOOSE_TIMERNAME) > 480 then -- Cannot advance any more if it's within one day
-				local time = UMCommonFns.MegaFlareTimerReduction(_worldsettingstimer:GetTimeLeft(MOTHERGOOSE_TIMERNAME))
+			local currentTime = _worldsettingstimer:GetTimeLeft(MOTHERGOOSE_TIMERNAME)
+			if currentTime ~= nil and currentTime > 480 then -- Cannot advance any more if it's within one day
+				local time = UMCommonFns.MegaFlareTimerReduction(currentTime)
 				_worldsettingstimer:SetTimeLeft(MOTHERGOOSE_TIMERNAME, time)
 				--TheNet:Announce("Moose/Goose timer: " .. tostring(time))
 				--TheNet:Announce("Moose/Goose timer: " .. tostring(time/480) .. " days")
