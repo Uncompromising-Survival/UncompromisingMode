@@ -2,7 +2,6 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 env.AddPrefabPostInit("monkey", function(inst)
-
 	if not TheWorld.ismastersim then
 		return
 	end

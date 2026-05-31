@@ -118,7 +118,7 @@ local function CreateGemologyEntryFromDefs(name, defs)
         anim = defs.anim,
         specialinfo = string.upper(name),
         subcat = "gemologygem",
-        deps = { "um_gemologyforge", "ancientfruit_gem" },
+        deps = { "um_gemologyforge", "ancientfruit_gem", "slurtle", "antlion", "rocky"}, --"snaildrake", "snowmong"
         workable = "HAMMER"
     }
 
@@ -165,7 +165,7 @@ local function CreateGeodeEntryFromLootTable(name, defs)
         type = "gemology",
         prefab = name,
         stacksize = 10,
-        workable = "HAMMER",
+        workable = "MINE",
         deps = {}
     }
 

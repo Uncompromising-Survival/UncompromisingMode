@@ -2,27 +2,24 @@ local GemologyScanner = Class(function(self, inst)
     self.inst = inst
     self.onscanned = nil
 
-    --Recommended to explicitly add tag to prefab pristine state
+    -- Recommended to explicitly add tag to prefab pristine state
     inst:AddTag("gemologyscanner")
 end)
 
-function GemologyScanner:OnRemoveFromEntity()
-    self.inst:RemoveTag("gemologyscanner")
-end
+function GemologyScanner:OnRemoveFromEntity() self.inst:RemoveTag("gemologyscanner") end
 
-function GemologyScanner:SetOnScannedFn(fn)
-    self.onscanned = fn
-end
+function GemologyScanner:SetOnScannedFn(fn) self.onscanned = fn end
 
 function GemologyScanner:Scan(target, doer)
     if target.components.stackable ~= nil and target.components.stackable:IsStack() then
-        local toscan = math.max(1, target.components.stackable:StackSize())
+        local toscan = self.getscanamountfn ~= nil and self.getscanamountfn(self.inst, target, doer) or math.max(1, target.components.stackable:StackSize())
+
         if self.inst.components.finiteuses ~= nil then
             toscan = math.floor(math.min(toscan, self.inst.components.finiteuses:GetUses() * self.inst.components.finiteuses.consumption[ACTIONS.SCAN_GEMOLOGY_GEM]))
         end
 
         local new_target = toscan >= target.components.stackable:StackSize() and target or target.components.stackable:Get(toscan)
-        new_target:PushEvent("reveal_gem", { doer = doer })
+        new_target:PushEvent("reveal_gem", {doer = doer})
 
         if new_target ~= target then
             local owner = new_target.components.inventoryitem:GetGrandOwner()
@@ -36,6 +33,10 @@ function GemologyScanner:Scan(target, doer)
                     self.inst.components.inventoryitem:SetLanded(false, true)
                 end
             end
+
+            if self.onscanned ~= nil then
+                self.onscanned(self.inst, new_target, doer)
+            end
         end
 
         if self.inst.components.finiteuses ~= nil then
@@ -43,12 +44,9 @@ function GemologyScanner:Scan(target, doer)
                 self.inst.components.finiteuses:OnUsedAsItem(ACTIONS.SCAN_GEMOLOGY_GEM, doer, new_target)
             end
         end
-
-        if self.onscanned ~= nil then
-            self.onscanned(self.inst, new_target, doer)
-        end
     else
-        target:PushEvent("reveal_gem", { doer = doer })
+        target:PushEvent("reveal_gem", {doer = doer})
+
         if self.inst.components.finiteuses ~= nil then
             self.inst.components.finiteuses:OnUsedAsItem(ACTIONS.SCAN_GEMOLOGY_GEM, doer, target)
         end
@@ -56,7 +54,9 @@ function GemologyScanner:Scan(target, doer)
         if self.onscanned ~= nil then
             self.onscanned(self.inst, target, doer)
         end
+
     end
+
 end
 
 return GemologyScanner

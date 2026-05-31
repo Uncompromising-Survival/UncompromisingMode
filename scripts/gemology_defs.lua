@@ -691,13 +691,12 @@ local function OnDropedIfDeadGiveBack(inst) -- This is the only one that has an 
             end
         end
         owner.components.inventory:GiveItem(inst) -- Give the ghost back the item
+        DamageInfiniteItemGem("purplegem2", inst, 0.25)
     end
 
     if inst.volatile_gemology_data.um_gemologypurplegem2.old_ondropfn then
         inst.volatile_gemology_data.um_gemologypurplegem2.old_ondropfn(inst)
     end
-
-    DamageInfiniteItemGem("purplegem2", inst, 0.25)
 end
 
 

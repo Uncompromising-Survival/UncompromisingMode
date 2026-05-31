@@ -125,12 +125,12 @@ function MineralLogbook:SetGem(gem, tier)
     self:Save()
 end
 
-function MineralLogbook:ClearKnownGems()
+function MineralLogbook:DebugClearKnownGems()
     self.known_gems = {}
     self:Save()
 end
 
-function MineralLogbook:DumpKnownGems()
+function MineralLogbook:DebugDumpKnownGems()
     printwrap("Known gems data", self.known_gems)
 end
 
