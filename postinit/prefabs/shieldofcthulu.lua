@@ -105,8 +105,20 @@ local function castspell(inst, target, pos, doer)
     UMCommonFns.StartRechargeableCooldown(inst, {cooldown = TUNING.DSTU.SHIELDOFTERROR_COOLDOWN, tags = {"shieldofterror"}})
 end
 
-local function can_cast_fn(doer, target, pos, inst)
-    return inst.components.rechargeable:IsCharged()
+local function OnDischarged(inst)
+    inst.components.aoetargeting:SetEnabled(false)
+end
+
+local function OnCharged(inst)
+    local owner = inst.components.inventoryitem:GetGrandOwner()
+    if owner and owner:HasTag("vetcurse") then
+        inst.components.aoetargeting:SetEnabled(true)
+    end
+end
+
+local function ShieldBash(inst, doer, pos)
+    UMCommonFns.StartRechargeableCooldown(inst, {cooldown = TUNING.DSTU.SHIELDOFTERROR_COOLDOWN, tags = {"shieldofterror"}})
+    return true
 end
 
 local function ToggleItemVetcurse(inst, toggle)
@@ -114,23 +126,22 @@ local function ToggleItemVetcurse(inst, toggle)
     if toggle then
         inst._vetcurseupgraded:set(true)
 
-        inst.spelltype = "UM_SHIELD_BASH"
+        local aoespell = inst.components.aoespell or inst:AddComponent("aoespell")
+        aoespell:SetSpellFn(ShieldBash)
 
-        inst:AddComponent("spellcaster")
-        inst.components.spellcaster:SetSpellFn(castspell)
-        inst.components.spellcaster:SetCanCastFn(can_cast_fn)
-        inst.components.spellcaster.canuseontargets = true
-        inst.components.spellcaster.canuseondead = true
-        inst.components.spellcaster.canuseonpoint = true
-        inst.components.spellcaster.canuseonpoint_water = true
-        inst.components.spellcaster.canusefrominventory = false
+        if inst.components.equippable and inst.components.equippable:IsEquipped() and inst.components.aoetargeting then
+            inst.components.aoetargeting:SetEnabled(inst.components.rechargeable and inst.components.rechargeable:IsCharged() or false)
+        end
 
         --todo: visual stuff?
     else
         inst._vetcurseupgraded:set(false)
 
-        inst.spelltype = nil
-        inst:RemoveComponent("spellcaster")
+        inst:RemoveComponent("aoespell")
+
+        if inst.components.aoetargeting and inst.components.aoetargeting:IsEnabled() then
+            inst.components.aoetargeting:SetEnabled(false)
+        end
     end
 end
 
@@ -157,13 +168,9 @@ local function ReticuleUpdatePositionFn(inst, pos, reticule, ease, smoothing, dt
     if ease and dt then
         local rot0 = reticule.Transform:GetRotation()
         local drot = rot - rot0
-        rot = Lerp((drot > 180 and rot0 + 360) or drot < -180 and rot0 - 360 or rot0, rot, dt * smoothing)
+        rot = Lerp((drot > 180 and rot0 + 360) or (drot < -180 and rot0 - 360) or rot0, rot, dt * smoothing)
     end
     reticule.Transform:SetRotation(rot)
-end
-
-local function ReticuleShouldHideFn(inst)
-    return inst._vetcurseupgraded and not inst._vetcurseupgraded:value()
 end
 
 local function OnPutInInventory(inst, owner)
@@ -173,43 +180,62 @@ end
 env.AddPrefabPostInit("shieldofterror", function(inst)
     CommonClientFunctions(inst)
     inst:AddTag("shieldofterror")
+    inst:AddTag("rechargeable")
 
     inst._vetcurseupgraded = net_bool(inst.GUID, "shieldofterror.vetcurse", "vetcursedirty")
     inst._vetcurseupgraded:set(false)
 
-    inst:ListenForEvent("vetcursedirty", function(inst)
-        inst.spelltype = inst._vetcurseupgraded:value() and "UM_SHIELD_BASH" or nil
-    end)
-
-    local reticule = inst.components.reticule or inst:AddComponent("reticule")
-    inst.components.reticule.reticuleprefab = "reticuleline2"
-    inst.components.reticule.pingprefab = "reticulelongping"
-    -- inst.components.reticule.reticuleprefab = "reticuleline2"
-    -- inst.components.reticule.pingprefab = "reticulelineping"
-    inst.components.reticule.targetfn = ReticuleTargetFn
-    inst.components.reticule.mousetargetfn = ReticuleMouseTargetFn
-    inst.components.reticule.updatepositionfn = ReticuleUpdatePositionFn
-    inst.components.reticule.shouldhidefn = ReticuleShouldHideFn
-    inst.components.reticule.validcolour = { 1, 1, 1, 1 }
-    inst.components.reticule.invalidcolour = { .5, 0, 0, 1 }
-    inst.components.reticule.ease = true
-    inst.components.reticule.mouseenabled = true
-    inst.components.reticule.ispassableatallpoints = true
+    local aoetargeting = inst.components.aoetargeting or inst:AddComponent("aoetargeting")
+    aoetargeting:SetAllowRiding(false)
+    aoetargeting.reticule.reticuleprefab = "reticuleline2"
+    aoetargeting.reticule.pingprefab = "reticulelongping"
+    aoetargeting.reticule.targetfn = ReticuleTargetFn
+    aoetargeting.reticule.mousetargetfn = ReticuleMouseTargetFn
+    aoetargeting.reticule.updatepositionfn = ReticuleUpdatePositionFn
+    aoetargeting.reticule.validcolour = { 1, 1, 1, 1 }
+    aoetargeting.reticule.invalidcolour = { .5, 0, 0, 1 }
+    aoetargeting.reticule.ease = true
+    aoetargeting.reticule.mouseenabled = true
 
     if not TheWorld.ismastersim then return end
+
+    aoetargeting:SetEnabled(false)
 
     if TUNING.DSTU.ARMORREWORK and inst.components.armor then
         inst.components.armor:InitCondition(TUNING.SHIELDOFTERROR_ARMOR * 2.333, TUNING.SHIELDOFTERROR_ABSORPTION)
     end
 
     if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED and inst.components.weapon then
-        inst._weaponused_callback = function(_, data) end --Leave empty function. Will crash if set to nil
+        inst._weaponused_callback = function(_, data) end -- Leave empty function. Will crash if set to nil
         inst.components.weapon:SetOnAttack(OnAttack)      -- Use the normal attack function instead
     end
 
     CommonFunctions(inst, "eye_shield", "idle")
 
     local rechargeable = inst.components.rechargeable or inst:AddComponent("rechargeable")
+    rechargeable:SetOnDischargedFn(OnDischarged)
+    rechargeable:SetOnChargedFn(OnCharged)
+
+    local equippable = inst.components.equippable
+    local _OnEquip = equippable.onequipfn
+    local function OnEquip(inst, owner, ...)
+        local ret = _OnEquip(inst, owner, ...)
+        if inst.components.aoetargeting and owner:HasTag("vetcurse") then
+            inst.components.aoetargeting:SetEnabled(inst.components.rechargeable and inst.components.rechargeable:IsCharged() or false)
+        end
+        return ret
+    end
+    equippable:SetOnEquip(OnEquip)
+
+    local _OnUnequip = equippable.onunequipfn
+    local function OnUnequip(inst, owner, ...)
+        local ret = _OnUnequip(inst, owner, ...)
+        if inst.components.aoetargeting and inst.components.aoetargeting:IsEnabled() then
+            inst.components.aoetargeting:SetEnabled(false)
+        end
+        return ret
+    end
+    equippable:SetOnUnequip(OnUnequip)
 
     inst.UMToggleItemVetcurse = ToggleItemVetcurse
 
