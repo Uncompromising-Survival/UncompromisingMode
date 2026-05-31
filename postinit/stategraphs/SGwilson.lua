@@ -678,13 +678,13 @@ env.AddStategraphPostInit("wilson", function(inst)
     inst.actionhandlers[ACTIONS.CASTAOE].deststate = function(inst, action, ...)
         if action.invobject.prefab == "um_detonator" then
             return "detonator_remotecast_pre"
-		elseif action.invobject:HasTag("shieldofterror") then
-			if inst:HasTag("vetcurse") and action.invobject.components.rechargeable:IsCharged() and (inst.components.rider and not inst.components.rider:IsRiding() or inst.components.rider == nil) then
-				return "um_shield_charge"
-			else
-				return
-			end
-		else
+        elseif action.invobject:HasTag("shieldofterror") then
+            if inst:HasTag("vetcurse") and action.invobject.components.rechargeable:IsCharged() and (inst.components.rider and not inst.components.rider:IsRiding() or inst.components.rider == nil) then
+                return "um_shield_charge"
+            else
+                return
+            end
+        else
             return _CASTAOE(inst, action, ...)
         end
     end
