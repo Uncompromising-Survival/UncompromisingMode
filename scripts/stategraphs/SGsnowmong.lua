@@ -12,15 +12,15 @@ local events =
     CommonHandlers.OnSleep(),
     EventHandler("death", function(inst) inst.sg:GoToState("death") end),
     EventHandler("doattack",
-    	function(inst, data)
-    		if not inst.components.health:IsDead() and (inst.sg:HasStateTag("hit") or not inst.sg:HasStateTag("busy")) then
-    			if inst.State == false then
-    				inst.sg:GoToState("attack", data.target)
-    			else
-    				inst.sg:GoToState("enter", "attack")
-    			end
-    		end
-    	end),
+        function(inst, data)
+            if not inst.components.health:IsDead() and (inst.sg:HasStateTag("hit") or not inst.sg:HasStateTag("busy")) then
+                if inst.State == false then
+                    inst.sg:GoToState("attack", data.target)
+                else
+                    inst.sg:GoToState("enter", "attack")
+                end
+            end
+        end),
     EventHandler("locomote", 
         function(inst) 
             if not inst.sg:HasStateTag("idle") and not inst.sg:HasStateTag("moving") then return end
@@ -49,7 +49,7 @@ local states =
         tags = {"busy"},
 
         onenter = function(inst, nextState)
-        	inst.attackUponSurfacing = (nextState == "attack")
+            --inst.attackUponSurfacing = (nextState == "attack")
             inst.Physics:Stop()
             inst.AnimState:PlayAnimation("enter")
             inst:SetAbove()
@@ -59,13 +59,15 @@ local states =
         events =
         {
             EventHandler("animover", function(inst)
-            	local nextState = "idle"
+                if inst.AnimState:AnimDone() then
+                    local nextState = "idle"
 
-            	if inst.attackUponSurfacing then
-            		nextState = "attack"
-            	end
+                    if inst.attackUponSurfacing then
+                        nextState = "attack"
+                    end
 
-                inst.sg:GoToState(nextState)
+                    inst.sg:GoToState(nextState)
+                end
             end)
         },
         
@@ -99,14 +101,14 @@ local states =
             
             TimeEvent(1* FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/Grub/jump") end),
             TimeEvent(22*FRAMES, function(inst) 
-				local x, y, z = inst:GetPosition():Get()
-				local ents = TheSim:FindEntities(x, y, z, inst.components.combat.hitrange, nil, {"snowish", "ghost", "playerghost", "shadow", "INLIMBO","structure","wall","companion"})
-				for i, v in ipairs(ents) do
-					if v.components.combat ~= nil then
-					v.components.combat:GetAttacked(inst, inst.components.combat.defaultdamage, nil)
-					end
-				end 
-			end),
+                local x, y, z = inst:GetPosition():Get()
+                local ents = TheSim:FindEntities(x, y, z, inst.components.combat.hitrange, nil, {"snowish", "ghost", "playerghost", "shadow", "INLIMBO","structure","wall","companion"})
+                for i, v in ipairs(ents) do
+                    if v.components.combat ~= nil then
+                    v.components.combat:GetAttacked(inst, inst.components.combat.defaultdamage, nil)
+                    end
+                end 
+            end),
             
             TimeEvent(20* FRAMES, function(inst) 
                 inst.SoundEmitter:PlaySound("UCSounds/Grub/submerge") 
@@ -161,7 +163,7 @@ local states =
 
         events =
         {
-            EventHandler("animover", function(inst) inst.sg:GoToState("walk") end),
+            EventHandler("animover", function(inst) if inst.AnimState:AnimDone() then inst.sg:GoToState("walk") end end),
         }
     },
 
@@ -196,32 +198,32 @@ local states =
 
         events =
         {
-            EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
+            EventHandler("animover", function(inst) if inst.AnimState:AnimDone() then inst.sg:GoToState("idle") end end),
         }
     },
 
-	State
-	{
-		name = "attack",
-		tags = {"attack", "busy"},
+    State
+    {
+        name = "attack",
+        tags = {"attack", "busy"},
 
-		onenter = function(inst, cb)
-			inst.Physics:Stop()
-			inst.components.combat:StartAttack()
-			inst.AnimState:PlayAnimation("action")
-		end,
+        onenter = function(inst, cb)
+            inst.Physics:Stop()
+            inst.components.combat:StartAttack()
+            inst.AnimState:PlayAnimation("action")
+        end,
 
-		timeline =
-		{
-			TimeEvent(8 * FRAMES, function(inst) inst.components.combat:DoAttack() end),
-			TimeEvent(2 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/Grub/attack") end),
-		},
+        timeline =
+        {
+            TimeEvent(8 * FRAMES, function(inst) inst.components.combat:DoAttack() end),
+            TimeEvent(2 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/Grub/attack") end),
+        },
 
-		events =
-		{
-			EventHandler("animover", function(inst, data) inst.sg:GoToState("idle") end),
-		}
-	},
+        events =
+        {
+            EventHandler("animover", function(inst) if inst.AnimState:AnimDone() then inst.sg:GoToState("idle") end end),
+        }
+    },
     State
     {
         name = "sleep",
@@ -240,7 +242,7 @@ local states =
 
         events =
         {   
-            EventHandler("animqueueover", function(inst) inst.sg:GoToState("sleeping") end),        
+            EventHandler("animqueueover", function(inst) if inst.AnimState:AnimDone() then inst.sg:GoToState("sleeping") end end),        
             EventHandler("onwakeup", function(inst) inst.sg:GoToState("wake") end),
         },
 
@@ -265,7 +267,7 @@ local states =
 
         events =
         {   
-            EventHandler("animover", function(inst) inst.sg:GoToState("sleeping") end),
+            EventHandler("animover", function(inst) if inst.AnimState:AnimDone() then inst.sg:GoToState("sleeping") end end),
             EventHandler("onwakeup", function(inst) inst.sg:GoToState("wake") end),
         },
 
@@ -292,7 +294,7 @@ local states =
 
         events =
         {
-            EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
+            EventHandler("animover", function(inst) if inst.AnimState:AnimDone() then inst.sg:GoToState("idle") end end),
         },
 
         timeline =
@@ -303,35 +305,35 @@ local states =
         },
     },
 
-	State
-	{
-		name = "death",
-		tags = {"busy", "stunned"},
+    State
+    {
+        name = "death",
+        tags = {"busy", "stunned"},
 
-		onenter = function(inst)
-			inst.AnimState:PlayAnimation("death")
-			inst.Physics:Stop()
-			inst.components.lootdropper:DropLoot(inst:GetPosition())
-			
-			if TheWorld.state.iswinter and math.random() > 0.75 then
-				inst.components.lootdropper:SpawnLootPrefab("um_ice_tail")
-			else
-				inst.components.lootdropper:SpawnLootPrefab("smallmeat")
-			end
-			
+        onenter = function(inst)
+            inst.AnimState:PlayAnimation("death")
+            inst.Physics:Stop()
+            inst.components.lootdropper:DropLoot(inst:GetPosition())
+            
+            if TheWorld.state.iswinter and math.random() > 0.75 then
+                inst.components.lootdropper:SpawnLootPrefab("um_ice_tail")
+            else
+                inst.components.lootdropper:SpawnLootPrefab("smallmeat")
+            end
+            
             inst.TryGemologyLoot(inst)
-			RemovePhysicsColliders(inst)
-		end,
+            RemovePhysicsColliders(inst)
+        end,
 
         timeline=
         {
             TimeEvent(3 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/Grub/death") end),
         }
 
-	},
+    },
     State{
         name = "steal_pre_under",
-        tags = { "busy" },
+        tags = {"busy"},
         onenter = function(inst, data)
             inst.Physics:Stop()
             inst.AnimState:PlayAnimation("enter")
@@ -348,15 +350,13 @@ local states =
 
         events =
         {
-            EventHandler("animqueueover", function(inst)
-                inst.sg:GoToState("steal")
-            end),
+            EventHandler("animqueueover", function(inst) inst.sg:GoToState("steal") end),
         },
     },
 
     State{
         name = "steal",
-        tags = { "busy", "canrotate" },
+        tags = {"busy", "canrotate"},
         onenter = function(inst, playanim)
             inst.Physics:Stop()
             inst.AnimState:PlayAnimation("action")
@@ -374,9 +374,7 @@ local states =
 
         events =
         {
-            EventHandler("animqueueover", function(inst)
-                inst.sg:GoToState("exit")
-            end),
+            EventHandler("animqueueover", function(inst) inst.sg:GoToState("exit") end),
         },
     },
 }
