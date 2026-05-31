@@ -467,6 +467,7 @@ local inventoryitems =
     "um_scrapper",
     "um_astral_projector",
     "um_astral_projector_target",
+    "um_blueprinting_kit"
 }
 
 local minimap_icons = {
@@ -1960,6 +1961,8 @@ Assets = {
     Asset("ANIM", "anim/um_tree_rock_swaps.zip"),
     Asset("ANIM", "anim/ui_forge_1x2.zip"),
     Asset("ANIM", "anim/gem_meter.zip"),
+
+    Asset("ANIM", "anim/blueprinting_kit.zip"),
 }
 
 for _, asset in pairs(inventoryitems) do

@@ -12,7 +12,11 @@ local SnowMongBrain = Class(Brain, function(self, inst)
 end)
 
 
+local FOOD_SEEK_RANGE_SQ = 20 * 20
+local GEM_EAT_CAP = 10
+
 local abominamole_wants = {"um_gemologybluegem1","um_gemologybluegem2","bluegem","ice","snowball_item"}
+local GEM_PREFABS = { um_gemologybluegem1 = true, um_gemologybluegem2 = true }
 local function IsAbominaMoleBait(inst)
 	for i,v in ipairs(abominamole_wants) do
 		if inst.prefab == v then
@@ -33,8 +37,21 @@ local function TakeBaitAction(inst)
     if inst:GetTimeAlive() < 3 or inst.sg:HasStateTag("busy") then
         return
     end
+    -- Target is close and snowmong is healthy: keep fighting, skip food
+    local target = inst.components.combat.target
+    if target and target:IsValid()
+        and inst:GetDistanceSqToInst(target) <= FOOD_SEEK_RANGE_SQ
+        and inst.components.health:GetPercent() > 0.3 then
+        return
+    end
 
-    local target = FindEntity(inst, 32, IsAbominaMoleBait, TAKEBAIT_MUST_TAGS, TAKEBAIT_CANT_TAGS)
+    local gem_cap_reached = (inst.gems_eaten or 0) >= GEM_EAT_CAP
+    local target = FindEntity(inst, 32, function(item)
+        if GEM_PREFABS[item.prefab] then
+            return not gem_cap_reached
+        end
+        return IsAbominaMoleBait(item)
+    end, TAKEBAIT_MUST_TAGS, TAKEBAIT_CANT_TAGS)
     if target ~= nil and not target.selectedasmoletarget and target:IsOnValidGround() then
         target.selectedasmoletarget = true
         target:DoTaskInTime(5, SelectedTargetTimeout)

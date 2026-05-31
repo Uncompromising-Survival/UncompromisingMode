@@ -215,6 +215,10 @@ local function fn()
     inst:AddComponent("hauntable")
     inst.components.hauntable:SetHauntValue(TUNING.HAUNT_TINY)
 
+    if KnownModIndex:IsModEnabled("workshop-2010472942") and inst.components.magmaaction == nil then
+		inst:AddComponent("magmaaction") --RoR Wragonfly comaptibility
+	end
+
     inst.OnSave = OnSave
     inst.OnLoad = OnLoad
 

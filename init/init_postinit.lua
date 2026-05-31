@@ -280,7 +280,8 @@ local stategraph_post = {
     "bigshadowtentacle",
     "worm",
     "slurtle",
-    "lavae"
+    "lavae",
+    "monkey"
 }
 
 local class_post = {

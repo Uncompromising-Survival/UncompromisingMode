@@ -374,82 +374,123 @@ AddUMGemDef("yellowgem1", {
 -----------------------------------------------------------------------------------
 ---Yellow2
 
-local static_mods = { 10, 15, 20 }
+local static_mods = { 5, 10, 15 }
 
 local arc_cantarget = { "_health", "_combat" }
 local arc_canttarget = { "player", "playerghost", "arcgrounded", "wall", "INLIMBO", "companion", "abigail", "invisible", "hiding", "notarget", "noattack" }
-local function FindEnemiesNearbyAndShockThem(inst, attacker, target, ShockAgain, tier)
-    local x, y, z = target.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, 4, arc_cantarget, arc_canttarget)
 
-    for i, v in ipairs(ents) do
-        if not v.components.health:IsDead() and not attacker.components.combat:IsAlly(v) and attacker.components.combat:CanTarget(v) then
-            local dist = math.sqrt(target:GetDistanceSqToInst(v))
-            v:DoTaskInTime(dist / 5, function(v)
-                if v.components.health and not v.components.health:IsDead() and not v:HasTag("arcgrounded") then -- we check these again because they could have already died or been shocked once
-                    local mult = 2 - dist
-                    if tier == 2 then
-                        mult = math.clamp(mult, 0.1, 1.25)
-                    elseif tier == 3 then
-                        mult = math.clamp(mult, 0.25, 1.5)
-                    end
-                    local damage = inst.components.weapon:GetDamage(attacker, target) * mult
-                    v.components.combat:GetAttacked(attacker, damage, nil, "electric")
-                    v:AddTag("arcgrounded")
-                    ShockAgain(inst, attacker, v)
-                    SpawnPrefab("electricchargedfx").Transform:SetPosition(v.Transform:GetWorldPosition())
-                    v:DoTaskInTime(3, function(v) v:RemoveTag("arcgrounded") end)
-                end
-            end)
-        end
-    end
+local electric_wet_multiplier = 1.5
+
+local function WetCheck(target)
+	return target ~= nil and target:IsValid() and target.GetWetMultiplier ~= nil and target:GetWetMultiplier() > 0
+end
+
+local function ForceElectrocute(target, attacker)
+	if target ~= nil and target:IsValid() and target.components.health ~= nil and not target.components.health:IsDead() then
+		target:PushEventImmediate("electrocute", {attacker = attacker, stimuli = "electric", numforks = 0, noresist = true,})
+	end
+end
+
+local function YellowDamage(inst, attacker, target, tier)
+	if target ~= nil and target:IsValid() and target.components.combat ~= nil then
+		local damage = static_mods[tier]
+
+		if WetCheck(target) then
+			damage = damage * electric_wet_multiplier
+		end
+
+		target.components.combat:GetAttacked(attacker, damage, inst, "electric")
+		ForceElectrocute(target, attacker)
+	end
+end
+
+local function ShockChain(inst, attacker, target, ShockAgain, tier)
+	local x, y, z = target.Transform:GetWorldPosition()
+	local ents = TheSim:FindEntities(x, y, z, 4, arc_cantarget, arc_canttarget)
+
+	for i, v in ipairs(ents) do
+		if v ~= target and v.components.health ~= nil and not v.components.health:IsDead() and attacker.components.combat ~= nil and not attacker.components.combat:IsAlly(v) and attacker.components.combat:CanTarget(v) then
+			local dist = math.sqrt(target:GetDistanceSqToInst(v))
+
+			v:DoTaskInTime(dist / 5, function(v)
+				if v:IsValid() and v.components.health ~= nil and not v.components.health:IsDead() and not v:HasTag("arcgrounded") then
+					local mult = 2 - dist
+
+					if tier == 2 then
+						mult = math.clamp(mult, 0.1, 1.25)
+					elseif tier == 3 then
+						mult = math.clamp(mult, 0.25, 1.5)
+					end
+
+					local damage = inst.components.weapon:GetDamage(attacker, v) * mult
+
+					v:AddTag("arcgrounded")
+					v.components.combat:GetAttacked(attacker, damage, inst)
+					ShockAgain(inst, attacker, v, tier)
+
+					SpawnPrefab("electricchargedfx").Transform:SetPosition(v.Transform:GetWorldPosition())
+
+					v:DoTaskInTime(3, function(v)
+						if v:IsValid() then
+							v:RemoveTag("arcgrounded")
+						end
+					end)
+				end
+			end)
+		end
+	end
 end
 
 local function ElectricAttack(inst, attacker, target, tier)
-    SpawnElectricHitSparks(attacker, target, true)
+	if target == nil or not target:IsValid() then
+		return
+	end
 
-    if tier ~= 1 then
-        if target:IsValid() then
-            FindEnemiesNearbyAndShockThem(inst, attacker, target, ElectricAttack, tier)
-        end
-        -- Dont allow arcing back upon oneself
-        target:AddTag("arcgrounded")
-        target:DoTaskInTime(3, function(target) target:RemoveTag("arcgrounded") end)
-    end
+	SpawnElectricHitSparks(attacker, target, true)
 
-    if target.components.combat then
-        target.components.combat:GetAttacked(attacker, static_mods[tier], nil, "electric")
-    end
+	if tier ~= 1 then
+		ShockChain(inst, attacker, target, ElectricAttack, tier)
 
-    if inst.components.weapon.stimuli ~= "electric" then
-        inst.components.weapon:SetElectric(1, 1.75)
-    end
+		target:AddTag("arcgrounded")
+		target:DoTaskInTime(3, function(target)
+			if target:IsValid() then
+				target:RemoveTag("arcgrounded")
+			end
+		end)
+	end
 
-    DamageInfiniteItemGem("yellowgem2", inst, 0.005)
+	YellowDamage(inst, attacker, target, tier)
+
+	DamageInfiniteItemGem("yellowgem2", inst, 0.005)
 end
 
 AddUMGemDef("yellowgem2", {
-    color = RGB(255, 228, 153),
-    fns = {
-        onapply = function(item, tier)
-            if item.prefab == "hambat" then
-                item.new_max_damage = TUNING.HAMBAT_DAMAGE + static_mods[tier]
-            end
+	color = RGB(255, 228, 153),
 
-            item.volatile_gemology_data.um_gemologyyellowgem2.old_stimuli = item.components.weapon.stimuli
-        end,
-        onattack = ElectricAttack,
-        onremove = function(item, tier)
-            item.new_max_damage = nil
+	fns = {
+		onapply = function(item, tier)
+			if item.prefab == "hambat" then
+				item.new_max_damage = TUNING.HAMBAT_DAMAGE + static_mods[tier]
+			end
 
-            if item.components.weapon then
-                item.components.weapon.stimuli = item.volatile_gemology_data.um_gemologyyellowgem2.old_stimuli
-            end
-        end,
-        canapply = function(item, tier)
-            return item.components.weapon ~= nil
-        end
-    }
+			item.volatile_gemology_data.um_gemologyyellowgem2.old_stimuli = item.components.weapon.stimuli
+		end,
+
+		onattack = ElectricAttack,
+
+		onremove = function(item, tier)
+			item.new_max_damage = nil
+
+			if item.components.weapon ~= nil then
+				item.components.weapon.stimuli =
+					item.volatile_gemology_data.um_gemologyyellowgem2.old_stimuli
+			end
+		end,
+
+		canapply = function(item, tier)
+			return item.components.weapon ~= nil
+		end
+	}
 })
 
 -----------------------------------------------------------------------------------
@@ -650,13 +691,12 @@ local function OnDropedIfDeadGiveBack(inst) -- This is the only one that has an 
             end
         end
         owner.components.inventory:GiveItem(inst) -- Give the ghost back the item
+        DamageInfiniteItemGem("purplegem2", inst, 0.25)
     end
 
     if inst.volatile_gemology_data.um_gemologypurplegem2.old_ondropfn then
         inst.volatile_gemology_data.um_gemologypurplegem2.old_ondropfn(inst)
     end
-
-    DamageInfiniteItemGem("purplegem2", inst, 0.25)
 end
 
 

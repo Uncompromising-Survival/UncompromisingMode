@@ -29,6 +29,12 @@ local function GoHomeAction(inst)
     end
 end
 
+local function ShockAttack(inst) -- Don't actually need to do an action, just send the shockworm to the shock state.
+    if inst.components.health and not inst.components.health:IsDead() then
+        return inst.sg:GoToState("shock_pre")
+    end
+end
+
 local function EatFoodAction(inst)
     if inst.sg:HasStateTag("busy") or
         (inst.components.eater:TimeSinceLastEating() ~= nil and inst.components.eater:TimeSinceLastEating() < TUNING.WORM_EATING_COOLDOWN) then
@@ -100,6 +106,10 @@ function ShockwormBrain:OnStart()
             PriorityNode{
                 BrainCommon.PanicTrigger(self.inst),
                 Leash(self.inst, self.inst.components.knownlocations:GetLocation("home"), TUNING.WORM_CHASE_DIST, TUNING.WORM_CHASE_DIST - 15), -- Don't go too far from your hunting grounds.
+                WhileNode(function() return self.inst.shocktargetpoint and self.inst:GetDistanceSqToPoint(self.inst.shocktargetpoint) < 2 end, "Electrify", 
+                    DoAction(self.inst, ShockAttack)),
+                WhileNode(function() return self.inst.shocktargetpoint end, "PrepareToShock", 
+                    Leash(self.inst, function() return self.inst.shocktargetpoint end, 1, 1)),
                 ChaseAndAttack(self.inst, TUNING.WORM_CHASE_TIME, TUNING.WORM_CHASE_DIST),
                 DoAction(self.inst, GoHomeAction), --Go home and set up your lure if conditions are met.
                 DoAction(self.inst, EatFoodAction), --Eat food if conditions are met.
@@ -107,12 +117,15 @@ function ShockwormBrain:OnStart()
                 StandStill(self.inst),
 
             }),
-
+        WhileNode(function() return self.inst.shocktargetpoint ~= nil and self.inst:GetDistanceSqToPoint(self.inst.shocktargetpoint) < 2 end, "Electrify", 
+            DoAction(self.inst, ShockAttack)),
+        WhileNode(function() return self.inst.shocktargetpoint ~= nil end, "PrepareToShock", 
+            Leash(self.inst, function() return self.inst.shocktargetpoint end, 1, 1)),
         ChaseAndAttack(self.inst, TUNING.WORM_CHASE_TIME, TUNING.WORM_CHASE_DIST),
         Wander(self.inst, function() return self.inst:GetPosition() end, TUNING.WORM_WANDER_DIST),
         StandStill(self.inst),
 
-    }, .25)
+    }, 2)
     self.bt = BT(self.inst, root)
 end
 

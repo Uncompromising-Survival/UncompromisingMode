@@ -199,6 +199,7 @@ RECIPE_DESC.UM_GEMOLOGY_POUCH = "Holds Strange Gems and geodes. Bigger on the in
 RECIPE_DESC.WORMWOOD_MUSHTREE = "Create your very own fungus among us."
 RECIPE_DESC.WORMWOOD_EQEX = "Friends come and go."
 RECIPE_DESC.UM_BOMB_MOON = "Create freaks scorched by the moon's light!"
+RECIPE_DESC.UM_BLUEPRINTING_KIT = "Write down what you know and copy what others wrote before you."
 
 RECIPE_DESC.UM_THULECITE_RAZOR = "Essential for the ancient technique of \"shaving\" "
 -- [              DSTU Related Overrides                  ]
@@ -248,7 +249,6 @@ STRINGS.ACTIONS.UM_ACTIVATABLE_ITEM = {
     MORPH = "Morph",
 }
 
-
 -- Wixie
 STRINGS.CHARACTER_SURVIVABILITY.wixie = "Grim"
 
@@ -264,7 +264,7 @@ STRINGS.ACTIONS.UPGRADE.SOUL = "Weave"
 STRINGS.ACTIONS.USESPELLBOOK.TELESTAFF = "Select Focus"
 STRINGS.ACTIONS.WX_CHARGEFROMPOWERCELL = "Charge"
 STRINGS.ACTIONS.CASTSPELL.CHARLES_CHARGE = "Charge!"
-STRINGS.ACTIONS.CASTSPELL.UM_SHIELD_BASH = "Shield Bash"
+STRINGS.ACTIONS.CASTAOE.SHIELDOFTERROR = "Shield Bash"
 STRINGS.ACTIONS.CASTSPELL.SLINGSHOT = "Shoot"
 STRINGS.ACTIONS.CASTSPELL.WIXIE_SLING = "Sling"
 STRINGS.ACTIONS.ACTIVATE.UM_TORNADOTRACKER = "Locate Tornadoes -"
@@ -847,7 +847,7 @@ STRINGS.UM_LOADINGTIPS = {
     PIGGYPACK = "The Piggyback's reduced movement speed is now based on the number of stored items inside it.",
     PREMIUMWATERINGCAN = "The Waterfowl Can can store and preserve fish in it.",
     TURF_DRAGONFLY = "Scaled Flooring prevents Snow Pile buildup.",
-    BLOWDART_YELLOW = "Electric Blowdarts can stun mechanical enemies.",
+    --BLOWDART_YELLOW = "Electric Blowdarts shock creatures for longer.",
     DRAGONFLY_CHEST = "The Scaled Chest now has 25 slots total, and may kill the first Rat trying to steal from it.",
     BANDAGE = "Honey Poultice restores an additional 15 health overtime when used.",
     MULTITOOL = "The Pick/Axe creates shockwaves when used, harvesting nearby rocks/trees.",

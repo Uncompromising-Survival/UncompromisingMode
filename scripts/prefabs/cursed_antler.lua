@@ -52,11 +52,6 @@ local function onequip(inst, owner)
 
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
-
-    local rechargeable = inst.components.rechargeable
-    if rechargeable and rechargeable:GetTimeToCharge() < TUNING.DSTU.CURSED_ANTLER_COOLDOWN_ONEQUIP then
-        rechargeable:Discharge(TUNING.DSTU.CURSED_ANTLER_COOLDOWN_ONEQUIP)
-    end
 end
 
 local function onunequip(inst, owner)
@@ -71,7 +66,7 @@ end
 
 local function onattack(inst, attacker, target)
     if target and target:IsValid() and attacker and attacker:IsValid() and inst.components.rechargeable:IsCharged() then
-        inst.components.rechargeable:Discharge(TUNING.DSTU.CURSED_ANTLER_COOLDOWN)
+        UMCommonFns.StartRechargeableCooldown(inst, {cooldown = TUNING.DSTU.CURSED_ANTLER_COOLDOWN, tags = {"cursedantler"}})
 
         local x, y, z = target.Transform:GetWorldPosition()
         for i = 1, 4 do

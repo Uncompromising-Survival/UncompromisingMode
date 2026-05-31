@@ -308,7 +308,6 @@ TUNING.DSTU = {
     WEATHERHAZARD_START_DATE_SPRING = GetModConfigData("weatherhazard_spring"),
     WEATHERHAZARD_START_DATE_SUMMER = GetModConfigData("weatherhazard_summer"),
     RNE_CHANCE = GetModConfigData("rne chance"),
-    SHADOW_ITEMS = GetModConfigData("shadow_items"),
     SNOWSTORMS = GetModConfigData("snowstorms"),
     HARDER_SHADOWS = GetModConfigData("harder_shadows"),
     DREADEYES_ALLOWED = GetModConfigData("dreadeyes_allowed"),
@@ -475,7 +474,6 @@ TUNING.DSTU = {
 
     ONEHP = GetModConfigData("uncompromising_1hp"),
 
-
     --hooded forest canoppy setttings
 
     HOODEDFOREST_CANOPY_MAX_ROTATION = 20,
@@ -494,24 +492,18 @@ TUNING.DSTU = {
     },
 
     CURSED_ANTLER_COOLDOWN = 5,
-    CURSED_ANTLER_COOLDOWN_ONEQUIP = 2,
-
     SLOBBERLOBBER_COOLDOWN = 45,
-
     CRYSTAL_CURSED_ANTLER_COOLDOWN = 5,
-    CRYSTAL_CURSED_ANTLER_COOLDOWN_ONEQUIP = 2,
-
     SHIELDOFTERROR_COOLDOWN = 5,
-    SHIELDOFTERROR_COOLDOWN_ONEQUIP = 2,
 
     -- Shadow Damage tuning
     RUINSNIGHTMARE_DAMAGE = 75,
     HERMITCRAB_MOONTREEBLOSSOMTEA_SHADOWCREATURE_DAMAGE = 75,
 
-    NO_THICKET_APHIDS = {"tumbleweed","beefalo","fruitbat"}, --AXE Add more as needed, most things >should< spawn aphids though.
+    NO_THICKET_APHIDS = {"tumbleweed","beefalo", "fruitbat"}, --AXE Add more as needed, most things >should< spawn aphids though.
 
-    RIPPLE_BLACKLIST_PREFABS = {"webbedcreature","rainometer"}, -- AXE Many cases would like "structure" tag still count for ripples, but many structures are incompatible, so we do a prefab based blacklist as well
-    RIPPLE_BLACKLIST_TAGS = {"projectile"} -- AXE other cases are universal, projectiles shouldn't really ever have ripples
+    RIPPLE_BLACKLIST_PREFABS = {"webbedcreature", "rainometer"}, -- AXE Many cases would like "structure" tag still count for ripples, but many structures are incompatible, so we do a prefab based blacklist as well
+    RIPPLE_BLACKLIST_TAGS = {"projectile", "FX"} -- AXE other cases are universal, projectiles shouldn't really ever have ripples
 }
 
 -- [              DST Related Overrides              ]

@@ -271,6 +271,12 @@ if TUNING.DSTU.WOLFGANG_HUNGERMIGHTY then
 end
 
 if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then
+    AllRecipes["wathgrithr_improvedhat"].ingredients = {
+        Ingredient("wathgrithrhat", 1),
+        Ingredient("beefalowool", 3),
+        Ingredient("marble", 2),
+    }
+
     AllRecipes["battlesong_shadowaligned"] = nil
     --AllRecipes["battlesong_lunaraligned"] = nil
     --AllRecipes["battlesong_shadowaligned"].builder_skill ="wathgrithr_allegiance_lunar"  
@@ -363,6 +369,9 @@ if GetModConfigData("pocket_powertrip_") then
 
     AddRecipeToFilter("trunkvest_summer", "CONTAINERS")
     ChangeSortKey("trunkvest_summer", "sporepack", "CONTAINERS", true)
+
+    AddRecipeToFilter("beargervest", "CONTAINERS")
+    ChangeSortKey("beargervest", "trunkvest_summer", "CONTAINERS", true)
 end
 
 AddRecipeToFilter("wardrobe", "CONTAINERS")

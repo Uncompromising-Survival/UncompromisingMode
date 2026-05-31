@@ -92,7 +92,7 @@ local function SetupColdLight(inst)
     inst.Light:SetColour(64 / 255, 64 / 255, 208 / 255)
 end
 
-local function Shoot(inst)
+local function ShootFire(inst)
     local speed = inst.speed or 10
     if not inst.time then
         inst.time = .01
@@ -140,7 +140,7 @@ local function Shoot(inst)
     end
 end
 
-local function fn()
+local function fnfire()
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -181,10 +181,134 @@ local function fn()
         COLLISION.SMALLOBSTACLES
     )
 
-    inst:DoTaskInTime(0, Shoot)
-    inst.dont_hit_tags = { "INLIMBO", "noattack", "invisible" } -- When adding more tags elsewhere do this when creating this prefab, please. inst.dont_hit_tags = JoinArrays(inst.dont_hit_tags, yourtablehere)
+    inst:DoTaskInTime(0, ShootFire)
+    local ghostlike_tags = UMCommonFns.GHOSTLIKE_TAGS
+    inst.dont_hit_tags = JoinArrays(ghostlike_tags, { "INLIMBO", "noattack", "invisible" })
 
     return inst
 end
+-- Fire Projectile
 
-return Prefab("um_fire_projectile", fn)
+-- Shock Projectile
+
+local function Redirection(inst,flooded) -- See where the arc should be pointing next
+    local x,y,z = inst.Transform:GetWorldPosition()
+    local living_things = TheSim:FindEntities(x,y,z,flooded and 32 or 16,{"_health"},inst.dont_hit_tags) -- Do a wide search for things to hit
+    local shoot_offcourse
+    if math.random() > 0.8 then -- chance for the arc to zig-zag
+        shoot_offcourse = true
+    end
+
+    local closest_distance = 999
+    local closest_target
+    for i,v in ipairs(living_things) do
+        if v:GetDistanceSqToInst(inst) < closest_distance and not table.contains(inst.shocked,v) then
+            closest_distance = v:GetDistanceSqToInst(inst)
+            closest_target = v
+        end
+    end
+
+    if closest_target then
+        inst:ForceFacePoint(closest_target:GetPosition())
+    end
+    if shoot_offcourse then
+        inst.Transform:SetRotation(inst:GetRotation()+(math.random() > 0.5 and 90 or -90))
+    end
+
+    inst.Physics:SetMotorVel(flooded and (inst.speed * 1.4) or inst.speed, 0, 0) -- Faster on flooded
+end
+
+local function GenerateArcs(inst)
+     local x,y,z = inst.Transform:GetWorldPosition()
+    SpawnPrefab("sparks").Transform:SetPosition(x + math.random(-10,10)/10,0,z + math.random(-10,10)/10)
+
+    local current_tile = TheWorld.Map:GetTileAtPoint(x,y,z)
+    local flooded
+    if current_tile == WORLD_TILES.UM_FLOODWATER or current_tile == WORLD_TILES.UM_FLOODWATER_GROTTO or current_tile == WORLD_TILES.UM_FLOODWATER_BROILING then
+        inst.lifetime = inst.lifetime - 1
+        flooded = true
+    else
+        inst.lifetime = inst.lifetime - 0.7 -- Longer projectile lifetime on flooded tiles
+    end	
+
+    if inst.counter then -- AXE The purpose of this is to make this function only do the damage and search every 0.33 seconds, where the sparking fx generates every 0.167 seconds. Keeping only 1 DoTaskInTime for this function
+        SpawnPrefab("electricchargedfx").Transform:SetPosition(inst.Transform:GetWorldPosition())
+        local ents = TheSim:FindEntities(x,0,z,2,{"_health"},inst.dont_hit_tags)
+        for i,ent in ipairs(ents) do
+            if ent.prefab ~= inst.prefab then
+                ent.components.combat:GetAttacked(inst.attacker and inst.attacker or nil, 20, nil, "electric")
+
+                table.insert(inst.shocked,ent)
+            end
+        end
+        inst.counter = nil
+    else
+        if math.random() > 0.5 then
+            Redirection(inst,flooded) -- See what kind of redirection I should be doing
+        end
+        inst.counter = true
+    end
+
+    
+
+    if inst.lifetime < 0 then
+        inst:Remove()
+    end
+end
+
+local function ShootShock(inst)
+    inst.speed = inst.speed or 10
+    
+    inst.Physics:SetMotorVel(inst.speed, 0, 0)
+    
+    inst.lifetime = 12
+    inst:DoPeriodicTask(0.08,GenerateArcs)
+    --[[inst:DoPeriodicTask(0.08,function(inst)
+        SpawnPrefab("electricchargedfx").Transform:SetPosition(inst.Transform:GetWorldPosition())
+    end)]]
+
+end
+
+local function fnshock()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddNetwork()
+
+    -- No animations, purely invisible the FX prefabs it spawns serve as visualization
+
+    MakeInventoryPhysics(inst)
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+
+    inst.Physics:SetMass(1)
+    inst.Physics:SetDamping(.1)
+    inst.Physics:SetFriction(.3)
+    inst.Physics:SetRestitution(.5)
+    inst.Physics:SetCollisionGroup(COLLISION.ITEMS)
+    inst.Physics:SetCollisionMask(
+        COLLISION.WORLD,
+        COLLISION.OBSTACLES,
+        COLLISION.SMALLOBSTACLES
+    )
+
+    inst:DoTaskInTime(0, ShootShock)
+    local ghostlike_tags = UMCommonFns.GHOSTLIKE_TAGS
+    inst.dont_hit_tags = JoinArrays(ghostlike_tags, { "INLIMBO", "noattack", "invisible","worm","structure" })
+    inst.shocked = {}
+
+    
+    inst.speed = 10
+    inst.persists = false
+    return inst
+end
+
+
+
+return Prefab("um_fire_projectile", fnfire),
+Prefab("um_shock_projectile",fnshock)
