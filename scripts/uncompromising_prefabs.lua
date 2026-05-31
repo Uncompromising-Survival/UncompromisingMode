@@ -635,6 +635,7 @@ local prefabs = {
     "um_thulecite_razor",
     "gemology_book",
     "magma_tile",
+    "um_blueprinting_kit"
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then

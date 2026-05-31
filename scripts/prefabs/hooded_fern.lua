@@ -263,8 +263,8 @@ end
 
 local function onnear(inst, target)
     if inst.components.pickable and inst.components.pickable:CanBePicked() and not inst.BrushingTest and target then
-        if not (WearingThicketResist(target) or PrickAdept(target) or table.contains(TUNING.DSTU.NO_THICKET_APHIDS,target.prefab) or TheWorld.state.iswinter) then
-            if math.random() > 0.95 then
+        if not (WearingThicketResist(target) or PrickAdept(target) or table.contains(TUNING.DSTU.NO_THICKET_APHIDS,target.prefab)) then
+            if math.random() > 0.95 and not TheWorld.state.iswinter then
                 if not IsIslandWorld() then
                     local total_aphids = GetNumAphidsWithWorldAge(TheWorld.state.cycles)
                     AphidStorm(inst,total_aphids,target)
