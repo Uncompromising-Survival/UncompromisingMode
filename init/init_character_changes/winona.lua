@@ -478,4 +478,5 @@ env.AddPrefabPostInit("winona_recipescanner", function(inst)
 
     inst:AddComponent("gemologyscanner")
 	inst.components.gemologyscanner:SetOnScannedFn(inst.Remove)
+    inst.components.gemologyscanner.getscanamountfn = function() return 1 end
 end)
