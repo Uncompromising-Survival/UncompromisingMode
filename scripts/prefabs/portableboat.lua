@@ -693,4 +693,4 @@ return Prefab("portableboat", fn, assets, prefabs),
        Prefab("portableboat_ripcord", cord_fn, item_assets, item_prefabs),
 	   Prefab("portableboatlip", lipfn, assets, prefabs),
 	   Prefab("portableplank", fakefn, assets, prefabs),
-       MakePlacer("portableboat_item_placer", "portableboat_placer", "portableboat_test", "placer", true, false, false, 0.8, nil, nil, nil, 0)
+       MakePlacer("portableboat_item_placer", "portableboat", "portableboat", "idle_full", true, false, false, 0.88, nil, nil, nil, 0)
