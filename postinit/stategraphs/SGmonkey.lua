@@ -20,4 +20,16 @@ env.AddStategraphPostInit("monkey", function(inst)
             --return doattack_eventhandler_fn(inst, data, ...)
         end
     end
+
+    local throwstate = inst.states["throw"]
+    if throwstate then
+        local throwstate_events_animover = throwstate.events["animover"]
+        if throwstate_events_animover then
+            local throwstate_events_animover_fn = throwstate_events_animover.fn
+            throwstate_events_animover.fn = function(inst, ...)
+                if not inst.AnimState:AnimDone() then return end
+                return throwstate_events_animover_fn(inst, ...)
+            end
+        end
+    end
 end)
