@@ -70,7 +70,9 @@ dataset["um_gemologyforge"] = {
 
 local dep_blacklist = {
     "fused_shadeling_bomb",
-    "compass"
+    "compass",
+    "feather_frock",
+    "slobberlobber"
 }
 
 for k, v in pairs(dataset) do
