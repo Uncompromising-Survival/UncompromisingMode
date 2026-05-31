@@ -111,7 +111,7 @@ end
 
 local function OnCharged(inst)
     local owner = inst.components.inventoryitem:GetGrandOwner()
-    if owner and owner:HasTag("vetcurse") then
+    if owner and owner:HasTag("vetcurse") and inst.components.equippable and inst.components.equippable:IsEquipped() then
         inst.components.aoetargeting:SetEnabled(true)
     end
 end
