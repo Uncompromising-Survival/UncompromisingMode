@@ -263,7 +263,7 @@ local function TryShockingTargets(inst)
     local ents = TheSim:FindEntities(x,y,z,32,{"_combat"},cant_target)
     for i,v in ipairs(ents) do
         if v:IsValid() then
-            shocking:ForceFacePoint(inst.components.combat.target:GetPosition())
+            shocking:ForceFacePoint(v:GetPosition())
             table.insert(inst.shock_targets,v)
             return
         end
@@ -293,6 +293,10 @@ end
 
 local preferred_rotations = {0,PI/6,-PI/6}
 local function TryDetermineShockPoint(inst)
+    if inst.sg:HasStateTag("busy") then
+        inst.components.timer:StartTimer("prepare_shock",1) -- Try again in a second
+        return
+    end
     if inst.components.combat and inst.components.combat.target then
         local point = inst.components.combat.target:GetPosition()
         local rot = inst.components.combat.target:GetRotation()
@@ -300,7 +304,7 @@ local function TryDetermineShockPoint(inst)
         local randmult = math.random() > 0.5 and 1 or -1
         for i,v in ipairs(preferred_rotations) do
             if not offset then
-                offset = FindWalkableOffset(point, rot + (randmult) * v, 8, 12, false, true, noentcheckfn, true, true)
+                offset = FindWalkableOffset(point, rot + (randmult) * v, 12, 16, false, true, noentcheckfn, true, true)
             end
         end
         if offset then
@@ -316,6 +320,7 @@ local function TryDetermineShockPoint(inst)
             else
                 SpawnPrefab("ground_chunks_breaking").Transform:SetPosition(inst.Transform:GetWorldPosition())
             end
+
         end
     end
 end
@@ -457,8 +462,8 @@ local function fn()
     inst:AddComponent("timer")
 
 
-    --inst:ListenForEvent("newcombattarget",TryBeginTimer)
-    --inst:ListenForEvent("timerdone",TryDetermineShockPoint)
+    inst:ListenForEvent("newcombattarget",TryBeginTimer)
+    inst:ListenForEvent("timerdone",TryDetermineShockPoint)
     return inst
 end
 

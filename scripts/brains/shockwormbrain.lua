@@ -110,7 +110,8 @@ function ShockwormBrain:OnStart()
                     DoAction(self.inst, ShockAttack)),
                 WhileNode(function() return self.inst.shocktargetpoint end, "PrepareToShock", 
                     Leash(self.inst, function() return self.inst.shocktargetpoint end, 1, 1)),
-                ChaseAndAttack(self.inst, TUNING.WORM_CHASE_TIME, TUNING.WORM_CHASE_DIST),
+                WhileNode(function() return not self.inst.shocktargetpoint end, "TryToAttack", 
+                   ChaseAndAttack(self.inst, TUNING.WORM_CHASE_TIME, TUNING.WORM_CHASE_DIST)),
                 DoAction(self.inst, GoHomeAction), --Go home and set up your lure if conditions are met.
                 DoAction(self.inst, EatFoodAction), --Eat food if conditions are met.
                 Wander(self.inst, function() return self.inst.components.knownlocations:GetLocation("home") end, TUNING.WORM_WANDER_DIST),
@@ -121,7 +122,8 @@ function ShockwormBrain:OnStart()
             DoAction(self.inst, ShockAttack)),
         WhileNode(function() return self.inst.shocktargetpoint ~= nil end, "PrepareToShock", 
             Leash(self.inst, function() return self.inst.shocktargetpoint end, 1, 1)),
-        ChaseAndAttack(self.inst, TUNING.WORM_CHASE_TIME, TUNING.WORM_CHASE_DIST),
+        WhileNode(function() return not self.inst.shocktargetpoint end, "TryToAttack", 
+            ChaseAndAttack(self.inst, TUNING.WORM_CHASE_TIME, TUNING.WORM_CHASE_DIST)),
         Wander(self.inst, function() return self.inst:GetPosition() end, TUNING.WORM_WANDER_DIST),
         StandStill(self.inst),
 

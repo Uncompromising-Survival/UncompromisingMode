@@ -450,7 +450,7 @@ local function GetTileForHotspring(noise)
 end
 
 local function GetTileForHoodedForest(noise)
-    if noise < 0.4 then
+    if noise < 0.5 then
         return WORLD_TILES.HOODEDFOREST_FOLIAGE
     end
     return WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK

@@ -107,9 +107,9 @@ AddRipples("boulder_crab", 3)
 AddRipples("molebat", 1.1, 1.1, 1.1)
 AddRipples("frog", 1.1, 1.1, 1.1)
 AddRipples("lunarfrog", 1.1, 1.1, 1.1)
-AddRipples("worm", 1.4, 1.4, 1.4)
-AddRipples("viperworm", 1.4, 1.4, 1.4)
-AddRipples("shockworm", 1.4, 1.4, 1.4)
+AddRipples("worm", 1.4, 1.4, 1.4,0.2)
+AddRipples("viperworm", 1.4, 1.4, 1.4,0.2)
+AddRipples("shockworm", 1.4, 1.4, 1.4,0.2)
 AddRipples("carrat", 1.1, 1.1, 1.1, 0.2)
 AddRipples("mushgnome", 0.8, 0.8, 0.8, 0.2)
 local pigmanlike_minions = { "pigman", "bunnyman", "merm", "mermguard", "merm_lunar", "mermguard_lunar" }
@@ -270,6 +270,8 @@ env.AddStategraphPostInit("molebat", function(inst)
         end
     end
 
+
+
     local state = inst.states["fall"]
     local _onenter = state.onenter
     state.onenter = function(inst, ...)
@@ -307,33 +309,40 @@ local function ToggleWormMoveSymbols(inst, show)
     end
 end
 
+-- Enter/Exit is regarding whether or not ripples should hide afterwards
+local worm_enter_states = {"attack_pre","shock_pre","shock_loop"}
+local worm_exit_states = {"attack","shock_pst"}
+
 env.AddStategraphPostInit("worm", function(inst)
-    local state = inst.states["attack_pre"]
-    local _onenter = state.onenter
-    state.onenter = function(inst, ...)
-        if RobustFloodCheck(inst) then
-            inst.components.umripples:OnLandedServer(true)
-            inst:Show()
+    for i,v in ipairs(worm_enter_states) do
+        local state = inst.states[v]
+        local _onenter = state.onenter
+        state.onenter = function(inst, ...)
+            if RobustFloodCheck(inst) and not inst.components.umripples.showing_effect then
+                inst.components.umripples:OnLandedServer(true)
+                inst:Show()
+                ToggleWormMoveSymbols(inst, false)
+            end
+            _onenter(inst, ...)
         end
-
-        _onenter(inst, ...)
     end
-
-    local state = inst.states["attack"]
-    local _onenter = state.onenter
-    state.onenter = function(inst, ...)
-        if RobustFloodCheck(inst) then
-            inst.components.umripples:OnLandedServer(true)
-            inst:Show()
-            ToggleWormMoveSymbols(inst, false)
+    for i,v in ipairs(worm_exit_states) do
+        local state = inst.states[v]
+        local _onenter = state.onenter
+        state.onenter = function(inst, ...)
+            if RobustFloodCheck(inst) and not inst.components.umripples.showing_effect then
+                inst.components.umripples:OnLandedServer(true)
+                inst:Show()
+                ToggleWormMoveSymbols(inst, false)
+            end
+            _onenter(inst, ...)
         end
-        _onenter(inst, ...)
-    end
-    state.onexit = function(inst, ...)
-        if RobustFloodCheck(inst) then
-            inst.components.umripples:OnNoLongerLandedServer()
-            inst:Hide()
-            ToggleWormMoveSymbols(inst, true)
+        state.onexit = function(inst, ...)
+            if RobustFloodCheck(inst) and inst.components.umripples.showing_effect then
+                inst.components.umripples:OnNoLongerLandedServer()
+                inst:Hide()
+                ToggleWormMoveSymbols(inst, true)
+            end
         end
     end
 end)

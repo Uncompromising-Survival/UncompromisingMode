@@ -225,10 +225,10 @@ local function GenerateArcs(inst)
     local current_tile = TheWorld.Map:GetTileAtPoint(x,y,z)
     local flooded
     if current_tile == WORLD_TILES.UM_FLOODWATER or current_tile == WORLD_TILES.UM_FLOODWATER_GROTTO or current_tile == WORLD_TILES.UM_FLOODWATER_BROILING then
-        inst.lifetime = inst.lifetime - 1
+        inst.lifetime = inst.lifetime - 0.3 -- Longer projectile lifetime on flooded tiles
         flooded = true
     else
-        inst.lifetime = inst.lifetime - 0.7 -- Longer projectile lifetime on flooded tiles
+        inst.lifetime = inst.lifetime - 0.7 
     end	
 
     if inst.counter then -- AXE The purpose of this is to make this function only do the damage and search every 0.33 seconds, where the sparking fx generates every 0.167 seconds. Keeping only 1 DoTaskInTime for this function
@@ -303,7 +303,7 @@ local function fnshock()
     inst.shocked = {}
 
     
-    inst.speed = 10
+    inst.speed = 11
     inst.persists = false
     return inst
 end

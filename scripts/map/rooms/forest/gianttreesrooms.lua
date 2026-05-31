@@ -29,7 +29,6 @@ AddRoom("GiantTrees",
 				evergreen_sparse = 0.5,
 				thicket_builder = 1,
 				ghost_walrus = 0.005,
-				blueberryplantbuncher = 0.1,
 				red_mushroom = 0.05,
 				lightrays_canopy = 0.05,
 				um_bear_trap_old = 0.1,
@@ -39,6 +38,7 @@ AddRoom("GiantTrees",
             {
                 extracanopyspawner = 4,
                 pitcherplant = function() return math.random(1, 2) end,
+                blueberryplantbuncher = function() return math.random(1,2) end,
             },
             countstaticlayouts = {
                 ["giant_tree_generic"] = function() return math.random(1, 3) end,
@@ -62,7 +62,6 @@ AddRoom("RockyGiantTrees",
                 perma_berrybush_juicy = 0.1,
                 thicket_builder = 1,
                 ghost_walrus = 0.005,
-                --blueberryplantbuncher = 0.1,
                 lightrays_canopy = 0.05,
                 um_bear_trap_old = 0.1,
                 rock1 = 0.25,
@@ -75,6 +74,7 @@ AddRoom("RockyGiantTrees",
             {
                 extracanopyspawner = 4,
                 tallbirdnest = function() return math.random(0, 1) end,
+                blueberryplantbuncher = function()return math.random(1,2) end,
             },
             countstaticlayouts = {
                 ["giant_tree_generic"] = function() return math.random(1, 3) end,
@@ -96,7 +96,6 @@ AddRoom("RockyWalrusGiantTrees",
                 perma_berrybush_juicy = 0.1,
                 thicket_builder = 1,
                 ghost_walrus = 0.5,
-                --blueberryplantbuncher = 0.1,
                 red_mushrom = 0.07,
                 green_mushroom = 0.07,
                 blue_mushroom = 0.07,
@@ -120,7 +119,7 @@ AddRoom("RockyWalrusGiantTrees",
 AddRoom("HoodedEntrance",
 	{
 		colour = { r = .6, g = .2, b = .8, a = .50 },
-		value = WORLD_TILES.UM_HOODED_FOREST,
+		value = WORLD_TILES.UM_HOODED_FOREST_SPARSE,
 		tags = { "RoadPoison", "hoodedcanopy" }, --"ForceDisconnected"
 		contents =
 		{
@@ -128,7 +127,6 @@ AddRoom("HoodedEntrance",
 			distributeprefabs = {
 				thicket_builder = 1,
 				ghost_walrus = 0.005,
-				blueberryplantbuncher = 0.1,
 				red_mushroom = 0.05,
 				lightrays_canopy = 0.01,
 				um_bear_trap_old = 0.1,
@@ -184,7 +182,6 @@ AddRoom("WalrusGiantTrees",
 				evergreen_sparse = 0.5,
 				thicket_builder = 1,
 				ghost_walrus = 0.5,
-				blueberryplantbuncher = 0.1,
 				green_mushroom = 0.05,
 				lightrays_canopy = 0.25,
 				um_fern_fox_den = 0.015,
@@ -195,6 +192,7 @@ AddRoom("WalrusGiantTrees",
                 extracanopyspawner = 4,
                 pitcherplant = 1,
                 walrus_camp = 1,
+                blueberryplantbuncher = function()return math.random(1,2) end,
 
             },
             countstaticlayouts = {
@@ -217,7 +215,6 @@ AddRoom("BGGiantTrees",
 				evergreen_sparse = 0.5,
 				thicket_builder = 1,
 				ghost_walrus = 0.03,
-				blueberryplantbuncher = 0.1,
 				blue_mushroom = 0.05,
 				lightrays_canopy = 0.25,
 				um_bear_trap_old = 0.1,
@@ -226,7 +223,7 @@ AddRoom("BGGiantTrees",
 			countprefabs =
 			{
                 extracanopyspawner = function() return 10 + math.random(0, 1) end,
-                --pitcherplant = function() return math.random(0, 1) end,
+                blueberryplantbuncher = function()return math.random(1,2) end,
 
             },
             countstaticlayouts = {
@@ -257,7 +254,7 @@ AddRoom("FoxGathering",
     })
 AddRoom("MoonBaseGiantTrees", {
     colour = { r = .8, g = 0.5, b = .6, a = .50 },
-    value = WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK,
+    value = WORLD_TILES.UM_HOODED_FOREST,
     tags = { "RoadPoison", "hoodedcanopy" },
     contents = {
         countstaticlayouts = {
@@ -268,13 +265,13 @@ AddRoom("MoonBaseGiantTrees", {
         {
             evergreen_sparse = 0.5,
             thicket_builder = 1,
-            blueberryplantbuncher = 0.1,
             pitcherplant = 0.001,
 			um_bear_trap_old = 0.05,
         },
         countprefabs =
         {
             extracanopyspawner = 4,
+            blueberryplantbuncher = function() return math.random(1,2) end,
         },
     }
 
@@ -311,7 +308,6 @@ AddRoom("HoodedTown", {
             evergreen_sparse = 0.4,
             thicket_builder = 1,
             ghost_walrus = 0.02,
-            blueberryplantbuncher = 0.1,
             pitcherplant = 0.001,
             lightrays_canopy = 0.25,
 			um_bear_trap_old = 0.1,
@@ -337,7 +333,6 @@ AddRoom("RoseGarden", {
             evergreen_sparse = 0.4,
             thicket_builder = 1,
             ghost_walrus = 0.005,
-            blueberryplantbuncher = 0.01,
             lightrays_canopy = 0.25,
 			um_bear_trap_old = 0.1,
 
@@ -365,7 +360,6 @@ AddRoom("HFHolidays", {
             ghost_walrus = 0.01,
             evergreen_sparse = 0.4,
             thicket_builder = 1,
-            blueberryplantbuncher = 0.01,
             lightrays_canopy = 0.25,
 			um_bear_trap_old = 0.1,
         },
