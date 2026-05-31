@@ -2,7 +2,7 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 local function IsThrowerEquipped(inst)
-    local thrower = inst.weaponitems and inst.weaponitems.thrower
+    local thrower = inst.HasAmmo and inst:HasAmmo() and inst.weaponitems and inst.weaponitems.thrower
     local inventory = inst.components.inventory
     return thrower and thrower:IsValid() and inventory and inventory:IsItemEquipped(thrower)
 end
