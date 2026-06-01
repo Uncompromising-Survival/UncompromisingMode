@@ -325,6 +325,7 @@ end
 local function TestForCrash(inst, data)
     if data then
         print(inst.." got target when it isnt supposed to. (New: "..(data.target or "N/A")..", Old: "..(data.oldtarget or "N/A")..")")
+        inst.SoundEmitter:PlaySound("dontstarve/common/teleportato/teleportato_maxwelllaugh")
     end
 end
 
