@@ -343,11 +343,9 @@ local states=
         events =
         {
             EventHandler("animqueueover", function(inst)
-				--if inst.getting_angry then
-					--inst.sg:GoToState("getting_pissed")
-				--else
+                if inst.AnimState:AnimDone() then
 					inst.sg:GoToState("idle")
-				--end
+				end
 			end),
         },
     },
