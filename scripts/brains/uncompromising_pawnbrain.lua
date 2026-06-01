@@ -52,12 +52,13 @@ function Uncompromising_PawnBrain:OnStart()
 
     local root = PriorityNode(
     {
-        WhileNode( function() return self.inst.components.health.takingfiredamage end, "OnFire", Panic(self.inst)),
+        WhileNode(function() return self.inst.components.health.takingfiredamage end, "OnFire", Panic(self.inst)),
         --RunAway(self.inst, "scarytopr1ey", AVOID_PLAYER_DIST, AVOID_PLAYER_STOP),
 
         IfNode(function() return IsDangerClose(self.inst) and not self.inst.components.freezable:IsFrozen() end, "DangerClose", ActionNode(function() TryHide(self.inst) end), "Hide"),
 
-        ChaseAndAttack(self.inst, 10),
+        WhileNode(function() return self.inst.pawntype == "_nightmare" end, "Chase And Attack",
+            ChaseAndAttack(self.inst, 10)),
 
         --FaceEntity(self.inst, GetFaceTargetFn, KeepFaceTargetFn),
         Wander(self.inst, function() return self.inst.components.knownlocations:GetLocation("home") end, MAX_WANDER_DIST)

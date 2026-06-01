@@ -101,10 +101,6 @@ local function OnAttack(inst, attacker, target)
     inst.components.armor:TakeDamage(TUNING.SHIELDOFTERROR_USEDAMAGE * useMult)
 end
 
-local function castspell(inst, target, pos, doer)
-    UMCommonFns.StartRechargeableCooldown(inst, {cooldown = TUNING.DSTU.SHIELDOFTERROR_COOLDOWN, tags = {"shieldofterror"}})
-end
-
 local function OnDischarged(inst)
     inst.components.aoetargeting:SetEnabled(false)
 end
