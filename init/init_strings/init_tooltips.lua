@@ -50,7 +50,6 @@ STRINGS.UNCOMP_TOOLTIP = {
     ANTLIONHAT = "- Has infinite stack size inside.\n- Picks up nearby Turf on the ground.",
     KELPHAT = "- Wearer's wetness will slowly rise up to 33%.",
     BOAT_BUMPER_KELP_KIT = "- Spoils over time.\n- Regenerates health in water.",
-    BATHBOMB = "- Restores lost maximum health, if tossed in a certain larger spring in mainland.",
     ONEMANBAND = "- Makes pigs and bunnymen leave their houses.\n- Reduced sanity drain.",
     FIRESTAFF = "- Creates controlled fires.",
     LIGHTER = "- Recharges with embers.\n- Doesn't break at 0%.",
@@ -220,8 +219,9 @@ STRINGS.ENGINEERING_TOOLTIP = {
     WINONA_UPGRADEKIT_ELECTRICAL = ""
 }
 
-
-
+if TUNING.DSTU.BATH_BOMB then
+    TOOLTIPS.BATHBOMB = "- Restores lost maximum health, if tossed in a certain larger spring in mainland."
+end
 
 if TUNING.DSTU.TELESTAFF_REWORK then
     TOOLTIPS.TELESTAFF = "- Can select its destination.\n- Increased uses for items and objects.\n- Can teleport other players without PVP enabled."
