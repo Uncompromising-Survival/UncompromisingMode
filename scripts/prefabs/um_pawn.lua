@@ -385,6 +385,13 @@ local function pawn_common(pawntype)
     inst.components.explosive.buildingdamage = 0
     inst.components.explosive.explosivedamage = TUNING.GUNPOWDER_DAMAGE
 
+    inst:AddComponent("locomotor") -- locomotor must be constructed before the stategraph
+    inst.components.locomotor:SetTriggersCreep(false)
+    inst.components.locomotor.runspeed = 5.5
+    inst.components.locomotor.walkspeed = 2.5
+
+    inst:SetStateGraph("SGuncompromising_pawn")
+
     if inst.pawntype == "_nightmare" then
         inst.components.locomotor.runspeed = 6.5
         inst.explode_timer_count = 1
@@ -396,13 +403,6 @@ local function pawn_common(pawntype)
     else
         inst:ListenForEvent("newcombattarget", TestForCrash)
     end
-
-    inst:AddComponent("locomotor") -- locomotor must be constructed before the stategraph
-    inst.components.locomotor:SetTriggersCreep(false)
-    inst.components.locomotor.runspeed = 5.5
-    inst.components.locomotor.walkspeed = 2.5
-
-    inst:SetStateGraph("SGuncompromising_pawn")
 
     inst.OnEntityWake = OnWake
     inst.OnEntitySleep = OnSleep
