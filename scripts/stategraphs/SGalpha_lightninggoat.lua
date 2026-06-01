@@ -286,8 +286,40 @@ local states=
         },
     },
 
+    --State{
+        --name = "getting_pissed",
+        --tags = { "taunt" },
+
+        --onenter = function(inst)
+            --inst.Physics:Stop()
+            --inst.AnimState:PlayAnimation("taunt_pre")
+            --inst.AnimState:PushAnimation("taunt")
+            --inst.AnimState:PushAnimation("taunt_pst", false)
+			
+			--if inst.pissed_count < 2 then
+				--inst.pissed_count = inst.pissed_count + 1
+			--end
+        --end,
+
+        --timeline =
+        --{
+            --TimeEvent(5*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/lightninggoat/taunt") end),
+            --TimeEvent(17*FRAMES, function(inst) if inst.charged then inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/lightninggoat/jacobshorn") end end),
+            --TimeEvent(27*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/lightninggoat/hoof") end),
+            --TimeEvent(44*FRAMES, function(inst) if inst.charged then inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/lightninggoat/jacobshorn") end end),
+            --TimeEvent(53*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/lightninggoat/hoof") end),
+            --TimeEvent(71*FRAMES, function(inst) if inst.charged then inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/lightninggoat/jacobshorn") end end),
+            --TimeEvent(79*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/lightninggoat/hoof") end),
+        --},
+
+        --events =
+        --{
+            --EventHandler("animqueueover", function(inst) inst.sg:GoToState("idle") end),
+        --},
+    --},
+
     State{
-        name = "getting_pissed",
+        name = "taunt",
         tags = { "taunt" },
 
         onenter = function(inst)
@@ -295,10 +327,6 @@ local states=
             inst.AnimState:PlayAnimation("taunt_pre")
             inst.AnimState:PushAnimation("taunt")
             inst.AnimState:PushAnimation("taunt_pst", false)
-			
-			--if inst.pissed_count < 2 then
-				--inst.pissed_count = inst.pissed_count + 1
-			--end
         end,
 
         timeline =
@@ -314,39 +342,11 @@ local states=
 
         events =
         {
-            EventHandler("animqueueover", function(inst) inst.sg:GoToState("idle") end),
-        },
-    },
-
-    State{
-        name = "taunt",
-        tags = { "busy" },
-
-        onenter = function(inst)
-            inst.Physics:Stop()
-            inst.AnimState:PlayAnimation("taunt_pre")
-            inst.AnimState:PushAnimation("taunt")
-            inst.AnimState:PushAnimation("taunt_pst", false)
-        end,
-
-        timeline =
-        {
-            TimeEvent(5*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/lightninggoat/taunt") end),
-            TimeEvent(17*FRAMES, function(inst) if inst.charged then inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/lightninggoat/jacobshorn") end end),
-            TimeEvent(27*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/lightninggoat/hoof") end),
-            TimeEvent(44*FRAMES, function(inst) if inst.charged then inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/lightninggoat/jacobshorn") end end),
-            TimeEvent(53*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/lightninggoat/hoof") end),
-            TimeEvent(71*FRAMES, function(inst) if inst.charged then inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/lightninggoat/jacobshorn") end end),
-            TimeEvent(79*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/lightninggoat/hoof") end),
-        },
-
-        events =
-        {
-            EventHandler("animover", function(inst)
+            EventHandler("animqueueover", function(inst)
 				--if inst.getting_angry then
-					inst.sg:GoToState("getting_pissed")
+					--inst.sg:GoToState("getting_pissed")
 				--else
-					--inst.sg:GoToState("idle")
+					inst.sg:GoToState("idle")
 				--end
 			end),
         },

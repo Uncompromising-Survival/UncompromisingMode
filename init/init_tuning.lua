@@ -345,6 +345,7 @@ TUNING.DSTU = {
     MUSHROOM_CHANGES = GetModConfigData("mushroom_changes"),
     ALL_MUST_BE_GATHERED = false,
     WATERING_TEMPERATURE = GetModConfigData("watering_thermal"),
+	BATH_BOMB = GetModConfigData("bath_heal"),
     KLAUS_AMULET_SECOND_HIT_DAMAGE_MULT = 0.75,
     KLAUS_AMULET_ABSORPTION = 0.3,
     ORANGESTAFF_COOLDOWN_1 = 5,
