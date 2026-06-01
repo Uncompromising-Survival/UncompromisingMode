@@ -342,12 +342,6 @@ local function pawn_common(pawntype)
     inst.AnimState:SetBuild("um_pawn" .. pawntype)
     inst.AnimState:PlayAnimation("idle")
 
-    inst:AddComponent("locomotor") -- locomotor must be constructed before the stategraph
-    inst.components.locomotor:SetTriggersCreep(false)
-    inst.components.locomotor.runspeed = 5.5
-    inst.components.locomotor.walkspeed = 2.5
-    inst:SetStateGraph("SGuncompromising_pawn")
-
     inst:AddTag("cavedweller")
     inst:AddTag("uncompromising_pawn")
     inst:AddTag("smallcreature")
@@ -394,6 +388,13 @@ local function pawn_common(pawntype)
         inst:AddTag("uncompromising_nightmarepawn")
         inst.components.combat:SetRetargetFunction(1, NormalRetarget)
     end
+
+    inst:AddComponent("locomotor") -- locomotor must be constructed before the stategraph
+    inst.components.locomotor:SetTriggersCreep(false)
+    inst.components.locomotor.runspeed = 5.5
+    inst.components.locomotor.walkspeed = 2.5
+
+    inst:SetStateGraph("SGuncompromising_pawn")
 
     inst.OnEntityWake = OnWake
     inst.OnEntitySleep = OnSleep
@@ -554,4 +555,11 @@ local function bluelight_nightmare()
     return inst
 end
 
-return Prefab("um_pawn", pawn, assets, prefabs), Prefab("um_pawn_nightmare", pawn_nightmare, assets, prefabs), Prefab("dr_hot_loop_light", redlight), Prefab("dr_warmer_loop_light", orangelight), Prefab("dr_warm_loop_2_light", yellowlight), Prefab("dr_warm_loop_1_light", bluelight), Prefab("dr_hot_loop_light_nightmare", redlight_nightmare), Prefab("dr_warmer_loop_light_nightmare", orangelight_nightmare), Prefab("dr_warm_loop_2_light_nightmare", yellowlight_nightmare), Prefab("dr_warm_loop_1_light_nightmare", bluelight_nightmare)
+return Prefab("um_pawn", pawn, assets, prefabs),
+    Prefab("um_pawn_nightmare", pawn_nightmare, assets, prefabs),
+    Prefab("dr_hot_loop_light", redlight), Prefab("dr_warmer_loop_light", orangelight),
+    Prefab("dr_warm_loop_2_light", yellowlight), Prefab("dr_warm_loop_1_light", bluelight),
+    Prefab("dr_hot_loop_light_nightmare", redlight_nightmare),
+    Prefab("dr_warmer_loop_light_nightmare", orangelight_nightmare),
+    Prefab("dr_warm_loop_2_light_nightmare", yellowlight_nightmare),
+    Prefab("dr_warm_loop_1_light_nightmare", bluelight_nightmare)
