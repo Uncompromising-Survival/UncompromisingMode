@@ -14,7 +14,6 @@ local PAWN_DIVINING_DISTANCES = {{maxdist = 12, describe = "hot", pingtime = 1},
 local PAWN_DIVINING_MAXDIST = 72
 local PAWN_DIVINING_DEFAULTPING = 1.8
 local function FindClosestPart(inst)
-
     local x, y, z = inst.Transform:GetWorldPosition()
 
     local ents = TheSim:FindEntities(x, y, z, 80, {"player"}, {"playerghost"})
@@ -323,6 +322,12 @@ local function OnNewTarget(inst)
     end
 end
 
+local function TestForCrash(inst, data)
+    if data then
+        print(inst.." got target when it isnt supposed to. (New: "..(data.target or "N/A")..", Old: "..(data.oldtarget or "N/A")..")")
+    end
+end
+
 local function pawn_common(pawntype)
     local inst = CreateEntity()
     local shadow = inst.entity:AddDynamicShadow()
@@ -387,6 +392,8 @@ local function pawn_common(pawntype)
     
         inst:AddTag("uncompromising_nightmarepawn")
         inst.components.combat:SetRetargetFunction(1, NormalRetarget)
+    else
+        inst:ListenForEvent("newcombattarget", TestForCrash)
     end
 
     inst:AddComponent("locomotor") -- locomotor must be constructed before the stategraph
