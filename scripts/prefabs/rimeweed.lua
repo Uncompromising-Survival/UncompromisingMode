@@ -174,27 +174,39 @@ local function AnimateRetaliateOver(inst)
     inst:RemoveEventCallback("animover", AnimateRetaliateOver)
 end
 
+local RETALIATE_COOLDOWN = 0.5
+
 local function Retaliate(inst)
-    if not inst.retaliating then
-        inst.retaliating = true
+	if inst.retaliate_cd then
+		return
+	end
 
-        inst:DoTaskInTime(6 * FRAMES, function(inst)
-            SpawnPrefab("bramblefx_rime"):SetFXOwner(inst)
-            if inst.SoundEmitter then
-                inst.SoundEmitter:PlaySound("dontstarve/wilson/blowdart_shoot")
-            end
-        end) -- Slight Delay
+	inst.retaliate_cd = true
+	inst:DoTaskInTime(RETALIATE_COOLDOWN, function(inst)
+		inst.retaliate_cd = nil
+	end)
 
-        if inst.SoundEmitter then
-            inst.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
-        end
-        if not (inst.components.health and inst.components.health:IsDead()) then
-            inst.AnimState:PlayAnimation("bramble_"..inst.type.."_hit", false)
-            inst:ListenForEvent("animover", function(inst)
-                AnimateRetaliateOver(inst)
-            end)
-        end
-    end
+	if not inst.retaliating then
+		inst.retaliating = true
+		inst:DoTaskInTime(6 * FRAMES, function(inst)
+			if inst:IsValid() then
+				SpawnPrefab("bramblefx_rime"):SetFXOwner(inst)
+
+				if inst.SoundEmitter then
+					inst.SoundEmitter:PlaySound("dontstarve/wilson/blowdart_shoot")
+				end
+			end
+		end)
+		
+		if inst.SoundEmitter then
+			inst.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
+		end
+
+		if not (inst.components.health and inst.components.health:IsDead()) then
+			inst.AnimState:PlayAnimation("bramble_"..inst.type.."_hit", false)
+			inst:ListenForEvent("animover", AnimateRetaliateOver)
+		end
+	end
 end
 
 local function BarrierRemove(inst)
@@ -693,18 +705,28 @@ local function mainweed()
 
     inst.components.health:StartRegen(TUNING.BUNNYMAN_HEALTH_REGEN_AMOUNT, TUNING.BUNNYMAN_HEALTH_REGEN_PERIOD)
     inst:AddComponent("combat")
-    inst:ListenForEvent("attacked", function(inst)
-        if not (inst.components.health and inst.components.health:IsDead()) then
-            if inst.stage > 2 then
-                inst:DoTaskInTime(4 * FRAMES, function(inst) SpawnPrefab("bramblefx_rime"):SetFXOwner(inst) end) -- Slight Delay
-                if inst.SoundEmitter then
-                    inst.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
-                end
-            end
-            inst.AnimState:PlayAnimation("flower_"..(inst.stage - 1).."_hit")
-            inst.AnimState:PushAnimation("flower_"..(inst.stage - 1).."_idle")
-        end
-    end)
+	inst:ListenForEvent("attacked", function(inst)
+		if not (inst.components.health and inst.components.health:IsDead()) then
+			if inst.stage > 2 and not inst.retaliate_cd then
+				inst.retaliate_cd = true
+				inst:DoTaskInTime(1.0, function(inst)
+					inst.retaliate_cd = nil
+				end)
+
+				inst:DoTaskInTime(4 * FRAMES, function(inst)
+					if inst:IsValid() then
+						SpawnPrefab("bramblefx_rime"):SetFXOwner(inst)
+					end
+				end)
+
+				if inst.SoundEmitter then
+					inst.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
+				end
+			end
+			inst.AnimState:PlayAnimation("flower_"..(inst.stage - 1).."_hit")
+			inst.AnimState:PushAnimation("flower_"..(inst.stage - 1).."_idle")
+		end
+	end)
 
     ---------------------
 
