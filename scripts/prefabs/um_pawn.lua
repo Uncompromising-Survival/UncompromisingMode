@@ -324,7 +324,14 @@ end
 
 local function TestForCrash(inst, data)
     if data then
-        print(inst.." got target when it isnt supposed to. (New: "..(data.target or "N/A")..", Old: "..(data.oldtarget or "N/A")..")")
+        print(tostring(inst).." got target when it isnt supposed to. (New: "..(data.target or "N/A")..", Old: "..(data.oldtarget or "N/A")..")")
+        inst.SoundEmitter:PlaySound("dontstarve/common/teleportato/teleportato_maxwelllaugh")
+    end
+end
+
+local function TestForCrash2(inst, data)
+    if data then
+        print(tostring(inst).." got target when it isnt supposed to. (Old: "..(data.target or "N/A")..")")
         inst.SoundEmitter:PlaySound("dontstarve/common/teleportato/teleportato_maxwelllaugh")
     end
 end
@@ -402,6 +409,7 @@ local function pawn_common(pawntype)
         inst.components.combat:SetRetargetFunction(1, NormalRetarget)
     else
         inst:ListenForEvent("newcombattarget", TestForCrash)
+        inst:ListenForEvent("droppedtarget", TestForCrash2)
     end
 
     inst.OnEntityWake = OnWake
