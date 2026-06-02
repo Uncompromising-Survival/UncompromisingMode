@@ -24,7 +24,7 @@ local function OnLand(inst)
     local ents = TheSim:FindEntities(x, y, z, 1.5, should_hit, shouldnt_hit)
     for i, v in ipairs(ents) do
         if v.prefab ~= inst.attacker.prefab and not (inst.attacker_faction and v:HasTag(inst.attacker_faction)) then
-			v.components.combat:GetAttacked(inst.attacker, 20, nil)
+            v.components.combat:GetAttacked(inst.attacker and inst.attacker or nil,20,inst)
         end
     end
     inst:Remove()
@@ -141,7 +141,7 @@ local function DoDamageEffect(inst, target)
 
     if not plague then
         if target.components.combat and not target.components.health:IsDead() then
-			target.components.combat:GetAttacked(inst.attacker, 20, nil)
+            target.components.combat:GetAttacked(inst.attacker and inst.attacker or nil, 20, inst)
             DeathSpoil(target)
         end
         target:PushEvent("knockback", { knocker = inst, radius = 1.5, strengthmult = 1.5, forcelanded = true })
@@ -221,6 +221,9 @@ local function lobbedminefn()
 
     inst:AddComponent("hauntable")
     inst.components.hauntable:SetOnHauntFn(OnExplode)
+	
+	inst:AddComponent("weapon")
+	inst.components.weapon:SetDamage(0)		
 
     inst.deathtask = inst:DoTaskInTime(math.random(2,6), OnExplode)
 
