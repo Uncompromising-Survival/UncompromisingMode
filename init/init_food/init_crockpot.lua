@@ -62,7 +62,7 @@ end
 -- Relevant: AddIngredientValues
 -------------------------------------------------------------------------------
 --TODO: Fix smart crocpot mods from this, if possible (currently not showing predicted recipes correctly)
-AddIngredientValues({ "butterflywings" }, { decoration = 2, insectoid = 0.5 })
+AddIngredientValues({ "butterflywings" }, { decoration = 2, insectoid = .5 })
 --AddIngredientValues({ "acorn" }, { seed = 1 })
 --Substract the meat value from the monster value, since it dillutes it
 
@@ -87,16 +87,16 @@ if TUNING.DSTU.CROCKPOTMONSTMEAT then
         { meat = 1, monster = GLOBAL.TUNING.DSTU.MONSTER_MEAT_DRIED_MONSTER_VALUE }
         , true, true) --1 monster total, Will be calculated with -1 meat
     AddIngredientValues({ "monstersmallmeat" }, {
-        meat = 0.5,
+        meat = .5,
         monster = GLOBAL.TUNING.DSTU.MONSTER_MEAT_COOKED_MONSTER_VALUE
     }, true, true) --2 monster total, Will be calculated with -1 meat
 
     --RegisterInventoryItemAtlas("images/inventoryimages/monstersmallmeat.xml", "monstersmallmeat.tex")
     AddIngredientValues({ "cookedmonstersmallmeat" },
-        { meat = 0.5, monster = GLOBAL.TUNING.DSTU.MONSTER_MEAT_COOKED_MONSTER_VALUE }, true, true) --2.5 monster total, Will be calculated with -1 meat
+        { meat = .5, monster = GLOBAL.TUNING.DSTU.MONSTER_MEAT_COOKED_MONSTER_VALUE }, true, true) --2.5 monster total, Will be calculated with -1 meat
     --RegisterInventoryItemAtlas("images/inventoryimages/cookedmonstersmallmeat.xml", "cookedmonstersmallmeat.tex")
     AddIngredientValues({ "monstersmallmeat_dried" },
-        { meat = 0.5, monster = GLOBAL.TUNING.DSTU.MONSTER_MEAT_DRIED_MONSTER_VALUE }, true, true) --2 monster total, Will be calculated with -1 meat
+        { meat = .5, monster = GLOBAL.TUNING.DSTU.MONSTER_MEAT_DRIED_MONSTER_VALUE }, true, true) --2 monster total, Will be calculated with -1 meat
     --RegisterInventoryItemAtlas("images/inventoryimages/monstersmallmeat_dried.xml", "monstersmallmeat_dried.tex")
 
     AddIngredientValues({ "um_monsteregg" }, { egg = 1, monster = GLOBAL.TUNING.DSTU.MONSTER_EGGS }, true)
@@ -104,9 +104,9 @@ if TUNING.DSTU.CROCKPOTMONSTMEAT then
     AddIngredientValues({ "um_monsteregg_cooked" }, { egg = 1, monster = GLOBAL.TUNING.DSTU.MONSTER_EGGS }, true)
     --RegisterInventoryItemAtlas("images/inventoryimages/um_monsteregg_cooked.xml", "um_monsteregg_cooked.tex")
 else
-    AddIngredientValues({ "monstersmallmeat" }, { meat = 0.5, monster = 1 }, true, true)       --2 monster total, Will be calculated with -1 meat
-    AddIngredientValues({ "cookedmonstersmallmeat" }, { meat = 0.5, monster = 1 }, true, true) --2.5 monster total, Will be calculated with -1 meat
-    AddIngredientValues({ "monstersmallmeat_dried" }, { meat = 0.5, monster = 1 }, true, true) --2 monster total, Will be calculated with -1 meat
+    AddIngredientValues({ "monstersmallmeat" }, { meat = .5, monster = 1 }, true, true)       --2 monster total, Will be calculated with -1 meat
+    AddIngredientValues({ "cookedmonstersmallmeat" }, { meat = .5, monster = 1 }, true, true) --2.5 monster total, Will be calculated with -1 meat
+    AddIngredientValues({ "monstersmallmeat_dried" }, { meat = .5, monster = 1 }, true, true) --2 monster total, Will be calculated with -1 meat
 
     AddIngredientValues({ "um_monsteregg" }, { egg = 1, monster = GLOBAL.TUNING.DSTU.MONSTER_EGGS }, true)
     --RegisterInventoryItemAtlas("images/inventoryimages/um_monsteregg.xml", "um_monsteregg.tex")
@@ -115,9 +115,9 @@ else
 end
 
 AddIngredientValues({ "forgetmelots" }, { decoration = 1, foliage = 1 })
-AddIngredientValues({ "aphid" }, { insectoid = 0.5, meat = 0.5, monster = GLOBAL.TUNING.DSTU.MONSTER_MEAT_COOKED_MONSTER_VALUE })
-AddIngredientValues({ "rabbit" }, { meat = 0.5 })
-AddIngredientValues({ "plantmeat" }, { meat = 1, plantmeat = 1 }, true, false, false)
+AddIngredientValues({ "aphid" }, { insectoid = .5, meat = .5, monster = GLOBAL.TUNING.DSTU.MONSTER_MEAT_COOKED_MONSTER_VALUE, fat = .5, magic = .25 })
+AddIngredientValues({ "rabbit" }, { meat = .5 })
+AddIngredientValues({ "plantmeat" }, { meat = 1, plantmeat = 1 }, true, false, true)
 
 AddIngredientValues({ "um_meat_cube" }, { meat = .5 })
 AddIngredientValues({ "um_monster_cube" }, { meat = .5, monster = GLOBAL.TUNING.DSTU.MONSTER_MEAT_COOKED_MONSTER_VALUE })
@@ -141,7 +141,7 @@ end
 recipes.figatoni.test = function(cooker, names, tags)
     return ((names.fig or names.fig_cooked) and
             tags.veggie and tags.veggie >= 2 and not tags.meat)
-        or ((names.aphid) and tags.veggie and tags.veggie >= 2 and tags.meat and tags.meat <= 0.5 and not (tags.insectoid and tags.insectoid >= 1) and not (tags.monster and tags.monster >= 2))
+        or ((names.aphid) and tags.veggie and tags.veggie >= 2 and tags.meat and tags.meat <= .5 and not (tags.insectoid and tags.insectoid >= 1) and not (tags.monster and tags.monster >= 2))
 end
 -- Original:	test = function(cooker, names, tags) return (names.fig or names.fig_cooked) and tags.veggie and tags.veggie >= 2  and not tags.meat end,
 
@@ -186,10 +186,10 @@ end
 -- Original:	test =  function(cooker, names, tags) return names.wobster_sheller_land and names.butter and (tags.meat == 1.0) and (tags.fish == 1.0) and not tags.frozen end
 
 recipes.barnaclepita.test = function(cooker, names, tags)
-    return (names.barnacle or names.barnacle_cooked) and tags.veggie and tags.veggie >= 0.5 and
+    return (names.barnacle or names.barnacle_cooked) and tags.veggie and tags.veggie >= .5 and
         UncompromisingFillers(tags) and not (tags.insectoid and tags.insectoid >= 1)
 end
--- Original:	test = function(cooker, names, tags) return (names.barnacle or names.barnacle_cooked) and tags.veggie and tags.veggie >= 0.5 end
+-- Original:	test = function(cooker, names, tags) return (names.barnacle or names.barnacle_cooked) and tags.veggie and tags.veggie >= .5 end
 
 recipes.leafloaf.test = function(cooker, names, tags)
     return tags.plantmeat and tags.plantmeat >= 2 and
@@ -467,11 +467,16 @@ warly_recipes.glowberrymousse.test = function(cooker, names, tags)
 end
 -- Original:	test = function(cooker, names, tags) return (names.wormlight or (names.wormlight_lesser and names.wormlight_lesser >= 2)) and (tags.fruit and tags.fruit >= 2) and not tags.meat and not tags.inedible end,
 
+warly_recipes.nightmarepie.test = function(cooker, names, tags)
+    return tags.magic and tags.magic >= 1.5 and
+        (names.potato or names.potato_cooked) and (names.onion or names.onion_cooked)
+end
+
 --warly_recipes.zaspberryparfait.test = function(cooker, names, tags) return not tags.monster and not tags.inedible and UncompromisingFillers(tags) and names.zaspberry and tags.dairy and tags.sweetener end
 
 local ingredients = cooking.ingredients
 --[[InsertIngredientValues function by Serpens https://forums.kleientertainment.com/forums/topic/69732-dont-use-addingredientvalues-in-mods/]]
---NOTE: If the thing already had a tag with the same name, you will still overwrite the old value, unless keepoldvalues is true. E.g if fish already had a tag seafood with value 0.5 and now you use this function with value 1, the result will be 1.
+--NOTE: If the thing already had a tag with the same name, you will still overwrite the old value, unless keepoldvalues is true. E.g if fish already had a tag seafood with value .5 and now you use this function with value 1, the result will be 1.
 function InsertIngredientValues(names, tags, cancook, candry, keepoldvalues) -- if cancook or candry is true, the cooked/dried variant of the thing will also get the tags and the tags precook/dried.
     for _, name in pairs(names) do
         if ingredients[name] == nil then                                     -- if it is not cookable already, it will be nil. Following code is just a copy of the normal AddIngredientValues function
@@ -534,43 +539,43 @@ require "um_ingredienttags"
 
 InsertIngredientValues({ "zaspberry" }, { fruit = 1 }, true, false, false)
 --RegisterInventoryItemAtlas("images/inventoryimages/zaspberry.xml", "zaspberry.tex")
-InsertIngredientValues({ "zaspberry_lesser" }, { fruit = 0.5 }, true, false, false)
+InsertIngredientValues({ "zaspberry_lesser" }, { fruit = .5 }, true, false, false)
 --RegisterInventoryItemAtlas("images/inventoryimages/zaspberry_lesser.xml", "zaspberry_lesser.tex")
 
-InsertIngredientValues({ "viperfruit" }, { fruit = 1 }, true, false, false)
+InsertIngredientValues({ "viperfruit" }, { fruit = 1, magic = 1}, true, false, false)
 --RegisterInventoryItemAtlas("images/inventoryimages/viperfruit.xml", "viperfruit.tex")
-InsertIngredientValues({ "viperfruit_lesser" }, { fruit = 0.5 }, true, false, false)
+InsertIngredientValues({ "viperfruit_lesser" }, { fruit = .5, magic = .5 }, true, false, false)
 --RegisterInventoryItemAtlas("images/inventoryimages/viperfruit_lesser.xml", "viperfruit_lesser.tex")
 InsertIngredientValues({ "giant_blueberry" }, { fruit = 1 }, true, false, false)
 --RegisterInventoryItemAtlas("images/inventoryimages/giant_blueberry.xml", "giant_blueberry.tex")
-InsertIngredientValues({ "iceboomerang" }, { ice = 1 }, true, false, false)
+--InsertIngredientValues({ "iceboomerang" }, { ice = 1 }, true, false, false)
 --RegisterInventoryItemAtlas("images/inventoryimages/iceboomerang.xml", "iceboomerang.tex")
 InsertIngredientValues({ "rice" }, { veggie = 1, lice = 1 }, true, false, false)
 --RegisterInventoryItemAtlas("images/inventoryimages/rice.xml", "rice.tex")
 InsertIngredientValues({ "rice_cooked" }, { veggie = 1, lice = .5 }, true, false, false)
 --RegisterInventoryItemAtlas("images/inventoryimages/rice_cooked.xml", "rice_cooked.tex")
 
-InsertIngredientValues({ "gloomcap" }, { veggie = 0.5 }, true, false, false)
+InsertIngredientValues({ "gloomcap" }, { veggie = .5, magic = 1 }, true, false, false)
 --RegisterInventoryItemAtlas("images/inventoryimages/gloomcap.xml", "gloomcap.tex")
-InsertIngredientValues({ "gloomcap_cooked" }, { veggie = 0.5 }, true, false, false)
+InsertIngredientValues({ "gloomcap_cooked" }, { veggie = .5, magic = 1 }, true, false, false)
 --RegisterInventoryItemAtlas("images/inventoryimages/gloomcap_cooked.xml", "gloomcap_cooked.tex")
 
 
-InsertIngredientValues({ "ocupus_tentacle" }, { fish = 1, meat = 0.5, monster = 1 }, true, false, false)
+InsertIngredientValues({ "ocupus_tentacle" }, { fish = 1, meat = .5, monster = 1 }, true, false, false)
 --RegisterInventoryItemAtlas("images/inventoryimages/ocupus_tentacle.xml", "ocupus_tentacle.tex")
-InsertIngredientValues({ "ocupus_tentacle_cooked" }, { fish = 1, meat = 0.5, monster = 1 }, true, false, false)
+InsertIngredientValues({ "ocupus_tentacle_cooked" }, { fish = 1, meat = .5, monster = 1 }, true, false, false)
 --RegisterInventoryItemAtlas("images/inventoryimages/ocupus_tentacle_cooked.xml", "ocupus_tentacle_cooked.tex")
 
 -- [Rimeweed] --
-InsertIngredientValues({ "um_rimeweed_itemflower" }, { frozen = 0.5, veggie = 1 })
+InsertIngredientValues({ "um_rimeweed_itemflower" }, { frozen = .5, veggie = 1 })
 --RegisterInventoryItemAtlas("images/inventoryimages/um_rimeweed_itemflower.xml", "um_rimeweed_itemflower.tex")
-InsertIngredientValues({ "um_rimeweed_itemvine" }, { frozen = 0.5, inedible = 0.5, })
+InsertIngredientValues({ "um_rimeweed_itemvine" }, { frozen = .5, inedible = .5, })
 --RegisterInventoryItemAtlas("images/inventoryimages/um_rimeweed_itemvine.xml", "um_rimeweed_itemvine.tex")
-InsertIngredientValues({ "um_ice_tail" }, { frozen = 1, meat = 0.5, })
+InsertIngredientValues({ "um_ice_tail" }, { frozen = 1, meat = .5, })
 
-InsertIngredientValues({ "um_leafwing" }, { meat = 0.5, plantmeat = 1 })
+InsertIngredientValues({ "um_leafwing" }, { meat = .5, plantmeat = 1 })
 InsertIngredientValues({ "um_ghost_pepper_item" }, { veggie = 1 })
-InsertIngredientValues({ "um_spongeplant_item" }, { veggie = 0.5 }, true, false, false)
+InsertIngredientValues({ "um_spongeplant_item" }, { veggie = .5 }, true, false, false)
 
 if TUNING.DSTU.NEWRECIPES then
     --InsertIngredientValues({ "firenettles" }, { foliage = 1 }, true, false, false)
@@ -579,10 +584,10 @@ if TUNING.DSTU.NEWRECIPES then
     InsertIngredientValues({ "foliage_dried" }, { foliage = 1 }, false, false, false)
     InsertIngredientValues({ "petals_dried" }, { foliage = 1.5 }, false, false, false)
     InsertIngredientValues({ "petals_evil_dried" }, { foliage = 1 }, false, false, false)
-    InsertIngredientValues({ "succulent_picked_dried" }, { foliage = 0.5 }, false, false, false)
+    InsertIngredientValues({ "succulent_picked_dried" }, { foliage = .5 }, false, false, false)
     InsertIngredientValues({ "moon_tree_blossom_dried" }, { foliage = 1 }, false, false, false)
     InsertIngredientValues({ "firenettles_dried" }, { foliage = 1 }, false, false, false)
-    InsertIngredientValues({ "tillweed_dried" }, { foliage = 0.5 }, false, false, false)
+    InsertIngredientValues({ "tillweed_dried" }, { foliage = .5 }, false, false, false)
     InsertIngredientValues({ "forgetmelots_dried" }, { foliage = 1 }, false, false, false)
 end
 --RegisterInventoryItemAtlas("images/inventoryimages/greenfoliage.xml", "greenfoliage.tex")
@@ -591,7 +596,8 @@ InsertIngredientValues({ "trunk_summer" }, { meat = 2 }, true, false, false)
 InsertIngredientValues({ "trunk_winter" }, { meat = 2 }, true, false, false)
 InsertIngredientValues({ "trunk_cooked" }, { meat = 2 }, false, false, false)
 InsertIngredientValues({ "fig" }, { fruit = 1 }, true, false, false)
-
+InsertIngredientValues({"mandrake"}, { veggie = 2 , magic = 2 }, true, false, false)
+InsertIngredientValues({"cookedmandrake"}, { veggie = 2 , magic = 2 }, false, false, false)
 
 InsertIngredientValues({ "um_meathoney" }, { sweetener = 1, meat = .5, monster = GLOBAL.TUNING.DSTU.MONSTER_MEAT_DRIED_MONSTER_VALUE }, false, false, false)
 InsertIngredientValues({ "um_meatcomb" }, { sweetener = 1, meat = .5, monster = GLOBAL.TUNING.DSTU.MONSTER_MEAT_DRIED_MONSTER_VALUE }, false, false, false)

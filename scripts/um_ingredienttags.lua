@@ -22,10 +22,14 @@ AddFoodTag = function(tag, data)
 end
 
 -- common tags
-AddFoodTag('insectoid', { name= 'Insectoid', atlas="images/um_food_tags.xml" })
-AddFoodTag('foliage', { name= 'Foliage', atlas="images/um_food_tags.xml" })
-AddFoodTag('lice', { name= 'Rice/Lice', atlas="images/um_food_tags.xml" })
-AddFoodTag('plantmeat', { name= 'Leafy Meats', atlas="images/um_food_tags.xml" })
-AddFoodTag('seed', { name= 'Birchnuts', atlas="images/um_food_tags.xml" })
-FOODTAGDEFINITIONS['frozen'].atlas="images/um_food_tags.xml"
+AddFoodTag('insectoid', { name= 'Insectoid', atlas="images/um_food_tags/insectoid.xml" })
+AddFoodTag('foliage', { name= 'Foliage', atlas="images/um_food_tags/foliage.xml" })
+AddFoodTag('lice', { name= 'Rice/Lice', atlas="images/um_food_tags/lice.xml" })
+AddFoodTag('plantmeat', { name= 'Leafy Meats', atlas="images/um_food_tags/plantmeat.xml" })
+AddFoodTag('seed', { name= 'Birchnuts', atlas="images/um_food_tags/seed.xml" })
+FOODTAGDEFINITIONS['frozen'].atlas="images/um_food_tags/frozen.xml"
+FOODTAGDEFINITIONS['monster'].atlas="images/um_food_tags/monster.xml"
+FOODTAGDEFINITIONS['egg'].atlas="images/um_food_tags/egg.xml"
+FOODTAGDEFINITIONS['inedible'].atlas="images/um_food_tags/inedible.xml"
+FOODTAGDEFINITIONS['magic'].atlas="images/um_food_tags/magic.xml"
 --AddFoodTag('frozen', { name="Ice", atlas="images/food_tags.xml" })
