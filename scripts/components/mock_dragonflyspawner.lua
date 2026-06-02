@@ -485,7 +485,7 @@ return Class(function(self, inst)
 
         local function SummonMonsterFullMoon(player)
             if _spawnmoonmaw and TheWorld.state.cycles > 50 and TheWorld.state.issummer and (TheWorld.state.isfullmoon or TheWorld.state.isalterawake) then
-                if _worldsettingstimer:ActiveTimerExists(MOCKFLY_TIMERNAME) and _worldsettingstimer:GetTimeLeft(MOCKFLY_TIMERNAME) < (60*8*5) then
+                if _worldsettingstimer:ActiveTimerExists(MOCKFLY_TIMERNAME) then --and _worldsettingstimer:GetTimeLeft(MOCKFLY_TIMERNAME) < (60*8*5) then
                     _worldsettingstimer:SetTimeLeft(MOCKFLY_TIMERNAME, 40)
                     _worldsettingstimer:ResumeTimer(MOCKFLY_TIMERNAME)
                 else
