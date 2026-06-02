@@ -38,15 +38,18 @@ local data = {
     anchor_item = {name="anchor_item", tex="anchor_item.tex", subcat="seafaring", type="item", prefab="anchor_item", build="seafarer_anchor", bank="seafarer_anchor", anim="idle", fueltype="BURNABLE", fuelvalue=180, burnable=true, deps={"anchor", "boards", "cutstone", "rope"}},
     battlesong_shadowaligned = {name="battlesong_shadowaligned", tex="battlesong_shadowaligned.tex", subcat="battlesong", type="item", prefab="battlesong_shadowaligned", build="battlesongs", bank="battlesongs", anim="battlesong_shadowaligned", fueltype="BURNABLE", fuelvalue=15, burnable=true, craftingprefab="wathgrithr", deps={"featherpencil", "horrorfuel", "papyrus"}},
     ]]
-    -- cursed items
+    -- cursed items & related
     cursed_antler = CreateCursedItemData("cursed_antler", nil, nil, nil, {weapondamage = "34-66", areadamage = 34, deps = {"boneshard", "deerclops"}}),
     beargerclaw = CreateCursedItemData("beargerclaw", nil, nil, nil, {areadamage = "20-60", weaponrange = 20, deps = {"boneshard", "bearger", "furtuft"} }), --toolactions = {"DIG"} toolactions looks wierd without  finiteuses
     slobberlobber = CreateCursedItemData("slobberlobber", nil, nil, nil, {weapondamage = "20/0.6s", weaponrange = 15, deps = {"meat", "dragon_scales", "dragonfly"} --[[mock_dragonfly]] }),
     feather_frock = CreateCursedItemData("feather_frock", "featherfrock_ground", "featherfrock_ground", "anim", {weapondamage = "10-50", deps = {"goose_feather", "moose", "feather_robin", "feather_robin_winter", "feather_crow", "feather_canary", "malbatross_feather"}}),
     gore_horn_hat = CreateCursedItemData("gore_horn_hat", "hat_gore_horn", "hat_gore_horn", nil, {weapondamage = 200, deps = {"minotaur", "nightmarefuel"}}),
-    klaus_amulet = CreateCursedItemData("klaus_amulet", "amulet_klaus", "amulet_klaus", "klausamulet", {deps = {"klaus"}, absorb_percent=0.3,}),
-    crabclaw = CreateCursedItemData("crabclaw", "cursedcrabclaw", "cursedcrabclaw", nil, {weapondamage = "40-60", deps = {"crabking", "redgem", "bluegem", "purplegem", "yellowgem", "greengem", "orangegem", "opalpreciousgem"}}),
-
+    klaus_amulet = CreateCursedItemData("klaus_amulet", "amulet_klaus", "amulet_klaus", "klausamulet", {deps = {"klaus", "goldnugget", "nightmarefuel"}, absorb_percent=0.3,}),
+    crabclaw = CreateCursedItemData("crabclaw", "cursedcrabclaw", "cursedcrabclaw", nil, {weapondamage = "40-60", deps = {"meat", "rocks", "crabking", "redgem", "bluegem", "purplegem", "yellowgem", "greengem", "orangegem", "opalpreciousgem"}}),
+    um_beegun = CreateCursedItemData("um_beegun", nil, nil, nil, {weapondamage = 10, weaponrange = 14, deps = {"beequeen", "honeycomb", "royal_jelly"}}),
+    bulletbee = {name="bulletbee", tex="bulletbee.tex", subcat="insect", type="creature", prefab="bulletbee", health=10, damage=10, stacksize=20, build="bulletbee_build", bank="bee", anim="idle", animoffsety=150, perishable=960, workable="NET", deps={"beemine", "um_beegun"}},
+    
+    
     -- lunar/grotto
     um_bee_moon = {name = "um_bee_moon", tex = "um_bee_moon.tex", subcat = "insect", type = "creature", prefab = "um_bee_moon", health = 250, damage = 34, stacksize = 20, build = "um_bee_moon", bank = "um_bee_moon", anim = "idle", animoffsety = 150, perishable = 960, workable = "NET", deps = {"um_meathoney", "houndstooth"}, notes = {lunar_aligned = true}},
     um_astral_projector = {name = "um_astral_projector", tex = "um_astral_projector.tex", subcat = "structure", type = "thing", prefab = "um_astral_projector", build = "um_archives_projectinator", bank = "um_archives_projectinator", anim = "idle", workable = "HAMMER", deps = {"um_astral_projector_target", "purplemooneye", "thulecite", "moonrocknugget"}},
