@@ -51,7 +51,7 @@ local component_post = {
     "walkableplatformplayer",
     "schoolspawner",
     "builder",
-
+    "spellcaster",
     "raindome",
     "fillable",
 
