@@ -182,19 +182,17 @@ env.AddPrefabPostInit("shieldofterror", function(inst)
     end)
 
     local reticule = inst.components.reticule or inst:AddComponent("reticule")
-    inst.components.reticule.reticuleprefab = "reticuleline2"
-    inst.components.reticule.pingprefab = "reticulelongping"
-    -- inst.components.reticule.reticuleprefab = "reticuleline2"
-    -- inst.components.reticule.pingprefab = "reticulelineping"
-    inst.components.reticule.targetfn = ReticuleTargetFn
-    inst.components.reticule.mousetargetfn = ReticuleMouseTargetFn
-    inst.components.reticule.updatepositionfn = ReticuleUpdatePositionFn
-    inst.components.reticule.shouldhidefn = ReticuleShouldHideFn
-    inst.components.reticule.validcolour = { 1, 1, 1, 1 }
-    inst.components.reticule.invalidcolour = { .5, 0, 0, 1 }
-    inst.components.reticule.ease = true
-    inst.components.reticule.mouseenabled = true
-    inst.components.reticule.ispassableatallpoints = true
+    reticule.reticuleprefab = "reticuleline2"
+    reticule.pingprefab = "reticulelongping"
+    reticule.targetfn = ReticuleTargetFn
+    reticule.mousetargetfn = ReticuleMouseTargetFn
+    reticule.updatepositionfn = ReticuleUpdatePositionFn
+    reticule.shouldhidefn = ReticuleShouldHideFn
+    reticule.validcolour = { 1, 1, 1, 1 }
+    reticule.invalidcolour = { .5, 0, 0, 1 }
+    reticule.ease = true
+    reticule.mouseenabled = true
+    reticule.ispassableatallpoints = true
 
     if not TheWorld.ismastersim then return end
 
