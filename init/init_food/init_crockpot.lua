@@ -27,7 +27,7 @@ local RECIPE_ICE_PLUS_TWIG_LIMIT = GLOBAL.TUNING.DSTU.CROCKPOT_RECIPE_ICE_PLUS_T
 
 local function LimitIceTestFn(tags, ice_limit)
     if tags ~= nil and tags.frozen ~= nil and TUNING.DSTU.GENERALCROCKBLOCKER then
-        return (not tags.frozen or (tags.frozen + (tags.foliage ~= nil and tags.foliage or 0) <= ice_limit))
+        return (not tags.frozen or (tags.frozen <= ice_limit))
     end
     return true
 end
@@ -63,7 +63,7 @@ end
 -------------------------------------------------------------------------------
 --TODO: Fix smart crocpot mods from this, if possible (currently not showing predicted recipes correctly)
 AddIngredientValues({ "butterflywings" }, { decoration = 2, insectoid = 0.5 })
-AddIngredientValues({ "acorn" }, { seed = 1 })
+--AddIngredientValues({ "acorn" }, { seed = 1 })
 --Substract the meat value from the monster value, since it dillutes it
 
 local meat_reduction_factor = GLOBAL.TUNING.DSTU.MONSTER_MEAT_MEAT_REDUCTION_PER_MEAT;
@@ -197,8 +197,8 @@ recipes.leafloaf.test = function(cooker, names, tags)
 end
 -- Original:	test = function(cooker, names, tags) return ((names.plantmeat or 0) + (names.plantmeat_cooked or 0) >= 2 ) end
 
---[[recipes.leafymeatburger.test = function(cooker, names, tags)
-    return (names.plantmeat or tags.plantmeat) and (names.onion or names.onion_cooked) and tags.veggie and tags.veggie >= 2
+recipes.leafymeatburger.test = function(cooker, names, tags)
+    return tags.plantmeat and (names.onion or names.onion_cooked) and tags.veggie and tags.veggie >= 2
 end
 -- Original:	test = function(cooker, names, tags) return (names.plantmeat or names.plantmeat_cooked) and (names.onion or names.onion_cooked) and tags.veggie and tags.veggie >= 2 end
 
@@ -209,7 +209,7 @@ end
 
 recipes.meatysalad.test = function(cooker, names, tags)
     return tags.plantmeat and tags.veggie and tags.veggie >= 3
-end]]
+end
 -- Original:	test = function(cooker, names, tags) return (names.plantmeat or names.plantmeat_cooked) and tags.veggie and tags.veggie >= 3 end
 
 recipes.barnaclestuffedfishhead.test = function(cooker, names, tags)
@@ -530,6 +530,8 @@ function InsertIngredientValues(names, tags, cancook, candry, keepoldvalues) -- 
     end
 end
 
+require "um_ingredienttags"
+
 InsertIngredientValues({ "zaspberry" }, { fruit = 1 }, true, false, false)
 --RegisterInventoryItemAtlas("images/inventoryimages/zaspberry.xml", "zaspberry.tex")
 InsertIngredientValues({ "zaspberry_lesser" }, { fruit = 0.5 }, true, false, false)
@@ -543,9 +545,9 @@ InsertIngredientValues({ "giant_blueberry" }, { fruit = 1 }, true, false, false)
 --RegisterInventoryItemAtlas("images/inventoryimages/giant_blueberry.xml", "giant_blueberry.tex")
 InsertIngredientValues({ "iceboomerang" }, { ice = 1 }, true, false, false)
 --RegisterInventoryItemAtlas("images/inventoryimages/iceboomerang.xml", "iceboomerang.tex")
-InsertIngredientValues({ "rice" }, { veggie = 1, rice = 1 }, true, false, false)
+InsertIngredientValues({ "rice" }, { veggie = 1, lice = 1 }, true, false, false)
 --RegisterInventoryItemAtlas("images/inventoryimages/rice.xml", "rice.tex")
-InsertIngredientValues({ "rice_cooked" }, { veggie = 1 }, true, false, false)
+InsertIngredientValues({ "rice_cooked" }, { veggie = 1, lice = .5 }, true, false, false)
 --RegisterInventoryItemAtlas("images/inventoryimages/rice_cooked.xml", "rice_cooked.tex")
 
 InsertIngredientValues({ "gloomcap" }, { veggie = 0.5 }, true, false, false)
