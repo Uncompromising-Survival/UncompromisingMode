@@ -24,15 +24,7 @@ local UpvalueHacker = require("tools/upvaluehacker")
 env.AddSimPostInit(function()
     local COMPONENT_ACTIONS = UpvalueHacker.GetUpvalue(EntityScript.CollectActions, "COMPONENT_ACTIONS")
     if COMPONENT_ACTIONS then
-        local --[[POINT,]] EQUIPPED = --[[COMPONENT_ACTIONS.POINT,]] COMPONENT_ACTIONS.EQUIPPED
-        --[[if POINT then
-            local _POINT_spellcaster_fn = POINT["spellcaster"]
-            if _POINT_spellcaster_fn then
-                POINT["spellcaster"] = function(inst, doer, target, actions, right, ...)
-                    return _POINT_spellcaster_fn(inst, doer, target, actions, right, ...)
-                end
-            end
-        end]]
+        local EQUIPPED = COMPONENT_ACTIONS.EQUIPPED
         if EQUIPPED then
             local _EQUIPPED_spellcaster_fn = EQUIPPED["spellcaster"]
             if _EQUIPPED_spellcaster_fn then
