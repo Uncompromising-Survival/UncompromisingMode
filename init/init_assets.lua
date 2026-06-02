@@ -1381,6 +1381,9 @@ Assets = {
     Asset("ATLAS", "images/tele_icon5b.xml"),
     Asset("IMAGE", "images/tele_icon5b.tex"),
 
+    Asset("IMAGE", "images/um_food_tags.tex"),
+    Asset("ATLAS", "images/um_food_tags.xml"),
+
     --OVERLAYS
     Asset("ATLAS", "images/UM_pollenover.xml"),
     Asset("IMAGE", "images/UM_pollenover.tex"),
