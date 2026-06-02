@@ -58,8 +58,16 @@ local function GetPureGem(gemtype)
     return PURE_GEM_MAP[gemtype]
 end
 
+local UM_TRINKETS = { "cctrinket_don", "cctrinket_jazzy", "cctrinket_names", "cctrinket_freddo", "corncan" }
+local function PickAnyTrinket()
+    if math.random(NUM_TRINKETS + #UM_TRINKETS) <= #UM_TRINKETS then
+        return UM_TRINKETS[math.random(#UM_TRINKETS)]
+    end
+    return PickRandomTrinket()
+end
+
 local function ProduceItem(inst, prefab, num, tier)
-    for i = 1, (num and num or 1), 1 do
+    for i = 1, (num or 1), 1 do
         local item = SpawnPrefab(prefab)
         item.Transform:SetPosition(inst.Transform:GetWorldPosition())
         if tier then
@@ -177,7 +185,7 @@ local function OnAccept(inst, giver, item, count, name)
         end
         inst.traded_and_friendly = true
         --I eat food
-        if item.components.edible ~= nil then
+        if item.components.edible then
             --if inst.components.sleeper:IsAsleep() then -- AXE Funnily enough, snaildrakes and slurtles both don't sleep.
             --inst.components.sleeper:WakeUp()
             --end
@@ -263,6 +271,10 @@ local function GetAntlionReward(inst)
             newtier = 2
         elseif rnd > 0.40 and orange then
             itemname = "orangegem"
+        elseif rnd > 0.30 and orange then
+            itemname = PickAnyTrinket()
+        elseif rnd > 0.50 then
+            itemname = PickAnyTrinket()
         else
             itemname = "townportaltalisman"
         end
@@ -271,21 +283,22 @@ local function GetAntlionReward(inst)
         if (rnd > 0.75 and orange) or rnd > 0.85 then
             itemname = gem
             newtier = 3
-        elseif (rnd > 0.2 and orange) or rnd > 0.4 then
+        elseif (rnd > 0.30 and orange) or rnd > 0.45 then
             itemname = gem
             newtier = 2
-        elseif (rnd > 0.15 and orange) or rnd > 0.35 then
+        elseif (rnd > 0.25 and orange) or rnd > 0.40 then
             itemname = pure or "townportaltalisman"
+        elseif (rnd > 0.15 and orange) or rnd > 0.30 then
+            itemname = PickAnyTrinket()
         else
             itemname = "townportaltalisman"
         end
     else
-        if (rnd > 0.8 and orange) or rnd > 0.9 then
+        if (rnd > 0.55 and orange) or rnd > 0.80 then
             itemname = gem
             newtier = 2
-        elseif (rnd > 0.4 and orange) or rnd > 0.6 then
-            itemname = gem
-            newtier = 2
+        elseif (rnd > 0.40 and orange) or rnd > 0.50 then
+            itemname = PickAnyTrinket()
         else
             itemname = "townportaltalisman"
         end
@@ -431,14 +444,16 @@ local function GenerateRockyLoot(inst, giver, item)
     end
     if itemname ~= "friendship" then
         local item = SpawnPrefab(itemname)
-        item.Transform:SetPosition(inst.Transform:GetWorldPosition())
-        if newtier then
-            item:SetTier(newtier)
-        end
-        if item and item:IsValid() and giver and giver:IsValid() then
-            LaunchAt(item, inst, giver, 1, 1, nil, math.random(-10, 10))
-        else
-            Launch2(item, inst, 1, 0, 1, math.random(-10, 10))
+        if item and item:IsValid() then
+            item.Transform:SetPosition(inst.Transform:GetWorldPosition())
+            if newtier then
+                item:SetTier(newtier)
+            end
+            if giver and giver:IsValid() then
+                LaunchAt(item, inst, giver, 1, 1, nil, math.random(-10, 10))
+            else
+                Launch2(item, inst, 1, 0, 1, math.random(-10, 10))
+            end
         end
         inst.sg:GoToState("rocklick")
     elseif giver then

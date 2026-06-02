@@ -594,8 +594,8 @@ configuration_options = {
     -----------------------------
     Header("Items and Structures"),
     -----------------------------
-
     BinaryConfig("inventory_backpacks", "Backpacks and Alikes", "When empty, backpacks can be stored in chests and inventories.", true),
+	BinaryConfig("bath_heal", "Bath Bomb", "When used in Boilling Springs, bathing in it restores Max Health. A bit more expensive, and can only be made on Celestial Altar Tier.", true),	
     BinaryConfig("infinite_blueprints_", "Blueprints", "Blueprints are no longer consumed when reading.", false),
     BinaryConfig("funcap_fun", "Funcap Rework", "Changes Funcaps to have a bone crushing surprise, aside from Lunar Funcap.", true),
     BinaryConfig("celestialitems_revert", "Celestial Altar Item Changes", "Glass tools can not be prototyped. Recipes are more expensive.", true),

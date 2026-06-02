@@ -606,8 +606,6 @@ for _, item in ipairs(scrapbook_icons) do
     RegisterScrapbookIconAtlas(GLOBAL.resolvefilepath("images/scrapbook/" .. item .. ".xml"), item .. ".tex")
 end
 
-
-
 Assets = {
     -- Cookbook HQ Icons
     Asset("IMAGE", "images/cookbook_beefalowings.tex"),
@@ -1994,4 +1992,22 @@ local limboleap_ui = {
 for _, path in ipairs(limboleap_ui) do
     table.insert(Assets, Asset("IMAGE", path .. ".tex"))
     table.insert(Assets, Asset("ATLAS", path .. ".xml"))
+end
+
+-- Craft Pot compatibility icons.
+local um_food_tags = {
+    "egg",
+    "foliage",
+    "frozen",
+    "inedible",
+    "insectoid",
+    "lice",
+    "magic",
+    "monster",
+    "plantmeat",
+    "seed",
+}
+for _, tag in ipairs(um_food_tags) do
+    table.insert(Assets, Asset("IMAGE", "images/um_food_tags/" .. tag .. ".tex"))
+    table.insert(Assets, Asset("ATLAS", "images/um_food_tags/" .. tag .. ".xml"))
 end

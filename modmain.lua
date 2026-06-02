@@ -2,6 +2,8 @@ local require = GLOBAL.require
 
 require "um_pocketdimensioncontainers"
 
+GLOBAL.UPDATE_CHECK = GLOBAL.CurrentRelease.GreaterOrEqualTo("R42_HEATED_VAULT") -- REMEMBER TO ALWAYS UPDATE THIS WITH NEW BETAS.
+
 GLOBAL.UMCommonFns = require("tools/um_commonfns")
 GLOBAL.MAX_GEM_TIER = 3
 GLOBAL.MIN_GEM_TIER = 0
