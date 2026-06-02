@@ -252,32 +252,39 @@ env.AddStategraphPostInit("wilson", function(inst)
     }
 
     local _OldSpellCast = inst.actionhandlers[ACTIONS.CASTSPELL].deststate
-    inst.actionhandlers[ACTIONS.CASTSPELL].deststate = function(inst, action, ...)
-        if action.invobject ~= nil then
-            if action.invobject:HasTag("lighter") then
-                return "castspelllighter"
-            elseif action.invobject:HasTag("charles_t_horse") then
-                if action.invobject.components.fueled:GetPercent() >= 0.2 then
+    inst.actionhandlers[ACTIONS.CASTSPELL].deststate =
+        function(inst, action, ...)
+            if action.invobject ~= nil then
+                if action.invobject:HasTag("lighter") then
+                    return "castspelllighter"
+                elseif action.invobject:HasTag("charles_t_horse") then
+                    if action.invobject.components.fueled:GetPercent() >= 0.2 then
+                        if inst.components.rider and inst.components.rider:IsRiding() then
+                            inst.components.rider:Dismount()
+                        else
+                            return "charles_charge"
+                        end
+                    else
+                        return
+                    end
+                elseif action.invobject:HasTag("beargerclaw") then
                     if inst.components.rider and inst.components.rider:IsRiding() then
                         inst.components.rider:Dismount()
                     else
-                        return "charles_charge"
+                        return "bearclaw_dig_start"
                     end
-                else
-                    return
+                elseif action.invobject:HasTag("beegun") then
+                    return "collectthebees"
+                elseif action.invobject:HasTag("shieldofterror") then
+                    if inst:HasTag("vetcurse") and action.invobject.components.rechargeable:IsCharged() and (inst.components.rider and not inst.components.rider:IsRiding() or inst.components.rider == nil) then
+                        return "um_shield_charge"
+                    else
+                        return
+                    end
                 end
-            elseif action.invobject:HasTag("beargerclaw") then
-                if inst.components.rider and inst.components.rider:IsRiding() then
-                    inst.components.rider:Dismount()
-                else
-                    return "bearclaw_dig_start"
-                end
-            elseif action.invobject:HasTag("beegun") then
-                return "collectthebees"
             end
+            return _OldSpellCast(inst, action, ...)
         end
-        return _OldSpellCast(inst, action, ...)
-    end
 
     local _OldPlay = inst.actionhandlers[ACTIONS.PLAY].deststate
     inst.actionhandlers[ACTIONS.PLAY].deststate =
@@ -678,12 +685,6 @@ env.AddStategraphPostInit("wilson", function(inst)
     inst.actionhandlers[ACTIONS.CASTAOE].deststate = function(inst, action, ...)
         if action.invobject.prefab == "um_detonator" then
             return "detonator_remotecast_pre"
-        elseif action.invobject:HasTag("shieldofterror") then
-            if inst:HasTag("vetcurse") and action.invobject.components.rechargeable:IsCharged() and (inst.components.rider and not inst.components.rider:IsRiding() or inst.components.rider == nil) then
-                return "um_shield_charge"
-            else
-                return
-            end
         else
             return _CASTAOE(inst, action, ...)
         end
