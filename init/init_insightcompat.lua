@@ -8,12 +8,12 @@ local function AddDescriptors()
 
     print("HERE INSIGHT!!!")
 
-    _G.Insight.descriptors.uncompromising_deerclopsspawner = _G.require("descriptors/uncompromising_deerclopsspawner")
-    _G.Insight.descriptors.mock_dragonflyspawner = _G.require("descriptors/mock_dragonflyspawner")
-    _G.Insight.descriptors.gmoosespawner = _G.require("descriptors/gmoosespawner")
+    _G.Insight.API.V1.AddComponentDescriptor("uncompromising_deerclopsspawner", _G.require("descriptors/uncompromising_deerclopsspawner"), { modname = modname })
+    _G.Insight.API.V1.AddComponentDescriptor("mock_dragonflyspawner", _G.require("descriptors/mock_dragonflyspawner"), { modname = modname })
+    _G.Insight.API.V1.AddComponentDescriptor("gmoosespawner", _G.require("descriptors/gmoosespawner"), { modname = modname })
 
-    _G.Insight.descriptors.gem_enchantable = _G.require("descriptors/gem_enchantable") 
-    _G.Insight.descriptors.gemology_gem = _G.require("descriptors/gemology_gem")
+    _G.Insight.API.V1.AddComponentDescriptor("gem_enchantable", _G.require("descriptors/gem_enchantable"), { modname = modname })
+    _G.Insight.API.V1.AddComponentDescriptor("gemology_gem", _G.require("descriptors/gemology_gem"), { modname = modname })
 end
 
 AddSimPostInit(AddDescriptors) -- _G.Insight.descriptors may not exist yet, but it will exist at AddSimPostInit.
