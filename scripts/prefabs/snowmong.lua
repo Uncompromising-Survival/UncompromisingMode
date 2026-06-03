@@ -56,7 +56,8 @@ local AGGRO_RANGE_SQ = AGGRO_RANGE * AGGRO_RANGE
 local function Retarget(inst)
     local notags = {"FX", "NOCLICK","INLIMBO", "playerghost", "shadowcreature","webbedcreature","wall","structure","companion","snowish"}
     return FindEntity(inst, AGGRO_RANGE, function(guy)
-        return guy:HasTag("player") and inst.components.combat:CanTarget(guy) and not guy.components.health:IsDead()
+        return guy:HasTag("player") and inst.components.combat:CanTarget(guy)
+            and guy.components.health and not guy.components.health:IsDead()
     end, nil, notags)
 end
 
@@ -127,7 +128,7 @@ local function IntegrateSnowStuff(inst) --AXE I'm using the mole's steal action 
 		local level = 0
 		local heal = 200
 		if item.prefab == "um_gemologybluegem1" or item.prefab == "um_gemologybluegem2" then
-			local tier = math.max(item:GetTier(), 1)
+			local tier = math.max(item:GetTier() or 0, 1)
 			local stacksize = (item.components.stackable and item.components.stackable:StackSize()) or 1
 			local current_eaten = inst.gems_eaten or 0
 			local gems_to_add = math.min(stacksize, 10 - current_eaten)

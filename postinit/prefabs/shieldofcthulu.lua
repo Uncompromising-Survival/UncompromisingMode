@@ -109,6 +109,10 @@ local function can_cast_fn(doer, target, pos, inst)
     return inst.components.rechargeable:IsCharged()
 end
 
+local function CantCastOnTarget(inst, doer, pos, target, actioncount)
+    return doer.components.playercontroller and not doer.components.playercontroller:IsControlPressed(CONTROL_FORCE_INSPECT) and actioncount
+end
+
 local function ToggleItemVetcurse(inst, toggle)
     if inst._vetcurseupgraded and inst._vetcurseupgraded:value() ~= not toggle then return end
     if toggle then
@@ -141,6 +145,8 @@ end
 env.AddPrefabPostInit("shieldofterror", function(inst)
     CommonClientFunctions(inst)
     inst:AddTag("shieldofterror")
+
+	inst.um_cantcastontarget = CantCastOnTarget
 
     inst._vetcurseupgraded = net_bool(inst.GUID, "shieldofterror.vetcurse", "vetcursedirty")
     inst._vetcurseupgraded:set(false)

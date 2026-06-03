@@ -500,34 +500,47 @@ local function TryGemologyLoot(inst)
 
     local x, y, z = inst.Transform:GetWorldPosition()
 
-    for _, entry in ipairs(list) do
-        local rnd = math.random()
-        local loot
-        local tier = math.max(entry.tier, 1)
-
-        if tier == 1 then
-            loot = SpawnPrefab(entry.prefab)
-            loot:SetTier(rnd < 0.40 and 2 or 1)
-        elseif tier == 2 then
-            if rnd < 0.40 then
-                loot = SpawnPrefab(entry.prefab)
-                loot:SetTier(3)
-            elseif rnd < 0.45 then
-                loot = SpawnPrefab("bluegem")
-            else
-                loot = SpawnPrefab(entry.prefab)
-                loot:SetTier(2)
-            end
-        elseif tier == 3 then
-            loot = SpawnPrefab("bluegem")
-        end
-
-        if loot and loot:IsValid() then
-            loot.Transform:SetPosition(x, y, z)
-            loot.Physics:SetVel(math.random(-2, 2), 8, math.random(-2, 2))
+    local function Launch(item)
+        if item and item:IsValid() then
+            item.Transform:SetPosition(x, y, z)
+            item.Physics:SetVel(math.random(-2, 2), 8, math.random(-2, 2))
         end
     end
 
+    for _, entry in ipairs(list) do
+        local rnd = math.random()
+        local tier = math.max(entry.tier or 0, 1)
+
+        if tier == 1 then
+            if rnd < 0.25 then
+                local loot = SpawnPrefab(entry.prefab)
+                if loot then loot:SetTier(2) Launch(loot) end
+            elseif rnd < 0.90 then
+                local loot = SpawnPrefab(entry.prefab)
+                if loot then loot:SetTier(1) Launch(loot) end
+            else
+                for i = 1, math.random(1, 2) do
+                    Launch(SpawnPrefab("ice"))
+                end
+            end
+        elseif tier == 2 then
+            if rnd < 0.25 then
+                local loot = SpawnPrefab(entry.prefab)
+                if loot then loot:SetTier(3) Launch(loot) end
+            elseif rnd < 0.30 then
+                Launch(SpawnPrefab("bluegem"))
+            elseif rnd < 0.40 then
+                for i = 1, math.random(1, 2) do
+                    Launch(SpawnPrefab("ice"))
+                end
+            else
+                local loot = SpawnPrefab(entry.prefab)
+                if loot then loot:SetTier(2) Launch(loot) end
+            end
+        elseif tier == 3 then
+            Launch(SpawnPrefab("bluegem"))
+        end
+    end
 end
 
 env.AddPrefabPostInit("snowmong", function(inst)
