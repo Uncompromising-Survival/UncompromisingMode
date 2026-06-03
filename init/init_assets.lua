@@ -470,6 +470,12 @@ local inventoryitems =
     "um_blueprinting_kit"
 }
 
+local um_preparedfoods = require("um_preparedfoods")
+
+for k, v in pairs(um_preparedfoods) do
+    table.insert(inventoryitems, k)
+end
+
 local minimap_icons = {
     "riceplant",
     "sporepack_map",
