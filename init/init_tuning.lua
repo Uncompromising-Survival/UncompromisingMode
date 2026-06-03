@@ -210,6 +210,8 @@ TUNING.DSTU = {
     REGSPIDERJUMP = GetModConfigData("alljumperspiders"),
     SPIDERWARRIORCOUNTER = GetModConfigData("spiderwarriorcounter"),
     TRAPDOORSPIDERS = GetModConfigData("trapdoorspiders"),
+    -- Merms
+    MERMTWEAKS = GetModConfigData("mermtweaks"),
     -- Perishable Increase
     --PERISHABLETIME = GetModConfigData("more perishing"),
     -- Fire Loot Rework
