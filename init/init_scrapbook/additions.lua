@@ -210,7 +210,13 @@ local specinfo = {
     WIDOWSGRASP = "Can cut open Cocoons.",
     WIDOWSHEAD = "Grants night vision when worn.",
     WEBBEDCREATURE = "Contains a variety of different creatures",
-    UM_MOONFLY_LANTERN = "Increase movement speed by 15% when held. Creates a light.\nCreates a trail of particles that create light and speed up survivors by an additional 15%."
+    UM_MOONFLY_LANTERN = "Increase movement speed by 15% when held. Creates a light.\nCreates a trail of particles that create light and speed up survivors by an additional 15%.",
+    SNAILDRAKEHAT = "Provides 75% resistance to fire.",
+    SNAILDRAKEBUCKET = "Can hold water or lava.\nWater can be used to water crops in an area. Lava can be dumped to create a burning pool.",
+    BOULDER_CRAB = "Appears under boulders. Mine its boulder to be able to properly it.\nBoulder will regrow if left alive.",
+    UM_ASTRAL_PROJECTOR = "Projects your body to the nearest receptionator.",
+    UM_ASTRAL_PROJECTOR_TARGET = "Returns your body back to the projectinator.",
+
 }
 
 

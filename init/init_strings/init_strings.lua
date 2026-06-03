@@ -418,8 +418,8 @@ STRINGS.UI.COOKBOOK.UM_ZASPBERRYPARFAIT = "Shocks your attackers"
 STRINGS.UI.COOKBOOK.UM_DURIAN_CREAM_MARSHCAKE = "Exotic out of season"
 STRINGS.UI.COOKBOOK.UM_BOOMBERRYPIE = "Will blow you away!"
 STRINGS.UI.COOKBOOK.UM_BOOM_TART = "Will blow others away!"
-STRINGS.UI.COOKBOOK.UM_RIMEWEED_SPAGETT = "Freezes your surroundings"
-STRINGS.UI.COOKBOOK.UM_RIMEWEED_TEQUILA = "Increases resistance to freezing"
+STRINGS.UI.COOKBOOK.UM_RIMEWEED_SPAGETT = "Freezes your surroundings, grants an Ice Shield"
+STRINGS.UI.COOKBOOK.UM_RIMEWEED_TEQUILA = "Increases resistance to freezing, grants an Ice Shield"
 
 STRINGS.NAMES.UM_VARGLET_PET_NAMES = {
 "Cupcake", --Shy

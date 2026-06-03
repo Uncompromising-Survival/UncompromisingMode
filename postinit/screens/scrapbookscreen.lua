@@ -58,6 +58,51 @@ STRINGS.SCRAPBOOK.SPECIALINFO.GEM_UPGRADING = {
     "Favored by NOT YET IMPLEMENTED"
 }
 
+ARMOR_ABSORPTION_OVERRIDES = {
+    ["beehat"] = .7,
+    ["armorruins"] = .8,
+    ["shieldofterror"] = .75,
+    ["cookiecutterhat"] = .7,
+    ["wathgrithrhat"] = .65,
+    ["wathgrithr_improvedhat"] = .7,
+    ["armor_bramble"] = .7,
+    ["voidclothhat"] = .7,
+    ["armor_voidcloth"] = .7,
+    ["lunarplanthat"] = .7,
+    ["armor_lunarplant"] = .7,
+    ["armor_lunarplant_husk"] = .7,
+    ["um_armor_bramble_rimeweed"] = .7,
+
+    -- Island Adventures
+    ["armorlimestone"] = .75,
+    ["armorobsidian"] = .7,
+    ["armorseashell"] = .7,
+    ["armorcactus"] = .7,
+    ["oxhat"] = .75,
+}
+
+-- Lower bounds are exclusive while upper bounds are inclusive. For example, a Log Suit with a
+-- protection value of .8 will be lowered to .65, not .75.
+local armor_mappings = {
+    { min_val = .9,  max_val = .95, new_absorb = .8 },
+    { min_val = .85, max_val = .9,  new_absorb = .75 },
+    { min_val = .8,  max_val = .85, new_absorb = .7 },
+    { min_val = .7,  max_val = .8,  new_absorb = .65 },
+    { min_val = .6,  max_val = .7,  new_absorb = .6 },
+}
+
+local function RemapAbsorption(prefab, absorb)
+    local absorb_override = ARMOR_ABSORPTION_OVERRIDES[prefab]
+    if absorb_override then return absorb_override end
+    for _, mapping in ipairs(armor_mappings) do
+        if absorb > mapping.min_val and absorb <= mapping.max_val then
+            return mapping.new_absorb
+        end
+    end
+    return absorb
+end
+
+
 local function GetKnownNameFromGem(name)
     if GEM_DEFS[name] == nil then
         return STRINGS.NAMES[string.upper(name)]
@@ -378,7 +423,7 @@ function ScrapbookScreen:PopulateInfoPanel(entry)
         end
     end
 
-    local settextblock = function(height, data)     -- font, size, str, color,leftmargin,rightmargin, leftoffset, ignoreheightchange, widget
+    local settextblock = function(height, data) -- font, size, str, color,leftmargin,rightmargin, leftoffset, ignoreheightchange, widget
         assert(data.font and data.size and data.str and data.color, "Missing String Data")
         local targetwidget = data.widget and data.widget or sub_root
         local txt = targetwidget:AddChild(Text(data.font, data.size, data.str, data.color))
@@ -397,7 +442,7 @@ function ScrapbookScreen:PopulateInfoPanel(entry)
         return height, txt
     end
 
-    local setimageblock = function(height, data)     -- source, tex, w,h,rotation,leftoffset, ignoreheightchange, widget)
+    local setimageblock = function(height, data) -- source, tex, w,h,rotation,leftoffset, ignoreheightchange, widget)
         assert(data.source and data.tex, "Missing Image Data")
         local targetwidget = data.widget and data.widget or sub_root
         local img = targetwidget:AddChild(Image(data.source, data.tex))
@@ -536,7 +581,7 @@ function ScrapbookScreen:PopulateInfoPanel(entry)
         icon:SetPosition(STAT_PANEL_INDENT + subwidth + (STAT_ICONSIZE / 2), statsheight + STAT_GAP_SMALL + (STAT_ICONSIZE / 2))
         local txt = statwidget:AddChild(Text(HEADERFONT, 18, text, UICOLOURS.BLACK))
         local tw, th = txt:GetRegionSize()
-        txt:SetPosition(STAT_PANEL_INDENT + subwidth + STAT_ICONSIZE + (tw / 2), statsheight + STAT_GAP_SMALL + (STAT_ICONSIZE / 2) - 2)     -- + STAT_GAP_SMALL
+        txt:SetPosition(STAT_PANEL_INDENT + subwidth + STAT_ICONSIZE + (tw / 2), statsheight + STAT_GAP_SMALL + (STAT_ICONSIZE / 2) - 2) -- + STAT_GAP_SMALL
         subwidth = subwidth + STAT_ICONSIZE + tw
         return subwidth
     end
@@ -685,6 +730,9 @@ function ScrapbookScreen:PopulateInfoPanel(entry)
         end
 
         if data.absorb_percent then
+            if TUNING.DSTU.ARMORREWORK then
+                data.absorb_percent = RemapAbsorption(data.prefab, data.absorb_percent)
+            end
             makesubentry(STRINGS.SCRAPBOOK.DATA_ARMOR_ABSORB .. (data.absorb_percent * 100) .. "%")
         end
 
@@ -795,7 +843,7 @@ function ScrapbookScreen:PopulateInfoPanel(entry)
                 makeentry("icon_moonaligned.tex", STRINGS.SCRAPBOOK.NOTE_LUNAR_ALIGNED)
             end
             if data.notes.cursed_item then
-                makeentry("icon_curseditem.tex", "CURSED")     -- MOVE THESE STRINGS!!!!
+                makeentry("icon_curseditem.tex", "CURSED") -- MOVE THESE STRINGS!!!!
                 makesubentry("BE CURSED TO WIELD THIS")
             end
             if data.notes.cursed_enhanced_item then
@@ -1078,7 +1126,7 @@ function ScrapbookScreen:PopulateInfoPanel(entry)
 
     if data and GEM_DEFS[data.prefab] then
         local known, tier = TheMineralLogbook:IsGemKnown(data.prefab)
-        specialinfo = GetGemUpgradingDescription(data.prefab, tier or 0)     -- default to tier 0 it not found
+        specialinfo = GetGemUpgradingDescription(data.prefab, tier or 0) -- default to tier 0 it not found
     end
 
     if specialinfo and data.knownlevel > 1 then
@@ -1109,7 +1157,7 @@ function ScrapbookScreen:PopulateInfoPanel(entry)
         local known, tier = TheMineralLogbook:IsGemKnown(data.prefab)
         maketextentry("GEM EFFECTS")
         local body
-        height, body = setcustomblock(height, { str = "\n\n" .. GetGemEffectDescription(data.prefab, tier or 0), minwidth = width - 100, leftoffset = 40 })
+        height, body = setcustomblock(height-20, { str = "\n\n" .. GetGemEffectDescription(data.prefab, tier or 0), minwidth = width - 100, leftoffset = 40 })
     end
 
     ----------------------- DEPS -----------------------------------------
@@ -1121,8 +1169,8 @@ function ScrapbookScreen:PopulateInfoPanel(entry)
     if data and data.deps and #data.deps > 0 then
         local idx = 1
         local row = 1
-        local cols = DEPS_COLS     -- 5
-        local gaps = 7             -- 10
+        local cols = DEPS_COLS -- 5
+        local gaps = 7         -- 10
         local imagesize = 32
         local imagebuffer = 5
         local depstoshow = shallowcopy(data.deps)
@@ -1372,7 +1420,7 @@ function ScrapbookScreen:PopulateInfoPanel(entry)
             recipebg:SetPosition(STAT_PANEL_WIDTH / 2, -math.abs(recipeheight) / 2)
             setattachmentdetils(attachments, STAT_PANEL_WIDTH, math.abs(recipeheight))
 
-            recipewidget:SetPosition(STAT_PANEL_INDENT, height)     -- rotwidth+ CUSTOM_INDENT +30
+            recipewidget:SetPosition(STAT_PANEL_INDENT, height) -- rotwidth+ CUSTOM_INDENT +30
 
             local rotation = (self.PRNG:Rand() * 5) - 2.5
             recipewidget:SetRotation(rotation)
@@ -1536,7 +1584,7 @@ function ScrapbookScreen:PopulateInfoPanel(entry)
 
     height = math.abs(height)
 
-    local max_visible_height = PANEL_HEIGHT - 60     -- -20
+    local max_visible_height = PANEL_HEIGHT - 60 -- -20
     local padding = 5
 
     local top = math.min(height, max_visible_height) / 2 - padding

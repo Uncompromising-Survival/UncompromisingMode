@@ -83,18 +83,38 @@ local data = {
     um_beeguard_blocker = { name = "um_beeguard_blocker", tex = "um_beeguard_blocker.tex", subcat = "insect", type = "creature", prefab = "um_beeguard_blocker", health = 180 * 15, damage = 15, build = "hivehead_bee_guard", bank = "bee_guard", anim = "idle", animoffsety = 100, deps = { "beequeen", "stinger" }, use_bg = true },
 
     -- lunar/grotto
-    um_bee_moon = { name = "um_bee_moon", tex = "um_bee_moon.tex", subcat = "insect", type = "creature", prefab = "um_bee_moon", health = 250, damage = 34, stacksize = 20, build = "um_bee_moon", bank = "um_bee_moon", anim = "idle", animoffsety = 150, perishable = 960, workable = "NET", deps = { "um_meathoney", "houndstooth" }, notes = { lunar_aligned = true } },
+    --missing deps
+    --um_bee_moon = { name = "um_bee_moon", tex = "um_bee_moon.tex", subcat = "insect", type = "creature", prefab = "um_bee_moon", health = 250, damage = 34, stacksize = 20, build = "um_bee_moon", bank = "um_bee_moon", anim = "idle", animoffsety = 150, perishable = 960, workable = "NET", deps = { "um_meathoney", "houndstooth" }, notes = { lunar_aligned = true } },
     um_astral_projector = { name = "um_astral_projector", tex = "um_astral_projector.tex", subcat = "structure", type = "thing", prefab = "um_astral_projector", build = "um_archives_projectinator", bank = "um_archives_projectinator", anim = "idle", workable = "HAMMER", deps = { "um_astral_projector_target", "purplemooneye", "thulecite", "moonrocknugget" } },
     um_astral_projector_target = { name = "um_astral_projector_target", tex = "um_astral_projector_target.tex", subcat = "structure", type = "thing", prefab = "um_astral_projector_target", build = "um_archives_receptionator", bank = "um_archives_receptionator", anim = "idle", workable = "HAMMER", deps = { "moonglass", "thulecite", "moonrocknugget" } },
 
     --hooded forest
     hoodedtrapdoor = { name = "hoodedtrapdoor", tex = "hoodedtrapdoor.tex", type = "thing", prefab = "hoodedtrapdoor", build = "rock_flipping_moss", bank = "flipping_rock", anim = "idle", workable = "MINE", deps = { "rocks", "spider_trapdoor_hooded" }, use_bg = true },
 
+    --broiling
+    springrock1 = { name = "springrock1", tex = "springrock1.tex", type = "thing", prefab = "springrock1", build = "springrock1", bank = "springrock1", anim = "full", workable = "MINE", deps = { "nitre", "rocks" }, use_bg = true },
+    springrock2 = { name = "springrock2", tex = "springrock2.tex", type = "thing", prefab = "springrock2", build = "springrock2", bank = "springrock2", anim = "full", workable = "MINE", deps = { "flint", "nitre", "rocks" }, use_bg = true },
+    springrock3 = { name = "springrock3", tex = "springrock3.tex", type = "thing", prefab = "springrock3", build = "springrock3", bank = "springrock3", anim = "full", workable = "MINE", deps = { "flint", "goldnugget", "nitre", "rocks" }, use_bg = true },
+    cave_entrance_magmabiome = { name = "cave_entrance_magmabiome", tex = "cave_entrance_magmabiome.tex", type = "POI", prefab = "cave_entrance_magmabiome", build = "cave_entrance_magmabiome", bank = "cave_entrance_magmabiome", anim = "full", workable = "MINE", deps = { "bat", "flint", "nitre", "rocks" }, use_bg = true },
+    um_hotspring = { name = "um_hotspring", tex = "um_hotspring.tex", type = "thing", prefab = "um_hotspring", build = "um_hotspring", bank = "um_hotspring", anim = "idle_med", deps = { "bathbomb" }, use_bg = true },
+
+    um_spongeplant_item = { name = "um_spongeplant_item", tex = "um_spongeplant_item.tex", type = "food", prefab = "um_spongeplant_item", stacksize = 20, hungervalue = 18.8, healthvalue = 3, sanityvalue = -10, foodtype = "VEGGIE", build = "um_spongeplant", bank = "um_spongeplant_item", anim = "idle", perishable = TUNING.PERISH_FAST, deps = { "spoiled_food", "um_spongeplant" } },
+    um_spongeplant = { name = "um_spongeplant", tex = "um_spongeplant.tex", type = "thing", prefab = "um_spongeplant", build = "um_spongeplant", bank = "um_spongeplant", anim = "idle", burnable = true, workable = "MINE", deps = { "um_spongeplant_item", "marble" }, use_bg = true },
+
+    snapalm = { name = "snapalm", tex = "snapalm.tex", type = "item", prefab = "snapalm", stacksize = 40, build = "snapalm", bank = "snapalm", anim = "idle", burnable = true },
+    snaildrakehat = { name = "snaildrakehat", tex = "snaildrakehat.tex", subcat = "armor", type = "item", prefab = "snaildrakehat", armor = TUNING.ARMOR_SLURTLEHAT, absorb_percent = 0.7, build = "snaildrakehat", bank = "snaildrakehat", anim = "anim", waterproofer = TUNING.WATERPROOFNESS_SMALL, snowmandecor = true, deps = { "snaildrake_magma", "slurtle_shellpieces" } },
+    snaildrakebucket = { name = "snaildrakebucket", tex = "snaildrakebucket_empty.tex", type = "item", prefab = "snaildrakebucket", build = "snaildrakebucket", bank = "snaildrakebucket", anim = "empty", deps = { "snaildrake_slime", "slurtle_shellpieces", "pond", "pond_cave", "oasislake", "lava_pond" } },
+    snaildrake_hole = { name = "snaildrake_hole", tex = "snaildrake_hole.tex", type = "thing", prefab = "snaildrake_hole", build = "snaildrake_hole", bank = "snaildrake_hole", anim = "idle", deps = { "snaildrake_slime", "snaildrake_magma" }, use_bg = true },
+    snaildrake_slime = { name = "snaildrake_slime", tex = "snaildrake_slime.tex", type = "creature", prefab = "snaildrake_slime", health = 450, damage = 25, build = "snaildrake_holeshell", bank = "snaildrake_holeshell", anim = "idle", deps = { "slurtle_shellpieces", "snaildrakebucket", "snapalm" }, scale = 2, animoffsetx = -10, animoffsety = -40, use_bg = true },
+    snaildrake_magma = { name = "snaildrake_magma", tex = "snaildrake_magma.tex", type = "creature", prefab = "snaildrake_magma", health = 450, damage = 25, build = "snaildrake_spikeshell", bank = "snaildrake_spikeshell", anim = "idle", deps = { "slurtle_shellpieces", "snaildrakebucket", "snapalm" }, scale = 2, animoffsetx = -10, animoffsety = -40, use_bg = true },
+
+    boulder_crab = { name = "boulder_crab", tex = "boulder_crab.tex", type = "creature", prefab = "boulder_crab", health = 500, damage = 34, build = "boulder_crab", bank = "boulder_crab", anim = "idle", deps = { "rock1", "rock2", "rock_moon", "rock_flintless", "springrock1", "springrock2", "springrock3", "meat", "rocks" }, scale = 1.5, use_bg = true },
+
     --misc.
-    trapdoor = { name = "trapdoor", tex = "trapdoor.tex", type = "thing", prefab = "trapdoor", build = "trapdoor", bank = "trapdoor", anim = "idle", workable = "MINE", deps = { "rocks", "spider_trapdoor" }, use_bg = true},
+    trapdoor = { name = "trapdoor", tex = "trapdoor.tex", type = "thing", prefab = "trapdoor", build = "trapdoor", bank = "trapdoor", anim = "idle", workable = "MINE", deps = { "rocks", "spider_trapdoor" }, use_bg = true },
     spider_trapdoor = { name = "spider_trapdoor", tex = "spider_trapdoor.tex", subcat = "spider", type = "creature", prefab = "spider_trapdoor", sanityaura = -0.66666666666667, health = 400, damage = 34, build = "spider_trapdoor", bank = "spider", anim = "idle", perishable = 2400, deps = { "monstermeat", "spidergland", "trapdoor", "trapdoorgrass" }, use_bg = true },
     mutator_trapdoor = { name = "mutator_trapdoor", tex = "mutator_trapdoor.tex", subcat = "mutator", type = "food", prefab = "mutator_trapdoor", stacksize = 20, hungervalue = 12.5, healthvalue = -3, sanityvalue = -10, foodtype = "MEAT", build = "um_spider_mutators", bank = "um_spider_mutators", anim = "trapdoor", fueltype = "BURNABLE", fuelvalue = 15, burnable = true, craftingprefab = "webber", deps = { "cutgrass", "monstermeat", "spidergland", "spider_trapdoor" } },
-    trapdoorgrass = { name = "trapdoorgrass", tex = "trapdoorgrass.tex", type = "thing", prefab = "trapdoorgrass", build = "trapdoorgrass", bank = "trapdoorgrass", anim = "idle", workable = "DIG", pickable = true, burnable = true, deps = { "cutgrass", "dug_grass", "trapdoor" }, use_bg = true, animoffsety=-20},
+    trapdoorgrass = { name = "trapdoorgrass", tex = "trapdoorgrass.tex", type = "thing", prefab = "trapdoorgrass", build = "trapdoorgrass", bank = "trapdoorgrass", anim = "idle", workable = "DIG", pickable = true, burnable = true, deps = { "cutgrass", "dug_grass", "trapdoor" }, use_bg = true, animoffsety = -20 },
 }
 
 return data

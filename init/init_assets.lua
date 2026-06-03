@@ -622,7 +622,17 @@ local scrapbook_icons = {
     "hoodedtrapdoor",
     "spider_trapdoor",
     "trapdoorgrass",
-    "trapdoor"
+    "trapdoor",
+    "cave_entrance_magmabiome",
+    "springrock3",
+    "springrock2",
+    "springrock1",
+    "um_hotspring",
+    "um_spongeplant",
+    "snaildrake_slime",
+    "snaildrake_magma",
+    "snaildrake_hole",
+    "boulder_crab",
 }
 
 for _, item in ipairs(scrapbook_icons) do
