@@ -467,7 +467,9 @@ local inventoryitems =
     "um_scrapper",
     "um_astral_projector",
     "um_astral_projector_target",
-    "um_blueprinting_kit"
+    "um_blueprinting_kit",
+    "um_cookpot_wagstaff_lever",
+    "um_cookpot_wagstaff_lever2"
 }
 
 local minimap_icons = {
