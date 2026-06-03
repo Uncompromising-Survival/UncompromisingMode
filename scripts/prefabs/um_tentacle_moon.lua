@@ -185,7 +185,10 @@ local function fnitem()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-			
+
+    inst:AddComponent("tradable")
+	inst.components.tradable.goldvalue = TUNING.GOLD_VALUES.YOTB_BEEFALO_DOLL --3
+
     MakeSmallBurnable(inst, TUNING.SMALL_BURNTIME)
 
     MakeHauntableLaunch(inst)

@@ -155,7 +155,7 @@ local prefab_post = {
     "pktrades",
     "pigking",
     "marblebean",
-    "reviver",
+    --"reviver",
     --"bundle",
     "eyebrella",
     "birds",

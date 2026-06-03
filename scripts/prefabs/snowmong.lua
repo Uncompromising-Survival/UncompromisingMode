@@ -327,6 +327,9 @@ local function fntail()
     inst.components.perishable:StartPerishing()
     inst.components.perishable.onperishreplacement = "smallmeat"
 
+	inst:AddComponent("tradable")
+	inst.components.tradable.goldvalue = TUNING.GOLD_VALUES.MEAT
+
 	inst.Transform:SetScale(1.5,1.5,1.5)
     inst:AddComponent("inspectable")
 
