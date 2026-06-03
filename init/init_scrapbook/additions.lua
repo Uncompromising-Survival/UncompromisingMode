@@ -216,7 +216,8 @@ local specinfo = {
     BOULDER_CRAB = "Appears under boulders. Mine its boulder to be able to properly it.\nBoulder will regrow if left alive.",
     UM_ASTRAL_PROJECTOR = "Projects your body to the nearest receptionator.",
     UM_ASTRAL_PROJECTOR_TARGET = "Returns your body back to the projectinator.",
-
+    UM_SPONGEPLANT = "Must be shaved to harvest.",
+    UM_SPONGEPLANT_ITEM = "Reduces moisture by 10."
 }
 
 
