@@ -52,6 +52,6 @@ function CreateManifier(name, durability, build, bank, common_fn)
     return Prefab(name, fn, assets)
 end
 
-return CreateManifier("um_magnifier", 100),
-    CreateManifier("um_magnifier_obsidian", 100, "um_magnifier_obsidian", "um_magnifier_obsidian"),
-    CreateManifier("um_magnifier_purplegem", 25, "um_magnifier_purplegem", "um_magnifier_purplegem")
+return CreateManifier("um_magnifier", 400),
+    CreateManifier("um_magnifier_obsidian", 400, "um_magnifier_obsidian", "um_magnifier_obsidian"),
+    CreateManifier("um_magnifier_purplegem", 100, "um_magnifier_purplegem", "um_magnifier_purplegem")
