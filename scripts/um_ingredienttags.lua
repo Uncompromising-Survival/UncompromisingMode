@@ -1,6 +1,6 @@
 -- From Craft Pot --
 
-if TheNet:IsDedicated() then
+if TheNet:IsDedicated() or not KnownModIndex:IsModEnabled("workshop-727774324")  then
     return
 end
 
