@@ -20,31 +20,25 @@ env.AddComponentPostInit("spellcaster", function(self)
     end
 end)
 
---[[local ignoredactions = {ACTIONS.LOOKAT, ACTIONS.WALKTO}
-local function CheckActions(doer, target)
-    local actions = doer.components.playeractionpicker and doer.components.playeractionpicker:GetSceneActions(target, true)
-    local count = 0
-    if actions then
-        for k, v in pairs(actions) do
-            if not table.contains(ignoredactions, v.action) then
-                count = count + 1
-            end
-        end
-    end
-    return count >= 1
-end]]
-
 local UpvalueHacker = require("tools/upvaluehacker")
 env.AddSimPostInit(function()
     local COMPONENT_ACTIONS = UpvalueHacker.GetUpvalue(EntityScript.CollectActions, "COMPONENT_ACTIONS")
     if COMPONENT_ACTIONS then
-        local --[[POINT,]] EQUIPPED = --[[COMPONENT_ACTIONS.POINT,]] COMPONENT_ACTIONS.EQUIPPED
+        local POINT, EQUIPPED = COMPONENT_ACTIONS.POINT, COMPONENT_ACTIONS.EQUIPPED
+		if POINT then
+            local _POINT_spellcaster_fn = POINT["spellcaster"]
+            if _POINT_spellcaster_fn then
+                POINT["spellcaster"] = function(inst, doer, pos, actions, right, target, ...)
+                    if inst.um_cantcastontarget and right and inst:um_cantcastontarget(doer, pos, target, UMCommonFns.CanOverrideAction(doer.components.playeractionpicker and doer.components.playeractionpicker:GetPointSpecialActions(pos, nil, true))) then return end
+                    return _POINT_spellcaster_fn(inst, doer, pos, actions, right, target, ...)
+                end
+            end
+		end
         if EQUIPPED then
             local _EQUIPPED_spellcaster_fn = EQUIPPED["spellcaster"]
             if _EQUIPPED_spellcaster_fn then
                 EQUIPPED["spellcaster"] = function(inst, doer, target, actions, right, ...)
-                    --[[if inst:HasTag("um_checksceneactions") and doer.components.playercontroller
-                        and not doer.components.playercontroller:IsControlPressed(CONTROL_FORCE_INSPECT) and CheckActions(doer, target) then return end]]
+                    if inst.um_cantcastontarget and right and inst:um_cantcastontarget(doer, nil, target, doer.components.playeractionpicker and UMCommonFns.CanOverrideAction(doer.components.playeractionpicker:GetSceneActions(target, true), doer.components.playeractionpicker:GetSceneActions(target))) then return end
                     if CantCastOnTarget(inst, target, true) then return end
                     return _EQUIPPED_spellcaster_fn(inst, doer, target, actions, right, ...)
                 end

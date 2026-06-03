@@ -73,6 +73,29 @@ UMCommonFns.VetcurseUnequip = function(inst, owner, slot)
     end
 end
 
+UMCommonFns.GetLMBActionIsAction = function(leftactions, action)
+    if leftactions then
+        for k, v in pairs(leftactions) do
+            if v.action == action then
+                return true
+            end
+        end
+    end
+end
+
+local ignoredactions = {ACTIONS.LOOKAT, ACTIONS.WALKTO}
+UMCommonFns.CanOverrideAction = function(rightactions, leftactions)
+    local count = 0
+    if rightactions then
+        for k, v in pairs(rightactions) do
+            if not table.contains(ignoredactions, v.action) and not UMCommonFns.GetLMBActionIsAction(leftactions, v.action) then
+                count = count + 1
+            end
+        end
+    end
+    return count >= 1
+end
+
 -- Unified megaflare timer reduction used by all seasonal boss spawners
 UMCommonFns.MegaFlareTimerReduction = function(time)
     if time > 480 * 8 then
