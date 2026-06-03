@@ -256,9 +256,11 @@ local function LongUpdate(inst, dt)
     end
 end
 local function TryColdness(v)
-    if v.components.moisture ~= nil and not v:HasTag("weerclops") then
-        if v.components.inventory ~= nil and (v.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) ~= nil and v.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY).prefab ~= "beargervest" or v.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) == nil) or v.components.inventory == nil then
-            v.components.moisture:DoDelta(5)
+    if v.components.temperature and not v:HasTag("weerclops") then
+        if v.components.inventory and (v.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) and
+            v.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY).prefab ~= "beargervest" or
+            v.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) == nil) or v.components.inventory == nil then
+                v.components.temperature:DoDelta(-5)
         end
     end
 end
@@ -295,15 +297,13 @@ local function onpickedfn(inst, picker)
             if picker.components.talker and picker == ThePlayer then
                 ThePlayer.components.talker:Say(GetString(ThePlayer.prefab, "ANNOUNCE_COLD"))
             end
-
             picker.components.moisture:DoDelta(15)
         end
 
         if picker.components.temperature ~= nil then
-            picker.components.temperature:DoDelta(-20)
-            if picker.components.temperature.current > -3 then
-                picker.components.temperature:SetTemperature(-3)
-            end
+            local winterInsulation,summerInsulation = picker.components.temperature:GetInsulation()
+            local temp = winterInsulation <= 0 and -20 or -20*(winterInsulation / 30)
+            picker.components.temperature:DoDelta(temp)
         end
     end
 
