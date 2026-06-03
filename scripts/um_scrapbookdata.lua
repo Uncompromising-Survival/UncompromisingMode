@@ -90,8 +90,6 @@ local data = {
     --hooded forest
     hoodedtrapdoor = { name = "hoodedtrapdoor", tex = "hoodedtrapdoor.tex", type = "thing", prefab = "hoodedtrapdoor", build = "rock_flipping_moss", bank = "flipping_rock", anim = "idle", workable = "MINE", deps = { "rocks", "spider_trapdoor_hooded" }, use_bg = true },
 
-    --broiling
-
     --misc.
     trapdoor = { name = "trapdoor", tex = "trapdoor.tex", type = "thing", prefab = "trapdoor", build = "trapdoor", bank = "trapdoor", anim = "idle", workable = "MINE", deps = { "rocks", "spider_trapdoor" }, use_bg = true},
     spider_trapdoor = { name = "spider_trapdoor", tex = "spider_trapdoor.tex", subcat = "spider", type = "creature", prefab = "spider_trapdoor", sanityaura = -0.66666666666667, health = 400, damage = 34, build = "spider_trapdoor", bank = "spider", anim = "idle", perishable = 2400, deps = { "monstermeat", "spidergland", "trapdoor", "trapdoorgrass" }, use_bg = true },

@@ -40,6 +40,40 @@ for k, v in pairs(crabclaw_gem_colours) do
     }
 end
 
+
+local turfs = {
+    um_hotspring_grass = { "twigs", "ice" },
+    um_magma = { "rocks", "firenettles_dried" },
+    um_hotspring_whiterock = { "rocks", "marble" },
+    um_hotspring_yellowrock = { "rocks", "nitre" },
+    magma_grass = { "rocks", "firenettles" },
+    hoodedfoliage = { "cutgrass", "seeds" },
+    hoodedfoliage_dark = { "twigs", "seeds" },
+    hoodedmoss = { "twigs", "um_moss" },
+    ancienthoodedturf = { "turf_hoodedmoss", "moonrocknugget" },
+}
+
+for name, deps in pairs(turfs) do
+    local data = {
+        name = "turf_" .. name,
+        tex = "turf_" .. name .. ".tex",
+        subcat = "turf",
+        type = "item",
+        prefab = "turf_" .. name,
+        stacksize = 20,
+        build = "hfturf",
+        bank = "hfturf",
+        anim = name,
+        fueltype = "BURNABLE",
+        fuelvalue = 7.5,
+        burnable = true,
+        deps = ConcatArrays({ "turfcraftingstation" }, deps),
+        specialinfo = "TURF"
+    }
+
+    um_scrapbookdata["turf_" .. name] = data
+end
+
 for name, data in pairs(um_scrapbookdata) do
     if data.name == nil or data.name ~= nil and STRINGS.NAMES[string.upper(data.name)] == nil then
         print("WARNING! \"" .. name .. "\" has no name in strings")
@@ -48,6 +82,7 @@ for name, data in pairs(um_scrapbookdata) do
     scrapbook_prefabs[name] = true
     scrapbookdata[name] = data
 end
+
 
 local S = STRINGS.SCRAPBOOK.SPECIALINFO
 STRINGS.SCRAPBOOK.DATA_INFINITE_USES = "Infinite"
