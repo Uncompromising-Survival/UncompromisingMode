@@ -114,7 +114,7 @@ local function can_cast_fn(doer, target, pos, inst)
 end
 
 local function CantCastOnTarget(inst, doer, pos, target, actioncount)
-    return doer.components.playercontroller and not doer.components.playercontroller:IsControlPressed(CONTROL_FORCE_INSPECT) and actioncount
+    return actioncount
 end
 
 local function ToggleItemVetcurse(inst, toggle)
