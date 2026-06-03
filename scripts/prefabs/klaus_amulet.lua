@@ -4,12 +4,17 @@ local assets =
     Asset("ANIM", "anim/torso_amulets.zip"),
 }
 
+local function ShouldMockAttack(buffaction, owner, weapon, target)
+    return (not buffaction or not buffaction.mockattack) and not owner.components.rider:IsRiding()
+        and (not weapon or weapon.components.weapon and not (weapon.components.projectile or weapon:HasTag("rangedweapon")))
+        and target.components.combat and not target.components.combat:ShouldRecoil(owner, weapon)
+end
+
 local function DoubleSlap(owner, data)
     local target, weapon = data and data.target, data and data.weapon
     local buffaction = owner:GetBufferedAction()
     if buffaction and buffaction.mockattack and owner.sg:HasStateTag("busy") then owner.sg:RemoveStateTag("busy") end
-    if (not buffaction or not buffaction.mockattack) and not owner.components.rider:IsRiding()
-        and (not weapon or weapon.components.weapon and not (weapon.components.projectile or weapon:HasTag("rangedweapon"))) then
+    if ShouldMockAttack(buffaction, owner, weapon, target) then
         owner:DoTaskInTime(0, function() -- Target can change during this task.
             local act = BufferedAction(owner, target, ACTIONS.ATTACK)
             if act and target and target:IsValid() and not (target.components.health and target.components.health:IsDead()) then
