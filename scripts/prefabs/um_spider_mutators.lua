@@ -1,5 +1,5 @@
 local prefabs = {}
-local mutator_targets = 
+local mutator_targets =
 {
     "trapdoor",
 }
@@ -31,7 +31,7 @@ local function MakeMutatorFn(mutator_target)
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-	
+
     inst:AddComponent("stackable")
 
     inst:AddComponent("edible")

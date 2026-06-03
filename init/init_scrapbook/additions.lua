@@ -1,3 +1,5 @@
+--    TheScrapbookPartitions:DebugUnlockEverything()
+
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
@@ -46,12 +48,6 @@ for name, data in pairs(um_scrapbookdata) do
     scrapbook_prefabs[name] = true
     scrapbookdata[name] = data
 end
-
---TODO: REMOVE ME BEFORE MERGING TO BETA.
-if TheScrapbookPartitions ~= nil then
-    TheScrapbookPartitions:DebugUnlockEverything()
-end
---TODO: REMOVE ME BEFORE MERGING TO BETA.
 
 local S = STRINGS.SCRAPBOOK.SPECIALINFO
 STRINGS.SCRAPBOOK.DATA_INFINITE_USES = "Infinite"

@@ -612,7 +612,11 @@ local scrapbook_icons = {
     "moonmaw_dragonfly",
     "moonmaw_lavae",
     "webbedcreature",
-    "spider_trapdoor_hooded"
+    "spider_trapdoor_hooded",
+    "hoodedtrapdoor",
+    "spider_trapdoor",
+    "trapdoorgrass",
+    "trapdoor"
 }
 
 for _, item in ipairs(scrapbook_icons) do

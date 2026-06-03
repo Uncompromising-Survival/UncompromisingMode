@@ -59,12 +59,12 @@ local data = {
     silken_bundle = { name = "silken_bundle", tex = "silken_bundle_large.tex", type = "item", prefab = "silken_bundle", build = "um_silken_bundle", bank = "um_silken_bundle", anim = "idle_large", burnable = true, deps = { "ash", "silk", "silksack" } },
 
     --bosses
-    hoodedwidow = { name = "hoodedwidow", sanityaura = -TUNING.SANITYAURA_HUGE, tex = "hoodedwidow.tex", type = "giant", prefab = "hoodedwidow", health = TUNING.DSTU.WIDOW_HEALTH, damage = "75-150", build = "widow1", bank = "widow", anim = "idle", deps = { "widowsgrasp", "monstermeat", "widowshead", "spider"}, use_bg = true },
+    hoodedwidow = { name = "hoodedwidow", sanityaura = -TUNING.SANITYAURA_HUGE, tex = "hoodedwidow.tex", type = "giant", prefab = "hoodedwidow", health = TUNING.DSTU.WIDOW_HEALTH, damage = "75-150", build = "widow1", bank = "widow", anim = "idle", deps = { "widowsgrasp", "monstermeat", "widowshead", "spider" }, use_bg = true },
     moonmaw_dragonfly = { name = "moonmaw_dragonfly", sanityaura = TUNING.SANITYAURA_HUGE, tex = "moonmaw_dragonfly.tex", type = "giant", prefab = "moonmaw_dragonfly", health = TUNING.DSTU.MOONFLY_HEALTH, damage = "75-150", build = "moonmaw_dragonfly", bank = "moonmaw_dragonfly", anim = "idle", deps = { "meat", "glass_scales", "moonglass_geode", "moonmaw_lavae" }, use_bg = true, notes = { lunar_aligned = true } },
     mock_dragonfly = { name = "mock_dragonfly", sanityaura = -TUNING.SANITYAURA_HUGE, tex = "mock_dragonfly.tex", type = "giant", prefab = "mock_dragonfly", health = TUNING.DSTU.WILTFLY_HEALTH, damage = "75-150", build = "dragonfly_fire_build", bank = "dragonfly", anim = "idle", deps = { "dragon_scales", "meat" }, use_bg = true },
     --different icon for mock_dragonfly so they're distinguished from normal dfly
 
-    --widow
+    --widow-related
     widowsgrasp = { name = "widowsgrasp", tex = "widowsgrasp.tex", weapondamage = TUNING.DSTU.WIDOWSGRASP_DAMAGE, finiteuses = TUNING.DSTU.WIDOWSGRASP_USES, type = "item", prefab = "widowsgrasp", build = "widowsgrasp", bank = "widowsgrasp", anim = "idle", deps = { "hoodedwidow", "webbedcreature" } },
     widowshead = { name = "widowshead", tex = "widowshead.tex", type = "item", perishable = 7.5 * TUNING.PERISH_TWO_DAY, prefab = "widowshead", build = "catcoonhat", bank = "hat_widowshead", anim = "idle", deps = { "hoodedwidow" } },
     webbedcreature = { name = "webbedcreature", tex = "webbedcreature.tex", type = "creature", prefab = "webbedcreature", build = "wackycocoons", bank = "wackycocoons", anim = "idle_medium_scrapbook", deps = { "hoodedwidow", "widowsgrasp" }, use_bg = true },
@@ -79,22 +79,24 @@ local data = {
 
     --bee queen
     um_beeguard_seeker = { name = "um_beeguard_seeker", tex = "um_beeguard_seeker.tex", subcat = "insect", type = "creature", prefab = "um_beeguard_seeker", health = 180 * 0.5, damage = 15, build = "fatbee_guard_build", bank = "bee_guard", anim = "idle", animoffsety = 100, deps = { "beequeen", "stinger" }, use_bg = true },
-    um_beeguard_shooter = { name = "um_beeguard_shooter", tex = "um_beeguard_shooter.tex", subcat = "insect", type = "creature", prefab = "bulletbee_guard", health = 180 * 0.5, damage = 15, build = "fatbee_guard_build", bank = "bee_guard", anim = "idle", animoffsety = 100, deps = { "beequeen", "stinger" }, use_bg = true },
+    um_beeguard_shooter = { name = "um_beeguard_shooter", tex = "um_beeguard_shooter.tex", subcat = "insect", type = "creature", prefab = "um_beeguard_shooter", health = 180 * 0.5, damage = 15, build = "bulletbee_guard", bank = "bee_guard", anim = "idle", animoffsety = 100, deps = { "beequeen", "stinger" }, use_bg = true },
     um_beeguard_blocker = { name = "um_beeguard_blocker", tex = "um_beeguard_blocker.tex", subcat = "insect", type = "creature", prefab = "um_beeguard_blocker", health = 180 * 15, damage = 15, build = "hivehead_bee_guard", bank = "bee_guard", anim = "idle", animoffsety = 100, deps = { "beequeen", "stinger" }, use_bg = true },
 
     -- lunar/grotto
     um_bee_moon = { name = "um_bee_moon", tex = "um_bee_moon.tex", subcat = "insect", type = "creature", prefab = "um_bee_moon", health = 250, damage = 34, stacksize = 20, build = "um_bee_moon", bank = "um_bee_moon", anim = "idle", animoffsety = 150, perishable = 960, workable = "NET", deps = { "um_meathoney", "houndstooth" }, notes = { lunar_aligned = true } },
     um_astral_projector = { name = "um_astral_projector", tex = "um_astral_projector.tex", subcat = "structure", type = "thing", prefab = "um_astral_projector", build = "um_archives_projectinator", bank = "um_archives_projectinator", anim = "idle", workable = "HAMMER", deps = { "um_astral_projector_target", "purplemooneye", "thulecite", "moonrocknugget" } },
-    um_astral_projector_target = { name = "um_astral_projector_target", tex = "um_astral_projector_target.tex", subcat = "structure", type = "thing", prefab = "um_astral_projector_target", build = "um_archives_receptionator", bank = "um_archives_receptionator", anim = "idle", workable = "HAMMER", deps = { "moonglass", "thulecite", "moonrocknugget" } }
+    um_astral_projector_target = { name = "um_astral_projector_target", tex = "um_astral_projector_target.tex", subcat = "structure", type = "thing", prefab = "um_astral_projector_target", build = "um_archives_receptionator", bank = "um_archives_receptionator", anim = "idle", workable = "HAMMER", deps = { "moonglass", "thulecite", "moonrocknugget" } },
 
     --hooded forest
-    
+    hoodedtrapdoor = { name = "hoodedtrapdoor", tex = "hoodedtrapdoor.tex", type = "thing", prefab = "hoodedtrapdoor", build = "rock_flipping_moss", bank = "flipping_rock", anim = "idle", workable = "MINE", deps = { "rocks", "spider_trapdoor_hooded" }, use_bg = true },
 
     --broiling
 
     --misc.
-
-
+    trapdoor = { name = "trapdoor", tex = "trapdoor.tex", type = "thing", prefab = "trapdoor", build = "trapdoor", bank = "trapdoor", anim = "idle", workable = "MINE", deps = { "rocks", "spider_trapdoor" }, use_bg = true},
+    spider_trapdoor = { name = "spider_trapdoor", tex = "spider_trapdoor.tex", subcat = "spider", type = "creature", prefab = "spider_trapdoor", sanityaura = -0.66666666666667, health = 400, damage = 34, build = "spider_trapdoor", bank = "spider", anim = "idle", perishable = 2400, deps = { "monstermeat", "spidergland", "trapdoor", "trapdoorgrass" }, use_bg = true },
+    mutator_trapdoor = { name = "mutator_trapdoor", tex = "mutator_trapdoor.tex", subcat = "mutator", type = "food", prefab = "mutator_trapdoor", stacksize = 20, hungervalue = 12.5, healthvalue = -3, sanityvalue = -10, foodtype = "MEAT", build = "um_spider_mutators", bank = "um_spider_mutators", anim = "trapdoor", fueltype = "BURNABLE", fuelvalue = 15, burnable = true, craftingprefab = "webber", deps = { "cutgrass", "monstermeat", "spidergland", "spider_trapdoor" } },
+    trapdoorgrass = { name = "trapdoorgrass", tex = "trapdoorgrass.tex", type = "thing", prefab = "trapdoorgrass", build = "trapdoorgrass", bank = "trapdoorgrass", anim = "idle", workable = "DIG", pickable = true, burnable = true, deps = { "cutgrass", "dug_grass", "trapdoor" }, use_bg = true, animoffsety=-20},
 }
 
 return data
