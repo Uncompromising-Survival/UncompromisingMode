@@ -152,7 +152,7 @@ end
 function SnowOver:GetAlpha()
     local x, y, z = self.owner.Transform:GetWorldPosition()
     local equationdingus = 0
-    for k, v in pairs(TheSim:FindEntities(x, y, z, 6, nil, nil, {"wall", "fire", "shelter", "snowstorm_protection_high"})) do
+    for k, v in pairs(TheSim:FindEntities(x, y, z, 6, nil, nil, {"wall", "fire", "shelter", "snowstorm_protection_high", "snowpileblocker"})) do
         equationdingus = equationdingus + (v:HasTag("wall") and .25 or 0) + (v:HasTag("fire") and .6 or 0)
             + (v:HasTag("shelter") and .15 or 0) + (v:HasTag("snowstorm_protection_high") and .8 or 0)
     end

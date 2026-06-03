@@ -129,6 +129,8 @@ env.AddStategraphPostInit("wilson", function(inst)
                 v:AddTag("wixieshoved")
                 SpawnPrefab("round_puff_fx_sm").Transform:SetPosition(v.Transform:GetWorldPosition())
 
+                inst.sg.statemem.recoilstate = "attack_recoil"
+                inst:PushEventImmediate("recoil_off", { target = v })
                 inst.components.combat:DoAttack(v, nil, nil, nil, 76.5 / 59.5, 4)
 
                 if v.components.locomotor ~= nil and not v:HasAnyTag(NO_SHOVE_TAGS) then
@@ -169,9 +171,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                     v:RemoveTag("wixieshoved")
                 end)
 
-
-                inst.sg.statemem.recoilstate = "attack_recoil"
-                inst:PushEventImmediate("recoil_off", { target = v })
                 break --only hit once
             end
         end
@@ -276,13 +275,14 @@ env.AddStategraphPostInit("wilson", function(inst)
                 elseif action.invobject:HasTag("beegun") then
                     return "collectthebees"
                 elseif action.invobject:HasTag("shieldofterror") then
-                    if inst:HasTag("vetcurse") and action.invobject.components.rechargeable:IsCharged() and (inst.components.rider and not inst.components.rider:IsRiding() or inst.components.rider == nil) then
+                    if inst:HasTag("vetcurse") and action.invobject.components.rechargeable:IsCharged() and action.invobject.components.equippable:IsEquipped() and (inst.components.rider and not inst.components.rider:IsRiding() or inst.components.rider == nil) then
                         return "um_shield_charge"
                     else
                         return
                     end
                 end
             end
+
             return _OldSpellCast(inst, action, ...)
         end
 

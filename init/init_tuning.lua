@@ -210,6 +210,8 @@ TUNING.DSTU = {
     REGSPIDERJUMP = GetModConfigData("alljumperspiders"),
     SPIDERWARRIORCOUNTER = GetModConfigData("spiderwarriorcounter"),
     TRAPDOORSPIDERS = GetModConfigData("trapdoorspiders"),
+    -- Merms
+    MERMTWEAKS = GetModConfigData("mermtweaks"),
     -- Perishable Increase
     --PERISHABLETIME = GetModConfigData("more perishing"),
     -- Fire Loot Rework
@@ -345,7 +347,7 @@ TUNING.DSTU = {
     MUSHROOM_CHANGES = GetModConfigData("mushroom_changes"),
     ALL_MUST_BE_GATHERED = false,
     WATERING_TEMPERATURE = GetModConfigData("watering_thermal"),
-	BATH_BOMB = GetModConfigData("bath_heal"),
+    BATH_BOMB = GetModConfigData("bath_heal"),
     KLAUS_AMULET_SECOND_HIT_DAMAGE_MULT = 0.75,
     KLAUS_AMULET_ABSORPTION = 0.3,
     ORANGESTAFF_COOLDOWN_1 = 5,
@@ -355,7 +357,7 @@ TUNING.DSTU = {
     ORANGESTAFF_DISTANCE_2 = 16,
     KOALEFANT_HEALTH = 2000,
     KOALEFANT_STOMP_COUNTERATTACK = {MIN = 8, MAX = 12},
-	SNAILDRAKEHAT_FIRE_RESIST = 0.75,
+    SNAILDRAKEHAT_FIRE_RESIST = 0.75,
 
     ----------------------------------------------------------------------------
     -- Dynamic Boss Resistance
@@ -439,7 +441,7 @@ TUNING.DSTU = {
     TELESTAFF_REWORK = GetModConfigData("telestaff_rework"),
     BEEBOX_NERF = GetModConfigData("beebox_nerf"),
     CANEDURABILITY = GetModConfigData("cane_durability"),
-	COOLDOWN_ORANGESTAFF = GetModConfigData("cooldown_orangestaff"),
+    COOLDOWN_ORANGESTAFF = GetModConfigData("cooldown_orangestaff"),
     --AC_COOLING = GetModConfigData("ac_does_ac"),
     HARDER_SPIDERQUEEN = GetModConfigData("harder_spider_queen"),
     HARDER_MOOSE = GetModConfigData("harder_moose"),
@@ -495,6 +497,7 @@ TUNING.DSTU = {
     SLOBBERLOBBER_COOLDOWN = 45,
     CRYSTAL_CURSED_ANTLER_COOLDOWN = 5,
     SHIELDOFTERROR_COOLDOWN = 5,
+    CASTSPELL_OVERRIDECONTROL = GLOBAL.CONTROL_FORCE_ATTACK,
 
     -- Shadow Damage tuning
     RUINSNIGHTMARE_DAMAGE = 75,

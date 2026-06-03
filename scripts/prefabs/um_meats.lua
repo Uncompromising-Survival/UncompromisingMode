@@ -141,7 +141,7 @@ local function um_leafwing()
     inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
 
     inst.components.perishable:SetPerishTime(TUNING.PERISH_FAST)
-	
+
     inst:AddComponent("fuel")
     inst.components.fuel.fuelvalue = TUNING.LARGE_FUEL
 

@@ -94,6 +94,10 @@ local function CommonFunctions(inst, sound, anim)
     end
 end
 
+local function OnCharged(inst)
+	inst.SoundEmitter:PlaySound("terraria1/eyeofterror/charge", nil, .3)
+end
+
 local function OnAttack(inst, attacker, target)
     local efficientuser = attacker.components.efficientuser and attacker.components.efficientuser:GetMultiplier(ACTIONS.ATTACK) or 1
     local useMult = efficientuser * inst.components.weapon.attackwearmultipliers:Get()
@@ -107,6 +111,10 @@ end
 
 local function can_cast_fn(doer, target, pos, inst)
     return inst.components.rechargeable:IsCharged()
+end
+
+local function CantCastOnTarget(inst, doer, pos, target, actioncount)
+    return actioncount
 end
 
 local function ToggleItemVetcurse(inst, toggle)
@@ -142,6 +150,8 @@ env.AddPrefabPostInit("shieldofterror", function(inst)
     CommonClientFunctions(inst)
     inst:AddTag("shieldofterror")
 
+	inst.um_cantcastontarget = CantCastOnTarget
+
     inst._vetcurseupgraded = net_bool(inst.GUID, "shieldofterror.vetcurse", "vetcursedirty")
     inst._vetcurseupgraded:set(false)
 
@@ -163,6 +173,7 @@ env.AddPrefabPostInit("shieldofterror", function(inst)
     CommonFunctions(inst, "eye_shield", "idle")
 
     local rechargeable = inst.components.rechargeable or inst:AddComponent("rechargeable")
+	inst.components.rechargeable:SetOnChargedFn(OnCharged)
 
     inst.UMToggleItemVetcurse = ToggleItemVetcurse
 

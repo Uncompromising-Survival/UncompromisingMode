@@ -1,5 +1,9 @@
 -- From Craft Pot --
 
+if TheNet:IsDedicated() or not KnownModIndex:IsModEnabled("workshop-727774324")  then
+    return
+end
+
 -- define or redefine global variable to store tag data
 global("FOODTAGDEFINITIONS")
 FOODTAGDEFINITIONS = FOODTAGDEFINITIONS or {}
