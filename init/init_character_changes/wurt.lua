@@ -42,7 +42,7 @@ for _, prefab in ipairs(lunar_merms) do
 
 		local _OnChangedLeaderLunar = inst.components.follower.OnChangedLeader
 
-		local function OnChangedLeaderLunar(inst, new_leader, prev_leaderm, ...)
+		local function OnChangedLeaderLunar(inst, new_leader, prev_leader, ...)
 			if TUNING.DSTU.MERMTWEAKS then
 				return
 			else
