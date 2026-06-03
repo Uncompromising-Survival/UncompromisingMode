@@ -599,7 +599,20 @@ local scrapbook_icons = {
     "um_sinkmound_rock_gemless",
     "um_slimestone_rock",
     "um_slimestone_rock_gemless",
-    "icon_curseditem"
+    "icon_curseditem",
+    "um_astral_projector",
+    "um_astral_projector_target",
+    "mock_dragonfly",
+    "um_beeguard_seeker",
+    "um_beeguard_shooter",
+    "um_beeguard_blocker",
+    "bulletbee",
+    "veteranshrine",
+    "hoodedwidow",
+    "moonmaw_dragonfly",
+    "moonmaw_lavae",
+    "webbedcreature",
+    "spider_trapdoor_hooded"
 }
 
 for _, item in ipairs(scrapbook_icons) do

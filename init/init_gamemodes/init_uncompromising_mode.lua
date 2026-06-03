@@ -95,8 +95,8 @@ modimport("init/init_gemology/misc") -- AXE Monkeys angering when you mine slime
 modimport("init/init_gemology/trades")
 
 --scrapbook
-modimport("init/init_scrapbook/additions")
 modimport("init/init_scrapbook/changes")
+modimport("init/init_scrapbook/additions") --run add before changes to overwrite tooltip strings.
 modimport("init/init_scrapbook/gemology")
 
 --if GetModConfigData("harder_monsters") then

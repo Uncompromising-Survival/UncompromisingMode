@@ -66,15 +66,15 @@ end
 local function ToggleCurse(inst, doer)
     if doer.components.debuffable then
         if not doer.vetcurse then
-            local sounds = {"common/teleportato/teleportato_maxwelllaugh", "sanity/creature2/taunt"}
+            local sounds = { "common/teleportato/teleportato_maxwelllaugh", "sanity/creature2/taunt" }
             for _, sound in pairs(sounds) do
-                doer.SoundEmitter:PlaySound("dontstarve/"..sound)
+                doer.SoundEmitter:PlaySound("dontstarve/" .. sound)
             end
             --doer.components.debuffable:AddDebuff("buff_vetcurse", "buff_vetcurse")
             if doer.UMToggleVetCurse then doer:UMToggleVetCurse(true) end
-            doer:PushEvent("foodbuffattached", {buff = "ANNOUNCE_ATTACH_BUFF_VETCURSE", 1})
+            doer:PushEvent("foodbuffattached", { buff = "ANNOUNCE_ATTACH_BUFF_VETCURSE", 1 })
             local x, y, z = inst.Transform:GetWorldPosition()
-            local fxlist = {"statue_transition_2", "statue_transition"}
+            local fxlist = { "statue_transition_2", "statue_transition" }
             for _, fx in pairs(fxlist) do
                 local fx = _G.Prefabs[fx] and SpawnPrefab(fx)
                 if fx then
@@ -103,9 +103,9 @@ local function OnActivate(inst, doer)
             ToggleCurse(inst, doer)
 
             -- Watermelon lantern easter egg
-            if doer.components.inventory:HasItemThatMatches(function(item) return item.prefab == "watermelon" end,2) then
+            if doer.components.inventory:HasItemThatMatches(function(item) return item.prefab == "watermelon" end, 2) then
                 doer.components.builder:UnlockRecipe("watermelon_lantern")
-                doer:PushEvent("learnrecipe", {teacher = inst, recipe = "watermelon_lantern"})
+                doer:PushEvent("learnrecipe", { teacher = inst, recipe = "watermelon_lantern" })
                 inst.components.talker:Say("Nice melons. Have some forbidden knowledge.") --LOOOOOLLL so dum -CB
             end
         end
@@ -126,7 +126,7 @@ local function ToggleCursee(inst)
             title = STRINGS.VETS_CONFIRMED_TITLE
             bodytext = STRINGS.VETS_CONFIRMED
         end
-        local bpds = BigPopupDialogScreen(title, bodytext, {{text = STRINGS.VETS_OK, cb = pop_screen}})
+        local bpds = BigPopupDialogScreen(title, bodytext, { { text = STRINGS.VETS_OK, cb = pop_screen } })
         bpds.title:SetPosition(0, 90, 0)
         bpds.text:SetPosition(0, -15, 0)
 
@@ -140,7 +140,7 @@ end
 
 local function fn(Sim)
     local inst = CreateEntity()
-    
+
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
@@ -153,20 +153,25 @@ local function fn(Sim)
     inst.AnimState:PlayAnimation("idle", true)
 
     --inst.GetActivateVerb = GetVerb
-    
+
+    if not TheNet:IsDedicated() then
+        inst:AddComponent("pointofinterest")
+        inst.components.pointofinterest:SetHeight(-1)
+    end
+
     inst.Cursee = net_entity(inst.GUID, "SetCursee.plyr", "SetCurseedirty")
 
     inst:DoTaskInTime(0, RegisterNetListeners)
-    
+
     MakeObstaclePhysics(inst, 1)
 
     inst.entity:SetPristine()
 
     inst:AddComponent("talker")
-    inst.components.talker.colour = Vector3(252/255, 226/255, 219/255)
+    inst.components.talker.colour = Vector3(252 / 255, 226 / 255, 219 / 255)
     inst.components.talker.offset = Vector3(0, -500, 0)
     inst.components.talker:MakeChatter()
-    inst.components.talker.lineduration = TUNING.HERMITCRAB.SPEAKTIME * 2 -0.5
+    inst.components.talker.lineduration = TUNING.HERMITCRAB.SPEAKTIME * 2 - 0.5
     if LOC.GetTextScale() == 1 then
         inst.components.talker.fontsize = 30
     end

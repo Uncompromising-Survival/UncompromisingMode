@@ -21,7 +21,7 @@ local SEARCH_BOX_WIDTH = 300
 local FILLER = "zzzzzzz"
 local UNKNOWN = "unknown"
 
-local UK_TINT = {0.5, 0.5, 0.5, 1}
+local UK_TINT = { 0.5, 0.5, 0.5, 1 }
 local left = 0
 local height = 0
 local title_space = 5
@@ -38,7 +38,25 @@ local GEM_DEFS = require("gemology_defs").GEM_DEFS
 local GEM_LOOKUP = require("gemology_defs").GEM_LOOKUP
 
 -- TODO: MOVE THIS
-STRINGS.SCRAPBOOK.SPECIALINFO.GEM_UPGRADING = {GEM_UPGRADING = "Can be fed to several creatures to attempt a quality increase, with differing effects and consequences.", UM_GEMOLOGYREDGEM1 = "Favored by Snaildrakes, not favored by Slurtles and Antlion", UM_GEMOLOGYREDGEM2 = "Favored by Snaildrakes, not favored by Slurtles and Antlion.", UM_GEMOLOGYGREENGEM1 = "Favored by Slurtles.", UM_GEMOLOGYGREENGEM2 = "Favored by Slurtles.", UM_GEMOLOGYORANGEGEM1 = "Favored by Antlion.", UM_GEMOLOGYORANGEGEM2 = "Favored by Antlion.", UM_GEMOLOGYPALEGEM1 = "Favored by Rock Lobsters.", UM_GEMOLOGYPALEGEM2 = "Favored by Rock Lobsters.", UM_GEMOLOGYBLUEGEM1 = "Favored by Abominamoles, not favored by Snaildrakes and Antlion.", UM_GEMOLOGYBLUEGEM2 = "Favored by Abominamoles, not favored by Snaildrakes and Antlion.", UM_GEMOLOGYYELLOWGEM1 = "Favored by NOT YET IMPLEMENTED", UM_GEMOLOGYYELLOWGEM2 = "Favored by NOT YET IMPLEMENTED", UM_GEMOLOGYPURPLEGEM1 = "Favored by NOT YET IMPLEMENTED", UM_GEMOLOGYPURPLEGEM2 = "Favored by NOT YET IMPLEMENTED"}
+STRINGS.SCRAPBOOK.SPECIALINFO.GEM_UPGRADING = {
+    GEM_UPGRADING = "Can be fed to several creatures to attempt a quality increase, with differing effects and consequences.",
+    UM_GEMOLOGYREDGEM1 = "Favored by Snaildrakes, not favored by Slurtles and Antlion",
+    UM_GEMOLOGYREDGEM2 = "Favored by Snaildrakes, not favored by Slurtles and Antlion.",
+    UM_GEMOLOGYGREENGEM1 = "Favored by Slurtles.",
+    UM_GEMOLOGYGREENGEM2 = "Favored by Slurtles.",
+    UM_GEMOLOGYORANGEGEM1 = "Favored by Antlion.",
+    UM_GEMOLOGYORANGEGEM2 =
+    "Favored by Antlion.",
+    UM_GEMOLOGYPALEGEM1 = "Favored by Rock Lobsters.",
+    UM_GEMOLOGYPALEGEM2 = "Favored by Rock Lobsters.",
+    UM_GEMOLOGYBLUEGEM1 = "Favored by Abominamoles, not favored by Snaildrakes and Antlion.",
+    UM_GEMOLOGYBLUEGEM2 = "Favored by Abominamoles, not favored by Snaildrakes and Antlion.",
+    UM_GEMOLOGYYELLOWGEM1 = "Favored by NOT YET IMPLEMENTED",
+    UM_GEMOLOGYYELLOWGEM2 = "Favored by NOT YET IMPLEMENTED",
+    UM_GEMOLOGYPURPLEGEM1 = "Favored by NOT YET IMPLEMENTED",
+    UM_GEMOLOGYPURPLEGEM2 =
+    "Favored by NOT YET IMPLEMENTED"
+}
 
 local function GetKnownNameFromGem(name)
     if GEM_DEFS[name] == nil then
@@ -63,16 +81,16 @@ local function GetPeriodString(period)
         local minutes = math.floor(period / 60 * 100) / 100
 
         if minutes < 1 then
-            return subfmt(STRINGS.SCRAPBOOK.DATA_TIME, {time = period, txt = STRINGS.SCRAPBOOK.DATA_SECONDS})
+            return subfmt(STRINGS.SCRAPBOOK.DATA_TIME, { time = period, txt = STRINGS.SCRAPBOOK.DATA_SECONDS })
         end
 
-        return subfmt(STRINGS.SCRAPBOOK.DATA_TIME, {time = minutes, txt = (minutes <= 1 and STRINGS.SCRAPBOOK.DATA_MINUTE or STRINGS.SCRAPBOOK.DATA_MINUTES)})
+        return subfmt(STRINGS.SCRAPBOOK.DATA_TIME, { time = minutes, txt = (minutes <= 1 and STRINGS.SCRAPBOOK.DATA_MINUTE or STRINGS.SCRAPBOOK.DATA_MINUTES) })
     else
-        return subfmt(STRINGS.SCRAPBOOK.DATA_TIME, {time = days, txt = (days <= 1 and STRINGS.SCRAPBOOK.DATA_DAY or STRINGS.SCRAPBOOK.DATA_DAYS)})
+        return subfmt(STRINGS.SCRAPBOOK.DATA_TIME, { time = days, txt = (days <= 1 and STRINGS.SCRAPBOOK.DATA_DAY or STRINGS.SCRAPBOOK.DATA_DAYS) })
     end
 end
 
-local FUELTYPE_SUBICON_LOOKUP = {[FUELTYPE.BURNABLE] = "icon_fuel_burnable.tex", [FUELTYPE.CAVE] = "icon_fuel_cavelight.tex", [FUELTYPE.CHEMICAL] = "icon_fuel_chemical.tex", [FUELTYPE.NIGHTMARE] = "icon_fuel_nightmare.tex", [FUELTYPE.WORMLIGHT] = "icon_fuel_wormlight.tex"}
+local FUELTYPE_SUBICON_LOOKUP = { [FUELTYPE.BURNABLE] = "icon_fuel_burnable.tex", [FUELTYPE.CAVE] = "icon_fuel_cavelight.tex", [FUELTYPE.CHEMICAL] = "icon_fuel_chemical.tex", [FUELTYPE.NIGHTMARE] = "icon_fuel_nightmare.tex", [FUELTYPE.WORMLIGHT] = "icon_fuel_wormlight.tex" }
 
 local FUELTYPE_SUBICONS = table.getkeys(FUELTYPE_SUBICON_LOOKUP)
 
@@ -115,7 +133,7 @@ end
 function ScrapbookScreen:MakeSideBar(...)
     _MakeSideBar(self, ...)
 
-    local buttonwidth = 252 / 2.2 -- 75
+    local buttonwidth = 252 / 2.2  -- 75
     local buttonheight = 112 / 2.2 -- 30
     local PANEL_WIDTH = 1000
     local PANEL_HEIGHT = 530
@@ -125,7 +143,7 @@ function ScrapbookScreen:MakeSideBar(...)
     local FILLER = "zzzzzzz"
     local UNKNOWN = "unknown"
 
-    local UK_TINT = {0.5, 0.5, 0.5, 1}
+    local UK_TINT = { 0.5, 0.5, 0.5, 1 }
 
     -- PANEL_HEIGHT
 
@@ -139,7 +157,7 @@ function ScrapbookScreen:MakeSideBar(...)
         local button = buttonwidget:AddChild(ImageButton("images/scrapbook.xml", "tab.tex"))
         button:ForceImageSize(buttonwidth, buttonheight)
         button.scale_on_focus = false
-        button.basecolor = {data.color[1], data.color[2], data.color[3]}
+        button.basecolor = { data.color[1], data.color[2], data.color[3] }
         button:SetImageFocusColour(math.min(1, data.color[1] * 1.2), math.min(1, data.color[2] * 1.2), math.min(1, data.color[3] * 1.2), 1)
         button:SetImageNormalColour(data.color[1], data.color[2], data.color[3], 1)
         button:SetImageSelectedColour(data.color[1], data.color[2], data.color[3], 1)
@@ -208,7 +226,7 @@ function ScrapbookScreen:MakeSideBar(...)
         table.insert(self.menubuttons, buttonwidget)
     end
 
-    MakeButton(7, {name = "gemology", filter = "gemology", color = {121 / 255, 72 / 255, 137 / 255}})
+    MakeButton(7, { name = "gemology", filter = "gemology", color = { 121 / 255, 72 / 255, 137 / 255 } })
 end
 
 env.AddClassPostConstruct("screens/redux/scrapbookscreen", function(self)
@@ -249,7 +267,7 @@ env.AddClassPostConstruct("screens/redux/scrapbookscreen", function(self)
                 suffix = "_tall"
             end
 
-            local materials = {"scrap", "scrap2"}
+            local materials = { "scrap", "scrap2" }
             if not tex then
                 tex = materials[self.PRNG:RandInt(#materials)] .. suffix .. ".tex"
             end
@@ -406,14 +424,14 @@ env.AddClassPostConstruct("screens/redux/scrapbookscreen", function(self)
         local setcustomblock = function(height, data)
             local panel = sub_root:AddChild(Widget("custompanel"))
             local bg
-            height, bg = setimageblock(height, {ignoreheightchange = true, widget = panel, source = "images/scrapbook.xml", tex = "scrap_square.tex"})
+            height, bg = setimageblock(height, { ignoreheightchange = true, widget = panel, source = "images/scrapbook.xml", tex = "scrap_square.tex" })
 
             local shade = 0.8 + self.PRNG:Rand() * 0.2
             bg:SetTint(shade, shade, shade, 1)
 
             local MARGIN = data.margin and data.margin or 15
             local textblock
-            height, textblock = settextblock(height, {str = data.str, width = data.width or nil, font = data.font or CHATFONT, size = data.size or 15, color = data.fontcolor or UICOLOURS.BLACK, leftmargin = MARGIN + 50, rightmargin = MARGIN + 50, leftoffset = -width / 2, ignoreheightchange = true, widget = panel})
+            height, textblock = settextblock(height, { str = data.str, width = data.width or nil, font = data.font or CHATFONT, size = data.size or 15, color = data.fontcolor or UICOLOURS.BLACK, leftmargin = MARGIN + 50, rightmargin = MARGIN + 50, leftoffset = -width / 2, ignoreheightchange = true, widget = panel })
             local pos_t = textblock:GetPosition()
             textblock:SetPosition(0, 0)
 
@@ -449,7 +467,7 @@ env.AddClassPostConstruct("screens/redux/scrapbookscreen", function(self)
         local cattitle
         if data and data.subcat then
             local subcat = STRINGS.SCRAPBOOK.SUBCATS[string.upper(data.subcat)]
-            height, cattitle = settextblock(height, {font = HEADERFONT, size = 25, str = subcat .. "/  ", color = UICOLOURS.GOLD, ignoreheightchange = true})
+            height, cattitle = settextblock(height, { font = HEADERFONT, size = 25, str = subcat .. "/  ", color = UICOLOURS.GOLD, ignoreheightchange = true })
         end
 
         local title
@@ -461,7 +479,7 @@ env.AddClassPostConstruct("screens/redux/scrapbookscreen", function(self)
         -- Get proper learned gem name.
         local name = data ~= nil and (GEM_DEFS[data.prefab] ~= nil and GetKnownNameFromGem(data.name) or STRINGS.NAMES[string.upper(data.name)]) or ""
 
-        height, title = settextblock(height, {font = HEADERFONT, size = 25, str = name, color = UICOLOURS.WHITE, leftoffset = leftoffset})
+        height, title = settextblock(height, { font = HEADERFONT, size = 25, str = name, color = UICOLOURS.WHITE, leftoffset = leftoffset })
 
         ------------------------------------
 
@@ -558,7 +576,7 @@ env.AddClassPostConstruct("screens/redux/scrapbookscreen", function(self)
             if data.damage then
                 makeentry("icon_damage.tex", tostring(checknumber(data.damage) and math.floor(data.damage) or data.damage))
                 if data.planardamage then
-                    makesubentry("+" .. math.floor(data.planardamage) .. STRINGS.SCRAPBOOK.DATA_PLANAR_DAMAGE)
+                    makesubentry("+" .. (tostring(checknumber(data.planardamage) and math.floor(data.planardamage) or data.planardamage) .. STRINGS.SCRAPBOOK.DATA_PLANAR_DAMAGE))
                 end
             end
 
@@ -609,9 +627,9 @@ env.AddClassPostConstruct("screens/redux/scrapbookscreen", function(self)
             end
 
             if showfood and data.hungervalue ~= nil and data.healthvalue ~= nil and data.sanityvalue ~= nil then
-                local icons = {"icon_hunger", "icon_health", "icon_sanity"}
+                local icons = { "icon_hunger", "icon_health", "icon_sanity" }
 
-                local texts = {(data.hungervalue > 0 and "+" or "") .. (data.hungervalue % 1 > 0 and string.format("%.1f", data.hungervalue) or math.floor(data.hungervalue)), (data.healthvalue > 0 and "+" or "") .. (data.healthvalue % 1 > 0 and string.format("%.1f", data.healthvalue) or math.floor(data.healthvalue)), (data.sanityvalue > 0 and "+" or "") .. (data.sanityvalue % 1 > 0 and string.format("%.1f", data.sanityvalue) or math.floor(data.sanityvalue))}
+                local texts = { (data.hungervalue > 0 and "+" or "") .. (data.hungervalue % 1 > 0 and string.format("%.1f", data.hungervalue) or math.floor(data.hungervalue)), (data.healthvalue > 0 and "+" or "") .. (data.healthvalue % 1 > 0 and string.format("%.1f", data.healthvalue) or math.floor(data.healthvalue)), (data.sanityvalue > 0 and "+" or "") .. (data.sanityvalue % 1 > 0 and string.format("%.1f", data.sanityvalue) or math.floor(data.sanityvalue)) }
 
                 makelistentry(icons, texts, STAT_ICONSIZE - 10)
             end
@@ -624,8 +642,14 @@ env.AddClassPostConstruct("screens/redux/scrapbookscreen", function(self)
 
                 if data.areadamage then
                     statsheight = statsheight - STAT_GAP_SMALL - 2
-                    makesubentry("+" .. math.floor(data.areadamage) .. STRINGS.SCRAPBOOK.DATA_SPLASHDAMAGE)
+                    makesubentry("+" .. tostring(checknumber(data.areadamage) and math.floor(data.areadamage) or data.areadamage) .. STRINGS.SCRAPBOOK.DATA_SPLASHDAMAGE)
                 end
+
+                if data.planarareadamage then
+                    statsheight = statsheight - STAT_GAP_SMALL - 2
+                    makesubentry("+" .. tostring(checknumber(data.planarareadamage) and math.floor(data.planarareadamage) or data.planarareadamage) .. " PLANAR SPLASH DAMAGE")
+                end
+
 
                 if data.weaponrange then
                     statsheight = statsheight - STAT_GAP_SMALL - 2
@@ -880,7 +904,7 @@ env.AddClassPostConstruct("screens/redux/scrapbookscreen", function(self)
             end
 
             if data.alpha or data.multcolour then
-                local r, g, b = unpack(data.multcolour or {1, 1, 1})
+                local r, g, b = unpack(data.multcolour or { 1, 1, 1 })
                 animstate:SetMultColour(r, g, b, data.alpha or 1)
             end
 
@@ -1042,11 +1066,11 @@ env.AddClassPostConstruct("screens/redux/scrapbookscreen", function(self)
 
         if data and data.knownlevel == 1 then
             local inspectbody
-            height, inspectbody = setcustomblock(height, {str = STRINGS.SCRAPBOOK.DATA_NEEDS_INVESTIGATION, minwidth = width - 100, leftoffset = 40, shortblock = true})
+            height, inspectbody = setcustomblock(height, { str = STRINGS.SCRAPBOOK.DATA_NEEDS_INVESTIGATION, minwidth = width - 100, leftoffset = 40, shortblock = true })
         end
         if not data then
             local inspectbody
-            height, inspectbody = setcustomblock(height, {str = " \n \n \n \n \n ", minwidth = width - 100, leftoffset = 40})
+            height, inspectbody = setcustomblock(height, { str = " \n \n \n \n \n ", minwidth = width - 100, leftoffset = 40 })
         end
 
         ------------------------ SPECIAL INFO -------------------------------
@@ -1067,7 +1091,7 @@ env.AddClassPostConstruct("screens/redux/scrapbookscreen", function(self)
 
             local body
             local shortblock = string.len(specialinfo) < 110
-            height, body = setcustomblock(height, {str = specialinfo, minwidth = width - 100, leftoffset = 40, shortblock = shortblock})
+            height, body = setcustomblock(height, { str = specialinfo, minwidth = width - 100, leftoffset = 40, shortblock = shortblock })
         end
         ----------------------- GEMOLOGY INFO -------------------------------
 
@@ -1086,7 +1110,7 @@ env.AddClassPostConstruct("screens/redux/scrapbookscreen", function(self)
             local known, tier = TheMineralLogbook:IsGemKnown(data.prefab)
             maketextentry("GEM EFFECTS")
             local body
-            height, body = setcustomblock(height, {str = "\n\n"..GetGemEffectDescription(data.prefab, tier or 0), minwidth = width - 100, leftoffset = 40})
+            height, body = setcustomblock(height, { str = "\n\n" .. GetGemEffectDescription(data.prefab, tier or 0), minwidth = width - 100, leftoffset = 40 })
         end
 
         ----------------------- DEPS -----------------------------------------
@@ -1099,7 +1123,7 @@ env.AddClassPostConstruct("screens/redux/scrapbookscreen", function(self)
             local idx = 1
             local row = 1
             local cols = DEPS_COLS -- 5
-            local gaps = 7 -- 10
+            local gaps = 7         -- 10
             local imagesize = 32
             local imagebuffer = 5
             local depstoshow = shallowcopy(data.deps)
@@ -1133,7 +1157,7 @@ env.AddClassPostConstruct("screens/redux/scrapbookscreen", function(self)
             end)
 
             local dep_imgsize = imagesize - imagebuffer
-            local needs_img_types = {"item", "food"}
+            local needs_img_types = { "item", "food" }
 
             for i, dep in ipairs(depstoshow) do
                 local xidx = i % cols
@@ -1177,13 +1201,26 @@ env.AddClassPostConstruct("screens/redux/scrapbookscreen", function(self)
                     if depdata.knownlevel == 0 then
                         button:SetTextures(GetScrapbookIconAtlas("unknown.tex"), "unknown.tex")
                         button:SetOnClick(function() end)
-                    elseif table.contains(needs_img_types, depdata.type) or depdata.use_bg then
+                    elseif table.contains(needs_img_types, depdata.type) then
                         button:SetTextures("images/scrapbook.xml", "inv_item_background.tex")
 
                         atlas = GetInventoryItemAtlas(tex)
 
                         local img = button:AddChild(Image(atlas, tex))
                         img:ScaleToSize(dep_imgsize, dep_imgsize)
+
+                        if depdata.knownlevel == 1 then
+                            img:SetTint(unpack(UK_TINT))
+                        end
+
+                        buttonimg = img
+                    elseif depdata.use_bg then
+                        button:SetTextures("images/scrapbook.xml", "inv_item_background.tex")
+
+                        atlas = GetScrapbookIconAtlas(tex)
+
+                        local img = button:AddChild(Image(atlas, tex))
+                        img:ScaleToSize(imagesize, imagesize)
 
                         if depdata.knownlevel == 1 then
                             img:SetTint(unpack(UK_TINT))
@@ -1289,7 +1326,7 @@ env.AddClassPostConstruct("screens/redux/scrapbookscreen", function(self)
                 end
 
                 if type(tex) == "function" then
-                    tex = tex(data.craftingprefab and {prefab = data.craftingprefab} or nil)
+                    tex = tex(data.craftingprefab and { prefab = data.craftingprefab } or nil)
                 end
 
                 local makerecipeentry = function(tex, text)
@@ -1423,7 +1460,7 @@ env.AddClassPostConstruct("screens/redux/scrapbookscreen", function(self)
                         if objstr then
                             descstr = descstr .. objstr
                             descstr = descstr .. " - " .. STRINGS.CHARACTER_NAMES[char]
-                            height, body = setcustomblock(height, {str = descstr, minwidth = width - 100, leftoffset = 40, ignoreheightchange = true, shortblock = true})
+                            height, body = setcustomblock(height, { str = descstr, minwidth = width - 100, leftoffset = 40, ignoreheightchange = true, shortblock = true })
                         end
                         character_panels[char] = body
                         if body then
@@ -1505,9 +1542,9 @@ env.AddClassPostConstruct("screens/redux/scrapbookscreen", function(self)
 
         local top = math.min(height, max_visible_height) / 2 - padding
 
-        local scissor_data = {x = 0, y = -max_visible_height / 2, width = width, height = max_visible_height}
-        local context = {widget = sub_root, offset = {x = 0, y = top}, size = {w = width, height = height + padding}}
-        local scrollbar = {scroll_per_click = 20 * 3}
+        local scissor_data = { x = 0, y = -max_visible_height / 2, width = width, height = max_visible_height }
+        local context = { widget = sub_root, offset = { x = 0, y = top }, size = { w = width, height = height + padding } }
+        local scrollbar = { scroll_per_click = 20 * 3 }
         self.scroll_area = page:AddChild(TrueScrollArea(context, scissor_data, scrollbar))
 
         if height < (PANEL_HEIGHT - 60) then
@@ -1682,13 +1719,14 @@ env.AddClassPostConstruct("screens/redux/scrapbookscreen", function(self)
                 widget.item_root.catname:Hide()
                 widget.item_root.inv_image:Hide()
 
-                
+
 
                 if data.use_bg then
                     widget.item_root.image:SetTexture("images/scrapbook.xml", "inv_item_background.tex")
                     widget.item_root.image:ScaleToSize(imagesize, imagesize)
                     widget.item_root.inv_image:Show()
                     widget.item_root.inv_image:SetTexture(GetScrapbookIconAtlas(data.tex) or GetScrapbookIconAtlas("cactus.tex"), data.tex or "cactus.tex")
+                    widget.item_root.inv_image:ScaleToSize(imagesize - 6, imagesize - 6)
                 elseif data.type == "item" or data.type == "food" then
                     widget.item_root.image:SetTexture("images/scrapbook.xml", "inv_item_background.tex")
                     widget.item_root.image:ScaleToSize(imagesize, imagesize)
@@ -1781,7 +1819,7 @@ env.AddClassPostConstruct("screens/redux/scrapbookscreen", function(self)
             end
         end
 
-        local grid = TEMPLATES.ScrollingGrid({}, {context = {}, widget_width = row_w + row_spacing, widget_height = row_h + row_spacing, force_peek = true, num_visible_rows = imagesize == bigimagesize and 7 or 13, num_columns = columns, item_ctor_fn = ScrollWidgetsCtor, apply_fn = ScrollWidgetSetData, scrollbar_offset = 20, scrollbar_height_offset = -60})
+        local grid = TEMPLATES.ScrollingGrid({}, { context = {}, widget_width = row_w + row_spacing, widget_height = row_h + row_spacing, force_peek = true, num_visible_rows = imagesize == bigimagesize and 7 or 13, num_columns = columns, item_ctor_fn = ScrollWidgetsCtor, apply_fn = ScrollWidgetSetData, scrollbar_offset = 20, scrollbar_height_offset = -60 })
 
         return grid
     end

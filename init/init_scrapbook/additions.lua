@@ -7,25 +7,51 @@ local scrapbook_prefabs = require("scrapbook_prefabs")
 local scrapbookdata = require("screens/redux/scrapbookdata")
 local um_scrapbookdata = require("um_scrapbookdata")
 
+--code-driven data additions
+
+local crabclaw_gem_colours = {
+    red = 1,
+    blue = 1,
+    purple = 1.25,
+    yellow = 2,
+    green = 2,
+    orange = 2,
+    opalprecious = 2
+}
+
+for k, v in pairs(crabclaw_gem_colours) do
+    um_scrapbookdata[k .. "gem_cracked"] = {
+        name = k .. "gem_cracked",
+        tex = k .. "gem_cracked.tex",
+        type = "item",
+        prefab = k .. "gem_cracked",
+        finiteuses = v * 200,
+        subcat = "veteranscurse",
+        build = "gems",
+        bank = "gems",
+        anim = (k == "opalprecious" and "opal" or k) .. "gem_idle",
+        hungervalue = 2.5,
+        healthvalue = 0,
+        sanityvalue = 0,
+        foodtype = "ELEMENTAL",
+        deps = { k .. "gem", "crabclaw" }
+    }
+end
+
 for name, data in pairs(um_scrapbookdata) do
     if data.name == nil or data.name ~= nil and STRINGS.NAMES[string.upper(data.name)] == nil then
         print("WARNING! \"" .. name .. "\" has no name in strings")
     end
-    if data.type ~= "item" then
-        data.use_bg = true -- automatically adds the inv icon BG.
-    end
+
     scrapbook_prefabs[name] = true
     scrapbookdata[name] = data
 end
 
-for name, data in pairs(scrapbookdata) do
-    if data.name == nil or data.name ~= nil and STRINGS.NAMES[string.upper(data.name)] == nil then
-        print("WARNING! \"" .. name .. "\" has no name in strings")
-    end
-    if data.name ~= nil and type(STRINGS.NAMES[string.upper(data.name)]) ~= "string" then
-        print("DEBUG: \"" .. name .. "\" has non-string name in strings")
-    end
+--TODO: REMOVE ME BEFORE MERGING TO BETA.
+if TheScrapbookPartitions ~= nil then
+    TheScrapbookPartitions:DebugUnlockEverything()
 end
+--TODO: REMOVE ME BEFORE MERGING TO BETA.
 
 local S = STRINGS.SCRAPBOOK.SPECIALINFO
 STRINGS.SCRAPBOOK.DATA_INFINITE_USES = "Infinite"
@@ -35,33 +61,33 @@ local N = STRINGS.NAMES
 -- KEEP IN SYNC WITH PREFABS/FEATHER_FROCK
 local feather_defs = {
     FEATHER_ROBIN = {
-        damage = 20, 
-        damage_reduction = 5, 
+        damage = 20,
+        damage_reduction = 5,
         effect = "Ignites attackers."
-    }, 
+    },
     FEATHER_ROBIN_WINTER = {
-        damage = 40, 
-        damage_reduction = 7, 
+        damage = 40,
+        damage_reduction = 7,
         effect = "No special effect."
-    }, 
+    },
     FEATHER_CROW = {
-        damage = 20, 
-        damage_reduction = 5, 
+        damage = 20,
+        damage_reduction = 5,
         effect = "Slows downs attackers by 30% for 5 seconds."
-    }, 
+    },
     FEATHER_CANARY = {
-        damage = 30, 
-        damage_reduction = 7, 
+        damage = 30,
+        damage_reduction = 7,
         effect = "Shocks attackers."
-    }, 
+    },
     GOOSE_FEATHER = {
-        damage = 10, 
-        damage_reduction = 15, 
+        damage = 10,
+        damage_reduction = 15,
         effect = "Spawns circling mini-tornadoes."
-    }, 
+    },
     MALBATROSS_FEATHER = {
-        damage = 50, 
-        damage_reduction = 10, 
+        damage = 50,
+        damage_reduction = 10,
         effect = "+100% speed and +1 second speed duration."
     }
 }
@@ -94,13 +120,22 @@ local specinfo = {
     UM_ARMOR_PYRE_NETTLES = "Panics and damages nearby miscreants.\nIgnores tiny, shadow, or fire-aligned creatures.",
     WIXIEPUZZLE = "Part of something larger. External help is required to unlock its secrets.",
     CURSED_ANTLER = "Deals 66 damage and area damage when charged.",
+    CRYSTAL_CURSED_ANTLER = "Deals 116 planar damage, area damage and creates a slowing freeze aura on hit when charged.",
     BEARGERCLAW = "Launches boulders at the target, creating a temporary sinkhole. Launching boulders again over the sinkhole launches 1 large boulder dealing 60 damage.\nAlso works as a shovel.",
     SLOBBERLOBBER = "Spits a magma blob that splits into 4 magma pools on impact. Magma pools deal fire damage and slow enemies.",
     FEATHER_FROCK = "Can store a feather inside, which grants different effects, flat damage reduction per feather when attacked and +50% speed for 1.5 seconds.\n\n",
     GORE_HORN_HAT = "Walking in a straight line builds up into a charge, gradually increasing speed up to +50% and dealing damage when crashing into creatures.",
     KLAUS_AMULET = "Causes attacks to swing twice in quick succession. The second hit deals 75% of the damage, but does not use durability.",
-    CRABCLAW = "Can have up to 4 gems socketed, each  gem has a different effect; alternitively, it can have up to 4 Strange Gems socketed. Each gem socketed increases damage by 5.",
-
+    CRABCLAW = "Can have up to 4 gems socketed, each  gem has a different effect; alternatively, it can have up to 4 Strange Gems socketed. Each gem socketed increases damage by 5.",
+    SILKSACK = "Holds 9 items. Can wrap up to 6 items with Silk into a Silken Bundle.\nPassively spins Silk.",
+    SILKEN_BUNDLE = S.BUNDLE .. "\nDoes not preserve food.",
+    VETERANSHRINE = "Interact with this to recieve the Veteran's Curse.\n\nThe curse will grant each character an unique afliction, but also allows the cursee to wield powerful Cursed items, dropped by bosses.",
+    MOONMAW_DRAGONFLY = "Appears under the light of the full \"Moon\" in Summer.",
+    HOODEDWIDOW = "Appears to defend its Cocoons.",
+    WIDOWSGRASP = "Can cut open Cocoons.",
+    WIDOWSHEAD = "Grants night vision when worn.",
+    WEBBEDCREATURE = "Contains a variety of different creatures",
+    UM_MOONFLY_LANTERN = "Increase movement speed by 15% when held. Creates a light.\nCreates a trail of particles that create light and speed up survivors by an additional 15%."
 }
 
 
@@ -123,5 +158,5 @@ local crabclaw_gem_colours = {
 }
 
 for k, v in pairs(crabclaw_gem_colours) do
-    S[string.upper(k).."GEM_CRACKED"] = "When socketed on a Crab Claw: " .. v
+    S[string.upper(k) .. "GEM_CRACKED"] = "When socketed on a Crab Claw: " .. v
 end
