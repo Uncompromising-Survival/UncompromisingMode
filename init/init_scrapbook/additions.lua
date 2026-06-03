@@ -10,7 +10,7 @@ local scrapbookdata = require("screens/redux/scrapbookdata")
 local um_scrapbookdata = require("um_scrapbookdata")
 
 --code-driven data additions
-
+--------------------- CRAB CLAW GEMS ----------------------------------
 local crabclaw_gem_colours = {
     red = 1,
     blue = 1,
@@ -41,6 +41,8 @@ for k, v in pairs(crabclaw_gem_colours) do
 end
 
 
+
+--------------------- TURFS ----------------------------------
 local turfs = {
     um_hotspring_grass = { "twigs", "ice" },
     um_magma = { "rocks", "firenettles_dried" },
@@ -74,6 +76,48 @@ for name, deps in pairs(turfs) do
     um_scrapbookdata["turf_" .. name] = data
 end
 
+
+
+--------------------- UM PREPARED FOODS ----------------------------------
+local um_preparedfoods = require("um_preparedfoods")
+
+
+local offset_required = {
+    "beefalowings",
+    "blueberrypancakes"
+}
+
+for k, v in pairs(um_preparedfoods) do
+    local data = {
+        name = k,
+        tex = k .. ".tex",
+        type = "food",
+        prefab = k,
+        stacksize = 40,
+        hungervalue = v.hunger,
+        healthvalue = v.health,
+        sanityvalue = v.sanity,
+        foodtype = v.foodtype,
+        build = k,
+        bank = k,
+        use_bg = false,
+        anim = "idle",
+        perishable = v.perishtime,
+        burnable = true,
+        deps = v.warly_only and { "spoiled_food", "portablecookpot" } or { "spoiled_food", "cookpot", "portablecookpot", "archive_cookpot" }
+    }
+
+    if table.contains(offset_required, k) then
+        data.animoffsetx = 70
+        data.animoffsety = -70
+    end
+
+    um_scrapbookdata[k] = data
+end
+
+
+
+--------------------- ADDING TO VANILLA SCRAPBOOK ----------------------------------
 for name, data in pairs(um_scrapbookdata) do
     if data.name == nil or data.name ~= nil and STRINGS.NAMES[string.upper(data.name)] == nil then
         print("WARNING! \"" .. name .. "\" has no name in strings")
@@ -84,9 +128,9 @@ for name, data in pairs(um_scrapbookdata) do
 end
 
 
-local S = STRINGS.SCRAPBOOK.SPECIALINFO
-STRINGS.SCRAPBOOK.DATA_INFINITE_USES = "Infinite"
 
+--------------------- STRINGS & SPECIAL INFO ----------------------------------
+local S = STRINGS.SCRAPBOOK.SPECIALINFO
 local N = STRINGS.NAMES
 
 -- KEEP IN SYNC WITH PREFABS/FEATHER_FROCK
@@ -178,7 +222,7 @@ for k, v in pairs(feather_defs) do
     S.FEATHER_FROCK = S.FEATHER_FROCK .. N[k] .. ": " .. v.damage .. " damage, " .. v.damage_reduction .. " flat damage reduction.\n" .. v.effect .. "\n\n"
 end
 
-local crabclaw_gem_colours = {
+local crabclaw_gem_desc = {
     red = "+0.2 health on hit.",
     blue = "+0.1 coldness inflected on hit.",
     purple = "+10% chance to spawn a shadow tentacle on hit.",
@@ -188,6 +232,6 @@ local crabclaw_gem_colours = {
     opalprecious = "+1 gem effect for each socketed gem."
 }
 
-for k, v in pairs(crabclaw_gem_colours) do
+for k, v in pairs(crabclaw_gem_desc) do
     S[string.upper(k) .. "GEM_CRACKED"] = "When socketed on a Crab Claw: " .. v
 end
