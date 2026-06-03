@@ -179,6 +179,31 @@ local function UpdateMineralLog(inst)
 end
 
 
+local DESPAWN_FOLLOWER_TAGS = {"pig", "raidrat", "winky_rat"}
+local DESPAWN_FOLLOWER_PREFABS = {"eyeofterror_mini_ally", "smallbird", "teenbird", "lightflier", "wx78_scanner"}
+local function DespawnFollowers(inst)
+    for k, v in pairs(inst.components.leader.followers) do
+        if k:HasTag("spider") and not TUNING.DSTU.TREATS_FOR_WEBBER or k:HasAnyTag(DESPAWN_FOLLOWER_TAGS) or TUNING.DSTU.MERMTWEAKS and k:HasTag("merm")
+            or table.contains(DESPAWN_FOLLOWER_PREFABS, k.prefab) then -- exluding things that can't/shouldn't/already do
+            local savedata = k:GetSaveRecord()
+            table.insert(inst.um_all_followers, savedata)
+            -- remove followers
+            k:AddTag("notarget")
+            k:AddTag("NOCLICK")
+            k.persists = false
+            if k.components.health then
+                k.components.health:SetInvincible(true)
+            end
+            k:DoTaskInTime(math.random() * 0.2, function(k)
+                local fx = SpawnPrefab("spawn_fx_small")
+                fx.Transform:SetPosition(k.Transform:GetWorldPosition())
+                local colourtweener = k.components.colourtweener or k:AddComponent("colourtweener")
+                colourtweener:StartTween({ 0, 0, 0, 1 }, 13 * FRAMES, k.Remove)
+            end)
+        end
+    end
+end
+
 env.AddPlayerPostInit(function(inst)
     if not TheWorld.ismastersim then
         inst:DoPeriodicTask(TUNING.SCRAPBOOK_UPDATERATE, UpdateMineralLog)
@@ -303,31 +328,6 @@ env.AddPlayerPostInit(function(inst)
     -- adding um_ prefix just in case...
 
     inst.OnDespawn = function(inst, migrationdata, ...)
-        for k, v in pairs(inst.components.leader.followers) do
-            if ((k:HasTag("spider") and not TUNING.DSTU.TREATS_FOR_WEBBER) or
-                    k:HasTag("pig") or k:HasTag("raidrat") or
-                    k:HasTag("winky_rat") or (TUNING.DSTU.MERMTWEAKS and k:HasTag("merm")) or k.prefab == "eyeofterror_mini_ally") or
-                k.prefab == "smallbird" or k.prefab == "teenbird" or k.prefab ==
-                "lightflier" or k.prefab == "wx78_scanner" or k.prefab == "wx78_posssessedbody" then -- exluding things that can't/shouldn't/already do
-                local savedata = k:GetSaveRecord()
-                table.insert(inst.um_all_followers, savedata)
-                -- remove followers
-                k:AddTag("notarget")
-                k:AddTag("NOCLICK")
-                k.persists = false
-                if k.components.health then
-                    k.components.health:SetInvincible(true)
-                end
-                k:DoTaskInTime(math.random() * 0.2, function(k)
-                    local fx = SpawnPrefab("spawn_fx_small")
-                    fx.Transform:SetPosition(k.Transform:GetWorldPosition())
-                    if not k.components.colourtweener then
-                        k:AddComponent("colourtweener")
-                    end
-                    k.components.colourtweener:StartTween({ 0, 0, 0, 1 }, 13 * FRAMES, k.Remove)
-                end)
-            end
-        end
 
         return _OnDespawn(inst, migrationdata, ...)
     end
