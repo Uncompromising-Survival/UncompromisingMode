@@ -328,7 +328,7 @@ env.AddPlayerPostInit(function(inst)
     -- adding um_ prefix just in case...
 
     inst.OnDespawn = function(inst, migrationdata, ...)
-
+        DespawnFollowers(inst)
         return _OnDespawn(inst, migrationdata, ...)
     end
 
