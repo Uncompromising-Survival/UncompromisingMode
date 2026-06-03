@@ -276,13 +276,14 @@ env.AddStategraphPostInit("wilson", function(inst)
                 elseif action.invobject:HasTag("beegun") then
                     return "collectthebees"
                 elseif action.invobject:HasTag("shieldofterror") then
-                    if inst:HasTag("vetcurse") and action.invobject.components.rechargeable:IsCharged() and (inst.components.rider and not inst.components.rider:IsRiding() or inst.components.rider == nil) then
+                    if inst:HasTag("vetcurse") and action.invobject.components.rechargeable:IsCharged() and action.invobject.components.equippable:IsEquipped() and (inst.components.rider and not inst.components.rider:IsRiding() or inst.components.rider == nil) then
                         return "um_shield_charge"
                     else
                         return
                     end
                 end
             end
+
             return _OldSpellCast(inst, action, ...)
         end
 
