@@ -76,7 +76,8 @@ local component_post = {
     "actionqueuer",
     "wavemanager",
     "seamlessplayerswapper",
-    "grottowarmanager"
+    "grottowarmanager",
+    "quaker"
 }
 
 local prefab_post = {
@@ -249,7 +250,6 @@ local prefab_post = {
     "cave_vent_mite",
     "bananabush",
     "tillweedsalve",
-    "ancienttree_fruits",
     "um_moonmutables",
     "rocky",
     "slurper",
@@ -258,7 +258,8 @@ local prefab_post = {
     "monkey_smallhat",
     "cane",
     "onemanband",
-    "cursed_monkey_token"
+    "cursed_monkey_token",
+    "slurtle_shellpieces"
 }
 
 local stategraph_post = {
