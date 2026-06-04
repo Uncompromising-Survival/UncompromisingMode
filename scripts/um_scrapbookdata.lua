@@ -91,6 +91,28 @@ local data = {
     --hooded forest
     hoodedtrapdoor = { name = "hoodedtrapdoor", tex = "hoodedtrapdoor.tex", type = "thing", prefab = "hoodedtrapdoor", build = "rock_flipping_moss", bank = "flipping_rock", anim = "idle", workable = "MINE", deps = { "rocks", "spider_trapdoor_hooded" }, use_bg = true },
 
+    --[[
+        hooded_fern
+        um_fern_fox
+        um_fern_fox_den
+        giant_tree
+        blueberryplant
+        um_moss
+        giant_blueberry
+        fruitbat
+        um_bear_trap_old
+        pitcherplant
+        snappy_jaw
+        um_boomberry_bomb
+        jawed_scythe
+        um_bear_trap_equippable_gold
+        um_bear_trap_equippable_tooth
+        aphid
+        woodpecker
+        um_leafwing
+        um_hat_leafwing
+    ]]
+
     --broiling
     springrock1 = { name = "springrock1", tex = "springrock1.tex", type = "thing", prefab = "springrock1", build = "springrock1", bank = "springrock1", anim = "full", workable = "MINE", deps = { "nitre", "rocks" }, use_bg = true },
     springrock2 = { name = "springrock2", tex = "springrock2.tex", type = "thing", prefab = "springrock2", build = "springrock2", bank = "springrock2", anim = "full", workable = "MINE", deps = { "flint", "nitre", "rocks" }, use_bg = true },
@@ -115,6 +137,14 @@ local data = {
     spider_trapdoor = { name = "spider_trapdoor", tex = "spider_trapdoor.tex", subcat = "spider", type = "creature", prefab = "spider_trapdoor", sanityaura = -0.66666666666667, health = 400, damage = 34, build = "spider_trapdoor", bank = "spider", anim = "idle", perishable = 2400, deps = { "monstermeat", "spidergland", "trapdoor", "trapdoorgrass" }, use_bg = true },
     mutator_trapdoor = { name = "mutator_trapdoor", tex = "mutator_trapdoor.tex", subcat = "mutator", type = "food", prefab = "mutator_trapdoor", stacksize = 20, hungervalue = 12.5, healthvalue = -3, sanityvalue = -10, foodtype = "MEAT", build = "um_spider_mutators", bank = "um_spider_mutators", anim = "trapdoor", fueltype = "BURNABLE", fuelvalue = 15, burnable = true, craftingprefab = "webber", deps = { "cutgrass", "monstermeat", "spidergland", "spider_trapdoor" } },
     trapdoorgrass = { name = "trapdoorgrass", tex = "trapdoorgrass.tex", type = "thing", prefab = "trapdoorgrass", build = "trapdoorgrass", bank = "trapdoorgrass", anim = "idle", workable = "DIG", pickable = true, burnable = true, deps = { "cutgrass", "dug_grass", "trapdoor" }, use_bg = true, animoffsety = -20 },
+
+    monstersmallmeat = { name = "monstersmallmeat", tex = "monstersmallmeat.tex", type = "food", prefab = "monstersmallmeat", stacksize = 40, hungervalue = TUNING.CALORIES_TINY, healthvalue = -15, sanityvalue = -10, foodtype = "MEAT", build = "extra_monsterfoods", bank = "extra_monsterfoods", anim = "idle", perishable = TUNING.PERISH_FAST, deps = { "spoiled_food", "meatrack", "meatrack_hermit", "meatrack_hermit_multi" } },
+    cookedmonstersmallmeat = { name = "cookedmonstersmallmeat", tex = "cookedmonstersmallmeat.tex", type = "food", prefab = "cookedmonstersmallmeat", stacksize = 40, hungervalue = TUNING.CALORIES_TINY, healthvalue = -5, sanityvalue = -10, foodtype = "MEAT", build = "extra_monsterfoods", bank = "extra_monsterfoods", anim = "cooked", perishable = TUNING.PERISH_SLOW, deps = { "spoiled_food", "monstersmallmeat" } },
+    monstersmallmeat_dried = { name = "monstersmallmeat_dried", tex = "monstersmallmeat_dried.tex", type = "food", prefab = "monstersmallmeat_dried", stacksize = 40, hungervalue = TUNING.CALORIES_TINY, healthvalue = -5, sanityvalue = -10, foodtype = "MEAT", build = "extra_monsterfoods", bank = "extra_monsterfoods", anim = "dried", perishable = TUNING.PERISH_PRESERVED, deps = { "spoiled_food", "meatrack", "meatrack_hermit", "meatrack_hermit_multi", "monstersmallmeat" } },
+
+    um_monsteregg = { name = "um_monsteregg", tex = "um_monsteregg.tex", type = "food", prefab = "um_monsteregg", stacksize = 40, hungervalue = 9.375, healthvalue = -15, sanityvalue = -10, foodtype = "MEAT", build = "extra_monsterfoods", bank = "extra_monsterfoods", anim = "egg", perishable = 4800, deps = { "um_monsteregg_cooked", "rottenegg", "birdcage" } },
+    um_monsteregg_cooked = { name = "um_monsteregg_cooked", tex = "um_monsteregg_cooked.tex", type = "food", prefab = "um_monsteregg_cooked", stacksize = 40, hungervalue = 9.375, healthvalue = -5, sanityvalue = -10, foodtype = "MEAT", build = "extra_monsterfoods", bank = "extra_monsterfoods", anim = "egg_cooked", perishable = 2880, deps = { "spoiled_food"  } },
+
 }
 
 return data

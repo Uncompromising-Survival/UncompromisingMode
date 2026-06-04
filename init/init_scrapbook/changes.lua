@@ -28,7 +28,7 @@ for k, v in pairs(specialinfo_ovewrite) do
     scrapbookdata[k]["specialinfo"] = v
 end
 --idfk where to put this
-scrapbookdata["shieldofterror"].notes = {cursed_enhanced_item = true}
+scrapbookdata["shieldofterror"].notes = { cursed_enhanced_item = true }
 
 --helper function to format tooltip strings into scrapbook special info.
 -- Turns "- Text.\n- like this."
@@ -276,4 +276,31 @@ for k, v in pairs(wixiethings) do
             inst.components.pointofinterest:SetHeight(0)
         end
     end)
+end
+
+local monster_meat_replace = {
+    "rabbit",
+    "spider",
+    "molebat",
+    "bat",
+    "cookiecutter"
+}
+
+local replacement_map = {
+    monstermeat = "monstersmallmeat",
+    cookedmonstermeat = "cookedmonstersmallmeat"
+}
+
+for _, critter in ipairs(monster_meat_replace) do
+    local new_deps = {}
+
+    for k, v in pairs(scrapbookdata[critter].deps) do
+        if replacement_map[v] ~= nil then
+            table.insert(new_deps, replacement_map[v])
+        else
+            table.insert(new_deps, v)
+        end
+    end
+
+    scrapbookdata[critter].deps = new_deps
 end
