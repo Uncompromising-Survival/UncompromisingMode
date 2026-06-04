@@ -38,7 +38,7 @@ local function common_meat(anim, tags, dryable, cookable)
         end
     end
 
-    if dryable ~= nil then
+    if dryable ~= nil and dryable.product ~= nil then
         --dryable (from dryable component) added to pristine state for optimization
         inst:AddTag("dryable")
         inst:AddTag("lureplant_bait")
