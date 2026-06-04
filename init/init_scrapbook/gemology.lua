@@ -118,11 +118,10 @@ local function CreateGemologyEntryFromDefs(name, defs)
         anim = defs.anim,
         specialinfo = string.upper(name),
         subcat = "gemologygem",
-        deps = { "um_gemologyforge", "ancientfruit_gem", "slurtle", "antlion", "rocky"}, --"snaildrake", "snowmong"
+        deps = { "um_gemologyforge", "slurtle", "antlion", "rocky"}, --"snaildrake", "snowmong"
         workable = "HAMMER"
     }
 
-    table.insert(dataset["ancientfruit_gem"].deps, name)
     table.insert(dataset["um_gemologyforge"].deps, name)
     table.insert(dataset["um_magnifier"].deps, name)
     table.insert(dataset["um_magnifier_purplegem"].deps, name)
