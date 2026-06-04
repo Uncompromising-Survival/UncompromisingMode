@@ -90,27 +90,49 @@ local data = {
 
     --hooded forest
     hoodedtrapdoor = { name = "hoodedtrapdoor", tex = "hoodedtrapdoor.tex", type = "thing", prefab = "hoodedtrapdoor", build = "rock_flipping_moss", bank = "flipping_rock", anim = "idle", workable = "MINE", deps = { "rocks", "spider_trapdoor_hooded" }, use_bg = true },
+    giant_blueberry = { name = "giant_blueberry", tex = "giant_blueberry.tex", type = "food", prefab = "giant_blueberry", stacksize = 20, hungervalue = 18.8, healthvalue = 1, sanityvalue = 0, foodtype = "VEGGIE", build = "blueberry", bank = "blueberry", anim = "idle", perishable = TUNING.PERISH_FAST * 2, deps = { "spoiled_food", "blueberryplant" } },
+    blueberryplant = { name = "blueberryplant", tex = "blueberryplant.tex", type = "thing", prefab = "blueberryplant", build = "blueberryplant", bank = "blueberryplant", anim = "idle1", burnable = true, workable = "SHOVEL", deps = { "ice" }, use_bg = true },
+    giant_tree = { name = "giant_tree", tex = "giant_tree.tex", type = "thing", prefab = "giant_tree", build = "um_hoodedtree", bank = "um_hoodedtree", anim = "idle_moss_full", workable = "AXE", deps = { "frog", "twigs", "log", "feather_robin", "feather_robin_winter", "feather_canary", "feather_crow", "spider", "aphid", "um_moss" }, specialinfo = "GIANT_TREE", use_bg = true },
+    um_moss = { name = "um_moss", tex = "um_moss.tex", type = "food", prefab = "um_moss", stacksize = 20, hungervalue = TUNING.CALORIES_SMALL / 2, healthvalue = TUNING.HEALING_SMALL, sanityvalue = TUNING.SANITY_SUPERTINY, foodtype = FOODTYPE.UM_HORRIBLE_VEGGIE, build = "um_moss", bank = "um_moss", anim = "idle", fueltype = "BURNABLE", fuelvalue = TUNING.SMALL_FUEL, burnable = true },
+
+    um_bear_trap_equippable_gold = { name = "um_bear_trap_equippable_gold", tex = "um_bear_trap_equippable_gold.tex", type = "item", prefab = "um_bear_trap_equippable_gold", damage = 60, finiteuses = 8, health = TUNING.WALRUS_HEALTH / 1.5, build = "um_bear_trap", bank = "um_bear_trap_gold", anim = "idle", deps = { "goldnugget", "houndstooth", "snappy_jaw" } },
+    um_bear_trap_equippable_tooth = { name = "um_bear_trap_equippable_tooth", tex = "um_bear_trap_equippable_tooth.tex", type = "item", prefab = "um_bear_trap_equippable_tooth", damage = 60, finiteuses = 1, health = TUNING.WALRUS_HEALTH / 1.5, build = "um_bear_trap", bank = "um_bear_trap_tooth", anim = "idle", deps = { "rocks", "snappy_jaw" } },
+    um_bear_trap_old = { name = "um_bear_trap_old", tex = "um_bear_trap_old.tex", type = "item", prefab = "um_bear_trap_old", damage = 60, health = TUNING.WALRUS_HEALTH, build = "um_bear_trap", bank = "um_bear_trap_old", anim = "idle", deps = { "walrus_camp", "hooded_fern", "snappy_jaw" } },
+    um_bear_trap_walrus = { name = "um_bear_trap", tex = "um_bear_trap.tex", type = "item", prefab = "um_bear_trap", damage = 60, health = TUNING.WALRUS_HEALTH, build = "um_bear_trap", bank = "um_bear_trap", anim = "idle", deps = { "walrus", "snappy_jaw" } },
+    snappy_jaw = { name = "snappy_jaw", tex = "snappy_jaw.tex", type = "item", prefab = "snappy_jaw", stacksize = 10, build = "um_bear_trap", bank = "um_bear_trap_old", anim = "item", deps = { "flint", "rope", "houndstooth" } },
+    jawed_scythe = { name = "jawed_scythe", tex = "jawed_scythe.tex", subcat = "tool", type = "item", prefab = "jawed_scythe", weapondamage = TUNING.SPEAR_DAMAGE * 1.3, finiteuses = 100, toolactions = { "SCYTHE" }, build = "scythe_voidcloth", bank = "scythe_jawed", anim = "idle", deps = { "twigs", "steelwool", "snappy_jaw" } },
+    um_boomberry_bomb = { name = "um_boomberry_bomb", tex = "um_boomberry_bomb.tex", subcat = "weapon", type = "item", prefab = "um_boomberry_bomb", stacksize = 20, weapondamage = TUNING.DSTU.BOOMBERRYBOMB_DAMAGE, weaponrange = 10, build = "um_boomberry_bomb", bank = "um_boomberry_bomb", anim = "idle", deps = { "giant_blueberry", "cutgrass", "twigs" } },
+    aphid = { name = "aphid", tex = "aphid.tex", subcat = "insect", type = "creature", prefab = "aphid", health = 100, damage = 10, build = "aphid", bank = "weevole", anim = "idle", perishable = TUNING.BUTTERFLY_PERISH_TIME, deps = { "monstermeat", "steelwool", "hooded_fern" } },
+    woodpecker = { name = "woodpecker", tex = "woodpecker.tex", subcat = "bird", type = "creature", prefab = "woodpecker", health = 25, build = "woodpecker_build", bank = "crow", anim = "idle", perishable = 2400, deps = { "cookedsmallmeat", "cutgrass", "feather_crow", "feather_robin", "flint", "seeds", "smallmeat", "twigs" } },
+    um_hat_leafwing = { name = "um_hat_leafwing", tex = "um_hat_leafwing.tex", subcat = "hat", type = "item", prefab = "um_hat_leafwing", build = "hat_catcoon", bank = "um_hat_leafwing", anim = "anim", perishable = 4800, waterproofer = TUNING.WATERPROOFNESS_SMALL, snowmandecor = true, deps = { "um_moss", "log", "um_leafwing", "spoiled_food" } },
+    um_leafwing = { name = "um_leafwing", tex = "um_leafwing.tex", type = "item", prefab = "um_leafwing", build = "um_leafwing", bank = "um_leafwing", anim = "idle", fueltype = "BURNABLE", fuelvalue = TUNING.LARGE_FUEL, perishable = TUNING.PERISH_FAST, stackable = TUNING.STACK_SIZE_SMALLITEM, foodtype = "meat", hungervalue = TUNING.CALORIES_TINY, healthvalue = TUNING.HEALING_SMALL, sanityvalue = -TUNING.SANITY_TINY },
+
+    hooded_fern = { name = "hooded_fern", tex = "hooded_fern.tex", type = "thing", prefab = "hooded_fern", build = "um_thicket", bank = "um_thicket", anim = "idle", pickable = true, burnable = true, deps = {"um_hat_leafwing", "armor_bramble", --[["um_armor_bramble_rimeweed",]] "armor_lunarplant_husk",  "ash", "mound", "spider", "aphid", "seeds", "cutgrass", "twigs", "carrot_seeds", "corn_seeds", "dragonfruit_seeds", "durian_seeds", "eggplant_seeds", "pomegranate_seeds", "pumpkin_seeds", "asparagus_seeds", "tomato_seeds", "potato_seeds", "onion_seeds", "pepper_seeds", "garlic_seeds", "watermelon_seeds"} },
 
     --[[
-        hooded_fern
+        items
+        giant_blueberry [x]
+        um_moss [x]
+        um_bear_trap_equippable_gold [x]
+        um_bear_trap_equippable_tooth [x]
+        um_boomberry_bomb [x]
+        aphid --technically. [x]
+        jawed_scythe [x]
+        woodpecker --also technically [x]
+        snappy_jaw [x]
+        um_hat_leafwing [x]
+        um_leafwing [x]
+
+        hooded_fern [ ]
         um_fern_fox
         um_fern_fox_den
-        giant_tree
-        blueberryplant
-        um_moss
-        giant_blueberry
+        giant_tree [ ]
+        giant_tree_nest
+        blueberryplant [ ]
         fruitbat
-        um_bear_trap_old
+        um_bear_trap_old [ ]
+        um_bear_trap_walrus [ ]
         pitcherplant
-        snappy_jaw
-        um_boomberry_bomb
-        jawed_scythe
-        um_bear_trap_equippable_gold
-        um_bear_trap_equippable_tooth
-        aphid
-        woodpecker
-        um_leafwing
-        um_hat_leafwing
     ]]
 
     --broiling
@@ -143,7 +165,7 @@ local data = {
     monstersmallmeat_dried = { name = "monstersmallmeat_dried", tex = "monstersmallmeat_dried.tex", type = "food", prefab = "monstersmallmeat_dried", stacksize = 40, hungervalue = TUNING.CALORIES_TINY, healthvalue = -5, sanityvalue = -10, foodtype = "MEAT", build = "extra_monsterfoods", bank = "extra_monsterfoods", anim = "dried", perishable = TUNING.PERISH_PRESERVED, deps = { "spoiled_food", "meatrack", "meatrack_hermit", "meatrack_hermit_multi", "monstersmallmeat" } },
 
     um_monsteregg = { name = "um_monsteregg", tex = "um_monsteregg.tex", type = "food", prefab = "um_monsteregg", stacksize = 40, hungervalue = 9.375, healthvalue = -15, sanityvalue = -10, foodtype = "MEAT", build = "extra_monsterfoods", bank = "extra_monsterfoods", anim = "egg", perishable = 4800, deps = { "um_monsteregg_cooked", "rottenegg", "birdcage" } },
-    um_monsteregg_cooked = { name = "um_monsteregg_cooked", tex = "um_monsteregg_cooked.tex", type = "food", prefab = "um_monsteregg_cooked", stacksize = 40, hungervalue = 9.375, healthvalue = -5, sanityvalue = -10, foodtype = "MEAT", build = "extra_monsterfoods", bank = "extra_monsterfoods", anim = "egg_cooked", perishable = 2880, deps = { "spoiled_food"  } },
+    um_monsteregg_cooked = { name = "um_monsteregg_cooked", tex = "um_monsteregg_cooked.tex", type = "food", prefab = "um_monsteregg_cooked", stacksize = 40, hungervalue = 9.375, healthvalue = -5, sanityvalue = -10, foodtype = "MEAT", build = "extra_monsterfoods", bank = "extra_monsterfoods", anim = "egg_cooked", perishable = 2880, deps = { "spoiled_food" } },
 
 }
 

@@ -217,7 +217,12 @@ local specinfo = {
     UM_ASTRAL_PROJECTOR = "Projects your body to the nearest receptionator.",
     UM_ASTRAL_PROJECTOR_TARGET = "Returns your body back to the projectinator.",
     UM_SPONGEPLANT = "Must be shaved to harvest.",
-    UM_SPONGEPLANT_ITEM = "Reduces moisture by 10."
+    UM_SPONGEPLANT_ITEM = "Reduces moisture by 10 when eaten.",
+    GIANT_TREE = S.WATERTREEPILLAR.."\nCan be shaved for Moss.",
+    GIANT_BLUEBERRY = "Increases moisture by 5 when eaten.",
+    UM_BOOMBERRY_BOMB = "Creates a slowing puddle of goo.",
+    UM_HAT_LEAFWING = "Increases speed by 15% when worn.\nNegates movement speed reductions.",
+
 }
 
 

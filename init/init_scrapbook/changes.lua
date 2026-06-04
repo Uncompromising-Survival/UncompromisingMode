@@ -283,7 +283,8 @@ local monster_meat_replace = {
     "spider",
     "molebat",
     "bat",
-    "cookiecutter"
+    "cookiecutter",
+    "aphid"
 }
 
 local replacement_map = {
