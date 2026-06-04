@@ -33,11 +33,11 @@ function AnimState:PushAnimation(anim, loop, ...)
     return _PushAnimation(self, anim, loop, ...)
 end
 
-local _SetClientsideBuildOverride = AnimState.SetClientsideBuildOverride
+--[[local _SetClientsideBuildOverride = AnimState.SetClientsideBuildOverride
 function AnimState:SetClientsideBuildOverride(flag, default_build, build_to_swap, ...)
     if flag == "insane" and default_build == "manrabbit_build" and build_to_swap == "manrabbit_beard_build" then return end
     return _SetClientsideBuildOverride(self, flag, default_build, build_to_swap, ...)
-end
+end]]
 
 local _PlaySound = SoundEmitter.PlaySound
 function SoundEmitter:PlaySound(sound, ...)
@@ -333,8 +333,8 @@ local function BeardlordAnimations(inst)
     inst:ListenForEvent("onremove", RemoveFromGlobalTable)
 end
 
-local function IsBeardlord(inst, forced)
-    return inst.beardlord and (not forced or inst.components.timer and inst.components.timer:TimerExists("forcenightmare"))
+local function IsBeardlord(inst--[[, forced]])
+    return inst.beardlord --and (not forced or inst.components.timer and inst.components.timer:TimerExists("forcenightmare"))
 end
 
 local function ToggleBeardlord(inst, data)
@@ -345,6 +345,7 @@ local function ToggleBeardlord(inst, data)
         inst.components.combat:SetDefaultDamage(TUNING.BEARDLORD_DAMAGE)
         inst.components.combat:SetAttackPeriod(TUNING.BEARDLORD_ATTACK_PERIOD)
         inst.components.combat.panic_thresh = TUNING.BEARDLORD_PANIC_THRESH
+        inst.components.sleeper:StartTesting()
     else
         inst.AnimState:SetBuild("manrabbit_build")
         inst.components.combat:SetDefaultDamage(TUNING.BUNNYMAN_DAMAGE)
@@ -359,8 +360,6 @@ end
 
 local BEARDLORD_TRANSFORM_RANGE = 20 --ENTITY_POPOUT_RADIUS + 1
 local function ShouldBeBeardlord_Internal(inst, data)
-    --local target = inst.um_beardlord_target
-    --if target and target:IsValid() and inst.UMFindPlayer then return target.isplayer and inst:UMFindPlayer(target) end
     local x, y, z = inst.Transform:GetWorldPosition()
     for i, v in ipairs(AllPlayers) do
         if inst.UMFindPlayer and inst:UMFindPlayer(v) and v:GetDistanceSqToPoint(x, y, z) < (BEARDLORD_TRANSFORM_RANGE * BEARDLORD_TRANSFORM_RANGE) then
@@ -379,22 +378,6 @@ local function ShouldBeBeardlord(inst, data)
     end
 end
 
---[[local function OnNewTarget(inst, data)
-    inst.um_beardlord_target = data and data.target or nil
-    if not inst.um_shouldbebeardlord then
-        inst.um_shouldbebeardlord = inst:DoPeriodicTask(FRAMES, inst.UMShouldBeBeardlord, 0)
-    end
-end
-
-local function OnDroppedTarget(inst, data)
-    if inst.um_shouldbebeardlord then
-        inst.um_shouldbebeardlord:Cancel()
-        inst.um_shouldbebeardlord = nil
-    end
-    inst.um_beardlord_target = nil
-    inst:UMShouldBeBeardlord({forcefail = true, nostate = inst.um_onload or inst:IsAsleep()})
-end]]
-
 local _SleepTest
 local function SleepTest(inst, ...)
     if inst.beardlord then return false end
@@ -403,7 +386,7 @@ end
 
 local _WakeTest
 local function WakeTest(inst, ...)
-    if inst.beardlord then return false end
+    if inst.beardlord then return true end
     return _WakeTest and _WakeTest(inst, ...)
 end
 
@@ -443,9 +426,7 @@ local function BunnymanFunctions(inst)
     inst.UMFindPlayer = FindPlayer
     inst.UMShouldBeBeardlord_Internal = ShouldBeBeardlord_Internal
     inst.UMShouldBeBeardlord = ShouldBeBeardlord
-    inst.um_shouldbebeardlord = inst:DoPeriodicTask(FRAMES, inst.UMShouldBeBeardlord, 0) -- Commented parts for sane players to see beardlords if there's an insane player nearby.
-    --[[inst:ListenForEvent("newcombattarget", OnNewTarget)
-    inst:ListenForEvent("droppedtarget", OnDroppedTarget)]]
+    inst.um_shouldbebeardlord = inst:DoPeriodicTask(FRAMES, inst.UMShouldBeBeardlord, 0)
 
     if not _SleepTest then
         _SleepTest = inst.components.sleeper.sleeptestfn
