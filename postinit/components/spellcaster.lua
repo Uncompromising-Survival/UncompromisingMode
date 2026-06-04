@@ -40,7 +40,7 @@ env.AddSimPostInit(function()
             if _EQUIPPED_spellcaster_fn then
                 EQUIPPED["spellcaster"] = function(inst, doer, target, actions, right, ...)
                     if inst.um_cantcastontarget and right and doer.components.playercontroller and not doer.components.playercontroller:IsControlPressed(TUNING.DSTU.CASTSPELL_OVERRIDECONTROL)
-                        and inst:um_cantcastontarget(doer, nil, target, doer.components.playeractionpicker and UMCommonFns.CanOverrideAction(doer.components.playeractionpicker:GetSceneActions(target, true), doer.components.playeractionpicker:GetSceneActions(target))) then return end
+                        and inst:um_cantcastontarget(doer, nil, target, doer.components.playeractionpicker and UMCommonFns.CanOverrideAction(doer.components.playeractionpicker:GetSceneActions(target, true), target ~= doer and doer.components.playeractionpicker:GetSceneActions(target))) then return end
                     if CantCastOnTarget(inst, target, true) then return end
                     return _EQUIPPED_spellcaster_fn(inst, doer, target, actions, right, ...)
                 end
