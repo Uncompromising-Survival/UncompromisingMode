@@ -1157,7 +1157,7 @@ function ScrapbookScreen:PopulateInfoPanel(entry)
         local known, tier = TheMineralLogbook:IsGemKnown(data.prefab)
         maketextentry("GEM EFFECTS")
         local body
-        height, body = setcustomblock(height-20, { str = "\n\n" .. GetGemEffectDescription(data.prefab, tier or 0), minwidth = width - 100, leftoffset = 40 })
+        height, body = setcustomblock(height - 20, { str = "\n\n" .. GetGemEffectDescription(data.prefab, tier or 0), minwidth = width - 100, leftoffset = 40 })
     end
 
     ----------------------- DEPS -----------------------------------------
@@ -1266,7 +1266,7 @@ function ScrapbookScreen:PopulateInfoPanel(entry)
 
                     atlas = GetScrapbookIconAtlas(tex)
 
-                    local img = button:AddChild(Image(atlas, tex))
+                    local img = button:AddChild(Image(atlas or GetScrapbookIconAtlas("cactus.tex"), tex or "cactus.tex"))
                     img:ScaleToSize(imagesize, imagesize)
 
                     if depdata.knownlevel == 1 then

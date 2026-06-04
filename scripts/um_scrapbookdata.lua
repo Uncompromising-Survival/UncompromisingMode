@@ -46,7 +46,7 @@ local data = {
     beargerclaw = CreateCursedItemData("beargerclaw", nil, nil, nil, { areadamage = "20-60", weaponrange = 20, deps = { "boneshard", "bearger", "furtuft" } }), --toolactions = {"DIG"} toolactions looks wierd without  finiteuses
     slobberlobber = CreateCursedItemData("slobberlobber", nil, nil, nil, { weapondamage = "20/0.6s", weaponrange = 15, deps = { "meat", "dragon_scales", "dragonfly", "mock_dragonfly" } }),
     feather_frock = CreateCursedItemData("feather_frock", "featherfrock_ground", "featherfrock_ground", "anim", { weapondamage = "10-50", deps = { "goose_feather", "moose", "feather_robin", "feather_robin_winter", "feather_crow", "feather_canary", "malbatross_feather" } }),
-    gore_horn_hat = CreateCursedItemData("gore_horn_hat", "hat_gore_horn", "hat_gore_horn", nil, { weapondamage = 200, deps = { "minotaur", "nightmarefuel" } }),
+    gore_horn_hat = CreateCursedItemData("gore_horn_hat", "hat_gore_horn", "hat_gore_horn", nil, { weapondamage = 200, deps = { "minotaur", "nightmarefuel" }, animoffsetx = -30 }),
     klaus_amulet = CreateCursedItemData("klaus_amulet", "amulet_klaus", "amulet_klaus", "klausamulet", { deps = { "klaus", "goldnugget", "nightmarefuel" }, absorb_percent = 0.3, }),
     crabclaw = CreateCursedItemData("crabclaw", "cursedcrabclaw", "cursedcrabclaw", nil, { weapondamage = "40-60", deps = { "meat", "rocks", "crabking", "redgem", "bluegem", "purplegem", "yellowgem", "greengem", "orangegem", "opalpreciousgem" } }),
     um_beegun = CreateCursedItemData("um_beegun", nil, nil, nil, { weapondamage = 10, weaponrange = 14, deps = { "beequeen", "honeycomb", "royal_jelly" } }),
@@ -66,14 +66,13 @@ local data = {
 
     --widow-related
     widowsgrasp = { name = "widowsgrasp", tex = "widowsgrasp.tex", weapondamage = TUNING.DSTU.WIDOWSGRASP_DAMAGE, finiteuses = TUNING.DSTU.WIDOWSGRASP_USES, type = "item", prefab = "widowsgrasp", build = "widowsgrasp", bank = "widowsgrasp", anim = "idle", deps = { "hoodedwidow", "webbedcreature" } },
-    widowshead = { name = "widowshead", tex = "widowshead.tex", type = "item", perishable = 7.5 * TUNING.PERISH_TWO_DAY, prefab = "widowshead", build = "catcoonhat", bank = "hat_widowshead", anim = "idle", deps = { "hoodedwidow" } },
+    widowshead = { name = "widowshead", tex = "widowshead.tex", type = "item", perishable = 7.5 * TUNING.PERISH_TWO_DAY, prefab = "widowshead", build = "hat_widowshead", bank = "catcoonhat", anim = "anim", deps = { "hoodedwidow" }, animoffsety = -10 },
     webbedcreature = { name = "webbedcreature", tex = "webbedcreature.tex", type = "creature", prefab = "webbedcreature", build = "wackycocoons", bank = "wackycocoons", anim = "idle_medium_scrapbook", deps = { "hoodedwidow", "widowsgrasp" }, use_bg = true },
     spider_trapdoor_hooded = { name = "spider_trapdoor_hooded", tex = "spider_trapdoor_hooded.tex", subcat = "spider", type = "creature", prefab = "spider_trapdoor_hooded", sanityaura = -0.66666666666667, health = 400, damage = 34, build = "spider_trapdoor_hooded", bank = "spider", anim = "idle", perishable = 2400, deps = { "monstermeat", "silk", "spidergland", "hoodedwidow" }, use_bg = true },
 
-
     --moonmaw
     armor_glassmail = { name = "armor_glassmail", tex = "armor_glassmail.tex", subcat = "armor", type = "item", prefab = "armor_glassmail", armor = 945, absorb_percent = 0.7, build = "armor_glassmail", bank = "armor_glassmail", anim = "anim", deps = { "glass_scales", "moonglass_charged" } },
-    glass_scales = { name = "glass_scales", tex = "glass_scales.tex", type = "item", prefab = "glass_scales", stacksize = 10, build = "glass_scales", bank = "glass_scales", anim = "idle" },
+    glass_scales = { name = "glass_scales", tex = "glass_scales.tex", type = "item", prefab = "glass_scales", stacksize = 10, build = "glass_scales", bank = "glass_scales", anim = "idle", animoffsetx = -35 },
     moonglass_geode = { name = "moonglass_geode", tex = "moonglass_geode.tex", type = "item", prefab = "moonglass_geode", build = "moonglass_geode", bank = "moonglass_geode", anim = "idle", workable = "MINE", deps = { "moonglass_charged" } },
     moonmaw_lavae = { name = "moonmaw_lavae", tex = "moonmaw_lavae.tex", type = "creature", prefab = "moonmaw_lavae", health = 250, damage = 50, build = "moonmaw_lavae", bank = "moonmaw_lavae", anim = "hover", use_bg = true },
 
@@ -91,23 +90,30 @@ local data = {
     --hooded forest
     hoodedtrapdoor = { name = "hoodedtrapdoor", tex = "hoodedtrapdoor.tex", type = "thing", prefab = "hoodedtrapdoor", build = "rock_flipping_moss", bank = "flipping_rock", anim = "idle", workable = "MINE", deps = { "rocks", "spider_trapdoor_hooded" }, use_bg = true },
     giant_blueberry = { name = "giant_blueberry", tex = "giant_blueberry.tex", type = "food", prefab = "giant_blueberry", stacksize = 20, hungervalue = 18.8, healthvalue = 1, sanityvalue = 0, foodtype = "VEGGIE", build = "blueberry", bank = "blueberry", anim = "idle", perishable = TUNING.PERISH_FAST * 2, deps = { "spoiled_food", "blueberryplant" } },
-    blueberryplant = { name = "blueberryplant", tex = "blueberryplant.tex", type = "thing", prefab = "blueberryplant", build = "blueberryplant", bank = "blueberryplant", anim = "idle1", burnable = true, workable = "SHOVEL", deps = { "ice" }, use_bg = true },
+    blueberryplant = { name = "blueberryplant", tex = "blueberryplant.tex", type = "thing", prefab = "blueberryplant", build = "blueberryplant", bank = "blueberryplant", anim = "idle1", burnable = true, workable = "SHOVEL", deps = { "ice" }, use_bg = true, animoffsetx = -15 },
     giant_tree = { name = "giant_tree", tex = "giant_tree.tex", type = "thing", prefab = "giant_tree", build = "um_hoodedtree", bank = "um_hoodedtree", anim = "idle_moss_full", workable = "AXE", deps = { "frog", "twigs", "log", "feather_robin", "feather_robin_winter", "feather_canary", "feather_crow", "spider", "aphid", "um_moss" }, specialinfo = "GIANT_TREE", use_bg = true },
     um_moss = { name = "um_moss", tex = "um_moss.tex", type = "food", prefab = "um_moss", stacksize = 20, hungervalue = TUNING.CALORIES_SMALL / 2, healthvalue = TUNING.HEALING_SMALL, sanityvalue = TUNING.SANITY_SUPERTINY, foodtype = FOODTYPE.UM_HORRIBLE_VEGGIE, build = "um_moss", bank = "um_moss", anim = "idle", fueltype = "BURNABLE", fuelvalue = TUNING.SMALL_FUEL, burnable = true },
 
-    um_bear_trap_equippable_gold = { name = "um_bear_trap_equippable_gold", tex = "um_bear_trap_equippable_gold.tex", type = "item", prefab = "um_bear_trap_equippable_gold", damage = 60, finiteuses = 8, health = TUNING.WALRUS_HEALTH / 1.5, build = "um_bear_trap", bank = "um_bear_trap_gold", anim = "idle", deps = { "goldnugget", "houndstooth", "snappy_jaw" } },
-    um_bear_trap_equippable_tooth = { name = "um_bear_trap_equippable_tooth", tex = "um_bear_trap_equippable_tooth.tex", type = "item", prefab = "um_bear_trap_equippable_tooth", damage = 60, finiteuses = 1, health = TUNING.WALRUS_HEALTH / 1.5, build = "um_bear_trap", bank = "um_bear_trap_tooth", anim = "idle", deps = { "rocks", "snappy_jaw" } },
-    um_bear_trap_old = { name = "um_bear_trap_old", tex = "um_bear_trap_old.tex", type = "item", prefab = "um_bear_trap_old", damage = 60, health = TUNING.WALRUS_HEALTH, build = "um_bear_trap", bank = "um_bear_trap_old", anim = "idle", deps = { "walrus_camp", "hooded_fern", "snappy_jaw" } },
-    um_bear_trap_walrus = { name = "um_bear_trap", tex = "um_bear_trap.tex", type = "item", prefab = "um_bear_trap", damage = 60, health = TUNING.WALRUS_HEALTH, build = "um_bear_trap", bank = "um_bear_trap", anim = "idle", deps = { "walrus", "snappy_jaw" } },
-    snappy_jaw = { name = "snappy_jaw", tex = "snappy_jaw.tex", type = "item", prefab = "snappy_jaw", stacksize = 10, build = "um_bear_trap", bank = "um_bear_trap_old", anim = "item", deps = { "flint", "rope", "houndstooth" } },
-    jawed_scythe = { name = "jawed_scythe", tex = "jawed_scythe.tex", subcat = "tool", type = "item", prefab = "jawed_scythe", weapondamage = TUNING.SPEAR_DAMAGE * 1.3, finiteuses = 100, toolactions = { "SCYTHE" }, build = "scythe_voidcloth", bank = "scythe_jawed", anim = "idle", deps = { "twigs", "steelwool", "snappy_jaw" } },
+    um_bear_trap_equippable_gold = { name = "um_bear_trap_equippable_gold", tex = "um_bear_trap_equippable_gold.tex", type = "item", prefab = "um_bear_trap_equippable_gold", weapondamage = 60, finiteuses = 8, health = TUNING.WALRUS_HEALTH / 1.5, bank = "um_bear_trap", build = "um_bear_trap_gold", anim = "idle", deps = { "goldnugget", "houndstooth", "snappy_jaw" }, animoffsetx = -50 },
+    um_bear_trap_equippable_tooth = { name = "um_bear_trap_equippable_tooth", tex = "um_bear_trap_equippable_tooth.tex", type = "item", prefab = "um_bear_trap_equippable_tooth", weapondamage = 60, finiteuses = 1, health = TUNING.WALRUS_HEALTH / 1.5, bank = "um_bear_trap", build = "um_bear_trap_tooth", anim = "idle", deps = { "rocks", "snappy_jaw" }, animoffsetx = -50 },
+    um_bear_trap_old = { name = "um_bear_trap_old", tex = "um_bear_trap_old.tex", type = "thing", prefab = "um_bear_trap_old", damage = 60, health = TUNING.WALRUS_HEALTH, bank = "um_bear_trap", build = "um_bear_trap_old", anim = "idle", deps = { "walrus_camp", "hooded_fern", "snappy_jaw" }, animoffsetx = -50, use_bg = true },
+    um_bear_trap = { name = "um_bear_trap", tex = "um_bear_trap.tex", type = "thing", prefab = "um_bear_trap", damage = 60, health = TUNING.WALRUS_HEALTH, bank = "um_bear_trap", build = "um_bear_trap", anim = "idle", deps = { "walrus", "snappy_jaw" }, animoffsetx = -50, use_bg = true },
+    snappy_jaw = { name = "snappy_jaw", tex = "snappy_jaw.tex", type = "item", prefab = "snappy_jaw", stacksize = 10, bank = "um_bear_trap", build = "um_bear_trap_old", anim = "item", deps = { "flint", "rope", "houndstooth" } },
+    jawed_scythe = { name = "jawed_scythe", tex = "jawed_scythe.tex", subcat = "tool", type = "item", prefab = "jawed_scythe", weapondamage = TUNING.SPEAR_DAMAGE * 1.3, finiteuses = 100, toolactions = { "SCYTHE" }, build = "scythe_jawed", bank = "scythe_voidcloth", anim = "idle", deps = { "twigs", "steelwool", "snappy_jaw" } },
     um_boomberry_bomb = { name = "um_boomberry_bomb", tex = "um_boomberry_bomb.tex", subcat = "weapon", type = "item", prefab = "um_boomberry_bomb", stacksize = 20, weapondamage = TUNING.DSTU.BOOMBERRYBOMB_DAMAGE, weaponrange = 10, build = "um_boomberry_bomb", bank = "um_boomberry_bomb", anim = "idle", deps = { "giant_blueberry", "cutgrass", "twigs" } },
-    aphid = { name = "aphid", tex = "aphid.tex", subcat = "insect", type = "creature", prefab = "aphid", health = 100, damage = 10, build = "aphid", bank = "weevole", anim = "idle", perishable = TUNING.BUTTERFLY_PERISH_TIME, deps = { "monstermeat", "steelwool", "hooded_fern" } },
-    woodpecker = { name = "woodpecker", tex = "woodpecker.tex", subcat = "bird", type = "creature", prefab = "woodpecker", health = 25, build = "woodpecker_build", bank = "crow", anim = "idle", perishable = 2400, deps = { "cookedsmallmeat", "cutgrass", "feather_crow", "feather_robin", "flint", "seeds", "smallmeat", "twigs" } },
-    um_hat_leafwing = { name = "um_hat_leafwing", tex = "um_hat_leafwing.tex", subcat = "hat", type = "item", prefab = "um_hat_leafwing", build = "hat_catcoon", bank = "um_hat_leafwing", anim = "anim", perishable = 4800, waterproofer = TUNING.WATERPROOFNESS_SMALL, snowmandecor = true, deps = { "um_moss", "log", "um_leafwing", "spoiled_food" } },
-    um_leafwing = { name = "um_leafwing", tex = "um_leafwing.tex", type = "item", prefab = "um_leafwing", build = "um_leafwing", bank = "um_leafwing", anim = "idle", fueltype = "BURNABLE", fuelvalue = TUNING.LARGE_FUEL, perishable = TUNING.PERISH_FAST, stackable = TUNING.STACK_SIZE_SMALLITEM, foodtype = "meat", hungervalue = TUNING.CALORIES_TINY, healthvalue = TUNING.HEALING_SMALL, sanityvalue = -TUNING.SANITY_TINY },
+    aphid = { name = "aphid", tex = "aphid.tex", subcat = "insect", type = "creature", prefab = "aphid", health = 100, damage = 10, build = "aphid", bank = "weevole", anim = "idle", perishable = TUNING.BUTTERFLY_PERISH_TIME, deps = { "monstermeat", "steelwool", "hooded_fern" }, use_bg = true },
+    woodpecker = { name = "woodpecker", tex = "woodpecker.tex", subcat = "bird", type = "creature", prefab = "woodpecker", health = 25, build = "woodpecker_build", bank = "crow", anim = "idle", perishable = 2400, deps = { "cookedsmallmeat", "cutgrass", "feather_crow", "feather_robin", "flint", "seeds", "smallmeat", "twigs" }, use_bg = true },
+    um_hat_leafwing = { name = "um_hat_leafwing", tex = "um_hat_leafwing.tex", subcat = "hat", type = "item", prefab = "um_hat_leafwing", build = "um_hat_leafwing", scale = 0.5, animoffsetx = -45, animoffsety = -10 bank = "catcoonhat", anim = "anim", perishable = 4800, waterproofer = TUNING.WATERPROOFNESS_SMALL, snowmandecor = true, deps = { "um_moss", "log", "um_leafwing", "spoiled_food" } },
+    um_leafwing = { name = "um_leafwing", tex = "um_leafwing.tex", type = "item", prefab = "um_leafwing", build = "um_leafwing", bank = "um_leafwing", anim = "idle", fueltype = "BURNABLE", fuelvalue = TUNING.LARGE_FUEL, perishable = TUNING.PERISH_FAST, stackable = TUNING.STACK_SIZE_SMALLITEM, foodtype = "MEAT", hungervalue = TUNING.CALORIES_TINY, healthvalue = TUNING.HEALING_SMALL, sanityvalue = -TUNING.SANITY_TINY },
 
-    hooded_fern = { name = "hooded_fern", tex = "hooded_fern.tex", type = "thing", prefab = "hooded_fern", build = "um_thicket", bank = "um_thicket", anim = "idle", pickable = true, burnable = true, deps = {"um_hat_leafwing", "armor_bramble", --[["um_armor_bramble_rimeweed",]] "armor_lunarplant_husk",  "ash", "mound", "spider", "aphid", "seeds", "cutgrass", "twigs", "carrot_seeds", "corn_seeds", "dragonfruit_seeds", "durian_seeds", "eggplant_seeds", "pomegranate_seeds", "pumpkin_seeds", "asparagus_seeds", "tomato_seeds", "potato_seeds", "onion_seeds", "pepper_seeds", "garlic_seeds", "watermelon_seeds"} },
+    hooded_fern = { name = "hooded_fern", tex = "hooded_fern.tex", type = "thing", prefab = "hooded_fern", build = "um_thicket", bank = "um_thicket", anim = "idle", pickable = true, burnable = true, deps = { "um_hat_leafwing", "armor_bramble", --[["um_armor_bramble_rimeweed",]] "armor_lunarplant_husk", "ash", "mound", "spider", "aphid", "seeds", "cutgrass", "twigs", "carrot_seeds", "corn_seeds", "dragonfruit_seeds", "durian_seeds", "eggplant_seeds", "pomegranate_seeds", "pumpkin_seeds", "asparagus_seeds", "tomato_seeds", "potato_seeds", "onion_seeds", "pepper_seeds", "garlic_seeds", "watermelon_seeds" }, use_bg = true },
+
+    um_fern_fox = { name = "um_fern_fox", tex = "um_fern_fox.tex", type = "creature", prefab = "um_fern_fox", health = 150, build = "fern_fox", bank = "fern_fox", anim = "idle_loop", deps = { "plantmeat", "um_moss", "um_fern_fox_den" }, use_bg = true },
+    um_fern_fox_den = { name = "um_fern_fox_den", tex = "um_fern_fox_den.tex", type = "thing", prefab = "um_fern_fox_den", build = "um_fox_den", bank = "um_fox_den", anim = "idle", workable = "DIG", burnable = true, deps = { "rocks", "um_moss", "twigs" }, use_bg = true },
+    giant_tree_birdnest = { name = "giant_tree_birdnest", tex = "giant_tree_birdnest.tex", type = "thing", prefab = "giant_tree_birdnest", build = "giant_tree_nest", bank = "giant_tree_nest", anim = "idle_3", burnable = true, deps = { "bird_egg", "twigs", "ash", "bird_egg_cooked", "giant_tree" }, use_bg = true },
+    fruitbat = { name = "fruitbat", tex = "fruitbat.tex", type = "creature", prefab = "fruitbat", health = 100, damage = "20-" .. TUNING.STARFISH_TRAP_DAMAGE, build = "fruitbat", bank = "fruitbat", anim = "idle", deps = { "um_leafwing", "giant_blueberry", "blueberryplant" }, animoffsetx = -20, use_bg = true },
+
+    pitcherplant = { name = "pitcherplant", tex = "pitcherplant.tex", type = "thing", prefab = "pitcherplant", build = "pitcher", bank = "pitcher", anim = "swing", deps = { "honey", "fruitbat" }, animoffsety = -70, animoffsetx = 20, use_bg = true },
 
     --[[
         items
@@ -116,23 +122,23 @@ local data = {
         um_bear_trap_equippable_gold [x]
         um_bear_trap_equippable_tooth [x]
         um_boomberry_bomb [x]
-        aphid --technically. [x]
+        aphid --technically. [ ]
         jawed_scythe [x]
-        woodpecker --also technically [x]
+        woodpecker --also technically [ ]
         snappy_jaw [x]
         um_hat_leafwing [x]
         um_leafwing [x]
 
         hooded_fern [ ]
-        um_fern_fox
-        um_fern_fox_den
+        um_fern_fox [ ]
+        um_fern_fox_den [ ]
         giant_tree [ ]
-        giant_tree_nest
+        giant_tree_nest [ ]
         blueberryplant [ ]
-        fruitbat
+        fruitbat [ ]
         um_bear_trap_old [ ]
-        um_bear_trap_walrus [ ]
-        pitcherplant
+        um_bear_trap [ ]
+        pitcherplant [ ]
     ]]
 
     --broiling
@@ -140,7 +146,7 @@ local data = {
     springrock2 = { name = "springrock2", tex = "springrock2.tex", type = "thing", prefab = "springrock2", build = "springrock2", bank = "springrock2", anim = "full", workable = "MINE", deps = { "flint", "nitre", "rocks" }, use_bg = true },
     springrock3 = { name = "springrock3", tex = "springrock3.tex", type = "thing", prefab = "springrock3", build = "springrock3", bank = "springrock3", anim = "full", workable = "MINE", deps = { "flint", "goldnugget", "nitre", "rocks" }, use_bg = true },
     cave_entrance_magmabiome = { name = "cave_entrance_magmabiome", tex = "cave_entrance_magmabiome.tex", type = "POI", prefab = "cave_entrance_magmabiome", build = "cave_entrance_magmabiome", bank = "cave_entrance_magmabiome", anim = "full", workable = "MINE", deps = { "bat", "flint", "nitre", "rocks" }, use_bg = true },
-    um_hotspring = { name = "um_hotspring", tex = "um_hotspring.tex", type = "thing", prefab = "um_hotspring", build = "um_hotspring", bank = "um_hotspring", anim = "idle_med", deps = { "bathbomb" }, use_bg = true },
+    um_hotspring = { name = "um_hotspring", tex = "um_hotspring.tex", type = "thing", prefab = "um_hotspring", build = "um_hotspring", bank = "um_hotspring", anim = "med_idle", deps = { "bathbomb" }, animoffsety = 45, animoffsetx = 15, use_bg = true },
 
     um_spongeplant_item = { name = "um_spongeplant_item", tex = "um_spongeplant_item.tex", type = "food", prefab = "um_spongeplant_item", stacksize = 20, hungervalue = 18.8, healthvalue = 3, sanityvalue = -10, foodtype = "VEGGIE", build = "um_spongeplant", bank = "um_spongeplant_item", anim = "idle", perishable = TUNING.PERISH_FAST, deps = { "spoiled_food", "um_spongeplant" } },
     um_spongeplant = { name = "um_spongeplant", tex = "um_spongeplant.tex", type = "thing", prefab = "um_spongeplant", build = "um_spongeplant", bank = "um_spongeplant", anim = "idle", burnable = true, workable = "MINE", deps = { "um_spongeplant_item", "marble" }, use_bg = true },
@@ -149,10 +155,10 @@ local data = {
     snaildrakehat = { name = "snaildrakehat", tex = "snaildrakehat.tex", subcat = "armor", type = "item", prefab = "snaildrakehat", armor = TUNING.ARMOR_SLURTLEHAT, absorb_percent = 0.7, build = "snaildrakehat", bank = "snaildrakehat", anim = "anim", waterproofer = TUNING.WATERPROOFNESS_SMALL, snowmandecor = true, deps = { "snaildrake_magma", "slurtle_shellpieces" } },
     snaildrakebucket = { name = "snaildrakebucket", tex = "snaildrakebucket_empty.tex", type = "item", prefab = "snaildrakebucket", build = "snaildrakebucket", bank = "snaildrakebucket", anim = "empty", deps = { "snaildrake_slime", "slurtle_shellpieces", "pond", "pond_cave", "oasislake", "lava_pond" } },
     snaildrake_hole = { name = "snaildrake_hole", tex = "snaildrake_hole.tex", type = "thing", prefab = "snaildrake_hole", build = "snaildrake_hole", bank = "snaildrake_hole", anim = "idle", deps = { "snaildrake_slime", "snaildrake_magma" }, use_bg = true },
-    snaildrake_slime = { name = "snaildrake_slime", tex = "snaildrake_slime.tex", type = "creature", prefab = "snaildrake_slime", health = 450, damage = 25, build = "snaildrake_holeshell", bank = "snaildrake_holeshell", anim = "idle", deps = { "slurtle_shellpieces", "snaildrakebucket", "snapalm" }, scale = 2, animoffsetx = -10, animoffsety = -40, use_bg = true },
-    snaildrake_magma = { name = "snaildrake_magma", tex = "snaildrake_magma.tex", type = "creature", prefab = "snaildrake_magma", health = 450, damage = 25, build = "snaildrake_spikeshell", bank = "snaildrake_spikeshell", anim = "idle", deps = { "slurtle_shellpieces", "snaildrakebucket", "snapalm" }, scale = 2, animoffsetx = -10, animoffsety = -40, use_bg = true },
+    snaildrake_slime = { name = "snaildrake_slime", tex = "snaildrake_slime.tex", type = "creature", prefab = "snaildrake_slime", health = 450, damage = 25, build = "snaildrake_holeshell", bank = "snaildrake_holeshell", anim = "idle", deps = { "slurtle_shellpieces", "snaildrakebucket", "snapalm" }, scale = 2, animoffsetx = -10, animoffsety = -20, use_bg = true },
+    snaildrake_magma = { name = "snaildrake_magma", tex = "snaildrake_magma.tex", type = "creature", prefab = "snaildrake_magma", health = 450, damage = 25, build = "snaildrake_spikeshell", bank = "snaildrake_spikeshell", anim = "idle", deps = { "slurtle_shellpieces", "snaildrakebucket", "snapalm" }, scale = 2, animoffsetx = -10, animoffsety = -20, use_bg = true },
 
-    boulder_crab = { name = "boulder_crab", tex = "boulder_crab.tex", type = "creature", prefab = "boulder_crab", health = 500, damage = 34, build = "boulder_crab", bank = "boulder_crab", anim = "idle", deps = { "rock1", "rock2", "rock_moon", "rock_flintless", "springrock1", "springrock2", "springrock3", "meat", "rocks" }, scale = 1.5, use_bg = true },
+    boulder_crab = { name = "boulder_crab", tex = "boulder_crab.tex", type = "creature", prefab = "boulder_crab", health = 500, damage = 34, build = "boulder_crab", bank = "boulder_crab", anim = "idle", animoffsetx = 15, deps = { "rock1", "rock2", "rock_moon", "rock_flintless", "springrock1", "springrock2", "springrock3", "meat", "rocks" }, scale = 1.5, use_bg = true },
 
     --misc.
     trapdoor = { name = "trapdoor", tex = "trapdoor.tex", type = "thing", prefab = "trapdoor", build = "trapdoor", bank = "trapdoor", anim = "idle", workable = "MINE", deps = { "rocks", "spider_trapdoor" }, use_bg = true },

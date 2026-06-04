@@ -4,6 +4,9 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 STRINGS.SCRAPBOOK.SUBCATS.VETERANSCURSE = "Veteran's Curse"
+STRINGS.SCRAPBOOK.SUBCATS.UM_DEBUG = "Debug"
+
+local debug = true
 
 local scrapbook_prefabs = require("scrapbook_prefabs")
 local scrapbookdata = require("screens/redux/scrapbookdata")
@@ -84,7 +87,10 @@ local um_preparedfoods = require("um_preparedfoods")
 
 local offset_required = {
     "beefalowings",
-    "blueberrypancakes"
+    "blueberrypancakes",
+    "californiaking",
+    "simpsalad",
+    "snowcone"
 }
 
 for k, v in pairs(um_preparedfoods) do
@@ -101,7 +107,7 @@ for k, v in pairs(um_preparedfoods) do
         build = k,
         bank = k,
         use_bg = false,
-        anim = "idle",
+        anim = k == "theatercorn" and "ground" or "idle",
         perishable = v.perishtime,
         burnable = true,
         deps = v.warly_only and { "spoiled_food", "portablecookpot" } or { "spoiled_food", "cookpot", "portablecookpot", "archive_cookpot" }
@@ -119,8 +125,9 @@ end
 
 --------------------- ADDING TO VANILLA SCRAPBOOK ----------------------------------
 for name, data in pairs(um_scrapbookdata) do
-    if data.name == nil or data.name ~= nil and STRINGS.NAMES[string.upper(data.name)] == nil then
-        print("WARNING! \"" .. name .. "\" has no name in strings")
+    if debug then
+        --so we can easily search all UM entries.
+        data.subcat = "um_debug"
     end
 
     scrapbook_prefabs[name] = true
@@ -218,10 +225,13 @@ local specinfo = {
     UM_ASTRAL_PROJECTOR_TARGET = "Returns your body back to the projectinator.",
     UM_SPONGEPLANT = "Must be shaved to harvest.",
     UM_SPONGEPLANT_ITEM = "Reduces moisture by 10 when eaten.",
-    GIANT_TREE = S.WATERTREEPILLAR.."\nCan be shaved for Moss.",
+    GIANT_TREE = S.WATERTREEPILLAR .. "\n\nCan be shaved for Moss.",
     GIANT_BLUEBERRY = "Increases moisture by 5 when eaten.",
     UM_BOOMBERRY_BOMB = "Creates a slowing puddle of goo.",
     UM_HAT_LEAFWING = "Increases speed by 15% when worn.\nNegates movement speed reductions.",
+    UM_FERN_FOX = "Makes nearby plants grow considerably faster.",
+    FRUITBAT = "Feasts on insects.",
+    JAWED_SCYTHE = "More uses when reaping.",
 
 }
 
@@ -246,4 +256,44 @@ local crabclaw_gem_desc = {
 
 for k, v in pairs(crabclaw_gem_desc) do
     S[string.upper(k) .. "GEM_CRACKED"] = "When socketed on a Crab Claw: " .. v
+end
+
+if env.GetModConfigData("monstersmallmeat") then
+    local monster_meat_replace = {
+        "rabbit",
+        "spider",
+        "molebat",
+        "bat",
+        "cookiecutter",
+        "aphid"
+    }
+
+    local replacement_map = {
+        monstermeat = "monstersmallmeat",
+        cookedmonstermeat = "cookedmonstersmallmeat"
+    }
+
+    for _, critter in ipairs(monster_meat_replace) do
+        local new_deps = {}
+
+        for k, v in pairs(scrapbookdata[critter].deps) do
+            if replacement_map[v] ~= nil then
+                table.insert(new_deps, replacement_map[v])
+            else
+                table.insert(new_deps, v)
+            end
+        end
+
+        scrapbookdata[critter].deps = new_deps
+    end
+end
+
+for k, v in pairs(scrapbookdata) do
+    if v.name == nil then
+        print("WARNING: \"" .. k .. "\" has no name!")
+    elseif v.name ~= nil and STRINGS.NAMES[string.upper(v.name)] == nil then
+        print("WARNING: \"" .. k .. "\" has no name in STRINGS.NAMES!")
+    elseif v.name ~= nil and STRINGS.NAMES[string.upper(v.name)] ~= nil and type(STRINGS.NAMES[string.upper(v.name)]) ~= "string" then
+        print("DEBUG: \"" .. k .. "\" has a name in STRINGS.NAMES that is not a string.")
+    end
 end

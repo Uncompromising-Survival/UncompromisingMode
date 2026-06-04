@@ -18,35 +18,35 @@ local warly_recipes = cooking.recipes.portablecookpot
 --recipes.meatballs.test = function(cooker, names, tags) return tags.antihistamine and tags.antihistamine >= 3  end,
 
 --local ApplyIcecreamBuff = function(inst, eater)
-    --if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
-        --not (eater.components.health ~= nil and eater.components.health:IsDead()) and
-        --not eater:HasTag("playerghost") then
-        --eater.components.debuffable:AddDebuff("icecreamsanityregenbuff", "icecreamsanityregenbuff")
-    --end
+--if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
+--not (eater.components.health ~= nil and eater.components.health:IsDead()) and
+--not eater:HasTag("playerghost") then
+--eater.components.debuffable:AddDebuff("icecreamsanityregenbuff", "icecreamsanityregenbuff")
+--end
 
-    --if inst.OldOnEat ~= nil then
-        --return inst.OldOnEat(inst, eater)
-    --end
+--if inst.OldOnEat ~= nil then
+--return inst.OldOnEat(inst, eater)
+--end
 --end
 
 
 --if TUNING.DSTU.MEATBALL then
-    --local MEATBALLS =
-    --{
-        --"meatballs",
-        --"meatballs_spice_chili",
-        --"meatballs_spice_garlic",
-        --"meatballs_spice_salt",
-        --"meatballs_spice_sugar",
-    --}
+--local MEATBALLS =
+--{
+--"meatballs",
+--"meatballs_spice_chili",
+--"meatballs_spice_garlic",
+--"meatballs_spice_salt",
+--"meatballs_spice_sugar",
+--}
 
-    --for k, v in pairs(MEATBALLS) do
-        --AddPrefabPostInit(v, function(inst)
-            --if inst ~= nil and inst.components.edible ~= nil then
-                --inst.components.edible.hungervalue = GLOBAL.TUNING.DSTU.RECIPE_CHANGE_MEATBALL_HUNGER
-            --end
-        --end)
-    --end
+--for k, v in pairs(MEATBALLS) do
+--AddPrefabPostInit(v, function(inst)
+--if inst ~= nil and inst.components.edible ~= nil then
+--inst.components.edible.hungervalue = GLOBAL.TUNING.DSTU.RECIPE_CHANGE_MEATBALL_HUNGER
+--end
+--end)
+--end
 --end
 
 
@@ -319,7 +319,6 @@ AddPrefabPostInit("honey", function(inst)
     end
 end)
 AddPrefabPostInit("butterflywings", function(inst)
-
     if inst.components.edible and TUNING.DSTU.BUTTERFLYWINGS_NERF == "stat_nerf" then
         inst.components.edible.healthvalue = GLOBAL.TUNING.DSTU.FOOD_BUTTERFLY_WING_HEALTH
         inst.components.edible.hungervalue = GLOBAL.TUNING.DSTU.FOOD_BUTTERFLY_WING_HUNGER
@@ -328,11 +327,11 @@ AddPrefabPostInit("butterflywings", function(inst)
 end)
 
 --if TUNING.DSTU.MUSHROOM_CHANGES then
-    --AddPrefabPostInit("green_cap_cooked", function(inst)
-        --if inst ~= nil and inst.components.edible ~= nil then
-            --inst.components.edible.healthvalue = -5
-        --end
-    --end)
+--AddPrefabPostInit("green_cap_cooked", function(inst)
+--if inst ~= nil and inst.components.edible ~= nil then
+--inst.components.edible.healthvalue = -5
+--end
+--end)
 --end
 
 AddPrefabPostInit("cookedmonstermeat", function(inst)
@@ -372,14 +371,14 @@ end
 -- Reduce seeds hunger
 -----------------------------------------------------------------
 if TUNING.DSTU.SEEDS then
-    local seeds = {"","carrot_","corn_","dragonfruit_","durian_","eggplant_","pomegranate_","pumpkin_","asparagus_","tomato_","potato_","onion_","pepper_","garlic_"}
+    local seeds = { "", "carrot_", "corn_", "dragonfruit_", "durian_", "eggplant_", "pomegranate_", "pumpkin_", "asparagus_", "tomato_", "potato_", "onion_", "pepper_", "garlic_" }
 
-    for i,v in ipairs(seeds) do
-    AddPrefabPostInit(v.."seeds", function(inst)
-        if inst ~= nil and inst.components.edible ~= nil then
-            inst.components.edible.hungervalue = GLOBAL.TUNING.DSTU.FOOD_SEEDS_HUNGER
-        end
-    end)
+    for i, v in ipairs(seeds) do
+        AddPrefabPostInit(v .. "seeds", function(inst)
+            if inst ~= nil and inst.components.edible ~= nil then
+                inst.components.edible.hungervalue = GLOBAL.TUNING.DSTU.FOOD_SEEDS_HUNGER
+            end
+        end)
     end
     AddPrefabPostInit("seeds_cooked", function(inst)
         if inst ~= nil and inst.components.edible ~= nil then
@@ -467,8 +466,6 @@ if GetModConfigData("sr_foodrebalance") then
             end
         )
     end
-
-
 end
 
 
@@ -493,13 +490,12 @@ for k, v in pairs(PUFFED_POTATOES) do
                     if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and not (eater.components.health ~= nil and eater.components.health:IsDead()) and not eater:HasTag("playerghost") then
                         eater.components.debuffable:AddDebuff("buff_smallcourage", "buff_smallcourage")
                     end
-                end            
+                end
                 if _oneatenfn then
-                    _oneatenfn(inst,eater)
+                    _oneatenfn(inst, eater)
                 end
             end
             inst.components.edible:SetOnEatenFn(oneatenfn)
-            
         end
     end)
 end
@@ -549,31 +545,31 @@ AddPrefabPostInit("wetgoop", function(inst)
     if not GLOBAL.TheWorld.ismastersim then
         return
     end
-    
+
     if inst.components.perishable ~= nil and inst.components.perishable.onperishreplacement ~= nil then
         if inst.components.perishable.onperishreplacement == "spoiled_food" then
             inst.components.perishable.onperishreplacement = nil
         end
-        
+
         inst.components.perishable:SetOnPerishFn(inst.Remove)
     end
 end)
 
 GLOBAL.FOODTYPE.UM_HORRIBLE_VEGGIE = "UM_HORRIBLE_VEGGIE"
-GLOBAL.STRINGS.FOOD_TYPES.UM_HORRIBLE_VEGGIE = "Horrible Veggie"
+GLOBAL.STRINGS.SCRAPBOOK.FOODTYPE.UM_HORRIBLE_VEGGIE = "Horrible Veggie"
 
-table.insert(GLOBAL.FOODGROUP.BERRIES_AND_SEEDS.types,GLOBAL.FOODTYPE.UM_HORRIBLE_VEGGIE)
-table.insert(GLOBAL.FOODGROUP.MOOSE.types,GLOBAL.FOODTYPE.UM_HORRIBLE_VEGGIE)
-table.insert(GLOBAL.FOODGROUP.BEARGER.types,GLOBAL.FOODTYPE.UM_HORRIBLE_VEGGIE)
-table.insert(GLOBAL.FOODGROUP.VEGETARIAN.types,GLOBAL.FOODTYPE.UM_HORRIBLE_VEGGIE)
+table.insert(GLOBAL.FOODGROUP.BERRIES_AND_SEEDS.types, GLOBAL.FOODTYPE.UM_HORRIBLE_VEGGIE)
+table.insert(GLOBAL.FOODGROUP.MOOSE.types, GLOBAL.FOODTYPE.UM_HORRIBLE_VEGGIE)
+table.insert(GLOBAL.FOODGROUP.BEARGER.types, GLOBAL.FOODTYPE.UM_HORRIBLE_VEGGIE)
+table.insert(GLOBAL.FOODGROUP.VEGETARIAN.types, GLOBAL.FOODTYPE.UM_HORRIBLE_VEGGIE)
 GLOBAL.FOODTYPE.UM_MOSS = "UM_MOSS"
 
 AddPrefabPostInit("acorn", function(inst)
-	if not GLOBAL.TheWorld.ismastersim then
-		return
-	end
+    if not GLOBAL.TheWorld.ismastersim then
+        return
+    end
 
     --inst.components.edible.hungervalue = TUNING.CALORIES_SMALL / 2
     inst.components.edible.foodtype = FOODTYPE.UM_HORRIBLE_VEGGIE
-	inst.components.edible.secondaryfoodtype = FOODTYPE.RAW
+    inst.components.edible.secondaryfoodtype = FOODTYPE.RAW
 end)

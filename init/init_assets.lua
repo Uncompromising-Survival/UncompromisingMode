@@ -635,6 +635,18 @@ local scrapbook_icons = {
     "snaildrake_magma",
     "snaildrake_hole",
     "boulder_crab",
+    "aphid",
+    "blueberryplant",
+    "fruitbat",
+    "giant_tree",
+    "giant_tree_birdnest",
+    "hooded_fern",
+    "um_bear_trap",
+    "um_bear_trap_old",
+    "um_fern_fox",
+    "um_fern_fox_den",
+    "woodpecker",
+    "pitcherplant"
 }
 
 for _, item in ipairs(scrapbook_icons) do

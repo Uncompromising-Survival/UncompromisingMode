@@ -204,6 +204,7 @@ local um_specialinfo = {
     HOMESIGN = "No longer has collision.",
     PENGUIN = "Aggressive near its breeding ground.",
     CACTUS = "No longer grows in Winter.",
+    OASIS_CACTUS = "No longer grows in Winter.",
     BANANABUSH = "No longer grows in Winter.",
     MARSH_BUSH = "No longer grows in Winter.",
     --ROCK_AVOCADO_BUSH = "No longer grows in Winter",
@@ -276,32 +277,4 @@ for k, v in pairs(wixiethings) do
             inst.components.pointofinterest:SetHeight(0)
         end
     end)
-end
-
-local monster_meat_replace = {
-    "rabbit",
-    "spider",
-    "molebat",
-    "bat",
-    "cookiecutter",
-    "aphid"
-}
-
-local replacement_map = {
-    monstermeat = "monstersmallmeat",
-    cookedmonstermeat = "cookedmonstersmallmeat"
-}
-
-for _, critter in ipairs(monster_meat_replace) do
-    local new_deps = {}
-
-    for k, v in pairs(scrapbookdata[critter].deps) do
-        if replacement_map[v] ~= nil then
-            table.insert(new_deps, replacement_map[v])
-        else
-            table.insert(new_deps, v)
-        end
-    end
-
-    scrapbookdata[critter].deps = new_deps
 end
