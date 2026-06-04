@@ -26,7 +26,7 @@ env.AddComponentPostInit("quaker", function(self)
         { -- rare
             weight = 0.035,
             loot = {
-                "mole",
+                --"mole",
                 "snapalm",
                 "slurtle_shellpieces",
             },
