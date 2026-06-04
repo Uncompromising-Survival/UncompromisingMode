@@ -135,7 +135,15 @@ local function GetPeriodString(period)
     end
 end
 
-local FUELTYPE_SUBICON_LOOKUP = { [FUELTYPE.BURNABLE] = "icon_fuel_burnable.tex", [FUELTYPE.CAVE] = "icon_fuel_cavelight.tex", [FUELTYPE.CHEMICAL] = "icon_fuel_chemical.tex", [FUELTYPE.NIGHTMARE] = "icon_fuel_nightmare.tex", [FUELTYPE.WORMLIGHT] = "icon_fuel_wormlight.tex" }
+local FUELTYPE_SUBICON_LOOKUP = {
+    [FUELTYPE.BURNABLE] = "icon_fuel_burnable.tex",
+    [FUELTYPE.CAVE] = "icon_fuel_cavelight.tex",
+    [FUELTYPE.CHEMICAL] = "icon_fuel_chemical.tex",
+    [FUELTYPE.NIGHTMARE] = "icon_fuel_nightmare.tex",
+    [FUELTYPE.WORMLIGHT] = "icon_fuel_wormlight.tex",
+    [FUELTYPE.SALT] = "icon_fuel_salt.tex",
+    [FUELTYPE.BATTERYPOWER] = "icon_fuel_batterypower.tex"
+}
 
 local FUELTYPE_SUBICONS = table.getkeys(FUELTYPE_SUBICON_LOOKUP)
 
@@ -166,7 +174,7 @@ local function GetGemUpgradingDescription(_name, knowntier)
     local str = ""
 
     if knowntier > 0 then
-        str = str .. "\n\n" .. STRINGS.SCRAPBOOK.SPECIALINFO.GEM_UPGRADING.GEM_UPGRADING .. " BETA NOTE: Aside from the mobs listed in the related entries, Snaildrakes and Abominamoles also eat gems." -- TODO: REMOVE ME
+        str = str .. "\n\n" .. STRINGS.SCRAPBOOK.SPECIALINFO.GEM_UPGRADING.GEM_UPGRADING
         if STRINGS.SCRAPBOOK.SPECIALINFO.GEM_UPGRADING[string.upper(_name)] ~= nil then
             str = str .. "\n" .. STRINGS.SCRAPBOOK.SPECIALINFO.GEM_UPGRADING[string.upper(_name)]
         end
@@ -726,14 +734,18 @@ function ScrapbookScreen:PopulateInfoPanel(entry)
         end
 
         if data.armor then
-            makeentry("icon_armor.tex", math.floor(data.armor))
+            makeentry("icon_armor.tex", data.armor)
         end
 
         if data.absorb_percent then
-            if TUNING.DSTU.ARMORREWORK then
-                data.absorb_percent = RemapAbsorption(data.prefab, data.absorb_percent)
+            if type(data.absorb_percent) == "number" then
+                if TUNING.DSTU.ARMORREWORK then
+                    data.absorb_percent = RemapAbsorption(data.prefab, data.absorb_percent)
+                end
+                makesubentry(STRINGS.SCRAPBOOK.DATA_ARMOR_ABSORB .. (data.absorb_percent * 100) .. "%")
+            else
+                makesubentry(STRINGS.SCRAPBOOK.DATA_ARMOR_ABSORB .. data.absorb_percent .. "%")
             end
-            makesubentry(STRINGS.SCRAPBOOK.DATA_ARMOR_ABSORB .. (data.absorb_percent * 100) .. "%")
         end
 
         if data.armor_planardefense then

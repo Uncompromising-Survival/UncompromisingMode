@@ -181,7 +181,7 @@ local specinfo = {
     AIR_CONDITIONER = "Can crush up Mushrooms for helpful stat clouds.",
     ANCIENT_AMULET_RED = "Drops soul orbs when attacked, which will replenish lost health when picked up.\nRevives players when haunted.",
     ARMOR_GLASSMAIL = "Summons spinning Glass Shards when attacking enemies. Loses shards when damage is taken.",
-    SALTPACK = "Drops piles of salt, preventing buildup of Snow Piles.",
+    SALTPACK = "Drops piles of salt, clearing and preventing further buildup of Snow Piles.",
     SPOREPACK = "An 12 slot container that doubles the speed of food spoiling inside.",
     UM_BEAR_TRAP_EQUIPPABLE_TOOTH = "Slows down anything it's attached to.\nDeployable and throwable.",
     UM_BEAR_TRAP_EQUIPPABLE_GOLD = "Slows down anything it's attached to.\nDeployable and throwable.",
@@ -190,8 +190,7 @@ local specinfo = {
     SNOWGOGGLES = "Grants protection against Snow Storms / Sand Storms when worn.",
     GASMASK = "Provides protection against spore clouds, smog and hayfever.",
     PLAGUEMASK = "Provides protection against spore clouds, smog and hayfever.",
-    FLORAL_BANDAGE = "Restores extra health over time.",
-    UM_RIMEWEED_ICEPACK = "Cools the user down.",
+    FLORAL_BANDAGE = "Heals 45 health. Restores extra health over time.",
     DISEASECUREBOMB = "Fertilizes plants and get those ready for harvest.",
     SLUDGE_OIL = "Multi-use fuel for fires and lanterns alike.",
     ARMOR_SHARKSUIT_UM = "Works as electrical insulation.\nWearer will wash ashore with no penalties.",
@@ -232,8 +231,15 @@ local specinfo = {
     UM_FERN_FOX = "Makes nearby plants grow considerably faster.",
     FRUITBAT = "Feasts on insects.",
     JAWED_SCYTHE = "More uses when reaping.",
-
+    UM_ARMOR_BRAMBLE_RIMEWEED = "This thorny husk deals its damage and freezes its surroundings when attacked.",
+    UM_RIMEWEED_ICEPACK = "Heals 30 health. Decreases temperature when used.",
+    RIMEWEED_WHIP = "Freezes on hit.",
+    SNOWPILE = "Builds up during snow storms.",
+    UM_HAT_RIME = "Protection scales with wearer temperature.",
+    UM_ICE_SICLE = "More uses when reaping. Freezes on hit, cools down the user when reaping.",
+    RIMEWEED_MAIN = "Creates Rimeweed Brambles in the area, ensnaring nearby plants.\n\nWhen fully grown, creates a perpetual snow storm around itself."
 }
+
 
 
 for k, v in pairs(specinfo) do

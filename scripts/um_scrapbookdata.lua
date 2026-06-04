@@ -115,32 +115,6 @@ local data = {
 
     pitcherplant = { name = "pitcherplant", tex = "pitcherplant.tex", type = "thing", prefab = "pitcherplant", build = "pitcher", bank = "pitcher", anim = "swing", deps = { "honey", "fruitbat" }, animoffsety = -70, animoffsetx = 20, use_bg = true },
 
-    --[[
-        items
-        giant_blueberry [x]
-        um_moss [x]
-        um_bear_trap_equippable_gold [x]
-        um_bear_trap_equippable_tooth [x]
-        um_boomberry_bomb [x]
-        aphid --technically. [ ]
-        jawed_scythe [x]
-        woodpecker --also technically [ ]
-        snappy_jaw [x]
-        um_hat_leafwing [x]
-        um_leafwing [x]
-
-        hooded_fern [ ]
-        um_fern_fox [ ]
-        um_fern_fox_den [ ]
-        giant_tree [ ]
-        giant_tree_nest [ ]
-        blueberryplant [ ]
-        fruitbat [ ]
-        um_bear_trap_old [ ]
-        um_bear_trap [ ]
-        pitcherplant [ ]
-    ]]
-
     --broiling
     springrock1 = { name = "springrock1", tex = "springrock1.tex", type = "thing", prefab = "springrock1", build = "springrock1", bank = "springrock1", anim = "full", workable = "MINE", deps = { "nitre", "rocks" }, use_bg = true },
     springrock2 = { name = "springrock2", tex = "springrock2.tex", type = "thing", prefab = "springrock2", build = "springrock2", bank = "springrock2", anim = "full", workable = "MINE", deps = { "flint", "nitre", "rocks" }, use_bg = true },
@@ -172,6 +146,24 @@ local data = {
 
     um_monsteregg = { name = "um_monsteregg", tex = "um_monsteregg.tex", type = "food", prefab = "um_monsteregg", stacksize = 40, hungervalue = 9.375, healthvalue = -15, sanityvalue = -10, foodtype = "MEAT", build = "extra_monsterfoods", bank = "extra_monsterfoods", anim = "egg", perishable = 4800, deps = { "um_monsteregg_cooked", "rottenegg", "birdcage" } },
     um_monsteregg_cooked = { name = "um_monsteregg_cooked", tex = "um_monsteregg_cooked.tex", type = "food", prefab = "um_monsteregg_cooked", stacksize = 40, hungervalue = 9.375, healthvalue = -5, sanityvalue = -10, foodtype = "MEAT", build = "extra_monsterfoods", bank = "extra_monsterfoods", anim = "egg_cooked", perishable = 2880, deps = { "spoiled_food" } },
+
+    --um winter
+    rimeweed_barrier = { name = "rimeweed_barrier", tex = "rimeweed_barrier.tex", type = "creature", prefab = "rimeweed_barrier", damage = 20, health = 200, build = "rimeweed", bank = "rimeweed", anim = "barrier_idle", deps = { "rimeweed_main" }, use_bg = true},
+    rimeweed_main = { name = "rimeweed_main", tex = "rimeweed_main.tex", type = "creature", prefab = "rimeweed_main", health = 600, build = "rimeweed", bank = "rimeweed", anim = "core_large", deps = { "rimeweed_barrier" }, use_bg =true},
+    snowmong = { name = "snowmong", tex = "snowmong.tex", type = "creature", prefab = "snowmong", damage = 20, health = 200, build = "snowmong", bank = "snowmong", anim = "idle", deps = { "snowball_item", "um_ice_tail", "charcoal", "ice", }, use_bg = true},
+    snowpile = { name = "snowpile", tex = "snowpile.tex", type = "thing", prefab = "snowpile", build = "snow_dune", bank = "snow_dune", anim = "full", workable = "DIG", deps = { "snowmong", "snowball_item" }, use_bg = true },
+    glacialhound = {name="glacialhound", tex="glacialhound.tex", subcat="hound", type="creature", prefab="glacialhound", sanityaura=-0.66666666666667, health=TUNING.WARGLET_HEALTH * 1.25, damage=TUNING.HOUND_DAMAGE * 2, build="um_ice_warg", bank="um_ice_warg", anim="idle", deps={"houndstooth", "monstermeat", "ice", "bluegem", "torch", "blowdart_fire", "firestaff", "lighter", "um_gemologyredgem2"}, use_bg = true},
+
+    um_hat_rime = { name = "um_hat_rime", tex = "um_hat_rime.tex", subcat = "armor", type = "item", prefab = "um_hat_rime", armor = "INFINITE", absorb_percent = "40-75", build = "um_hat_rime", animoffsetx = -20, bank = "catcoonhat", perishable = 3.5 * TUNING.PERISH_TWO_DAY, anim = "anim", waterproofer = 0.2, snowmandecor = true, deps = { "um_ice_tail", "um_rimeweed_itemvine", "rocks" } },
+    um_ice_tail = { name = "um_ice_tail", tex = "um_ice_tail.tex", type = "item", prefab = "um_ice_tail", build = "um_ice_tail", bank = "um_ice_tail", perishable = TUNING.PERISH_FAST, anim = "idle", deps = {} },
+    um_ice_sicle = { name = "um_ice_sicle", tex = "um_ice_sicle.tex", subcat = "tool", type = "item", prefab = "um_ice_sicle", weapondamage = TUNING.SPEAR_DAMAGE * 1.3, finiteuses = 200, toolactions = { "SCYTHE" }, build = "um_ice_sicle", bank = "scythe_voidcloth", anim = "idle", deps = { "icestaff", "livinglog", "um_rimeweed_itemflower" } },
+    saltpack = { name = "saltpack", tex = "saltpack.tex", subcat = "tool", type = "item", prefab = "saltpack", build = "saltpack", bank = "umbrella", anim = "idle", fueledmax = TUNING.TORCH_FUEL * 2, fueledrate = TUNING.TORCH_FUEL * 2 / 100, fueledtype1 = "SALT", fueleduses = true, deps = { "saltrock", "gears", "boards", "snowpile" } },
+    snowgoggles = { name = "snowgoggles", tex = "snowgoggles.tex", subcat = "hat", type = "item", prefab = "catcoonhat", build = "hat_snowgoggles", bank = "catcoonhat", anim = "anim", insulator = 120, insulator_type = "winter", dapperness = TUNING.DAPPERNESS_MED, fueledmax = TUNING.CATCOONHAT_PERISHTIME, fueledrate = 1, fueledtype1 = "USAGE", sewable = true, snowmandecor = true, deps = { "goggleshat", "beefalowool", "catcoonhat" } },
+    um_armor_bramble_rimeweed = { name = "um_armor_bramble_rimeweed", tex = "um_armor_bramble_rimeweed.tex", subcat = "armor", type = "item", prefab = "um_armor_bramble_rimeweed", damage = 20, armor = 525, absorb_percent = 0.8, build = "um_armor_bramble_rimeweed", bank = "um_armor_bramble_rimeweed", anim = "idle", fueltype = "BURNABLE", fuelvalue = 180, burnable = true, craftingprefab = "wormwood", deps = { "um_rimeweed_itemflower", "um_rimeweed_itemvine", "armor_bramble" } },
+    um_rimeweed_itemvine = { name = "um_rimeweed_itemvine", tex = "um_rimeweed_itemvine.tex", type = "item", prefab = "um_rimeweed_itemvine", stacksize = 40, build = "um_rimeweed_itemvine", bank = "um_rimeweed_itemvine", anim = "idle", perishable = 4 * TUNING.PERISH_TWO_DAY, deps = { "twigs", "rimeweed_barrier" } },
+    um_rimeweed_itemflower = { name = "um_rimeweed_itemflower", tex = "um_rimeweed_itemflower.tex", type = "item", prefab = "um_rimeweed_itemflower", hungervalue = 25, foodtype = "VEGGIE", stacksize = 40, build = "um_rimeweed_itemflower", bank = "um_rimeweed_itemflower", anim = "idle", perishable = 3 * TUNING.PERISH_TWO_DAY, deps = { "spoiled_food", "rimeweed_main" } },
+    um_rimeweed_icepack = { name = "um_rimeweed_icepack", tex = "um_rimeweed_icepack.tex", type = "item", prefab = "um_rimeweed_icepack", stacksize = 40, build = "um_rimeweed_icepack", bank = "um_rimeweed_icepack", anim = "idle", perishable = 10 * TUNING.PERISH_TWO_DAY, deps = { "papyrus", "ice", "um_rimeweed_itemvine" } },
+    rimeweed_whip = { name = "rimeweed_whip", tex = "rimeweed_whip.tex", subcat = "weapon", type = "item", prefab = "rimeweed_whip", weapondamage = 51, weaponrange = 2, finiteuses = 150, build = "um_rimelash", bank = "whip", anim = "idle", deps = { "rimeweed_main", "um_rimeweed_itemvine" } },
 
 }
 

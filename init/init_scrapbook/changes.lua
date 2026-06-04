@@ -278,3 +278,14 @@ for k, v in pairs(wixiethings) do
         end
     end)
 end
+
+local uses_batterypower = {
+    "nightstick",
+    "winona_telebrella",
+    "winona_remote",
+    "winona_storage_robot",
+}
+
+for k, v in pairs(uses_batterypower) do
+    scrapbookdata[v].fueledtype1= "BATTERYPOWER"
+end

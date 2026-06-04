@@ -10,25 +10,25 @@ require("um_gemology_geode_defs")
 require("simutil")
 
 --strings todo: move this somewhere else?
-STRINGS.SCRAPBOOK.CATS.GEMOLOGY = "Gemology"
-STRINGS.SCRAPBOOK.SUBCATS.GEMOLOGYGEM = "Strange Gem"
-STRINGS.SCRAPBOOK.SUBCATS.GEODE = "Geode"
-STRINGS.SCRAPBOOK.SUBCATS.GEMOLOGY = "Gemology"
+STRINGS.SCRAPBOOK.CATS.GEMOLOGY        = "Gemology"
+STRINGS.SCRAPBOOK.SUBCATS.GEMOLOGYGEM  = "Strange Gem"
+STRINGS.SCRAPBOOK.SUBCATS.GEODE        = "Geode"
+STRINGS.SCRAPBOOK.SUBCATS.GEMOLOGY     = "Gemology"
 
-SPECIALINFO.GEMOLOGY_FORGE = "A forge found in the heart of the Magma Caves capable of enchanting tools and weapons with Strange Gems to amplify them with special effects.\n\nGem effects fade with usage."
-SPECIALINFO.GEMOLOGY_GEM = "Can be used at an " .. STRINGS.NAMES.UM_GEMOLOGYFORGE .. " to apply a special effect to a Tool or Weapon depending on the quality of the gem."
-SPECIALINFO.UM_MOONGLASS_CEILING = "Breaks appart and drops Glass Geodes during Earthquakes."
-SPECIALINFO.UM_SLIMESTONE_ROCK = "Falls from the Ceiling near Slime Pillars during Earthquakes while Nightmare Phase is active."
+SPECIALINFO.GEMOLOGY_FORGE             = "A forge found in the heart of the Magma Caves capable of enchanting tools and weapons with Strange Gems to amplify them with special effects.\n\nGem effects fade with usage."
+SPECIALINFO.GEMOLOGY_GEM               = "Can be used at an " .. STRINGS.NAMES.UM_GEMOLOGYFORGE .. " to apply a special effect to a Tool or Weapon depending on the quality of the gem."
+SPECIALINFO.UM_MOONGLASS_CEILING       = "Breaks appart and drops Glass Geodes during Earthquakes."
+SPECIALINFO.UM_SLIMESTONE_ROCK         = "Falls from the Ceiling near Slime Pillars during Earthquakes while Nightmare Phase is active."
 SPECIALINFO.UM_SLIMESTONE_ROCK_GEMLESS = "Falls from the Ceiling near Slime Pillars during Earthquakes while Nightmare Phase is active."
-SPECIALINFO.PETRIFIED_MUSHTREE = "Petrifies at the end of its blooming season." --normal ones are in in init_changes/changes
-SPECIALINFO.UM_GUANO_ROCK = "Builds up during Guano Rain."
-SPECIALINFO.UM_GUANO_ROCK_GEMLESS = "Builds up during Guano Rain."
-SPECIALINFO.UM_ROCKLOBSTER_ROCK = "Rock Lobster eggs. Rock Lobsters lay their eggs on flintless Boulders when Autumn begins\nIf there is no nearby Boulders, a new boulder is placed."
-SPECIALINFO.ROCK_FLINTLESS = "Rock Lobsters lay their eggs on this Boulder at the begining of Autumn"
-SPECIALINFO.UM_SINKMOUND_ROCK = "Houses a variety of creatures.\nRegrows after 10 days once mined."
-SPECIALINFO.UM_SINKMOUND_ROCK_GEMLESS = "Houses a variety of creatures.\nRegrows after 10 days once mined."
-SPECIALINFO.GEMOLOGY_NEEDS_SCAN = "Analyze this gem with a Gem Magnifier to discover its effects."
-SPECIALINFO.GEMOLOGY_GEM_EFFECTS  = "Gem Effects:"
+SPECIALINFO.PETRIFIED_MUSHTREE         = "Petrifies at the end of its blooming season." --normal ones are in in init_changes/changes
+SPECIALINFO.UM_GUANO_ROCK              = "Builds up during Guano Rain."
+SPECIALINFO.UM_GUANO_ROCK_GEMLESS      = "Builds up during Guano Rain."
+SPECIALINFO.UM_ROCKLOBSTER_ROCK        = "Rock Lobster eggs. Rock Lobsters lay their eggs on flintless Boulders when Autumn begins\nIf there is no nearby Boulders, a new boulder is placed."
+SPECIALINFO.ROCK_FLINTLESS             = "Rock Lobsters lay their eggs on this Boulder at the begining of Autumn"
+SPECIALINFO.UM_SINKMOUND_ROCK          = "Houses a variety of creatures.\nRegrows after 10 days once mined."
+SPECIALINFO.UM_SINKMOUND_ROCK_GEMLESS  = "Houses a variety of creatures.\nRegrows after 10 days once mined."
+SPECIALINFO.GEMOLOGY_NEEDS_SCAN        = "Analyze this gem with a Gem Magnifier to discover its effects."
+SPECIALINFO.GEMOLOGY_GEM_EFFECTS       = "Gem Effects:"
 --thermite init_changes/stuff in changes.lua
 
 
@@ -83,8 +83,8 @@ end
 
 --magnifiers...
 local magnifiers = {
-    um_magnifier = { uses = 100, deps = { "ancient_altar", "fossil_piece", "thulecite" } },
-    um_magnifier_purplegem = { uses = 25, deps = { "researchlab3", "boneshard", "livinglog", "purplegem" } }
+    um_magnifier = { uses = 400, deps = { "ancient_altar", "fossil_piece", "thulecite" } },
+    um_magnifier_purplegem = { uses = 100, deps = { "researchlab3", "boneshard", "livinglog", "purplegem" } }
 }
 
 for name, data in pairs(magnifiers) do
@@ -120,7 +120,7 @@ local function CreateGemologyEntryFromDefs(name, defs)
         anim = defs.anim,
         specialinfo = string.upper(name),
         subcat = "gemologygem",
-        deps = { "um_gemologyforge", "slurtle", "antlion", "rocky"}, --"snaildrake", "snowmong"
+        deps = { "um_gemologyforge", "slurtle", "antlion", "rocky", "snaildrake_slime","snaildrake_magma", "snowmong"},
         workable = "HAMMER"
     }
 

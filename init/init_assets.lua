@@ -646,7 +646,14 @@ local scrapbook_icons = {
     "um_fern_fox",
     "um_fern_fox_den",
     "woodpecker",
-    "pitcherplant"
+    "pitcherplant",
+    "icon_fuel_salt",
+    "icon_fuel_batterypower",
+    "glacialhound",
+    "rimeweed_barrier",
+    "rimeweed_main",
+    "snowmong",
+    "snowpile",
 }
 
 for _, item in ipairs(scrapbook_icons) do
