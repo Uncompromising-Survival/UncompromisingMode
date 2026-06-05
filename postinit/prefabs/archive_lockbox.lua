@@ -81,67 +81,60 @@ end]]
 	end]]
 --end)
 
-env.AddPrefabPostInit("archive_lockbox_dispencer", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
+local function UMBlueprints(product)
+	if product == "archive_resonator_item" or product == "archive_resonator" then
+		return { "um_astral_projector_blueprint" }
+	elseif product == "refined_dust" then
+		return { "um_astral_projector_target_blueprint" }
+	else
+		return { "um_scrapper_blueprint" }
+	end
+end
 
-    local _OnActivate = inst.components.activatable.OnActivate
+local function Giveknowledge(inst)
+	local pos = Vector3(inst.Transform:GetWorldPosition())
+	local players = FindPlayersInRange(pos.x, pos.y, pos.z, 20, true)
+	local blueprints = UMBlueprints(inst.product_orchestrina)
 
-    local function OnActivate(inst, doer)
-        --local loot = SpawnPrefab("archive_lockbox")
-        local pt = Vector3(inst.Transform:GetWorldPosition())
-        local players = FindPlayersInRange( pt.x, pt.y, pt.z, 20, true )
-        local archivemanager = TheWorld.components.archivemanager
-		local powered = archivemanager == nil or archivemanager:GetPowerSetting()
-        inst:DoTaskInTime(5.2 ,function()
-            if math.random() > 0.25 and TUNING.DSTU.DATES.APRIL_FOOLS then
-                SpawnPrefab("balloonparty_confetti_cloud").Transform:SetPosition(inst.Transform:GetWorldPosition())
-            end
-            for i,player in ipairs(players) do
-                local talker = player.components.talker
-                local papyrus = SpawnPrefab("wixie_piano_card")
-                local fx = SpawnPrefab("archive_lockbox_player_fx")
-                if player.components.builder and powered then
-                    if inst.product_orchestrina == "archive_resonator_item" then -- Blue
-                        if not player.components.builder:KnowsRecipe("um_astral_projector") then
-                            player.components.builder:UnlockRecipe("um_astral_projector")
-                            --player.components.builder:UnlockRecipe("um_astral_projector_target")
-                            if talker then talker:Say(GetString(player, "ANNOUNCE_ARCHIVE_NEW_KNOWLEDGE"), nil, true) end
-                            if fx then player:AddChild(fx) end
-                            papyrus.Transform:SetPosition(inst.Transform:GetWorldPosition())
-                            papyrus.name = "You got: Astral Projectinator!"
-                            Launch2(papyrus, inst, 2, 0, 1, .5)
-                        else
-                            if talker then talker:Say(GetString(player, "ANNOUNCE_ARCHIVE_OLD_KNOWLEDGE"), nil, true) end
-                        end
-                    elseif inst.product_orchestrina == "refined_dust" then -- Red
-                        if not player.components.builder:KnowsRecipe("um_astral_projector_target") then
-                            player.components.builder:UnlockRecipe("um_astral_projector_target")
-                            if talker then talker:Say(GetString(player, "ANNOUNCE_ARCHIVE_NEW_KNOWLEDGE"), nil, true) end
-                            if fx then player:AddChild(fx) end
-                            papyrus.Transform:SetPosition(inst.Transform:GetWorldPosition())
-                            papyrus.name = "You got: Astral Receptionator!"
-                            Launch2(papyrus, inst, 2, 0, 1, .5)
-                        else
-                            if talker then talker:Say(GetString(player, "ANNOUNCE_ARCHIVE_OLD_KNOWLEDGE"), nil, true) end
-                        end
-                    else -- turf_vault = Green, vaultrelic = Orange
-                        if not player.components.builder:KnowsRecipe("um_scrapper") then
-                            player.components.builder:UnlockRecipe("um_scrapper")
-                            if talker then talker:Say(GetString(player, "ANNOUNCE_ARCHIVE_NEW_KNOWLEDGE"), nil, true) end
-                            if fx then player:AddChild(fx) end
-                            papyrus.Transform:SetPosition(inst.Transform:GetWorldPosition())
-                            papyrus.name = "You got: Ancient Scrapper!"
-                            Launch2(papyrus, inst, 2, 0, 1, .5)
-                        end
-                    end
-                end
-            end
-        end)
-        _OnActivate(inst, doer)
-    end
+	for _, player in ipairs(players) do
+		if player.components.builder ~= nil and player.components.inventory ~= nil then
+			local they_know = false
 
-    inst:AddComponent("activatable")
-    inst.components.activatable.OnActivate = OnActivate
+			for _, blueprint_prefab in ipairs(blueprints) do
+				local recipe = string.gsub(blueprint_prefab, "_blueprint$", "")
+
+				if not player.components.builder:KnowsRecipe(recipe) then
+					local loot = SpawnPrefab(blueprint_prefab)
+
+					if loot ~= nil then
+						they_know = true
+						player.components.inventory:GiveItem(loot, nil, pos)
+					end
+				end
+			end
+
+			local fx = SpawnPrefab("archive_lockbox_player_fx")
+			if fx ~= nil then
+				player:AddChild(fx)
+			end
+
+			if player.components.talker ~= nil then
+				player.components.talker:Say(GetString(player, they_know and "ANNOUNCE_ARCHIVE_NEW_KNOWLEDGE" or "ANNOUNCE_ARCHIVE_OLD_KNOWLEDGE" ), nil, true)
+			end
+		end
+	end
+end
+
+env.AddPrefabPostInit("archive_lockbox", function(inst)
+	if not TheWorld.ismastersim then
+		return
+	end
+
+	inst:ListenForEvent("onteach", function(inst)
+		inst:DoTaskInTime(174 / 30, function()
+			if inst ~= nil and inst:IsValid() then
+				Giveknowledge(inst)
+			end
+		end)
+	end)
 end)
