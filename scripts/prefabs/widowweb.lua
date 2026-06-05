@@ -29,7 +29,7 @@ local function RerollCocoons(inst)
     local existing_cocoons = TheSim:FindEntities(x, y, z, 30, { "webbedcreature" })
     local widowweb = TheSim:FindFirstEntityWithTag("widowweb")
 
-    if widowweb --[[Just to prevent a crash if it was deleted.]] and widowweb.components.childspawner:IsFull() then
+    if widowweb --[[Just to prevent a crash if it was deleted.]] and widowweb.components.childspawner:IsFull() and widowweb.components.childspawner.numchildrenoutside == 0 then
         for k, v in ipairs(existing_cocoons) do
             if table.contains(blacklisted_coocoons, v.cocoon_creature) --[[or table.contains(COCOON_CHARACTERS, v.cocoon_creature)]] then
             else
@@ -77,6 +77,11 @@ local function SpawnInvestigators(inst, target)
     local x, y, z = inst.Transform:GetWorldPosition()
     if inst.components.childspawner and target then
         local spider = inst.components.childspawner:SpawnChild()
+
+        if inst.components.timer:TimerExists("reroll_cocoons") then
+            inst.components.timer:PauseTimer("reroll_cocoons")
+        end
+
         if spider then
             local x, y, z = inst.Transform:GetWorldPosition()
             spider.sg:GoToState("fall")
@@ -97,11 +102,11 @@ local function fn()
 
     inst.scrapbook_inspectonseen = true
     inst.scrapbook_proxy = "webbedcreature"
+
     if not TheNet:IsDedicated() then
         inst:AddComponent("pointofinterest")
         inst.components.pointofinterest:SetHeight(0)
     end
-
 
     inst.entity:SetPristine()
 
@@ -124,8 +129,6 @@ local function fn()
     if not inst.components.timer:TimerExists("reroll_cocoons") then
         inst.components.timer:StartTimer("reroll_cocoons", TUNING.TOTAL_DAY_TIME * 5)
     end
-
-
 
     return inst
 end
