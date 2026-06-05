@@ -31,7 +31,7 @@ env.AddSimPostInit(function()
                 POINT["spellcaster"] = function(inst, doer, pos, actions, right, target, ...)
                     --[[if inst.um_cantcastontarget and right and doer.components.playercontroller and not doer.components.playercontroller:IsControlPressed(TUNING.DSTU.CASTSPELL_OVERRIDECONTROL)
                         and inst:um_cantcastontarget(doer, pos, target, UMCommonFns.CanOverrideAction(doer.components.playeractionpicker and doer.components.playeractionpicker:GetPointSpecialActions(pos, nil, true))) then return end]]
-					if inst.um_cantcastontarget and right and doer.components.playercontroller and not doer.components.playercontroller:IsControlPressed(TUNING.DSTU.CASTSPELL_OVERRIDECONTROL)
+                    if inst.um_cantcastontarget and right and doer.components.playercontroller and not doer.components.playercontroller:IsControlPressed(TUNING.DSTU.CASTSPELL_OVERRIDECONTROL)
                         and inst:um_cantcastontarget(doer, pos, target, UMCommonFns.HasRightClickAction(inst, doer, pos, target)) then return end
                     return _POINT_spellcaster_fn(inst, doer, pos, actions, right, target, ...)
                 end
@@ -43,7 +43,7 @@ env.AddSimPostInit(function()
                 EQUIPPED["spellcaster"] = function(inst, doer, target, actions, right, ...)
                     --[[if inst.um_cantcastontarget and right and doer.components.playercontroller and not doer.components.playercontroller:IsControlPressed(TUNING.DSTU.CASTSPELL_OVERRIDECONTROL)
                         and inst:um_cantcastontarget(doer, nil, target, doer.components.playeractionpicker and UMCommonFns.CanOverrideAction(doer.components.playeractionpicker:GetSceneActions(target, true), target ~= doer and doer.components.playeractionpicker:GetSceneActions(target))) then return end]]
-					if inst.um_cantcastontarget and right and doer.components.playercontroller and not doer.components.playercontroller:IsControlPressed(TUNING.DSTU.CASTSPELL_OVERRIDECONTROL)
+                    if inst.um_cantcastontarget and right and doer.components.playercontroller and not doer.components.playercontroller:IsControlPressed(TUNING.DSTU.CASTSPELL_OVERRIDECONTROL)
                         and inst:um_cantcastontarget(doer, nil, target, UMCommonFns.HasRightClickAction(inst, doer, nil, target)) then return end
                     if CantCastOnTarget(inst, target, true) then return end
                     return _EQUIPPED_spellcaster_fn(inst, doer, target, actions, right, ...)
