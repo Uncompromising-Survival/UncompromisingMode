@@ -23,10 +23,10 @@ local function TrySpawnCocoon(x, z)
     end
 end
 
-local blacklisted_coocoons = {"krampus", "walrus", "grassgator"}
+local blacklisted_coocoons = { "krampus", "walrus", "grassgator" }
 local function RerollCocoons(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    local existing_cocoons = TheSim:FindEntities(x, y, z, 30, {"webbedcreature"})
+    local existing_cocoons = TheSim:FindEntities(x, y, z, 30, { "webbedcreature" })
     local widowweb = TheSim:FindFirstEntityWithTag("widowweb")
 
     if widowweb --[[Just to prevent a crash if it was deleted.]] and widowweb.components.childspawner:IsFull() then
@@ -95,10 +95,13 @@ local function fn()
 
     inst:AddTag("widowweb")
 
+    inst.scrapbook_inspectonseen = true
+    inst.scrapbook_proxy = "webbedcreature"
     if not TheNet:IsDedicated() then
         inst:AddComponent("pointofinterest")
         inst.components.pointofinterest:SetHeight(0)
     end
+
 
     inst.entity:SetPristine()
 
@@ -121,6 +124,7 @@ local function fn()
     if not inst.components.timer:TimerExists("reroll_cocoons") then
         inst.components.timer:StartTimer("reroll_cocoons", TUNING.TOTAL_DAY_TIME * 5)
     end
+
 
 
     return inst

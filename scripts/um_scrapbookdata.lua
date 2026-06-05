@@ -22,8 +22,6 @@ local function CreateCursedItemData(name, build, bank, anim, extra_data)
         end
     end
 
-    printwrap("UM Cursed Item Data", data)
-
     return data
 end
 
@@ -148,6 +146,7 @@ local data = {
     um_monsteregg_cooked = { name = "um_monsteregg_cooked", tex = "um_monsteregg_cooked.tex", type = "food", prefab = "um_monsteregg_cooked", stacksize = 40, hungervalue = 9.375, healthvalue = -5, sanityvalue = -10, foodtype = "MEAT", build = "extra_monsterfoods", bank = "extra_monsterfoods", anim = "egg_cooked", perishable = 2880, deps = { "spoiled_food" } },
 
     --um winter
+    --RIME DARTS TODO
     rimeweed_barrier = { name = "rimeweed_barrier", tex = "rimeweed_barrier.tex", type = "creature", prefab = "rimeweed_barrier", damage = 20, health = 200, build = "rimeweed", bank = "rimeweed", anim = "barrier_idle", deps = { "rimeweed_main" }, use_bg = true},
     rimeweed_main = { name = "rimeweed_main", tex = "rimeweed_main.tex", type = "creature", prefab = "rimeweed_main", health = 600, build = "rimeweed", bank = "rimeweed", anim = "core_large", deps = { "rimeweed_barrier" }, use_bg =true},
     snowmong = { name = "snowmong", tex = "snowmong.tex", type = "creature", prefab = "snowmong", damage = 20, health = 200, build = "snowmong", bank = "snowmong", anim = "idle", deps = { "snowball_item", "um_ice_tail", "charcoal", "ice", }, use_bg = true},
@@ -164,6 +163,39 @@ local data = {
     um_rimeweed_itemflower = { name = "um_rimeweed_itemflower", tex = "um_rimeweed_itemflower.tex", type = "item", prefab = "um_rimeweed_itemflower", hungervalue = 25, foodtype = "VEGGIE", stacksize = 40, build = "um_rimeweed_itemflower", bank = "um_rimeweed_itemflower", anim = "idle", perishable = 3 * TUNING.PERISH_TWO_DAY, deps = { "spoiled_food", "rimeweed_main" } },
     um_rimeweed_icepack = { name = "um_rimeweed_icepack", tex = "um_rimeweed_icepack.tex", type = "item", prefab = "um_rimeweed_icepack", stacksize = 40, build = "um_rimeweed_icepack", bank = "um_rimeweed_icepack", anim = "idle", perishable = 10 * TUNING.PERISH_TWO_DAY, deps = { "papyrus", "ice", "um_rimeweed_itemvine" } },
     rimeweed_whip = { name = "rimeweed_whip", tex = "rimeweed_whip.tex", subcat = "weapon", type = "item", prefab = "rimeweed_whip", weapondamage = 51, weaponrange = 2, finiteuses = 150, build = "um_rimelash", bank = "whip", anim = "idle", deps = { "rimeweed_main", "um_rimeweed_itemvine" } },
+
+    --magma caves
+    --[[
+        --prefab, build, bank, anim, file
+        um_pyre_nettles - um_pyre_nettles um_pyre_nettles - pn5_idle - um_pyre_nettles
+        magmarock1 - magmarock1 - magmarock1 - full - magmarock1
+        mushtree_shadow - gloomcap - gloomcap - idle_loop - gloomcap
+        gloomcap - gloomcap_item - gloomcap_item - idle - gloomcap_item
+        um_smolder_spore - um_smolder_spore - um_smolder_spore - idle - um_smolder_spore
+        um_blowdart_pyre - um_blowdart_pyre - um_blowdart_pyre - idle_pyre - um_blowdart_pyre
+        magmabone - magmabone - magmabone - piece1 - magmabone
+        um_fyrite - um_fyrite - um_fyrite - idle - um_fyrite
+        fyriterock - fyriterock - fyriterock - full - fyriterock
+        um_pyrite_ceiling - um_pyrite_ceiling - um_pyrite_ceiling - idle_full - um_pyrite_ceiling
+        um_fyre_bomb - um_fyre_bomb - um_fyre_bomb - idle - um_fyre_bomb
+        um_ribopod - um_ribopod - um_ribopod - idle - um_ribopod
+        um_ribopodden - um_ribopodden - um_ribopodden - idle - um_ribopodden
+        um_ghost_pepper - um_ghost_pepper - um_ghost_pepper - idle_fruit - um_ghost_pepper
+        um_ghost_pepper_item - um_ghost_pepper_item - um_ghost_pepper_item - idle - um_ghost_pepper_item
+        viperfruit_plant - viperworm - worm - berry_idle - 
+        viperfruit_lesser - viperfruit_lesser - viperfruit_lesser - idle - viperfruit_lesser
+        viperfruit - viperfruit - viperfruit - idle - viperfruit
+        viperworm - viperworm - worm - atk - 
+        viperling - viperworm - worm - atk - DO THE RECOLORS AND SHIT
+        ruins_statue_miner - minerstatue - minerstatue - idle_full - minerstatue
+        um_pepperdragon_nest - um_pepperdragon_nest - um_pepperdragon_nest - idle - um_pepperdragon_nest
+        um_pepperdragon - um_pepperdragon - um_pepperdragon - idle1 - um_pepperdragon
+        um_pepperdragon_bladder - um_pepperdragon_bladder - um_pepperdragon_bladder - idle - um_pepperdragon_bladder
+        um_armor_pyre_nettles - um_armor_pyre_nettles - um_armor_pyre_nettles - anim - um_armor_pyre_nettles
+        um_flameburster - um_flameburster - um_flameburster - idle - um_flameburster
+        um_firecream - um_firecream - um_firecream - idle - um_firecream
+        um_hat_pepperdragon - um_hat_pepperdragon - catcoonhat - anim - 
+        ]]
 
 }
 

@@ -164,6 +164,7 @@ local function fn()
 
     inst.scrapbook_anim = "bubble_lava"
     inst.scrapbook_specialinfo = "LAVAPOND"
+    inst.scrapbook_proxy = "lava_pond"
 
     inst.MiniMapEntity:SetIcon("lava_pond.png")
 
@@ -216,8 +217,8 @@ local function fn()
     inst.components.hauntable:SetHauntValue(TUNING.HAUNT_TINY)
 
     if KnownModIndex:IsModEnabled("workshop-2010472942") and inst.components.magmaaction == nil then
-		inst:AddComponent("magmaaction") --RoR Wragonfly comaptibility
-	end
+        inst:AddComponent("magmaaction") --RoR Wragonfly comaptibility
+    end
 
     inst.OnSave = OnSave
     inst.OnLoad = OnLoad
