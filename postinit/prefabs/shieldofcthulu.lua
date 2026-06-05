@@ -95,7 +95,7 @@ local function CommonFunctions(inst, sound, anim)
 end
 
 local function OnCharged(inst)
-	inst.SoundEmitter:PlaySound("terraria1/eyeofterror/charge", nil, .3)
+	inst.SoundEmitter:PlaySound("terraria1/eyeofterror/charge", nil, .4)
 end
 
 local function OnAttack(inst, attacker, target)
