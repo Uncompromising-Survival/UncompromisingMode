@@ -609,6 +609,9 @@ for _, item in ipairs(scrapbook_icons) do
 end
 
 Assets = {
+    Asset("IMAGE", "images/um_guano_rain_icon.tex"),
+    Asset("ATLAS", "images/um_guano_rain_icon.xml"),
+
     -- Cookbook HQ Icons
     Asset("IMAGE", "images/cookbook_beefalowings.tex"),
     Asset("ATLAS", "images/cookbook_beefalowings.xml"),
