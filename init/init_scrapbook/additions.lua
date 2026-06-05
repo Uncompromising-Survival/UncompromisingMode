@@ -19,7 +19,7 @@ local specinfo = {
     ANCIENT_AMULET_RED = "Drops soul orbs when attacked, which will replenish lost health when picked up.\nRevives players when haunted.",
     ARMOR_GLASSMAIL = "Summons spinning Glass Shards when attacking enemies. Loses shards when damage is taken.",
     SALTPACK = "Drops piles of salt, preventing buildup of Snow Piles.",
-    SPOREPACK = "An 12 slot container that doubles the speed of food spoiling inside.",
+    SPOREPACK = "An 12 slot container that doubles the speed of food spoiling inside, but refreshes spores.",
     UM_BEAR_TRAP_EQUIPPABLE_TOOTH =
     "Slows down anything it's attached to.\nDeployable and throwable.",
     UM_BEAR_TRAP_EQUIPPABLE_GOLD =
