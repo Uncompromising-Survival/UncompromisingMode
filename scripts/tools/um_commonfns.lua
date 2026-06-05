@@ -73,7 +73,7 @@ UMCommonFns.VetcurseUnequip = function(inst, owner, slot)
     end
 end
 
-UMCommonFns.GetLMBActionIsAction = function(leftactions, action)
+--[[UMCommonFns.GetLMBActionIsAction = function(leftactions, action)
     if leftactions then
         for k, v in pairs(leftactions) do
             if v.action == action then
@@ -81,10 +81,10 @@ UMCommonFns.GetLMBActionIsAction = function(leftactions, action)
             end
         end
     end
-end
+end]]
 
 local ignoredactions = {ACTIONS.LOOKAT, ACTIONS.WALKTO}
-UMCommonFns.CanOverrideAction = function(rightactions, leftactions)
+--[[UMCommonFns.CanOverrideAction = function(rightactions, leftactions)
     local count = 0
     if rightactions then
         for k, v in pairs(rightactions) do
@@ -94,6 +94,17 @@ UMCommonFns.CanOverrideAction = function(rightactions, leftactions)
         end
     end
     return count >= 1
+end]]
+
+UMCommonFns.HasRightClickAction = function(inst, doer, pos, target)
+    if inst.um_checkingactions then return true end
+    inst.um_checkingactions = true
+    local _, rmb
+    if doer.components.playeractionpicker then
+        _, rmb = doer.components.playeractionpicker:DoGetMouseActions(pos, target)
+    end
+    inst.um_checkingactions = nil
+    return rmb and not table.contains(ignoredactions, rmb.action)
 end
 
 -- Unified megaflare timer reduction used by all seasonal boss spawners
