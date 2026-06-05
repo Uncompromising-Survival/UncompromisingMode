@@ -14,6 +14,7 @@ local function AddDescriptors()
 
     _G.Insight.API.V1.AddComponentDescriptor("gem_enchantable", _G.require("descriptors/gem_enchantable"), { modname = modname })
     _G.Insight.API.V1.AddComponentDescriptor("gemology_gem", _G.require("descriptors/gemology_gem"), { modname = modname })
+    _G.Insight.API.V1.AddComponentDescriptor("um_guano_rain", _G.require("descriptors/um_guano_rain"), { modname = modname })
 end
 
 AddSimPostInit(AddDescriptors) -- _G.Insight.descriptors may not exist yet, but it will exist at AddSimPostInit.
