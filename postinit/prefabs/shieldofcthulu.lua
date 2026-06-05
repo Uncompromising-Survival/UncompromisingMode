@@ -94,8 +94,22 @@ local function CommonFunctions(inst, sound, anim)
     end
 end
 
+local function OnVetcurseDirty(inst)
+	if inst._vetcurseupgraded:value() then
+		inst.spelltype = "UM_SHIELD_BASH"
+		inst:AddTag("allow_action_on_impassable")
+	else
+		inst.spelltype = nil
+		inst:RemoveTag("allow_action_on_impassable")
+	end
+end
+
+local function CantCastOnTarget(inst, doer, pos, target, actioncount)
+    return actioncount
+end
+
 local function OnCharged(inst)
-	inst.SoundEmitter:PlaySound("terraria1/eyeofterror/charge", nil, .3)
+    inst.SoundEmitter:PlaySound("terraria1/eyeofterror/charge", nil, .4)
 end
 
 local function OnAttack(inst, attacker, target)
@@ -111,10 +125,6 @@ end
 
 local function can_cast_fn(doer, target, pos, inst)
     return inst.components.rechargeable:IsCharged()
-end
-
-local function CantCastOnTarget(inst, doer, pos, target, actioncount)
-    return actioncount
 end
 
 local function ToggleItemVetcurse(inst, toggle)
@@ -150,14 +160,12 @@ env.AddPrefabPostInit("shieldofterror", function(inst)
     CommonClientFunctions(inst)
     inst:AddTag("shieldofterror")
 
-	inst.um_cantcastontarget = CantCastOnTarget
-
     inst._vetcurseupgraded = net_bool(inst.GUID, "shieldofterror.vetcurse", "vetcursedirty")
     inst._vetcurseupgraded:set(false)
 
-    inst:ListenForEvent("vetcursedirty", function(inst)
-        inst.spelltype = inst._vetcurseupgraded:value() and "UM_SHIELD_BASH" or nil
-    end)
+    inst:ListenForEvent("vetcursedirty", OnVetcurseDirty)
+
+    inst.um_cantcastontarget = CantCastOnTarget
 
     if not TheWorld.ismastersim then return end
 
@@ -173,7 +181,7 @@ env.AddPrefabPostInit("shieldofterror", function(inst)
     CommonFunctions(inst, "eye_shield", "idle")
 
     local rechargeable = inst.components.rechargeable or inst:AddComponent("rechargeable")
-	inst.components.rechargeable:SetOnChargedFn(OnCharged)
+    inst.components.rechargeable:SetOnChargedFn(OnCharged)
 
     inst.UMToggleItemVetcurse = ToggleItemVetcurse
 
