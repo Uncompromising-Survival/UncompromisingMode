@@ -15,22 +15,14 @@ return Class(function(self, inst)
     end
 
     local function CheckForOtherOcupi(pos)
-        print("checking for other ocupi")
-        print("min dist", 40 * 40)
-        print("ocupi count", CountOcupi())
-
         if CountOcupi() > 0 then
             for guid, ent in pairs(self.ocupi) do
-                print("curr dist for ", ent, ent ~= nil and ent:IsValid() and ent:GetDistanceSqToPoint(pos.x, 0, pos.z))
                 if ent ~= nil and ent:IsValid() and ent:GetDistanceSqToPoint(pos.x, 0, pos.z) <= 40 * 40 then
-                    print("returning false because there's other ocupi that's too close")
                     return false
                 end
             end
-            print("returning true because there's no nearby ocupi")
             return true
         else
-            print("returning true because there's no ocupi")
             return true
         end
     end
@@ -152,13 +144,9 @@ return Class(function(self, inst)
     end
 
     function self:OnPostInit()
-        print(c_countprefabs("um_ocupus"))
         --need to wait for um_tilelogger to register tiles.
-        print("doing first run in 1s")
         self.inst:DoTaskInTime(1, function(inst)
-            print("first run task")
             if not self.firstrun then
-                print("first run being done")
                 inst.components.um_ocupusappearinator:FirstRun()
                 self.firstrun = true
             end
@@ -167,7 +155,6 @@ return Class(function(self, inst)
 
     function self:LoadPostPass(newents, savedata)
 
-        print("load post pass")
         if savedata.ocupi then
             for k, guid in pairs(savedata.ocupi) do
                 if newents[guid] then
@@ -177,21 +164,15 @@ return Class(function(self, inst)
         end
 
         if not self.retrofit then
-            print("doing retro")
-            print("CountOcupi", CountOcupi())
             --in case old worlds have too many.
             if CountOcupi() > 6 then
-                print("has too many ocupi")
                 while CountOcupi() > 6 do
-                    print("while loop")
                     for k, v in pairs(self.ocupi) do
-                        print("for loop")
                         v:Remove()
                         break
                     end
                 end
             end
-            print("retrofit done")
             self.retrofit = true
         end
     end
