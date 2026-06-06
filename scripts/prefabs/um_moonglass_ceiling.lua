@@ -81,6 +81,8 @@ local function fn()
     inst.MiniMapEntity:SetIcon("um_grotto_glass_icon.tex")
     inst.no_wet_prefix = true
 
+    inst.scrapbook_inspectonseen = true
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
