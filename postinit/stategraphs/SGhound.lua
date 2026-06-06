@@ -417,13 +417,13 @@ env.AddStategraphPostInit("hound", function(inst)
             timeline =
             {
                 TimeEvent(8 * FRAMES, function(inst)
-					inst.FirePoof(inst)
+					inst:FirePoof()
 					if inst.sg.statemem.target and inst.sg.statemem.target:GetPosition() then
 						inst:ForceFacePoint(inst.sg.statemem.target:GetPosition())
 					end
                 end),
                 TimeEvent(16 * FRAMES, function(inst)
-					inst.FirePoof(inst)
+					inst:FirePoof()
 					if inst.sg.statemem.target and inst.sg.statemem.target:GetPosition() then
 						inst:ForceFacePoint(inst.sg.statemem.target:GetPosition())
 					end
@@ -463,7 +463,7 @@ env.AddStategraphPostInit("hound", function(inst)
             timeline =
             {
                 TimeEvent(8 * FRAMES, function(inst)
-					inst.SnowFX(inst)
+					inst:SnowFX()
 					if inst.sg.statemem.target and inst.sg.statemem.target:GetPosition() then
 						inst:ForceFacePoint(inst.sg.statemem.target:GetPosition())
 					end
