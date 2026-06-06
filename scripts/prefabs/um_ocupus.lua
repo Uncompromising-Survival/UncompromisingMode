@@ -156,7 +156,7 @@ local function FindPointEyeTentacle(inst, x, y, z, rot, stalkinggrounds) --Note 
     if IsOcean(x, y, z) then                                                               --okay.. just some basic tests here.... are we near a tentacle already? are we in the water?
         return x, y, z                                                                     --good, now we can finally spawn a SINGULAR tentacle.
     elseif max_tries > 0 then
-        max_tries = max_tries -1 
+        max_tries = max_tries - 1
         return FindPointEyeTentacle(inst, oldx, oldy, oldz, oldrot + 2.5, stalkinggrounds) --yeah something didn't work, the land thing is highly unlikely unless someone spawned the creature on land, should add a remove to the prefab itself if it happens to appear on land (likely via console meddling).
     else
         print("PANIC! Could not find pos for eye tentacle.")
