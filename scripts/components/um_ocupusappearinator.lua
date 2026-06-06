@@ -27,7 +27,6 @@ return Class(function(self, inst)
         end
     end
 
-
     local function IterateThroughTiles(tiles)
         for k, v in ipairs(tiles) do
             local offset = math.random() * 4
@@ -53,8 +52,6 @@ return Class(function(self, inst)
             return IterateThroughTiles(deepcopy(TheWorld.components.um_tilelogger.Hazardous))
         end
     end
-
-
 
     local function SpawnOcupi()
         local pos = FindLocation()
