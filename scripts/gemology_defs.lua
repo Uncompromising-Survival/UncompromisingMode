@@ -17,7 +17,7 @@ The values are:
     -- for mineral logbook
     sources = {
     prefab_name = {build = "string", bank = "string", anim = "string" }} --anim defaults to idle. Should these actually be the inv image instead, though?
-    desc = { --For insight. NOTE: YOUR GEM ITEM NEEDS THE GEMOLOGY_GEM COMPONENT
+    desc = { --For scrapbook ad insight.
         [1] = "Description for tier 1 gem"
         [2] = "Description for tier 2 gem"
         ...and so forth
@@ -45,7 +45,7 @@ This is so we can save some gem-specific data so it can probably revert when rem
 
 local GEM_DEFS = {}
 local GEM_LOOKUP = {}
-
+local GENERIC_GEM_USES = 100 / 250
 function AddGemDef(name, def)
     GEM_LOOKUP[#GEM_LOOKUP + 1] = name
     GEM_DEFS[name] = def
@@ -95,7 +95,7 @@ AddUMGemDef("redgem2", {
                     target.components.health:DoFireDamage(inst.components.weapon:GetDamage(attacker, target) * burn_portion[tier - 1], attacker, true)
                     target.components.burnable:ExtendBurning()
                 end
-                DamageInfiniteItemGem("redgem2", inst, 0.005)
+                DamageInfiniteItemGem("redgem2", inst, GENERIC_GEM_USES)
             end
         end,
         canapply = function(item, tier)
@@ -127,7 +127,7 @@ AddUMGemDef("redgem1", {
                 attacker.components.sanity:DoDelta(recover)
             end
 
-            DamageInfiniteItemGem("redgem1", inst, 0.005)
+            DamageInfiniteItemGem("redgem1", inst, GENERIC_GEM_USES)
         end,
         canapply = function(item, tier)
             return item.components.weapon ~= nil
@@ -188,7 +188,7 @@ local swilson_symbols_to_hide = {
 }
 
 local function SendShadowClone(item, owner, target, tier)
-    DamageInfiniteItemGem("greengem1", item, 0.005) --damage on any attack/work because it speeds it up.
+    DamageInfiniteItemGem("greengem1", item, GENERIC_GEM_USES) --damage on any attack/work because it speeds it up.
 
     if target:IsValid() and (tier - 1) * 0.3 > math.random() and tier > 1 then
         if owner:GetDistanceSqToInst(target) > 50 ^ 2 and owner.components.sanity then --Long ways away, it's taking from your mind to send swilsons there
@@ -231,7 +231,11 @@ AddUMGemDef("greengem1", {
             local tool = item.components.tool
 
             if tool and tool.actions then
-                item.volatile_gemology_data.um_gemologygreengem1.tool_actions = deepcopy(tool.actions)
+                item.volatile_gemology_data.um_gemologygreengem1.tool_actions = {}
+
+                for k, v in pairs(tool.actions) do
+                    item.volatile_gemology_data.um_gemologygreengem1.tool_actions[k] = v
+                end
 
                 for i, v in ipairs(action_list) do
                     if tool.actions[v] then
@@ -329,10 +333,10 @@ AddUMGemDef("greengem2", {
             item:StopWatchingWorldState("startday", addRandomGemEffects)
         end,
         onattack = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("greengem2", item, 0.005)
+            DamageInfiniteItemGem("greengem2", item, GENERIC_GEM_USES)
         end,
         onwork = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("greengem2", item, 0.005)
+            DamageInfiniteItemGem("greengem2", item, GENERIC_GEM_USES)
         end
 
     }
@@ -382,115 +386,115 @@ local arc_canttarget = { "player", "playerghost", "arcgrounded", "wall", "INLIMB
 local electric_wet_multiplier = 1.5
 
 local function WetCheck(target)
-	return target ~= nil and target:IsValid() and target.GetWetMultiplier ~= nil and target:GetWetMultiplier() > 0
+    return target ~= nil and target:IsValid() and target.GetWetMultiplier ~= nil and target:GetWetMultiplier() > 0
 end
 
 local function ForceElectrocute(target, attacker)
-	if target ~= nil and target:IsValid() and target.components.health ~= nil and not target.components.health:IsDead() then
-		target:PushEventImmediate("electrocute", {attacker = attacker, stimuli = "electric", numforks = 0, noresist = true,})
-	end
+    if target ~= nil and target:IsValid() and target.components.health ~= nil and not target.components.health:IsDead() then
+        target:PushEventImmediate("electrocute", { attacker = attacker, stimuli = "electric", numforks = 0, noresist = true, })
+    end
 end
 
 local function YellowDamage(inst, attacker, target, tier)
-	if target ~= nil and target:IsValid() and target.components.combat ~= nil then
-		local damage = static_mods[tier]
+    if target ~= nil and target:IsValid() and target.components.combat ~= nil then
+        local damage = static_mods[tier]
 
-		if WetCheck(target) then
-			damage = damage * electric_wet_multiplier
-		end
+        if WetCheck(target) then
+            damage = damage * electric_wet_multiplier
+        end
 
-		target.components.combat:GetAttacked(attacker, damage, inst, "electric")
-		ForceElectrocute(target, attacker)
-	end
+        target.components.combat:GetAttacked(attacker, damage, inst, "electric")
+        ForceElectrocute(target, attacker)
+    end
 end
 
 local function ShockChain(inst, attacker, target, ShockAgain, tier)
-	local x, y, z = target.Transform:GetWorldPosition()
-	local ents = TheSim:FindEntities(x, y, z, 4, arc_cantarget, arc_canttarget)
+    local x, y, z = target.Transform:GetWorldPosition()
+    local ents = TheSim:FindEntities(x, y, z, 4, arc_cantarget, arc_canttarget)
 
-	for i, v in ipairs(ents) do
-		if v ~= target and v.components.health ~= nil and not v.components.health:IsDead() and attacker.components.combat ~= nil and not attacker.components.combat:IsAlly(v) and attacker.components.combat:CanTarget(v) then
-			local dist = math.sqrt(target:GetDistanceSqToInst(v))
+    for i, v in ipairs(ents) do
+        if v ~= target and v.components.health ~= nil and not v.components.health:IsDead() and attacker.components.combat ~= nil and not attacker.components.combat:IsAlly(v) and attacker.components.combat:CanTarget(v) then
+            local dist = math.sqrt(target:GetDistanceSqToInst(v))
 
-			v:DoTaskInTime(dist / 5, function(v)
-				if v:IsValid() and v.components.health ~= nil and not v.components.health:IsDead() and not v:HasTag("arcgrounded") then
-					local mult = 2 - dist
+            v:DoTaskInTime(dist / 5, function(v)
+                if v:IsValid() and v.components.health ~= nil and not v.components.health:IsDead() and not v:HasTag("arcgrounded") then
+                    local mult = 2 - dist
 
-					if tier == 2 then
-						mult = math.clamp(mult, 0.1, 1.25)
-					elseif tier == 3 then
-						mult = math.clamp(mult, 0.25, 1.5)
-					end
+                    if tier == 2 then
+                        mult = math.clamp(mult, 0.1, 1.25)
+                    elseif tier == 3 then
+                        mult = math.clamp(mult, 0.25, 1.5)
+                    end
 
-					local damage = inst.components.weapon:GetDamage(attacker, v) * mult
+                    local damage = inst.components.weapon:GetDamage(attacker, v) * mult
 
-					v:AddTag("arcgrounded")
-					v.components.combat:GetAttacked(attacker, damage, inst)
-					ShockAgain(inst, attacker, v, tier)
+                    v:AddTag("arcgrounded")
+                    v.components.combat:GetAttacked(attacker, damage, inst)
+                    ShockAgain(inst, attacker, v, tier)
 
-					SpawnPrefab("electricchargedfx").Transform:SetPosition(v.Transform:GetWorldPosition())
+                    SpawnPrefab("electricchargedfx").Transform:SetPosition(v.Transform:GetWorldPosition())
 
-					v:DoTaskInTime(3, function(v)
-						if v:IsValid() then
-							v:RemoveTag("arcgrounded")
-						end
-					end)
-				end
-			end)
-		end
-	end
+                    v:DoTaskInTime(3, function(v)
+                        if v:IsValid() then
+                            v:RemoveTag("arcgrounded")
+                        end
+                    end)
+                end
+            end)
+        end
+    end
 end
 
 local function ElectricAttack(inst, attacker, target, tier)
-	if target == nil or not target:IsValid() then
-		return
-	end
+    if target == nil or not target:IsValid() then
+        return
+    end
 
-	SpawnElectricHitSparks(attacker, target, true)
+    SpawnElectricHitSparks(attacker, target, true)
 
-	if tier ~= 1 then
-		ShockChain(inst, attacker, target, ElectricAttack, tier)
+    if tier ~= 1 then
+        ShockChain(inst, attacker, target, ElectricAttack, tier)
 
-		target:AddTag("arcgrounded")
-		target:DoTaskInTime(3, function(target)
-			if target:IsValid() then
-				target:RemoveTag("arcgrounded")
-			end
-		end)
-	end
+        target:AddTag("arcgrounded")
+        target:DoTaskInTime(3, function(target)
+            if target:IsValid() then
+                target:RemoveTag("arcgrounded")
+            end
+        end)
+    end
 
-	YellowDamage(inst, attacker, target, tier)
+    YellowDamage(inst, attacker, target, tier)
 
-	DamageInfiniteItemGem("yellowgem2", inst, 0.005)
+    DamageInfiniteItemGem("yellowgem2", inst, GENERIC_GEM_USES)
 end
 
 AddUMGemDef("yellowgem2", {
-	color = RGB(255, 228, 153),
+    color = RGB(255, 228, 153),
 
-	fns = {
-		onapply = function(item, tier)
-			if item.prefab == "hambat" then
-				item.new_max_damage = TUNING.HAMBAT_DAMAGE + static_mods[tier]
-			end
+    fns = {
+        onapply = function(item, tier)
+            if item.prefab == "hambat" then
+                item.new_max_damage = TUNING.HAMBAT_DAMAGE + static_mods[tier]
+            end
 
-			item.volatile_gemology_data.um_gemologyyellowgem2.old_stimuli = item.components.weapon.stimuli
-		end,
+            item.volatile_gemology_data.um_gemologyyellowgem2.old_stimuli = item.components.weapon.stimuli
+        end,
 
-		onattack = ElectricAttack,
+        onattack = ElectricAttack,
 
-		onremove = function(item, tier)
-			item.new_max_damage = nil
+        onremove = function(item, tier)
+            item.new_max_damage = nil
 
-			if item.components.weapon ~= nil then
-				item.components.weapon.stimuli =
-					item.volatile_gemology_data.um_gemologyyellowgem2.old_stimuli
-			end
-		end,
+            if item.components.weapon ~= nil then
+                item.components.weapon.stimuli =
+                    item.volatile_gemology_data.um_gemologyyellowgem2.old_stimuli
+            end
+        end,
 
-		canapply = function(item, tier)
-			return item.components.weapon ~= nil
-		end
-	}
+        canapply = function(item, tier)
+            return item.components.weapon ~= nil
+        end
+    }
 })
 
 -----------------------------------------------------------------------------------
@@ -510,7 +514,7 @@ AddUMGemDef("palegem1", {
                     and (AllRecipes[item.prefab].is_deconstruction_recipe))
                 and item.components.weapon ~= nil then
                 local damage = item.components.weapon.damage
-                item.volatile_gemology_data.um_gemologypalegem1 = damage
+                item.volatile_gemology_data.um_gemologypalegem1.weapon_damage = damage
                 if type(damage) == "function" then
                     item.components.weapon:SetDamage(function(inst, attacker, target)
                         return damage(inst, attacker, target) + (34 / 2 * (tier - 1))
@@ -521,11 +525,11 @@ AddUMGemDef("palegem1", {
             end
         end,
         onattack = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("palegem1", item, 0.005)
+            DamageInfiniteItemGem("palegem1", item, GENERIC_GEM_USES)
         end,
         onremove = function(item, tier)
             if item.volatile_gemology_data.um_gemologypalegem1 then
-                item.components.weapon.damage = item.volatile_gemology_data.um_gemologypalegem1
+                item.components.weapon.damage = item.volatile_gemology_data.um_gemologypalegem1.weapon_damage
             end
         end
     }
@@ -658,7 +662,7 @@ AddUMGemDef("purplegem1", {
                     damage = damage * tier * 0.25
                     local stimuli = item.components.weapon.stimuli and item.components.weapon.stimuli or nil
                     target.components.combat:GetAttacked(attacker, damage, nil, stimuli)
-                    DamageInfiniteItemGem("purplegem1", item, 0.005)
+                    DamageInfiniteItemGem("purplegem1", item, GENERIC_GEM_USES)
                 end
             end
         end,
@@ -732,7 +736,7 @@ local function FindUniqueBaseStructures(inst, tier)
 end
 
 local function BaseSitterAttack(item, attacker, target, tier)
-    DamageInfiniteItemGem("orangegem1", item, 0.005)
+    DamageInfiniteItemGem("orangegem1", item, GENERIC_GEM_USES)
 
     if tier ~= 1 then
         local damage = item.components.weapon:GetDamage(attacker, target)
@@ -752,7 +756,7 @@ AddUMGemDef("orangegem1", {
             item.structure_bonus = nil
         end,
         onwork = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("orangegem1", item, 0.005)
+            DamageInfiniteItemGem("orangegem1", item, GENERIC_GEM_USES)
         end,
         onupdate = FindUniqueBaseStructures
     }
@@ -820,10 +824,10 @@ AddUMGemDef("orangegem2", {
             end
         end,
         onattack = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("orangegem2", item, 0.005)
+            DamageInfiniteItemGem("orangegem2", item, GENERIC_GEM_USES)
         end,
         onwork = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("orangegem2", item, 0.005)
+            DamageInfiniteItemGem("orangegem2", item, GENERIC_GEM_USES)
         end,
         onremove = function(item, tier)
             if item.HarvestPickable then
@@ -875,7 +879,7 @@ AddUMGemDef("bluegem1", {
                     local iceShield = SpawnPrefab("um_ice_shield")
                     iceShield:Init(attacker, "swap_body", .25 + (tier * 0.125))
                 end
-                DamageInfiniteItemGem("bluegem1", item, 0.005)
+                DamageInfiniteItemGem("bluegem1", item, GENERIC_GEM_USES)
             end
         end
     }
@@ -968,30 +972,31 @@ AddUMGemDef("bluegem2", {
             local old_perishtime = item.volatile_gemology_data.um_gemologybluegem2.old_perishtime
             local old_onfill = item.persistent_gemology_data.um_gemologybluegem2.old_onfill
 
-            item:DoTaskInTime(0, function(item)
-                if old_finite then
-                    item.components.finiteuses = old_finite
-                    item.components.finiteuses:SetPercent(pct)
-                end
-                if old_fueled then
-                    item.components.fueled = old_fueled
-                    item.components.fueled:SetPercent(pct)
-                end
-                if old_perishtime then
-                    item.components.perishable.perishtime = old_perishtime
-                    item.components.perishable:SetPercent(pct)
-                end
-                if not old_perishtime then
-                    item:RemoveComponent("perishable")
-                elseif item.components.perishable ~= nil then
-                    item.components.perishable.perishtime = old_perishtime
-                end
-                if old_onfill then
-                    item.components.fillable.overrideonfillfn = old_onfill
-                end
-            end)
+            if old_finite then
+                item.components.finiteuses = old_finite
+                item.components.finiteuses:SetPercent(pct)
+            end
+            if old_fueled then
+                item.components.fueled = old_fueled
+                item.components.fueled:SetPercent(pct)
+            end
+            if old_perishtime then
+                item.components.perishable.perishtime = old_perishtime
+                item.components.perishable:SetPercent(pct)
+            end
+            if not old_perishtime then
+                item:RemoveComponent("perishable")
+            elseif item.components.perishable ~= nil then
+                item.components.perishable.perishtime = old_perishtime
+            end
+            if old_onfill then
+                item.components.fillable.overrideonfillfn = old_onfill
+            end
         end,
         onupdate = function(item, tier)
+            if not item.components.perishable then
+                return
+            end
             item.persistent_gemology_data.um_gemologybluegem2.perish_time_left = item.components.perishable.perishremainingtime
         end,
         canapply = function(item, tier)
