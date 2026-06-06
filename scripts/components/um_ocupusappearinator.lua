@@ -141,7 +141,6 @@ return Class(function(self, inst)
     end
 
     function self:LoadPostPass(newents, savedata)
-
         if savedata.ocupi then
             for k, guid in pairs(savedata.ocupi) do
                 if newents[guid] then
@@ -155,8 +154,10 @@ return Class(function(self, inst)
             if CountOcupi() > 6 then
                 while CountOcupi() > 6 do
                     for k, v in pairs(self.ocupi) do
-                        v:Remove()
-                        break
+                        if v ~= nil then
+                            v:Remove()
+                            break
+                        end
                     end
                 end
             end
