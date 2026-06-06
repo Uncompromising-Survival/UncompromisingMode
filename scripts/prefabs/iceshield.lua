@@ -5,6 +5,11 @@ local function OnHealthDelta(inst, oldpercent, newpercent, overtime, cause, affl
         inst._parent.SoundEmitter:PlaySound("meta4/mortars/cannonball_hit_ice")
         SpawnPrefab("mining_ice_fx").Transform:SetPosition(inst._parent.Transform:GetWorldPosition())
     end
+
+    if inst._parent ~= nil and inst._parent:IsValid() and inst._parent.components.health ~= nil and inst._parent:HasTag("player") then
+        inst._parent.ice_shield_health:set(math.floor(inst.components.health.currenthealth))
+        inst._parent.ice_shield_maxhealth:set(math.floor(inst.components.health.maxhealth))
+    end
 end
 
 local function ShouldWeaponPierce(inst, weapon, attacker)
@@ -21,6 +26,7 @@ local function ShouldRecoilIceShield(inst, attacker, weapon, damage)
     end
     return shouldrecoil, (ShouldWeaponPierce(inst, weapon, attacker) or not inst:HasTag("ice_shielded")) and damage or damage and damage / 2 or nil
 end
+
 
 local function Init(inst, parent, fx_symbol, tier)
     inst.tier = tier
@@ -87,6 +93,15 @@ local function Init(inst, parent, fx_symbol, tier)
 
     parent.shield_fx2 = SpawnPrefab("um_ice_shield_fx")
     parent.shield_fx2.entity:SetParent(parent.entity) --don't need followsymbol here.
+
+    if parent:IsValid() and parent.components.health ~= nil and parent:HasTag("player") then
+        parent.ice_shield_health:set(math.floor(inst.components.health.currenthealth))
+        parent.ice_shield_maxhealth:set(math.floor(inst.components.health.maxhealth))
+    end
+
+    if parent.components.temperature and UPDATE_CHECK then
+        parent.components.temperature:SetInsulationModifier(SEASONS.SUMMER, inst, TUNING.INSULATION_SMALL)
+    end
 end
 
 local function fn()
@@ -125,16 +140,7 @@ local function fn()
         end
 
         if inst._parent then
-            inst._parent:RemoveTag("ice_shielded")
             inst._parent:PushEvent("ice_shield_death")
-
-            if inst._parent.shield_fx then
-                inst._parent.shield_fx:Remove()
-            end
-
-            if inst._parent.shield_fx2 then
-                inst._parent.shield_fx2:Remove()
-            end
 
             if inst._parent.components.burnable then
                 inst._parent.components.burnable:Extinguish()
@@ -148,6 +154,23 @@ local function fn()
         if inst._parent then
             inst._parent:RemoveTag("ice_shielded")
             inst._parent.components.health.redirect = inst.redirect_old and inst.redirect_old or nil
+
+            if inst._parent.components.temperature and UPDATE_CHECK then
+                inst._parent.components.temperature:RemoveInsulationModifier(SEASONS.SUMMER, inst)
+            end
+
+            if inst._parent.ice_shield_health then
+                inst._parent.ice_shield_health:set(0)
+                inst._parent.ice_shield_maxhealth:set(0)
+            end
+
+            if inst._parent.shield_fx then
+                inst._parent.shield_fx:Remove()
+            end
+
+            if inst._parent.shield_fx2 then
+                inst._parent.shield_fx2:Remove()
+            end
         end
     end)
 

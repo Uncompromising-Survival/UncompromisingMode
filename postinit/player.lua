@@ -179,8 +179,15 @@ local function UpdateMineralLog(inst)
 end
 
 
-local DESPAWN_FOLLOWER_TAGS = {"pig", "raidrat", "winky_rat"}
-local DESPAWN_FOLLOWER_PREFABS = {"eyeofterror_mini_ally", "smallbird", "teenbird", "lightflier", "wx78_scanner"}
+local function DespawnIceShield(inst)
+    if inst:HasTag("ice_shielded") and inst.ice_shield ~= nil then
+        inst.ice_shield_tier = inst.ice_shield.tier
+        inst.ice_shield_saverecord = inst.ice_shield:GetSaveRecord()
+    end
+end
+
+local DESPAWN_FOLLOWER_TAGS = { "pig", "raidrat", "winky_rat" }
+local DESPAWN_FOLLOWER_PREFABS = { "eyeofterror_mini_ally", "smallbird", "teenbird", "lightflier", "wx78_scanner" }
 local function DespawnFollowers(inst)
     for k, v in pairs(inst.components.leader.followers) do
         if k:HasTag("spider") and not TUNING.DSTU.TREATS_FOR_WEBBER or k:HasAnyTag(DESPAWN_FOLLOWER_TAGS) or TUNING.DSTU.MERMTWEAKS and k:HasTag("merm")
@@ -205,6 +212,12 @@ local function DespawnFollowers(inst)
 end
 
 env.AddPlayerPostInit(function(inst)
+    inst.ice_shield_health = net_int(inst.GUID, "iceshield.health", "iceshield.health_dirty")
+    inst.ice_shield_maxhealth = net_int(inst.GUID, "iceshield.maxhealth", "iceshield.health_dirty")
+
+    inst.ice_shield_health:set(0)
+    inst.ice_shield_maxhealth:set(0)
+
     if not TheWorld.ismastersim then
         inst:DoPeriodicTask(TUNING.SCRAPBOOK_UPDATERATE, UpdateMineralLog)
     end
@@ -329,12 +342,15 @@ env.AddPlayerPostInit(function(inst)
 
     inst.OnDespawn = function(inst, migrationdata, ...)
         DespawnFollowers(inst)
+        DespawnIceShield(inst)
         return _OnDespawn(inst, migrationdata, ...)
     end
 
     local _OnSave = inst.OnSave
     inst.OnSave = function(inst, data, ...)
         data.um_all_followers = inst.um_all_followers
+        data.ice_shield_saverecord = inst.ice_shield_saverecord
+        data.ice_shield_tier = inst.ice_shield_tier
 
         if _OnSave then
             return _OnSave(inst, data, ...)
@@ -362,7 +378,13 @@ env.AddPlayerPostInit(function(inst)
                     end)
                 end
             end
+
+            if data.ice_shield_saverecord and data.ice_shield_tier then
+                local shield = SpawnSaveRecord(data.ice_shield_saverecord)
+                shield:Init(inst, "swap_body", data.ice_shield_tier)
+            end
         end
+
         if _OnLoad then
             return _OnLoad(inst, data, ...)
         end

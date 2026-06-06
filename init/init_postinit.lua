@@ -297,7 +297,8 @@ local class_post = {
     "widgets/inventorybar",
     "widgets/containerwidget",
     "widgets/statusdisplays",
-    "screens/scrapbookscreen"
+    "screens/scrapbookscreen",
+    "widgets/healthbadge"
 }
 
 local brain_post = {

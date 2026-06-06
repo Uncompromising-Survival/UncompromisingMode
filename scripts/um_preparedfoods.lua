@@ -571,82 +571,80 @@ local um_preparedfoods =
         perishtime = 10 * TUNING.PERISH_TWO_DAY,
         floater = { nil, .1, .6 },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_VIPERJAM,
-		oneatenfn = function(inst, eater)
-			local function RemoveFriend(friend)
-				if friend ~= nil and friend:IsValid() then
-					local x, y, z = friend.Transform:GetWorldPosition()
-					SpawnPrefab("shadow_despawn").Transform:SetPosition(x, y, z)
-					friend:Remove()
-				end
-			end
+        oneatenfn = function(inst, eater)
+            local function RemoveFriend(friend)
+                if friend ~= nil and friend:IsValid() then
+                    local x, y, z = friend.Transform:GetWorldPosition()
+                    SpawnPrefab("shadow_despawn").Transform:SetPosition(x, y, z)
+                    friend:Remove()
+                end
+            end
 
-			local function MakeFriend(eater)
-				local x, y, z = eater.Transform:GetWorldPosition()
-				local worms = TheSim:FindEntities(x, y, z, 40, { "viperlingfriend" }, { "INLIMBO" })
-				local worm_friends = {}
+            local function MakeFriend(eater)
+                local x, y, z = eater.Transform:GetWorldPosition()
+                local worms = TheSim:FindEntities(x, y, z, 40, { "viperlingfriend" }, { "INLIMBO" })
+                local worm_friends = {}
 
-				if eater.components.leader == nil then
-					return worm_friends
-				end
+                if eater.components.leader == nil then
+                    return worm_friends
+                end
 
-				for _, v in ipairs(worms) do
-					if v:IsValid() and eater.components.leader:IsFollower(v) then
-						table.insert(worm_friends, v)
-					end
-				end
+                for _, v in ipairs(worms) do
+                    if v:IsValid() and eater.components.leader:IsFollower(v) then
+                        table.insert(worm_friends, v)
+                    end
+                end
 
-				table.sort(worm_friends, function(a, b)
-					return (a.despawn_time or 0) < (b.despawn_time or 0)
-				end)
+                table.sort(worm_friends, function(a, b)
+                    return (a.despawn_time or 0) < (b.despawn_time or 0)
+                end)
 
-				return worm_friends
-			end
+                return worm_friends
+            end
 
-			local function SpawnFriend(eater)
-				if eater == nil or not eater:IsValid() then
-					return
-				end
+            local function SpawnFriend(eater)
+                if eater == nil or not eater:IsValid() then
+                    return
+                end
 
-				local x, y, z = eater.Transform:GetWorldPosition()
-				local projectile = SpawnPrefab("viperprojectile")
-				projectile.Transform:SetPosition(x, y, z)
+                local x, y, z = eater.Transform:GetWorldPosition()
+                local projectile = SpawnPrefab("viperprojectile")
+                projectile.Transform:SetPosition(x, y, z)
 
-				local pt = eater:GetPosition()
-				pt.x = pt.x + math.random(-3, 3)
-				pt.z = pt.z + math.random(-3, 3)
+                local pt = eater:GetPosition()
+                pt.x = pt.x + math.random(-3, 3)
+                pt.z = pt.z + math.random(-3, 3)
 
-				if TheWorld.Map:IsAboveGroundAtPoint(pt.x, 0, pt.z) or TheWorld.Map:GetPlatformAtPoint(pt.x, pt.z) ~= nil then
+                if TheWorld.Map:IsAboveGroundAtPoint(pt.x, 0, pt.z) or TheWorld.Map:GetPlatformAtPoint(pt.x, pt.z) ~= nil then
+                    local speed = easing.linear(3, 7, 3, 10)
 
-					local speed = easing.linear(3, 7, 3, 10)
+                    projectile:AddTag("canthit")
+                    projectile:AddTag("friendly")
+                    projectile.eater = eater
+                    projectile.max_worms = 6
 
-					projectile:AddTag("canthit")
-					projectile:AddTag("friendly")
-					projectile.eater = eater
-					projectile.max_worms = 6
+                    projectile.components.complexprojectile:SetHorizontalSpeed(speed + math.random(4, 9))
+                    projectile.components.complexprojectile:Launch(pt, eater, eater)
+                else
+                    projectile:Remove()
+                end
+            end
 
-					projectile.components.complexprojectile:SetHorizontalSpeed(speed + math.random(4, 9))
-					projectile.components.complexprojectile:Launch(pt, eater, eater)
-				else
-					projectile:Remove()
-				end
-			end
+            if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and not (eater.components.health ~= nil and eater.components.health:IsDead()) and not eater:HasTag("playerghost") then
+                local friends = MakeFriend(eater)
+                local replace_count = math.min(#friends, 6)
 
-			if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and not (eater.components.health ~= nil and eater.components.health:IsDead()) and not eater:HasTag("playerghost") then
+                for i = 1, replace_count do
+                    RemoveFriend(friends[i])
+                end
 
-				local friends = MakeFriend(eater)
-				local replace_count = math.min(#friends, 6)
-
-				for i = 1, replace_count do
-					RemoveFriend(friends[i])
-				end
-
-				for i = 1, 6 do
-					eater:DoTaskInTime(0, function()
-						SpawnFriend(eater)
-					end)
-				end
-			end
-		end,
+                for i = 1, 6 do
+                    eater:DoTaskInTime(0, function()
+                        SpawnFriend(eater)
+                    end)
+                end
+            end
+        end,
         card_def = { ingredients = { { "viperfruit", 1 }, { "giant_blueberry", 1 } } },
     },
 
@@ -683,8 +681,8 @@ local um_preparedfoods =
     -- [Rimeweed] -----
     um_rimeweed_spagett =
     {
-        test = function(cooker, names, tags) return names.um_rimeweed_itemflower and names.um_rimeweed_itemvine and names.um_rimeweed_itemvine > 2 end,
-        hunger = 62.5,
+        test = function(cooker, names, tags) return names.um_ice_tail and names.um_rimeweed_itemvine and tags.egg and not tags.fruit end,
+        hunger = 46.8,
         health = 3,
         sanity = 5,
         priority = 200,
@@ -692,18 +690,16 @@ local um_preparedfoods =
         cooktime = 1.8,
         temperature = TUNING.COLD_FOOD_BONUS_TEMP,
         temperatureduration = TUNING.FOOD_TEMP_LONG,
-        foodtype = FOODTYPE.VEGGIE,
+        foodtype = FOODTYPE.MEAT,
         perishtime = 3 * TUNING.PERISH_TWO_DAY,
         floater = { "med", .05, .65 },
-        card_def = { ingredients = { { "um_rimeweed_itemvine", 3 }, { "um_rimeweed_itemflower", 1 } } },
+        card_def = { ingredients = { { "um_rimeweed_itemvine", 3 }, { "um_ice_tail", 1 }, { "bird_egg", 1 } } },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_RIMEWEED_SPAGETT,
         oneatenfn = function(inst, eater)
             if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
                 not (eater.components.health ~= nil and eater.components.health:IsDead()) and
                 not eater:HasTag("playerghost") then
                 local x, y, z = eater.Transform:GetWorldPosition()
-                local iceShield = SpawnPrefab("um_ice_shield")
-                iceShield:Init(eater, "swap_body", .125)
 
                 local fx = SpawnPrefab("deer_ice_burst")
                 fx.Transform:SetPosition(x, y, z)
@@ -720,12 +716,12 @@ local um_preparedfoods =
 
     um_rimeweed_tequila =
     {
-        test = function(cooker, names, tags) return names.um_rimeweed_itemflower and names.ice end,
+        test = function(cooker, names, tags) return names.um_rimeweed_itemflower and names.ice and tags.frozen >= 2.5 and not tags.meat and not tags.egg  end,
         hunger = 12.5,
-        health = 3,
-        sanity = 33,
+        health = 15,
+        sanity = 50,
         priority = 200,
-        weight = 1,
+        weight = 5,
         cooktime = 2,
         temperature = TUNING.COLD_FOOD_BONUS_TEMP,
         temperatureduration = TUNING.FOOD_TEMP_LONG,
@@ -740,11 +736,13 @@ local um_preparedfoods =
                 not (eater.components.health ~= nil and eater.components.health:IsDead()) and
                 not eater:HasTag("playerghost") then
                 local iceShield = SpawnPrefab("um_ice_shield")
-                iceShield:Init(eater, "swap_body", .125)
+                iceShield:Init(eater, "swap_body", .25)
 
                 eater.components.debuffable:AddDebuff("um_rimeweed_tequila_buff", "um_rimeweed_tequila_buff")
             end
         end,
+        warly_only = true,
+
     },
     um_durian_cream_marshcake =
     {
