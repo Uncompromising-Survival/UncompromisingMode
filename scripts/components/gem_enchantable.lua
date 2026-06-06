@@ -221,6 +221,12 @@ function GemEnchantable:OnLoad(data)
     self.dirty = true
 end
 
+function GemEnchantable:RemoveAllEnchantments()
+    for k, v in pairs(self.enchants) do
+        self:RemoveEnchantment(k)
+    end
+end
+
 function GemEnchantable:OnRemoveFromEntity()
     if self.gem_update_task ~= nil then
         self.gem_update_task:Cancel()
