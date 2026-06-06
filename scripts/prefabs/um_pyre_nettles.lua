@@ -80,13 +80,12 @@ local function PlayerImmunity(inst)
     if inst.components.debuffable and inst.components.debuffable:HasDebuff("um_firecream_buff") then
         return true
     end
-    if inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
-        and inst.components.inventory:EquipHasTag("pyre_toxin_immune") then
+    if inst.components.inventory and inst.components.inventory:EquipHasTag("pyre_toxin_immune") then
         return true
     end
 end
 
-local no_tags = { "pyre_toxin_immune", "FX", "INLIMBO", "shadow", "wall", "invisible", "notarget", "noattack", "playerghost", "boat", "walkableplatform" }
+local no_tags = JoinArrays(UMCommonFns.GHOSTLIKE_TAGS, {"pyre_toxin_immune", "FX", "INLIMBO", "wall", "invisible", "notarget", "noattack", "boat", "walkableplatform"})
 local function pyrenettle_bumped(inst, nextvictim)
     if nextvictim:IsValid() and not nextvictim:HasAnyTag(no_tags) and not PlayerImmunity(nextvictim) then
         inst.AnimState:PlayAnimation("pn" .. inst.stage .. "_bump", false)

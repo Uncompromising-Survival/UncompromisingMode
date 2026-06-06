@@ -245,8 +245,7 @@ local function CustomOnHaunt(inst, haunter)
     return false
 end
 
-local ghostlike_tags = UMCommonFns.GHOSTLIKE_TAGS
-local cant_target = JoinArrays(ghostlike_tags, { "INLIMBO", "noattack", "invisible","worm","structure" })
+local cant_target = JoinArrays(UMCommonFns.GHOSTLIKE_TAGS, {"INLIMBO", "noattack", "invisible", "worm", "structure"})
 local function TryShockingTargets(inst)
     local x,y,z = inst.Transform:GetWorldPosition()
     local shocking = SpawnPrefab("um_shock_projectile")

@@ -182,8 +182,7 @@ local function fnfire()
     )
 
     inst:DoTaskInTime(0, ShootFire)
-    local ghostlike_tags = UMCommonFns.GHOSTLIKE_TAGS
-    inst.dont_hit_tags = JoinArrays(ghostlike_tags, { "INLIMBO", "noattack", "invisible" })
+    inst.dont_hit_tags = JoinArrays(UMCommonFns.GHOSTLIKE_TAGS, {"INLIMBO", "noattack", "invisible"})
 
     return inst
 end
@@ -285,7 +284,6 @@ local function fnshock()
         return inst
     end
 
-
     inst.Physics:SetMass(1)
     inst.Physics:SetDamping(.1)
     inst.Physics:SetFriction(.3)
@@ -298,17 +296,13 @@ local function fnshock()
     )
 
     inst:DoTaskInTime(0, ShootShock)
-    local ghostlike_tags = UMCommonFns.GHOSTLIKE_TAGS
-    inst.dont_hit_tags = JoinArrays(ghostlike_tags, { "INLIMBO", "noattack", "invisible","worm","structure" })
+    inst.dont_hit_tags = JoinArrays(UMCommonFns.GHOSTLIKE_TAGS, {"INLIMBO", "noattack", "invisible", "worm", "structure"})
     inst.shocked = {}
 
-    
     inst.speed = 10
     inst.persists = false
     return inst
 end
 
-
-
 return Prefab("um_fire_projectile", fnfire),
-Prefab("um_shock_projectile",fnshock)
+    Prefab("um_shock_projectile",fnshock)
