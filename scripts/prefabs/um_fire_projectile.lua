@@ -44,7 +44,7 @@ local function BurnSurroundings(inst)
             v.components.burnable:Ignite(true, inst, inst.damager)
         end
         if v.components.health and v:IsValid() then
-            v.components.health:DoFireDamage(inst.damage, inst.damager, true)
+            v.components.health:DoFireDamage(damage, inst.damager, true)
         end
         if v.components.combat and inst.damager then
             v.components.combat:SuggestTarget(inst.damager)
