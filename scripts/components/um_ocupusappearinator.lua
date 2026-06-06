@@ -146,12 +146,12 @@ return Class(function(self, inst)
             end
         end
 
-        if not self.retrofit then
+        --[[if not self.retrofit then
             --in case old worlds have too many.
             if CountOcupi() > 6 then
                 while CountOcupi() > 6 do
                     for k, v in pairs(self.ocupi) do
-                        if v ~= nil and v:IsValid() then
+                        if v ~= nil then
                             v:Remove()
                             break
                         end
@@ -159,7 +159,7 @@ return Class(function(self, inst)
                 end
             end
             self.retrofit = true
-        end
+        end]]
     end
 
     self.inst:ListenForEvent("seasontick", OnSeasonTick, TheWorld)
