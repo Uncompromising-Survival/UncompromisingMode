@@ -266,7 +266,7 @@ local function GetChanceAphidsWithWorldAge(age)
 end
 
 local function onnear(inst, target)
-    if inst.components.pickable and inst.components.pickable:CanBePicked() and not inst.BrushingTest and target then
+    if inst.components.pickable and inst.components.pickable:CanBePicked() and not inst.BrushingTest and target and target.components.health ~= nil then
         if not (WearingThicketResist(target) or PrickAdept(target) or table.contains(TUNING.DSTU.NO_THICKET_APHIDS,target.prefab)) then
             local chance_aphids = GetChanceAphidsWithWorldAge(TheWorld.state.cycles) * .01
             if math.random() > chance_aphids and not TheWorld.state.iswinter then
@@ -283,7 +283,7 @@ local function onnear(inst, target)
                     SpawnPrefab("snake").Transform:SetPosition(inst.Transform:GetWorldPosition())
                 end
             end
-            if not target:HasTag("EPIC") then
+            if not target:HasTag("EPIC")  then
                 target.components.locomotor:SetExternalSpeedMultiplier(target, "thicket", 0.3)
                 if not target.thicketcheck then
                     target.thicketcheck = target:DoPeriodicTask(0.1, OutOfTheWoodsYet)
