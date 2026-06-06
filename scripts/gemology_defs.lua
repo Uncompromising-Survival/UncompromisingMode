@@ -45,7 +45,7 @@ This is so we can save some gem-specific data so it can probably revert when rem
 
 local GEM_DEFS = {}
 local GEM_LOOKUP = {}
-local GENERIC_GEM_USES = 100 / 250
+local GENERIC_GEM_USES = 1 / 250
 function AddGemDef(name, def)
     GEM_LOOKUP[#GEM_LOOKUP + 1] = name
     GEM_DEFS[name] = def
