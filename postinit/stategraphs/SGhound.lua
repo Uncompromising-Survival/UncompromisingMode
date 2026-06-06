@@ -469,7 +469,7 @@ env.AddStategraphPostInit("hound", function(inst)
 					end
                 end),
                 TimeEvent(16 * FRAMES, function(inst)
-					inst.SnowFX(inst)
+					inst:SnowFX()
 					if inst.sg.statemem.target and inst.sg.statemem.target:GetPosition() then
 						inst:ForceFacePoint(inst.sg.statemem.target:GetPosition())
 					end
