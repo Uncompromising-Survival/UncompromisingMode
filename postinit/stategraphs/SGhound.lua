@@ -360,28 +360,28 @@ env.AddStategraphPostInit("hound", function(inst)
                 TimeEvent(3 * FRAMES, function(inst)
                     if inst.sg.statemem.target and inst.sg.statemem.target:IsValid() then
                         inst.sg.statemem.inkpos = Vector3(inst.sg.statemem.target.Transform:GetWorldPosition())
-						inst.ShootFire(inst,3)
+						inst:ShootFire(3)
                         --inst:LaunchProjectile(inst.sg.statemem.target)
                     end
                 end),
                 TimeEvent(6 * FRAMES, function(inst)
                     if inst.sg.statemem.target and inst.sg.statemem.target:IsValid() then
                         inst.sg.statemem.inkpos = Vector3(inst.sg.statemem.target.Transform:GetWorldPosition())
-						inst.ShootFire(inst,3)
+						inst:ShootFire(3)
                         --inst:LaunchProjectile(inst.sg.statemem.target)
                     end
                 end),
                 TimeEvent(9 * FRAMES, function(inst)
                     if inst.sg.statemem.target and inst.sg.statemem.target:IsValid() then
                         inst.sg.statemem.inkpos = Vector3(inst.sg.statemem.target.Transform:GetWorldPosition())
-						inst.ShootFire(inst,3)
+						inst:ShootFire(3)
                         --inst:LaunchProjectile(inst.sg.statemem.target)
                     end
                 end),
                 TimeEvent(12 * FRAMES, function(inst)
                     if inst.sg.statemem.target and inst.sg.statemem.target:IsValid() then
                         inst.sg.statemem.inkpos = Vector3(inst.sg.statemem.target.Transform:GetWorldPosition())
-						inst.ShootFire(inst,3)
+						inst:ShootFire(3)
                         --inst:LaunchProjectile(inst.sg.statemem.target)
                     end
                 end),
@@ -433,7 +433,7 @@ env.AddStategraphPostInit("hound", function(inst)
 					if inst.sg.statemem.target and inst.sg.statemem.target:GetPosition() then
 						inst:ForceFacePoint(inst.sg.statemem.target:GetPosition())
 					end
-					inst.ShootFire(inst)
+					inst:ShootFire()
                 end),
             },
 			
@@ -478,7 +478,7 @@ env.AddStategraphPostInit("hound", function(inst)
                     inst.AnimState:SetDeltaTimeMultiplier(1)
 					if inst.sg.statemem.target and inst.sg.statemem.target:GetPosition() then
 						inst:ForceFacePoint(inst.sg.statemem.target:GetPosition())
-						inst.IceSpike(inst,inst.sg.statemem.target)
+						inst:IceSpike(inst.sg.statemem.target)
 					end
 					
                 end),
