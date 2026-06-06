@@ -949,7 +949,7 @@ AddUMGemDef("bluegem2", {
                 item:AddComponent("perishable")
             end
 
-            item.components.perishable:SetPerishTime(maxval * tier * (was_perishable and 1 or 3))
+            item.components.perishable:SetPerishTime(maxval * tier * (was_perishable and 2 or 4))
             item.components.perishable:StartPerishing()
             item.components.perishable.onperishreplacement = "spoiled_food"
             item.components.perishable:SetPercent(pct)
