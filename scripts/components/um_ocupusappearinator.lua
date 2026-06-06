@@ -151,7 +151,7 @@ return Class(function(self, inst)
             if CountOcupi() > 6 then
                 while CountOcupi() > 6 do
                     for k, v in pairs(self.ocupi) do
-                        if v ~= nil then
+                        if v ~= nil and v:IsValid() then
                             v:Remove()
                             break
                         end
