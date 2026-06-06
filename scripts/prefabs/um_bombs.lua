@@ -241,10 +241,11 @@ local function moon_bomb_fn()
     if not TheWorld.ismastersim then
         return inst
     end
-    inst.components.complexprojectile:SetHorizontalSpeed(25)
+
+    --inst.components.complexprojectile:SetHorizontalSpeed(25)
     inst.components.complexprojectile:SetOnHit(OnHitMutate)
-    inst.components.weapon:SetRange(12, 12)
-    inst.components.weapon.toss_range_override = 12 --AXE override the usual toss range, additional code in init_actions passes this value
+    --inst.components.weapon:SetRange(12, 12)
+    --inst.components.weapon.toss_range_override = 12 --AXE override the usual toss range, additional code in init_actions passes this value
 
     return inst
 end

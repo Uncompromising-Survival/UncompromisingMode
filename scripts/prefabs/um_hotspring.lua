@@ -105,10 +105,11 @@ end
 
 local function OnBathingPoolTick_PerOccupant(inst, occupant, dt)
     if inst.components.bathbombable.is_bathbombed then
-        if occupant.components.health then
-            occupant.components.health:DeltaPenalty(-0.009)
-        end
-
+		if TUNING.DSTU.BATH_BOMB then
+			if occupant.components.health then
+				occupant.components.health:DeltaPenalty(-0.009)
+			end
+		end
         if occupant.components.inventory then
             local waterproofness = occupant.components.inventory and math.min(occupant.components.inventory:GetWaterproofness(), 1) or 0
             if occupant.components.moisture then

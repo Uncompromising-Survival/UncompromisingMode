@@ -232,3 +232,19 @@ env.AddComponentPostInit("combat", function(self)
         return _GetAttacked(self, attacker, damage, weapon, stimuli, spdamage, ...)
     end
 end)
+
+--fix for chilled items dropping out of their containers
+env.AddComponentPostInit("container", function(self)
+    local _GiveItem = self.GiveItem
+    function self:GiveItem(item, slot, src_pos, drop_on_fail)
+        local ret = _GiveItem(self, item, slot, src_pos, drop_on_fail)
+    
+        if item.components.gem_enchantable ~= nil and item.components.gem_enchantable:HasEnchantment("um_gemologybluegem2") and not self:IsHolding(item) then
+            self.inst:DoTaskInTime(0, function()
+                self:GiveItem(item, slot, src_pos, drop_on_fail)
+            end)
+        end
+
+        return ret
+    end
+end)

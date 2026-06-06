@@ -46,46 +46,16 @@ local function CreateBase()
 
     return inst
 end
-
-local function InitFX(inst)
-    local cloud = SpawnPrefab("sporepack_circle")
-    --cloud.Transform:SetPosition(inst.Transform:GetWorldPosition())
-    cloud.entity:SetParent(inst.entity)
-end
-
 local function onequip(inst, owner)
     owner.AnimState:OverrideSymbol("swap_body", "swap_sporepack", "backpack")
     owner.AnimState:OverrideSymbol("swap_body", "swap_sporepack", "swap_body")
     inst.components.container:Open(owner)
-
-    if owner.sporepack_task ~= nil then
-        owner.sporepack_task:Cancel()
-        owner.sporepack_task = nil
-    end
-
-    if owner.sporespoil_task ~= nil then
-        owner.sporespoil_task:Cancel()
-        owner.sporespoil_task = nil
-    end
-
-    --owner.sporepack_task = owner:DoPeriodicTask(3, InitFX)
-    owner.sporespoil_task = owner:DoPeriodicTask(3, DoSporeRefresh)
 end
 
 local function onunequip(inst, owner)
     owner.AnimState:ClearOverrideSymbol("swap_body")
     owner.AnimState:ClearOverrideSymbol("backpack")
     inst.components.container:Close(owner)
-
-    if owner.sporepack_task ~= nil then
-        owner.sporepack_task:Cancel()
-        owner.sporepack_task = nil
-    end
-
-    if owner.sporespoil_task ~= nil then
-        owner.sporespoil_task:Cancel()
-        owner.sporespoil_task = nil
-    end
 end
 
 local function fn()
@@ -122,6 +92,8 @@ local function fn()
         end
         return inst
     end
+
+    inst:DoPeriodicTask(3, DoSporeRefresh)
 
     inst:AddComponent("inspectable")
 

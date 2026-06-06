@@ -47,7 +47,7 @@ UMCommonFns.IsAlly = function(inst, guy, tags) -- Used for UMIsAlly on certain c
 end
 
 UMCommonFns.IsNotFriendly = function(attacker, target) -- Is the target an ally or my leader's ally?
-    if not target.components.health then return true end
+    if not (attacker and attacker:IsValid()) or not target.components.health then return true end
     local attackercombat = attacker and attacker.components.combat
     local leader = attacker and attacker.components.follower and attacker.components.follower:GetLeader()
     local leadercombat = leader and leader.components.combat
@@ -71,6 +71,40 @@ UMCommonFns.VetcurseUnequip = function(inst, owner, slot)
         end)
         return true
     end
+end
+
+--[[UMCommonFns.GetLMBActionIsAction = function(leftactions, action)
+    if leftactions then
+        for k, v in pairs(leftactions) do
+            if v.action == action then
+                return true
+            end
+        end
+    end
+end]]
+
+local ignoredactions = {ACTIONS.LOOKAT, ACTIONS.WALKTO}
+--[[UMCommonFns.CanOverrideAction = function(rightactions, leftactions)
+    local count = 0
+    if rightactions then
+        for k, v in pairs(rightactions) do
+            if not table.contains(ignoredactions, v.action) and not UMCommonFns.GetLMBActionIsAction(leftactions, v.action) then
+                count = count + 1
+            end
+        end
+    end
+    return count >= 1
+end]]
+
+UMCommonFns.HasRightClickAction = function(inst, doer, pos, target)
+    if inst.um_checkingactions then return true end
+    inst.um_checkingactions = true
+    local _, rmb
+    if doer.components.playeractionpicker then
+        _, rmb = doer.components.playeractionpicker:DoGetMouseActions(pos, target)
+    end
+    inst.um_checkingactions = nil
+    return rmb and not table.contains(ignoredactions, rmb.action)
 end
 
 -- Unified megaflare timer reduction used by all seasonal boss spawners

@@ -28,3 +28,35 @@ env.AddPrefabPostInit("wurt", function(inst)
 
 
 end)
+
+local lunar_merms = {
+    "mermguard_lunar",
+    "merm_lunar",
+}
+
+for _, prefab in ipairs(lunar_merms) do
+	env.AddPrefabPostInit(prefab, function(inst)
+		if not TheWorld.ismastersim then
+			return
+		end
+
+		local _OnChangedLeaderLunar = inst.components.follower.OnChangedLeader
+
+		local function OnChangedLeaderLunar(inst, new_leader, prev_leader, ...)
+			if TUNING.DSTU.MERMTWEAKS then
+				return
+			else
+				return _OnChangedLeaderLunar(inst, new_leader, prev_leader, ...)
+			end
+		end
+
+		inst.components.follower.OnChangedLeader = OnChangedLeaderLunar
+
+		--Infinite merms followers feel too convenient, if I can just make lunar merms have a huge loyalty time and loyalty per food... -CB
+		--local loyalty_max = (isguard and TUNING.MERM_GUARD_LOYALTY_MAXTIME) or TUNING.MERM_LOYALTY_MAXTIME
+		--local loyalty_time = item.components.edible:GetHunger() * loyalty_per_hunger
+		--inst.components.follower.maxfollowtime = loyalty_max
+		--inst.components.follower:AddLoyaltyTime(loyalty_time)
+
+	end)
+end

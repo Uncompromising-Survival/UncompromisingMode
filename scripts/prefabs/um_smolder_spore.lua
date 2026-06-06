@@ -82,6 +82,8 @@ end
 -- Divebomb the ground and explode!
 local function Divebomb(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
+    if not TheWorld.Map:IsVisualGroundAtPoint(x, y, z) then return end
+
     local refusetargets = TheSim:FindEntities(x, y, z, 2, "_health", nil, { "SmolderSporeAvoid", "plantkin" })
 
     if not inst:HasTag("BUSYSMOLDERSPORE") and #refusetargets < 1 then
@@ -185,20 +187,32 @@ end
 local function TimeToDie(inst) -- Forced explosion
     inst:AddTag("BUSYSMOLDERSPORE")
 
+    local x, y, z = inst.Transform:GetWorldPosition()
+
     if inst.components.locomotor ~= nil then
         inst.components.locomotor:Stop()
     end
 
-    inst.AnimState:PlayAnimation("divebomb", false)
+    if not TheWorld.Map:IsVisualGroundAtPoint(x, y, z) then
+        inst.AnimState:PlayAnimation("explode", false)
+        inst.AnimState:HideSymbol("spore_body")
+        inst:ListenForEvent("animover", function(inst)
+            if inst:IsValid() then
+                inst:Remove()
+            end
+        end)
+    else
+        inst.AnimState:PlayAnimation("divebomb", false)
 
-    inst:ListenForEvent("animover", function(inst)
-        if inst:IsValid() then
-            SpawnPrefab("explode_small").Transform:SetPosition(inst.Transform:GetWorldPosition())
-            FieryAftermath(inst)
-            FireSpread(inst)
-            inst:Remove()
-        end
-    end)
+        inst:ListenForEvent("animover", function(inst)
+            if inst:IsValid() then
+                SpawnPrefab("explode_small").Transform:SetPosition(inst.Transform:GetWorldPosition())
+                FieryAftermath(inst)
+                FireSpread(inst)
+                inst:Remove()
+            end
+        end)
+    end
 end
 
 local function OnDropped(inst)

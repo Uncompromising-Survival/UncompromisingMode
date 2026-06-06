@@ -2,7 +2,7 @@ require("components/deployhelper") -- TriggerDeployHelpers lives here
 
 local assets =
 {
-	Asset("ANIM", "anim/um_detonator.zip"),
+    Asset("ANIM", "anim/um_detonator.zip"),
 }
 
 local prefabs =
@@ -11,28 +11,28 @@ local prefabs =
 }
 
 local function ShouldRepeatCast(inst, doer)
-	return not inst:HasTag("usesdepleted")
+    return not inst:HasTag("usesdepleted")
 end
 
 
 
 local function PingCatapult(inst, doer, pos, catapult)
-	local ping = SpawnPrefab("reticuleaoewinonaengineeringping")
-	ping.Transform:SetPosition(catapult.Transform:GetWorldPosition())
-	ping.Transform:SetRotation(catapult.Transform:GetRotation())
+    local ping = SpawnPrefab("reticuleaoewinonaengineeringping")
+    ping.Transform:SetPosition(catapult.Transform:GetWorldPosition())
+    ping.Transform:SetRotation(catapult.Transform:GetRotation())
 
-	--placer colours:
-	--  -base colour 0x6e6045 via multcolour
-	--  -validcolour (0.25, 0.75, 0.25) via addcolour
-	--
-	--normally, reticule:PingReticuleAt controls the colours
-	--to manually match it:
-	--  use multcolour to match the base+validclour
-	--  addcolour is fixed (0.2, 0.2, 0.2) when triggering ping
-	ping.AnimState:SetMultColour(math.min(1, 0x6e/255+0.25), math.min(1, 0x60/255+0.75), math.min(1, 0x45/255+0.25), 1)
-	ping.AnimState:SetAddColour(0.2, 0.2, 0.2, 0)
+    --placer colours:
+    --  -base colour 0x6e6045 via multcolour
+    --  -validcolour (0.25, 0.75, 0.25) via addcolour
+    --
+    --normally, reticule:PingReticuleAt controls the colours
+    --to manually match it:
+    --  use multcolour to match the base+validclour
+    --  addcolour is fixed (0.2, 0.2, 0.2) when triggering ping
+    ping.AnimState:SetMultColour(math.min(1, 0x6e / 255 + 0.25), math.min(1, 0x60 / 255 + 0.75), math.min(1, 0x45 / 255 + 0.25), 1)
+    ping.AnimState:SetAddColour(0.2, 0.2, 0.2, 0)
 
-	return true
+    return true
 end
 
 
@@ -42,99 +42,104 @@ end
 
 --------------------------------------------------------------------------
 
-local standard_explosives = {"gunpowder","slurtleslime","snapalm"}
+local standard_explosives = { "gunpowder", "slurtleslime", "snapalm" }
 
 local function IsStandardExplosive(prefab)
-	for i,v in ipairs(standard_explosives) do
-		if prefab == v then
-			return true
-		end
-	end
+    for i, v in ipairs(standard_explosives) do
+        if prefab == v then
+            return true
+        end
+    end
 end
 
-local explosive_enemies = {"um_bee_moon","um_pawn_nightmare","slurtle","snurtle","snaildrake_magma","snaildrake_slime"}
+local explosive_enemies = { "um_bee_moon", "um_pawn_nightmare", "slurtle", "snurtle", "snaildrake_magma", "snaildrake_slime" }
 
 local function IsExplosiveEnemy(prefab)
-	for i,v in ipairs(explosive_enemies) do
-		if prefab == v then
-			return true
-		end
-	end
+    for i, v in ipairs(explosive_enemies) do
+        if prefab == v then
+            return true
+        end
+    end
 end
 
-local melee_mines = {"trap","trap_teeth","trap_starfish","trap_bramble","um_bear_trap","um_bear_trap_equippable_gold","um_bear_trap_equippable_tooth","um_bear_trap_old"}
+local melee_mines = { "trap", "trap_teeth", "trap_starfish", "trap_bramble", "um_bear_trap", "um_bear_trap_equippable_gold", "um_bear_trap_equippable_tooth", "um_bear_trap_old" }
 
 local function IsMeleeMine(prefab)
-	for i,v in ipairs(melee_mines) do
-		if prefab == v then
-			return true
-		end
-	end
+    for i, v in ipairs(melee_mines) do
+        if prefab == v then
+            return true
+        end
+    end
 end
 
 
 local function FindNearbyTarget(pos)
-	local ents = TheSim:FindEntities(pos.x,pos.y,pos.z,16,{"_health"})
-	local dist = 999
-	local target  
-	for i,v in ipairs(ents) do -- Look for the closest
-		local x,y,z = v.Transform:GetWorldPosition()
-		local newdist = math.sqrt((pos.x-x)^2+(pos.z-z)^2)
-		if newdist < dist then
-			dist = newdist
-			target = v
-		end
-	end
-	return target
+    local ents = TheSim:FindEntities(pos.x, pos.y, pos.z, 16, { "_health" })
+    local dist = 999
+    local target
+    for i, v in ipairs(ents) do -- Look for the closest
+        local x, y, z = v.Transform:GetWorldPosition()
+        local newdist = math.sqrt((pos.x - x) ^ 2 + (pos.z - z) ^ 2)
+        if newdist < dist then
+            dist = newdist
+            target = v
+        end
+    end
+    return target
 end
 
 local function ExplodeSpellFn(inst, doer, pos)
-	local ents = TheSim:FindEntities(pos.x,pos.y,pos.z,4)
-	for i,v in ipairs(ents) do
-		if v:HasTag("INLIMBO") and v.components.inventoryitem and not TheNet:GetPVPEnabled() then
-			local owner = v.components.inventoryitem:GetGrandOwner()
-			if owner:HasTag("player") and owner ~= doer then
-				return
-			end
-		end
-		if v.prefab == "spore_moon" then -- Spores
-			inst.components.finiteuses:Use(1)
-			v.sg:GoToState("pre_pop")
-		end
-		if IsStandardExplosive(v.prefab) and v.components.explosive then -- Gunpowder, the likes
-			inst.components.finiteuses:Use(1)
-			v.components.explosive:OnBurnt()
-		end
-		if IsExplosiveEnemy(v.prefab) then -- Exploding enemies, mostly UM
-			if v.prefab == "snaildrake_magma" or v.prefab == "snaildrake_slime" then -- These guys have different handling
-				inst.components.finiteuses:Use(50)
-				v:DoExplosion()
-				v.components.combat:GetAttacked(doer, 100, nil)
-			elseif v.components.explosive then
-				inst.components.finiteuses:Use(50)
-				v.components.explosive:OnBurnt()
-			elseif v.components.health and not v.components.health:IsDead() then
-				inst.components.finiteuses:Use(50)
-				v.components.health:Kill()
-			end
-		end
-		if v.components.mine then
-			local target = FindNearbyTarget(pos)
-			inst.components.finiteuses:Use(1)
-			if IsMeleeMine(v.prefab) then
-				v.components.mine:Explode()
-			else
-				v.components.mine:Explode(target)
-			end
-		end
-		if v.ModdedExplodeFn then
-			v.ModdedExplodeFn(v,inst,doer,pos) -- If there is a modded prefab, let them postinit this function and add their own handling! 
-		end
-	end
+    local ents = TheSim:FindEntities(pos.x, pos.y, pos.z, 4)
+    for i, v in ipairs(ents) do
+        if v:HasTag("INLIMBO") and v.components.inventoryitem and not TheNet:GetPVPEnabled() then
+            local owner = v.components.inventoryitem:GetGrandOwner()
+            if owner:HasTag("player") and owner ~= doer then
+                return
+            end
+        end
+        if v.prefab == "spore_moon" then -- Spores
+            inst.components.finiteuses:Use(1)
+            v.sg:GoToState("pre_pop")
+        end
+        if IsStandardExplosive(v.prefab) and v.components.explosive then -- Gunpowder, the likes
+            inst.components.finiteuses:Use(1)
+            v.components.explosive:OnBurnt()
+        end
+        if IsExplosiveEnemy(v.prefab) then                                  -- Exploding enemies, mostly UM
+            if v.prefab == "snaildrake_magma" or v.prefab == "snaildrake_slime" then -- These guys have different handling
+                inst.components.finiteuses:Use(50)
+                v:DoExplosion()
+                v.components.combat:GetAttacked(doer, 100, nil)
+            elseif v.components.explosive then
+                inst.components.finiteuses:Use(50)
+                v.components.explosive:OnBurnt()
+            elseif v.components.health and not v.components.health:IsDead() then
+                inst.components.finiteuses:Use(50)
+                v.components.health:Kill()
+            end
+        end
+        if v.components.mine then
+            local target = FindNearbyTarget(pos)
+            inst.components.finiteuses:Use(1)
+            if IsMeleeMine(v.prefab) then
+                v.components.mine:Explode()
+            else
+                v.components.mine:Explode(target)
+            end
+        end
+
+        if v.components.boatcannon and v.components.boatcannon:IsAmmoLoaded() then
+            v.components.boatcannon:Shoot()
+        end
+
+        if v.ModdedExplodeFn then
+            v.ModdedExplodeFn(v, inst, doer, pos) -- If there is a modded prefab, let them postinit this function and add their own handling!
+        end
+    end
 end
 
 local function ExplodeSpellUpdatePositionFn(inst, pos, reticule, ease, smoothing, dt)
-	reticule.Transform:SetPosition(pos:Get())
+    reticule.Transform:SetPosition(pos:Get())
 end
 
 --------------------------------------------------------------------------
@@ -143,25 +148,25 @@ end
 --------------------------------------------------------------------------
 
 local function ReticuleTargetAllowWaterFn()
-	local player = ThePlayer
-	local ground = TheWorld.Map
-	local pos = Vector3()
-	--Cast range is 30, leave room for error
-	--15 is the aoe range
-	for r = 10, 0, -.25 do
-		pos.x, pos.y, pos.z = player.entity:LocalToWorldSpace(r, 0, 0)
-		if ground:IsPassableAtPoint(pos.x, 0, pos.z, true) and not ground:IsGroundTargetBlocked(pos) then
-			return pos
-		end
-	end
-	return pos
+    local player = ThePlayer
+    local ground = TheWorld.Map
+    local pos = Vector3()
+    --Cast range is 30, leave room for error
+    --15 is the aoe range
+    for r = 10, 0, -.25 do
+        pos.x, pos.y, pos.z = player.entity:LocalToWorldSpace(r, 0, 0)
+        if ground:IsPassableAtPoint(pos.x, 0, pos.z, true) and not ground:IsGroundTargetBlocked(pos) then
+            return pos
+        end
+    end
+    return pos
 end
 
 local function StartAOETargeting(inst)
-	local playercontroller = ThePlayer.components.playercontroller
-	if playercontroller ~= nil then
-		playercontroller:StartAOETargetingUsing(inst)
-	end
+    local playercontroller = ThePlayer.components.playercontroller
+    if playercontroller ~= nil then
+        playercontroller:StartAOETargetingUsing(inst)
+    end
 end
 
 local ICON_SCALE = .6
@@ -172,79 +177,78 @@ local SPELLBOOK_FOCUS_RADIUS = SPELLBOOK_RADIUS + 2
 
 local SPELLS =
 {
-	{
-		label = "Detonate Explosives",
-		onselect = function(inst)
-			inst.components.spellbook:SetSpellName("Detonate Explosives")
-			inst.components.spellbook:SetSpellAction(nil)
-			inst.components.aoetargeting:SetDeployRadius(0)
-			--inst.components.aoetargeting:SetShouldRepeatCastFn(ShouldRepeatCast)			
-			inst.components.aoetargeting.reticule.reticuleprefab = "reticuleaoe"
-			inst.components.aoetargeting.reticule.pingprefab = "reticuleaoeping"
-			inst.components.aoetargeting.reticule.updatepositionfn = ExplodeSpellUpdatePositionFn 
-			if TheWorld.ismastersim then
-				inst.components.aoetargeting:SetTargetFX(nil)
-				inst.components.aoespell:SetSpellFn(ExplodeSpellFn)
-				inst.components.spellbook:SetSpellFn(nil)
-			end
-		end,
-		execute = StartAOETargeting,
-		bank = "spell_icons_winona",
-		build = "spell_icons_winona",
-		anims =
-		{
-			idle = { anim = "icon_wake" },
-			focus = { anim = "icon_wake_focus", loop = true },
-			down = { anim = "icon_wake_pressed" },
-			disabled = { anim = "icon_wake_disabled" },
-		},
-		clicksound = "um_detonator/winona_UI/select",
-		widget_scale = ICON_SCALE,
-	},
+    {
+        label = "Detonate Explosives",
+        onselect = function(inst)
+            inst.components.spellbook:SetSpellName("Detonate Explosives")
+            inst.components.spellbook:SetSpellAction(nil)
+            inst.components.aoetargeting:SetDeployRadius(0)
+            --inst.components.aoetargeting:SetShouldRepeatCastFn(ShouldRepeatCast)			
+            inst.components.aoetargeting.reticule.reticuleprefab = "reticuleaoe"
+            inst.components.aoetargeting.reticule.pingprefab = "reticuleaoeping"
+            inst.components.aoetargeting.reticule.updatepositionfn = ExplodeSpellUpdatePositionFn
+            if TheWorld.ismastersim then
+                inst.components.aoetargeting:SetTargetFX(nil)
+                inst.components.aoespell:SetSpellFn(ExplodeSpellFn)
+                inst.components.spellbook:SetSpellFn(nil)
+            end
+        end,
+        execute = StartAOETargeting,
+        bank = "spell_icons_winona",
+        build = "spell_icons_winona",
+        anims =
+        {
+            idle = { anim = "icon_wake" },
+            focus = { anim = "icon_wake_focus", loop = true },
+            down = { anim = "icon_wake_pressed" },
+            disabled = { anim = "icon_wake_disabled" },
+        },
+        clicksound = "um_detonator/winona_UI/select",
+        widget_scale = ICON_SCALE,
+    },
 }
 
 local SPELLBOOK_BG =
 {
-	bank = "spell_icons_winona",
-	build = "spell_icons_winona",
-	anim = "dpad",
-	widget_scale = ICON_SCALE,
+    bank = "spell_icons_winona",
+    build = "spell_icons_winona",
+    anim = "dpad",
+    widget_scale = ICON_SCALE,
 }
 
 -- Detonator is a spellbook with only 1 spell, cast instantly
 local function OnOpenSpellBook(inst)
-
-	local doer
+    local doer
     if TheWorld.ismastersim then
         doer = inst.components.inventoryitem and inst.components.inventoryitem.owner
     else
         doer = ThePlayer
     end
 
-	--Instantly select first spell
-	inst.components.spellbook:SelectSpell(1)
+    --Instantly select first spell
+    inst.components.spellbook:SelectSpell(1)
 
-	-- Make sure AOE targeting is allowed/enabled
-	if inst.components.aoetargeting and not inst.components.aoetargeting:IsEnabled() then
-		if inst.components.aoetargeting.Enable then
-			inst.components.aoetargeting:Enable(true)
-		end
-	end
+    -- Make sure AOE targeting is allowed/enabled
+    if inst.components.aoetargeting and not inst.components.aoetargeting:IsEnabled() then
+        if inst.components.aoetargeting.Enable then
+            inst.components.aoetargeting:Enable(true)
+        end
+    end
 
-	-- Show the reticule immediately (client)
-	if doer.components.playercontroller.StartAOETargeting then
-		doer.components.playercontroller:StartAOETargeting(inst)
-	elseif inst.components.aoetargeting and inst.components.aoetargeting.StartTargeting then
-		inst.components.aoetargeting:StartTargeting(doer) -- fallback
-	end
+    -- Show the reticule immediately (client)
+    if doer.components.playercontroller.StartAOETargeting then
+        doer.components.playercontroller:StartAOETargeting(inst)
+    elseif inst.components.aoetargeting and inst.components.aoetargeting.StartTargeting then
+        inst.components.aoetargeting:StartTargeting(doer) -- fallback
+    end
 
-	if doer and doer.HUD and doer.HUD.CloseSpellWheel then
-    	doer.HUD:CloseSpellWheel(true)
-	end
+    if doer and doer.HUD and doer.HUD.CloseSpellWheel then
+        doer.HUD:CloseSpellWheel(true)
+    end
 end
 
 local function OnCloseSpellBook(inst)
-	--nothing
+    --nothing
 end
 
 --------------------------------------------------------------------------
@@ -463,116 +467,116 @@ end
 
 -- Disabled many parts of Winona remote control we don't need
 local function fn()
-	local inst = CreateEntity()
+    local inst = CreateEntity()
 
-	inst.entity:AddTransform()
-	inst.entity:AddAnimState()
-	--inst.entity:AddSoundEmitter()
-	inst.entity:AddNetwork()
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    --inst.entity:AddSoundEmitter()
+    inst.entity:AddNetwork()
 
-	MakeInventoryPhysics(inst)
+    MakeInventoryPhysics(inst)
 
-	inst.AnimState:SetBank("winona_remote")
-	inst.AnimState:SetBuild("um_detonator")
-	inst.AnimState:PlayAnimation("idle")
-	--inst.AnimState:OverrideSymbol("wire", "winona_remote", "dummy")
+    inst.AnimState:SetBank("winona_remote")
+    inst.AnimState:SetBuild("um_detonator")
+    inst.AnimState:PlayAnimation("idle")
+    --inst.AnimState:OverrideSymbol("wire", "winona_remote", "dummy")
 
-	inst:AddTag("remotecontrol")
-	inst:AddTag("wardrobe_item")
-	--inst:AddTag("engineering")
-	--inst:AddTag("engineeringbatterypowered")
+    inst:AddTag("remotecontrol")
+    inst:AddTag("wardrobe_item")
+    --inst:AddTag("engineering")
+    --inst:AddTag("engineeringbatterypowered")
 
-	MakeInventoryFloatable(inst, "small", 0.14, { 1.1, 1.15, 1 })
+    MakeInventoryFloatable(inst, "small", 0.14, { 1.1, 1.15, 1 })
 
-	inst:AddComponent("spellbook")
-	--inst.components.spellbook:SetRequiredTag("portableengineer")
-	inst.components.spellbook:SetRadius(SPELLBOOK_RADIUS)
-	inst.components.spellbook:SetFocusRadius(SPELLBOOK_FOCUS_RADIUS)
-	inst.components.spellbook:SetItems(SPELLS)
-	--inst.components.spellbook:SetBgData(SPELLBOOK_BG)
-	inst.components.spellbook:SetOnOpenFn(OnOpenSpellBook)
-	inst.components.spellbook:SetOnCloseFn(OnCloseSpellBook)
-	inst.components.spellbook.opensound = "meta4/winona_UI/open"
-	--inst.components.spellbook.closesound = "meta4/winona_UI/close"
-	inst.components.spellbook.executesound = "meta4/winona_UI/select"	--use .clicksound for item buttons instead
-	--inst.components.spellbook.focussound = "meta4/winona_UI/hover"		--item UIAnimButton don't have hover sound
+    inst:AddComponent("spellbook")
+    --inst.components.spellbook:SetRequiredTag("portableengineer")
+    inst.components.spellbook:SetRadius(SPELLBOOK_RADIUS)
+    inst.components.spellbook:SetFocusRadius(SPELLBOOK_FOCUS_RADIUS)
+    inst.components.spellbook:SetItems(SPELLS)
+    --inst.components.spellbook:SetBgData(SPELLBOOK_BG)
+    inst.components.spellbook:SetOnOpenFn(OnOpenSpellBook)
+    inst.components.spellbook:SetOnCloseFn(OnCloseSpellBook)
+    inst.components.spellbook.opensound = "meta4/winona_UI/open"
+    --inst.components.spellbook.closesound = "meta4/winona_UI/close"
+    inst.components.spellbook.executesound = "meta4/winona_UI/select" --use .clicksound for item buttons instead
+    --inst.components.spellbook.focussound = "meta4/winona_UI/hover"		--item UIAnimButton don't have hover sound
 
-	inst:AddComponent("aoetargeting")
-	inst.components.aoetargeting:SetAllowWater(true)
-	inst.components.aoetargeting:SetRange(TUNING.WINONA_REMOTE_RANGE)
-	inst.components.aoetargeting.reticule.targetfn = ReticuleTargetAllowWaterFn
-	inst.components.aoetargeting.reticule.validcolour = { 0x33/255, 0x66/255, 0xFF/255, 1 }
-	inst.components.aoetargeting.reticule.invalidcolour = { 0.5, 0, 0, 1 }
-	inst.components.aoetargeting.reticule.ease = true
-	inst.components.aoetargeting.reticule.mouseenabled = true
-	inst.components.aoetargeting.reticule.twinstickmode = 1
-	inst.components.aoetargeting.reticule.twinstickrange = TUNING.WINONA_REMOTE_RANGE
+    inst:AddComponent("aoetargeting")
+    inst.components.aoetargeting:SetAllowWater(true)
+    inst.components.aoetargeting:SetRange(TUNING.WINONA_REMOTE_RANGE)
+    inst.components.aoetargeting.reticule.targetfn = ReticuleTargetAllowWaterFn
+    inst.components.aoetargeting.reticule.validcolour = { 0x33 / 255, 0x66 / 255, 0xFF / 255, 1 }
+    inst.components.aoetargeting.reticule.invalidcolour = { 0.5, 0, 0, 1 }
+    inst.components.aoetargeting.reticule.ease = true
+    inst.components.aoetargeting.reticule.mouseenabled = true
+    inst.components.aoetargeting.reticule.twinstickmode = 1
+    inst.components.aoetargeting.reticule.twinstickrange = TUNING.WINONA_REMOTE_RANGE
 
-	inst.entity:SetPristine()
+    inst.entity:SetPristine()
 
-	if not TheWorld.ismastersim then
-		return inst
-	end
+    if not TheWorld.ismastersim then
+        return inst
+    end
 
-	inst.swap_build = "um_detonator"
+    inst.swap_build = "um_detonator"
 
-	--inst:AddComponent("updatelooper")
-	--inst:AddComponent("colouradder")
+    --inst:AddComponent("updatelooper")
+    --inst:AddComponent("colouradder")
 
-	inst:AddComponent("inspectable")
-	--inst.components.inspectable.getstatus = GetStatus
+    inst:AddComponent("inspectable")
+    --inst.components.inspectable.getstatus = GetStatus
 
-	inst:AddComponent("inventoryitem")
-	-- inst.components.inventoryitem:SetOnPutInInventoryFn(OnPutInInventory)
-	-- inst.components.inventoryitem:SetOnDroppedFn(OnDropped)
+    inst:AddComponent("inventoryitem")
+    -- inst.components.inventoryitem:SetOnPutInInventoryFn(OnPutInInventory)
+    -- inst.components.inventoryitem:SetOnDroppedFn(OnDropped)
 
-	-- inst:AddComponent("fueled")
-	-- inst.components.fueled.fueltype = FUELTYPE.MAGIC
-	-- inst.components.fueled.rate = 0
-	-- inst.components.fueled:InitializeFuelLevel(TUNING.WINONA_REMOTE_FUEL)
+    -- inst:AddComponent("fueled")
+    -- inst.components.fueled.fueltype = FUELTYPE.MAGIC
+    -- inst.components.fueled.rate = 0
+    -- inst.components.fueled:InitializeFuelLevel(TUNING.WINONA_REMOTE_FUEL)
 
-	-- inst:AddComponent("circuitnode")
-	-- inst.components.circuitnode:SetRange(TUNING.WINONA_BATTERY_RANGE)
-	-- inst.components.circuitnode:SetFootprint(0)
-	-- inst.components.circuitnode:SetOnConnectFn(OnConnectCircuit)
-	-- inst.components.circuitnode:SetOnDisconnectFn(OnDisconnectCircuit)
-	-- inst.components.circuitnode.connectsacrossplatforms = false
-	-- inst.components.circuitnode.rangeincludesfootprint = false
+    -- inst:AddComponent("circuitnode")
+    -- inst.components.circuitnode:SetRange(TUNING.WINONA_BATTERY_RANGE)
+    -- inst.components.circuitnode:SetFootprint(0)
+    -- inst.components.circuitnode:SetOnConnectFn(OnConnectCircuit)
+    -- inst.components.circuitnode:SetOnDisconnectFn(OnDisconnectCircuit)
+    -- inst.components.circuitnode.connectsacrossplatforms = false
+    -- inst.components.circuitnode.rangeincludesfootprint = false
 
-	-- inst:AddComponent("powerload")
-	-- inst.components.powerload:SetLoad(0)
+    -- inst:AddComponent("powerload")
+    -- inst.components.powerload:SetLoad(0)
 
-	-- inst:ListenForEvent("engineeringcircuitchanged", OnCircuitChanged)
-	-- inst:ListenForEvent("on_no_longer_landed", OnNoLongerLanded)
-	-- inst:ListenForEvent("on_landed", OnLanded)
+    -- inst:ListenForEvent("engineeringcircuitchanged", OnCircuitChanged)
+    -- inst:ListenForEvent("on_no_longer_landed", OnNoLongerLanded)
+    -- inst:ListenForEvent("on_landed", OnLanded)
 
-	inst:AddComponent("finiteuses")
-	inst.components.finiteuses:SetMaxUses(1000)
-	inst.components.finiteuses:SetUses(1000)
-	inst.components.finiteuses:SetOnFinished(inst.Remove)
-	--inst.components.finiteuses:SetConsumption(ACTIONS.CHOP, 1)
-		
-	inst:AddComponent("aoespell")
+    inst:AddComponent("finiteuses")
+    inst.components.finiteuses:SetMaxUses(1000)
+    inst.components.finiteuses:SetUses(1000)
+    inst.components.finiteuses:SetOnFinished(inst.Remove)
+    --inst.components.finiteuses:SetConsumption(ACTIONS.CHOP, 1)
 
-	--MakeSmallBurnable(inst, TUNING.MED_BURNTIME)
-	--MakeSmallPropagator(inst)
+    inst:AddComponent("aoespell")
 
-	MakeHauntableLaunch(inst)
+    --MakeSmallBurnable(inst, TUNING.MED_BURNTIME)
+    --MakeSmallPropagator(inst)
 
-	-- inst.AddBatteryPower = AddBatteryPower
-	-- inst.OnSave = OnSave
-	-- inst.OnLoad = OnLoad
+    MakeHauntableLaunch(inst)
 
-	--skilltree
-	-- inst._quickcharge = false
+    -- inst.AddBatteryPower = AddBatteryPower
+    -- inst.OnSave = OnSave
+    -- inst.OnLoad = OnLoad
 
-	-- inst._wired = nil
-	-- inst._inittask = inst:DoTaskInTime(0, OnInit)
+    --skilltree
+    -- inst._quickcharge = false
+
+    -- inst._wired = nil
+    -- inst._inittask = inst:DoTaskInTime(0, OnInit)
 
 
-	inst.ModdedExplodeFn = function(inst,prefab) end -- Fellow Modders, if you want the detonator to work on something from your mod, simply postinit this prefab, call the ExplodeSpellFn, add your own handlers, and then you should be good.
-	
-	return inst
+    inst.ModdedExplodeFn = function(inst, prefab) end -- Fellow Modders, if you want the detonator to work on something from your mod, simply postinit this prefab, call the ExplodeSpellFn, add your own handlers, and then you should be good.
+
+    return inst
 end
 
 return Prefab("um_detonator", fn, assets, prefabs)

@@ -153,13 +153,19 @@ AllRecipes["goggleshat"].ingredients = {
 
 AllRecipes["lantern"].level = TechTree.Create(TECH.SCIENCE_ONE)
 
+if TUNING.DSTU.BATH_BOMB then
+	AllRecipes["bathbomb"].level = TechTree.Create(TECH.CELESTIAL_THREE)
+	AllRecipes["bathbomb"].ingredients = {
+		Ingredient("moon_tree_blossom", 3),
+		Ingredient("nitre", 3)
+	}
+end
+
 AllRecipes["saddle_race"].ingredients = {
     Ingredient("livinglog", 2),
     Ingredient("silk", 4),
     Ingredient("glommerwings", 1)
 }
-
-
 
 AllRecipes["walterhat"].ingredients = {
     Ingredient("silk", 4),

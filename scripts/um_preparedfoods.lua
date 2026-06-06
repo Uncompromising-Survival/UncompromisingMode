@@ -246,7 +246,7 @@ local um_preparedfoods =
     liceloaf =
     {
         test = function(cooker, names, tags)
-            return (tags.rice and tags.rice >= 2) and UncompromisingFillers(tags) and
+            return (tags.lice and tags.lice >= 2) and UncompromisingFillers(tags) and
                 not (tags.insectoid and tags.insectoid >= 1) and not tags.inedible
         end,
         hunger = 62.5,
@@ -267,7 +267,7 @@ local um_preparedfoods =
     seafoodpaella =
     {
         test = function(cooker, names, tags)
-            return UncompromisingFillers(tags) and tags.rice and tags.veggie and
+            return UncompromisingFillers(tags) and tags.lice and tags.veggie and
                 tags.veggie >= 2 and (names.wobster_sheller_land or tags.fish and tags.fish >= 2)
         end,
         hunger = 75,
@@ -558,8 +558,8 @@ local um_preparedfoods =
     viperjam =
     {
         test = function(cooker, names, tags)
-            return UncompromisingFillers(tags) and not tags.meat and not tags.veggie and not tags.inedible and not (tags.insectoid and tags.insectoid >= 1)
-                and (names.viperfruit or (names.viperfruit_lesser and names.viperfruit_lesser >= 2)) and names.giant_blueberry
+            return UncompromisingFillers(tags) and not tags.meat and not (tags.insectoid and tags.insectoid >= 1)
+                and (names.viperfruit or (names.viperfruit_lesser and names.viperfruit_lesser >= 2)) and names.giant_blueberry and tags.magic and tags.magic >= 2
         end,
         hunger = 37.5,
         health = 40,
@@ -784,7 +784,7 @@ local um_preparedfoods =
     },
     um_chiles_en_nogada =
     {
-        test = function(cooker, names, tags) return (names.pepper or names.pepper_cooked) and (names.acorn or names.acorn_cooked) and (names.pomegranate or names.pomegranate_cooked) and tags.meat and tags.meat > .5 end,
+        test = function(cooker, names, tags) return (names.pepper or names.pepper_cooked) and tags.seed and (names.pomegranate or names.pomegranate_cooked) and tags.meat and tags.meat > .5 end,
         hunger = 37.5,
         health = 20,
         sanity = 50,
@@ -800,7 +800,7 @@ local um_preparedfoods =
     },
     um_rice_pudding =
     {
-        test = function(cooker, names, tags) return (tags.rice and tags.rice >= 2) and tags.sweetener and not tags.meat and not tags.inedible end,
+        test = function(cooker, names, tags) return (tags.lice and tags.lice >= 2) and tags.sweetener and not tags.meat and not tags.inedible end,
         hunger = 37.5,
         health = 20,
         sanity = 15,

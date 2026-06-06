@@ -62,7 +62,7 @@ return Class(function(self, inst)
         -- end
 
         TheWorld:PushEvent("ms_forceprecipitation", false)
-		
+
         TheWorld:DoTaskInTime(5, function()
             TheWorld:AddTag("heatwavestart")
             if TheWorld.net ~= nil then
@@ -95,19 +95,19 @@ return Class(function(self, inst)
     --------------------------------------------------------------------------
 
     local function OnSeasonChange(self)
-		local inst = self.inst
-		inst:DoTaskInTime(0,function(inst) -- need to delay for a second, TheWorld.state.season hasn't been updated when OnSeasonChange is pushed
-			if TheWorld.state.issummer or TheWorld.state.isdry then
-				if TheWorld.state.cycles >= TUNING.DSTU.WEATHERHAZARD_START_DATE_SUMMER then
-					--if not _storming then
-					StartHeatWaves()
-					--end
-				end
-			else
-				StopHeatwave()
-				StopHeatWaves()
-			end
-		end)
+        local inst = self.inst
+        inst:DoTaskInTime(0, function(inst) -- need to delay for a second, TheWorld.state.season hasn't been updated when OnSeasonChange is pushed
+            if TheWorld.state.issummer or TheWorld.state.isdry then
+                if TheWorld.state.cycles >= TUNING.DSTU.WEATHERHAZARD_START_DATE_SUMMER then
+                    --if not _storming then
+                    StartHeatWaves()
+                    --end
+                end
+            else
+                StopHeatwave()
+                StopHeatWaves()
+            end
+        end)
     end
 
     function self:OnSave()

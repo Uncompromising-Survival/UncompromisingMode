@@ -24,9 +24,7 @@ local function AddEdibles(prefab)
         if not GLOBAL.TheWorld.ismastersim then return end
 
         local edible = inst.components.edible or inst:AddComponent("edible")
-        edible.healthvalue = 5
-        edible.hungervalue = 5
-        edible.sanityvalue = -TUNING.SANITY_SMALL
+        edible.sanityvalue = 10
         edible.foodtype = FOODTYPE.INSECT
     end)
 end

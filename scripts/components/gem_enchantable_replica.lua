@@ -7,6 +7,14 @@ local GemEnchantable = Class(function(self, inst)
 
     self.inst:ListenForEvent("gemology.enchant_datadirty", function(inst)
         self.enchant_data = json.decode(self._enchant_data:value())
+        self.using_chilling_show_spoilage = false
+        if self:HasEnchantment("um_gemologybluegem2") and not self.inst:HasTag("show_spoilage") then
+            self.inst:AddTag("show_spoilage")
+            self.using_chilling_show_spoilage = true
+        elseif self.using_chilling_show_spoilage then
+            self.inst:RemoveTag("show_spoilage")
+            self.using_chilling_show_spoilage = false
+        end
     end)
 
     self._slots = net_int(inst.GUID, "gemology.slots", "gemology.onslotsdirty")

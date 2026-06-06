@@ -104,7 +104,7 @@ ANNOUNCE.ANNOUNCE_OVER_EAT = {
 DESCRIBE.UM_SAND =
 "When Wolfgang holds it it slips through his large, strong hands."
 DESCRIBE.UM_SANDHILL = "Tiny, crushable hill."
-DESCRIBE.SNOWPILE = "Cold is no good for the muscles!."
+DESCRIBE.SNOWPILE = "Cold is no good for the muscles!"
 DESCRIBE.SNOWGOGGLES = "Is... little tight... for head."
 
 DESCRIBE.SNOWMONG = "Snow is fighting back!"

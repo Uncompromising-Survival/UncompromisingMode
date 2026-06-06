@@ -61,7 +61,7 @@ local function StompHandler(inst, data)
         if inst.components.health and inst.components.health:GetPercent() < 0.75 then
             inst.stomprage = inst.stomprage + 1
 
-            if data.attacker and data.attacker.components.combat and inst.stompready then
+            if data.attacker and data.attacker:IsValid() and data.attacker.components.combat and inst.stompready then
                 inst.prioritytarget = data.attacker
                 if inst.components.combat.target and data.attacker ~= inst.components.combat.target then
                     if inst.tiredcount then

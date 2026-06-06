@@ -28,19 +28,4 @@ env.AddComponentPostInit("weapon", function(self)
         if owner and owner.UMShouldNotRangeAttack and owner:UMShouldNotRangeAttack({weapon = self.inst}) then return false end
         return _CanRangedAttack(self, ...)
     end
-
-    function self:OnAttack_NoDurabilityLoss(attacker, target, projectile)
-        if self.onattack ~= nil then
-            self.onattack(self.inst, attacker, target, 2)
-        end
-
-        --[[if self.inst.components.finiteuses ~= nil then
-            local uses = (self.attackwear or 1) * self.attackwearmultipliers:Get()
-            if attacker ~= nil and attacker:IsValid() and attacker.components.efficientuser ~= nil then
-                uses = uses * (attacker.components.efficientuser:GetMultiplier(ACTIONS.ATTACK) or 1)
-            end
-
-            self.inst.components.finiteuses:Use(uses)
-        end]]
-    end
 end)

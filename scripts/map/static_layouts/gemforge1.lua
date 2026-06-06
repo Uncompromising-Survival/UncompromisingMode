@@ -1,37 +1,64 @@
 return {
-  version = "1.1",
+  version = "1.10",
   luaversion = "5.1",
+  tiledversion = "1.12.2",
+  class = "",
   orientation = "orthogonal",
+  renderorder = "right-down",
   width = 48,
   height = 48,
   tilewidth = 16,
   tileheight = 16,
+  nextlayerid = 3,
+  nextobjectid = 37,
   properties = {},
   tilesets = {
     {
       name = "tiles",
       firstgid = 1,
+      class = "",
       tilewidth = 64,
       tileheight = 64,
       spacing = 0,
       margin = 0,
-      image = "../../../../tools/tiled/dont_starve/tiles.png",
+      columns = 0,
+      image = "../../../tools/tiled/dont_starve/tiles.png",
       imagewidth = 512,
-      imageheight = 512,
+      imageheight = 1024,
+      objectalignment = "unspecified",
+      tilerendersize = "tile",
+      fillmode = "stretch",
+      tileoffset = {
+        x = 0,
+        y = 0
+      },
+      grid = {
+        orientation = "orthogonal",
+        width = 64,
+        height = 64
+      },
       properties = {},
+      wangsets = {},
+      tilecount = 0,
       tiles = {}
     }
   },
   layers = {
     {
       type = "tilelayer",
-      name = "BG_TILES",
       x = 0,
       y = 0,
       width = 48,
       height = 48,
+      id = 1,
+      name = "BG_TILES",
+      class = "",
       visible = true,
       opacity = 1,
+      offsetx = 0,
+      offsety = 0,
+      parallaxx = 1,
+      parallaxy = 1,
       properties = {},
       encoding = "lua",
       data = {
@@ -50,71 +77,321 @@ return {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 25, 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 27, 0, 0, 0, 25, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 29, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 25, 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 0, 0, 0, 27, 0, 0, 0, 0, 0, 0, 0, 29, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 25, 25, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 27, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 0, 0, 0, 27, 0, 0, 0, 0, 0, 0, 0, 29, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 25, 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 25, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 29, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 29, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 25, 0, 0, 0, 29, 0, 0, 0, 27, 0, 0, 0, 27, 0, 0, 0, 25, 0, 0, 0, 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 29, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 25, 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 27, 0, 0, 0, 25, 0, 0, 0, 27, 0, 0, 0, 27, 0, 0, 0, 29, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 25, 0, 0, 0, 29, 0, 0, 0, 27, 0, 0, 0, 27, 0, 0, 0, 25, 0, 0, 0, 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 27, 0, 0, 0, 25, 0, 0, 0, 27, 0, 0, 0, 27, 0, 0, 0, 29, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 29, 0, 0, 0, 27, 0, 0, 0, 27, 0, 0, 0, 25, 0, 0, 0, 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 27, 0, 0, 0, 25, 0, 0, 0, 27, 0, 0, 0, 27, 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 29, 0, 0, 0, 29, 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 29, 0, 0, 0, 29, 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 0, 0, 0, 25, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 25, 0, 0, 0, 25, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 27, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 27, 0, 0, 0, 27, 0, 0, 0
+        27, 0, 0, 0, 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 27, 0, 0, 0
       }
     },
     {
       type = "objectgroup",
+      draworder = "topdown",
+      id = 2,
       name = "FG_OBJECTS",
+      class = "",
       visible = true,
       opacity = 1,
+      offsetx = 0,
+      offsety = 0,
+      parallaxx = 1,
+      parallaxy = 1,
       properties = {},
       objects = {
         {
+          id = 1,
           name = "",
-          type = "fissure_lower",
+          type = "pillar_ruins",
           shape = "rectangle",
-          x = 308,
-          y = 306,
+          x = 65,
+          y = 63,
           width = 0,
           height = 0,
+          rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {}
         },
         {
+          id = 2,
           name = "",
-          type = "chessjunk_spawner",
+          type = "wall_ruins",
           shape = "rectangle",
-          x = 559,
+          x = 64,
+          y = 272,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          opacity = 1,
+          visible = true,
+          properties = {
+            ["data.health.percent"] = 0
+          }
+        },
+        {
+          id = 3,
+          name = "",
+          type = "wall_ruins",
+          shape = "rectangle",
+          x = 64,
+          y = 352,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          opacity = 1,
+          visible = true,
+          properties = {
+            ["data.health.percent"] = 0.5
+          }
+        },
+        {
+          id = 4,
+          name = "",
+          type = "wall_ruins",
+          shape = "rectangle",
+          x = 64,
+          y = 336,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          opacity = 1,
+          visible = true,
+          properties = {
+            ["data.health.percent"] = 0.3
+          }
+        },
+        {
+          id = 5,
+          name = "",
+          type = "brokenwall_ruins",
+          shape = "rectangle",
+          x = 64,
+          y = 368,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          opacity = 1,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 6,
+          name = "",
+          type = "wall_ruins",
+          shape = "rectangle",
+          x = 64,
+          y = 512,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          opacity = 1,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 7,
+          name = "",
+          type = "brokenwall_ruins",
+          shape = "rectangle",
+          x = 64,
+          y = 608,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          opacity = 1,
+          visible = true,
+          properties = {
+            ["data.health.percent"] = 0.1
+          }
+        },
+        {
+          id = 8,
+          name = "",
+          type = "wall_ruins",
+          shape = "rectangle",
+          x = 64,
+          y = 592,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          opacity = 1,
+          visible = true,
+          properties = {
+            ["data.health.percent"] = 0.3
+          }
+        },
+        {
+          id = 9,
+          name = "",
+          type = "wall_ruins",
+          shape = "rectangle",
+          x = 64,
+          y = 576,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          opacity = 1,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 10,
+          name = "",
+          type = "pillar_ruins",
+          shape = "rectangle",
+          x = 64,
+          y = 703,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          opacity = 1,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 11,
+          name = "",
+          type = "chessjunk1",
+          shape = "rectangle",
+          x = 160,
+          y = 384,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          opacity = 1,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 12,
+          name = "",
+          type = "chessjunk1",
+          shape = "rectangle",
+          x = 209,
           y = 191,
           width = 0,
           height = 0,
+          rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {}
         },
         {
+          id = 13,
+          name = "",
+          type = "brokenwall_ruins",
+          shape = "rectangle",
+          x = 304,
+          y = 64,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          opacity = 1,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 14,
+          name = "",
+          type = "wall_ruins",
+          shape = "rectangle",
+          x = 352,
+          y = 64,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          opacity = 1,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 15,
+          name = "",
+          type = "wall_ruins",
+          shape = "rectangle",
+          x = 336,
+          y = 64,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          opacity = 1,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 16,
+          name = "",
+          type = "wall_ruins",
+          shape = "rectangle",
+          x = 320,
+          y = 64,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          opacity = 1,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 17,
+          name = "",
+          type = "ruins_statue_miner",
+          shape = "rectangle",
+          x = 320,
+          y = 448,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          opacity = 1,
+          visible = true,
+          properties = {
+            ["data.workable.workleft"] = "1"
+          }
+        },
+        {
+          id = 18,
+          name = "",
+          type = "nightmarelight",
+          shape = "rectangle",
+          x = 384,
+          y = 288,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          opacity = 1,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 19,
           name = "",
           type = "um_gemologyforge",
           shape = "rectangle",
@@ -122,391 +399,196 @@ return {
           y = 385,
           width = 0,
           height = 0,
+          rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {}
         },
         {
+          id = 20,
           name = "",
-          type = "chessjunk_spawner",
+          type = "nightmarelight",
           shape = "rectangle",
-          x = 400,
-          y = 320,
+          x = 384,
+          y = 480,
           width = 0,
           height = 0,
+          rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {}
         },
         {
-          name = "",
-          type = "chessjunk_spawner",
-          shape = "rectangle",
-          x = 350,
-          y = 320,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {}
-        },
-        {
-          name = "",
-          type = "wall_ruins",
-          shape = "rectangle",
-          x = 64,
-          y = 144,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {
-            ["data.health.percent"] = "1.0"
-          }
-        },
-        {
-          name = "",
-          type = "brokenwall_ruins",
-          shape = "rectangle",
-          x = 64,
-          y = 240,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {
-            ["data.health.percent"] = "1.0"
-          }
-        },
-        {
-          name = "",
-          type = "fissure_lower",
-          shape = "rectangle",
-          x = 64,
-          y = 224,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {
-            ["data.health.percent"] = "1.0"
-          }
-        },
-        {
-          name = "",
-          type = "chessjunk_spawner",
-          shape = "rectangle",
-          x = 230,
-          y = 70,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {
-            ["data.health.percent"] = ".3"
-          }
-        },
-        {
-          name = "",
-          type = "chessjunk_spawner",
-          shape = "rectangle",
-          x = 224,
-          y = 64,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {
-            ["data.health.percent"] = ".3"
-          }
-        },
-        {
-          name = "",
-          type = "chessjunk_spawner",
-          shape = "rectangle",
-          x = 208,
-          y = 70,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {
-            ["data.health.percent"] = ".5"
-          }
-        },
-        {
-          name = "",
-          type = "pillar_ruins",
-          shape = "rectangle",
-          x = 703,
-          y = 63,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {}
-        },
-        {
-          name = "",
-          type = "pillar_ruins",
-          shape = "rectangle",
-          x = 704,
-          y = 703,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {}
-        },
-        {
-          name = "",
-          type = "pillar_ruins",
-          shape = "rectangle",
-          x = 63,
-          y = 63,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {}
-        },
-        {
-          name = "",
-          type = "pillar_ruins",
-          shape = "rectangle",
-          x = 256,
-          y = 255,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {}
-        },
-        {
-          name = "",
-          type = "fissure_lower",
-          shape = "rectangle",
-          x = 303,
-          y = 465,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {}
-        },
-        {
-          name = "",
-          type = "wall_ruins",
-          shape = "rectangle",
-          x = 704,
-          y = 512,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {
-            ["data.health.percent"] = "1.0"
-          }
-        },
-        {
-          name = "",
-          type = "wall_ruins",
-          shape = "rectangle",
-          x = 704,
-          y = 592,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {
-            ["data.health.percent"] = "1.0"
-          }
-        },
-        {
-          name = "",
-          type = "wall_ruins",
-          shape = "rectangle",
-          x = 704,
-          y = 576,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {
-            ["data.health.percent"] = ".4"
-          }
-        },
-        {
-          name = "",
-          type = "brokenwall_ruins",
-          shape = "rectangle",
-          x = 704,
-          y = 608,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {
-            ["data.health.percent"] = "1.0"
-          }
-        },
-        {
-          name = "",
-          type = "wall_ruins",
-          shape = "rectangle",
-          x = 704,
-          y = 272,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {
-            ["data.health.percent"] = "1.0"
-          }
-        },
-        {
-          name = "",
-          type = "wall_ruins",
-          shape = "rectangle",
-          x = 704,
-          y = 352,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {
-            ["data.health.percent"] = "1.0"
-          }
-        },
-        {
-          name = "",
-          type = "wall_ruins",
-          shape = "rectangle",
-          x = 704,
-          y = 336,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {
-            ["data.health.percent"] = ".4"
-          }
-        },
-        {
-          name = "",
-          type = "brokenwall_ruins",
-          shape = "rectangle",
-          x = 704,
-          y = 368,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {
-            ["data.health.percent"] = "1.0"
-          }
-        },
-        {
-          name = "",
-          type = "wall_ruins",
-          shape = "rectangle",
-          x = 448,
-          y = 64,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {
-            ["data.health.percent"] = ".3"
-          }
-        },
-        {
+          id = 21,
           name = "",
           type = "wall_ruins",
           shape = "rectangle",
           x = 416,
-          y = 64,
+          y = 704,
           width = 0,
           height = 0,
+          rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
-            ["data.health.percent"] = ".5"
+            ["data.health.percent"] = 0.6
           }
         },
         {
-          name = "",
-          type = "brokenwall_ruins",
-          shape = "rectangle",
-          x = 464,
-          y = 64,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {
-            ["data.health.percent"] = ".3"
-          }
-        },
-        {
+          id = 22,
           name = "",
           type = "wall_ruins",
           shape = "rectangle",
           x = 432,
-          y = 64,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {
-            ["data.health.percent"] = ".3"
-          }
-        },
-        {
-          name = "",
-          type = "wall_ruins",
-          shape = "rectangle",
-          x = 352,
           y = 704,
           width = 0,
           height = 0,
+          rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
-            ["data.health.percent"] = ".3"
+            ["data.health.percent"] = 0.3
           }
         },
         {
-          name = "",
-          type = "wall_ruins",
-          shape = "rectangle",
-          x = 320,
-          y = 704,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {
-            ["data.health.percent"] = ".5"
-          }
-        },
-        {
+          id = 23,
           name = "",
           type = "brokenwall_ruins",
           shape = "rectangle",
-          x = 368,
+          x = 400,
           y = 704,
           width = 0,
           height = 0,
-          visible = true,
-          properties = {
-            ["data.health.percent"] = ".3"
-          }
-        },
-        {
-          name = "",
-          type = "wall_ruins",
-          shape = "rectangle",
-          x = 336,
-          y = 704,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {
-            ["data.health.percent"] = ".3"
-          }
-        },
-        {
-          name = "",
-          type = "bishop_nightmare_spawner",
-          shape = "rectangle",
-          x = 331,
-          y = 413,
-          width = 0,
-          height = 0,
+          rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {}
         },
         {
+          id = 24,
           name = "",
-          type = "bishop_nightmare_spawner",
+          type = "ruins_statue_miner",
           shape = "rectangle",
-          x = 432,
-          y = 351,
+          x = 448,
+          y = 320,
           width = 0,
           height = 0,
+          rotation = 0,
+          opacity = 1,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 25,
+          name = "",
+          type = "wall_ruins",
+          shape = "rectangle",
+          x = 448,
+          y = 704,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          opacity = 1,
+          visible = true,
+          properties = {
+            ["data.health.percent"] = 0.3
+          }
+        },
+        {
+          id = 26,
+          name = "",
+          type = "pillar_ruins",
+          shape = "rectangle",
+          x = 512,
+          y = 255,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          opacity = 1,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 27,
+          name = "",
+          type = "chessjunk2",
+          shape = "rectangle",
+          x = 544,
+          y = 512,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          opacity = 1,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 28,
+          name = "",
+          type = "pillar_ruins",
+          shape = "rectangle",
+          x = 705,
+          y = 63,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          opacity = 1,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 29,
+          name = "",
+          type = "wall_ruins",
+          shape = "rectangle",
+          x = 704,
+          y = 144,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          opacity = 1,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 30,
+          name = "",
+          type = "brokenwall_ruins",
+          shape = "rectangle",
+          x = 704,
+          y = 240,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          opacity = 1,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 35,
+          name = "",
+          type = "bishop_nightmare",
+          shape = "rectangle",
+          x = 421,
+          y = 346,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          opacity = 1,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 36,
+          name = "",
+          type = "bishop_nightmare",
+          shape = "rectangle",
+          x = 352,
+          y = 412,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {}
         }

@@ -58,8 +58,16 @@ local function GetPureGem(gemtype)
     return PURE_GEM_MAP[gemtype]
 end
 
+local UM_TRINKETS = { "cctrinket_don", "cctrinket_jazzy", "cctrinket_names", "cctrinket_freddo", "corncan" }
+local function PickAnyTrinket()
+    if math.random(NUM_TRINKETS + #UM_TRINKETS) <= #UM_TRINKETS then
+        return UM_TRINKETS[math.random(#UM_TRINKETS)]
+    end
+    return PickRandomTrinket()
+end
+
 local function ProduceItem(inst, prefab, num, tier)
-    for i = 1, (num and num or 1), 1 do
+    for i = 1, (num or 1), 1 do
         local item = SpawnPrefab(prefab)
         item.Transform:SetPosition(inst.Transform:GetWorldPosition())
         if tier then
@@ -177,7 +185,7 @@ local function OnAccept(inst, giver, item, count, name)
         end
         inst.traded_and_friendly = true
         --I eat food
-        if item.components.edible ~= nil then
+        if item.components.edible then
             --if inst.components.sleeper:IsAsleep() then -- AXE Funnily enough, snaildrakes and slurtles both don't sleep.
             --inst.components.sleeper:WakeUp()
             --end
@@ -263,6 +271,10 @@ local function GetAntlionReward(inst)
             newtier = 2
         elseif rnd > 0.40 and orange then
             itemname = "orangegem"
+        elseif rnd > 0.30 and orange then
+            itemname = PickAnyTrinket()
+        elseif rnd > 0.50 then
+            itemname = PickAnyTrinket()
         else
             itemname = "townportaltalisman"
         end
@@ -271,21 +283,22 @@ local function GetAntlionReward(inst)
         if (rnd > 0.75 and orange) or rnd > 0.85 then
             itemname = gem
             newtier = 3
-        elseif (rnd > 0.2 and orange) or rnd > 0.4 then
+        elseif (rnd > 0.30 and orange) or rnd > 0.45 then
             itemname = gem
             newtier = 2
-        elseif (rnd > 0.15 and orange) or rnd > 0.35 then
+        elseif (rnd > 0.25 and orange) or rnd > 0.40 then
             itemname = pure or "townportaltalisman"
+        elseif (rnd > 0.15 and orange) or rnd > 0.30 then
+            itemname = PickAnyTrinket()
         else
             itemname = "townportaltalisman"
         end
     else
-        if (rnd > 0.8 and orange) or rnd > 0.9 then
+        if (rnd > 0.55 and orange) or rnd > 0.80 then
             itemname = gem
             newtier = 2
-        elseif (rnd > 0.4 and orange) or rnd > 0.6 then
-            itemname = gem
-            newtier = 2
+        elseif (rnd > 0.40 and orange) or rnd > 0.50 then
+            itemname = PickAnyTrinket()
         else
             itemname = "townportaltalisman"
         end
@@ -431,14 +444,16 @@ local function GenerateRockyLoot(inst, giver, item)
     end
     if itemname ~= "friendship" then
         local item = SpawnPrefab(itemname)
-        item.Transform:SetPosition(inst.Transform:GetWorldPosition())
-        if newtier then
-            item:SetTier(newtier)
-        end
-        if item and item:IsValid() and giver and giver:IsValid() then
-            LaunchAt(item, inst, giver, 1, 1, nil, math.random(-10, 10))
-        else
-            Launch2(item, inst, 1, 0, 1, math.random(-10, 10))
+        if item and item:IsValid() then
+            item.Transform:SetPosition(inst.Transform:GetWorldPosition())
+            if newtier then
+                item:SetTier(newtier)
+            end
+            if giver and giver:IsValid() then
+                LaunchAt(item, inst, giver, 1, 1, nil, math.random(-10, 10))
+            else
+                Launch2(item, inst, 1, 0, 1, math.random(-10, 10))
+            end
         end
         inst.sg:GoToState("rocklick")
     elseif giver then
@@ -485,34 +500,47 @@ local function TryGemologyLoot(inst)
 
     local x, y, z = inst.Transform:GetWorldPosition()
 
-    for _, entry in ipairs(list) do
-        local rnd = math.random()
-        local loot
-        local tier = math.max(entry.tier, 1)
-
-        if tier == 1 then
-            loot = SpawnPrefab(entry.prefab)
-            loot:SetTier(rnd < 0.40 and 2 or 1)
-        elseif tier == 2 then
-            if rnd < 0.40 then
-                loot = SpawnPrefab(entry.prefab)
-                loot:SetTier(3)
-            elseif rnd < 0.45 then
-                loot = SpawnPrefab("bluegem")
-            else
-                loot = SpawnPrefab(entry.prefab)
-                loot:SetTier(2)
-            end
-        elseif tier == 3 then
-            loot = SpawnPrefab("bluegem")
-        end
-
-        if loot and loot:IsValid() then
-            loot.Transform:SetPosition(x, y, z)
-            loot.Physics:SetVel(math.random(-2, 2), 8, math.random(-2, 2))
+    local function Launch(item)
+        if item and item:IsValid() then
+            item.Transform:SetPosition(x, y, z)
+            item.Physics:SetVel(math.random(-2, 2), 8, math.random(-2, 2))
         end
     end
 
+    for _, entry in ipairs(list) do
+        local rnd = math.random()
+        local tier = math.max(entry.tier or 0, 1)
+
+        if tier == 1 then
+            if rnd < 0.25 then
+                local loot = SpawnPrefab(entry.prefab)
+                if loot then loot:SetTier(2) Launch(loot) end
+            elseif rnd < 0.90 then
+                local loot = SpawnPrefab(entry.prefab)
+                if loot then loot:SetTier(1) Launch(loot) end
+            else
+                for i = 1, math.random(1, 2) do
+                    Launch(SpawnPrefab("ice"))
+                end
+            end
+        elseif tier == 2 then
+            if rnd < 0.25 then
+                local loot = SpawnPrefab(entry.prefab)
+                if loot then loot:SetTier(3) Launch(loot) end
+            elseif rnd < 0.30 then
+                Launch(SpawnPrefab("bluegem"))
+            elseif rnd < 0.40 then
+                for i = 1, math.random(1, 2) do
+                    Launch(SpawnPrefab("ice"))
+                end
+            else
+                local loot = SpawnPrefab(entry.prefab)
+                if loot then loot:SetTier(2) Launch(loot) end
+            end
+        elseif tier == 3 then
+            Launch(SpawnPrefab("bluegem"))
+        end
+    end
 end
 
 env.AddPrefabPostInit("snowmong", function(inst)

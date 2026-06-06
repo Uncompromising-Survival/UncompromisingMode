@@ -1,8 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-local ghostlike_tags = UMCommonFns.GHOSTLIKE_TAGS
-local cant_thicket = JoinArrays(ghostlike_tags, {"smallcreature", "bird", "bat"})
+local cant_thicket = JoinArrays(UMCommonFns.GHOSTLIKE_TAGS, {"smallcreature", "bird", "bat"})
 local function ThicketCheck(inst)
     local x,y,z = inst.Transform:GetWorldPosition()
     local triggers = TheSim:FindEntities(x,y,z,1.5,nil,nil,{"briar_plants"})

@@ -221,6 +221,9 @@ local function lobbedminefn()
 
     inst:AddComponent("hauntable")
     inst.components.hauntable:SetOnHauntFn(OnExplode)
+	
+	inst:AddComponent("weapon")
+	inst.components.weapon:SetDamage(0)		
 
     inst.deathtask = inst:DoTaskInTime(math.random(2,6), OnExplode)
 

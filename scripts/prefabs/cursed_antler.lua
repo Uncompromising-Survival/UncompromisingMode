@@ -22,20 +22,20 @@ local function charged(inst)
 end
 
 local function OnCharged(inst)
-    local fx = SpawnPrefab("dr_warm_loop_1")
+    --local fx = SpawnPrefab("dr_warm_loop_1")
 
-    local owner = inst.components.inventoryitem.owner
+    --local owner = inst.components.inventoryitem.owner
 
-    if inst.components.equippable:IsEquipped() and owner ~= nil then
-        fx.entity:SetParent(owner.entity)
-        fx.entity:AddFollower()
-        fx.Follower:FollowSymbol(owner.GUID, "swap_object", 0, -275, 0)
-        fx.Transform:SetScale(1.33, 1.33, 1.33)
-    else
-        fx.entity:SetParent(inst.entity)
-        fx.Transform:SetPosition(0, 2.35, 0)
-        fx.Transform:SetScale(1.33, 1.33, 1.33)
-    end
+    --if inst.components.equippable:IsEquipped() and owner ~= nil then
+        --fx.entity:SetParent(owner.entity)
+        --fx.entity:AddFollower()
+        --fx.Follower:FollowSymbol(owner.GUID, "swap_object", 0, -275, 0)
+        --fx.Transform:SetScale(1.33, 1.33, 1.33)
+    --else
+        --fx.entity:SetParent(inst.entity)
+        --fx.Transform:SetPosition(0, 2.35, 0)
+        --fx.Transform:SetScale(1.33, 1.33, 1.33)
+    --end
     inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/charge")
     inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/taunt_howl", nil, .4)
 end

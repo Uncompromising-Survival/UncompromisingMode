@@ -17,7 +17,7 @@ STRINGS.SCRAPBOOK.SUBCATS.GEMOLOGY = "Gemology"
 
 SPECIALINFO.GEMOLOGY_FORGE = "A forge found in the heart of the Magma Caves capable of enchanting tools and weapons with Strange Gems to amplify them with special effects.\n\nGem effects fade with usage."
 SPECIALINFO.GEMOLOGY_GEM = "Can be used at an " .. STRINGS.NAMES.UM_GEMOLOGYFORGE .. " to apply a special effect to a Tool or Weapon depending on the quality of the gem."
-SPECIALINFO.UM_MOONGLASS_CEILING = "Breaks appart and drops Glass Geodes during earthquakes."
+SPECIALINFO.UM_MOONGLASS_CEILING = "Breaks appart and drops Glass Geodes during Earthquakes."
 SPECIALINFO.UM_SLIMESTONE_ROCK = "Falls from the Ceiling near Slime Pillars during Earthquakes while Nightmare Phase is active."
 SPECIALINFO.UM_SLIMESTONE_ROCK_GEMLESS = "Falls from the Ceiling near Slime Pillars during Earthquakes while Nightmare Phase is active."
 SPECIALINFO.PETRIFIED_MUSHTREE = "Petrifies at the end of its blooming season." --normal ones are in in init_changes/changes
@@ -118,11 +118,10 @@ local function CreateGemologyEntryFromDefs(name, defs)
         anim = defs.anim,
         specialinfo = string.upper(name),
         subcat = "gemologygem",
-        deps = { "um_gemologyforge", "ancientfruit_gem", "slurtle", "antlion", "rocky"}, --"snaildrake", "snowmong"
+        deps = { "um_gemologyforge", "slurtle", "antlion", "rocky"}, --"snaildrake", "snowmong"
         workable = "HAMMER"
     }
 
-    table.insert(dataset["ancientfruit_gem"].deps, name)
     table.insert(dataset["um_gemologyforge"].deps, name)
     table.insert(dataset["um_magnifier"].deps, name)
     table.insert(dataset["um_magnifier_purplegem"].deps, name)
