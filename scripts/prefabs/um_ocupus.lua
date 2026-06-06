@@ -131,7 +131,6 @@ local function FindStalkingGrounds(inst, alreadyused)
     end
 end
 
-
 local max_tries = 10
 local function FindPointEyeTentacle(inst, x, y, z, rot, stalkinggrounds) --Note that "rot" stands for "rotation" referring to how the submerged eyetacles are spread around a point.
     if not rot then                                                      -- If rot is somehow not passed (shouldn't ever happen) then have some dummy values JIC
