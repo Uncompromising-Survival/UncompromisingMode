@@ -520,7 +520,7 @@ AddUMGemDef("palegem1", {
                         return damage(inst, attacker, target) + (34 / 2 * (tier - 1))
                     end)
                 else
-                    item.components.weapon.damage = damage + (34 / 2 * (tier - 1))
+                    item.components.weapon:SetDamage(damage + (34 / 2 * (tier - 1)))
                 end
             end
         end,
@@ -528,8 +528,8 @@ AddUMGemDef("palegem1", {
             DamageInfiniteItemGem("palegem1", item, GENERIC_GEM_USES)
         end,
         onremove = function(item, tier)
-            if item.volatile_gemology_data.um_gemologypalegem1 then
-                item.components.weapon.damage = item.volatile_gemology_data.um_gemologypalegem1.weapon_damage
+            if item.volatile_gemology_data.um_gemologypalegem1 and item.volatile_gemology_data.um_gemologypalegem1.weapon_damage then
+                item.components.weapon:SetDamage(item.volatile_gemology_data.um_gemologypalegem1.weapon_damage)
             end
         end
     }
@@ -564,6 +564,8 @@ AddUMGemDef("palegem2", {
 
                 item.components.perishable:SetPercent(pct)
             end
+
+            --TODO: ARMOR
 
             if item.components.finiteuses
                 and AllRecipes ~= nil

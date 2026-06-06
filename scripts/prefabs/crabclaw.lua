@@ -17,25 +17,6 @@ local prefabs =
 
 
 local function DamageCalculation(inst, isattack)
-    local opalgem = #
-        inst.components.container:FindItems(function(item) return item.prefab == "opalpreciousgem_cracked" end)
-
-    local redgem = #inst.components.container:FindItems(function(item) return item.prefab == "redgem_cracked" end)
-
-    local yellowgem = #inst.components.container:FindItems(function(item) return item.prefab == "yellowgem_cracked" end)
-
-    local bluegem = #inst.components.container:FindItems(function(item) return item.prefab == "bluegem_cracked" end)
-
-    local greengem = #inst.components.container:FindItems(function(item) return item.prefab == "greengem_cracked" end)
-
-    local purplegem = #inst.components.container:FindItems(function(item) return item.prefab == "purplegem_cracked" end)
-
-    local orangegem = #inst.components.container:FindItems(function(item) return item.prefab == "orangegem_cracked" end)
-
-    local dmg = 40 + (5 * opalgem) + (5 * (redgem + bluegem + yellowgem + greengem + orangegem + purplegem + (math.abs(inst.components.gem_enchantable.slots - 4))))
-
-    inst.components.weapon:SetDamage(dmg)
-
     if isattack then
         local item1 = inst.components.container.slots[1]
         local item2 = inst.components.container.slots[2]
@@ -480,7 +461,26 @@ local function fn()
     inst.slot4_inserted = false
 
     inst:AddComponent("weapon")
-    inst.components.weapon:SetDamage(30)
+    inst.components.weapon:SetDamage(function(inst)
+        local opalgem = #
+            inst.components.container:FindItems(function(item) return item.prefab == "opalpreciousgem_cracked" end)
+
+        local redgem = #inst.components.container:FindItems(function(item) return item.prefab == "redgem_cracked" end)
+
+        local yellowgem = #inst.components.container:FindItems(function(item) return item.prefab == "yellowgem_cracked" end)
+
+        local bluegem = #inst.components.container:FindItems(function(item) return item.prefab == "bluegem_cracked" end)
+
+        local greengem = #inst.components.container:FindItems(function(item) return item.prefab == "greengem_cracked" end)
+
+        local purplegem = #inst.components.container:FindItems(function(item) return item.prefab == "purplegem_cracked" end)
+
+        local orangegem = #inst.components.container:FindItems(function(item) return item.prefab == "orangegem_cracked" end)
+
+        return 40 + (5 * opalgem) + (5 * (redgem + bluegem + yellowgem + greengem + orangegem + purplegem + (math.abs(inst.components.gem_enchantable.slots - 4))))
+    end)
+
+
     inst.components.weapon:SetOnAttack(onattack)
 
     inst:AddComponent("gem_enchantable")
