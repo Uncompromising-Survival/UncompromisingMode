@@ -3,21 +3,6 @@ GLOBAL.setfenv(1, GLOBAL)
 
 local um_flood_speed_immune_TAGS = { "turfrunner_279", "turfrunner_280", "turfrunner_281", "swampbro", "playermerm", "woosegoose", "merm" }
 
-local function RobustFloodCheck(inst) -- For players, check to see if they're on the edge of a tile, you can walk on the "Void" to avoid the effects of the tile you're standing on, similar to spider webbings
-    --IsVisualGroundAtPoint(x,y,z)... not sure how this can help?
-    local x, y, z = inst.Transform:GetWorldPosition()
-    local md = 1.5 --maxdist
-    for i = -md, md, 3 do
-        for j = -md, md, 3 do
-            local current_tile = TheWorld.Map:GetTileAtPoint(x + i, y, z + j)
-            if current_tile == WORLD_TILES.UM_FLOODWATER or current_tile == WORLD_TILES.UM_FLOODWATER_GROTTO or current_tile == WORLD_TILES.UM_FLOODWATER_BROILING then
-                return true
-            end
-        end
-    end
-end
-
-
 for i, v in ipairs(TUNING.DSTU.RIPPLE_BLACKLIST_PREFABS) do
     env.AddPrefabPostInit(v, function(inst)
         inst.um_ripple_blacklist = true
@@ -166,7 +151,7 @@ env.AddStategraphPostInit("wilson", function(inst)
         local _onenter = state.onenter
         state.onenter = function(inst, ...)
             inst:DoTaskInTime(state_time_ent[iname], function(inst)
-                if RobustFloodCheck(inst) and inst.sg.currentstate.name == statenames[iname] then
+                if UMCommonFns.AreaFloodCheck(inst) and inst.sg.currentstate.name == statenames[iname] then
                     inst.components.umripples._resize_target:set({ 250, 250, 250 })
                 end
             end)
@@ -176,7 +161,7 @@ env.AddStategraphPostInit("wilson", function(inst)
         local _onexit = state.onexit
         state.onexit = function(inst, ...)
             inst:DoTaskInTime(state_time_ext[iname], function(inst)
-                if RobustFloodCheck(inst) then
+                if UMCommonFns.AreaFloodCheck(inst) then
                     inst.components.umripples._resize_target:set({ 75, 100, 75 })
                 end
             end)
@@ -200,7 +185,7 @@ end
 
 env.AddPrefabPostInit("mole_move_fx", function(inst)
     inst:DoTaskInTime(0, function(inst)
-        if RobustFloodCheck(inst) then
+        if UMCommonFns.AreaFloodCheck(inst) then
             inst:Remove()
         end
     end)
@@ -217,13 +202,13 @@ env.AddStategraphPostInit("frog", function(inst)
         end
         local _fn = state.timeline[2].fn
         state.timeline[2].fn = function(inst)
-            if RobustFloodCheck(inst) then
+            if UMCommonFns.AreaFloodCheck(inst) then
                 inst.components.umripples:OnLandedServer(true)
             end
             _fn(inst)
         end
         state.onexit = function(inst)
-            if RobustFloodCheck(inst) and not inst.components.umripples.showing_effect then
+            if UMCommonFns.AreaFloodCheck(inst) and not inst.components.umripples.showing_effect then
                 inst.components.umripples:OnLandedServer(true)
             end
         end
@@ -240,13 +225,13 @@ env.AddStategraphPostInit("molebat", function(inst)
     end
     local _fn = state.timeline[3].fn
     state.timeline[3].fn = function(inst)
-        if RobustFloodCheck(inst) then
+        if UMCommonFns.AreaFloodCheck(inst) then
             inst.components.umripples:OnLandedServer(true)
         end
         _fn(inst)
     end
     state.onexit = function(inst)
-        if RobustFloodCheck(inst) and not inst.components.umripples.showing_effect then
+        if UMCommonFns.AreaFloodCheck(inst) and not inst.components.umripples.showing_effect then
             inst.components.umripples:OnLandedServer(true)
         end
     end
@@ -259,13 +244,13 @@ env.AddStategraphPostInit("molebat", function(inst)
     end
     local _fn = state.timeline[3].fn
     state.timeline[3].fn = function(inst)
-        if RobustFloodCheck(inst) then
+        if UMCommonFns.AreaFloodCheck(inst) then
             inst.components.umripples:OnLandedServer(true)
         end
         _fn(inst)
     end
     state.onexit = function(inst)
-        if RobustFloodCheck(inst) and not inst.components.umripples.showing_effect then
+        if UMCommonFns.AreaFloodCheck(inst) and not inst.components.umripples.showing_effect then
             inst.components.umripples:OnLandedServer(true)
         end
     end
@@ -275,7 +260,7 @@ env.AddStategraphPostInit("molebat", function(inst)
     local state = inst.states["fall"]
     local _onenter = state.onenter
     state.onenter = function(inst, ...)
-        if RobustFloodCheck(inst) then
+        if UMCommonFns.AreaFloodCheck(inst) then
             inst.components.umripples:OnNoLongerLandedServer()
             inst:DoTaskInTime(30 * FRAMES, function(inst)
                 inst.components.umripples:OnLandedServer(true)
@@ -318,7 +303,7 @@ env.AddStategraphPostInit("worm", function(inst)
         local state = inst.states[v]
         local _onenter = state.onenter
         state.onenter = function(inst, ...)
-            if RobustFloodCheck(inst) and not inst.components.umripples.showing_effect then
+            if UMCommonFns.AreaFloodCheck(inst) and not inst.components.umripples.showing_effect then
                 inst.components.umripples:OnLandedServer(true)
                 inst:Show()
                 ToggleWormMoveSymbols(inst, false)
@@ -330,7 +315,7 @@ env.AddStategraphPostInit("worm", function(inst)
         local state = inst.states[v]
         local _onenter = state.onenter
         state.onenter = function(inst, ...)
-            if RobustFloodCheck(inst) and not inst.components.umripples.showing_effect then
+            if UMCommonFns.AreaFloodCheck(inst) and not inst.components.umripples.showing_effect then
                 inst.components.umripples:OnLandedServer(true)
                 inst:Show()
                 ToggleWormMoveSymbols(inst, false)
@@ -338,7 +323,7 @@ env.AddStategraphPostInit("worm", function(inst)
             _onenter(inst, ...)
         end
         state.onexit = function(inst, ...)
-            if RobustFloodCheck(inst) and inst.components.umripples.showing_effect then
+            if UMCommonFns.AreaFloodCheck(inst) and inst.components.umripples.showing_effect then
                 inst.components.umripples:OnNoLongerLandedServer()
                 inst:Hide()
                 ToggleWormMoveSymbols(inst, true)
@@ -360,7 +345,7 @@ end
 local _LandFlyingCreature = LandFlyingCreature
 function LandFlyingCreature(inst)
     _LandFlyingCreature(inst)
-    if inst.components.umripples and RobustFloodCheck(inst) and not inst.components.umripples.showing_effect then
+    if inst.components.umripples and UMCommonFns.AreaFloodCheck(inst) and not inst.components.umripples.showing_effect then
         inst.components.umripples.showing_effect = true
         inst.components.umripples:OnLandedServer(true)
     end
@@ -382,8 +367,10 @@ env.AddComponentPostInit("blinkstaff", function(self)
     end
 end)
 
--- wortox
+
 env.AddStategraphPostInit("wilson", function(inst)
+
+    -- Wortox
     local state = inst.states["portal_jumpout"]
     local _onexit = state.onexit
     state.onexit = function(inst, ...)
@@ -392,7 +379,9 @@ env.AddStategraphPostInit("wilson", function(inst)
         end
         _onexit(inst, ...)
     end
+
 end)
+
 
 ---------------------------
 -- [ Flooded Tile Handling] -- AXE
@@ -474,7 +463,7 @@ local function RemoveFloodCheck(inst)
 end
 
 local function FloodContinualCheck(inst)
-    if not RobustFloodCheck(inst) then
+    if not UMCommonFns.AreaFloodCheck(inst) then
         RemoveFloodCheck(inst)
     end
 end
@@ -492,7 +481,7 @@ env.AddComponentPostInit("locomotor", function(self)
     function self:OnUpdate(dt, arrive_check_only)
         local inst = self.inst
         if not inst:HasAnyTag("flying", "ghost", "playerghost", "shadowcreature", "nightmarecreature", "brightmare_gestalt", "shadowminion", "shadowchesspiece") and not (inst.components.umripples and inst.components.umripples.speed_immune) then
-            if RobustFloodCheck(self.inst) and not inst.um_floodcontinualcheck then
+            if UMCommonFns.AreaFloodCheck(self.inst) and not inst.um_floodcontinualcheck then
                 if not inst:HasAnyTag(um_flood_speed_immune_TAGS) then
                     inst:PushEvent("carefulwalking", { careful = true })
                 end
@@ -516,7 +505,7 @@ env.AddComponentPostInit("locomotor", function(self)
                         AdjustSpeed(inst)
                     end
                 end
-            elseif inst.um_floodcontinualcheck and not RobustFloodCheck(self.inst) then
+            elseif inst.um_floodcontinualcheck and not UMCommonFns.AreaFloodCheck(self.inst) then
                 inst.um_floodcontinualcheck:Cancel()
                 inst.um_flood_moisture_ramp:Cancel()
                 inst.um_floodcontinualcheck = nil

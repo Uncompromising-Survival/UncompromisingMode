@@ -64,7 +64,7 @@ end)
 
 AddTaskPreInit("LichenLand", function(task)
     task.room_choices = {
-        ["LichenLandMONKEY"] = 8,
+        ["LichenLandMONKEY"] = function() return 1 + math.random(GLOBAL.SIZE_VARIATION) end,
         ["LichenLandHub"] = 1,
     }
     --task.hub_room = "LichenLandHub"

@@ -252,45 +252,44 @@ AddRoom("LichenLandMONKEY", {
     tags = {"Hutch_Fishbowl"},
     random_node_entrance_weight = 0,
     contents =  {
-        distributepercent = 0.3,
+        distributepercent = 0.6,
         distributeprefabs=
         {
-            lichen = 1.0,
-            monkeybarrel_spawner = 0.1,
-            cave_fern = 0.5,
-            pillar_algae = 0.05,
-            slurper_spawner = 0.05,
-            fissure_lower = 0.05,
+            lichen = 0.65,
+            cave_fern = 0.05,
             um_slimestone_rock_gemless = 0.2,
             um_slimestone_rock = 0.05,
-            worm_spawner = 0.1,
         },
 		countprefabs = {
 			um_slimestone_respawner = function() return math.random(2,3) end,
+            monkeybarrel_spawner = 2,
+            slurper_spawner = 6,
+            fissure_lower = 4,
+            pillar_algae = 1,
 		},
     }
 })
 
-AddRoom("LichenLandHub", {
+AddRoom("LichenLandHub", { -- AXE The difference between these two is exit/enter weight
     colour={r=0.3,g=0.2,b=0.1,a=0.3},
     value = WORLD_TILES.MUD,
     tags = {"Hutch_Fishbowl"},
-    random_node_entrance_weight = 0,
+    random_node_exit_weight = 0,
     contents =  {
-        distributepercent = 0.35,
+        distributepercent = 0.6,
         distributeprefabs=
         {
-            lichen = 1.0,
-            monkeybarrel_spawner = 0.1,
-            cave_fern = 0.5,
-            pillar_algae = 0.05,
-            slurper_spawner = 0.05,
-            fissure_lower = 0.05,
+            lichen = 0.65,
+            cave_fern = 0.05,
             um_slimestone_rock_gemless = 0.2,
             um_slimestone_rock = 0.05,
         },
 		countprefabs = {
 			um_slimestone_respawner = function() return math.random(2,3) end,
+            monkeybarrel_spawner = 2,
+            slurper_spawner = 6,
+            fissure_lower = 4,
+            pillar_algae = 1,
 		},
     }
 })

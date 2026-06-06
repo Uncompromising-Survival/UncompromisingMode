@@ -86,4 +86,20 @@ UMCommonFns.MegaFlareTimerReduction = function(time)
     end
 end
 
+UMCommonFns.AreaFloodCheck = function(inst) -- For players, check to see if they're on the edge of a tile, you can walk on the "Void" to avoid the effects of the tile you're standing on, similar to spider webbings
+    --IsVisualGroundAtPoint(x,y,z)... not sure how this can help?
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local md = 1.5 --maxdist
+    for i = -md, md, 3 do
+        for j = -md, md, 3 do
+            local current_tile = TheWorld.Map:GetTileAtPoint(x + i, y, z + j)
+            if current_tile == WORLD_TILES.UM_FLOODWATER or current_tile == WORLD_TILES.UM_FLOODWATER_GROTTO or current_tile == WORLD_TILES.UM_FLOODWATER_BROILING then
+                return true
+            end
+        end
+    end
+end
+
+
+
 return UMCommonFns
