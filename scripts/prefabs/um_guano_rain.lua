@@ -43,8 +43,8 @@ local function CheckGuanoStatus(x, y, z)
     return high, med, low, gems, impacted_rock, impacted_guano, too_close, guanos, guano_rocks
 end
 
-local DAMAGE_ONEOF_TAGS = { "NPC_workable", "CHOP_workable", "HAMMER_workable", "MINE_workable", "DIG_workable" }
-
+local DAMAGE_CANT_TAGS = {"INLIMBO"}
+local DAMAGE_ONEOF_TAGS = {"NPC_workable", "CHOP_workable", "HAMMER_workable", "MINE_workable", "DIG_workable"}
 
 local function ContributeToPoopSociety(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
@@ -71,7 +71,7 @@ local function ContributeToPoopSociety(inst)
                     rock.AnimState:PushAnimation("low_0")
                 end)
 
-                local structure_ents = TheSim:FindEntities(x, 0, z, 2, nil, nil, DAMAGE_ONEOF_TAGS)
+                local structure_ents = TheSim:FindEntities(x, 0, z, 2, nil, DAMAGE_CANT_TAGS, DAMAGE_ONEOF_TAGS)
                 for i, v in ipairs(structure_ents) do
                     if not (v.prefab == "um_guano_rock" or v.prefab == "um_guano_rock_gemless") then
                         SpawnPrefab("collapse_small").Transform:SetPosition(v.Transform:GetWorldPosition())
@@ -88,15 +88,10 @@ local function ContributeToPoopSociety(inst)
         end
     end
     --AXE hit players in the head
-    local ents = TheSim:FindEntities(x, 0, z, 2, { "_sanity" })
-    for i, v in ipairs(ents) do
+    for i, v in ipairs(TheSim:FindEntities(x, 0, z, 2, { "_sanity" })) do
         if v:IsValid() then
-            if v.prefab == "wormwood" then
-                v.components.sanity:DoDelta(5)
-            else
-                v.components.combat:GetAttacked(inst, 3)
-                v.components.sanity:DoDelta(-10)
-            end
+            v.components.sanity:DoDelta(v.prefab == "wormwood" and 5 or -10)
+            v:PushEvent("attacked", {attacker = inst, damage = 0})
         end
     end
 end
