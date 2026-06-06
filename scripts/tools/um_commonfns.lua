@@ -47,7 +47,7 @@ UMCommonFns.IsAlly = function(inst, guy, tags) -- Used for UMIsAlly on certain c
 end
 
 UMCommonFns.IsNotFriendly = function(attacker, target) -- Is the target an ally or my leader's ally?
-    if not target.components.health then return true end
+    if not (attacker and attacker:IsValid()) or not target.components.health then return true end
     local attackercombat = attacker and attacker.components.combat
     local leader = attacker and attacker.components.follower and attacker.components.follower:GetLeader()
     local leadercombat = leader and leader.components.combat
