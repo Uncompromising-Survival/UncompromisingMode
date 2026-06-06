@@ -94,7 +94,7 @@ local function pyrenettle_bumped(inst, nextvictim)
             inst.SoundEmitter:PlaySound("dontstarve/creatures/spider/spiderLair_hit")
         end
         -- Apply debuff if it's a valid target.
-        if not (nextvictim.components.health and nextvictim.components.health:IsDead() and nextvictim.components.health:GetFireDamageScale() <= 0) and nextvictim.components.burnable ~= nil and inst.stage > 1 then
+        if not (nextvictim.components.health and nextvictim.components.health:IsDead()) and nextvictim.components.burnable ~= nil and inst.stage > 1 then
             local DebuffDuration = inst.stage > 3 and 10 or 6
             if nextvictim.components.combat and nextvictim.components.health and not nextvictim.components.health:IsDead() then
                 nextvictim.components.combat:GetAttacked(inst, 10)
