@@ -29,16 +29,12 @@ return Class(function(self, inst)
 
 
     local function IterateThroughTiles(tiles)
-        print("iterating through tiles")
-        --print("iterating through tiles...")
         for k, v in ipairs(tiles) do
-            --print("k,v", k,v)
             local offset = math.random() * 4
             local target_location = {}
             target_location.x = v.x
             target_location.z = v.z
-            --print("target_location = ", target_location.x, target_location.z)
-            print("checking for other ocupi at", target_location, CheckForOtherOcupi(target_location))
+
             if CheckForOtherOcupi(target_location) then
                 --print("found valid location")
                 target_location.x = v.x + offset
@@ -53,9 +49,6 @@ return Class(function(self, inst)
     end
 
     local function FindLocation()
-        print("finding location")
-        print("tilelogger", TheWorld.components.um_tilelogger)
-        print("haz", TheWorld.components.um_tilelogger.Hazardous)
         if TheWorld.components.um_tilelogger and TheWorld.components.um_tilelogger.Hazardous then
             return IterateThroughTiles(deepcopy(TheWorld.components.um_tilelogger.Hazardous))
         end
@@ -64,16 +57,13 @@ return Class(function(self, inst)
 
 
     local function SpawnOcupi()
-        print("spawn ocupi")
         local pos = FindLocation()
-        print("pos", pos)
         if pos then --If you maxwelled the whole ocean I swear
             SpawnPrefab("um_ocupus").Transform:SetPosition(pos.x, 0, pos.z)
         end
     end
 
     local function OnSeasonTick(src, data)
-        print("season tick")
         local Ocupus = CountOcupi()
         if Ocupus and Ocupus < 1 then
             SpawnOcupi()
@@ -88,21 +78,18 @@ return Class(function(self, inst)
     end
 
     function self:FirstRun()
-        print("doing first run")
         SpawnOcupi()
         SpawnOcupi()
         SpawnOcupi()
     end
 
     function self:RegisterOcupus(ent)
-        print("registering ocupus", ent)
         if ent ~= nil and ent:IsValid() then
             self.ocupi[ent.GUID] = ent
         end
     end
 
     function self:UnregisterOcupus(ent)
-        print("unregistering an ocupus")
         self.ocupi[ent.GUID] = nil
         local new_ocupi = {}
 
