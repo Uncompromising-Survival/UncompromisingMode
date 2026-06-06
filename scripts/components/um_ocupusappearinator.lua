@@ -119,9 +119,6 @@ return Class(function(self, inst)
             if data.firstrun then
                 self.firstrun = data.firstrun
             end
-            if data.retrofit then
-                self.retrofit = data.retrofit
-            end
         end
     end
 
