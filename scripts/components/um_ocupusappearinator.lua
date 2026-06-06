@@ -104,8 +104,6 @@ return Class(function(self, inst)
         data.firstrun = self.firstrun
         data.ocupi = {}
 
-        data.retrofit = self.retrofit
-
         local references = {}
 
         for k, v in pairs(self.ocupi) do
