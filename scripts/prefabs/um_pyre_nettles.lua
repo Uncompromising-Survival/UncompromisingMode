@@ -42,35 +42,35 @@ SetSharedLootTable('um_pyre_nettles_5',
     })
 
 local function TrySpawnSpore(inst)
-    if not inst:IsAsleep() and math.random() > 2/3 then
+    if not inst:IsAsleep() and math.random() > 2 / 3 then
         SpawnPrefab("um_smolder_spore").Transform:SetPosition(inst.Transform:GetWorldPosition())
     end
 end
 
 local function ScheduledSpore(inst)
-	-- inst.AnimState:PlayAnimation("pn"..inst.stage.."_coof", false) -- coughing animations look bad
-	-- inst.AnimState:PushAnimation("pn"..inst.stage.."_idle", true)		
-	TrySpawnSpore(inst)
-	if inst.sporetask then
-		inst.sporetask:Cancel()
-		inst.sporetask = nil
-	end
-	if not inst:IsAsleep() then
-		inst.sporetask = inst:DoTaskInTime(math.random(60,120),ScheduledSpore)
-	end
+    -- inst.AnimState:PlayAnimation("pn"..inst.stage.."_coof", false) -- coughing animations look bad
+    -- inst.AnimState:PushAnimation("pn"..inst.stage.."_idle", true)		
+    TrySpawnSpore(inst)
+    if inst.sporetask then
+        inst.sporetask:Cancel()
+        inst.sporetask = nil
+    end
+    if not inst:IsAsleep() then
+        inst.sporetask = inst:DoTaskInTime(math.random(60, 120), ScheduledSpore)
+    end
 end
 
 local function StartSpores(inst)
-	if inst.stage > 3 then
-		inst.sporetask = inst:DoTaskInTime(math.random(5,15),ScheduledSpore)
-	end
+    if inst.stage > 3 then
+        inst.sporetask = inst:DoTaskInTime(math.random(5, 15), ScheduledSpore)
+    end
 end
 
 local function StopSpores(inst)
-	if inst.sporetask then
-		inst.sporetask:Cancel()
-		inst.sporetask = nil
-	end
+    if inst.sporetask then
+        inst.sporetask:Cancel()
+        inst.sporetask = nil
+    end
 end
 
 local function PlayerImmunity(inst)
@@ -80,25 +80,26 @@ local function PlayerImmunity(inst)
     if inst.components.debuffable and inst.components.debuffable:HasDebuff("um_firecream_buff") then
         return true
     end
-    if inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) 
-        and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY).prefab == "um_armor_pyre_nettles" then
+    if inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
+        and inst.components.inventory:EquipHasTag("pyre_toxin_immune") then
         return true
     end
 end
 
-local function pyrenettle_bumped(inst,nextvictim)
-    if nextvictim:IsValid() and not nextvictim:HasTag("shadow") and not PlayerImmunity(nextvictim) then
+local no_tags = { "pyre_toxin_immune", "FX", "INLIMBO", "shadow", "wall", "invisible", "notarget", "noattack", "playerghost", "boat", "walkableplatform" }
+local function pyrenettle_bumped(inst, nextvictim)
+    if nextvictim:IsValid() and not nextvictim:HasAnyTag(no_tags) and not PlayerImmunity(nextvictim) then
         inst.AnimState:PlayAnimation("pn" .. inst.stage .. "_bump", false)
         inst.AnimState:PushAnimation("pn" .. inst.stage .. "_idle", true)
-		if inst.stage ~= 1 then
-			inst.SoundEmitter:PlaySound("dontstarve/creatures/spider/spiderLair_hit")
-		end
+        if inst.stage ~= 1 then
+            inst.SoundEmitter:PlaySound("dontstarve/creatures/spider/spiderLair_hit")
+        end
         -- Apply debuff if it's a valid target.
-        if not (nextvictim.components.health and nextvictim.components.health:IsDead()) and inst.stage > 1 then
+        if not (nextvictim.components.health and nextvictim.components.health:IsDead() and nextvictim.components.health:GetFireDamageScale() <= 0) and nextvictim.components.burnable ~= nil and inst.stage > 1 then
             local DebuffDuration = inst.stage > 3 and 10 or 6
-			if nextvictim.components.combat and nextvictim.components.health and not nextvictim.components.health:IsDead() then
-				nextvictim.components.combat:GetAttacked(inst,10)
-			end --AXE I added damage to the thicket too at one point to ensure it wasn't possible to just tank the heating... but it may not be needed now.
+            if nextvictim.components.combat and nextvictim.components.health and not nextvictim.components.health:IsDead() then
+                nextvictim.components.combat:GetAttacked(inst, 10)
+            end --AXE I added damage to the thicket too at one point to ensure it wasn't possible to just tank the heating... but it may not be needed now.
             nextvictim:AddDebuff("umdebuff_pyre_toxin", "umdebuff_pyre_toxin", DebuffDuration)
             if nextvictim.components.temperature and nextvictim.components.temperature.current < 80 then
                 nextvictim.components.temperature:DoDelta(15)
@@ -107,17 +108,17 @@ local function pyrenettle_bumped(inst,nextvictim)
     end
 end
 -- Timer reset for small nettle growth.
-local function SmallPyreNettleGrowthTimerReset(inst,cancel)
+local function SmallPyreNettleGrowthTimerReset(inst, cancel)
     local time_remaining = inst.components.timer:GetTimeLeft("SmallPyreNettleGrowthTimer")
-    local timer_duration = math.random(8,12)/10 * 480
-	if inst.stage > 2 then
-		timer_duration = timer_duration * 3
-	end
-	if cancel and time_remaining then
-		inst.components.timer:StopTimer("SmallPyreNettleGrowthTimer")
-	end
+    local timer_duration = math.random(8, 12) / 10 * 480
+    if inst.stage > 2 then
+        timer_duration = timer_duration * 3
+    end
+    if cancel and time_remaining then
+        inst.components.timer:StopTimer("SmallPyreNettleGrowthTimer")
+    end
     if inst.stage < inst.target_stage then
-		inst.components.timer:StartTimer("SmallPyreNettleGrowthTimer", timer_duration)
+        inst.components.timer:StartTimer("SmallPyreNettleGrowthTimer", timer_duration)
     end
 end
 -- This sets up the plant's stage-unique traits.
@@ -150,7 +151,7 @@ local function SetStage(inst)
     inst.components.pickable.remove_when_picked = inst.stage == 1 or false
 
     -- Flammability stage properties.
-   -- inst.components.burnable:SetFXLevel(inst.stage > 3 and 3 or 2)
+    -- inst.components.burnable:SetFXLevel(inst.stage > 3 and 3 or 2)
     local multsize = .5 + (math.random() * .2)
     if inst.stage ~= 1 then
         multsize = .75 + (math.random() * .2)
@@ -160,30 +161,30 @@ local function SetStage(inst)
 end
 
 local function QueueSetStage(inst)
-	SetStage(inst)
-	inst:RemoveEventCallback("animover",QueueSetStage)
+    SetStage(inst)
+    inst:RemoveEventCallback("animover", QueueSetStage)
 end
 
 local function OnGrow(inst)
     local targetstage = math.clamp(inst.stage + 1, 1, 6)
-	inst.AnimState:PlayAnimation("pn" .. inst.stage .. "_grow", false)
-	inst.stage = targetstage
-	inst:ListenForEvent("animover", QueueSetStage)
-	if inst.stage < inst.target_stage then
-		SmallPyreNettleGrowthTimerReset(inst)
-	end
-	if inst.stage > 3 and not inst:IsAsleep() and not inst.sporetask then
-		inst.sporetask = inst:DoTaskInTime(math.random(10, 20),ScheduledSpore) -- Cough sooner if we just grew
-	end
+    inst.AnimState:PlayAnimation("pn" .. inst.stage .. "_grow", false)
+    inst.stage = targetstage
+    inst:ListenForEvent("animover", QueueSetStage)
+    if inst.stage < inst.target_stage then
+        SmallPyreNettleGrowthTimerReset(inst)
+    end
+    if inst.stage > 3 and not inst:IsAsleep() and not inst.sporetask then
+        inst.sporetask = inst:DoTaskInTime(math.random(10, 20), ScheduledSpore) -- Cough sooner if we just grew
+    end
 end
 
 local function OnPicked(inst)
     local targetstage = math.clamp(inst.stage - 1, 1, 5)
     inst.AnimState:PlayAnimation("pn" .. inst.stage .. "_shrink", false)
     inst.stage = targetstage
-	SmallPyreNettleGrowthTimerReset(inst,true)
-	inst:ListenForEvent("animover", QueueSetStage)
-	StopSpores(inst)	
+    SmallPyreNettleGrowthTimerReset(inst, true)
+    inst:ListenForEvent("animover", QueueSetStage)
+    StopSpores(inst)
 end
 
 -- Make the plant destroyable instantly with explosives, dropping the current stage's loot and all below it.
@@ -204,7 +205,7 @@ end
 
 local function OnTimerDone(inst, data)
     --print("timerdone", data.name)
-    if data.name == "SmallPyreNettleGrowthTimer" then	
+    if data.name == "SmallPyreNettleGrowthTimer" then
         OnGrow(inst)
     end
 end
@@ -212,14 +213,14 @@ end
 local function OnSave(inst, data)
     if inst.stage then
         data.stage = inst.stage
-		data.target_stage = inst.target_stage
+        data.target_stage = inst.target_stage
     end
 end
 
 local function OnLoad(inst, data)
     if data and data.stage then
         inst.stage = data.stage
-		inst.target_stage = data.target_stage
+        inst.target_stage = data.target_stage
     end
     SetStage(inst)
 end
@@ -280,9 +281,9 @@ local function StageSpawner(name, SpawnAtStage)
         inst.components.pickable.use_lootdropper_for_product = true
         inst.components.pickable.picksound = "dontstarve/wilson/harvest_berries"
         inst.components.pickable.onpickedfn = OnPicked
-		if inst.stage ~= 1 then
-			inst.components.pickable.canbepicked = true
-		end
+        if inst.stage ~= 1 then
+            inst.components.pickable.canbepicked = true
+        end
 
         inst:AddComponent("combat")
 
@@ -294,7 +295,7 @@ local function StageSpawner(name, SpawnAtStage)
         --inst:AddComponent("burnable")
         --inst.components.burnable:AddBurnFX("character_fire", Vector3(0, 0, 0))
         --inst.components.burnable:SetBurnTime(6)
-		
+
         --MakeSmallPropagator(inst)
 
         inst:AddComponent("timer")
@@ -302,13 +303,13 @@ local function StageSpawner(name, SpawnAtStage)
 
         --inst:DoTaskInTime(0, WorldCheck)
         inst:DoTaskInTime(0, SetStage)
-		
-		inst.pyrenettle_bumped = pyrenettle_bumped
+
+        inst.pyrenettle_bumped = pyrenettle_bumped
         inst.OnSave = OnSave
         inst.OnLoad = OnLoad
 
-		inst:ListenForEvent("entitywake", StartSpores)
-		inst:ListenForEvent("entitysleep", StopSpores)
+        inst:ListenForEvent("entitywake", StartSpores)
+        inst:ListenForEvent("entitysleep", StopSpores)
         return inst
     end
 

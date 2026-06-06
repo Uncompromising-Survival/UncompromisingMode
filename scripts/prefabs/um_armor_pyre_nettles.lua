@@ -238,7 +238,7 @@ local function fn()
     inst:AddTag("icebox_valid")
     inst:AddTag("donotautopick")
     inst:AddTag("waterproofer")
-
+    inst:AddTag("pyre_toxin_immune")
 
     inst.entity:SetPristine()
 
