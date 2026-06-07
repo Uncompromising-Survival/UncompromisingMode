@@ -128,7 +128,7 @@ function HealthBadge:SetPercent(val, max, penaltypercent, ...)
 
     if self.topperanim ~= nil then
         if penaltypercent < 0.25 then
-            self.topperanim:GetAnimState():SetMultColour(0.25, 0.25, 0.25, 1)
+            self.topperanim:GetAnimState():SetMultColour(0.2, 0.2, 0.2, 1)
         else
             self.topperanim:GetAnimState():SetMultColour(0, 0, 0, 1)
         end

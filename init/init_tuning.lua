@@ -506,7 +506,15 @@ TUNING.DSTU = {
     NO_THICKET_APHIDS = {"tumbleweed","beefalo", "fruitbat"}, --AXE Add more as needed, most things >should< spawn aphids though.
 
     RIPPLE_BLACKLIST_PREFABS = {"webbedcreature", "rainometer"}, -- AXE Many cases would like "structure" tag still count for ripples, but many structures are incompatible, so we do a prefab based blacklist as well
-    RIPPLE_BLACKLIST_TAGS = {"projectile", "FX"} -- AXE other cases are universal, projectiles shouldn't really ever have ripples
+    RIPPLE_BLACKLIST_TAGS = {"projectile", "FX"}, -- AXE other cases are universal, projectiles shouldn't really ever have ripples
+
+    -- Rat Poison
+    RATPOISON_EAT_DAMAGE = 24,
+    RATPOISON_EAT_USES = 8,
+    RATPOISON_DURATION = 20, --total seconds
+    RATPOISON_TICKRATE = 1, --every x seconds
+    RATPOISON_TICK_DAMAGE = 2, 
+    RATPOISON_RATMULT = 2.5, --damage multiplier against rats 
 }
 
 -- [              DST Related Overrides              ]

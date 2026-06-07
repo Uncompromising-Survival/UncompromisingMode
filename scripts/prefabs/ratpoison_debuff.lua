@@ -2,7 +2,7 @@ local function OnTick(inst, target)
     if not (target.components.health and target.components.health:IsDead()) and
         not target:HasTag("playerghost") then
 
-        local damage = target:HasTag("raidrat") and 5 or 2
+        local damage = target:HasTag("raidrat") and TUNING.DSTU.RATPOISON_TICK_DAMAGE * TUNING.DSTU.RATPOISON_RATMULT or TUNING.DSTU.RATPOISON_TICK_DAMAGE
         inst.attackcount = (inst.attackcount or 1) + 1
         if target.components.combat and inst.attackcount >= 5 then
             inst.attackcount = 1
@@ -21,21 +21,19 @@ local function OnAttached(inst, target)
 
     inst.entity:SetParent(target.entity)
     inst.Transform:SetPosition(0, 0, 0) --in case of loading
-    inst.task = inst:DoPeriodicTask(1, OnTick, nil, target)
+    inst.task = inst:DoPeriodicTask(TUNING.DSTU.RATPOISON_TICKRATE, OnTick, nil, target)
     inst:ListenForEvent("death", function() inst.components.debuff:Stop() end, target)
 end
 
 local function OnTimerDone(inst, data)
-    if data.name == "regenover" then
+    if data.name == "um_ratpoison" then
         inst.components.debuff:Stop()
     end
 end
 
 local function OnExtended(inst, target)
-    inst.components.timer:StopTimer("regenover")
-    inst.components.timer:StartTimer("regenover", 180)
-    inst.task:Cancel()
-    inst.task = inst:DoPeriodicTask(2, OnTick, nil, target)
+    inst.components.timer:StopTimer("um_ratpoison")
+    inst.components.timer:StartTimer("um_ratpoison", TUNING.DSTU.RATPOISON_DURATION)
 end
 
 local function fn()
@@ -64,7 +62,7 @@ local function fn()
     inst.components.debuff.keepondespawn = true
 
     inst:AddComponent("timer")
-    inst.components.timer:StartTimer("regenover", 180)
+    inst.components.timer:StartTimer("um_ratpoison", TUNING.DSTU.RATPOISON_DURATION)
     inst:ListenForEvent("timerdone", OnTimerDone)
 
     return inst
