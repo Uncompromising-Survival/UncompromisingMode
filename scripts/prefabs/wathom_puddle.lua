@@ -4,7 +4,7 @@ local function ApplySlows(inst)
     local wathom = inst.wathom and inst.wathom:IsValid() and inst.wathom or nil
     local wathomcombat = wathom and wathom.components.combat or nil
     local x, y, z = inst.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, 2, {"_combat"}, {"companion", "INLIMBO", "notarget", "player", "playerghost", "wall", "abigail", "shadowminion", "shadow", "trap"}) --added playertags because of the taunt.
+    local ents = TheSim:FindEntities(x, y, z, 2, {"_combat"}, {"companion", "INLIMBO", "notarget", "player", "playerghost", "wall", "abigail", "shadowminion", "shadow", "trap", "flying"}) --added playertags because of the taunt.
     for i, v in ipairs(ents) do
         if v ~= wathom and v.entity:IsVisible()
             and not (v.components.health and v.components.health:IsDead())
@@ -17,7 +17,7 @@ local function ApplySlows(inst)
                 end)
             end
             if v.components.hauntable and v.components.hauntable.panicable then
-                v.components.hauntable:Panic(8) -- Fallback to TUNING.BATTLESONG_PANIC_TIME (6 seconds) if needed
+                v.components.hauntable:Panic(1)
             end
             if not v:HasTag("bird") and v.components.combat and (not v.components.hauntable or v.components.hauntable and not v.components.hauntable.panicable) then
                 v.components.combat:SetTarget(wathom)
@@ -39,20 +39,22 @@ local function puddle()
     inst.AnimState:SetLayer(LAYER_BACKGROUND)
 
     inst.entity:SetPristine()
+    inst:AddTag("NOCLICK")
+    --inst:AddTag("NOBLOCK")
 
     if not TheWorld.ismastersim then return inst end
 
-    inst.Transform:SetScale(1.5, 1.5, 1.5)
+    inst.Transform:SetScale(1.75, 1.75, 1.75)
 
     inst.AnimState:PlayAnimation("pre_idle", false)
     inst.AnimState:PushAnimation("idle", false)
     inst.AnimState:SetMultColour(0, 0, 0, .6)
 
-    inst:ListenForEvent("animover",function(inst) inst.AnimState:SetDeltaTimeMultiplier(.4) end)
-    inst:ListenForEvent("animqueueover",function(inst) inst:Remove() end)
+    inst:ListenForEvent("animover",function() inst.AnimState:SetDeltaTimeMultiplier(.55) end) --This makes it disappear slower
+    inst:ListenForEvent("animqueueover",function() inst:Remove() end)
 
     inst.persists = false
-    
+
     inst:DoPeriodicTask(.5, ApplySlows)
 
     return inst

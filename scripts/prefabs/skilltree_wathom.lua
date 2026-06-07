@@ -72,7 +72,7 @@ local function PissOfGestalts(inst)
 end
 
 local WARNING_MUST_TAGS = {"_health", "_combat"}
-local WARNING_MUST_NOT_TAGS = {"player", "wall", "soulless"}
+local WARNING_MUST_NOT_TAGS = {"player", "wall", "soulless", "mech"}
 
 local function ShowLowHealth(inst)
     local x,y,z = inst.Transform:GetWorldPosition()
@@ -90,13 +90,14 @@ local function ShowLowHealth(inst)
 end
 
 local function ShowLowHealth_OnAttack(inst, data)
-    if data.target and data.target.components.health and not data.target.components.health:IsDead()
+    if not inst.um_wathomdamagedtargettask and data.target and data.target.components.health and not data.target.components.health:IsDead()
         and data.target:HasAnyTag(WARNING_MUST_TAGS) and not data.target:HasAnyTag(WARNING_MUST_NOT_TAGS)
         and (data.target.components.health:GetPercent() <= 0.3 and not data.target:HasTag("epic"))
         or (data.target.components.health:GetPercent() <= 0.1 and data.target:HasTag("epic")) then
         local fx = SpawnPrefab("wathom_wound_vfx")
         fx.entity:SetParent(data.target.entity)
         fx.Network:SetClassifiedTarget(inst)
+        inst.um_wathomdamagedtargettask = inst:DoTaskInTime(12, function(inst) inst.um_wathomdamagedtargettask = nil end)
     end
 end
 
