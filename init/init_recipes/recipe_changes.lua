@@ -304,7 +304,7 @@ if GetModConfigData("telestaff_rework") then
         Ingredient("nightmarefuel", 4),
         Ingredient("livinglog", 4),
         Ingredient("goldnugget", 8),
-        Ingredient("purplegem", 3)
+        --Ingredient("purplegem", 3)
     }
     --AllRecipes["telestaff"].ingredients = {
     --Ingredient("nightmarefuel", 2),
