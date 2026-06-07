@@ -131,9 +131,7 @@ local function fn()
 
     inst.regen_task = inst:DoPeriodicTask(2.5, function(inst)
         local temperature_scale = Lerp(2, -2, TheWorld.state.temperature / 80)
-        print("temperature scale", temperature_scale)
         local value = 1 * inst.tier * temperature_scale
-        print("value", value)
         if value < 0 then
             local fx = SpawnPrefab("washashore_puddle_fx")
             local scale = math.abs(1 * inst.tier * temperature_scale) / 2
