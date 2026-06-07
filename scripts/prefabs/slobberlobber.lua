@@ -14,42 +14,42 @@ local prefabs =
 local easing = require("easing")
 
 local function OnCharged(inst)
-    local fx = SpawnPrefab("dr_warmer_loop")
+    --local fx = SpawnPrefab("dr_warmer_loop")
 
-    local owner = inst.components.inventoryitem.owner
+    --local owner = inst.components.inventoryitem.owner
     inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/angry", nil, 0.6)
 
-    if inst.components.equippable:IsEquipped() and owner ~= nil then
-        fx.entity:SetParent(owner.entity)
-        fx.entity:AddFollower()
-        fx.Follower:FollowSymbol(owner.GUID, "swap_object", 0, -275, 0)
-        fx.Transform:SetScale(1.11, 1.11, 1.11)
-    else
-        fx.entity:SetParent(inst.entity)
-        fx.Transform:SetPosition(0, 2.35, 0)
-        fx.Transform:SetScale(1.11, 1.11, 1.11)
-    end
+    --if inst.components.equippable:IsEquipped() and owner ~= nil then
+        --fx.entity:SetParent(owner.entity)
+        --fx.entity:AddFollower()
+        --fx.Follower:FollowSymbol(owner.GUID, "swap_object", 0, -275, 0)
+        --fx.Transform:SetScale(1.11, 1.11, 1.11)
+    --else
+        --fx.entity:SetParent(inst.entity)
+        --fx.Transform:SetPosition(0, 2.35, 0)
+        --fx.Transform:SetScale(1.11, 1.11, 1.11)
+    --end
 end
 --[[
 local function fuelme(inst)
-	if inst.components.fueled:GetPercent() < 1 then
-		inst.components.fueled:DoDelta(5)
-		if inst.components.fueled:GetPercent() >= 1 then
-			inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/angry", nil, 0.6)
+    if inst.components.fueled:GetPercent() < 1 then
+        inst.components.fueled:DoDelta(5)
+        if inst.components.fueled:GetPercent() >= 1 then
+            inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/angry", nil, 0.6)
 
-			charged(inst)
-			
-			if inst.task ~= nil then
-				inst.task:Cancel()
-				inst.task = nil
-			end
-		end
-	else
-		if inst.task ~= nil then
-			inst.task:Cancel()
-			inst.task = nil
-		end
-	end
+            charged(inst)
+            
+            if inst.task ~= nil then
+                inst.task:Cancel()
+                inst.task = nil
+            end
+        end
+    else
+        if inst.task ~= nil then
+            inst.task:Cancel()
+            inst.task = nil
+        end
+    end
 end
 ]]
 local function LaunchSpit(caster, pos)
@@ -92,20 +92,7 @@ local function createlight(staff, target, pos)
         local caster = staff.components.inventoryitem.owner
         LaunchSpit(caster, pos or target and target:GetPosition())
 
-        local x1, y1, z1 = staff.Transform:GetWorldPosition()
-
-        local owner = staff.components.inventoryitem.owner
-
-        for i, v in pairs(TheSim:FindEntities(x1, y1, z1, 8, { "slobberlobber" })) do
-            if v ~= staff then
-                local vowner = v.components.inventoryitem:GetGrandOwner()
-                if vowner ~= nil and (vowner == owner or not vowner:HasTag("player")) or vowner == nil then
-                    v.components.rechargeable:Discharge(TUNING.DSTU.SLOBBERLOBBER_COOLDOWN)
-                end
-            end
-        end
-
-        staff.components.rechargeable:Discharge(TUNING.DSTU.SLOBBERLOBBER_COOLDOWN) --whatever, do what you want with that number
+        UMCommonFns.StartRechargeableCooldown(staff, {cooldown = TUNING.DSTU.SLOBBERLOBBER_COOLDOWN, tags = {"slobberlobber"}})
     else
         staff.SoundEmitter:PlaySound("dontstarve/common/teleportworm/sick_cough")
     end

@@ -37,8 +37,7 @@ local function common(bank, build, anim, tags, cookable)
     end
 
     MakeInventoryFloatable(inst)
-	
-	
+
     local land_time = (POPULATING and 12*FRAMES) or 0
     inst:DoTaskInTime(land_time, function(inst)
         inst.components.floater:OnLandedServer()
@@ -50,7 +49,7 @@ local function common(bank, build, anim, tags, cookable)
     end
 	inst.bank = bank
 	inst.build = build
-	
+
     inst:AddComponent("edible")
     inst.components.edible.ismeat = true
     inst.components.edible.foodtype = FOODTYPE.MEAT
@@ -64,7 +63,7 @@ local function common(bank, build, anim, tags, cookable)
     inst:AddComponent("stackable")
 
     inst:AddComponent("tradable")
-    inst.components.tradable.goldvalue = TUNING.GOLD_VALUES.MEAT
+    inst.components.tradable.goldvalue = TUNING.GOLD_VALUES.YOTB_BEEFALO_DOLL --3
 
     inst:AddComponent("perishable")
     inst.components.perishable:SetPerishTime(TUNING.PERISH_FAST*1.5)
@@ -90,8 +89,6 @@ local function ocupus_tentacle()
     inst.components.edible.sanityvalue = -15
     inst.components.perishable:SetPerishTime(TUNING.PERISH_FAST*1.5)
 
-    inst.components.tradable.goldvalue = 1
-
     return inst
 end
 
@@ -105,8 +102,6 @@ local function ocupus_tentacle_eye()
     inst.components.edible.hungervalue = 37.5
     inst.components.edible.sanityvalue = -33
     inst.components.perishable:SetPerishTime(TUNING.PERISH_FAST*1.5)
-
-    inst.components.tradable.goldvalue = 1
 
     return inst
 end
@@ -122,8 +117,6 @@ local function ocupus_tentacle_cooked()
     inst.components.edible.hungervalue = 37.5
     inst.components.edible.sanityvalue = -10
     inst.components.perishable:SetPerishTime(3*TUNING.PERISH_FAST)
-
-    inst.components.tradable.goldvalue = 1
 
     return inst
 end
@@ -156,12 +149,10 @@ local function ocupus_beak()
     inst:AddComponent("stackable")
 
     inst:AddComponent("tradable")
-    inst.components.tradable.goldvalue = TUNING.GOLD_VALUES.MEAT
+    inst.components.tradable.goldvalue = TUNING.GOLD_VALUES.RAREMEAT --5
 
     return inst
 end
 
 return Prefab("ocupus_tentacle", ocupus_tentacle, assets), Prefab("ocupus_tentacle_eye", ocupus_tentacle_eye, assets),
     Prefab("ocupus_tentacle_cooked", ocupus_tentacle_cooked, assets), Prefab("ocupus_beak", ocupus_beak, assets)
-
-    

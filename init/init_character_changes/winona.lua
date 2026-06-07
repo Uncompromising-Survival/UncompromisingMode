@@ -381,6 +381,24 @@ end)
 --]]
 
 
+local function CalcBatteryChargeMult(inst, battery)
+    local pct = inst.components.fueled:GetPercent()
+    return math.clamp(1 - pct, 0, 1)
+end
+
+local function OnBatteryUsed(inst, battery, mult)
+    if mult <= 0 or inst.components.fueled:IsFull() then
+        return false, "CHARGE_FULL"
+    end
+
+    local newpercent = math.clamp(inst.components.fueled:GetPercent() + mult, 0, 1)
+    inst.components.fueled:SetPercent(newpercent)
+    SpawnElectricHitSparks(inst, battery, true)
+
+    return true
+end
+
+
 local chargeable_items = {
     "winona_telebrella",
     "winona_remote",
@@ -391,6 +409,11 @@ for i, v in ipairs(chargeable_items) do
         if not TheWorld.ismastersim then return end
 
         inst.components.fueled.fueltype = FUELTYPE.BATTERYPOWER
+
+        inst:AddComponent("batteryuser")
+        inst.components.batteryuser:SetChargeMultFn(CalcBatteryChargeMult)
+        inst.components.batteryuser:SetOnBatteryUsedFn(OnBatteryUsed)
+        inst.components.batteryuser:SetAllowPartialCharge(true)
     end)
 end
 
@@ -477,5 +500,6 @@ env.AddPrefabPostInit("winona_recipescanner", function(inst)
     if not TheWorld.ismastersim then return end
 
     inst:AddComponent("gemologyscanner")
-	inst.components.gemologyscanner:SetOnScannedFn(inst.Remove)
+    inst.components.gemologyscanner:SetOnScannedFn(inst.Remove)
+    inst.components.gemologyscanner.getscanamountfn = function() return 1 end
 end)

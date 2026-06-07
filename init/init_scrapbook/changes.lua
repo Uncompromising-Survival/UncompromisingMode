@@ -155,7 +155,7 @@ local um_specialinfo = {
     --Other stuff TODO TODO TODO
     MUSHTREE = "Petrifies at the end of its blooming season.",
     DRAGONFLY = "No longer drops scales mid-fight, instead drops all 3 on death.",
-    SHIELDOFTERROR = "Negative food stats no longer contribute for repairs.\nIncreased stats.",
+    SHIELDOFTERROR = "Negative food stats no longer contribute for repairs.\nIncreased stats.\nCan perform a special right click attack while under the Veteran's Curse.",
     KNIGHT = clockwork_str,
     BISHOP = clockwork_str,
     ROOK = clockwork_str,

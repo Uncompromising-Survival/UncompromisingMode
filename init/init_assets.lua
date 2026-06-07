@@ -467,7 +467,9 @@ local inventoryitems =
     "um_scrapper",
     "um_astral_projector",
     "um_astral_projector_target",
-    "um_blueprinting_kit"
+    "um_blueprinting_kit",
+    "um_cookpot_wagstaff_lever",
+    "um_cookpot_wagstaff_lever2"
 }
 
 local minimap_icons = {
@@ -606,9 +608,17 @@ for _, item in ipairs(scrapbook_icons) do
     RegisterScrapbookIconAtlas(GLOBAL.resolvefilepath("images/scrapbook/" .. item .. ".xml"), item .. ".tex")
 end
 
-
-
 Assets = {
+    --insight icons
+    Asset("IMAGE", "images/um_guano_rain_icon.tex"),
+    Asset("ATLAS", "images/um_guano_rain_icon.xml"),
+
+    Asset("IMAGE", "images/widowweb_icon.tex"),
+    Asset("ATLAS", "images/widowweb_icon.xml"),
+
+    Asset("IMAGE", "images/um_tornado_icon.tex"),
+    Asset("ATLAS", "images/um_tornado_icon.xml"),
+
     -- Cookbook HQ Icons
     Asset("IMAGE", "images/cookbook_beefalowings.tex"),
     Asset("ATLAS", "images/cookbook_beefalowings.xml"),
@@ -1996,4 +2006,22 @@ local limboleap_ui = {
 for _, path in ipairs(limboleap_ui) do
     table.insert(Assets, Asset("IMAGE", path .. ".tex"))
     table.insert(Assets, Asset("ATLAS", path .. ".xml"))
+end
+
+-- Craft Pot compatibility icons.
+local um_food_tags = {
+    "egg",
+    "foliage",
+    "frozen",
+    "inedible",
+    "insectoid",
+    "lice",
+    "magic",
+    "monster",
+    "plantmeat",
+    "seed",
+}
+for _, tag in ipairs(um_food_tags) do
+    table.insert(Assets, Asset("IMAGE", "images/um_food_tags/" .. tag .. ".tex"))
+    table.insert(Assets, Asset("ATLAS", "images/um_food_tags/" .. tag .. ".xml"))
 end

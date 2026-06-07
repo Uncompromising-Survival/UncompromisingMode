@@ -286,7 +286,7 @@ local function fn()
     inst.components.locomotor:SetTriggersCreep(false)
 
     if TheWorld.components.worldwind ~= nil then
-        inst:DoPeriodicTask(FRAMES, function(inst)
+        inst.movetask = inst:DoPeriodicTask(FRAMES, function(inst)
             if TheWorld.components.worldwind ~= nil then
                 local x, y, z = inst.Transform:GetWorldPosition()
                 local ang = TheWorld.components.worldwind:GetWindAngle()
@@ -302,13 +302,13 @@ local function fn()
         end)
     end
 
-    inst:DoPeriodicTask(5 + math.random(5), function(inst)
+    inst.hurttask = inst:DoPeriodicTask(5 + math.random(5), function(inst)
         local x, y, z = inst.Transform:GetWorldPosition()
         local ents = TheSim:FindEntities(x, y, z, 8, nil,
             { "INLIMBO", "playerghost", "has_gasmask", "pyromaniac", "smogimmune", "minifansuppressor", "scp049",
                 "wragonfly" }, { "player", "insect" })
         for k, v in ipairs(ents) do
-            if v.components.health ~= nil and math.random() > 0.25 then
+            if v.components.health ~= nil and not v.components.health.disable_penalty and not v.components.health.invincible and math.random() > 0.25 then
                 if v.components.oldager ~= nil or v.components.health.penalty >= TUNING.MAXIMUM_HEALTH_PENALTY - .05 or not TUNING.HEALTH_PENALTY_ENABLED then
                     v.components.health:DoDelta(-1, false, "smog")
                 elseif v:HasTag("player") then

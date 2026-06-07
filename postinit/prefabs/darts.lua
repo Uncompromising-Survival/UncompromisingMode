@@ -97,14 +97,14 @@ env.AddPrefabPostInit("blowdart_fire", function(inst)
             target.components.combat:SetTarget(attacker)
         end
     end
-    
+
     inst.entity:AddSoundEmitter()
-    
+
     inst.components.weapon:SetDamage(20)
     inst.components.weapon:SetOnAttack(fireattack)
 end)
 
-env.AddPrefabPostInit("blowdart_yellow", function(inst)
+--[[env.AddPrefabPostInit("blowdart_yellow", function(inst)
     if not TheWorld.ismastersim then
         return
     end
@@ -112,11 +112,11 @@ env.AddPrefabPostInit("blowdart_yellow", function(inst)
     local _attackfn = inst.components.weapon.onattack
     local function yellowattack(inst, attacker, target)
         if target and target:IsValid() then
-            if not target:HasAnyTag("shadowthrall", "shadow", "shadowchesspiece", "trepidation", "shadowminion", "lunarthrall_plant", "brightmare") and (target:HasTag("smallepic") or not target:HasTag("epic")) then
+            if not target:HasAnyTag("shadowthrall", "shadow", "shadowchesspiece", "trepidation", "shadowminion", "lunarthrall_plant", "brightmare", "electricdamageimmune") and (target:HasTag("smallepic") or not target:HasTag("epic")) then
                 target:AddDebuff("shockstundebuff", "shockstundebuff", {attacker = attacker})
             end
         end
         _attackfn(inst, attacker, target)
     end
     inst.components.weapon:SetOnAttack(yellowattack)
-end)
+end)]]

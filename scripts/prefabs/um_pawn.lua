@@ -14,7 +14,6 @@ local PAWN_DIVINING_DISTANCES = {{maxdist = 12, describe = "hot", pingtime = 1},
 local PAWN_DIVINING_MAXDIST = 72
 local PAWN_DIVINING_DEFAULTPING = 1.8
 local function FindClosestPart(inst)
-
     local x, y, z = inst.Transform:GetWorldPosition()
 
     local ents = TheSim:FindEntities(x, y, z, 80, {"player"}, {"playerghost"})
@@ -323,6 +322,10 @@ local function OnNewTarget(inst)
     end
 end
 
+local function ShouldAggro(inst, target)
+    return false
+end
+
 local function pawn_common(pawntype)
     local inst = CreateEntity()
     local shadow = inst.entity:AddDynamicShadow()
@@ -341,12 +344,6 @@ local function pawn_common(pawntype)
     inst.AnimState:SetBank("um_pawn")
     inst.AnimState:SetBuild("um_pawn" .. pawntype)
     inst.AnimState:PlayAnimation("idle")
-
-    inst:AddComponent("locomotor") -- locomotor must be constructed before the stategraph
-    inst.components.locomotor:SetTriggersCreep(false)
-    inst.components.locomotor.runspeed = 5.5
-    inst.components.locomotor.walkspeed = 2.5
-    inst:SetStateGraph("SGuncompromising_pawn")
 
     inst:AddTag("cavedweller")
     inst:AddTag("uncompromising_pawn")
@@ -385,6 +382,13 @@ local function pawn_common(pawntype)
     inst.components.explosive.buildingdamage = 0
     inst.components.explosive.explosivedamage = TUNING.GUNPOWDER_DAMAGE
 
+    inst:AddComponent("locomotor") -- locomotor must be constructed before the stategraph
+    inst.components.locomotor:SetTriggersCreep(false)
+    inst.components.locomotor.runspeed = 5.5
+    inst.components.locomotor.walkspeed = 2.5
+
+    inst:SetStateGraph("SGuncompromising_pawn")
+
     if inst.pawntype == "_nightmare" then
         inst.components.locomotor.runspeed = 6.5
         inst.explode_timer_count = 1
@@ -393,6 +397,8 @@ local function pawn_common(pawntype)
     
         inst:AddTag("uncompromising_nightmarepawn")
         inst.components.combat:SetRetargetFunction(1, NormalRetarget)
+    else
+        inst.components.combat:SetShouldAggroFn(ShouldAggro)
     end
 
     inst.OnEntityWake = OnWake
@@ -554,4 +560,11 @@ local function bluelight_nightmare()
     return inst
 end
 
-return Prefab("um_pawn", pawn, assets, prefabs), Prefab("um_pawn_nightmare", pawn_nightmare, assets, prefabs), Prefab("dr_hot_loop_light", redlight), Prefab("dr_warmer_loop_light", orangelight), Prefab("dr_warm_loop_2_light", yellowlight), Prefab("dr_warm_loop_1_light", bluelight), Prefab("dr_hot_loop_light_nightmare", redlight_nightmare), Prefab("dr_warmer_loop_light_nightmare", orangelight_nightmare), Prefab("dr_warm_loop_2_light_nightmare", yellowlight_nightmare), Prefab("dr_warm_loop_1_light_nightmare", bluelight_nightmare)
+return Prefab("um_pawn", pawn, assets, prefabs),
+    Prefab("um_pawn_nightmare", pawn_nightmare, assets, prefabs),
+    Prefab("dr_hot_loop_light", redlight), Prefab("dr_warmer_loop_light", orangelight),
+    Prefab("dr_warm_loop_2_light", yellowlight), Prefab("dr_warm_loop_1_light", bluelight),
+    Prefab("dr_hot_loop_light_nightmare", redlight_nightmare),
+    Prefab("dr_warmer_loop_light_nightmare", orangelight_nightmare),
+    Prefab("dr_warm_loop_2_light_nightmare", yellowlight_nightmare),
+    Prefab("dr_warm_loop_1_light_nightmare", bluelight_nightmare)

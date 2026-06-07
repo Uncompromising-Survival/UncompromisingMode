@@ -15,9 +15,9 @@ local loot =
     --"silksack",
 }
 
-local RETARGET_MUST_TAGS = {"_combat"}
-local RETARGET_CANT_TAGS = {"INLIMBO", "structure", "bird", "um_fern_fox"}
-local RETARGET_ONE_OF_TAGS = {"player"}
+local RETARGET_MUST_TAGS = { "_combat" }
+local RETARGET_CANT_TAGS = { "INLIMBO", "structure", "bird", "um_fern_fox" }
+local RETARGET_ONE_OF_TAGS = { "player" }
 local function Retarget(inst)
     if not inst.components.health:IsDead() and not inst.components.sleeper:IsAsleep() and not inst.sg:HasStateTag("attack") then
         local newtarget = FindEntity(inst, 64,
@@ -54,6 +54,12 @@ local function DoDespawn(inst)
         home.components.childspawner:GoHome(inst)
         --home.components.childspawner:StartSpawning()
         inst:AddTag("home")
+
+        if home.components.timer:TimerExists("reroll_cocoons") then
+            home.components.timer:ResumeTimer("reroll_cocoons")
+        else
+            home.components.timer:StartTimer("reroll_cocoons", TUNING.TOTAL_DAY_TIME * 5)
+        end
     else
         inst:Remove() --Hooded Widow was probably debug spawned in?
     end
@@ -77,7 +83,7 @@ local function ShouldDodge(inst)
         xtest = x + 10 * math.cos(3.14 * i / 4 + .01 * math.random(-50, 50))
         ztest = z + 10 * math.sin(3.14 * i / 4 + .01 * math.random(-50, 50))
         --SpawnPrefab("maxwell_smoke").Transform:SetPosition(xtest,y,ztest) --For testing which points widow will dodge to with visuals
-        if mindist > inst:GetDistanceSqToPoint(xtest, y, ztest) and TheWorld.Map:IsAboveGroundAtPoint(xtest, y, ztest) and #TheSim:FindEntities(xtest, y, ztest, 3, {"giant_tree"}) == 0 then --We're looking for the dodge position closest to widow
+        if mindist > inst:GetDistanceSqToPoint(xtest, y, ztest) and TheWorld.Map:IsAboveGroundAtPoint(xtest, y, ztest) and #TheSim:FindEntities(xtest, y, ztest, 3, { "giant_tree" }) == 0 then --We're looking for the dodge position closest to widow
             mindist = inst:GetDistanceSqToPoint(xtest, y, ztest)
             xnew = xtest
             znew = ztest
@@ -99,7 +105,7 @@ end
 
 local function EpicsCheck(inst) -- Widow will not tolerate being bullied by epics, you go fight them yourself!
     local x, y, z = inst.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, 20, {"epic"}, {"hoodedwidow", "leif"})
+    local ents = TheSim:FindEntities(x, y, z, 20, { "epic" }, { "hoodedwidow", "leif" })
 
     -- if inst.components.homeseeker and inst.components.homeseeker.home and inst:GetDistanceSqToInst(inst.components.homeseeker.home) > TUNING.DRAGONFLY_RESET_DIST * 20 then
     -- inst.bullier = true
@@ -120,7 +126,7 @@ local function OtherFollowSymbol(inst, other)
     other:DoTaskInTime(1, function(other) other:Remove() end) -- Give it a second before removal.
 end
 
-local edible_creatures = {"spider","aphid","hound","spider_trapdoor","spider_trapdoor_hooded"}
+local edible_creatures = { "spider", "aphid", "hound", "spider_trapdoor", "spider_trapdoor_hooded" }
 
 local function ThisIsEdible(other)
     return table.contains(edible_creatures, other.prefab)
@@ -128,7 +134,7 @@ end
 
 local function OnHitOther(inst, data)
     local other = data.target
-    if ThisIsEdible(other) then 
+    if ThisIsEdible(other) then
         if not inst.components.health:IsDead() and (not inst.sg:HasStateTag("ability") or inst.sg:HasStateTag("eating")) then
             inst.components.health:DoDelta(250)
             if not inst.sg:HasStateTag("eating") then inst.sg:GoToState("eat_small") end
@@ -203,8 +209,8 @@ local function ShakeTree(inst, tree)
     if target then
         --WebMortarCanopy(inst, target)
         -- for i = 1, 4 do
-            -- tree.SpawnDebris(tree, target, fx_loot, target)           -- FX
-            -- tree.SpawnDebris(tree, target, impact_loot, target, true) -- Watch your head
+        -- tree.SpawnDebris(tree, target, fx_loot, target)           -- FX
+        -- tree.SpawnDebris(tree, target, impact_loot, target, true) -- Watch your head
         -- end
 
         -- Enemies
@@ -223,7 +229,7 @@ local function ShakeTree(inst, tree)
 
         -- Watch your head
         -- for i = 1, 2 do
-            -- tree.SpawnDebris(tree, nil, impact_loot, home, true)
+        -- tree.SpawnDebris(tree, nil, impact_loot, home, true)
         -- end
 
         -- Enemies
@@ -240,7 +246,7 @@ local function ShakeTree(inst, tree)
 
     -- Watch your head
     -- for i = 1, 2 do
-        -- tree.SpawnDebris(tree, inst, impact_loot, nil, true)
+    -- tree.SpawnDebris(tree, inst, impact_loot, nil, true)
     -- end
 
     -- Enemies
@@ -270,15 +276,13 @@ local function ShakeTree(inst, tree)
             -- Enemies
             --tree.SpawnDebris(tree, target, minion_loot, target)
             --tree.SpawnDebris(tree, target, minion_loot, target)
-
-            
         end
     end
 end
 
 local function DecideWhatTreeToBe(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    local trees = TheSim:FindEntities(x, y, z, 50, {"giant_tree"})
+    local trees = TheSim:FindEntities(x, y, z, 50, { "giant_tree" })
     local mindist = 15 ^ 2
     for i, tree in ipairs(trees) do
         local treedist = inst:GetDistanceSqToInst(tree)
@@ -395,14 +399,14 @@ local function fn()
     inst:AddComponent("locomotor")
     inst.components.locomotor:SetSlowMultiplier(1)
     inst.components.locomotor:SetTriggersCreep(false)
-    inst.components.locomotor.pathcaps = {ignorecreep = true}
+    inst.components.locomotor.pathcaps = { ignorecreep = true }
     inst.components.locomotor.walkspeed = 3
     inst.components.locomotor.runspeed = 3
 
     ------------------
 
     inst:AddComponent("eater")
-    inst.components.eater:SetDiet({FOODTYPE.MEAT}, {FOODTYPE.MEAT})
+    inst.components.eater:SetDiet({ FOODTYPE.MEAT }, { FOODTYPE.MEAT })
     inst.components.eater:SetCanEatHorrible()
     inst.components.eater.strongstomach = true -- can eat monster meat!
 
@@ -428,8 +432,8 @@ local function fn()
     inst.combo = 1
     inst:AddComponent("timer")
     inst:ListenForEvent("timerdone", TryPowerMove)
-    UMCommonFns.RestartTimer(inst, {name = "pounce", time = 10 + math.random(-3, 1)})
-    UMCommonFns.RestartTimer(inst, {name = "mortar", time = 20 + math.random(-1, 5)})
+    UMCommonFns.RestartTimer(inst, { name = "pounce", time = 10 + math.random(-3, 1) })
+    UMCommonFns.RestartTimer(inst, { name = "mortar", time = 20 + math.random(-1, 5) })
     inst:DoPeriodicTask(3, EpicsCheck)
     inst.ShouldDodge = ShouldDodge
     inst.combosucceed = true

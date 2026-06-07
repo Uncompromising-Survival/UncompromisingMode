@@ -2,8 +2,7 @@
 local STRINGS = GLOBAL.STRINGS
 
 STRINGS.UNCOMP_TOOLTIP = {
-    AMULET =
-    "- Prevents death while worn.\n- Increased heal rate at lower health.\n- Never breaks, can be refueled with Nightmare Fuel.",
+    AMULET = "- Prevents death while worn.\n- Increased heal rate at lower health.\n- Never breaks, can be refueled with Nightmare Fuel.",
     ARMORRUINS = "- Prevents knockback effects.\n- Reduces insanity aura effects by 30%.",
     SWEATERVEST = "- Reduces insanity aura effects by 60%.",
     SKELETONHAT = "- Will not spawn the Creeping Fear when worn.",
@@ -15,7 +14,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     NIGHTLIGHT = "- Fuels itself at night by taking nearby players sanity.",
     ARMOR_SANITY = "- Reduced sanity drain on damage taken.",
     TOPHAT = "- Reduces sanity loss from various magic items.",
-    MOONDIAL = "- Fills watering cans.\n- When socketed with a Moon Tear, mutates offered items under the light of the full \"Moon\".",
+    MOONDIAL = "- Source of water for Watering Cans.", --\n- When socketed with a Moon Tear, mutates offered items under the light of the full \"Moon\".
     ARMORDRAGONFLY = "- Summons mini Lavae allies when worn.",
     FEATHERHAT = "- Provides safety from territorial Pengulls.",
     YELLOWAMULET = "- No longer breaks when empty.",
@@ -24,9 +23,9 @@ STRINGS.UNCOMP_TOOLTIP = {
     PIGGYBACK = "- No Passive -10% movement speed while worn.\n- Decreases Player speed by 1% per item held.",
     PREMIUMWATERINGCAN = "- Can contain and preserve ocean fish.",
     RAINHAT = "- Slightly increased rain protection.",
-    ARMORMARBLE = "- Prevents knockback effects.",
+    ARMORMARBLE = "- Prevents knockback effects. \n- Reduces speed by only 20%.",
     TURF_DRAGONFLY = "- Speeds up player movement.",
-    BLOWDART_YELLOW = "- Stuns certain mechanical enemies.",
+    --BLOWDART_YELLOW = "- Shocks creatures for longer.",
     DRAGONFLYCHEST = "- Has even more item slots.",
     WARDROBE = "- Can store a lot of equipment.",
     WINONA_SPOTLIGHT = "- Significantly increased range.\n- Doubled radius.",
@@ -50,7 +49,6 @@ STRINGS.UNCOMP_TOOLTIP = {
     ANTLIONHAT = "- Has infinite stack size inside.\n- Picks up nearby Turf on the ground.",
     KELPHAT = "- Wearer's wetness will slowly rise up to 33%.",
     BOAT_BUMPER_KELP_KIT = "- Spoils over time.\n- Regenerates health in water.",
-    BATHBOMB = "- Restores lost maximum health, if tossed in a certain larger spring in mainland.",
     ONEMANBAND = "- Makes pigs and bunnymen leave their houses.\n- Reduced sanity drain.",
     FIRESTAFF = "- Creates controlled fires.",
     LIGHTER = "- Recharges with embers.\n- Doesn't break at 0%.",
@@ -65,7 +63,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     ARMOR_GLASSMAIL = "- Summons spinning Glass Shards when attacking enemies.\n- Loses shards when damage is taken.",
     HONEY_LOG = "- Provides protection from Hayfever. Mostly useful for other allies.",
     SALTPACK = "- Drops piles of salt, clearing and preventing buildup of Snow Piles.",
-    SPOREPACK = "- Items inside spoil twice as fast.",
+    SPOREPACK = "- Items inside spoil twice as fast.\n- Spores are refreshed instead.",
     SLUDGE_SACK = "- It's always wet.",
     UM_BEAR_TRAP_EQUIPPABLE_TOOTH =
     "- Slows down anything it's attached to.\n- Deployable and throwable.",
@@ -104,7 +102,10 @@ STRINGS.UNCOMP_TOOLTIP = {
     UM_ICE_SICLE = "- Reaps plants and freezes enemies.\n- Lowers temperature on reaping and even more on attacking.\n- Clothing helps resist the cold.",
     JAWED_SCYTHE = "- Reaps plants.",
     HOUNDIOUS_OBSERVIOUS = "- Warns of incoming giants or hounds.",
+    BRUSH = "- Provides more domestication and obedience.",
     BEAKBASHER = "- Is a darn good hammer.",
+    UM_ASTRAL_PROJECTOR = "- Projects your body to the nearest receptionator.",
+    UM_ASTRAL_PROJECTOR_TARGET = "- Returns your body back to the projectinator.",
     UM_HAT_LEAFWING = "- Speedier when worn.\n- Can breeze through Thickets.",
     UM_FEATHER_TOTEM = "- Stays with you post-mortem.\n- Consumes feathers inside on revival for maximum\nhealth loss prevention and other special effects.",
     UM_MAGNIFIER = "- Reveals the quality of Strange Gems.\n- Discovering new Strange Gems permanently reveals the name\nand catalogues effects to the Scrapbook.",
@@ -217,8 +218,9 @@ STRINGS.ENGINEERING_TOOLTIP = {
     WINONA_UPGRADEKIT_ELECTRICAL = ""
 }
 
-
-
+if TUNING.DSTU.BATH_BOMB then
+    TOOLTIPS.BATHBOMB = "- Restores lost maximum health, if tossed in a certain larger spring in mainland."
+end
 
 if TUNING.DSTU.TELESTAFF_REWORK then
     TOOLTIPS.TELESTAFF = "- Can select its destination.\n- Increased uses for items and objects.\n- Can teleport other players without PVP enabled."
@@ -239,12 +241,12 @@ if TUNING.DSTU.FUNCAP_REWORK then
 end
 if not TUNING.DSTU.ELECTRICALMISHAP then
     TOOLTIPS.NIGHTSTICK =
-    "- No longer breaks when empty.\n- Can be fueled by various electrical items, generators, and potatoes."
+    "- Can be fueled by various electrical items, generators, and potatoes."
     TOOLTIPS.BUGZAPPER =
     "- Deals bonus damage, and area damage to Insects.\n- Deals electrical damage.\n- Can be fueled by various electrical items, generators, and potatoes."
 else
     TOOLTIPS.NIGHTSTICK =
-    "- No longer breaks when empty.\n- Functions as a portable lightning rod.\n- Regains fuel when struck by lightning or when charged at generators."
+    "- Functions as a portable lightning rod.\n- Regains fuel when struck by lightning or when charged at generators."
     TOOLTIPS.BUGZAPPER =
     "- Deals bonus damage, and area damage to Insects.\n- Deals electrical damage.\n - Can be charged at generators."
 end
@@ -433,7 +435,7 @@ if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then
 end
 
 if TUNING.DSTU.DISABLE_MEGAFLARE then
-    TOOLTIPS.MEGAFLARE = "- No longer summons Deerclops."
+    TOOLTIPS.MEGAFLARE = "- Makes the current season's boss arrive sooner."
 end
 
 

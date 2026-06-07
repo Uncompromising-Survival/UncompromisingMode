@@ -389,37 +389,61 @@ end)
 -- [ Flooded Tile Handling] -- AXE
 ---------------------------
 
---(Atoba): This should really just do something with the waterproofness of the body slot + exception for shark vest for mod compat...
---TODO: That ^
-local flood_equipment_verylow = { "trunkvest_summer", "reflectivevest" }
-local flood_equipment_low = { "armor_reed_um", "armor_windbreaker", "armor_snakeskin" }
-local flood_equipment_med = { "raincoat", "blubbersuit", "tarsuit" }
-local flood_equipment_high = { "armor_sharksuit_um" }
+--local flood_equipment_verylow = { "trunkvest_summer", "reflectivevest" }
+--local flood_equipment_low = { "armor_reed_um", "armor_windbreaker", "armor_snakeskin" }
+--local flood_equipment_med = { "raincoat", "blubbersuit", "tarsuit" }
+--local flood_equipment_high = { "armor_sharksuit_um" }
 
-local function CheckClothing(inst, table_check)
-    local body
-    if inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) then
-        body = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY).prefab
+--local function CheckClothing(inst, table_check)
+    --local body
+    --if inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) then
+        --body = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY).prefab
+    --end
+    --return (body and table.contains(table_check, body))
+--end
+
+local function GetBodyItem(inst)
+    return inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
+end
+
+local function GetBodyWetnessProtection(inst)
+    local body = GetBodyItem(inst)
+
+    if body ~= nil and body.components.waterproofer ~= nil then
+        return body.components.waterproofer:GetEffectiveness()
     end
-    return (body and table.contains(table_check, body))
+
+    return 0
 end
 
 local function AdjustSpeed(inst)
     if inst:HasAnyTag(um_flood_speed_immune_TAGS) then return end
-    local mod = 0.5 -- Nothing
-    if CheckClothing(inst, flood_equipment_high) then
-        mod = 1.2 -- Shark Vest
-    elseif CheckClothing(inst, flood_equipment_med) then
-        mod = 0.9 -- Rain Coat
-    elseif CheckClothing(inst, flood_equipment_low) then
-        mod = 0.75 -- Reed Suit
-    elseif CheckClothing(inst, flood_equipment_verylow) then
-        mod = 0.6 -- Oddballs, like summer vest
+
+    local body = GetBodyItem(inst)
+
+    if body ~= nil and body.prefab == "armor_sharksuit_um" then
+		inst.components.locomotor:SetExternalSpeedMultiplier(inst, "um_floodedwater", 1.2)
+		return
     end
+	
+    local waterproofness = GetBodyWetnessProtection(inst)
+
+    local mod = 0.5
+
+    if waterproofness >= 0.7 then
+        mod = 0.9
+    elseif waterproofness >= 0.35 then
+        mod = 0.75
+    elseif waterproofness > 0 then
+        mod = 0.6
+    end
+	
+	if inst.components.rider and inst.components.rider:IsRiding() and mod < 1 then
+		mod = (mod + 1) / 2
+	end
 
     inst.components.locomotor:SetExternalSpeedMultiplier(inst, "um_floodedwater", mod)
 end
-
 
 local no_water = { "flying", "shadow", "worm", "playerghost", "brightmare", "brightmare_gestalt" }
 
@@ -429,24 +453,28 @@ local function IsFloodWater(inst)
 end
 
 local function FloodMoistureRamp(inst)
-    if inst.components.moisture ~= nil then
-        local mod = 0 -- nothing
-        if CheckClothing(inst, flood_equipment_high) or CheckClothing(inst, flood_equipment_med) then
-            mod = 1 -- Rain coat, shark suit (full immunity)
-        elseif CheckClothing(inst, flood_equipment_low) then
-            mod = 0.75 -- Reed Suit only gain 5% of 10
-        elseif CheckClothing(inst, flood_equipment_verylow) then
-            mod = 0.5 -- Summer Vest
+	if inst.components.moisture ~= nil then
+		local body = GetBodyItem(inst)
+
+        local mod
+
+        if body ~= nil and body.prefab == "armor_sharksuit_um" then
+            mod = 1
+        else
+            mod = GetBodyWetnessProtection(inst)
         end
+
         if inst.components.burnable ~= nil and inst.components.burnable:IsBurning() then
             inst.components.burnable:Extinguish()
         end
 
-        -- On a beefalo.
-        if (inst.components.rider and inst.components.rider:IsRiding()) then
-            mod = 1
-        end
-        inst.components.moisture:DoDelta(3 * (1 - mod), true) -- 10 per second
+		local wetness_gain = 3 * (1 - mod)
+
+		if inst.components.rider and inst.components.rider:IsRiding() then
+			wetness_gain = wetness_gain * 0.5
+		end
+
+		inst.components.moisture:DoDelta(wetness_gain, true)
     end
 end
 

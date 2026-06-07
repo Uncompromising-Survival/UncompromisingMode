@@ -94,7 +94,6 @@ local special_staff = {
 }
 
 local function Attack_New(inst, action, ...)
-    inst.sg.mem.localchainattack = not action.forced or nil
     local weapon = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) or nil
     if weapon and not ((weapon:HasTag("blowdart") or weapon:HasTag("thrown") or (weapon:HasTag("rangedweapon") and not table.contains(special_staff, weapon.prefab)))) and inst:HasTag("wathom") and
         not inst.sg:HasStateTag("attack") and not (inst.components.rider and inst.components.rider:IsRiding()) then
@@ -369,10 +368,14 @@ local function IsImportantLoot(v)
 end
 
 local function MarkDontEatFoods(inst,target)
+	if target == nil or not target:IsValid() or target.Transform == nil then
+		return
+	end
+
     local x,y,z = target.Transform:GetWorldPosition()
     local loot = TheSim:FindEntities(x, y, z, 4, {"_inventoryitem"}, {"INLIMBO"})
     for i,v in ipairs(loot) do
-        if v:HasAnyTag("meat", "smallmeat", "rawmeat") and v.components.edible and not IsImportantLoot(v) then
+		if v:IsValid() and v:HasAnyTag("meat", "smallmeat", "rawmeat") and v.components.edible and not IsImportantLoot(v) then
             v.wathom_dont_eat = true
             v:DoTaskInTime(3,function(v) v.wathom_dont_eat = nil end)
         end

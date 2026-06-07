@@ -14,6 +14,22 @@ UMCommonFns.RestartTimer = function(inst, data)
     if time then timer:StartTimer(name, time, paused, initialtime_override) end
 end
 
+UMCommonFns.StartRechargeableCooldown = function(inst, data)
+    if not data then return end
+    local cooldown = data.cooldown or 5
+    local x1, y1, z1 = inst.Transform:GetWorldPosition()
+    local owner = inst.components.inventoryitem.owner
+    for i, v in pairs(TheSim:FindEntities(x1, y1, z1, 8, data.tags or {})) do
+        if v ~= inst then
+            local vowner = v.components.inventoryitem:GetGrandOwner()
+            if vowner and (vowner == owner or not vowner:HasTag("player")) or not vowner then
+                v.components.rechargeable:Discharge(cooldown)
+            end
+        end
+    end
+    inst.components.rechargeable:Discharge(cooldown)
+end
+
 UMCommonFns.KNOCKBACK_CANT_TAGS = {"fat_gang", "foodknockbackimmune", "heavybody"}
 UMCommonFns.KNOCKBACK_ARMOR_CANT_TAGS = {"heavyarmor", "knockback_protection"}
 UMCommonFns.ShouldKnockback = function(inst)
@@ -31,7 +47,7 @@ UMCommonFns.IsAlly = function(inst, guy, tags) -- Used for UMIsAlly on certain c
 end
 
 UMCommonFns.IsNotFriendly = function(attacker, target) -- Is the target an ally or my leader's ally?
-    if not target.components.health then return true end
+    if not (attacker and attacker:IsValid()) or not target.components.health then return true end
     local attackercombat = attacker and attacker.components.combat
     local leader = attacker and attacker.components.follower and attacker.components.follower:GetLeader()
     local leadercombat = leader and leader.components.combat
@@ -54,6 +70,53 @@ UMCommonFns.VetcurseUnequip = function(inst, owner, slot)
             end
         end)
         return true
+    end
+end
+
+--[[UMCommonFns.GetLMBActionIsAction = function(leftactions, action)
+    if leftactions then
+        for k, v in pairs(leftactions) do
+            if v.action == action then
+                return true
+            end
+        end
+    end
+end]]
+
+local ignoredactions = {ACTIONS.LOOKAT, ACTIONS.WALKTO}
+--[[UMCommonFns.CanOverrideAction = function(rightactions, leftactions)
+    local count = 0
+    if rightactions then
+        for k, v in pairs(rightactions) do
+            if not table.contains(ignoredactions, v.action) and not UMCommonFns.GetLMBActionIsAction(leftactions, v.action) then
+                count = count + 1
+            end
+        end
+    end
+    return count >= 1
+end]]
+
+UMCommonFns.HasRightClickAction = function(inst, doer, pos, target)
+    if inst.um_checkingactions then return true end
+    inst.um_checkingactions = true
+    local _, rmb
+    if doer.components.playeractionpicker then
+        _, rmb = doer.components.playeractionpicker:DoGetMouseActions(pos, target)
+    end
+    inst.um_checkingactions = nil
+    return rmb and not table.contains(ignoredactions, rmb.action)
+end
+
+-- Unified megaflare timer reduction used by all seasonal boss spawners
+UMCommonFns.MegaFlareTimerReduction = function(time)
+    if time > 480 * 8 then
+        return time - 480 * math.random(4, 6)
+    elseif time > 480 * 4 then
+        return time - 480 * math.random(2, 4)
+    elseif time > 480 * 2.5 then
+        return time - 480 * 2
+    else
+        return time - 240
     end
 end
 

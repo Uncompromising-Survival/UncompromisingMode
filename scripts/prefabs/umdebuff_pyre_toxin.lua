@@ -35,7 +35,7 @@ local function debuff_OnAttached(inst, target, followsymbol, followoffset, data)
 	if target ~= nil
 	and (target.components.temperature ~= nil or target.components.health ~= nil)
 	and (inst.components.debuff.name == "umdebuff_pyre_toxin_armor_wearer" or not target:HasAnyTag("pyre_toxin_immune", "plantkin", "shadowcreature", "shadow", "dragonfly",
-	 "lavae", "butterfly","wall", "structure"))
+	 "lavae", "butterfly","wall", "structure", "wragonflyminion", "rocky"))
 	and not (target:HasTag("bee") and not target:HasTag("monster"))
 	and target.prefab ~= "firehound"
 	and target.prefab ~= "lavae_pet"

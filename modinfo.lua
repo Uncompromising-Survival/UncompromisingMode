@@ -7,7 +7,7 @@ end
 
 --MAJOR.MINOR.FIX
 --INCREASE THIS VERSION
-local _version = "5.5.0"
+local _version = "5.8.1"
 
 description = [[
     󰀔 ["On The Rocks!" v1.6  (Beta ver: v]] .. _version .. [[)]
@@ -166,10 +166,8 @@ configuration_options = {
 
     Header("In Development"),
     --BinaryConfig("ck_loot", "Additional Crab King Loot",
-    --"Crab King now drops unique loot based on the gems used.\nMissing art assets.", false),
-
-    BinaryConfig("shadow_items", "Shadow Character Items",
-        "Shadow Characters drop Unique Items", false),
+        --"Crab King now drops unique loot based on the gems used.\nMissing art assets.", false),
+    BinaryConfig("nightterrors", "Night Terrors", "New Moons are accompanied by a maddening nightmare fog.\nEvents occur based on player sanity.", false),
     BinaryConfig("food_stats", "Dynamic Food Stats", "Makes crockpot dishes take into account the ingredients it was made with.\nMakes crockpot dishes unstacklable.", false),
     BinaryConfig("armorrework", "Armor Rework",
         "Armor provides significantly less protection, with higher absorption armor being weakened more than lower absorption armor.",
@@ -185,7 +183,6 @@ configuration_options = {
     --true),
     BinaryConfig("no_winter_growing_", "No Winter Growing",
         "Makes a few food sources such as Kelp and Stone Fruit not grow in Winter.", true),
-    BinaryConfig("nightterrors", "Night Terrors [EXTREMELY UNFINISHED]", "The Fog is coming.", false),
     BinaryConfig("beefalo_nerf", "Beefalo Nerf", "Players will take half of the damage that the Beefalo takes.", true),
     {
         name = "fireloot",
@@ -597,8 +594,8 @@ configuration_options = {
     -----------------------------
     Header("Items and Structures"),
     -----------------------------
-
     BinaryConfig("inventory_backpacks", "Backpacks and Alikes", "When empty, backpacks can be stored in chests and inventories.", true),
+	BinaryConfig("bath_heal", "Bath Bomb", "When used in Boilling Springs, bathing in it restores Max Health. A bit more expensive, and can only be made on Celestial Altar Tier.", true),	
     BinaryConfig("infinite_blueprints_", "Blueprints", "Blueprints are no longer consumed when reading.", false),
     BinaryConfig("funcap_fun", "Funcap Rework", "Changes Funcaps to have a bone crushing surprise, aside from Lunar Funcap.", true),
     BinaryConfig("celestialitems_revert", "Celestial Altar Item Changes", "Glass tools can not be prototyped. Recipes are more expensive.", true),
@@ -885,7 +882,7 @@ configuration_options = {
     BinaryConfig("harder_pigs", "Harder Pigs", "Pigs have a new counter and charge attack.", true),
     BinaryConfig("hungryfrogs", "Hungry Frogs", "Frogs eat anything left on the floor.", true),
     BinaryConfig("walrus", "MacTusk", "MacTusk won't return home when in combat, has a counter attack and can throw traps. His drops chances are doubled.", true),
-    BinaryConfig("mermtweaks", "Merm Tweaks", "Regular Merms can now leave their houses during winter, Merm Guards respawn slower.", true),
+    BinaryConfig("mermtweaks", "Merm Tweaks", "Regular Merms can now leave their houses during winter, Merm Guards respawn slower. Allied Merms can cross shards and disconnect with you.", true),
     BinaryConfig("sharpshooter_monkeys_", "Sharpshooter Powder Monkeys", "Powder monkeys actually aim their cannons and fire at anything they may consider 'fun' shooting at.", false),
     BinaryConfig("fiendforcedmetodothis", "Slurtle Tweaks", "Slurtles attack faster, have less health and drop Shellmets more often.", true),
     BinaryConfig("angrypenguins", "Territorial Penguins", "Penguins will aggresively defend their land.", true),

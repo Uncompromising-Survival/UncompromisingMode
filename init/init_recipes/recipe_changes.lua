@@ -153,13 +153,19 @@ AllRecipes["goggleshat"].ingredients = {
 
 AllRecipes["lantern"].level = TechTree.Create(TECH.SCIENCE_ONE)
 
+if TUNING.DSTU.BATH_BOMB then
+	AllRecipes["bathbomb"].level = TechTree.Create(TECH.CELESTIAL_THREE)
+	AllRecipes["bathbomb"].ingredients = {
+		Ingredient("moon_tree_blossom", 3),
+		Ingredient("nitre", 3)
+	}
+end
+
 AllRecipes["saddle_race"].ingredients = {
     Ingredient("livinglog", 2),
     Ingredient("silk", 4),
     Ingredient("glommerwings", 1)
 }
-
-
 
 AllRecipes["walterhat"].ingredients = {
     Ingredient("silk", 4),
@@ -271,6 +277,12 @@ if TUNING.DSTU.WOLFGANG_HUNGERMIGHTY then
 end
 
 if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then
+    AllRecipes["wathgrithr_improvedhat"].ingredients = {
+        Ingredient("wathgrithrhat", 1),
+        Ingredient("beefalowool", 3),
+        Ingredient("marble", 2),
+    }
+
     AllRecipes["battlesong_shadowaligned"] = nil
     --AllRecipes["battlesong_lunaraligned"] = nil
     --AllRecipes["battlesong_shadowaligned"].builder_skill ="wathgrithr_allegiance_lunar"  
@@ -292,7 +304,7 @@ if GetModConfigData("telestaff_rework") then
         Ingredient("nightmarefuel", 4),
         Ingredient("livinglog", 4),
         Ingredient("goldnugget", 8),
-        Ingredient("purplegem", 3)
+        --Ingredient("purplegem", 3)
     }
     --AllRecipes["telestaff"].ingredients = {
     --Ingredient("nightmarefuel", 2),

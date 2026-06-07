@@ -94,7 +94,7 @@ local function geodemain(bankbuild)
     inst:AddComponent("tradable")
 
     inst:AddComponent("workable")
-    inst.components.workable:SetWorkAction(ACTIONS.HAMMER)
+    inst.components.workable:SetWorkAction(ACTIONS.MINE)
     inst.components.workable:SetWorkLeft(TUNING.ROCK_FRUIT_MINES * inst.components.stackable.stacksize)
     --inst.components.workable:SetOnFinishCallback(on_mine)
     inst.components.workable:SetOnWorkCallback(on_mine)

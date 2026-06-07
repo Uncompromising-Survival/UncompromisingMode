@@ -68,9 +68,6 @@ RECIPE_DESC.TRINKET_6 = "A key ingredient for modern marvels."
 RECIPE_DESC.PORTABLEBOAT_ITEM = "Pack up and go!"
 RECIPE_DESC.MASTUPGRADE_WINDTURBINE_ITEM = "Full speed ahead!"
 RECIPE_DESC.CODEX_MANTRA = "Repeat after me."
-if GetModConfigData("telestaff_rework") then
-    RECIPE_DESC.TELEBASE = "Gems included."
-end
 -- sailing rebalance strings
 RECIPE_DESC.MOONSTORM_STATIC_ITEM = "The power of the moon, contained!"
 RECIPE_DESC.ALTERGUARDIANHATSHARD = "Harness the moonlight."
@@ -265,6 +262,7 @@ STRINGS.ACTIONS.UPGRADE.SOUL = "Weave"
 STRINGS.ACTIONS.USESPELLBOOK.TELESTAFF = "Select Focus"
 STRINGS.ACTIONS.WX_CHARGEFROMPOWERCELL = "Charge"
 STRINGS.ACTIONS.CASTSPELL.CHARLES_CHARGE = "Charge!"
+STRINGS.ACTIONS.CASTSPELL.UM_BEARGERCLAW = "Throw"
 STRINGS.ACTIONS.CASTSPELL.UM_SHIELD_BASH = "Shield Bash"
 STRINGS.ACTIONS.CASTSPELL.SLINGSHOT = "Shoot"
 STRINGS.ACTIONS.CASTSPELL.WIXIE_SLING = "Sling"
@@ -848,7 +846,7 @@ STRINGS.UM_LOADINGTIPS = {
     PIGGYPACK = "The Piggyback's reduced movement speed is now based on the number of stored items inside it.",
     PREMIUMWATERINGCAN = "The Waterfowl Can can store and preserve fish in it.",
     TURF_DRAGONFLY = "Scaled Flooring prevents Snow Pile buildup.",
-    BLOWDART_YELLOW = "Electric Blowdarts can stun mechanical enemies.",
+    --BLOWDART_YELLOW = "Electric Blowdarts shock creatures for longer.",
     DRAGONFLY_CHEST = "The Scaled Chest now has 25 slots total, and may kill the first Rat trying to steal from it.",
     BANDAGE = "Honey Poultice restores an additional 15 health overtime when used.",
     MULTITOOL = "The Pick/Axe creates shockwaves when used, harvesting nearby rocks/trees.",
@@ -909,8 +907,8 @@ STRINGS.UM_DESCRIPTOR = {
         PREFIX = "When applied:",
         BLUE1 = {
             "Gives summer insulation when held and freezes enemies on hit.",
-            "Gives summer insulation when held and freezes enemies on hit.\nHitting frozen enemies grants you an ice shield.",
-            "Gives summer insulation when held and freezes enemies on hit.\nHitting frozen enemies grants you an ice shield.",
+            "Gives summer insulation when held and freezes enemies on hit.\nFreezing enemies grants you an ice shield.",
+            "Gives summer insulation when held and freezes enemies on hit.\nFreezing enemies grants you an ice shield.",
         },
         BLUE2 = {
             "Converts durability into freshness. Can be fully preserved in an ice box.",
@@ -984,8 +982,8 @@ STRINGS.UM_DESCRIPTOR = {
         SLOTS_PREFIX = "Gem slots:",
         BLUE1 = {
             "Has summer insulation when held and freezes enemies on hit.",
-            "Has summer insulation when held and freezes enemies on hit.\nHitting frozen enemies grants you an ice shield.",
-            "Has summer insulation when held and freezes enemies on hit.\nHitting frozen enemies grants you an ice shield.",
+            "Has summer insulation when held and freezes enemies on hit.\nFreezing enemies grants you an ice shield.",
+            "Has summer insulation when held and freezes enemies on hit.\nFreezing enemies grants you an ice shield.",
         }, --
         BLUE2 = {
             "Has freshness instead of durability. Can be fully preserved in an ice box.",

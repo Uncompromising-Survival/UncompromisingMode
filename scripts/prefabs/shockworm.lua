@@ -29,7 +29,7 @@ local prefabs =
     "sparks",
 }
 
-local brain = require("brains/wormbrain")
+local brain = require("brains/shockwormbrain")
 
 local MAX_LIGHT_FRAME = 20
 
@@ -245,6 +245,80 @@ local function CustomOnHaunt(inst, haunter)
     return false
 end
 
+local cant_target = JoinArrays(UMCommonFns.GHOSTLIKE_TAGS, {"INLIMBO", "noattack", "invisible", "worm", "structure"})
+local function TryShockingTargets(inst)
+    local x,y,z = inst.Transform:GetWorldPosition()
+    local shocking = SpawnPrefab("um_shock_projectile")
+    shocking.Transform:SetPosition(x,y,z)
+    shocking.attacker = inst
+    -- Attack my target first
+    if inst.components.combat and inst.components.combat.target and inst.components.combat.target:IsValid() and not table.contains(inst.shock_targets,inst.components.combat.target) then
+        shocking:ForceFacePoint(inst.components.combat.target:GetPosition())
+        table.insert(inst.shock_targets,inst.components.combat.target)
+        return
+    end
+
+    -- I've attacked my target, fall back to other entities I haven't attacked yet
+    local ents = TheSim:FindEntities(x,y,z,32,{"_combat"},cant_target)
+    for i,v in ipairs(ents) do
+        if v:IsValid() then
+            shocking:ForceFacePoint(inst.components.combat.target:GetPosition())
+            table.insert(inst.shock_targets,v)
+            return
+        end
+    end
+
+    --Fallback to single target
+    if inst.components.combat and inst.components.combat.target and inst.components.combat.target:IsValid() then
+        shocking:ForceFacePoint(inst.components.combat.target:GetPosition())
+        return
+    end
+
+    -- Last Fallback
+    shocking.Transform:SetRotation(math.random(0,360))
+end
+
+
+local function TryBeginTimer(inst)
+    if not (inst.components.timer:TimerExists("prepare_shock") or inst.shocktargetpoint) then
+        inst.components.timer:StartTimer("prepare_shock",math.random(10,20))
+    end
+end
+    
+local NOTENTCHECK_CANT_TAGS = { "FX", "INLIMBO" }
+local function noentcheckfn(pt)
+    return not TheWorld.Map:IsPointNearHole(pt) and #TheSim:FindEntities(pt.x, pt.y, pt.z, 1, nil, NOTENTCHECK_CANT_TAGS) == 0
+end
+
+local preferred_rotations = {0,PI/6,-PI/6}
+local function TryDetermineShockPoint(inst)
+    if inst.components.combat and inst.components.combat.target then
+        local point = inst.components.combat.target:GetPosition()
+        local rot = inst.components.combat.target:GetRotation()
+        local offset
+        local randmult = math.random() > 0.5 and 1 or -1
+        for i,v in ipairs(preferred_rotations) do
+            if not offset then
+                offset = FindWalkableOffset(point, rot + (randmult) * v, 8, 12, false, true, noentcheckfn, true, true)
+            end
+        end
+        if offset then
+            inst.shocktargetpoint = Vector3(point.x+offset.x,0,point.z+offset.z)
+            inst.components.locomotor:SetExternalSpeedMultiplier(inst, "about_to_special_shock", 4)
+            inst:DoTaskInTime(3,function(inst)
+                inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, "about_to_special_shock")
+            end)
+
+            local current_tile = TheWorld.Map:GetTileAtPoint(inst.Transform:GetWorldPosition()) 
+            if current_tile == WORLD_TILES.UM_FLOODWATER or current_tile == WORLD_TILES.UM_FLOODWATER_GROTTO or current_tile == WORLD_TILES.UM_FLOODWATER_BROILING then
+                SpawnPrefab("splash_green").Transform:SetPosition(inst.Transform:GetWorldPosition())
+            else
+                SpawnPrefab("ground_chunks_breaking").Transform:SetPosition(inst.Transform:GetWorldPosition())
+            end
+        end
+    end
+end
+
 local function onsave(inst, data)
     if inst.from_waterhole then
         data.from_waterhole = inst.from_waterhole
@@ -376,8 +450,14 @@ local function fn()
         end
     end)
 
-    inst:AddComponent("um_electrifies_tiles")
+    inst.TryShockingTargets = TryShockingTargets
+    inst.shock_targets = {}
 
+    inst:AddComponent("timer")
+
+
+    --inst:ListenForEvent("newcombattarget",TryBeginTimer)
+    --inst:ListenForEvent("timerdone",TryDetermineShockPoint)
     return inst
 end
 

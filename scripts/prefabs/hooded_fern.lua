@@ -244,37 +244,46 @@ local function AphidStorm(inst,num,unfortunate_soul)
         local aphid = SpawnPrefab("aphid")
         aphid.Transform:SetPosition(thicket.Transform:GetWorldPosition())
         aphid.components.combat:SuggestTarget(unfortunate_soul)
-        
+
         if num > 0 then
             num = num - 1
             if not unfortunate_soul:HasTag("player") then
                 num = num - 1
             end
             thicket.cant_aphid = true
-            thicket:DoTaskInTime(3,function(thicket) thicket.cant_aphid = nil end)
+            thicket:DoTaskInTime(6,function(thicket) thicket.cant_aphid = nil end)
             inst:DoTaskInTime(0.2,function(inst) AphidStorm(thicket,num,unfortunate_soul) end)
         end
     end
 end
 
 local function GetNumAphidsWithWorldAge(age)
-    return math.clamp(math.random(age/8,age/4),4,21) -- min 4, max 21 guaranteed around 168 days in
+    return math.clamp(math.random(age/10,age/5),4,9) -- min 4, max 9 guaranteed around 90 days in. 25 days where number is always the same (4).
+end
+
+local function GetChanceAphidsWithWorldAge(age)
+    return math.clamp(100-(age/6), 85, 95) -- max .95, min .85 achieved 90 days in. 30 days where chance is the same (.95).
 end
 
 local function onnear(inst, target)
-    if inst.components.pickable and inst.components.pickable:CanBePicked() and not inst.BrushingTest and target then
-        if not (WearingThicketResist(target) or PrickAdept(target) or table.contains(TUNING.DSTU.NO_THICKET_APHIDS,target.prefab) or TheWorld.state.iswinter) then
-            if math.random() > 0.95 then
+    if inst.components.pickable and inst.components.pickable:CanBePicked() and not inst.BrushingTest and target and target.components.health ~= nil then
+        if not (WearingThicketResist(target) or PrickAdept(target) or table.contains(TUNING.DSTU.NO_THICKET_APHIDS,target.prefab)) then
+            local chance_aphids = GetChanceAphidsWithWorldAge(TheWorld.state.cycles) * .01
+            if math.random() > chance_aphids and not TheWorld.state.iswinter then
                 if not IsIslandWorld() then
                     local total_aphids = GetNumAphidsWithWorldAge(TheWorld.state.cycles)
-                    AphidStorm(inst,total_aphids,target)
-                    inst.cant_aphid = true
-                    inst:DoTaskInTime(3,function(inst) inst.cant_aphid = nil end)
+                    if not target.cant_aphid then
+                        AphidStorm(inst,total_aphids,target)
+                        inst.cant_aphid = true
+                        inst:DoTaskInTime(6,function() inst.cant_aphid = nil end)
+                        target.cant_aphid = true
+                        target:DoTaskInTime(6,function() target.cant_aphid = nil end)
+                    end
                 else
                     SpawnPrefab("snake").Transform:SetPosition(inst.Transform:GetWorldPosition())
                 end
             end
-            if not target:HasTag("EPIC") then
+            if not target:HasTag("EPIC")  then
                 target.components.locomotor:SetExternalSpeedMultiplier(target, "thicket", 0.3)
                 if not target.thicketcheck then
                     target.thicketcheck = target:DoPeriodicTask(0.1, OutOfTheWoodsYet)

@@ -60,30 +60,31 @@ local function LaunchSpit(caster, pos)
             caster.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/bearger/attack")
         end
     
-        for i = 1, biggy and 1 or 4 do 
-            local targetpos = pos
+		if not biggy then
+			for i = 1, 4 do 
+				local targetpos = Vector3(pos.x, pos.y, pos.z)
 
-            local projectile = SpawnPrefab("beargerclaw_boulder")
-            projectile.coolingtime = 8
-            projectile.Transform:SetPosition(x, y, z)
-            projectile.clawer = caster
-            
-            targetpos.x = targetpos.x + (biggy and 0 or math.random(-2, 2))
-            targetpos.z = targetpos.z + (biggy and 0 or math.random(-2, 2))
-            
-            local dx = targetpos.x - x
-            local dz = targetpos.z - z
-            
-            local rangesq = dx * dx + dz * dz
-            local maxrange = TUNING.FIRE_DETECTOR_RANGE
-            
-            local speed = easing.linear(rangesq, maxrange, 5, maxrange * maxrange)
-            projectile.components.complexprojectile:SetHorizontalSpeed(speed * 1.1)
-            projectile.components.complexprojectile:SetGravity(-35)
-            projectile.components.complexprojectile:Launch(targetpos, caster, caster)
-            projectile.components.complexprojectile:SetLaunchOffset(Vector3(1.5, 1.5, 0))
-            projectile.biggy = biggy
-        end
+				local projectile = SpawnPrefab("beargerclaw_boulder")
+				projectile.coolingtime = 8
+				projectile.Transform:SetPosition(x, y, z)
+				projectile.clawer = caster
+        
+				targetpos.x = targetpos.x + math.random(-2, 2)
+				targetpos.z = targetpos.z + math.random(-2, 2)
+        
+				local dx = targetpos.x - x
+				local dz = targetpos.z - z
+        
+				local rangesq = dx * dx + dz * dz
+				local maxrange = TUNING.FIRE_DETECTOR_RANGE
+        
+				local speed = easing.linear(rangesq, maxrange, 5, maxrange * maxrange)
+				projectile.components.complexprojectile:SetHorizontalSpeed(speed * 1.1)
+				projectile.components.complexprojectile:SetGravity(-35)
+				projectile.components.complexprojectile:Launch(targetpos, caster, caster)
+				projectile.components.complexprojectile:SetLaunchOffset(Vector3(1.5, 1.5, 0))
+			end
+		end
         
         if biggy then
             for i, v in pairs(ents) do
@@ -172,7 +173,7 @@ local function staff_fn()
     inst:AddTag("inventoryitem")
     MakeInventoryFloatable(inst)
 
-    inst.spelltype = "SCIENCE"
+    inst.spelltype = "UM_BEARGERCLAW"
 
     inst.entity:SetPristine()
     
