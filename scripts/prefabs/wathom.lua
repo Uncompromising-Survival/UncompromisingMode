@@ -532,10 +532,10 @@ local function UpdateAdrenaline(inst, data)
     elseif AmpLevel < 0.5 and not inst:HasTag("amped") then
         inst.components.combat.attackrange = item and 4 or 2
         inst.AmpDamageTakenModifier = 1
-    elseif AmpLevel >= 1 and not inst:HasTag("amped") and HasSkill(inst,"amp_3") then
+    elseif AmpLevel >= 1 and not inst:HasTag("amped") and HasSkill(inst,"amp_2") then
         Amp(inst)
         inst.AmpDamageTakenModifier = TUNING.DSTU.WATHOM_AMPED_VULNERABILITY
-    elseif AmpLevel >= 1 and not inst:HasTag("amped") and HasSkill(inst,"amp_3") then
+    elseif AmpLevel >= 1 and not inst:HasTag("amped") and HasSkill(inst,"amp_2") then
         inst.components.combat.attackrange = item and (HasSkill(inst,"amp_2") and 6 or HasSkill(inst,"amp_1") and 5) or 2
         --inst.components.health:SetAbsorptionAmount(HasSkill(inst,"amp_2") and -0.5 or HasSkill(inst,"amp_2") and -0.25 or 0)
         inst.AmpDamageTakenModifier = HasSkill(inst,"amp_2") and 2 or HasSkill(inst,"amp_1") and 1.5 or 1    

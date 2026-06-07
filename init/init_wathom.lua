@@ -397,9 +397,9 @@ local function CheckIfDead(inst, target)
             local loot = TheSim:FindEntities(x, y, z, 4, bite2MustTags, bite2CantTags, bite2MustOneOfTags)
             for i,v in ipairs(loot) do
                 if v.components.edible and not v.wathom_dont_eat and v.components.edible.healthvalue >= 0 and not v.components.inventoryitem:IsHeld() then
-                    local health_restore = v.components.edible.healthvalue*1.1
-                    local hunger_restore = v.components.edible.hungervalue*1.1
-                    local sanity_restore = v.components.edible.sanityvalue*1.1
+                    local health_restore = v.components.edible.healthvalue*1.5
+                    local hunger_restore = v.components.edible.hungervalue*1.5
+                    local sanity_restore = v.components.edible.sanityvalue*1.5
                     if (inst.components.hunger.current + hunger_restore) < inst.components.hunger.max then
                         inst.components.hunger:DoDelta(hunger_restore)
                         inst.components.health:DoDelta(health_restore)
