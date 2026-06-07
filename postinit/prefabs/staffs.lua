@@ -374,7 +374,11 @@ if env.GetModConfigData("telestaff_rework") then
 
         inst.components.spellbook:SetRequiredTag("telestaff_spellbook_user")
 
-        --inst:ListenForEvent("openspellwheel", UpdateSpells)
+        local _OpenSpellBook = inst.components.spellbook.OpenSpellBook
+        inst.components.spellbook.OpenSpellBook = function(self, user)
+            UpdateSpells(self.inst)
+            _OpenSpellBook(self,user)
+        end
         --inst:ListenForEvent("closespellwheel", UpdateSpells)
 
         if not TheWorld.ismastersim then return end
