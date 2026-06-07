@@ -599,7 +599,7 @@ InsertIngredientValues({ "fig" }, { fruit = 1 }, true, false, false)
 InsertIngredientValues({"mandrake"}, { veggie = 2 , magic = 2 }, true, false, false)
 InsertIngredientValues({"cookedmandrake"}, { veggie = 2 , magic = 2 }, false, false, false)
 
-InsertIngredientValues({ "um_meathoney" }, { sweetener = 1, meat = .5, monster = GLOBAL.TUNING.DSTU.MONSTER_MEAT_DRIED_MONSTER_VALUE }, false, false, false)
+InsertIngredientValues({ "um_meathoney" }, { sweetener = 1, meat = .5, monster = 1 }, false, false, false)
 InsertIngredientValues({ "um_meatcomb" }, { sweetener = 1, meat = .5, monster = GLOBAL.TUNING.DSTU.MONSTER_MEAT_DRIED_MONSTER_VALUE }, false, false, false)
 
 if TUNING.DSTU.NEWRECIPES then
