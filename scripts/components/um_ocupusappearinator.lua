@@ -17,11 +17,6 @@ return Class(function(self, inst)
     local function CheckForOtherOcupi(pos)
         if self:CountOcupi() > 0 then
             for guid, ent in pairs(self.ocupi) do
-                print("dist sqr", ent:GetDistanceSqToPoint(pos.x, 0, pos.z) )
-                print("min dist", 100*100)
-                print("dist?", ent:GetDistanceSqToPoint(pos.x, 0, pos.z) <= 250 * 250)
-                print("ent", ent)
-                print("isvalid", ent:IsValid())
                 if ent ~= nil and ent:IsValid() and ent:GetDistanceSqToPoint(pos.x, 0, pos.z) <= 250 * 250 then
                     return false
                 end
