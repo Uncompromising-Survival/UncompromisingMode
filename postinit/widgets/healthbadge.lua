@@ -78,6 +78,18 @@ function HealthBadge:SetIceShieldPercent(percent)
     end
 end
 
+local _SetPercent = HealthBadge.SetPercent
+function HealthBadge:SetPercent(val, max, penaltypercent, ...)
+    _SetPercent(self, val, max, penaltypercent, ...)
+    if self.topperanim ~= nil then
+        if penaltypercent < 0.25 then
+            self.topperanim:GetAnimState():SetMultColour(0.25, 0.25, 0.25, 1)
+        else
+            self.topperanim:GetAnimState():SetMultColour(0, 0, 0, 1)
+        end
+    end
+end
+
 local _ctor = HealthBadge._ctor
 function HealthBadge:_ctor(owner, art, iconbuild)
     _ctor(self, owner, art, iconbuild)
