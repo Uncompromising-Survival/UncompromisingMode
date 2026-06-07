@@ -225,6 +225,7 @@ local function DetachCurse(inst)
 end
 
 UMVetCurse.ToggleVetCurse = function(inst, toggle)
+    if toggle and inst.vetcurse or not toggle and not inst.vetcurse then return end
     if toggle then
         AttachCurse(inst)
     else

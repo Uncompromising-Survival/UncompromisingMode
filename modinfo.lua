@@ -157,6 +157,7 @@ configuration_options = {
         default = "blue",
         client = true
     },
+    BinaryConfig("ui_healthpenalty_grey", "Grey Health Penalty", "Color/Colour Health Penalty as grey when below 25%.", true, true),
 
     SkipSpace(),
 
@@ -230,7 +231,7 @@ configuration_options = {
         "Veteran's curse is an optional difficulty mode, which increases risk & reward.",
         options = {
             { description = "Default", data = "default" }, { description = "Always On", data = "always" },
-            { description = "Off",     data = "off" } },
+            { description = "Off", data = "off" } },
         default =
         "default"
     },

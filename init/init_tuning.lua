@@ -466,6 +466,7 @@ TUNING.DSTU = {
     UI_VETCURSE = GetModConfigData("ui_showvetcurse", true),
     UI_SHOWMULTIPRODUCTS = GetModConfigData("ui_showmultiproducts", true),
     UI_SHOWMULTIPRODUCTS_FONT = GetModConfigData("ui_showmultiproducts_font", true),
+    UI_HEALTHPENALTY_GREY = GetModConfigData("ui_healthpenalty_grey", true),
 
     -- boss hp qol
 
