@@ -93,9 +93,6 @@ function HealthBadge:OnGainFocus()
     if self.iceshieldpercent and self.iceshieldpercent > 0 then
         self.iceshieldnum:Show()
     end
-    if self.penaltynum and self.penaltypercent > 0 then
-        self.penaltynum:Show()
-    end
 
     local has_combinedstatus = GetModName("Combined Status")
 
@@ -116,9 +113,6 @@ function HealthBadge:OnLoseFocus()
             self.iceshieldnum:Hide()
         end
     end
-    if self.penaltynum then
-        self.penaltynum:Hide()
-    end
 end
 
 function HealthBadge:SetIceShieldPercent(percent)
@@ -131,8 +125,6 @@ end
 local _SetPercent = HealthBadge.SetPercent
 function HealthBadge:SetPercent(val, max, penaltypercent, ...)
     _SetPercent(self, val, max, penaltypercent, ...)
-    self.penaltypercent = penaltypercent
-    self.penaltynum:SetString("-" .. tostring(penaltypercent * 100) .. "%")
 
     if self.topperanim ~= nil then
         if penaltypercent < 0.25 then
@@ -147,12 +139,4 @@ local _ctor = HealthBadge._ctor
 function HealthBadge:_ctor(owner, art, iconbuild)
     _ctor(self, owner, art, iconbuild)
     self:AddIceShield()
-
-    self.penaltynum = self:AddChild(Text(BODYTEXTFONT, 33))
-    self.penaltynum:SetHAlign(ANCHOR_MIDDLE)
-    self.penaltynum:SetScale(.5, .5)
-    self.penaltynum:SetPosition(3, 35, 0)
-    self.penaltynum:SetColour(1, 0.2, 0.2, 1)
-
-    self.penaltynum:Hide()
 end
