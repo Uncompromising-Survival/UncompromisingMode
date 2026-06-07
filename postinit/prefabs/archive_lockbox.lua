@@ -69,6 +69,12 @@ end]]
                     player.components.inventory:GiveItem(SpawnPrefab(recipe2 .. "_blueprint"))
                 end
             end
+            if player:HasTag("wathom") then
+                TheGenericKV:SetKV("wathom_smarted", "1") --Serious name later on release
+                player:DoTaskInTime(5.2 ,function()
+                    player.components.talker:Say(GetString(player, "ANNOUNCE_ARCHIVE_NEW_KNOWLEDGE"), nil, true) --"Your knowledge, my pursuit. Must learn all there is."
+                end)
+            end
         end
         _teach(inst)
     end
@@ -122,6 +128,9 @@ local function Giveknowledge(inst)
 				player.components.talker:Say(GetString(player, they_know and "ANNOUNCE_ARCHIVE_NEW_KNOWLEDGE" or "ANNOUNCE_ARCHIVE_OLD_KNOWLEDGE" ), nil, true)
 			end
 		end
+        if player:HasTag("wathom") then
+            SendRPCToClient(CLIENT_RPC.UpdateAccomplishment, player.userid, "wathom_smarted") --Serious name later on release
+        end
 	end
 end
 

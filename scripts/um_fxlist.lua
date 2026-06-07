@@ -24,7 +24,7 @@ local fxlist = {
         anim = "idle1",
         nofaced = true,
         fn = function(inst)
-            inst.AnimState:SetDeltaTimeMultiplier(.8)
+            inst.AnimState:SetDeltaTimeMultiplier(.85)
         end,
     },
 }

@@ -320,14 +320,20 @@ AddStategraphPostInit("wilsonghost", function(inst)
                 fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
                 fx.Transform:SetScale(1.2, 1.2, 1.2)
             end
-            
+ 
             if HasSkill(inst,"bark_mastery") then
                 SpreadGoo(inst,1)
             end
             local x,y,z = inst.Transform:GetWorldPosition()
             local ents = GLOBAL.TheSim:FindEntities(x, y, z, 8) --added playertags because of the taunt.
+            local RESSURECT_PREFABS = {"multiplayer_portal", "wathom_corpse", "lifeamulet", "ancient_amulet_red", "resurrectionstone", "cave_exit"}
             for i, v in ipairs(ents) do
-                if v.components.hauntable ~= nil and v.prefab ~= "wathom_corpse" and v.prefab ~= "lifeamulet" and v.prefab ~= "ancient_amulet_red" and v.prefab ~= "resurrectionstone" then
+                if v.components.hauntable ~= nil --[[and v.prefab ~= "wathom_corpse" and v.prefab ~= "lifeamulet" and v.prefab ~= "ancient_amulet_red" and v.prefab ~= "resurrectionstone"]] then
+                    for _, prefab in pairs(RESSURECT_PREFABS) do
+                        if v.prefab == prefab then
+                            return
+                        end
+                    end
                     AddEnemyDebuffFx("battlesong_instant_panic_fx", v)
                     v.components.hauntable:DoHaunt(inst)
                     if HasSkill(inst,"wathom_friends_1") then
@@ -340,7 +346,7 @@ AddStategraphPostInit("wilsonghost", function(inst)
     end
 
     inst.states["haunt_pre"].onenter = NewOnEnter
-    
+
     local _haunt = inst.states["haunt"].onenter
     local function NewOnEnter(inst, ...)
         _haunt(inst, ...)
@@ -387,19 +393,20 @@ local bite2CantTags = {"INLIMBO"}
 local bite2MustOneOfTags = {"meat", "smallmeat", "rawmeat"}
 local function CheckIfDead(inst, target)
     if (target and target.components.health and target.components.health:IsDead() and target:IsValid()) and not (target:HasAnyTag("soulless", "wall")) then
-        local bite_heal_mod = target:HasTag("epic") and 10 or 1
+        local bite_heal_mod = target:HasTag("epic") and 5 or target:HasTag("insect", "smallcreature", "prey", "bird", "spider", "raidrat") and .5 or 1
         if HasSkill(inst,"bite_mastery") and inst.components.health then
             inst.components.health:DeltaPenalty(-.01 * bite_heal_mod)
         end
-        inst.components.health:DoDelta(4 * bite_heal_mod)
+        inst.components.health:DoDelta(8 * bite_heal_mod)
         if HasSkill(inst,"bite_2") then
             local x,y,z = target.Transform:GetWorldPosition()
             local loot = TheSim:FindEntities(x, y, z, 4, bite2MustTags, bite2CantTags, bite2MustOneOfTags)
             for i,v in ipairs(loot) do
                 if v.components.edible and not v.wathom_dont_eat and v.components.edible.healthvalue >= 0 and not v.components.inventoryitem:IsHeld() then
-                    local health_restore = v.components.edible.healthvalue*1.25
-                    local hunger_restore = v.components.edible.hungervalue*1.25
-                    local sanity_restore = v.components.edible.sanityvalue*1.25
+                    local value_bonus = HasSkill(inst,"bite_2") and 1.5 or 1.25
+                    local health_restore = v.components.edible.healthvalue * value_bonus
+                    local hunger_restore = v.components.edible.hungervalue * value_bonus
+                    local sanity_restore = v.components.edible.sanityvalue * value_bonus
                     if (inst.components.hunger.current + hunger_restore) < inst.components.hunger.max then
                         inst.components.hunger:DoDelta(hunger_restore)
                         inst.components.health:DoDelta(health_restore)
@@ -1414,9 +1421,8 @@ local function oneatenfn(inst, eater)
             eater.fuelleaking:Cancel()
             eater.fuelleaking = nil
         end
-        eater.components.talker:Say(GetString(eater, "ANNOUNCE_POCKETWATCH_MARK"))
     end)
-    TheGenericKV:SetKV("wathom_yummy", "1")
+    SendRPCToClient(CLIENT_RPC.UpdateAccomplishment, eater.userid, "wathom_yummy")
 end
 
 AddPrefabPostInit("shadowheart", function(inst)

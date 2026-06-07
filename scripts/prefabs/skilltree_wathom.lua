@@ -301,26 +301,26 @@ local function BuildSkillsData(SkillTreeFns)
         },
 
         -- Overwhelming Presence Path
-        wathom_friends_1 = {
-            title = STRINGS.SKILLTREE.WATHOM.WATHOM_FRIENDS_1_TITLE,
-            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_FRIENDS_1_DESC,
-            icon = "wathom_friends_1",
+        digitigrade_1 = {
+            title = STRINGS.SKILLTREE.WATHOM.DIGITIGRADE_1_TITLE,
+            desc = STRINGS.SKILLTREE.WATHOM.DIGITIGRADE_1_DESC,
+            icon = "wathom_digitigrade_1",
             pos = {-214+38*4+38/2,58},
-            group = "rally",
-            tags = {"rally"},
+            --pos = {0,-1},
+            group = "digitigrade",
+            tags = {"digitigrade"},
             root = true,
             connects = {
-                "wathom_friends_2",
+                "digitigrade_2",
             },
         },
-
-        wathom_friends_2 = {
-            title = STRINGS.SKILLTREE.WATHOM.WATHOM_FRIENDS_2_TITLE,
-            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_FRIENDS_2_DESC,
-            icon = "wathom_friends_2",
+        digitigrade_2 = {
+            title = STRINGS.SKILLTREE.WATHOM.DIGITIGRADE_2_TITLE,
+            icon = "wathom_digitigrade_2",
             pos = {-214+38*4+38/2,58+38},
-            group = "rally",
-            tags = {"rally"},
+            desc = STRINGS.SKILLTREE.WATHOM.DIGITIGRADE_2_DESC,
+            group = "digitigrade",
+            tags = {"digitigrade"},
         },
 
         rampage_1 = {
@@ -353,7 +353,7 @@ local function BuildSkillsData(SkillTreeFns)
             tags = {"lock"},
             root = true,
             lock_open = function(prefabname, activatedskills, readonly)
-                if SkillTreeFns.CountTags(prefabname, "rampage", activatedskills) >= 2 and SkillTreeFns.CountTags(prefabname, "rally", activatedskills) >= 2 then
+                if SkillTreeFns.CountTags(prefabname, "rampage", activatedskills) >= 2 and SkillTreeFns.CountTags(prefabname, "digitigrade", activatedskills) >= 2 then
                     return true
                 end
             end,
@@ -372,6 +372,28 @@ local function BuildSkillsData(SkillTreeFns)
         },
 
         --Miscellaneous Skills
+        wathom_friends_1 = {
+            title = STRINGS.SKILLTREE.WATHOM.WATHOM_FRIENDS_1_TITLE,
+            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_FRIENDS_1_DESC,
+            icon = "wathom_friends_1",
+            pos = {204-22+2-50,58-38},
+            group = "rally",
+            tags = {"rally"},
+            root = true,
+            connects = {
+                "wathom_friends_2",
+            },
+        },
+
+        wathom_friends_2 = {
+            title = STRINGS.SKILLTREE.WATHOM.WATHOM_FRIENDS_2_TITLE,
+            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_FRIENDS_2_DESC,
+            icon = "wathom_friends_2",
+            pos = {204-22+2-50,58},
+            group = "rally",
+            tags = {"rally"},
+        },
+
         wathom_magics = {
             title = STRINGS.SKILLTREE.WATHOM.WATHOM_MAGICS_TITLE,
             desc = STRINGS.SKILLTREE.WATHOM.WATHOM_MAGICS_DESC,
@@ -393,28 +415,6 @@ local function BuildSkillsData(SkillTreeFns)
             group = "ampfuel",
             tags = {"ampfuel", "artifacts"},
             --root = true,
-        },
-
-        digitigrade_1 = {
-            title = STRINGS.SKILLTREE.WATHOM.DIGITIGRADE_1_TITLE,
-            desc = STRINGS.SKILLTREE.WATHOM.DIGITIGRADE_1_DESC,
-            icon = "wathom_digitigrade_1",
-            pos = {204-22+2-50,58-38},
-            --pos = {0,-1},
-            group = "digitigrade",
-            tags = {"digitigrade"},
-            root = true,
-            connects = {
-                "digitigrade_2",
-            },
-        },
-        digitigrade_2 = {
-            title = STRINGS.SKILLTREE.WATHOM.DIGITIGRADE_2_TITLE,
-            icon = "wathom_digitigrade_2",
-            pos = {204-22+2-50,58},
-            desc = STRINGS.SKILLTREE.WATHOM.DIGITIGRADE_2_DESC,
-            group = "digitigrade",
-            tags = {"digitigrade"},
         },
 
         -- Abyssal Terror Alignment
@@ -620,7 +620,7 @@ local function BuildSkillsData(SkillTreeFns)
         },
 
         wathom_allegiance_lock_3 = {
-            desc = STRINGS.SKILLTREE.ALLEGIANCE_LOCK_3_DESC,
+            desc = STRINGS.SKILLTREE.WATHOM.ALLEGIANCE_ANCIENT_LOCK_DESC,
             pos = {204+22+2-50,176-38},
             --pos = {0,-1},
             group = "allegiance",
@@ -631,7 +631,7 @@ local function BuildSkillsData(SkillTreeFns)
                     return "question"
                 end
 
-                return TheGenericKV:GetKV("celestialchampion_killed") == "1"
+                return TheGenericKV:GetKV("wathom_smarted") == "1"
             end,
             connects = {
                 "wathom_allegiance_neutral",

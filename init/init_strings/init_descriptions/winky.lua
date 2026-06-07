@@ -7,9 +7,9 @@ DESCRIBE = STRINGS.CHARACTERS.WINKY.DESCRIBE
 ACTIONFAIL = STRINGS.CHARACTERS.WINKY.ACTIONFAIL
 
 --	[ 		Winky Descriptions		]   --
-ANNOUNCE.START_RAT_ORDER = "Go get me more stuff!"
-ANNOUNCE.STOP_RAT_ORDER = "You can stop for now."
-ANNOUNCE.FAIL_RAT_ORDER = "Where is everyone?"
+ANNOUNCE.START_RAT_ORDER = "Go get me more stuff!" -- only_used_by_winky
+ANNOUNCE.STOP_RAT_ORDER = "You can stop for now." -- only_used_by_winky
+ANNOUNCE.FAIL_RAT_ORDER = "Where is everyone?" -- only_used_by_winky
 ANNOUNCE.DREADEYE_SPOOKED = "Wah! What is that?!"
 ANNOUNCE.ANNOUNCE_HARDCORE_RES = "Grah! This heart is mine, not yours."
 ANNOUNCE.ANNOUNCE_WINONAGEN = "Useless machine"
