@@ -304,25 +304,13 @@ if GetModConfigData("wathgrithr_rework_") == 1 then
     AllRecipes["battlesong_lunaraligned"] = nil
 end
 
-if GetModConfigData("telestaff_rework") then
-    AllRecipes["telebase"].ingredients = {
-        Ingredient("nightmarefuel", 4),
-        Ingredient("livinglog", 4),
-        Ingredient("goldnugget", 8),
-        Ingredient("purplegem", 3)
-    }
-    --AllRecipes["telestaff"].ingredients = {
-    --Ingredient("nightmarefuel", 2),
-    --Ingredient("spear", 1),
-    --Ingredient("purplegem", 1)
-    --}
-    AllRecipes["purpleamulet"].ingredients = {
+
+AllRecipes["purpleamulet"].ingredients = {
         Ingredient("goldnugget", 3),
         Ingredient("nightmarefuel", 2),
         Ingredient("purplegem", 1)
-    }
-end
-
+}
+    
 if GetModConfigData("longpig") then
     local ghostlyelixir_fastregen = AllRecipes["ghostlyelixir_fastregen"]
     ghostlyelixir_fastregen.ingredients = {Ingredient("ghostflower", 3)}
@@ -1710,9 +1698,6 @@ STRINGS.RECIPE_DESC.TRINKET_6 = "A key ingredient for modern marvels."
 STRINGS.RECIPE_DESC.PORTABLEBOAT_ITEM = "Pack up and go!"
 STRINGS.RECIPE_DESC.MASTUPGRADE_WINDTURBINE_ITEM = "Full speed ahead!"
 STRINGS.RECIPE_DESC.CODEX_MANTRA = "Repeat after me."
-if GetModConfigData("telestaff_rework") then
-    STRINGS.RECIPE_DESC.TELEBASE = "Now with 100% less gold!"
-end
 -- sailing rebalance strings
 STRINGS.RECIPE_DESC.MOONSTORM_STATIC_ITEM = "The power of the moon, contained!"
 STRINGS.RECIPE_DESC.ALTERGUARDIANHATSHARD = "Harness the moonlight."
