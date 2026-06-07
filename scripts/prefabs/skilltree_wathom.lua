@@ -71,18 +71,32 @@ local function PissOfGestalts(inst)
     CheckForMORE(inst)
 end
 
+local WARNING_MUST_TAGS = {"_health", "_combat"}
+local WARNING_MUST_NOT_TAGS = {"player", "wall", "soulless"}
+
 local function ShowLowHealth(inst)
-    local WARNING_MUST_TAGS = {"_health", "_combat"}
-    local WARNING_MUST_NOT_TAGS = {"player", "wall", "soulless"}
     local x,y,z = inst.Transform:GetWorldPosition()
     local creatures = TheSim:FindEntities(x, y, z, 24, WARNING_MUST_TAGS, WARNING_MUST_NOT_TAGS)
     for i,creature in ipairs(creatures) do
-        if creature.components.combat and creature.components.health then
-            if (creature.components.health:GetPercent() <= 0.3 and not creature:HasTag("epic")) or (creature.components.health:GetPercent() <= 0.1 and creature:HasTag("epic")) then
-                local fx = SpawnPrefab("reticuleaoewinonaengineeringping") --reticuleaoewinonaengineeringping or some Forge thing or wurt_tentacle_warning
-                fx.entity:SetParent(creature.entity)
-            end
+        if creature.components.health and not creature.components.health:IsDead()
+            and (creature.components.health:GetPercent() <= 0.3 and not creature:HasTag("epic"))
+            or (creature.components.health:GetPercent() <= 0.1 and creature:HasTag("epic")) then
+            local fx = SpawnPrefab("wathom_wound_vfx")
+            fx.Transform:SetScale(1.3,1.3,1.3)
+            fx.entity:SetParent(creature.entity)
+            fx.Network:SetClassifiedTarget(inst)
         end
+    end
+end
+
+local function ShowLowHealth_OnAttack(inst, data)
+    if data.target and data.target.components.health and not data.target.components.health:IsDead()
+        and data.target:HasAnyTag(WARNING_MUST_TAGS) and not data.target:HasAnyTag(WARNING_MUST_NOT_TAGS)
+        and (data.target.components.health:GetPercent() <= 0.3 and not data.target:HasTag("epic"))
+        or (data.target.components.health:GetPercent() <= 0.1 and data.target:HasTag("epic")) then
+        local fx = SpawnPrefab("wathom_wound_vfx")
+        fx.entity:SetParent(data.target.entity)
+        fx.Network:SetClassifiedTarget(inst)
     end
 end
 
@@ -97,7 +111,7 @@ local function BuildSkillsData(SkillTreeFns)
             tags = {"rampage"},
             pos = {-214+38+38+38+38,58},
             --pos = {1,-3},
-            --root = true,
+            root = true,
             connects = {
                 "rampage_2",
             },
@@ -198,7 +212,7 @@ local function BuildSkillsData(SkillTreeFns)
             --pos = {0,-1},
             group = "digitigrade",
             tags = {"digitigrade"},
-            --root = true,
+            root = true,
             connects = {
                 "digitigrade_2",
             },
@@ -218,20 +232,22 @@ local function BuildSkillsData(SkillTreeFns)
             desc = STRINGS.SKILLTREE.WATHOM.BITE_1_DESC,
             icon = "wathom_bite_1",
             onactivate = function(inst, fromload)
-                --inst.watch_healthtask = inst:DoPeriodicTask(3,ShowLowHealth)
+                inst.watch_healthtask = inst:DoPeriodicTask(4,ShowLowHealth)
+                inst:ListenForEvent("onattackother", ShowLowHealth_OnAttack)
                 inst.components.combat:SetDefaultDamage(TUNING.UNARMED_DAMAGE+2.5)
             end,
             ondeactivate = function(inst, fromload)
-                --[[if inst.watch_healthtask then
+                if inst.watch_healthtask then
                     inst.watch_healthtask:Cancel()
                     inst.watch_healthtask = nil
-                end]]
+                end
+                inst:RemoveEventCallback("onattackother", ShowLowHealth_OnAttack)
                 inst.components.combat:SetDefaultDamage(TUNING.UNARMED_DAMAGE)
             end,
             pos = {-214+38+38,58},
             group = "bite",
             tags = {"bite"},
-            --root = true,
+            root = true,
             connects = {
                 "bite_2",
             },
@@ -275,7 +291,7 @@ local function BuildSkillsData(SkillTreeFns)
             pos = {-214+38,58},
             group = "echo",
             tags = {"echo"},
-            --root = true,
+            root = true,
             onactivate = function(inst, fromload)
                 inst:AddTag("echolocation")
                 if not inst.wathom_mapexplorerbonus then
@@ -406,7 +422,7 @@ local function BuildSkillsData(SkillTreeFns)
             },
         },
         
-        wathom_amp_lock = {
+        --[[wathom_amp_lock = {
             desc = STRINGS.SKILLTREE.WATHOM.WATHOM_AMP_LOCK,
             pos = {-214+38+38+38/2,58-38},
             --pos = {0.5,0},
@@ -438,7 +454,7 @@ local function BuildSkillsData(SkillTreeFns)
             connects = {
                 "wathom_magics","wathom_friends_1"
             },
-        },
+        },]]
 
         wathom_magics = {
             title = STRINGS.SKILLTREE.WATHOM.WATHOM_MAGICS_TITLE,
@@ -447,7 +463,7 @@ local function BuildSkillsData(SkillTreeFns)
             pos = {38,25+38},
             group = "ampfuel",
             tags = {"ampfuel"},
-            --root = true,
+            root = true,
             connects = {
                 "wathom_artifacts",
             },
@@ -460,7 +476,6 @@ local function BuildSkillsData(SkillTreeFns)
             pos = {38+38,25+38},
             group = "ampfuel",
             tags = {"ampfuel"},
-            --root = true,
         },
         
         wathom_friends_1 = {
@@ -470,7 +485,7 @@ local function BuildSkillsData(SkillTreeFns)
             pos = {38,25},
             group = "rally",
             tags = {"rally"},
-            --root = true,
+            root = true,
             connects = {
                 "wathom_friends_2",
             },
