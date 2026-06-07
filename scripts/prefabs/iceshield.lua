@@ -21,7 +21,7 @@ end
 
 local function ShouldRecoilIceShield(inst, attacker, weapon, damage)
     local shouldrecoil = inst:HasTag("ice_shielded") and not ShouldWeaponPierce(inst, weapon, attacker)
-    if shouldrecoil and attacker and attacker.components.talker then
+    if shouldrecoil and attacker and attacker.components.talker and attacker:HasTag("player") then
         attacker.components.talker:Say(GetString(attacker, "ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD"))
     end
     return shouldrecoil, (ShouldWeaponPierce(inst, weapon, attacker) or not inst:HasTag("ice_shielded")) and damage or damage and damage / 2 or nil
@@ -63,6 +63,9 @@ local function Init(inst, parent, fx_symbol, tier)
                 if cause == "fire" then
                     amount = amount * 10
                     SpawnPrefab("washashore_puddle_fx").Transform:SetPosition(parent.Transform:GetWorldPosition())
+                    if inst._parent.components.moisture then
+                        inst._parent.components.moisture:DoDelta(math.abs(amount/10))
+                    end
                 end
 
                 inst.components.health:DoDelta(amount, overtime, cause, ...)
@@ -126,10 +129,23 @@ local function fn()
     --inst.components.health.externalfiredamagemultipliers:SetModifier(inst, 10)
     --this doesn't work as expected. It never actually gets fire damaged directly. fire damage mults are on the redirect.
 
-    inst:DoPeriodicTask(2.5, function(inst)
-        if inst.components.health:GetPercent() < 1 then
-            inst.components.health:DoDelta(1 * inst.tier)
+    inst.regen_task = inst:DoPeriodicTask(2.5, function(inst)
+        local temperature_scale = Lerp(2, -2, TheWorld.state.temperature / 80)
+        print("temperature scale", temperature_scale)
+        local value = 1 * inst.tier * temperature_scale
+        print("value", value)
+        if value < 0 then
+            local fx = SpawnPrefab("washashore_puddle_fx")
+            local scale = math.abs(1 * inst.tier * temperature_scale) / 2
+            fx.Transform:SetPosition(inst._parent.Transform:GetWorldPosition())
+            fx.Transform:SetScale(scale, scale, scale)
+
+            if inst._parent.components.moisture then
+                inst._parent.components.moisture:DoDelta(math.abs(value))
+            end
         end
+
+        inst.components.health:DoDelta(value)
     end)
 
     inst.Init = Init

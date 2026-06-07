@@ -877,9 +877,9 @@ AddUMGemDef("bluegem1", {
             if target.components.freezable then
                 target.components.freezable:AddColdness(0.15 * tier)
                 target.components.freezable:SpawnShatterFX()
-                if target.sg and target.sg:HasStateTag("frozen") and math.random() < (tier - 1) * 0.25 and tier ~= 1 then
-                    local iceShield = SpawnPrefab("um_ice_shield")
-                    iceShield:Init(attacker, "swap_body", .25 + (tier * 0.125))
+                if target.components.freezable:IsFrozen() and tier ~= 1 then
+                    local ice_shield = SpawnPrefab("um_ice_shield")
+                    ice_shield:Init(attacker, "swap_body", .25 + (tier * 0.125))
                 end
                 DamageInfiniteItemGem("bluegem1", item, GENERIC_GEM_USES)
             end
