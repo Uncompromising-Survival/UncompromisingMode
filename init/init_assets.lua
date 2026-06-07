@@ -609,6 +609,16 @@ for _, item in ipairs(scrapbook_icons) do
 end
 
 Assets = {
+    --insight icons
+    Asset("IMAGE", "images/um_guano_rain_icon.tex"),
+    Asset("ATLAS", "images/um_guano_rain_icon.xml"),
+
+    Asset("IMAGE", "images/widowweb_icon.tex"),
+    Asset("ATLAS", "images/widowweb_icon.xml"),
+
+    Asset("IMAGE", "images/um_tornado_icon.tex"),
+    Asset("ATLAS", "images/um_tornado_icon.xml"),
+
     -- Cookbook HQ Icons
     Asset("IMAGE", "images/cookbook_beefalowings.tex"),
     Asset("ATLAS", "images/cookbook_beefalowings.xml"),
@@ -761,6 +771,8 @@ Assets = {
 
     Asset("IMAGE", "bigportraits/wathom_triumphant.tex"),
     Asset("ATLAS", "bigportraits/wathom_triumphant.xml"),
+
+    Asset("ANIM", "anim/wathom_wound_vfx.zip"),
 
     -- ITS WIXIE!!! (Also walter...)
 

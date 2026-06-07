@@ -532,10 +532,10 @@ local function UpdateAdrenaline(inst, data)
     elseif AmpLevel < 0.5 and not inst:HasTag("amped") then
         inst.components.combat.attackrange = item and 4 or 2
         inst.AmpDamageTakenModifier = 1
-    elseif AmpLevel >= 1 and not inst:HasTag("amped") and HasSkill(inst,"amp_3") then
+    elseif AmpLevel >= 1 and not inst:HasTag("amped") and HasSkill(inst,"amp_2") then
         Amp(inst)
         inst.AmpDamageTakenModifier = TUNING.DSTU.WATHOM_AMPED_VULNERABILITY
-    elseif AmpLevel >= 1 and not inst:HasTag("amped") and HasSkill(inst,"amp_3") then
+    elseif AmpLevel >= 1 and not inst:HasTag("amped") and HasSkill(inst,"amp_2") then
         inst.components.combat.attackrange = item and (HasSkill(inst,"amp_2") and 6 or HasSkill(inst,"amp_1") and 5) or 2
         --inst.components.health:SetAbsorptionAmount(HasSkill(inst,"amp_2") and -0.5 or HasSkill(inst,"amp_2") and -0.25 or 0)
         inst.AmpDamageTakenModifier = HasSkill(inst,"amp_2") and 2 or HasSkill(inst,"amp_1") and 1.5 or 1    
@@ -687,6 +687,16 @@ local function WathomWarnsEarly(inst, threattype)
     inst.owner.components.talker:Say("Others can't hear, "..threattype.." is coming.")
 end
 
+local AMP_TAGS = {"amped", "deathamp"}
+
+local function CanSleepInBagFn(wathom, bed)
+    if not wathom:HasAnyTag(AMP_TAGS) then
+        return true
+    else
+        return false, "ANNOUNCE_NOHUNGERSLEEP"
+    end
+end
+
 -- This initializes for the server only. Components are added here.
 local function master_postinit(inst)
     --    inst.components.sanity:EnableLunacy(true, "wathomlunacy")
@@ -723,6 +733,8 @@ local function master_postinit(inst)
     inst.components.health:SetMaxHealth(TUNING.WATHOM_HEALTH)
     inst.components.hunger:SetMax(TUNING.WATHOM_HUNGER)
     inst.components.sanity:SetMax(TUNING.WATHOM_SANITY)
+
+    inst.components.sleepingbaguser:SetCanSleepFn(CanSleepInBagFn)
 
     --    inst.components.sanity.neg_aura_absorb = TUNING.ARMOR_HIVEHAT_SANITY_ABSORPTION -- Reverses insanity auras and reduces by 50%
 

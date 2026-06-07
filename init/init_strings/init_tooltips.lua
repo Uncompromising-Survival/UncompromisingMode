@@ -63,7 +63,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     ARMOR_GLASSMAIL = "- Summons spinning Glass Shards when attacking enemies.\n- Loses shards when damage is taken.",
     HONEY_LOG = "- Provides protection from Hayfever. Mostly useful for other allies.",
     SALTPACK = "- Drops piles of salt, clearing and preventing buildup of Snow Piles.",
-    SPOREPACK = "- Items inside spoil twice as fast.",
+    SPOREPACK = "- Items inside spoil twice as fast.\n- Spores are refreshed instead.",
     SLUDGE_SACK = "- It's always wet.",
     UM_BEAR_TRAP_EQUIPPABLE_TOOTH =
     "- Slows down anything it's attached to.\n- Deployable and throwable.",
@@ -241,12 +241,12 @@ if TUNING.DSTU.FUNCAP_REWORK then
 end
 if not TUNING.DSTU.ELECTRICALMISHAP then
     TOOLTIPS.NIGHTSTICK =
-    "- No longer breaks when empty.\n- Can be fueled by various electrical items, generators, and potatoes."
+    "- Can be fueled by various electrical items, generators, and potatoes."
     TOOLTIPS.BUGZAPPER =
     "- Deals bonus damage, and area damage to Insects.\n- Deals electrical damage.\n- Can be fueled by various electrical items, generators, and potatoes."
 else
     TOOLTIPS.NIGHTSTICK =
-    "- No longer breaks when empty.\n- Functions as a portable lightning rod.\n- Regains fuel when struck by lightning or when charged at generators."
+    "- Functions as a portable lightning rod.\n- Regains fuel when struck by lightning or when charged at generators."
     TOOLTIPS.BUGZAPPER =
     "- Deals bonus damage, and area damage to Insects.\n- Deals electrical damage.\n - Can be charged at generators."
 end
