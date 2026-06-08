@@ -2,7 +2,7 @@ local function Describe(self, context)
     local description = nil
     local _worldsettingstimer = TheWorld.components.worldsettingstimer
 
-    local timeleft = _worldsettingstimer:TimerExists("um_stopheatwave_timer") and _worldsettingstimer:GetTimeLeft("um_stopheatwave_timer")
+    local timeleft = _worldsettingstimer:TimerExists("um_stopheatwave_timer") and TheWorld:HasTag("heatwavestart") and _worldsettingstimer:GetTimeLeft("um_stopheatwave_timer")
         or _worldsettingstimer:TimerExists("um_stopheatwave_timer") and _worldsettingstimer:GetTimeLeft("um_heatwave_timer") or nil
 
     if timeleft then
