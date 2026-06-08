@@ -74,7 +74,7 @@ function DamageInfiniteItemGem(enchant, item, value)
         and not item.components.fueled
         and not item.components.armor
         and not item.components.perishable
-        and]] item.components.gem_enchantable:HasDurabilityEnabled("um_gemology" .. enchant) then
+        and]] item.components.gem_enchantable:HasEnchantment("um_gemology" .. enchant) and item.components.gem_enchantable:HasDurabilityEnabled("um_gemology" .. enchant) then
         item.components.gem_enchantable:DoDurabilityDelta("um_gemology" .. enchant, -value)
     end
 end
@@ -682,23 +682,32 @@ AddUMGemDef("purplegem1", {
 local function GrabNearItem(inst, owner)
     local item = FindEntity(owner, 8, function(ent) return ent.components.inventoryitem and ent ~= inst end)
     if item then
+        local fx = SpawnPrefab("shadow_puff")
+        fx.Transform:SetPosition(item.Transform:GetWorldPosition())
         owner.components.inventory:GiveItem(item)
     end
 end
 
 local function OnDropedIfDeadGiveBack(inst) -- This is the only one that has an "ondropped" effects
     local tier = inst.components.gem_enchantable:GetEnchantmentTier("um_gemologypurplegem2")
-    local x, y, z = inst.Transform:GetWorldPosition()
-    local owner = FindEntity(inst, 10, function(ent) return ent:HasTag("player") and ent.components.health and ent.components.health:IsDead() end)
-    if owner and owner.components.health:IsDead() then -- If this happens, the owner has just died.
-        if tier ~= 1 then
-            for i = 1, tier do
-                GrabNearItem(inst, owner)
+    local owner = FindEntity(inst, 10, function(ent) return ent:HasTag("player") end)
+
+    inst:DoTaskInTime(math.random(), function(inst)
+
+        if owner and (owner.components.health:IsDead() or owner.sg ~= nil and owner.sg:HasStateTag("dead") or owner:HasTag("playerghost")) then -- If this happens, the owner has just died.
+            if tier ~= 1 then
+                for i = 1, tier do
+                    GrabNearItem(inst, owner)
+                end
             end
+
+            owner.components.inventory:GiveItem(inst) -- Give the ghost back the item
+            local fx = SpawnPrefab("shadow_puff")
+            fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
+
+            DamageInfiniteItemGem("purplegem2", inst, 0.25)
         end
-        owner.components.inventory:GiveItem(inst) -- Give the ghost back the item
-        DamageInfiniteItemGem("purplegem2", inst, 0.25)
-    end
+    end)
 
     if inst.volatile_gemology_data.um_gemologypurplegem2.old_ondropfn then
         inst.volatile_gemology_data.um_gemologypurplegem2.old_ondropfn(inst)
