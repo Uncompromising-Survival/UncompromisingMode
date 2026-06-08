@@ -82,11 +82,17 @@ GLOBAL.TUNING.ROCK_FRUIT_REGROW = {
 -----------------------------------------------------------------
 -- Relevant: MakeNoGrowInWinter in standardcomponents.lua
 
-local function ToggleGrowable(growable, iswinter)
+local function ToggleGrowable(inst)
+    print("toggle growable")
+    local iswinter = TheWorld.state.season == "winter"
+    
+    print("iswinter", iswinter)
     if iswinter then
-        growable:Pause()
+        print("pausing")
+        inst.components.growable:Pause("winter")
     else
-        growable:Resume()
+        print("resuming")
+        inst.components.growable:Resume("winter")
     end
 end
 
@@ -97,8 +103,9 @@ function GLOBAL.MakeNoGrowInWinter(inst)
         _MakeNoGrowInWinter(inst)
     end --making this not an elseif to do BOTH if something has both pickable and growable
     if inst.components.growable then
-        inst.components.growable:WatchWorldState("iswinter", ToggleGrowable)
-        ToggleGrowable(inst.components.growable, GLOBAL.TheWorld.state.iswinter)
+        print("do the grow thing")
+        inst:WatchWorldState("season", ToggleGrowable)
+        ToggleGrowable(inst)
     end
 end
 
@@ -150,11 +157,11 @@ if GetModConfigData("no_winter_growing_") then
     -- Extra check for Farm Crops, Banana Bushes, and Stone Fruit
     AddComponentPostInit("growable", function(self)
         local _Resume = self.Resume
-        function self:Resume()
-            if (self.inst:HasTag("farm_plant") or self.inst:HasTag("bananabush") --[[or self.inst.prefab == "rock_avocado_bush"]]) and GLOBAL.TheWorld.state.iswinter then
+        function self:Resume(...)
+            if (self.inst:HasTag("bananabush") --[[or self.inst.prefab == "rock_avocado_bush"]]) and GLOBAL.TheWorld.state.iswinter then
                 return false
             end
-            return _Resume(self)
+            return _Resume(self, ...)
         end
 
         local _StartGrowing = self.StartGrowing
@@ -168,11 +175,11 @@ if GetModConfigData("no_winter_growing_") then
 
     AddComponentPostInit("pickable", function(self)
         local _Resume = self.Resume
-        function self:Resume()
+        function self:Resume(cause, ...)
             if (self.inst:HasTag("bananabush") --[[or self.inst.prefab == "rock_avocado_bush"]]) and GLOBAL.TheWorld.state.iswinter then
                 return false
             end
-            return _Resume(self)
+            return _Resume(self, ...)
         end
     end)
 
@@ -291,19 +298,19 @@ end)]]
 -----------------------------------------------------------------
 -- Bees don't drop honey no more
 -----------------------------------------------------------------
-local beelist = {"bee", "killerbee"}
+local beelist = { "bee", "killerbee" }
 for _, bee in pairs(beelist) do
     AddPrefabPostInit(bee, function(inst)
         if not GLOBAL.TheWorld.ismastersim then return end
         if inst.components.lootdropper then
-            inst.components.lootdropper:SetLoot({"stinger"})
+            inst.components.lootdropper:SetLoot({ "stinger" })
         end
     end)
 end
 
 if TUNING.DSTU.BEEBOX_NERF then
     --local HONEY_PER_STAGE = GLOBAL.TUNING.DSTU.FOOD_HONEY_PRODUCTION_PER_STAGE
-    local beebox_prefabs = {"beebox", "beebox_hermit"}
+    local beebox_prefabs = { "beebox", "beebox_hermit" }
     local function ReleaseBees(inst, picker)
         if not inst:HasTag("burnt") and picker and picker:HasTag("player") and not GLOBAL.TheWorld.state.iswinter then
             local protection
@@ -331,7 +338,7 @@ if TUNING.DSTU.BEEBOX_NERF then
                     local damagetotake = ((isspring and 20 or 10) + (picker:HasTag("allergictobees") and TUNING.BEE_ALLERGY_EXTRADAMAGE or 0)) * (picker:HasTag("wearger") and TUNING.WEARGER_BEERESIST or 1)
                     picker.components.health:DoDelta(-damagetotake, nil, inst.prefab, nil, inst)
                     if not picker:HasTag("wearger") then
-                        picker:PushEvent("attacked", {damage = damagetotake})
+                        picker:PushEvent("attacked", { damage = damagetotake })
                     end
                 end
             end
@@ -344,18 +351,18 @@ if TUNING.DSTU.BEEBOX_NERF then
     end
 
     --local function UpdateHoneyLevels(inst)
-        --if inst.components.harvestable then
-            --for i, amt in pairs(HONEY_PER_STAGE) do
-                --if inst.components.harvestable.produce == amt or i >= #HONEY_PER_STAGE then
-                    --inst.anims = {
-                        --idle = amt <= 0 and "bees_loop" or "honey"..i - 1,
-                        --hit = amt <= 0 and "hit_idle" or "hit_honey"..i - 1,
-                    --}
-                    --inst.AnimState:PlayAnimation(inst.anims.idle)
-                    --break
-                --end
-            --end
-        --end
+    --if inst.components.harvestable then
+    --for i, amt in pairs(HONEY_PER_STAGE) do
+    --if inst.components.harvestable.produce == amt or i >= #HONEY_PER_STAGE then
+    --inst.anims = {
+    --idle = amt <= 0 and "bees_loop" or "honey"..i - 1,
+    --hit = amt <= 0 and "hit_idle" or "hit_honey"..i - 1,
+    --}
+    --inst.AnimState:PlayAnimation(inst.anims.idle)
+    --break
+    --end
+    --end
+    --end
     --end
 
     for i, v in ipairs(beebox_prefabs) do
