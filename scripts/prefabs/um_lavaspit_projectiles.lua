@@ -15,6 +15,21 @@ local function OnLoad(inst, data)
     inst:Remove()
 end
 
+local function DoAreaEffectMeltSnowPiles(inst)
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local snow = TheSim:FindEntities(x, y, z, 6, "snowpile", "_health")
+
+    for i, v in ipairs(snow) do
+        if v:HasTag("snowpile") then
+            if v.components.workable ~= nil and v.components.workable:CanBeWorked() then
+                SpawnPrefab("splash_snow_fx").Transform:SetPosition(v.Transform:GetWorldPosition())
+            end
+            v:Remove()
+        end
+    end
+end
+
+
 local function GetStatus(inst, viewer)
     return inst.cooled and "COOL" or "HOT"
 end
@@ -36,22 +51,21 @@ end
 local function TrySlowdown(inst, target)
     local debuffkey = inst.prefab
     --if inst.prefab ~= "um_lavaspit_slobber" then
-        if (not target:HasTag("player") or target == inst.lobber) and target.components.locomotor ~= nil then
-            if target._lavavomit_speedmulttask ~= nil then
-                target._lavavomit_speedmulttask:Cancel()
-            end
-            target._lavavomit_speedmulttask = target:DoTaskInTime(0.6, function(i)
-                    i.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey)
-                    i._lavavomit_speedmulttask = nil
-                end)
-
-            target.components.locomotor:SetExternalSpeedMultiplier(target, debuffkey, 0.5)
+    if (not target:HasTag("player") or target == inst.lobber) and target.components.locomotor ~= nil then
+        if target._lavavomit_speedmulttask ~= nil then
+            target._lavavomit_speedmulttask:Cancel()
         end
+        target._lavavomit_speedmulttask = target:DoTaskInTime(0.6, function(i)
+            i.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey)
+            i._lavavomit_speedmulttask = nil
+        end)
+
+        target.components.locomotor:SetExternalSpeedMultiplier(target, debuffkey, 0.5)
+    end
     --end
 
     if (not target:HasTag("player") or target == inst.lobber) and (inst.prefab ~= "um_lavaspit_slobber" and inst.components.propagator ~= nil or inst.prefab == "um_lavaspit_slobber") and target.components.combat ~= nil and target.components.health ~= nil and
         not target:HasTag("dragonfly") and not target:HasTag("lavae") and target.components.burnable ~= nil then
-
         target.components.health:DoFireDamage(20, inst.lobber, true)
         if target.components.freezable ~= nil then
             if target.components.freezable:IsFrozen() then
@@ -260,6 +274,7 @@ local function slobberfn()
         inst.components.colourtweener:StartTween({ 0, 0, 0, 0 }, 7, function(inst) inst:Remove() end)
     end)
 
+    inst._melttask = inst:DoPeriodicTask(1, DoAreaEffectMeltSnowPiles)
     inst._spoiltask = inst:DoPeriodicTask(inst.components.aura.tickperiod, DoAreaSlow, inst.components.aura.tickperiod * .5)
 
     return inst
@@ -442,14 +457,14 @@ local function SnaildrakeTrySlowdownMagma(inst, target)
             target._lavavomit_speedmulttask:Cancel()
         end
         target._lavavomit_speedmulttask = target:DoTaskInTime(0.6, function(i)
-                i.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey)
-                i._lavavomit_speedmulttask = nil
-            end)
+            i.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey)
+            i._lavavomit_speedmulttask = nil
+        end)
 
         target.components.locomotor:SetExternalSpeedMultiplier(target, debuffkey, 0.5)
     end
 
-    if target.components.combat and target.components.health and target.components.burnable and not target:HasAnyTag({"dragonfly", "lavae", "snaildrake"}) then
+    if target.components.combat and target.components.health and target.components.burnable and not target:HasAnyTag({ "dragonfly", "lavae", "snaildrake" }) then
         target.components.health:DoFireDamage(20, inst.lobber, true)
         if target.components.freezable ~= nil then
             if target.components.freezable:IsFrozen() then
@@ -464,9 +479,9 @@ local function SnaildrakeTrySlowdownMagma(inst, target)
         if inst.lobber ~= nil then
             target.components.combat:SuggestTarget(inst.lobber)
             if target.components.combat.onhitfn ~= nil then
-                --fences don't really take damage to break, onhit they get hammered, 
+                --fences don't really take damage to break, onhit they get hammered,
                 -- normal walls update their visuals onhit.
-                target.components.combat.onhitfn(target, inst.lobber, 0, 0) 
+                target.components.combat.onhitfn(target, inst.lobber, 0, 0)
             end
         end
 
@@ -525,10 +540,10 @@ end
 -- Make sure to not hit other Snaildrakes.
 local function OnCollideMagma(inst, other)
     local x, y, z = inst.Transform:GetWorldPosition()
-    if (other ~= nil and other:IsValid() and 
-        other:HasTag("_combat") and not other:HasTag("snaildrake") and 
-        not other:HasTag("lavaspit") or y <= inst:GetPhysicsRadius() + 0.001
-    ) then
+    if (other ~= nil and other:IsValid() and
+            other:HasTag("_combat") and not other:HasTag("snaildrake") and
+            not other:HasTag("lavaspit") or y <= inst:GetPhysicsRadius() + 0.001
+        ) then
         OnHitMagma(inst, other)
     end
 end
@@ -544,7 +559,7 @@ local function OnHitSlime(inst, attacker, other, dont_stick)
     -- was in splash range.
     if attacker and not other then
         other = attacker.components.combat.target
-        if other and not(other:IsValid() and other:IsNear(inst, TUNING.SNAILDRAKE_SLIME_SPLAT_RADIUS)) then
+        if other and not (other:IsValid() and other:IsNear(inst, TUNING.SNAILDRAKE_SLIME_SPLAT_RADIUS)) then
             other = nil
         end
     end
@@ -588,19 +603,6 @@ local function DoAreaEffectSlime(inst)
     end
 end
 
-local function DoAreaEffectMeltSnowPiles(inst)
-    local x, y, z = inst.Transform:GetWorldPosition()
-    local snow = TheSim:FindEntities(x, y, z, 6, "snowpile","_health")
-    
-    for i,v in ipairs(snow) do
-        if v:HasTag("snowpile") then
-            if  v.components.workable ~= nil and v.components.workable:CanBeWorked() then
-                SpawnPrefab("splash_snow_fx").Transform:SetPosition(v.Transform:GetWorldPosition())
-            end
-            v:Remove()
-        end
-    end
-end
 
 local function magma_projectile_fn()
     local inst = projectilefn()
@@ -631,11 +633,12 @@ local function magma_sludge_fn()
     inst.components.aura.auraexcludetags = AURA_EXCLUDE_TAGS
 
     inst:AddComponent("heater")
-    inst.components.heater.heat = 500    
+    inst.components.heater.heat = 500
     inst._melttask = inst:DoPeriodicTask(1, DoAreaEffectMeltSnowPiles)
 
 
     if inst._spoiltask then inst._spoiltask:Cancel() end
+
     inst._spoiltask = inst:DoPeriodicTask(inst.components.aura.tickperiod, DoAreaEffectMagma, inst.components.aura.tickperiod * .5)
 
     return inst
@@ -675,7 +678,7 @@ local function slime_projectile_fn()
     end
 
     inst.Physics:SetCollisionCallback(OnCollideSlime)
-    
+
     inst:AddComponent("complexprojectile")
     inst.components.complexprojectile:SetHorizontalSpeed(15)
     inst.components.complexprojectile:SetGravity(-20)
@@ -706,16 +709,17 @@ local function slime_sludge_fn()
     if not TheWorld.ismastersim then
         return inst
     end
-    
+
     inst:AddComponent("aura")
     inst.components.aura.radius = 2
     inst.components.aura.tickperiod = 0.6
     inst.components.aura.auraexcludetags = AURA_EXCLUDE_TAGS
     inst.components.aura:Enable(true)
-    
+
     inst:AddComponent("heater")
     inst.components.heater.heat = 250
 
+    inst._melttask = inst:DoPeriodicTask(1, DoAreaEffectMeltSnowPiles)
     inst._spoiltask = inst:DoPeriodicTask(inst.components.aura.tickperiod, DoAreaEffectSlime, inst.components.aura.tickperiod * .5)
 
     inst.removetask = inst:DoTaskInTime(TUNING.SNAILDRAKE_SLIME_SLUDGE_DURATION, inst.Remove)
