@@ -726,6 +726,8 @@ NAMES.UM_MEATCOMB = "Carrion Honeycomb"
 NAMES.UM_MEATHONEY = "Carrion Honey"
 
 NAMES.FYRITEROCK = "Pyrite Outcropping"
+NAMES.UM_PYRITE_CEILING = "Pyrite Stalactite"
+
 NAMES.UM_FYRITE = "Pyrite"
 NAMES.UM_FYRE_BOMB = "Pyre Bomb"
 NAMES.UM_MANNY = "Plaunt Manny"

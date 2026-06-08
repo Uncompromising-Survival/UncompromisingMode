@@ -654,6 +654,21 @@ local scrapbook_icons = {
     "rimeweed_main",
     "snowmong",
     "snowpile",
+    "fyriterock",
+    "magmabone",
+    "magmarock1",
+    "mushtree_shadow",
+    "ruins_statue_miner",
+    "um_ghost_pepper",
+    "um_pepperdragon",
+    "um_pepperdragon_nest",
+    "um_pyre_nettles",
+    "um_pyrite_ceiling",
+    "um_ribopod",
+    "um_ribopodden",
+    "viperfruit_plant",
+    "viperling",
+    "viperworm",
 }
 
 for _, item in ipairs(scrapbook_icons) do

@@ -3,6 +3,10 @@ local STRINGS = GLOBAL.STRINGS
 local SPECIALINFO = STRINGS.SCRAPBOOK.SPECIALINFO
 local TOOLTIP = STRINGS.UNCOMP_TOOLTIP
 
+STRINGS.SCRAPBOOK.SUBCATS.UM_DEBUG = "Debug"
+
+local debug = true
+
 --Damnit klei.
 --Sets the scrabookdata specialinfo of some entries to something else. These entries re-use something else.
 local scrapbookdata = require("screens/redux/scrapbookdata")
@@ -25,11 +29,16 @@ SPECIALINFO.MUSHTREE = SPECIALINFO.TREE
 
 --then change the special info.
 for k, v in pairs(specialinfo_ovewrite) do
+    if debug then
+        scrapbookdata[k].subcat = "um_debug"
+    end
     scrapbookdata[k]["specialinfo"] = v
 end
 --idfk where to put this
 scrapbookdata["shieldofterror"].notes = { cursed_enhanced_item = true }
-
+if debug then
+    scrapbookdata["shieldofterror"].subcat = "um_debug"
+end
 --helper function to format tooltip strings into scrapbook special info.
 -- Turns "- Text.\n- like this."
 -- into "Text. Like this."
@@ -50,6 +59,10 @@ end
 ---@param info string
 ---@param overwrite? boolean
 local function AddAddtionalScrapbookInfo(page, info, overwrite)
+    if debug and scrapbookdata[string.lower(page)] ~= nil then
+        scrapbookdata[string.lower(page)].subcat = "um_debug"
+    end
+
     if string.match(page, "ITEM") ~= nil or string.match(page, "KIT") ~= nil then return end -- only show for the actual buildings, not kit/item versions.
     if SPECIALINFO[page] ~= nil then
         if overwrite then
@@ -195,7 +208,7 @@ local um_specialinfo = {
     STINGER = "Self-stacks. Burnable as fuel.",
     SLURTLE = "Faster attack speed but less health.",
     SNURTLE = "Less health.",
-    ANTLION = "May harrass survivors at sea.\nIncreased resistance against explosives.",
+    ANTLION = "Increased resistance against explosives.",
     BEEQUEEN = "Reworked fight. Several new attacks and bees.",
     MONKEY_MEDIUMHAT = "Increases boat steering speed.",
     EYEMASKHAT = "Negative food stats no longer contribute for repairs.",
@@ -287,5 +300,5 @@ local uses_batterypower = {
 }
 
 for k, v in pairs(uses_batterypower) do
-    scrapbookdata[v].fueledtype1= "BATTERYPOWER"
+    scrapbookdata[v].fueledtype1 = "BATTERYPOWER"
 end

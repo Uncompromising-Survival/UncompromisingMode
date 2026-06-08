@@ -164,9 +164,10 @@ local data = {
     um_monsteregg_cooked = { name = "um_monsteregg_cooked", tex = "um_monsteregg_cooked.tex", type = "food", prefab = "um_monsteregg_cooked", stacksize = 40, hungervalue = 9.375, healthvalue = -5, sanityvalue = -10, foodtype = "MEAT", build = "extra_monsterfoods", bank = "extra_monsterfoods", anim = "egg_cooked", perishable = 2880, deps = { "spoiled_food" } },
 
     --um winter
-    --RIME DARTS TODO
+    um_blowdart_rime = CreateBasicEntry("um_blowdart_rime", "item", "idle_rime", { stacksize = 40, weapondamage = 75, weaponrange = 8, deps = { "um_rimeweed_itemvine", "cutreeds", "feather_robin_winter", "researchlab2" } }),
+
     rimeweed_barrier = { name = "rimeweed_barrier", tex = "rimeweed_barrier.tex", type = "creature", prefab = "rimeweed_barrier", damage = 20, health = 200, build = "rimeweed", bank = "rimeweed", anim = "barrier_idle", deps = { "rimeweed_main" }, use_bg = true },
-    rimeweed_main = { name = "rimeweed_main", tex = "rimeweed_main.tex", type = "creature", prefab = "rimeweed_main", health = 600, build = "rimeweed", bank = "rimeweed", anim = "core_large", deps = { "rimeweed_barrier" }, use_bg = true },
+    rimeweed_main = { name = "rimeweed_main", tex = "rimeweed_main.tex", type = "creature", prefab = "rimeweed_main", health = 600, build = "rimeweed", bank = "rimeweed", anim = "core_large", deps = { "rimeweed_barrier", "um_rimeweed_itemvine"}, use_bg = true },
     snowmong = { name = "snowmong", tex = "snowmong.tex", type = "creature", prefab = "snowmong", damage = 20, health = 200, build = "snowmong", bank = "snowmong", anim = "idle", deps = { "snowball_item", "um_ice_tail", "charcoal", "ice", }, use_bg = true },
     snowpile = { name = "snowpile", tex = "snowpile.tex", type = "thing", prefab = "snowpile", build = "snow_dune", bank = "snow_dune", anim = "full", workable = "DIG", deps = { "snowmong", "snowball_item" }, use_bg = true },
     glacialhound = { name = "glacialhound", tex = "glacialhound.tex", subcat = "hound", type = "creature", prefab = "glacialhound", sanityaura = -0.66666666666667, health = TUNING.WARGLET_HEALTH * 1.25, damage = TUNING.HOUND_DAMAGE * 2, build = "um_ice_warg", bank = "um_ice_warg", anim = "idle", deps = { "houndstooth", "monstermeat", "ice", "bluegem", "torch", "blowdart_fire", "firestaff", "lighter", "um_gemologyredgem2" }, use_bg = true },
@@ -175,62 +176,42 @@ local data = {
     um_ice_tail = { name = "um_ice_tail", tex = "um_ice_tail.tex", type = "item", prefab = "um_ice_tail", build = "um_ice_tail", bank = "um_ice_tail", perishable = TUNING.PERISH_FAST, anim = "idle", deps = {} },
     um_ice_sicle = { name = "um_ice_sicle", tex = "um_ice_sicle.tex", subcat = "tool", type = "item", prefab = "um_ice_sicle", weapondamage = TUNING.SPEAR_DAMAGE * 1.3, finiteuses = 200, toolactions = { "SCYTHE" }, build = "um_ice_sicle", bank = "scythe_voidcloth", anim = "idle", deps = { "icestaff", "livinglog", "um_rimeweed_itemflower" } },
     saltpack = { name = "saltpack", tex = "saltpack.tex", subcat = "tool", type = "item", prefab = "saltpack", build = "saltpack", bank = "umbrella", anim = "idle", fueledmax = TUNING.TORCH_FUEL * 2, fueledrate = TUNING.TORCH_FUEL * 2 / 100, fueledtype1 = "SALT", fueleduses = true, deps = { "saltrock", "gears", "boards", "snowpile" } },
-    snowgoggles = { name = "snowgoggles", tex = "snowgoggles.tex", subcat = "hat", type = "item", prefab = "catcoonhat", build = "hat_snowgoggles", bank = "catcoonhat", anim = "anim", insulator = 120, insulator_type = "winter", dapperness = TUNING.DAPPERNESS_MED, fueledmax = TUNING.CATCOONHAT_PERISHTIME, fueledrate = 1, fueledtype1 = "USAGE", sewable = true, snowmandecor = true, deps = { "goggleshat", "beefalowool", "catcoonhat" } },
+    snowgoggles = { name = "snowgoggles", tex = "snowgoggles.tex", subcat = "hat", type = "item", prefab = "catcoonhat", build = "hat_snowgoggles", bank = "catcoonhat", anim = "anim", insulator = 120, insulator_type = "winter", dapperness = TUNING.DAPPERNESS_MED, fueledmax = TUNING.CATCOONHAT_PERISHTIME, fueledrate = 1, fueledtype1 = "USAGE", sewable = true, snowmandecor = true, deps = { "goggleshat", "beefalowool", "catcoonhat", "researchlab3" } },
     um_armor_bramble_rimeweed = { name = "um_armor_bramble_rimeweed", tex = "um_armor_bramble_rimeweed.tex", subcat = "armor", type = "item", prefab = "um_armor_bramble_rimeweed", damage = 20, armor = 525, absorb_percent = 0.8, build = "um_armor_bramble_rimeweed", bank = "um_armor_bramble_rimeweed", anim = "idle", fueltype = "BURNABLE", fuelvalue = 180, burnable = true, craftingprefab = "wormwood", deps = { "um_rimeweed_itemflower", "um_rimeweed_itemvine", "armor_bramble" } },
     um_rimeweed_itemvine = { name = "um_rimeweed_itemvine", tex = "um_rimeweed_itemvine.tex", type = "item", prefab = "um_rimeweed_itemvine", stacksize = 40, build = "um_rimeweed_itemvine", bank = "um_rimeweed_itemvine", anim = "idle", perishable = 4 * TUNING.PERISH_TWO_DAY, deps = { "twigs", "rimeweed_barrier" } },
     um_rimeweed_itemflower = { name = "um_rimeweed_itemflower", tex = "um_rimeweed_itemflower.tex", type = "item", prefab = "um_rimeweed_itemflower", hungervalue = 25, foodtype = "VEGGIE", stacksize = 40, build = "um_rimeweed_itemflower", bank = "um_rimeweed_itemflower", anim = "idle", perishable = 3 * TUNING.PERISH_TWO_DAY, deps = { "spoiled_food", "rimeweed_main" } },
-    um_rimeweed_icepack = { name = "um_rimeweed_icepack", tex = "um_rimeweed_icepack.tex", type = "item", prefab = "um_rimeweed_icepack", stacksize = 40, build = "um_rimeweed_icepack", bank = "um_rimeweed_icepack", anim = "idle", perishable = 10 * TUNING.PERISH_TWO_DAY, deps = { "papyrus", "ice","researchlab2", "um_rimeweed_itemvine" } },
+    um_rimeweed_icepack = { name = "um_rimeweed_icepack", tex = "um_rimeweed_icepack.tex", type = "item", prefab = "um_rimeweed_icepack", stacksize = 40, build = "um_rimeweed_icepack", bank = "um_rimeweed_icepack", anim = "idle", perishable = 10 * TUNING.PERISH_TWO_DAY, deps = { "papyrus", "ice", "researchlab2", "um_rimeweed_itemvine" } },
     rimeweed_whip = { name = "rimeweed_whip", tex = "rimeweed_whip.tex", subcat = "weapon", type = "item", prefab = "rimeweed_whip", weapondamage = 51, weaponrange = 2, finiteuses = 150, build = "um_rimelash", bank = "whip", anim = "idle", deps = { "rimeweed_main", "um_rimeweed_itemvine" } },
 
     --magma caves
-    --[[
-        --prefab, build, bank, anim, file
-        --items
-        [x] gloomcap - gloomcap_item - gloomcap_item - idle - gloomcap_item [x]
-        [x] um_blowdart_pyre - um_blowdart_pyre - um_blowdart_pyre - idle_pyre - um_blowdart_pyre [x]
-        [x] um_fyrite - um_fyrite - um_fyrite - idle - um_fyrite
-        [x] um_ghost_pepper_item - um_ghost_pepper_item - um_ghost_pepper_item - idle - um_ghost_pepper_item
-        [x] viperfruit_lesser - viperfruit_lesser - viperfruit_lesser - idle - viperfruit_lesser
-        [x] viperfruit - viperfruit - viperfruit - idle - viperfruit
-        [x] um_pepperdragon_bladder - um_pepperdragon_bladder - um_pepperdragon_bladder - idle - um_pepperdragon_bladder
-        um_armor_pyre_nettles - um_armor_pyre_nettles - um_armor_pyre_nettles - anim - um_armor_pyre_nettles
-        um_firecream - um_firecream - um_firecream - idle - um_firecream
-        um_flameburster - um_flameburster - um_flameburster - idle - um_flameburster
-        um_hat_pepperdragon - um_hat_pepperdragon - catcoonhat - anim -
-        um_fyre_bomb - um_fyre_bomb - um_fyre_bomb - idle - um_fyre_bomb
-        um_smolder_spore - um_smolder_spore - um_smolder_spore - idle - um_smolder_spore
-
-        --things
-        um_pyre_nettles - um_pyre_nettles um_pyre_nettles - pn5_idle - um_pyre_nettles
-        magmarock1 - magmarock1 - magmarock1 - full - magmarock1
-        [ ] mushtree_shadow - gloomcap - gloomcap - idle_loop - gloomcap [ ]
-        magmabone - magmabone - magmabone - piece1 - magmabone
-        um_pyrite_ceiling - um_pyrite_ceiling - um_pyrite_ceiling - idle_full - um_pyrite_ceiling
-        um_ribopod - um_ribopod - um_ribopod - idle - um_ribopod
-        um_ribopodden - um_ribopodden - um_ribopodden - idle - um_ribopodden
-        um_ghost_pepper - um_ghost_pepper - um_ghost_pepper - idle_fruit - um_ghost_pepper
-        fyriterock - fyriterock - fyriterock - full - fyriterock
-        viperfruit_plant - viperworm - worm - berry_idle -
-        viperworm - viperworm - worm - atk -
-        viperling - viperworm - worm - atk - DO THE RECOLORS AND SHIT
-        ruins_statue_miner - minerstatue - minerstatue - idle_full - minerstatue
-        um_pepperdragon_nest - um_pepperdragon_nest - um_pepperdragon_nest - idle - um_pepperdragon_nest
-        um_pepperdragon - um_pepperdragon - um_pepperdragon - idle1 - um_pepperdragon
-        ]]
-
     gloomcap = { name = "gloomcap", prefab = "gloomcap", tex = "gloomcap.tex", anim = "idle", bank = "gloomcap_item", build = "gloomcap_item", foodtype = "VEGGIE", hungervalue = 18.8, healthvalue = -20, sanityvalue = -33, burnable = true, perishable = 3 * TUNING.PERISH_TWO_DAY, stacksize = 40, deps = { "mushtree_shadow", "spoiledfood" } },
     mushtree_shadow = { name = "mushtree_shadow", tex = "mushtree_shadow.tex", type = "thing", prefab = "mushtree_shadow", build = "gloomcap", bank = "gloomcap", anim = "idle_loop", sanityaura = -TUNING.SANITYAURA_MED, workable = "AXE", deps = { "log", "gloomcap" }, use_bg = true },
-
     um_fyrite = CreateBasicEntry("um_fyrite", "item", nil, { stacksize = 40, weapondamage = 50, deps = { "fyriterock", "um_pyrite_ceiling" } }),
     um_ghost_pepper_item = CreateBasicEntry("um_ghost_pepper_item", "item", nil, { stacksize = 40, foodtype = "VEGGIE", perishable = TUNING.PERISH_FAST / 6, healthvalue = -3, hungervalue = 12.5, sanityvalue = -10, deps = { "pepper", "um_ghost_pepper" } }),
     viperfruit_lesser = CreateBasicEntry("viperfruit_lesser", "item", nil, { stacksize = TUNING.STACK_SIZE_LARGEITEM, foodtype = "VEGGIE", perishable = TUNING.PERISH_MED, healthvalue = TUNING.HEALING_SMALL, fueltype = "WORMLIGHT", fuelvalue = TUNING.MED_FUEL, hungervalue = TUNING.CALORIES_MEDSMALL, sanityvalue = -TUNING.SANITY_MED, deps = {} }),
     viperfruit = CreateBasicEntry("viperfruit", "item", nil, { stacksize = TUNING.STACK_SIZE_LARGEITEM, foodtype = "VEGGIE", perishable = TUNING.PERISH_MED, healthvalue = TUNING.HEALING_MOREMEDSMALL, fueltype = "WORMLIGHT", fuelvalue = TUNING.LARGE_FUEL * 1.33, hungervalue = TUNING.CALORIES_LARGE, sanityvalue = -TUNING.SANITY_LARGE, deps = {} }),
-
-    um_armor_pyre_nettles = CreateBasicEntry("um_armor_pyre_nettles", ""),
-
+    um_flamethrower = { bank = "um_flameburster", tex = "um_flamethrower.tex", build = "um_flameburster", anim = "idle", type = "item", { finiteuses = 400, deps = { "pepper", "um_ghost_fajita", "spice_chili", "firenettles", "firenettles_dried", "um_rimeweed_itemflower", "um_ghost_pepper_item", "um_fyrite", "rocks", "um_pepperdragon_bladder" } } },
+    um_hat_pepperdragon = { name = "um_hat_pepperdragon", tex = "um_hat_pepperdragon.tex", subcat = "hat", type = "item", prefab = "um_hat_pepperdragon", build = "um_hat_pepperdragon", bank = "catcoonhat", anim = "anim", insulator_type = "winter", fueledmax = TUNING.STRAWHAT_PERISHTIME, fueledrate = 1, fueledtype1 = "USAGE", sewable = true, snowmandecor = true, deps = { "um_pepperdragon_bladder", "um_fyrite", "redgem", "researchlab3" } },
+    um_fyre_bomb = CreateBasicEntry("um_fyre_bomb", "item", nil, { subcat = "weapon", stacksize = 20, weapondamage = TUNING.DSTU.PYREBOMB_DAMAGE, weaponrange = 10, deps = { "twigs", "rocks", "um_fyrite", "researchlab2" } }),
+    um_armor_pyre_nettles = CreateBasicEntry("um_armor_pyre_nettles", "item", nil, { subcat = "armor", armor = 1000, perishable = TUNING.TOTAL_DAY_TIME * 5, absorb_percent = TUNING.ARMORGRASS_ABSORPTION, burnable = true, deps = { "um_smolder_spore", "firenettles", "silk" } }),
     um_pepperdragon_bladder = CreateBasicEntry("um_pepperdragon_bladder", "item", nil, { stacksize = TUNING.STACK_SIZE_MEDITEM, deps = { "um_pepperdragon" } }),
-
-    um_blowdart_pyre = CreateBasicEntry("um_blowdart_pyre", "item", nil, { stacksize = 40, weapondamage = 25, weaponrange = 8, deps = { "um_smolder_spore", "firenettles", "cutreeds", "researchlab2" } }),
+    um_firecream = CreateBasicEntry("um_firecream", "item", nil, { stacksize = 40, deps = { "um_pepperdragon_bladder", "um_ghost_pepper_item", "firenettles_dried", "researchlab2" } }),
+    um_blowdart_pyre = CreateBasicEntry("um_blowdart_pyre", "item", "idle_pyre", { stacksize = 40, weapondamage = 25, weaponrange = 8, deps = { "um_smolder_spore", "firenettles", "cutreeds", "researchlab2" } }),
+    um_smolder_spore = CreateBasicEntry("um_smolder_spore", "item", nil, { stacksize = 20, workable = "NET", deps = { "um_pyre_nettles" }, perishable = TUNING.TOTAL_DAY_TIME, fueltype = "BURNABLE", fuelvalue = TUNING.LARGE_FUEL, healthvalue = -10, hungervalue = 0, sanityvalue = 0, foodtype = "GOODIES" }),
+    um_pyre_nettles = { name = "um_pyre_nettles", tex = "um_pyre_nettles.tex", prefab = "um_pyre_nettles", type = "thing", damage = 20, pickable = true, build = "um_pyre_nettles", bank = "um_pyre_nettles", anim = "pn5_idle", deps = { "firenettles" }, use_bg = true},
+    magmarock1 = { name = "magmarock1", tex = "magmarock1.tex", type = "thing", prefab = "magmarock1", build = "magmarock1", bank = "magmarock1", anim = "full", workable = "MINE", deps = { "goldnugget", "flint", "fossil_piece", "redgem", "rocks" }, use_bg = true },
+    magmabone = { name = "magmabone", tex = "magmabone.tex", type = "thing", prefab = "magmabone", build = "magmabone", bank = "magmabone", anim = "piece1", workable = "HAMMER", deps = { "houndstooth", "boneshard", "fossil_piece" }, use_bg = true },
+    um_pyrite_ceiling = CreateBasicEntry("um_pyrite_ceiling", "thing", "idle_full", { deps = { "um_fyrite" }, use_bg = true }),
+    um_ribopod = CreateBasicEntry("um_ribopod", "creature", nil, { health = 500, damage = 10, deps = { "fishmeat_small", "boneshard", "um_ribopodden" }, use_bg = true}),
+    um_ribopodden = CreateBasicEntry("um_ribopodden", "thing", nil, { workable = "HAMMER", deps = { "boneshard", "rocks", "researchlab3" }, use_bg = true }),
+    um_ghost_pepper = CreateBasicEntry("um_ghost_pepper", "thing", "idle_fruit", { pickable = true, use_bg = true }),
+    fyriterock = CreateBasicEntry("fyriterock", "thing", "full", { workable = "MINE", damage = 50, deps = { "rocks", "flint", "redgem", "fossil_piece", "um_fyrite" }, use_bg = true }),
+    viperfruit_plant = { name = "viperfruit_plant", tex = "viperfruit_plant.tex", type = "thing", prefab = "viperfruit_plant", build = "viperworm", bank = "worm", anim = "berry_idle", use_bg = true, pickable = true, deps = { "viperling", "viperfruit_lesser" } },
+    viperworm = { name = "viperworm", tex = "viperworm.tex", type = "creature", prefab = "viperworm", speechstatus = "WORM", sanityaura = -0.41666666666667, health = 900, damage = 75, animpercent = 0.37, build = "viperworm", bank = "worm", anim = "atk", pickable = true, deps = { "monstermeat", "viperfruit", "viperling" }, notes = { shadow_aligned = true }, use_bg = true },
+    viperling = { name = "viperling", tex = "viperling.tex", type = "creature", prefab = "viperling", sanityaura = -0.41666666666667, health = 100, damage = 37.5, multcolour = { "0", "0", "0" }, animpercent = 0.37, build = "viperworm", bank = "worm", anim = "atk", notes = { shadow_aligned = true }, use_bg = true },
+    ruins_statue_miner = { name = "ancient_statue", tex = "ruins_statue_miner.tex", subcat = "structure", type = "thing", prefab = "ruins_statue_miner", speechname = "ancient_statue", build = "minerstatue", bank = "minerstatue", anim = "idle_full", workable = "MINE", deps = { "nightmarefuel", "thulecite", }, use_bg = true },
+    um_pepperdragon_nest = CreateBasicEntry("um_pepperdragon_nest", "thing", nil, { workable = "HAMMER", use_bg = true, deps = { "um_pepperdragon", "firenettles", "boneshard" } }),
+    um_pepperdragon = CreateBasicEntry("um_pepperdragon", "giant", "idle1", { health = 2000, damage = 75, deps = UPDATE_CHECK and { "meat", "um_pepperdragon_bladder", "mitegland" } or { "meat", "um_pepperdragon_bladder" }, use_bg = true }),
 }
 
 return data

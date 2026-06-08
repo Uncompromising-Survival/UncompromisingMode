@@ -198,7 +198,7 @@ local specinfo = {
     HAT_CRAB_ICE = "Resistance scales with wetness.\nPrevents the wearer from drying up.",
     ARMOR_CRAB_MAXHP = "Increases maximum health when worn.",
     ARMOR_CRAB_REGEN = "Self-healing.",
-    UM_ARMOR_PYRE_NETTLES = "Panics and damages nearby miscreants.\nIgnores tiny, shadow, or fire-aligned creatures.",
+    UM_ARMOR_PYRE_NETTLES = "Damages nearby enemies by touching them, and you when equipping.\nIgnores tiny, shadow, or fire-aligned creatures.\nSpoils a little when equipping.",
     WIXIEPUZZLE = "Part of something larger. External help is required to unlock its secrets.",
     CURSED_ANTLER = "Deals 66 damage and area damage when charged.",
     CRYSTAL_CURSED_ANTLER = "Deals 116 planar damage, area damage and creates a slowing freeze aura on hit when charged.",
@@ -237,7 +237,12 @@ local specinfo = {
     SNOWPILE = "Builds up during snow storms.",
     UM_HAT_RIME = "Protection scales with wearer temperature.",
     UM_ICE_SICLE = "More uses when reaping. Freezes on hit, cools down the user when reaping.",
-    RIMEWEED_MAIN = "Creates Rimeweed Brambles in the area, ensnaring nearby plants.\n\nWhen fully grown, creates a perpetual snow storm around itself."
+    RIMEWEED_MAIN = "Creates Rimeweed Brambles in the area, ensnaring nearby plants.\n\nWhen fully grown, creates a perpetual snow storm around itself.",
+    UM_FIRECREAM = "Heals 15 health.\n\nProvides 100% resistance to fire, and immunity to Pyre Nettles for 8 minutes.",
+    UM_FLAMEBURSTER = "Load it with a variety of fiery or chilly items to spew flames when used.",
+    UM_HAT_PEPPERDRAGON = "Reverses temperature gain.",
+    UM_PYRE_NETTLES = "Touching this plant is not a good idea.",
+    UM_PYRITE_CEILING = "Rains down Pyrite during earthquakes."
 }
 
 

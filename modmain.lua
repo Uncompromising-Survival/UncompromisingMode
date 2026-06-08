@@ -24,6 +24,11 @@ if GLOBAL.UM_DEV then
     GLOBAL.CHEATS_ENABLED = true
 end
 
+GLOBAL.UM_DEV = GetModConfigData("scrapbook_debug")
+if GLOBAL.UM_DEV then
+    GLOBAL.CHEATS_ENABLED = true
+end
+
 PrefabFiles = require("uncompromising_prefabs")
 PreloadAssets = {
     Asset("IMAGE", "images/UM_tip_icon.tex"),

@@ -23,16 +23,16 @@ local RETARGET_MUST_TAGS = { "_combat", "_health" }
 local RETARGET_CANT_TAGS = { "um_ribopod" }
 
 local function retargetfn(inst)
-	if not inst.components.health:IsDead() and not (inst.components.sleeper ~= nil and inst.components.sleeper:IsAsleep()) and inst.friend_tracking >= 3 then
+    if not inst.components.health:IsDead() and not (inst.components.sleeper ~= nil and inst.components.sleeper:IsAsleep()) and inst.friend_tracking >= 3 then
         local target_dist = 12
 
         return FindEntity(inst, target_dist, function(guy)
-            if not guy.components.health:IsDead() then
-                return guy.components.inventory ~= nil
-            end
-        end,
-        RETARGET_MUST_TAGS, -- see entityreplica.lua
-        RETARGET_CANT_TAGS
+                if not guy.components.health:IsDead() then
+                    return guy.components.inventory ~= nil
+                end
+            end,
+            RETARGET_MUST_TAGS, -- see entityreplica.lua
+            RETARGET_CANT_TAGS
         )
     end
 end
@@ -54,11 +54,11 @@ local function OnTrapped(inst, data)
 end
 
 local function FriendTracking(inst)
-	if inst.entity:IsAwake() then
-		local x,y,z = inst.Transform:GetWorldPosition()
-		local ribopods = TheSim:FindEntities(x,y,z,16,{"um_ribopod"})
-		inst.friend_tracking = #ribopods
-	end
+    if inst.entity:IsAwake() then
+        local x, y, z = inst.Transform:GetWorldPosition()
+        local ribopods = TheSim:FindEntities(x, y, z, 16, { "um_ribopod" })
+        inst.friend_tracking = #ribopods
+    end
 end
 
 local function commonfn()
@@ -123,20 +123,20 @@ local function commonfn()
 
     inst:AddComponent("knownlocations")
     inst:AddComponent("inspectable")
-	
-	inst:AddComponent("eater")
-	inst.components.eater:SetDiet({ FOODGROUP.OMNI }, { FOODGROUP.OMNI })
-	inst.components.eater:SetCanEatHorrible()
-	inst.components.eater:SetCanEatRaw()
-	inst.components.eater.strongstomach = true -- can eat monster meat!
-		
+
+    inst:AddComponent("eater")
+    inst.components.eater:SetDiet({ FOODGROUP.OMNI }, { FOODGROUP.OMNI })
+    inst.components.eater:SetCanEatHorrible()
+    inst.components.eater:SetCanEatRaw()
+    inst.components.eater.strongstomach = true -- can eat monster meat!
+
     inst:ListenForEvent("attacked", OnAttacked)
     --inst:ListenForEvent("goinghome", OnGoingHome)
 
     MakeHauntablePanic(inst)
-	
-	inst.friend_tracking = 0
-	inst:DoPeriodicTask(3,FriendTracking)
+
+    inst.friend_tracking = 0
+    inst:DoPeriodicTask(3, FriendTracking)
     return inst
 end -- No burnable, fireproof
 
@@ -157,30 +157,30 @@ local function normalfn()
 
     inst.sounds = NORMAL_SOUNDS
 
-	inst:AddComponent("sleeper")
-	inst.components.sleeper:SetSleepTest(ShouldSleep)
+    inst:AddComponent("sleeper")
+    inst.components.sleeper:SetSleepTest(ShouldSleep)
 
     inst.components.health:SetMaxHealth(500)
 
     inst.components.combat:SetDefaultDamage(TUNING.FROG_DAMAGE)
     inst.components.combat:SetAttackPeriod(2.5)
-	inst.components.combat:SetRange(1, 1)
-	inst.Transform:SetScale(1.2,1.2,1.2)
-	
-	inst:ListenForEvent("ontrapped", OnTrapped)
-	
+    inst.components.combat:SetRange(1, 1)
+    inst.Transform:SetScale(1.2, 1.2, 1.2)
+
+    inst:ListenForEvent("ontrapped", OnTrapped)
+
 
     -----------------
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem.nobounce = true
     inst.components.inventoryitem.canbepickedup = false
-    inst.components.inventoryitem.canbepickedupalive = true    
-	
-	MakeFeedableSmallLivestock(inst, TUNING.RABBIT_PERISH_TIME, nil, OnDropped)
-	
-	inst.SoundPath = SoundPath
+    inst.components.inventoryitem.canbepickedupalive = true
+
+    MakeFeedableSmallLivestock(inst, TUNING.RABBIT_PERISH_TIME, nil, OnDropped)
+
+    inst.SoundPath = SoundPath
     return inst
 end
 
 
-return Prefab("um_ribopod", normalfn,normal_assets)
+return Prefab("um_ribopod", normalfn, normal_assets)
