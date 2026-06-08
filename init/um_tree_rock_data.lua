@@ -126,7 +126,7 @@ local WEIGHTED_LOOT = {
         ["yellowgem"]               = 0.2,
         ["orangegem"]               = 0.2,
         ["greengem"]                = 0.2,
-        ["um_gemology_geode_ruins"] = 0.2,
+        ["um_gemology_geode_ruins"] = 3,
         ["wormlight"]               = 0.5,
     },
 
