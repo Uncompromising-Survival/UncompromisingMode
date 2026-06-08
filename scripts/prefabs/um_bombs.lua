@@ -5,6 +5,9 @@ local assets =
 
     Asset("ANIM", "anim/swap_um_bomb_moon.zip"),
     Asset("ANIM", "anim/um_bomb_moon.zip"),
+
+    Asset("ANIM", "anim/swap_um_trans_bomb_moon.zip"),
+    Asset("ANIM", "anim/um_trans_bomb_moon.zip"),
 }
 
 local should_hit = { "_combat", "CHOP_workable", "MINE_workable", "HAMMER_workable", "DIG_workable" }
@@ -87,12 +90,24 @@ local function OnHitMutate(inst, attacker, target)
 end
 
 local function onequip(inst, owner)
-    owner.AnimState:OverrideSymbol("swap_object", "swap_" .. inst.bank, "swap_" .. inst.bank)
+    local skin_build = inst:GetSkinBuild()
+    if skin_build ~= nil then
+        owner:PushEvent("equipskinneditem", inst:GetSkinName())
+        owner.AnimState:OverrideItemSkinSymbol("swap_object", "swap_" .. skin_build, "swap_um_trans_bomb_moon", inst.GUID, "swap_" .. inst.bank)
+    else
+        owner.AnimState:OverrideSymbol("swap_object", "swap_" .. inst.bank, "swap_" .. inst.bank)
+    end
+
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
 end
 
 local function onunequip(inst, owner)
+    local skin_build = inst:GetSkinBuild()
+    if skin_build ~= nil then
+        owner:PushEvent("unequipskinneditem", inst:GetSkinName())
+    end
+
     owner.AnimState:Hide("ARM_carry")
     owner.AnimState:Show("ARM_normal")
 end

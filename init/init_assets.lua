@@ -341,6 +341,7 @@ local inventoryitems =
     "ms_plaguemask_formal", --dunno??
     "ms_feather_frock_fancy",
     "ms_twisted_antler",
+    "ms_um_trans_bomb_moon",
 
     --winona stuff
     "winona_battery_low_item_um",
