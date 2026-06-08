@@ -23,6 +23,7 @@ local function DoAreaEffectMeltSnowPiles(inst)
         if v:HasTag("snowpile") then
             if v.components.workable ~= nil and v.components.workable:CanBeWorked() then
                 SpawnPrefab("splash_snow_fx").Transform:SetPosition(v.Transform:GetWorldPosition())
+                SpawnPrefab("washashore_puddle_fx").Transform:SetPosition(v.Transform:GetWorldPosition())
             end
             v:Remove()
         end
