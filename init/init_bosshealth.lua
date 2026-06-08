@@ -106,8 +106,12 @@ local spookyskeletons_items = {
     shadowheart = true,
 }
 
-local unique_loot = { "fruitflyfruit", }
-
+local unique_loot = { 
+	"fruitflyfruit",
+	"um_cookpot_wagstaff_lever",
+	"um_cookpot_wagstaff_lever2", 
+}
+	
 local function MultiplyLoot(inst, mult)
     local lootdropper = inst.components.lootdropper
     if not lootdropper or mult == 1 then return end
@@ -282,36 +286,25 @@ AddPrefabPostInit("minotaurchest", function(inst)
 	end)
 end)
 
-local function CopyKlaus(item)
-	if type(item) == "table" then
-		return { item[1], item[2] }
-	end
-	return item
-end
+local function CopyBundle(bundle_items)
+	local copy = {}
 
-local function MultiplyKlaus(items, mult)
-	local final = {}
-
-	for _, item in ipairs(items) do
-		table.insert(final, CopyKlaus(item))
-
-		local whole = math.floor(mult - 1)
-		local frac = (mult - 1) % 1
-
-		for i = 1, whole do
-			table.insert(final, CopyKlaus(item))
-		end
-
-		if frac > 0 and math.random() < frac then
-			table.insert(final, CopyKlaus(item))
+	for _, item in ipairs(bundle_items) do
+		if type(item) == "table" then
+			table.insert(copy, { item[1], item[2] })
+		else
+			table.insert(copy, item)
 		end
 	end
 
-	return final
+	return copy
 end
 
 AddComponentPostInit("klaussackloot", function(self)
-	if self._bosslootmult_klaus_patched then return end
+	if self._bosslootmult_klaus_patched then
+		return
+	end
+	
 	self._bosslootmult_klaus_patched = true
 
 	local _GetLoot = self.GetLoot
@@ -329,7 +322,13 @@ AddComponentPostInit("klaussackloot", function(self)
 		local final = {}
 
 		for _, bundle_items in ipairs(loot) do
-			table.insert(final, MultiplyKlaus(bundle_items, mult))
+			table.insert(final, bundle_items)
+
+			local extra = ExtraRoll(mult)
+
+			for i = 1, extra do
+				table.insert(final, CopyBundle(bundle_items))
+			end
 		end
 
 		return final
@@ -433,6 +432,51 @@ end
 
 AddPrefabPostInit("worm_boss_segment", MultiplyWormBossBodyLoot)
 AddPrefabPostInit("worm_boss", MultiplyWormBossBodyLoot)
+
+local function MultiplyExtraShroomSkins(inst, config)
+	local n = GetModConfigData(config) or 1
+	local mult = 1 + (n - 1) / 2
+	local extra = ExtraRoll(mult)
+
+	if extra <= 0 then
+		return
+	end
+
+	local player = inst:GetNearestPlayer()
+
+	for i = 1, extra do
+		LaunchAt(SpawnPrefab("shroom_skin"), inst, player, 1, 4, 2)
+	end
+end
+
+local function PatchThresholds(prefab, config)
+	AddPrefabPostInit(prefab, function(inst)
+		if not TheWorld.ismastersim then return end
+
+		inst:ListenForEvent("roar", function(inst)
+			inst:DoTaskInTime(0, function()
+				if inst.components.health == nil or inst.components.health:IsDead() then
+					return
+				end
+
+				local phase = inst.phase or 1
+
+				if inst.MultiplyLastPhase == phase then
+					return
+				end
+
+				inst.MultiplyLastPhase = phase
+
+				if phase >= 2 then
+					MultiplyExtraShroomSkins(inst, config)
+				end
+			end)
+		end)
+	end)
+end
+
+PatchThresholds("toadstool", "toadstool_health_")
+PatchThresholds("toadstool_dark", "toadstool_dark_health_")
 
 for _, prefab in ipairs(shadowpieces) do
     AddPrefabPostInit(prefab, function(inst)
