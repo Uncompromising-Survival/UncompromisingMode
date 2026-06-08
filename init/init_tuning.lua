@@ -62,7 +62,6 @@ TUNING.DSTU = {
     GOODIESNERF = GetModConfigData("goodies_nerf"),
     -- Daywalker
     DAYWALKERSPAWN = GetModConfigData("daywalker_spawn"),
-    DAYWALKERSPAWN = GetModConfigData("daywalker_spawn"),
 
     -- Global appearance rate of foods
     FOOD_CARROT_PLANTED_APPEARANCE_PERCENT = 0.75,
