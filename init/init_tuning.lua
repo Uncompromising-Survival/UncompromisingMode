@@ -62,7 +62,6 @@ TUNING.DSTU = {
     GOODIESNERF = GetModConfigData("goodies_nerf"),
     -- Daywalker
     DAYWALKERSPAWN = GetModConfigData("daywalker_spawn"),
-    DAYWALKERSPAWN = GetModConfigData("daywalker_spawn"),
 
     -- Global appearance rate of foods
     FOOD_CARROT_PLANTED_APPEARANCE_PERCENT = 0.75,
@@ -73,7 +72,6 @@ TUNING.DSTU = {
     FOOD_MUSHROOM_RED_APPEARANCE_PERCENT = 0.7,
     -- Growth time increases
     STONE_FRUIT_GROWTH_INCREASE = 3,
-    TREE_GROWTH_TIME_INCREASE = 1.00,
     BERRYBUSH_JUICY_CYCLES = 2,
     -- Food stats
     FOOD_BUTTERFLY_WING_HEALTH = 1,
@@ -726,7 +724,7 @@ end
 --TUNING.KRAMPUS_THRESHOLD_VARIANCE = 40
 --end
 
-TUNING.COMPASS_FUEL = total_day_time * 5
+TUNING.COMPASS_FUEL = total_day_time * 10
 
 TUNING.BOAT.GRASSBOAT_LEAK_DAMAGE.med_leak = 75
 TUNING.BOAT.GRASSBOAT_LEAK_DAMAGE.small_leak = 50
