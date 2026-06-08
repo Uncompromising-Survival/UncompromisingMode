@@ -51,7 +51,7 @@ end
 
 local function TrySlowdown(inst, target)
     local debuffkey = inst.prefab
-    --if inst.prefab ~= "um_lavaspit_slobber" then
+
     if (not target:HasTag("player") or target == inst.lobber) and target.components.locomotor ~= nil then
         if target._lavavomit_speedmulttask ~= nil then
             target._lavavomit_speedmulttask:Cancel()
@@ -63,7 +63,6 @@ local function TrySlowdown(inst, target)
 
         target.components.locomotor:SetExternalSpeedMultiplier(target, debuffkey, 0.5)
     end
-    --end
 
     if (not target:HasTag("player") or target == inst.lobber) and (inst.prefab ~= "um_lavaspit_slobber" and inst.components.propagator ~= nil or inst.prefab == "um_lavaspit_slobber") and target.components.combat ~= nil and target.components.health ~= nil and
         not target:HasTag("dragonfly") and not target:HasTag("lavae") and target.components.burnable ~= nil then
@@ -94,17 +93,12 @@ local function TrySlowdown(inst, target)
 end
 
 local function DoAreaSlow(inst)
+    local lobber = inst.lobber and inst.lobber:IsValid() and inst.lobber or nil
+    local lobbercombat = lobber and lobber.components.combat or nil
     local x, y, z = inst.Transform:GetWorldPosition()
     local ents = TheSim:FindEntities(x, y, z, inst.components.aura.radius, nil, inst.dragonflyspit and AURA_EXCLUDE_TAGS_DRAGONFLY or AURA_EXCLUDE_TAGS)
     for i, v in ipairs(ents) do
-        if v.entity:IsVisible() and v.components.locomotor then
-            TrySlowdown(inst, v)
-        end
-    end
-
-    local walls = TheSim:FindEntities(x, y, z, inst.components.aura.radius, { "wall" }, { "INLIMBO", "_inventoryitem" })
-    for i, v in ipairs(walls) do
-        if v.entity:IsVisible() then
+        if v.entity:IsVisible() and (not (lobbercombat and lobbercombat:IsAlly(v)) or v == lobber) then
             TrySlowdown(inst, v)
         end
     end
@@ -501,13 +495,6 @@ local function DoAreaEffectMagma(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
     local ents = TheSim:FindEntities(x, y, z, inst.components.aura.radius, nil, SNAILDRAKE_AURA_EXCLUDE_TAGS)
     for i, v in ipairs(ents) do
-        if v ~= lobber and v.entity:IsVisible() and not (lobbercombat and lobbercombat:IsAlly(v)) and v.components.locomotor then
-            SnaildrakeTrySlowdownMagma(inst, v)
-        end
-    end
-
-    local walls = TheSim:FindEntities(x, y, z, inst.components.aura.radius, { "wall" }, { "INLIMBO", "_inventoryitem" })
-    for i, v in ipairs(walls) do
         if v ~= lobber and v.entity:IsVisible() and not (lobbercombat and lobbercombat:IsAlly(v)) then
             SnaildrakeTrySlowdownMagma(inst, v)
         end
