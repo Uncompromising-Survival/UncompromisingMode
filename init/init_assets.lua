@@ -824,6 +824,8 @@ Assets = {
     Asset("IMAGE", "bigportraits/wathom_triumphant.tex"),
     Asset("ATLAS", "bigportraits/wathom_triumphant.xml"),
 
+    Asset("ANIM", "anim/wathom_wound_vfx.zip"),
+
     -- ITS WIXIE!!! (Also walter...)
 
     Asset("ANIM", "anim/wixie.zip"),

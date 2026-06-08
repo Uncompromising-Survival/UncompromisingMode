@@ -74,7 +74,8 @@ local function FindSpreadSpot(inst)
         inst.redo = true
     end
 
-    if #TheSim:FindEntities(x, y, z, 64, { "snowpile" }) > 48 then -- limit all snowpiles in a big radius
+    --using snowpilemanager here becuase its a big dist check, FindEntities is unperformant.
+    if TheWorld.components.um_snowstormmanager:CheckForOtherSnowpiles({ x = x, y = y, z = z }, 64 * 64) > 48 then -- limit all snowpiles in a big radius
         inst.redo = true
         inst.count = 9
     end
@@ -128,14 +129,18 @@ local function onregen(inst)
             startregen(inst)
         end
     else
-        if inst.components.workable.workleft > 1 then
-            SpawnPrefab("washashore_puddle_fx").Transform:SetPosition(my_x, 0, my_z)
-            inst.components.workable:SetWorkLeft(inst.components.workable.workleft - 1)
-            inst.components.pickable.cycles_left = inst.components.pickable.cycles_left - 1
-            startregen(inst)
-        else
-            SpawnPrefab("washashore_puddle_fx").Transform:SetPosition(my_x, 0, my_z)
+        if inst:IsAsleep() then
             inst:Remove()
+        else
+            if inst.components.workable.workleft > 1 then
+                SpawnPrefab("washashore_puddle_fx").Transform:SetPosition(my_x, 0, my_z)
+                inst.components.workable:SetWorkLeft(inst.components.workable.workleft - 1)
+                inst.components.pickable.cycles_left = inst.components.pickable.cycles_left - 1
+                startregen(inst)
+            else
+                SpawnPrefab("washashore_puddle_fx").Transform:SetPosition(my_x, 0, my_z)
+                inst:Remove()
+            end
         end
     end
 
@@ -258,9 +263,9 @@ end
 local function TryColdness(v)
     if v.components.temperature and not v:HasTag("weerclops") then
         if v.components.inventory and (v.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) and
-            v.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY).prefab ~= "beargervest" or
-            v.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) == nil) or v.components.inventory == nil then
-                v.components.temperature:DoDelta(-5)
+                v.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY).prefab ~= "beargervest" or
+                v.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) == nil) or v.components.inventory == nil then
+            v.components.temperature:DoDelta(-5)
         end
     end
 end
@@ -301,8 +306,8 @@ local function onpickedfn(inst, picker)
         end
 
         if picker.components.temperature ~= nil then
-            local winterInsulation,summerInsulation = picker.components.temperature:GetInsulation()
-            local temp = winterInsulation <= 0 and -20 or -20*(winterInsulation / 30)
+            local winterInsulation, summerInsulation = picker.components.temperature:GetInsulation()
+            local temp = winterInsulation <= 0 and -20 or -20 * (winterInsulation / 30)
             picker.components.temperature:DoDelta(temp)
         end
     end
@@ -369,16 +374,27 @@ local function OnSeasonChange(inst)
     if TheWorld.state.iswinter then return end
     inst.persists = false
     if inst.removesnowpile then return end
-    inst.removesnowpile = inst:DoTaskInTime(math.min(math.random() * .5, .5), function(inst)
-        if not TheWorld.state.iswinter then inst:Remove() end
-    end)
+    if not inst:IsAsleep() then
+        inst.removesnowpile = inst:DoTaskInTime(math.min(math.random() * .5, .5), function(inst)
+            if not TheWorld.state.iswinter then inst:Remove() end
+        end)
+    else
+        inst:Remove()
+    end
 end
 
 local function SlowlyPickAway(inst)
     if TheWorld.state.iswinter or not TheWorld.state.israining or inst.slowlypicksnowpile then return end
+
     inst.slowlypicksnowpile = inst:DoTaskInTime(math.min(math.random() * .5, .5), function(inst)
-        if TheWorld.state.israining and not TheWorld.state.iswinter then inst.components.pickable:Pick() end
-        inst.slowlypicksnowpile = nil
+        if TheWorld.state.israining and not TheWorld.state.iswinter then
+            if not inst:IsAsleep() then
+                inst.components.pickable:Pick()
+            else
+                inst:Remove()
+            end
+            inst.slowlypicksnowpile = nil
+        end
     end)
 end
 
@@ -530,7 +546,10 @@ local function snowpilefn(Sim)
     SpawnPrefab("splash_snow_fx").Transform:SetPosition(x, 0, z)
     inst:ListenForEvent("animover", on_anim_over)
 
+    TheWorld.components.um_snowstormmanager:RegisterSnowpile(inst)
     inst:ListenForEvent("onremove", function()
+        TheWorld.components.um_snowstormmanager:UnregisterSnowpile(inst)
+
         local x, y, z = inst.Transform:GetWorldPosition()
         local inlimbostructures = TheSim:FindEntities(x, y, z, inst.components.aura.radius, { "structure", "NOCLICK" }, { "wall" })
         for i, v in ipairs(inlimbostructures) do

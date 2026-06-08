@@ -33,7 +33,7 @@ env.AddPrefabPostInit("molehat", function(inst)
             inst.components.fueled.fueltype = FUELTYPE.BATTERYPOWER
             inst.components.fueled.rate_modifiers:SetModifier(inst, 0.75, "electricalefficiency")
 
-            inst.components.named:SetName(STRINGS.NAMES.MINERHAT_ELECTRICAL) --this seems to actually set the name, since it has a replica for clients
+            inst.components.named:SetName(STRINGS.NAMES.MOLEHAT_ELECTRICAL) --this seems to actually set the name, since it has a replica for clients
 
             inst:AddComponent("batteryuser")
             inst.components.batteryuser:SetChargeMultFn(CalcBatteryChargeMult)

@@ -109,32 +109,6 @@ local UMVetCurse = require("tools/um_vetcurseutility")
     
     inst.OnSave = OnSave
     inst.OnLoad = OnLoad
-]]
-
-env.AddPlayerPostInit(function(inst)
-    if not TheWorld.ismastersim then return inst end
-    
-    local _OnSave = inst.OnSave
-    local function OnSave(inst, data, ...)
-        if inst.vetcurse then
-            data.vetscurse = inst.vetcurse
-        end
-        return _OnSave(inst, data, ...)
-    end
-
-    local _OnLoad = inst.OnLoad
-    local function OnLoad(inst, data, ...)
-        if data and data.vetscurse and inst.UMToggleVetCurse then
-            inst:UMToggleVetCurse(true)
-        end
-        return _OnLoad(inst, data, ...)
-    end
-
-    inst.UMToggleVetCurse = UMVetCurse.ToggleVetCurse
-
-    inst.OnSave = OnSave
-    inst.OnLoad = OnLoad
-end)
 
 env.AddClassPostConstruct("widgets/healthbadge", function(self, owner)
     local _OldOnUpdate = self.OnUpdate
@@ -193,4 +167,34 @@ env.AddClassPostConstruct("widgets/controls", function(self, owner)
         
         return _OldOnUpdate(self, dt)
     end
+end)]]
+
+env.AddPlayerPostInit(function(inst)
+    if not TheWorld.ismastersim then return inst end
+    
+    local _OnSave = inst.OnSave
+    local function OnSave(inst, data, ...)
+        if inst.vetcurse then
+            data.vetscurse = inst.vetcurse
+        end
+        return _OnSave(inst, data, ...)
+    end
+
+    local _OnLoad = inst.OnLoad
+    local function OnLoad(inst, data, ...)
+        if TUNING.DSTU.VETCURSE == "default" and data and data.vetscurse and inst.UMToggleVetCurse then
+            inst:UMToggleVetCurse(true)
+        end
+        return _OnLoad(inst, data, ...)
+    end
+
+    inst.UMToggleVetCurse = UMVetCurse.ToggleVetCurse
+
+    if TUNING.DSTU.VETCURSE == "always" and not inst:HasTag("vetcurse") then
+        if inst.UMToggleVetCurse then inst:UMToggleVetCurse(true) end
+        inst:PushEvent("foodbuffattached", {buff = "ANNOUNCE_ATTACH_BUFF_VETCURSE", 1})
+    end
+
+    inst.OnSave = OnSave
+    inst.OnLoad = OnLoad
 end)

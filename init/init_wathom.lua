@@ -24,7 +24,7 @@ end
 local function SpreadGoo(inst,number)
     local circle = number*2+3
     local x,y,z = inst.Transform:GetWorldPosition()
-    local radius = number*2
+    local radius = number*3
     for i = 1,circle do
         local x1 = x+radius*math.cos(2*3.14*i/circle)
         local z1 = z+radius*math.sin(2*3.14*i/circle)
@@ -32,7 +32,7 @@ local function SpreadGoo(inst,number)
         puddle.Transform:SetPosition(x1,y,z1)
         puddle.wathom = inst
     end
-    
+
     if number < 2 then
         inst:DoTaskInTime(.2,function(inst) SpreadGoo(inst,number+1) end)
     end
@@ -320,14 +320,20 @@ AddStategraphPostInit("wilsonghost", function(inst)
                 fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
                 fx.Transform:SetScale(1.2, 1.2, 1.2)
             end
-            
+ 
             if HasSkill(inst,"bark_mastery") then
                 SpreadGoo(inst,1)
             end
             local x,y,z = inst.Transform:GetWorldPosition()
             local ents = GLOBAL.TheSim:FindEntities(x, y, z, 8) --added playertags because of the taunt.
+            local RESSURECT_PREFABS = {"multiplayer_portal", "wathom_corpse", "lifeamulet", "ancient_amulet_red", "resurrectionstone", "cave_exit"}
             for i, v in ipairs(ents) do
-                if v.components.hauntable ~= nil and v.prefab ~= "wathom_corpse" and v.prefab ~= "lifeamulet" and v.prefab ~= "ancient_amulet_red" and v.prefab ~= "resurrectionstone" then
+                if v.components.hauntable ~= nil --[[and v.prefab ~= "wathom_corpse" and v.prefab ~= "lifeamulet" and v.prefab ~= "ancient_amulet_red" and v.prefab ~= "resurrectionstone"]] then
+                    for _, prefab in pairs(RESSURECT_PREFABS) do
+                        if v.prefab == prefab then
+                            return
+                        end
+                    end
                     AddEnemyDebuffFx("battlesong_instant_panic_fx", v)
                     v.components.hauntable:DoHaunt(inst)
                     if HasSkill(inst,"wathom_friends_1") then
@@ -340,7 +346,7 @@ AddStategraphPostInit("wilsonghost", function(inst)
     end
 
     inst.states["haunt_pre"].onenter = NewOnEnter
-    
+
     local _haunt = inst.states["haunt"].onenter
     local function NewOnEnter(inst, ...)
         _haunt(inst, ...)
@@ -397,9 +403,9 @@ local function CheckIfDead(inst, target)
             local loot = TheSim:FindEntities(x, y, z, 4, bite2MustTags, bite2CantTags, bite2MustOneOfTags)
             for i,v in ipairs(loot) do
                 if v.components.edible and not v.wathom_dont_eat and v.components.edible.healthvalue >= 0 and not v.components.inventoryitem:IsHeld() then
-                    local health_restore = v.components.edible.healthvalue*1.1
-                    local hunger_restore = v.components.edible.hungervalue*1.1
-                    local sanity_restore = v.components.edible.sanityvalue*1.1
+                    local health_restore = v.components.edible.healthvalue*1.5
+                    local hunger_restore = v.components.edible.hungervalue*1.5
+                    local sanity_restore = v.components.edible.sanityvalue*1.5
                     if (inst.components.hunger.current + hunger_restore) < inst.components.hunger.max then
                         inst.components.hunger:DoDelta(hunger_restore)
                         inst.components.health:DoDelta(health_restore)
@@ -647,6 +653,25 @@ AddStategraphPostInit("wilson", function(inst)
                 --                inst.components.talker:Say("Can't... Breathe...", nil, true) -- I can't think of something cool for Wathom to say, so away this goes.
 
                 inst.AnimState:PlayAnimation("sing_fail", false)
+                if inst.components.adrenaline:GetPercent() < 0.25 and not inst:HasAnyTag("amped", "deathamp") then
+                    local health = inst.components.health
+                    if health and not health:IsDead() then
+                        if health.currenthealth > 5 or TUNING.DSTU.DATES.APRIL_FOOLS then
+                            print(health.currenthealth)
+                            health:DoDelta(-5, nil, "DEATHAMP", nil, nil, true)
+                        end
+                        inst.components.adrenaline:DoDelta(25)
+                        inst.components.grogginess.grog_amount = 0
+                        local x, y, z = inst.Transform:GetWorldPosition()
+                        SpawnPrefab("minotaur_blood3").Transform:SetPosition(x, y, z)
+                        inst:DoTaskInTime(.5, function()
+                            SpawnPrefab("minotaur_blood3").Transform:SetPosition(x, y, z)
+                            if health.currenthealth > 5 or TUNING.DSTU.DATES.APRIL_FOOLS then
+                                health:DoDelta(-5, nil, "DEATHAMP", nil, nil, true)
+                            end
+                        end)
+                    end
+                end
 
                 inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/leap") -- maybe make something new later?
             end,
@@ -1111,7 +1136,7 @@ local wathombark = AddAction(
             doer.components.adrenaline:DoDelta(doer:HasTag("amped") and 8 or -25, 2)
             --        doer.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/bark") Commented out for now since it already plays the sound before this code is performed
 
-            local pos = act:GetActionPoint()
+            local pos = act:GetActionPoint() -- Cursor Position Bark
             local ents = GLOBAL.TheSim:FindEntities(pos.x, pos.y, pos.z, 10, {"_combat"}, {"companion", "INLIMBO", "notarget", "noattack", "player", "playerghost", "wall", "abigail", "shadowminion", "shadow"}) --added playertags because of the taunt.
             for i, v in ipairs(ents) do
                 if v ~= doer and v.entity:IsVisible()
@@ -1132,7 +1157,7 @@ local wathombark = AddAction(
                 end
             end
             --also scare enemies near wathom, at a smaller radius
-            local x, y, z = doer.Transform:GetWorldPosition()
+            local x, y, z = doer.Transform:GetWorldPosition() -- Wathom Position Bark
             ents = GLOBAL.TheSim:FindEntities(x, y, z, 4, {"_combat"}, {"companion", "INLIMBO", "notarget", "noattack", "player", "playerghost", "wall", "abigail", "shadowminion", "shadow", "trap"}) --added playertags because of the taunt.
             for i, v in ipairs(ents) do
                 if v ~= doer and v.entity:IsVisible()
@@ -1279,13 +1304,13 @@ AddPlayerPostInit(function(inst)
     if inst:HasTag("wathom") then
         inst.counter_max = GLOBAL.net_shortint(inst.GUID, "counter_max", "counter_maxdirty")
         inst.counter_current = GLOBAL.net_shortint(inst.GUID, "counter_current", "counter_currentdirty")
-    
-        
+
+
         if _G.TheWorld.ismastersim then
             inst.HoundTask = HoundTask
-            inst:AddComponent("adrenaline")    
+            inst:AddComponent("adrenaline")
         end
-        inst:ListenForEvent("onattackother", AttackOther)
+        inst:ListenForEvent("onattackother", AttackOther) --???????
     end
 end)
 

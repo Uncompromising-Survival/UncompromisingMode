@@ -121,6 +121,9 @@ local function Giveknowledge(inst)
 			if player.components.talker ~= nil then
 				player.components.talker:Say(GetString(player, they_know and "ANNOUNCE_ARCHIVE_NEW_KNOWLEDGE" or "ANNOUNCE_ARCHIVE_OLD_KNOWLEDGE" ), nil, true)
 			end
+            if player:HasTag("wathom") then
+                SendRPCToClient(CLIENT_RPC.UpdateAccomplishment, player.userid, "wathom_ancient_knowledge")
+            end
 		end
 	end
 end

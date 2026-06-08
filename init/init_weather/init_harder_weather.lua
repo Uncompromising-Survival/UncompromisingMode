@@ -131,6 +131,8 @@ env.AddPrefabPostInit("forest", function(inst)
         inst:AddComponent("um_snow_stormspawner")
     end
 
+    inst:AddComponent("um_snowstormmanager")
+
     if TUNING.DSTU.HEATWAVES then
         inst:AddComponent("um_heatwaves")
     end

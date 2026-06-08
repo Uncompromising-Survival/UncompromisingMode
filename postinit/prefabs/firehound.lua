@@ -10,35 +10,6 @@ local function RechargeSpitfireAttack(inst)
     -- hitrange = 3
 end
 
-local ARC = 90 * DEGREES --degrees to each side
-local AOE_TARGET_CANT_TAGS = { "INLIMBO", "invisible", "notarget", "noattack" }
-local function PoofNearby(inst)
-    local x, y, z = inst.Transform:GetWorldPosition()
-    local rot = inst.Transform:GetRotation() * DEGREES
-    local x0, z0
-    local radius = 4
-    for i, v in ipairs(TheSim:FindEntities(x, y, z, radius, nil, AOE_TARGET_CANT_TAGS)) do
-        if v ~= inst and v:IsValid() and not v:IsInLimbo()
-            and not (v.components.health ~= nil and v.components.health:IsDead()) then
-            local attackable = UMCommonFns.IsNotFriendly(inst, v)
-            if not attackable then return end
-            local range = radius + v:GetPhysicsRadius(0)
-            local x1, y1, z1 = v.Transform:GetWorldPosition()
-            local dx = x1 - x
-            local dz = z1 - z
-            local distsq = dx * dx + dz * dz
-            if distsq > 0 and distsq < range * range and DiffAngleRad(rot, math.atan2(-dz, dx)) < ARC then
-                if not v.components.fueled and v.components.burnable and not v.components.burnable:IsBurning() and not v:HasTag("burnt") then
-                    v.components.burnable:Ignite()
-                end
-                if v.components.health then
-                    v.components.health:DoFireDamage(10, nil, true)
-                end
-            end
-        end
-    end
-end
-
 local function SetUpFire(inst, degrand, speed, scale, damage)
     local x, y, z = inst.Transform:GetWorldPosition()
     local projectile = SpawnPrefab("um_fire_projectile")
@@ -53,15 +24,6 @@ local function SetUpFire(inst, degrand, speed, scale, damage)
     projectile.speed = speed
     projectile.scale = scale -- scale up sometimes.
     projectile.damage = damage
-end
-
-local function ShootFireMagmaHound(inst, total_flame) --AXE obviously called by magmahound to perform its continuous fire breath attack
-    for i = 1, total_flame do
-        inst:DoTaskInTime(0 + math.random(1, 15) * FRAMES, function(inst)
-            SetUpFire(inst, 5, 20, 0.8 + math.random(0, 10) / 100, 2)
-            PoofNearby(inst)
-        end)
-    end
 end
 
 local function ShootFire(inst) --AXE this one is called by fire hound for its short-range spitfire attack
@@ -89,7 +51,7 @@ local function OnHitOtherBurn(inst, data)
 end
 
 local function IsAlly(inst, guy)
-    return UMCommonFns.IsAlly(inst, guy, {"hound", "houndfriend", "houndmound"})
+    return UMCommonFns.IsAlly(inst, guy, { "hound", "houndfriend", "houndmound" })
 end
 
 env.AddPrefabPostInit("firehound", function(inst)
@@ -100,7 +62,7 @@ env.AddPrefabPostInit("firehound", function(inst)
     inst.UMIsAlly = IsAlly
 
     if inst.components.combat then
-		inst:ListenForEvent("onhitother", OnHitOtherBurn)
+        inst:ListenForEvent("onhitother", OnHitOtherBurn)
     end
 
     inst:AddComponent("timer")
@@ -119,16 +81,4 @@ env.AddPrefabPostInit("firehound", function(inst)
             { 'houndstooth', 1.0 },
             { 'redgem',      0.3 },
         })
-end)
-
-env.AddPrefabPostInit("magmahound", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
-
-    if inst.components.combat then
-        inst:ListenForEvent("onhitother", OnHitOtherBurn)
-    end
-
-    inst.ShootFire = ShootFireMagmaHound
 end)

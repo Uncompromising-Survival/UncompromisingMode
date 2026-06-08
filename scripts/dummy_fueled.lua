@@ -1,10 +1,10 @@
-local DummyFn = Class(function(self, inst) --make it an actual class
-    self.inst = inst
-end)
+local DummyFn = function() end
 -- May move these dummy functions outside of the component and somewherer else to improve readability, if anyone wants to do that they can, but it's not necessary.
 
 -- Set up the dummy fueled class
-local DummyFueledClass = {}
+local DummyFueledClass = Class(function(self, inst) --make it an actual class
+    self.inst = inst
+end)
 -- Keep a the variables in the class definition incase they are referenced by another script. They shouldn't do anything, but they're *also* not nil
 DummyFueledClass.consuming = false
 

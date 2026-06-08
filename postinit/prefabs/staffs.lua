@@ -120,7 +120,15 @@ end
 if env.GetModConfigData("telestaff_rework") then
     local function GetAllActiveTelebases()
         local valid_telebases = {}
-        for k, telebase in pairs(Ents) do if telebase.prefab == "telebase" then if telebase.canteleto(telebase) then table.insert(valid_telebases, telebase) end end end
+
+        for k, telebase in pairs(Ents) do
+            if telebase.prefab == "telebase" then
+                if telebase.canteleto ~= nil and telebase:canteleto() or telebase.valid_tp_target:value() then
+                    table.insert(valid_telebases, telebase)
+                end
+            end
+        end
+
         return valid_telebases
     end
 
@@ -242,7 +250,8 @@ if env.GetModConfigData("telestaff_rework") then
         end
     end
 
-    local function validteleporttarget(inst) return true end
+    local function validteleporttarget(inst) return inst:canteleto() end
+
 
     function FindNearestActiveTelebase(x, y, z, range, minrange)
         range = (range == nil and math.huge) or (range > 0 and range * range) or 0
@@ -295,6 +304,7 @@ if env.GetModConfigData("telestaff_rework") then
                 inst.components.spellbook.items = GetAllValidSpells(inst)
             end
         }
+
 
         if #GetAllActiveTelebases() < 2 then -- only show
             return spells
@@ -364,7 +374,11 @@ if env.GetModConfigData("telestaff_rework") then
 
         inst.components.spellbook:SetRequiredTag("telestaff_spellbook_user")
 
-        --inst:ListenForEvent("openspellwheel", UpdateSpells)
+        local _OpenSpellBook = inst.components.spellbook.OpenSpellBook
+        inst.components.spellbook.OpenSpellBook = function(self, user)
+            UpdateSpells(self.inst)
+            _OpenSpellBook(self,user)
+        end
         --inst:ListenForEvent("closespellwheel", UpdateSpells)
 
         if not TheWorld.ismastersim then return end
@@ -463,8 +477,11 @@ if env.GetModConfigData("telestaff_rework") then
 
         inst.OnRemoveEntity = UpdateTelestaffs
 
+        inst.valid_tp_target = net_bool(inst.GUID, "telebase.valid", "telebase.validdirty")
+
+        inst:ListenForEvent("telebase.validdirty", function(inst, data) UpdateTelestaffs() end)
+
         inst.onteleto = teleport_target
-        inst.canteleto = validteleporttarget
 
         inst:AddComponent("areaaware")
         inst.update_location = function(inst)
@@ -476,9 +493,21 @@ if env.GetModConfigData("telestaff_rework") then
 
         inst:DoTaskInTime(0, inst.update_location)
 
+
+
         inst.custom_location_name = net_string(inst.GUID, "custom_location_name")
 
         if not TheWorld.ismastersim then return end
+
+        local _canteleto = inst.canteleto
+        inst.canteleto = function(inst)
+            local ret = _canteleto(inst)
+            inst.valid_tp_target:set(ret)
+
+            return ret
+        end
+
+        inst:DoPeriodicTask(1, inst.canteleto)
 
         inst.components.workable:SetOnWorkCallback(onhit)
 
@@ -515,53 +544,8 @@ if env.GetModConfigData("telestaff_rework") then
         end
     end)
 
-    -- I basicly have to remake this thing, fun!!
-
-    local function OnGemGiven(inst, giver, item)
-        -- inst.SoundEmitter:PlaySound("dontstarve/common/telebase_hum", "hover_loop")
-        inst.SoundEmitter:PlaySound("dontstarve/common/telebase_gemplace")
-        inst.AnimState:PlayAnimation("idle_full_loop", true)
-        inst.components.trader:Disable()
-    end
-
-    local function OnLoad(inst, data) end
-
-    local function OnSave(inst, data) end
-
-    local function getstatus(inst) return "VALID" end
-
-    local function ShatterGem(inst)
-        inst.SoundEmitter:KillSound("hover_loop")
-        inst.AnimState:ClearBloomEffectHandle()
-        inst.AnimState:PlayAnimation("shatter")
-        inst.AnimState:PushAnimation("idle_empty")
-        inst.SoundEmitter:PlaySound("dontstarve/common/gem_shatter")
-    end
-
-    local function DestroyGem(inst)
-        inst.components.trader:Enable()
-        inst:DoTaskInTime(math.random() * 0.5, ShatterGem)
-    end
-
     env.AddPrefabPostInit("gemsocket", function(inst)
-        inst.teleports = 0
-
         if not TheWorld.ismastersim then return end
-
-        inst:RemoveComponent("pickable")
-        -- I uhh, am lazy?
-        inst:DoTaskInTime(1 + math.random(), function(inst)
-            OnGemGiven(inst)
-            local x, y, z = inst.Transform:GetWorldPosition()
-            SpawnPrefab("crab_king_shine").Transform:SetPosition(x, y + 1.75, z)
-        end)
-
-        inst.components.trader.onaccept = OnGemGiven
-        inst.components.inspectable.getstatus = getstatus
-        inst.DestroyGemFn = DestroyGem
-
-        inst.OnLoad = OnLoad
-        inst.OnSave = OnSave
     end)
 end
 

@@ -16,6 +16,10 @@ local itemprefabs=
 }
 
 local function oneaten(inst, eater)
+    if eater:HasTag("raidrat") and eater.components.health and not eater.components.health:IsDead() then 
+        eater.components.health:DoDelta(-TUNING.DSTU.RATPOISON_EAT_DAMAGE * (TUNING.DSTU.RATPOISON_RATMULT -1), nil, "ratpoison")
+    end
+
     eater:AddDebuff("ratpoison_debuff", "ratpoison_debuff")
     if inst.count and inst.count ~= 0 then
         local poison = SpawnPrefab("ratpoison")
@@ -77,7 +81,7 @@ local function fn()
     
     local edible = inst:AddComponent("edible")
     edible.foodtype = FOODTYPE.VEGGIE --Horrible is generally unedible
-    edible.healthvalue = -60
+    edible.healthvalue = -TUNING.DSTU.RATPOISON_EAT_DAMAGE
     edible:SetOnEatenFn(oneaten)
     
     inst:AddComponent("bait")
@@ -109,7 +113,7 @@ end
 local function OnDeploy(inst, pt)
     local poison = SpawnPrefab("ratpoison")
     poison.Transform:SetPosition(pt.x, 0, pt.z)
-    poison.count = 8
+    poison.count = TUNING.DSTU.RATPOISON_EAT_USES
     inst:Remove()
 end
 

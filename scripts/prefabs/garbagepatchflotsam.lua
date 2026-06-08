@@ -199,8 +199,7 @@ local function OnPicked(inst, picker)
 
     if TheWorld.components.ratcheck ~= nil and TheWorld.components.ratcheck:GetBurrows() >= 1 and math.random() > 0.5 then
         SpawnPrefab("uncompromising_rat").Transform:SetPosition(x, y, z)
-
-    end 
+    end
 
     SpawnPrefab("flotsam_break").Transform:SetPosition(x, y, z)
 
@@ -367,15 +366,14 @@ local function landfn(data)
 
     inst:DoTaskInTime(0, function(inst)
         local _inv = TheWorld.components.garbagepatch_manager:GetInventory()
-       
+
         local x, y, z = inst.Transform:GetWorldPosition()
 
         for i = 0, math.random(3, 6) do
             local item = _inv.components.inventory:RemoveItem(_inv.components.inventory:GetFirstItemInAnySlot(), true)
-           
+
             if item ~= nil then
                 inst.components.inventory:GiveItem(item, nil, Vector3(x, y, z))
-               
             end
         end
     end)

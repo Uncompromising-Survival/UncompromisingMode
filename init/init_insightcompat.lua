@@ -46,7 +46,7 @@ AddComponentPostInit("shard_insight", function(self)
 end)
 
 AddPrefabPostInit("widowweb", function(inst)
-    if not _G.TheWorld.ismastersim then return end
+    if not _G.TheWorld.ismastersim or not _G.rawget(_G, "Insight") then return end
 
     inst:DoTaskInTime(0, function()
         _G.TheWorld.shard.components.shard_insight:SetWidowSpawner(inst)
