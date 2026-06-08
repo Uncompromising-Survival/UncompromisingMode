@@ -478,6 +478,52 @@ end
 PatchThresholds("toadstool", "toadstool_health_")
 PatchThresholds("toadstool_dark", "toadstool_dark_health_")
 
+local function MultiplyDragonflyScales(inst)
+	if not TheWorld.ismastersim then
+		return
+	end
+
+	inst:DoTaskInTime(0, function()
+		if inst.components.damagetracker == nil or inst.components.stunnable == nil then
+			return
+		end
+
+		if inst.ExtraScales then
+			return
+		end
+
+		inst.ExtraScales = true
+
+		local n = GetModConfigData("dragonfly_health_") or 1
+		local mult = 1 + (n - 1) / 2
+
+		inst.components.damagetracker.damage_threshold = TUNING.DRAGONFLY_BREAKOFF_DAMAGE * n
+		inst.components.stunnable.stun_threshold = TUNING.DRAGONFLY_STUN * n
+
+		local old_damage_threshold_fn = inst.components.damagetracker.damage_threshold_fn
+
+		inst.components.damagetracker.damage_threshold_fn = function(inst, ...)
+			if old_damage_threshold_fn ~= nil then
+				old_damage_threshold_fn(inst, ...)
+			end
+
+			local extra = ExtraRoll(mult)
+
+			if extra <= 0 then
+				return
+			end
+
+			local player = inst:GetNearestPlayer()
+
+			for i = 1, extra do
+				LaunchAt(SpawnPrefab("dragon_scales"), inst, player, 1, 3, 1.5)
+			end
+		end
+	end)
+end
+
+AddPrefabPostInit("dragonfly", MultiplyDragonflyScales)
+
 for _, prefab in ipairs(shadowpieces) do
     AddPrefabPostInit(prefab, function(inst)
         if not TheWorld.ismastersim then return end
