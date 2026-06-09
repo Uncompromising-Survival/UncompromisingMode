@@ -206,14 +206,14 @@ env.AddStategraphPostInit("wilson", function(inst)
                                         v.Transform:SetPosition(dx, dy, dz)
                                     end
                                 end
-
-                                if i >= 50 then
-                                    v:RemoveTag("wixieshoved")
-                                end
                             end
                         end)
                     end
                 end
+
+                v:DoTaskInTime(1, function(v)
+                    v:RemoveTag("wixieshoved")
+                end)
             end
         end
     end
