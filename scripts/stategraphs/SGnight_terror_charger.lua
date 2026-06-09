@@ -20,7 +20,7 @@ local function Check_ChargingButItsBowling(inst,v) --I'll steal it, and noone wi
 
 	if v.components.locomotor ~= nil and not v:HasTag("stageusher") then
 		for i = 1, 50 do
-			v:DoTaskInTime((i - 1) / 50, function(v)
+			v:DoTaskInTime((i - 1) / 75, function(v)
 				if v ~= nil and inst ~= nil then
 					local x, y, z = inst.Transform:GetWorldPosition()
 					local tx, ty, tz = v.Transform:GetWorldPosition()

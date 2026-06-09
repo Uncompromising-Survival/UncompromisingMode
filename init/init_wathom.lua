@@ -226,15 +226,15 @@ local function Check_Bowling(inst, target)
             end
 
             if v.components.locomotor ~= nil and not v:HasAnyTag(NO_SHOVE_TAGS) then
-                for i = 1, 25 do
-                    v:DoTaskInTime((i - 1) / 50, function(v)
+                for i = 1, 50 do
+                    v:DoTaskInTime((i - 1) / 75, function(v)
                         if v ~= nil and inst ~= nil then
                             local x, y, z = inst.Transform:GetWorldPosition()
                             local tx, ty, tz = v.Transform:GetWorldPosition()
 
                             local rad = math.rad(inst:GetAngleToPoint(tx, ty, tz))
-                            local velx = math.cos(rad)*2  --* 4.5
-                            local velz = -math.sin(rad)*2 --* 4.5
+                            local velx = math.cos(rad)  --* 4.5
+                            local velz = -math.sin(rad) --* 4.5
 
                             local giantreduction = v:HasTag("epic") and 1.5 or v:HasTag("smallcreature") and .8 or 1
                             local cursemultiplier = v:HasDebuff("wixiecurse_debuff") and 1.75 or 1.25
