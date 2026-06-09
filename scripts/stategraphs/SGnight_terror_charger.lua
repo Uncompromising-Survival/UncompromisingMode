@@ -8,7 +8,7 @@ local actionhandlers =
 
     local SLEEPREPEL_MUST_TAGS = { "_combat" }
     local SLEEPREPEL_CANT_TAGS = { "player", "companion", "shadow", "playerghost", "INLIMBO", "wixieshoved", "invisible",
-        "hiding", "NOTARGET", "flight", "toadstool" }
+        "hiding", "NOTARGET", "flight", "toadstool", "rooted" }
 
 local function Check_ChargingButItsBowling(inst,v) --I'll steal it, and noone will ever know. (Credit to Scrimbles for Shove)
 	if inst ~= nil then

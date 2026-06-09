@@ -107,7 +107,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
     local SLEEPREPEL_MUST_TAGS = { "_combat" }
     local SLEEPREPEL_CANT_TAGS = { "player", "companion", "abigail", "shadowminion", "shadow", "playerghost", "INLIMBO", "wixieshoved", "invisible",
-        "hiding", "NOTARGET", "flight", "toadstool" }
+        "hiding", "NOTARGET", "flight", "toadstool", "rooted" }
     local SHIELD_CANT_TAGS = { "player", "companion", "abigail", "playerghost", "INLIMBO", "wixieshoved", "invisible",
         "hiding", "NOTARGET", "flight", "toadstool", "bird", "wall" }
     local NO_SHOVE_TAGS = {"stageusher", "toadstool"}
