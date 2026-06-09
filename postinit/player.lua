@@ -396,11 +396,10 @@ env.AddPlayerPostInit(function(inst)
     local current_time = os.time()
     local current_month = os.date("*t", current_time).month
 
-    local UNLOCKMODDEDSKIN_RPC = GetClientModRPC("ModdedSkins", "UnlockModdedSkin")
-    if UNLOCKMODDEDSKIN_RPC then
+    if CLIENT_MOD_RPC["ModdedSkins"] then
         inst:DoTaskInTime(0, function()
             if current_month == 6 then
-                SendModRPCToClient(UNLOCKMODDEDSKIN_RPC, inst.userid, "ms_um_trans_bomb_moon")
+                SendModRPCToClient(GetClientModRPC("ModdedSkins", "UnlockModdedSkin"), inst.userid, "ms_um_trans_bomb_moon")
             end
         end)
     end
