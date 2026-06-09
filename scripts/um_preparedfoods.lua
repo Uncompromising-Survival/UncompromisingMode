@@ -682,7 +682,7 @@ local um_preparedfoods =
     um_rimeweed_spagett =
     {
         test = function(cooker, names, tags) return names.um_ice_tail and names.um_rimeweed_itemvine and tags.egg and not tags.fruit end,
-        hunger = 46.8,
+        hunger = 50,
         health = 3,
         sanity = 5,
         priority = 200,
@@ -691,7 +691,7 @@ local um_preparedfoods =
         temperature = TUNING.COLD_FOOD_BONUS_TEMP,
         temperatureduration = TUNING.FOOD_TEMP_LONG,
         foodtype = FOODTYPE.MEAT,
-        perishtime = 3 * TUNING.PERISH_TWO_DAY,
+        perishtime = 4 * TUNING.PERISH_TWO_DAY,
         floater = { "med", .05, .65 },
         card_def = { ingredients = { { "um_rimeweed_itemvine", 3 }, { "um_ice_tail", 1 }, { "bird_egg", 1 } } },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_RIMEWEED_SPAGETT,
