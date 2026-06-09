@@ -280,8 +280,10 @@ local function OnHitVortex(inst, attacker, target)
                     if v:HasAnyTag("lunar_aligned", "player_lunar_aligned") or v.components.halloweenmoonmutable then
                         mult = mult * 3 -- ATOBA shadow bomb is exceptionally effective against lunar creatures
                     end
-                    v.components.combat:GetAttacked(attacker, mult * 75, inst, nil, { planar = 100 })
+                    v.components.combat:GetAttacked(attacker, mult * 150, inst)
                 end
+
+                --todo: shadow sneak thingy on suck?
                 if v.components.sanity then
                     v.components.sanity:DoDelta(-50)
                 end
@@ -478,7 +480,7 @@ local function vortex_fn()
             for i, v in pairs(ents) do
                 if (not v:HasTag("player") or v == attacker) then
                     if v.components.combat and v.components.health and not v.components.health:IsDead() and not inst:HasAnyTag(shouldnt_hit) and v.components.combat:CanBeAttacked(attacker) then
-                        v.components.combat:GetAttacked(attacker, 20, nil, nil, { planar = 80 })
+                        v.components.combat:GetAttacked(attacker, 34)
                     end
                 end
             end
