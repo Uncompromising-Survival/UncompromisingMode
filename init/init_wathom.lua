@@ -28,9 +28,11 @@ local function SpreadGoo(inst,number)
     for i = 1,circle do
         local x1 = x+radius*math.cos(2*3.14*i/circle)
         local z1 = z+radius*math.sin(2*3.14*i/circle)
-        local puddle = GLOBAL.SpawnPrefab("wathom_puddle")
-        puddle.Transform:SetPosition(x1,y,z1)
-        puddle.wathom = inst
+        if TheWorld.Map:IsPassableAtPoint(x1, y, z1) then
+            local puddle = GLOBAL.SpawnPrefab("wathom_puddle")
+            puddle.Transform:SetPosition(x1,y,z1)
+            puddle.wathom = inst
+        end
     end
 
     if number < 2 then
@@ -208,7 +210,7 @@ end
 -- This is Scrimble's Shove Code, it's used for both Charles T. Horse and Wixie, be appreciative, swine.
 local SLEEPREPEL_MUST_TAGS = {"_combat"}
 local SLEEPREPEL_CANT_TAGS = {"player", "companion", "abigail", "shadowminion", "playerghost", "INLIMBO", "wixieshoved", "invisible",
-    "hiding", "notarget", "noattack", "flight", "wall"}
+    "hiding", "notarget", "noattack", "flight", "wall", "rooted"}
 local NO_SHOVE_TAGS = {"stageusher", "toadstool"}
 local function Check_Bowling(inst, target)
     local x, y, z = inst.Transform:GetWorldPosition()
@@ -224,15 +226,15 @@ local function Check_Bowling(inst, target)
             end
 
             if v.components.locomotor ~= nil and not v:HasAnyTag(NO_SHOVE_TAGS) then
-                for i = 1, 50 do
+                for i = 1, 25 do
                     v:DoTaskInTime((i - 1) / 50, function(v)
                         if v ~= nil and inst ~= nil then
                             local x, y, z = inst.Transform:GetWorldPosition()
                             local tx, ty, tz = v.Transform:GetWorldPosition()
 
                             local rad = math.rad(inst:GetAngleToPoint(tx, ty, tz))
-                            local velx = math.cos(rad)  --* 4.5
-                            local velz = -math.sin(rad) --* 4.5
+                            local velx = math.cos(rad)*2  --* 4.5
+                            local velz = -math.sin(rad)*2 --* 4.5
 
                             local giantreduction = v:HasTag("epic") and 1.5 or v:HasTag("smallcreature") and .8 or 1
                             local cursemultiplier = v:HasDebuff("wixiecurse_debuff") and 1.75 or 1.25
