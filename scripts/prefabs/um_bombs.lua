@@ -52,6 +52,10 @@ local function OnHitMutate(inst, attacker, target)
     --fx.AnimState:PlayAnimation("impact3_special")
     --fx.hideanim:set(true)
     fx.SoundEmitter:PlaySound("meta4/winona_catapult/lunar_projectile_explode")
+    if inst:GetSkinBuild() ~= nil then
+        fx.AnimState:SetMultColour(math.random(), math.random(), math.random(), 1)
+    end
+
     fx:ListenForEvent("animover", fx.Remove)
 
     local ents = TheSim:FindEntities(x, y, z, 5)
@@ -86,6 +90,7 @@ local function OnHitMutate(inst, attacker, target)
             end
         end
     end
+
     inst:Remove()
 end
 

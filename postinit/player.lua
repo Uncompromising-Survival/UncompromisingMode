@@ -392,4 +392,15 @@ env.AddPlayerPostInit(function(inst)
             inst.starting_inventory = { "razor" }
         end
     end
+
+    local current_time = os.time()
+    local current_month = os.date("*t", current_time).month
+
+    if CLIENT_MOD_RPC["ModdedSkins"] then
+        inst:DoTaskInTime(0, function()
+            if current_month == 6 then
+                SendModRPCToClient(GetClientModRPC("ModdedSkins", "UnlockModdedSkin"), ThePlayer.userid, "ms_um_trans_bomb_moon")
+            end
+        end)
+    end
 end)

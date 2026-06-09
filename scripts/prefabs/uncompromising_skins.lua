@@ -58,7 +58,10 @@ table.insert(prefs, CreatePrefabSkin("ms_um_trans_bomb_moon",
 	base_prefab = "um_bomb_moon",
 	build_name_override = "um_trans_bomb_moon",
 	type = "item",
-	rarity = "ModMade",
+	rarity = "ModLocked",
+    condition = {
+        no_gift = true
+    },
 	skin_tags = {"CRAFTABLE"},
 }))
 
