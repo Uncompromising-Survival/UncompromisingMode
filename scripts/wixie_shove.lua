@@ -49,7 +49,7 @@ function WixieShove(inst, target, speed, billiard, distancemod, bonus_ammo_reduc
                                     v:AddTag("wixieshoved")
 
                                     for iv = 1, 50 do
-                                        inst:DoTaskInTime((iv - 1) / 50, function(inst)
+                                        inst:DoTaskInTime((iv - 1) / 75, function(inst)
                                             if v ~= nil and v.Transform:GetWorldPosition() and target ~= nil and tx ~= nil then
                                                 if v == 1 and applyslow then
                                                     v.components.locomotor:SetExternalSpeedMultiplier(target, "wixieshoved", .01)
