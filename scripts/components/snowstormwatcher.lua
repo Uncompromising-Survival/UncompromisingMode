@@ -46,10 +46,12 @@ function SnowStormWatcher:SnowstormLevel()
 end
 
 local function MiniBlizzNear(inst)
+    local um_snowstormmanager = TheWorld.components.um_snowstormmanager
+    if not um_snowstormmanager then return end
     local x, y, z = inst.Transform:GetWorldPosition()
-    local miniblizzards = TheWorld.components.um_snowstormmanager and TheWorld.components.um_snowstormmanager:CheckForOtherRimeweeds({ x = x, y = y, z = z }, 32 * 32)
+    local miniblizzards = um_snowstormmanager:CheckForOtherRimeweeds({ x = x, y = y, z = z }, 32 * 32)
 
-    return miniblizzards and miniblizzards > 0
+    return miniblizzards > 0
 end
 
 local function SnowstormImmune(inst)
