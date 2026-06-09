@@ -214,9 +214,9 @@ local function BuildSkillsData(SkillTreeFns)
                 end
 
             end,
-            connects = {
+            --connects = {
                 --"echolocation_2",
-            },
+            --},
         },
         --[[echolocation_2 = {
             title = STRINGS.SKILLTREE.WATHOM.ECHOLOCATION_2_TITLE,
