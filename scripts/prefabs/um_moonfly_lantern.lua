@@ -44,7 +44,7 @@ local function turnon(inst)
             PlayIgniteSound(inst)
         end
         if inst._body ~= nil and
-            not inst._body.entity:IsVisible() and
+            --not inst._body.entity:IsVisible() and
             inst.components.inventoryitem.owner ~= nil then
             inst._light.Follower:FollowSymbol(inst.components.inventoryitem.owner.GUID, "swap_object", 68, -70, 0)
         else
