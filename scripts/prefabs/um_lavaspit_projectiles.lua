@@ -57,7 +57,9 @@ local function TrySlowdown(inst, target)
             target._lavavomit_speedmulttask:Cancel()
         end
         target._lavavomit_speedmulttask = target:DoTaskInTime(0.6, function(i)
-            i.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey)
+            if i.components.locomotor then
+                i.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey)
+            end
             i._lavavomit_speedmulttask = nil
         end)
 
@@ -452,7 +454,9 @@ local function SnaildrakeTrySlowdownMagma(inst, target)
             target._lavavomit_speedmulttask:Cancel()
         end
         target._lavavomit_speedmulttask = target:DoTaskInTime(0.6, function(i)
-            i.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey)
+            if i.components.locomotor then
+                i.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey)
+            end
             i._lavavomit_speedmulttask = nil
         end)
 

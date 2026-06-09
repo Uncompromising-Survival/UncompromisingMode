@@ -174,7 +174,9 @@ local function OnUpdateIceCircle(inst)
                 v.components.locomotor:SetExternalSpeedMultiplier(v, debuffkey, 0.5)
                 v.um_ice_circle = v:DoPeriodicTask(1, function(guy)
                     if not FindEntity(guy, 3, function(ent) return ent.prefab == "antler_ice_circle" end) then
-                        guy.components.locomotor:RemoveExternalSpeedMultiplier(guy, debuffkey)
+                        if guy.components.locomotor then
+                            guy.components.locomotor:RemoveExternalSpeedMultiplier(guy, debuffkey)
+                        end
                         if guy.um_ice_circle then
                             guy.um_ice_circle:Cancel()
                             guy.um_ice_circle = nil
