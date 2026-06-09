@@ -30,7 +30,11 @@ local Umripples = Class(function(self, inst)
             end
         end)
         if inst:HasTag("player") then
-            self._onisriding = function() self:ShouldChangeToRiding(self.inst.replica.rider:IsRiding()) end
+            self._onisriding = function()
+                if self.inst.replica.rider ~= nil then
+                    self:ShouldChangeToRiding(self.inst.replica.rider:IsRiding())
+                end
+            end
             inst:ListenForEvent("isridingdirty", self._onisriding)
         end
         self._resize = function() self:ShouldChangeSize() end
