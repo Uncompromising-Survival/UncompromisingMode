@@ -506,9 +506,6 @@ GLOBAL.ancient_amulet_red_clear_fn = function(inst) GLOBAL.basic_clear_fn(inst, 
 GLOBAL.um_bomb_moon_init_fn = function(inst, build_name) GLOBAL.basic_init_fn(inst, build_name, "um_bomb_moon") end
 GLOBAL.um_bomb_moon_clear_fn = function(inst) GLOBAL.basic_clear_fn(inst, "um_bomb_moon") end
 
-
-
-
 GLOBAL.TUNING.DSTU.MODROOT = MODROOT
 
 modimport("init/init_statusannouncements")
@@ -518,4 +515,3 @@ AddSimPostInit(function()
         GLOBAL.ShadeRenderer:SetShadeTexture(GLOBAL.ShadeTypes.HoodedForestCanopy, GLOBAL.resolvefilepath("images/giant_tree.tex"))
     end
 end)
-
