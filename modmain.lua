@@ -504,6 +504,7 @@ GLOBAL.ancient_amulet_red_init_fn = function(inst, build_name) GLOBAL.basic_init
 GLOBAL.ancient_amulet_red_clear_fn = function(inst) GLOBAL.basic_clear_fn(inst, "amulet_red_ground") end
 
 GLOBAL.um_bomb_moon_init_fn = function(inst, build_name) GLOBAL.basic_init_fn(inst, build_name, "um_bomb_moon") end
+
 GLOBAL.um_bomb_moon_clear_fn = function(inst) GLOBAL.basic_clear_fn(inst, "um_bomb_moon") end
 
 GLOBAL.TUNING.DSTU.MODROOT = MODROOT
