@@ -105,11 +105,9 @@ env.AddStategraphPostInit("wilson", function(inst)
         end
     end
 
-    local SLEEPREPEL_MUST_TAGS = { "_combat" }
-    local SLEEPREPEL_CANT_TAGS = { "player", "companion", "abigail", "shadowminion", "shadow", "playerghost", "INLIMBO", "wixieshoved", "invisible",
-    "hiding", "NOTARGET", "flight", "rooted" }
-    local SHIELD_CANT_TAGS = { "player", "companion", "abigail", "playerghost", "INLIMBO", "wixieshoved", "invisible",
-        "hiding", "NOTARGET", "flight", "bird", "wall" }
+    local SLEEPREPEL_MUST_TAGS = {"_combat"}
+    local SLEEPREPEL_CANT_TAGS = {"player", "companion", "abigail", "shadowminion", "playerghost", "INLIMBO", "wixieshoved", "invisible", "hiding", "NOTARGET", "flight"}
+    local SHIELD_CANT_TAGS = {"player", "companion", "abigail", "shadowminion" "playerghost", "INLIMBO", "wixieshoved", "invisible", "hiding", "NOTARGET", "flight", "bird", "wall"}
     local NO_SHOVE_TAGS = {"stageusher", "toadstool", "rooted"}
     local function CheckShield(inst)
         local x, y, z = inst.Transform:GetWorldPosition()
