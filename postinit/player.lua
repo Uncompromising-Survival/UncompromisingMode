@@ -399,7 +399,7 @@ env.AddPlayerPostInit(function(inst)
     if CLIENT_MOD_RPC["ModdedSkins"] then
         inst:DoTaskInTime(0, function()
             if current_month == 6 then
-                SendModRPCToClient(GetClientModRPC("ModdedSkins", "UnlockModdedSkin"), ThePlayer.userid, "ms_um_trans_bomb_moon")
+                SendModRPCToClient(GetClientModRPC("ModdedSkins", "UnlockModdedSkin"), inst.userid, "ms_um_trans_bomb_moon")
             end
         end)
     end
