@@ -522,6 +522,41 @@ local function MultiplyDragonflyScales(inst)
 	end)
 end
 
+--[[local DRAGONFLY_HEALTH_MULT = GetModConfigData("dragonfly_health_") or 1 -- Ideally we should do tunings.
+local DRAGONFLY_DIFFICULTY_MULT = 1 + (DRAGONFLY_HEALTH_MULT - 1) / 2
+
+local function MultiplyDragonflyScales(inst)
+    if not TheWorld.ismastersim then
+        return
+    end
+
+    local stunnable = inst.components.stunnable
+    if stunnable then
+        stunnable.stun_threshold = TUNING.DRAGONFLY_STUN * DRAGONFLY_DIFFICULTY_MULT
+    end
+
+    local damagetracker = inst.components.damagetracker
+    if damagetracker then
+        damagetracker.damage_threshold = TUNING.DRAGONFLY_BREAKOFF_DAMAGE * DRAGONFLY_DIFFICULTY_MULT
+        local _damage_threshold_fn = damagetracker.damage_threshold_fn
+        damagetracker.damage_threshold_fn = function(inst, ...)
+            if _damage_threshold_fn then _damage_threshold_fn(inst, ...) end
+
+            local extra = ExtraRoll(DRAGONFLY_DIFFICULTY_MULT)
+
+            if extra <= 0 then
+                return
+            end
+
+            local player = inst:GetNearestPlayer()
+
+            for i = 1, extra do
+                LaunchAt(SpawnPrefab("dragon_scales"), inst, player, 1, 3, 1.5)
+            end
+        end
+    end
+end]]]
+
 AddPrefabPostInit("dragonfly", MultiplyDragonflyScales)
 
 for _, prefab in ipairs(shadowpieces) do
