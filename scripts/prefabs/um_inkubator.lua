@@ -102,7 +102,7 @@ local EXPERIMENTS =
 		fuel = "nightmarefuel",
 		fuel_2 = "moonglass",
 		flesh = "pondfish",
-		binding = "frogleg",
+		binding = "froglegs",
 		timer = 60,
 	},
     {
@@ -171,13 +171,7 @@ local EXPERIMENTS =
     {
 		result = "rocky",
 		fuel = "nightmarefuel",
-		flesh = "meat",
-		binding = "wobster_sheller_land",
-		timer = 60,
-	},
-    {
-		result = "rocky",
-		fuel = "moonglass",
+		fuel_2 = "moonglass",
 		flesh = "meat",
 		binding = "wobster_sheller_land",
 		timer = 60,
@@ -373,7 +367,7 @@ local EXPERIMENTS =
 		result = "babybeefalo",
 		fuel = "nightmarefuel",
 		fuel_2 = "moonglass",
-		flesh = "meat",
+		flesh = "smallmeat",
 		binding = "beefalowool",
 		timer = 60,
 	},
@@ -402,7 +396,7 @@ local EXPERIMENTS =
     {
 		result = "grassgekko",
 		fuel = "nightmarefuel",
-		fuel2 = "moonglass",
+		fuel_2 = "moonglass",
 		flesh = "plantmeat",
 		binding = "cutgrass",
 		binding_2 = "dug_grass",

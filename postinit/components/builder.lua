@@ -49,8 +49,8 @@ env.AddComponentPostInit("builder", function(self)
 	end
 
 	local old_remove = self.RemoveIngredients
-	function self:RemoveIngredients(ingredients, recname)
-		old_remove(self, ingredients, recname)
+	function self:RemoveIngredients(ingredients, recname, discounted, ...)
+		old_remove(self, ingredients, recname, discounted, ...)
 
 		local recipe = AllRecipes[recname]
 		if recipe then
