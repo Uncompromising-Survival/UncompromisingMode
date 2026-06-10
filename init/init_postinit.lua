@@ -415,7 +415,6 @@ end
 if GetModConfigData("harder_leifs") then
     table.insert(stategraph_post, "Leif")
     table.insert(prefab_post, "leif")
-    table.insert(prefab_post, "leif_sparse")
     table.insert(brain_post, "leif")
 end
 
