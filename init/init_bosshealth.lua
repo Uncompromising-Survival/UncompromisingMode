@@ -555,7 +555,7 @@ local function MultiplyDragonflyScales(inst)
             end
         end
     end
-end]]]
+end]]
 
 AddPrefabPostInit("dragonfly", MultiplyDragonflyScales)
 
