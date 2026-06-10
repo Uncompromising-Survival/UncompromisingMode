@@ -26,5 +26,5 @@ jobs:
                   configVdf: ${{ secrets.STEAM_CONFIG_VDF }}
                   path: .
                   appId: 322330
-                  publishedFileId: 3742174736
+                  publishedFileId: 3696874966
                   changeNote: ${{ github.event.head_commit.message }}
