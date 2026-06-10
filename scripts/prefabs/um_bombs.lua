@@ -280,7 +280,7 @@ local function OnHitVortex(inst, attacker, target)
                     if v:HasAnyTag("lunar_aligned", "player_lunar_aligned") or v.components.halloweenmoonmutable then
                         mult = mult * 3 -- ATOBA shadow bomb is exceptionally effective against lunar creatures
                     end
-                    v.components.combat:GetAttacked(attacker, mult * 150, inst)
+                    v.components.combat:GetAttacked(attacker, mult * 100, inst)
                 end
 
                 --todo: shadow sneak thingy on suck?
