@@ -33,7 +33,7 @@ author = "󰀈 The Uncomp Dev Team 󰀈"
 version = "On The Rocks! v1.6 Testing v" .. _version
 
 
-forumthread = "/topic/111892-announcement-uncompromising-mode/"
+forumthread = "/topic/111892-announcement-uncompromising-mode/" 
 
 api_version = 10
 
