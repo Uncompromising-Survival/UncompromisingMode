@@ -544,9 +544,7 @@ local function MultiplyDragonflyScales(inst)
 
             local extra = ExtraRoll(DRAGONFLY_DIFFICULTY_MULT)
 
-            if extra <= 0 then
-                return
-            end
+            if extra <= 0 then return end
 
             local player = inst:GetNearestPlayer()
 
