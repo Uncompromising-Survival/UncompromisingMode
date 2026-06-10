@@ -1,11 +1,8 @@
 name = "󰀕 Uncompromising Mode"
 -- borrowed from IA
-local is_bleeding_edge = false
+folder_name = folder_name or "workshop-"
 if not folder_name:find("workshop-") then
     name = "[LOCAL] - " .. name
-elseif folder_name == "workshop-3696874966" then
-    name = "[BE] - " .. name
-    is_bleeding_edge = true
 end
 
 --MAJOR.MINOR.FIX
@@ -46,8 +43,8 @@ forge_compatible = false
 
 all_clients_require_mod = true
 
-icon_atlas = is_bleeding_edge and "modicon_be.xml" or "modicon.xml"
-icon = is_bleeding_edge and "modicon_be.tex" or "modicon.tex"
+icon_atlas = "modicon.xml"
+icon = "modicon.tex"
 
 server_filter_tags = { "uncomp", "UM", "uncompromising", "DSTU", "collab", "overhaul", "hard", "difficult", "madness", "challenge",
     "hardcore", "um_beta" } --REMOVE THE UM_BETA TAG LATER
