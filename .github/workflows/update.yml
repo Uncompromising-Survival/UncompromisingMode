@@ -1,0 +1,30 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Workshop Upload
+
+# Controls when the workflow will run
+on:
+    push:
+        branches: ['utw-beta']
+
+    # Allows you to run this workflow manually from the Actions tab
+    workflow_dispatch:
+
+jobs:
+    workshopUpload:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Update version in modinfo.lua
+              run: |
+                  sed -i 's/_version = ".*"/_version = "${{ github.run_number }}"/' modinfo.lua
+
+            - name: Upload to workshop
+              uses: m00nl1ght-dev/steam-workshop-deploy@v4
+              with:
+                  username: ${{ secrets.STEAM_USERNAME }}
+                  configVdf: ${{ secrets.STEAM_CONFIG_VDF }}
+                  path: .
+                  appId: 322330
+                  publishedFileId: 3742174736
+                  changeNote: ${{ github.event.head_commit.message }}
