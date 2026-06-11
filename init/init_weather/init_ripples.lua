@@ -69,6 +69,16 @@ env.AddClassPostConstruct("components/inventoryitem_replica", function(self) --A
     end
 end)
 
+env.AddClassPostConstruct("components/health_replica", function(self) --AXE Add ripples to the client side of any creature, including modded followers whose mob tags are server-only
+    local inst = self.inst
+    if not inst.components.umripples and not inst:HasAnyTag("shadow", "flying", "gestalt", "ghost", "playerghost") then
+        inst:AddComponent("umripples")
+        if not inst.components.floatable then
+            inst.components.umripples.vert_offset = 0.2
+        end
+    end
+end)
+
 local function AddRipples(prefab, xscale, yscale, zscale, vert_offset) --AXE These calls need to be both on client and server
     env.AddPrefabPostInit(prefab, function(inst)
         if not inst.components.umripples then
@@ -547,9 +557,9 @@ env.AddComponentPostInit("locomotor", function(self)
                         inst.um_worm_bubble_task = nil
                     end
                 end
+                self.inst:RemoveEventCallback("equip", AdjustSpeed)
+                self.inst:RemoveEventCallback("unequip", AdjustSpeed)
                 if self._externalspeedmultipliers and self._externalspeedmultipliers[inst] and self._externalspeedmultipliers[inst].multipliers["um_floodedwater"] then
-                    self.inst:RemoveEventCallback("equip", AdjustSpeed)
-                    self.inst:RemoveEventCallback("unequip", AdjustSpeed)
                     self:RemoveExternalSpeedMultiplier(inst, "um_floodedwater")
                 end
             end

@@ -1,3 +1,21 @@
+local function UpdateRippleFXTransform(ripples)
+    local front_fx, back_fx = ripples.front_fx, ripples.back_fx
+    if front_fx ~= nil then
+        front_fx.Transform:SetScale(ripples.xscale, ripples.yscale, ripples.zscale)
+    end
+    if back_fx ~= nil then
+        back_fx.Transform:SetScale(ripples.xscale, ripples.yscale, ripples.zscale)
+    end
+    if ripples.vert_offset ~= nil then
+        if front_fx ~= nil then
+            front_fx.Transform:SetPosition(0, ripples.vert_offset, 0)
+        end
+        if back_fx ~= nil then
+            back_fx.Transform:SetPosition(0, ripples.vert_offset, 0)
+        end
+    end
+end
+
 local Umripples = Class(function(self, inst)
     self.inst = inst
 
@@ -63,27 +81,14 @@ function Umripples:ShouldChangeToRiding(riding)
         self.xscale = 3
         self.yscale = 3
         self.zscale = 3
-        self.vert_offset = 0.5 
+        self.vert_offset = 0.5
     else -- Player gets player FX
         self.vert_offset = 0.2
         self.xscale = 0.75
         self.zscale = 0.75
         self.yscale = 1
     end
-    if self.front_fx ~= nil then
-        self.front_fx.Transform:SetScale(self.xscale, self.yscale, self.zscale)
-    end
-    if self.back_fx ~= nil then
-        self.back_fx.Transform:SetScale(self.xscale, self.yscale, self.zscale)
-    end
-    if self.vert_offset ~= nil then
-        if self.front_fx ~= nil then
-            self.front_fx.Transform:SetPosition(0, self.vert_offset, 0)
-        end
-        if self.back_fx ~= nil then
-            self.back_fx.Transform:SetPosition(0, self.vert_offset, 0)
-        end
-    end
+    UpdateRippleFXTransform(self)
 end
 
 function Umripples:ShouldChangeSize()
@@ -94,20 +99,7 @@ function Umripples:ShouldChangeSize()
     if resize[4] then
         self.vert_offset = resize[4]
     end
-    if self.front_fx ~= nil then
-        self.front_fx.Transform:SetScale(self.xscale, self.yscale, self.zscale)
-    end
-    if self.back_fx ~= nil then
-        self.back_fx.Transform:SetScale(self.xscale, self.yscale, self.zscale)
-    end
-    if self.vert_offset ~= nil then
-        if self.front_fx ~= nil then
-            self.front_fx.Transform:SetPosition(0, self.vert_offset, 0)
-        end
-        if self.back_fx ~= nil then
-            self.back_fx.Transform:SetPosition(0, self.vert_offset, 0)
-        end
-    end
+    UpdateRippleFXTransform(self)
 end
 
 function Umripples:SetIsObstacle(bool)
@@ -121,14 +113,7 @@ end
 
 function Umripples:SetVerticalOffset(offset)
     self.vert_offset = offset
-    if self.vert_offset ~= nil then
-        if self.front_fx ~= nil then
-            self.front_fx.Transform:SetPosition(0, self.vert_offset, 0)
-        end
-        if self.back_fx ~= nil then
-            self.back_fx.Transform:SetPosition(0, self.vert_offset, 0)
-        end
-    end
+    UpdateRippleFXTransform(self)
 end
 
 function Umripples:SetScale(scale)
@@ -143,12 +128,7 @@ function Umripples:SetScale(scale)
             self.zscale = scale
         end
 
-        if self.front_fx ~= nil then
-            self.front_fx.Transform:SetScale(self.xscale, self.yscale, self.zscale)
-        end
-        if self.back_fx ~= nil then
-            self.back_fx.Transform:SetScale(self.xscale, self.yscale, self.zscale)
-        end
+        UpdateRippleFXTransform(self)
     end
 end
 
@@ -173,6 +153,10 @@ local function CheckForY0(inst)
         if inst.falling then
             inst.falling:Cancel()
             inst.falling = nil
+        end
+        if inst.umripples_falling then
+            inst.umripples_falling:Cancel()
+            inst.umripples_falling = nil
         end
     end
 end
@@ -230,20 +214,21 @@ end
 
 
 function Umripples:OnLandedServer(forced)
+    local inst = self.inst
     if not self.showing_effect and (self:ShouldShowEffect() or forced) then
         -- If something lands in a place where the water effect should be shown, and it has an inventory component,
         -- update the inventory component to represent the associated wetness.
         -- Don't apply the wetness to something held by someone, though.
-        if self.inst.components.inventoryitem ~= nil and not self.inst.components.inventoryitem:IsHeld() and not self.inst:HasTag("likewateroffducksback") then
-			self.inst.components.inventoryitem:MakeMoistureAtLeast(TUNING.OCEAN_WETNESS)
+        if inst.components.inventoryitem ~= nil and not inst.components.inventoryitem:IsHeld() and not inst:HasTag("likewateroffducksback") then
+			inst.components.inventoryitem:MakeMoistureAtLeast(TUNING.OCEAN_WETNESS)
         end
 
-        if self.splash and (not self.inst.components.inventoryitem or not self.inst.components.inventoryitem:IsHeld()) then
+        if self.splash and (not inst.components.inventoryitem or not inst.components.inventoryitem:IsHeld()) then
             local splash = SpawnPrefab("splash_green")
-            splash.Transform:SetPosition(self.inst.Transform:GetWorldPosition())
+            splash.Transform:SetPosition(inst.Transform:GetWorldPosition())
         end
 
-        self.inst:PushEvent("umripples_startfloating")
+        inst:PushEvent("umripples_startfloating")
         self._is_landed:set(true)
         self.showing_effect = true
 
@@ -252,6 +237,7 @@ function Umripples:OnLandedServer(forced)
 end
 
 function Umripples:OnLandedClient()
+    local inst = self.inst
     self.showing_effect = true
     if self.front_fx == nil then
         self.front_fx = SpawnPrefab("float_fx_front")
@@ -265,7 +251,7 @@ function Umripples:OnLandedClient()
         self.back_fx.AnimState:PlayAnimation("idle_back_" .. self.size, true)
     end
 
-    self.inst.AnimState:SetFloatParams(-0.1, 1.0, self.bob_percent)
+    inst.AnimState:SetFloatParams(-0.1, 1.0, self.bob_percent)
 
 end
 
@@ -282,6 +268,11 @@ function Umripples:SwitchToDefaultAnim(force_switch)
 end
 
 function Umripples:OnNoLongerLandedServer()
+    local inst = self.inst
+    if inst.umripples_falling then
+        inst.umripples_falling:Cancel()
+        inst.umripples_falling = nil
+    end
     if self.showing_effect then
         self._is_landed:set(false)
         self.showing_effect = false
@@ -291,8 +282,9 @@ function Umripples:OnNoLongerLandedServer()
 end
 
 function Umripples:OnNoLongerLandedClient()
+    local inst = self.inst
     self.showing_effect = false
-    self.inst.AnimState:SetFloatParams(0.0, 0.0, 0.0)
+    inst.AnimState:SetFloatParams(0.0, 0.0, 0.0)
 
     if self.front_fx ~= nil and self.front_fx:IsValid() then
         self.front_fx:Remove()
