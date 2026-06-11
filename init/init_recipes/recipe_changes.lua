@@ -463,3 +463,10 @@ AllRecipes["blueprint_craftingset_ruins_builder"].no_builder_skill = "wathom_all
 --AllRecipes["blueprint_craftingset_ruins_builder"].forward_ingredients = {"wathom_blueprint_craftingset_ruins_builder"}
 AllRecipes["blueprint_craftingset_ruinsglow_builder"].no_builder_skill = "wathom_allegiance_neutral"
 --AllRecipes["blueprint_craftingset_ruinsglow_builder"].forward_ingredients = {"wathom_blueprint_craftingset_ruinsglow_builder"}
+
+-- Thermic tools recipe overrides
+AllRecipes["fumaroleaxe"].ingredients = { Ingredient("axe", 1), Ingredient("mitegland", 2), Ingredient("um_fyrite", 3) }
+AllRecipes["fumarolepickaxe"].ingredients = { Ingredient("pickaxe", 1), Ingredient("mitegland", 2), Ingredient("um_fyrite", 3) }
+AllRecipes["fumaroleshovel"].ingredients = { Ingredient("shovel", 1), Ingredient("mitegland", 2), Ingredient("um_fyrite", 3) }
+AllRecipes["fumarolehammer"].ingredients = { Ingredient("hammer", 1), Ingredient("mitegland", 2), Ingredient("um_fyrite", 3) }
+AllRecipes["fumarole_farm_hoe"].ingredients = { Ingredient("farm_hoe", 1), Ingredient("mitegland", 2), Ingredient("um_fyrite", 3) }
