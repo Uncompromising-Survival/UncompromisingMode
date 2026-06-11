@@ -10,6 +10,8 @@ GLOBAL.setfenv(1, GLOBAL)
 ]]
 
 if TUNING.DSTU.INSUL_THERMALSTONE then
+    local base_insulation = TUNING.INSULATION_TINY --60 insulation
+
     local function CalculateInsulation(inst)
         local owner = inst.components.inventoryitem:GetGrandOwner()
         if owner and owner.components.temperature then
@@ -24,8 +26,6 @@ if TUNING.DSTU.INSUL_THERMALSTONE then
 
     env.AddPrefabPostInit("heatrock", function(inst)
         if not TheWorld.ismastersim then return end
-
-        local base_insulation = TUNING.INSULATION_TINY --60 insulation
 
         if inst.components.temperature ~= nil then
             inst.components.temperature.inherentinsulation = base_insulation
