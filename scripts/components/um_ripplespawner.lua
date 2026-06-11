@@ -16,7 +16,6 @@ local function CheckLeftPond(ent,self)
 	end
 end
 
-
 function UM_Ripplespawner:spawnripple(inst)
 	if inst ~= nil then
 		local x, y, z = inst.Transform:GetWorldPosition()

@@ -162,11 +162,10 @@ local function CheckForY0(inst)
 end
 
 function Umripples:ShouldShowEffect()
-    local inst = self.inst
-    local x,y,z = inst.Transform:GetWorldPosition()
-    if TheWorld.Map:GetTileAtPoint(x,0,z) == WORLD_TILES.UM_FLOODWATER_GROTTO and not (inst.sg and inst.sg:HasStateTag("flying")) then
-        if y > 0 and inst.components.inventoryitem then
-            inst.umripples_falling = inst:DoPeriodicTask(FRAMES,CheckForY0)
+    local x,y,z = self.inst.Transform:GetWorldPosition()
+    if TheWorld.Map:GetTileAtPoint(x,0,z) == WORLD_TILES.UM_FLOODWATER_GROTTO and not (self.inst.sg and self.inst.sg:HasStateTag("flying")) then
+        if y > 0 and self.inst.components.inventoryitem then
+            self.inst.umripples_falling = self.inst:DoPeriodicTask(FRAMES, CheckForY0)
             return false
         else
             return true
@@ -214,21 +213,20 @@ end
 
 
 function Umripples:OnLandedServer(forced)
-    local inst = self.inst
     if not self.showing_effect and (self:ShouldShowEffect() or forced) then
         -- If something lands in a place where the water effect should be shown, and it has an inventory component,
         -- update the inventory component to represent the associated wetness.
         -- Don't apply the wetness to something held by someone, though.
-        if inst.components.inventoryitem ~= nil and not inst.components.inventoryitem:IsHeld() and not inst:HasTag("likewateroffducksback") then
-			inst.components.inventoryitem:MakeMoistureAtLeast(TUNING.OCEAN_WETNESS)
+        if self.inst.components.inventoryitem ~= nil and not self.inst.components.inventoryitem:IsHeld() and not self.inst:HasTag("likewateroffducksback") then
+			self.inst.components.inventoryitem:MakeMoistureAtLeast(TUNING.OCEAN_WETNESS)
         end
 
-        if self.splash and (not inst.components.inventoryitem or not inst.components.inventoryitem:IsHeld()) then
+        if self.splash and (not self.inst.components.inventoryitem or not self.inst.components.inventoryitem:IsHeld()) then
             local splash = SpawnPrefab("splash_green")
-            splash.Transform:SetPosition(inst.Transform:GetWorldPosition())
+            splash.Transform:SetPosition(self.inst.Transform:GetWorldPosition())
         end
 
-        inst:PushEvent("umripples_startfloating")
+        self.inst:PushEvent("umripples_startfloating")
         self._is_landed:set(true)
         self.showing_effect = true
 
@@ -237,7 +235,6 @@ function Umripples:OnLandedServer(forced)
 end
 
 function Umripples:OnLandedClient()
-    local inst = self.inst
     self.showing_effect = true
     if self.front_fx == nil then
         self.front_fx = SpawnPrefab("float_fx_front")
@@ -251,8 +248,7 @@ function Umripples:OnLandedClient()
         self.back_fx.AnimState:PlayAnimation("idle_back_" .. self.size, true)
     end
 
-    inst.AnimState:SetFloatParams(-0.1, 1.0, self.bob_percent)
-
+    self.inst.AnimState:SetFloatParams(-0.1, 1.0, self.bob_percent)
 end
 
 function Umripples:SwitchToDefaultAnim(force_switch)
@@ -268,10 +264,9 @@ function Umripples:SwitchToDefaultAnim(force_switch)
 end
 
 function Umripples:OnNoLongerLandedServer()
-    local inst = self.inst
-    if inst.umripples_falling then
-        inst.umripples_falling:Cancel()
-        inst.umripples_falling = nil
+    if self.inst.umripples_falling then
+        self.inst.umripples_falling:Cancel()
+        self.inst.umripples_falling = nil
     end
     if self.showing_effect then
         self._is_landed:set(false)
@@ -282,9 +277,8 @@ function Umripples:OnNoLongerLandedServer()
 end
 
 function Umripples:OnNoLongerLandedClient()
-    local inst = self.inst
     self.showing_effect = false
-    inst.AnimState:SetFloatParams(0.0, 0.0, 0.0)
+    self.inst.AnimState:SetFloatParams(0.0, 0.0, 0.0)
 
     if self.front_fx ~= nil and self.front_fx:IsValid() then
         self.front_fx:Remove()
@@ -297,4 +291,3 @@ function Umripples:OnNoLongerLandedClient()
 end
 
 return Umripples
-

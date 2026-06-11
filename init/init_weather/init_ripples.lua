@@ -17,13 +17,11 @@ local function RobustFloodCheck(inst) -- For players, check to see if they're on
     end
 end
 
-
 for _, prefab in ipairs(TUNING.DSTU.RIPPLE_BLACKLIST_PREFABS) do
     env.AddPrefabPostInit(prefab, function(inst)
         inst.um_ripple_blacklist = true
     end)
 end
-
 
 -- AXE Add ripples to plants, structures, and items
 env.AddPrefabPostInitAny(function(inst)
@@ -58,9 +56,8 @@ env.AddPrefabPostInitAny(function(inst)
     end
 end)
 
-
 env.AddClassPostConstruct("components/inventoryitem_replica", function(self) --AXE Add the ripples to the client side of items
-    if not self.inst.components.umripples then
+    if not self.inst.components.umripples and not self.inst:HasAnyTag(TUNING.DSTU.RIPPLE_BLACKLIST_TAGS) then
         self.inst:AddComponent("umripples")
         if not self.inst.components.floatable then
             local umripples = self.inst.components.umripples
@@ -70,11 +67,10 @@ env.AddClassPostConstruct("components/inventoryitem_replica", function(self) --A
 end)
 
 env.AddClassPostConstruct("components/health_replica", function(self) --AXE Add ripples to the client side of any creature, including modded followers whose mob tags are server-only
-    local inst = self.inst
-    if not inst.components.umripples and not inst:HasAnyTag("shadow", "flying", "gestalt", "ghost", "playerghost") then
-        inst:AddComponent("umripples")
-        if not inst.components.floatable then
-            inst.components.umripples.vert_offset = 0.2
+    if not self.inst.components.umripples and not self.inst:HasAnyTag(JoinArrays(TUNING.DSTU.RIPPLE_BLACKLIST_TAGS, {"shadow", "flying", "gestalt", "ghost", "playerghost"})) then
+        self.inst:AddComponent("umripples")
+        if not self.inst.components.floatable then
+            self.inst.components.umripples.vert_offset = 0.2
         end
     end
 end)
@@ -91,7 +87,6 @@ local function AddRipples(prefab, xscale, yscale, zscale, vert_offset) --AXE The
         umripples.zscale = zscale and zscale or 1
     end)
 end
-
 
 -- AXE TODO convert the many function calls to a table and a loop... would that even be cleaner though? It's already about as complex as a table...? What do you think?
 
@@ -125,7 +120,6 @@ for _, v in ipairs(pigmanlike_minions) do
     AddRipples(v, 1.2, 1.2, 1.2, 0.2)
 end
 --
-
 
 env.AddPlayerPostInit(function(inst)
     if not inst.components.umripples then
