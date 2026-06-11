@@ -100,7 +100,13 @@ local EXPERIMENTS =
     {
 		result = "merm",
 		fuel = "nightmarefuel",
-		fuel_2 = "moonglass",
+		flesh = "pondfish",
+		binding = "froglegs",
+		timer = 60,
+	},
+	{
+		result = "merm_lunar",
+		fuel = "moonglass",
 		flesh = "pondfish",
 		binding = "froglegs",
 		timer = 60,
@@ -147,16 +153,17 @@ local EXPERIMENTS =
 		binding = "feather_crow",
 		timer = 60,
 	},
-    {
+    --[[{
 		result = "werepig",
 		fuel = "moonglass",
 		flesh = "meat",
 		binding = "pigskin",
 		timer = 60,
-	},
+	},]]
     {
 		result = "pigman",
 		fuel = "nightmarefuel",
+		fuel_2 = "moonglass",
 		flesh = "meat",
 		binding = "pigskin",
 		timer = 60,
