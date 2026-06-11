@@ -16,4 +16,10 @@ env.AddClassPostConstruct("components/combat_replica", function(self)
         if self.inst.UMIsAlly and self.inst:UMIsAlly(guy) then return true end
         return _IsAlly(self, guy, ...)
     end
+
+    local _CanTarget = self.CanTarget
+    function self:CanTarget(target, ...)
+        if target and target:HasTag("um_slippery") and not self.inst.isplayer then return false end
+        return _CanTarget(self, target, ...)
+    end
 end)

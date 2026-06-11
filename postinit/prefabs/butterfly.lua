@@ -109,13 +109,14 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
     local butterflies = {"butterfly","um_buttery_fly","moonbutterfly"}
     for i,v in ipairs(butterflies) do
         env.AddPrefabPostInit(v, function(inst)
+            inst:AddTag("um_slippery")
+
             if not TheWorld.ismastersim then return end
 
             inst.UMSlipAway = UMSlipAway
 
             inst:DoPeriodicTask(2, CheckForNearbyBozos)
-            
-            
+
             if v == "butterfly" then
                 inst.OnSave = function(inst,data)
                     if inst.buttery then data.buttery = inst.buttery end
