@@ -312,7 +312,6 @@ local brain_post = {
     --"catcoon",
     "walrus",
     "deer",
-    "shadowwaxwell",
     "hound",
     "iceshield"
 }
