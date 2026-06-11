@@ -10,7 +10,7 @@ GLOBAL.setfenv(1, GLOBAL)
 ]]
 
 if TUNING.DSTU.INSUL_THERMALSTONE then
-    local function CalculateInsulation()
+    local function CalculateInsulation(inst)
         local owner = inst.components.inventoryitem:GetGrandOwner()
         if owner and owner.components.temperature then
             local winter_insulation, summer_insulation = owner.components.temperature:GetInsulation()
