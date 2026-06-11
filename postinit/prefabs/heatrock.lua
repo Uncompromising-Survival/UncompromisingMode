@@ -6,9 +6,10 @@
 ]]
 if TUNING.DSTU.INSUL_THERMALSTONE then
     AddPrefabPostInit("heatrock", function(inst)
+        if not TheWorld.ismastersim then return end
 
         local base_insulation = GLOBAL.TUNING.INSULATION_TINY --60 insulation
-        
+
         if inst.components.temperature ~= nil then
             inst.components.temperature.inherentinsulation = base_insulation
             inst.components.temperature.inherentsummerinsulation = base_insulation
