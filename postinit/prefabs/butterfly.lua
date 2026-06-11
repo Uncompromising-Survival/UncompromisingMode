@@ -106,7 +106,7 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
         end
     end
 
-    local butterflies = {"butterfly","um_buttery_fly","moonbutterfly"}
+    local butterflies = {"butterfly", "um_buttery_fly", "moonbutterfly"}
     for i,v in ipairs(butterflies) do
         env.AddPrefabPostInit(v, function(inst)
             inst:AddTag("um_slippery")
