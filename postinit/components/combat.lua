@@ -92,4 +92,13 @@ env.AddComponentPostInit("combat", function(self)
         end
         return unpack(ret)
     end
+
+    --[[ Vanilla SetLastTarget accesses self.inst.components.combat, but if the entity was already removed (e.g. a dead bunnyman whose losetargetcallback fires late idk how but ive had this happen more than once), that field is nil and causes a crash, guarding it here since we can't patch vanilla directly]]--
+    local _SetLastTarget = self.SetLastTarget
+    function self:SetLastTarget(target)
+        if self.inst == nil or not self.inst:IsValid() then
+            return
+        end
+        return _SetLastTarget(self, target)
+    end
 end)
