@@ -18,8 +18,8 @@ local function RobustFloodCheck(inst) -- For players, check to see if they're on
 end
 
 
-for i, v in ipairs(TUNING.DSTU.RIPPLE_BLACKLIST_PREFABS) do
-    env.AddPrefabPostInit(v, function(inst)
+for _, prefab in ipairs(TUNING.DSTU.RIPPLE_BLACKLIST_PREFABS) do
+    env.AddPrefabPostInit(prefab, function(inst)
         inst.um_ripple_blacklist = true
     end)
 end
@@ -27,10 +27,8 @@ end
 
 -- AXE Add ripples to plants, structures, and items
 env.AddPrefabPostInitAny(function(inst)
-    for i,v in ipairs(TUNING.DSTU.RIPPLE_BLACKLIST_TAGS) do
-        if inst:HasTag(v) then
-            inst.um_ripple_blacklist = true
-        end
+    if inst:HasAnyTag(TUNING.DSTU.RIPPLE_BLACKLIST_TAGS) then
+        inst.um_ripple_blacklist = true
     end
 
     if (inst:HasAnyTag("structure", "boulder", "plant") or inst.components.inventoryitem) and not inst.um_ripple_blacklist then
@@ -422,10 +420,10 @@ local function AdjustSpeed(inst)
     local body = GetBodyItem(inst)
 
     if body ~= nil and body.prefab == "armor_sharksuit_um" then
-		inst.components.locomotor:SetExternalSpeedMultiplier(inst, "um_floodedwater", 1.2)
-		return
+        inst.components.locomotor:SetExternalSpeedMultiplier(inst, "um_floodedwater", 1.2)
+        return
     end
-	
+    
     local waterproofness = GetBodyWetnessProtection(inst)
 
     local mod = 0.5
@@ -437,10 +435,10 @@ local function AdjustSpeed(inst)
     elseif waterproofness > 0 then
         mod = 0.6
     end
-	
-	if inst.components.rider and inst.components.rider:IsRiding() and mod < 1 then
-		mod = (mod + 1) / 2
-	end
+    
+    if inst.components.rider and inst.components.rider:IsRiding() and mod < 1 then
+        mod = (mod + 1) / 2
+    end
 
     inst.components.locomotor:SetExternalSpeedMultiplier(inst, "um_floodedwater", mod)
 end
@@ -453,8 +451,8 @@ local function IsFloodWater(inst)
 end
 
 local function FloodMoistureRamp(inst)
-	if inst.components.moisture ~= nil then
-		local body = GetBodyItem(inst)
+    if inst.components.moisture ~= nil then
+        local body = GetBodyItem(inst)
 
         local mod
 
@@ -468,13 +466,13 @@ local function FloodMoistureRamp(inst)
             inst.components.burnable:Extinguish()
         end
 
-		local wetness_gain = 3 * (1 - mod)
+        local wetness_gain = 3 * (1 - mod)
 
-		if inst.components.rider and inst.components.rider:IsRiding() then
-			wetness_gain = wetness_gain * 0.5
-		end
+        if inst.components.rider and inst.components.rider:IsRiding() then
+            wetness_gain = wetness_gain * 0.5
+        end
 
-		inst.components.moisture:DoDelta(wetness_gain, true)
+        inst.components.moisture:DoDelta(wetness_gain, true)
     end
 end
 
