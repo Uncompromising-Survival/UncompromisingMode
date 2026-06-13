@@ -41,28 +41,6 @@ if TUNING.DSTU.WAXWELL then
         RemoveNode(self, _ShouldAvoidExplosive)
         RemoveNode(self, _ShouldRunAway)
     end)
-
-    env.AddClassPostConstruct("components/combat_replica", function(self)
-        local _IsValidTarget = self.IsValidTarget
-        function self:IsValidTarget(target, ...)
-            if not target or target == self.inst or not (target.entity:IsValid() and target.entity:IsVisible()) then
-                return _IsValidTarget(self, target, ...)
-            end
-            local follower = self.inst:HasTag("shadowminion") and self.inst.replica.follower
-            local leader = follower and follower:GetLeader()
-            if leader and leader.replica.combat and target:HasTag("shadow") and leader.replica.combat:IsValidTarget(target) then
-                return true
-            end
-            return _IsValidTarget(self, target, ...)
-        end
-
-        local _CanBeAttacked = self.CanBeAttacked
-        function self:CanBeAttacked(attacker, ...)
-            local follower = attacker and attacker:HasTag("shadowminion") and attacker.replica.follower
-            local leader = follower and follower:GetLeader()
-            return _CanBeAttacked(self, leader and self.inst:HasAnyTag("shadowcreature", "nightmarecreature") and leader or attacker, ...)
-        end
-    end)
 end
 
 --[[local ICON_SCALE = .6

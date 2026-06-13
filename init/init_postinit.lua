@@ -110,7 +110,6 @@ local prefab_post = {
     "foodbuffs",
     "mutatedhound",
     "skeleton",
-    --"shadowcreature",
     "berrybush",
     --"papyrus",
     "sporecloud",
