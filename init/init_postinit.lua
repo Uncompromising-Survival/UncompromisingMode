@@ -258,7 +258,8 @@ local prefab_post = {
     "cane",
     "onemanband",
     "cursed_monkey_token",
-    "slurtle_shellpieces"
+    "slurtle_shellpieces",
+    "fused_shadeling"
 }
 
 local stategraph_post = {
