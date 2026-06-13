@@ -5,9 +5,8 @@ local assets =
 }
 
 local function ShouldMockAttack(buffaction, owner, weapon, target)
-    return (not buffaction or not buffaction.mockattack) and not owner.components.rider:IsRiding()
-        and owner.sg.currentstate.name ~= "attack_recoil"
-        and (not weapon or weapon.components.weapon and not (weapon.components.projectile or weapon:HasTag("rangedweapon")))
+    return (not buffaction or not buffaction.mockattack) and not (owner.components.rider and owner.components.rider:IsRiding())
+        and owner.sg.currentstate.name ~= "attack_recoil" and (not weapon or weapon.components.weapon and not (weapon.components.projectile or weapon:HasTag("rangedweapon")))
 end
 
 local function DoubleSlap(owner, data)
