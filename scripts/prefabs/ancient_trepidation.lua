@@ -315,14 +315,14 @@ local function fn(Sim)
     inst.AnimState:UsePointFiltering(true)
     inst.entity:SetPristine()
 
-	inst:AddTag("nightmarecreature")
+    inst:AddTag("nightmarecreature")
     inst:AddTag("trepidation")
-	inst:AddTag("gestaltnoloot")
-	inst:AddTag("monster")
-	inst:AddTag("hostile")
-	inst:AddTag("shadow")
-	inst:AddTag("notraptrigger")
-	inst:AddTag("shadow_aligned")
+    inst:AddTag("gestaltnoloot")
+    inst:AddTag("monster")
+    inst:AddTag("hostile")
+    inst:AddTag("shadow")
+    inst:AddTag("notraptrigger")
+    inst:AddTag("shadow_aligned")
 
     inst.menaces = {} --putting this here so clients can access it!
 
