@@ -30,16 +30,16 @@ env.AddClassPostConstruct("components/combat_replica", function(self)
         end
         local follower = self.inst.replica.follower
         local leader = follower and follower:GetLeader()
-        if leader and leader.replica.combat and target:HasTag("shadow") and target:HasAnyTag("fused_shadeling", "nightmarecreature") and leader.replica.combat:IsValidTarget(target) then
+        if leader and leader.replica.combat and target:HasAllTags("shadow", "fused_shadeling") and leader.replica.combat:IsValidTarget(target) then
             return true
         end
         return _IsValidTarget(self, target, ...)
     end
 
-    local _CanBeAttacked = self.CanBeAttacked
+    --[[local _CanBeAttacked = self.CanBeAttacked
     function self:CanBeAttacked(attacker, ...)
         local follower = attacker and attacker.replica.follower
         local leader = follower and follower:GetLeader()
-        return _CanBeAttacked(self, leader and self.inst:HasAnyTag("fused_shadeling", "nightmarecreature") and leader or attacker, ...)
-    end
+        return _CanBeAttacked(self, leader and self.inst:HasAnyTag("fused_shadeling") and leader or attacker, ...)
+    end]]
 end)
