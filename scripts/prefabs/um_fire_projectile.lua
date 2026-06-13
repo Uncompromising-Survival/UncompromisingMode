@@ -182,7 +182,7 @@ local function fnfire()
     )
 
     inst:DoTaskInTime(0, ShootFire)
-    inst.dont_hit_tags = JoinArrays(UMCommonFns.GHOSTLIKE_TAGS, {"INLIMBO", "noattack", "invisible"})
+    inst.dont_hit_tags = JoinArrays(UMCommonFns.GHOSTLIKE_TAGS, {"INLIMBO", "notarget", "noattack", "invisible"})
 
     return inst
 end
@@ -296,7 +296,7 @@ local function fnshock()
     )
 
     inst:DoTaskInTime(0, ShootShock)
-    inst.dont_hit_tags = JoinArrays(UMCommonFns.GHOSTLIKE_TAGS, {"INLIMBO", "noattack", "invisible", "worm", "structure"})
+    inst.dont_hit_tags = JoinArrays(UMCommonFns.GHOSTLIKE_TAGS, {"INLIMBO", "notarget", "noattack", "invisible", "worm", "structure"})
     inst.shocked = {}
 
     inst.speed = 10
