@@ -4,7 +4,7 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 STRINGS.SCRAPBOOK.SUBCATS.VETERANSCURSE = "Veteran's Curse"
-STRINGS.SCRAPBOOK.SUBCATS.UM_DEBUG = "Debug"
+STRINGS.SCRAPBOOK.SUBCATS.UM_DEBUG = "Debug/Additions"
 
 local debug = true
 

@@ -3,7 +3,7 @@ local STRINGS = GLOBAL.STRINGS
 local SPECIALINFO = STRINGS.SCRAPBOOK.SPECIALINFO
 local TOOLTIP = STRINGS.UNCOMP_TOOLTIP
 
-STRINGS.SCRAPBOOK.SUBCATS.UM_DEBUG = "Debug"
+STRINGS.SCRAPBOOK.SUBCATS.UM_DEBUG_CHANGES = "Debug/Changes"
 
 local debug = true
 
@@ -30,14 +30,14 @@ SPECIALINFO.MUSHTREE = SPECIALINFO.TREE
 --then change the special info.
 for k, v in pairs(specialinfo_ovewrite) do
     if debug then
-        scrapbookdata[k].subcat = "um_debug"
+        scrapbookdata[k].subcat = "um_debug_changes"
     end
     scrapbookdata[k]["specialinfo"] = v
 end
 --idfk where to put this
 scrapbookdata["shieldofterror"].notes = { cursed_enhanced_item = true }
 if debug then
-    scrapbookdata["shieldofterror"].subcat = "um_debug"
+    scrapbookdata["shieldofterror"].subcat = "um_debug_changes"
 end
 --helper function to format tooltip strings into scrapbook special info.
 -- Turns "- Text.\n- like this."
@@ -60,7 +60,7 @@ end
 ---@param overwrite? boolean
 local function AddAddtionalScrapbookInfo(page, info, overwrite)
     if debug and scrapbookdata[string.lower(page)] ~= nil then
-        scrapbookdata[string.lower(page)].subcat = "um_debug"
+        scrapbookdata[string.lower(page)].subcat = "um_debug_changes"
     end
 
     if string.match(page, "ITEM") ~= nil or string.match(page, "KIT") ~= nil then return end -- only show for the actual buildings, not kit/item versions.
