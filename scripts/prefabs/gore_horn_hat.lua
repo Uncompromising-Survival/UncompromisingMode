@@ -320,15 +320,15 @@ local function onothercollide(inst, other, owner)
     end
 end
 
-local NOTAGS = {"fx", "INLIMBO", "player", "bird", "butterfly", "boat", "wall", "companion", "shadowminion", "abigail"}
-local NO_RAM_LEADER_TAGS = {"player", "bell"}
+local NOTAGS = {"fx", "INLIMBO", "player", "bird", "butterfly", "boat", "wall", "companion", "shadowminion", "abigail", "wieneke_possessed"}
+local NO_RAM_LEADER_TAGS = {"player", "bell", "wieneke_possessed"}
 local function oncollide(inst)
     if inst.owner ~= nil then
         local x, y, z = inst.owner.Transform:GetWorldPosition()
         local ents = TheSim:FindEntities(x, y, z, 3, nil, NOTAGS)
         for i, v in ipairs(ents) do
             local leader = v.components.follower and v.components.follower:GetLeader()
-            if not (leader and leader:HasAnyTag(NO_RAM_LEADER_TAGS)) then
+            if not (leader and leader:HasAnyTag(NO_RAM_LEADER_TAGS)) and not (v.crab and v.crab:HasTag("wieneke_possessed")) then
                 onothercollide(inst, v, inst.owner)
             end
         end

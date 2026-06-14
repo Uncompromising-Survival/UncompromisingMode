@@ -37,6 +37,14 @@ local function NewCallBack(inst, worker, workleft, ...)
     return ret
 end
 
+local function OnHauntCrabsBoulder(inst, haunter)
+    if inst and inst.crab and not (inst.crab.components.health and inst.crab.components.health:IsDead()) and inst.crab.hiding then
+        inst.crab:PushEvent("comeoutfromunderrock")
+        return true
+    end
+    return false
+end
+
 local function GetRock(inst, rock)
     --TheNet:Announce("got my rock")
     if type(rock) ~= "string" then
@@ -56,6 +64,7 @@ local function GetRock(inst, rock)
 
     inst.myrock._oldcallback = inst.myrock.components.workable.onwork
     inst.myrock.components.workable:SetOnWorkCallback(NewCallBack)
+    AddHauntableCustomReaction(inst.myrock, OnHauntCrabsBoulder)
 
     if inst.components.health then -- Will leave this in incase it somehow bypasses.
         inst.components.health:SetAbsorptionAmount(rock == "rock_moon" and .9 or .75) -- .9 is Effective 5000 health (mine the rock off you hooligan). .75 is Effective 2000 health.
