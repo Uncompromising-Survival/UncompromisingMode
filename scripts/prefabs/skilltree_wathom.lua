@@ -79,8 +79,8 @@ local function ShowLowHealth(inst)
     local creatures = TheSim:FindEntities(x, y, z, 24, WARNING_MUST_TAGS, WARNING_MUST_NOT_TAGS)
     for i,creature in ipairs(creatures) do
         if creature.components.health and not creature.components.health:IsDead()
-            and (creature.components.health:GetPercent() <= 0.3 and not creature:HasTag("epic"))
-            or (creature.components.health:GetPercent() <= 0.1 and creature:HasTag("epic")) then
+            and (creature.components.health:GetPercent() <= 0.3 and not creature:HasTag("epic")
+            or creature.components.health:GetPercent() <= 0.1 and creature:HasTag("epic")) then
             local fx = SpawnPrefab("wathom_wound_vfx")
             fx.Transform:SetScale(1.3,1.3,1.3)
             fx.entity:SetParent(creature.entity)
@@ -92,8 +92,8 @@ end
 local function ShowLowHealth_OnAttack(inst, data)
     if not inst.um_wathomdamagedtargettask and data.target and data.target.components.health and not data.target.components.health:IsDead()
         and data.target:HasAnyTag(WARNING_MUST_TAGS) and not data.target:HasAnyTag(WARNING_MUST_NOT_TAGS)
-        and (data.target.components.health:GetPercent() <= 0.3 and not data.target:HasTag("epic"))
-        or (data.target.components.health:GetPercent() <= 0.1 and data.target:HasTag("epic")) then
+        and (data.target.components.health:GetPercent() <= 0.3 and not data.target:HasTag("epic")
+        or data.target.components.health:GetPercent() <= 0.1 and data.target:HasTag("epic")) then
         local fx = SpawnPrefab("wathom_wound_vfx")
         fx.entity:SetParent(data.target.entity)
         fx.Network:SetClassifiedTarget(inst)
