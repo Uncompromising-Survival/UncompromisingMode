@@ -345,7 +345,7 @@ dataset["um_moonglass_ceiling"] = {
     build = "um_moonglass_ceiling",
     subcat = "gemology",
     bank = "um_moonglass_ceiling",
-    anim = "full",
+    anim = "idle_full1",
     deps = { "um_gemology_geode_glass" }
 }
 scrapbook_prefabs["um_moonglass_ceiling"] = true
