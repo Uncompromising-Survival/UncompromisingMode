@@ -244,6 +244,8 @@ local function BeeMine(name, alignment, skin, spawnprefab, isinventory)
 
         inst:AddTag("mine")
 
+        inst.scrapbook_proxy = "um_beemine_moon_item"
+
         inst.entity:SetPristine()
 
         if not TheWorld.ismastersim then
