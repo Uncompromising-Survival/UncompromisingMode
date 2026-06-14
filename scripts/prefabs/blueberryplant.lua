@@ -532,7 +532,9 @@ local function ApplySlows(inst)
             v.components.locomotor:SetExternalSpeedMultiplier(v, debuffkey, 0.5)
             v.um_boomslowtask = v:DoPeriodicTask(1, function(guy)
                 if not FindEntity(guy, 3, function(ent) return ent.prefab == "blueberrypuddle" end) then
-                    guy.components.locomotor:RemoveExternalSpeedMultiplier(guy, debuffkey)
+                    if guy.components.locomotor then
+                        guy.components.locomotor:RemoveExternalSpeedMultiplier(guy, debuffkey)
+                    end
                     if guy.um_boomslowtask then
                         guy.um_boomslowtask:Cancel()
                         guy.um_boomslowtask = nil

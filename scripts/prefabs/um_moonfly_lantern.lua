@@ -38,18 +38,11 @@ local function turnon(inst)
     if inst._body ~= nil or not inst.components.inventoryitem:IsHeld() then
         if inst._light == nil then
             inst._light = SpawnPrefab("um_moonfly_lantern_light")
-            inst._light.entity:AddFollower()
             inst._light._thurible = inst
             inst:ListenForEvent("onremove", onremovesmoke, inst._light)
             PlayIgniteSound(inst)
         end
-        if inst._body ~= nil and
-            not inst._body.entity:IsVisible() and
-            inst.components.inventoryitem.owner ~= nil then
-            inst._light.Follower:FollowSymbol(inst.components.inventoryitem.owner.GUID, "swap_object", 68, -70, 0)
-        else
-            inst._light.Follower:FollowSymbol((inst._body or inst).GUID, "thurible_swing", 0, 185, 0)
-        end
+        inst._light.entity:SetParent((inst.components.inventoryitem.owner or inst).entity)
     elseif inst._light ~= nil then
         inst._light:Remove()
         PlayExtinguishSound(inst)
@@ -86,15 +79,9 @@ local function ToggleOverrideSymbols(inst, owner)
                 and not owner.sg:HasStateTag("forcedangle"))) then
         owner.AnimState:OverrideSymbol("swap_object", "swap_dy", "swap_thurible")
         inst._body:Hide()
-        if inst._light ~= nil then
-            inst._light.Follower:FollowSymbol(owner.GUID, "swap_object", 65, 0, 0)
-        end
     else
         owner.AnimState:OverrideSymbol("swap_object", "swap_thurible", "swap_thurible_stick")
         inst._body:Show()
-        if inst._light ~= nil then
-            inst._light.Follower:FollowSymbol(inst._body.GUID, "thurible_swing", 0, 185, 0)
-        end
     end
 end
 

@@ -143,9 +143,6 @@ local function fn()
 
     inst:AddComponent("inventoryitem")
 
-    inst:AddComponent("shadowlevel")
-    inst.components.shadowlevel:SetDefaultLevel(TUNING.AMULET_SHADOW_LEVEL)
-
     inst:AddComponent("equippable")
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)
@@ -174,7 +171,9 @@ local function OnUpdateIceCircle(inst)
                 v.components.locomotor:SetExternalSpeedMultiplier(v, debuffkey, 0.5)
                 v.um_ice_circle = v:DoPeriodicTask(1, function(guy)
                     if not FindEntity(guy, 3, function(ent) return ent.prefab == "antler_ice_circle" end) then
-                        guy.components.locomotor:RemoveExternalSpeedMultiplier(guy, debuffkey)
+                        if guy.components.locomotor then
+                            guy.components.locomotor:RemoveExternalSpeedMultiplier(guy, debuffkey)
+                        end
                         if guy.um_ice_circle then
                             guy.um_ice_circle:Cancel()
                             guy.um_ice_circle = nil

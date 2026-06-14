@@ -16,7 +16,6 @@ local function CheckLeftPond(ent,self)
 	end
 end
 
-
 function UM_Ripplespawner:spawnripple(inst)
 	if inst ~= nil then
 		local x, y, z = inst.Transform:GetWorldPosition()
@@ -38,16 +37,12 @@ function UM_Ripplespawner:spawnripple(inst)
 						splash.Transform:SetScale(0.75,0.75,0.75)
 					end
 				end
-				if self.inst:HasTag("pond_inducedinsanity") then
-					--splash.AnimState:SetMultColour(0,0,0,1)
-				end
 				if inst.components.moisture ~= nil then
 					local waterproofness = inst.components.inventory and math.min(inst.components.inventory:GetWaterproofness(),1) or 0
 					inst.components.moisture:DoDelta(10 * (1 - waterproofness), true)
 				end
 			end    
 			
-			local x,y,z = inst.Transform:GetWorldPosition()
 			local ripple = SpawnPrefab("weregoose_ripple1")
 			
 			if math.random() > 0.5 then
@@ -67,10 +62,6 @@ function UM_Ripplespawner:spawnripple(inst)
 			if ripple.AnimState ~= nil then
 				ripple.AnimState:SetOceanBlendParams(.2)
 			end
-			if self.inst:HasTag("pond_inducedinsanity") then
-				--ripple.AnimState:SetMultColour(0,0,0,1)
-			end
-			
 			--[[ using bathingpool now
             if self.inst.prefab == "um_hotspring" then
 				if inst.components.temperature then
@@ -129,7 +120,6 @@ function UM_Ripplespawner:spawnripple(inst)
 		end
 	end
 	
-	inst.um_rippletask = nil 
 end
 
 function UM_Ripplespawner:OnEntitySleep()
@@ -151,10 +141,11 @@ function UM_Ripplespawner:OnUpdate(dt)
     for i, ent in ipairs(ents) do
 		if ent.um_rippletask == nil then
 			ent.um_rippletask = ent:DoTaskInTime(ent.components.locomotor ~= nil and (1.8 / ent.components.locomotor:GetRunSpeed()) or .3,
-				function(ent)  
+				function(ent)
+					ent.um_rippletask = nil
 					if not ent:HasTag("flying") or ent:HasTag("ghostplayer") then
-						self:spawnripple(ent) 
-					end 
+						self:spawnripple(ent)
+					end
 				end)
 		end
 		--[[if self.inst:HasTag("pond_inducedinsanity") and not ent.um_pond_induced_insanity and ent.components.sanity then

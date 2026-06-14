@@ -423,7 +423,9 @@ local function WathomEnterDark(inst)
 end]]
 
 local function CheckLight(inst)
-    if inst:IsInLight() then
+    local x,y,z = inst.Transform:GetWorldPosition()
+    local light = TheSim:GetLightAtPoint(x, y, z)
+    if light and light > .9 then
         if not inst.updatewathomvisiontask then
             inst.updatewathomvisiontask = inst:DoTaskInTime(2, function()
                 inst.components.playervision:SetCustomCCTable(nil)

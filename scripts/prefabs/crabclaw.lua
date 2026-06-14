@@ -421,9 +421,8 @@ local function OnOpen(inst)
 end
 
 local function GetShadowLevel(inst)
-    return inst.components.container ~= nil and #inst.components.container:FindItems(function(item) return item.prefab == "purplegem_cracked" end) + 1
+    return inst.components.container ~= nil and #inst.components.container:FindItems(function(item) return item.prefab == "purplegem_cracked" end) + TUNING.DSTU.CRABCLAW_SHADOW_LEVEL
 end
-
 
 local function fn()
     local inst = CreateEntity()
@@ -462,8 +461,7 @@ local function fn()
 
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(function(inst)
-        local opalgem = #
-            inst.components.container:FindItems(function(item) return item.prefab == "opalpreciousgem_cracked" end)
+        local opalgem = #inst.components.container:FindItems(function(item) return item.prefab == "opalpreciousgem_cracked" end)
 
         local redgem = #inst.components.container:FindItems(function(item) return item.prefab == "redgem_cracked" end)
 
@@ -479,7 +477,6 @@ local function fn()
 
         return 40 + (5 * opalgem) + (5 * (redgem + bluegem + yellowgem + greengem + orangegem + purplegem + (math.abs(inst.components.gem_enchantable.slots - 4))))
     end)
-
 
     inst.components.weapon:SetOnAttack(onattack)
 

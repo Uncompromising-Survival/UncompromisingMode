@@ -136,7 +136,7 @@ local function fn()
     inst:AddComponent("inventoryitem")
 
     inst:AddComponent("shadowlevel")
-    inst.components.shadowlevel:SetDefaultLevel(TUNING.AMULET_SHADOW_LEVEL)
+    inst.components.shadowlevel:SetDefaultLevel(TUNING.DSTU.CURSED_ANTLER_SHADOW_LEVEL)
 
     inst:AddComponent("equippable")
     inst.components.equippable:SetOnEquip(onequip)

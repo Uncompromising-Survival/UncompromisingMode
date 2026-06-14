@@ -707,7 +707,7 @@ local function fnlever()
     inst.entity:AddAnimState()
     inst.entity:AddNetwork()
 
-
+	MakeInventoryPhysics(inst)
 
     inst.AnimState:SetBank("um_cookpot_wagstaff_lever")
     inst.AnimState:SetBuild("um_cookpot_wagstaff_lever")
@@ -724,6 +724,8 @@ local function fnlever()
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem.atlasname = "images/inventoryimages/um_cookpot_wagstaff_lever.xml"
 
+    inst:AddTag("irreplaceable")
+	
     inst:AddComponent("tradable")
     return inst
 end
@@ -735,7 +737,7 @@ local function fnlever2()
     inst.entity:AddAnimState()
     inst.entity:AddNetwork()
 
-
+	MakeInventoryPhysics(inst)
 
     inst.AnimState:SetBank("um_cookpot_wagstaff_lever2")
     inst.AnimState:SetBuild("um_cookpot_wagstaff_lever2")
@@ -751,6 +753,8 @@ local function fnlever2()
 
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem.atlasname = "images/inventoryimages/um_cookpot_wagstaff_lever2.xml"
+
+    inst:AddTag("irreplaceable")
 
     inst:AddComponent("tradable")
     return inst

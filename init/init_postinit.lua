@@ -110,7 +110,6 @@ local prefab_post = {
     "foodbuffs",
     "mutatedhound",
     "skeleton",
-    --"shadowcreature",
     "berrybush",
     --"papyrus",
     "sporecloud",
@@ -259,7 +258,8 @@ local prefab_post = {
     "cane",
     "onemanband",
     "cursed_monkey_token",
-    "slurtle_shellpieces"
+    "slurtle_shellpieces",
+    "fused_shadeling"
 }
 
 local stategraph_post = {
@@ -312,7 +312,6 @@ local brain_post = {
     --"catcoon",
     "walrus",
     "deer",
-    "shadowwaxwell",
     "hound",
     "iceshield"
 }
@@ -415,7 +414,6 @@ end
 if GetModConfigData("harder_leifs") then
     table.insert(stategraph_post, "Leif")
     table.insert(prefab_post, "leif")
-    table.insert(prefab_post, "leif_sparse")
     table.insert(brain_post, "leif")
 end
 

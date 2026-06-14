@@ -36,11 +36,7 @@ RECIPE_DESC.UM_BEAR_TRAP_EQUIPPABLE_TOOTH = "These jaws need to get a grip!"
 RECIPE_DESC.UM_BEAR_TRAP_EQUIPPABLE_GOLD = "My shiny teeth and me!"
 RECIPE_DESC.ARMOR_GLASSMAIL = "Surround yourself with broken glass."
 RECIPE_DESC.MUTATOR_TRAPDOOR = "They're smart, allegedly."
-if TUNING.DSTU.DATES.APRIL_FOOLS then
-    RECIPE_DESC.DRIFTWOODFISHINGROD = "Go fucking fishing. For fucking fish."
-else
-    RECIPE_DESC.DRIFTWOODFISHINGROD = "Go fancy fishing. For fancy fish."
-end
+RECIPE_DESC.DRIFTWOODFISHINGROD = TUNING.DSTU.DATES.APRIL_FOOLS and "Go fucking fishing. For fucking fish." or "Go fancy fishing. For fancy fish."
 RECIPE_DESC.UNCOMPROMISING_FISHINGNET = "Nothing but net!"
 RECIPE_DESC.UNCOMPROMISING_HARPOON = "Keel Haul 'Em!"
 RECIPE_DESC.UNCOMPROMISING_HARPOON_HEAVY = "Up for a Chain'ge?"

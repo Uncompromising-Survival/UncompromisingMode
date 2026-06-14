@@ -274,6 +274,39 @@ function c_um_setadrenaline(p)
     end
 end
 
+function c_um_setclaustrophobia(p)
+    local player = ConsoleCommandPlayer()
+    if player ~= nil and player.claustrophobia ~= nil then
+        player.claustrophobia = p
+        if p >= 1 and not player.wixiepanic then
+            player.wixiepanic = true
+            SendModRPCToServer(GetModRPC("WixieTheDelinquent", "ClaustrophobiaPanic"), player)
+        end
+    end
+end
+
+function c_um_godmodeclaustrophobia(player)
+    if TheWorld and not TheWorld.ismastersim then
+        c_remote("c_um_godmodeclaustrophobia()")
+        return
+    end
+
+    player = ConsoleCommandPlayer()
+    if player and player.claustrophobia and player:HasTag("troublemaker") then
+        SuUsed("c_um_godmodeclaustrophobia", true)
+        if not player.no_claustrophobia then
+            player.claustrophobia = 0
+            player.no_claustrophobia = true
+            print("No Claustrophobia mode: On")
+        else
+            player.no_claustrophobia = false
+            print("No Claustrophobia mode: Off")
+        end
+    else
+        print("You are not Wixie! Or you don't have any Claustrophobia!")
+    end
+end
+
 local function CountLocalPrefabs(prefab, pos, set_radius)
     local ents = TheSim:FindEntities(pos.x, 0, pos.z, set_radius)
     local count = 0
