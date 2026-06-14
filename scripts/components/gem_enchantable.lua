@@ -134,7 +134,7 @@ function GemEnchantable:GetDurability(enchantment)
     return self.enchant_durabilty[enchantment]
 end
 
-function GemEnchantable:AddEnchantment(enchant, tier)
+function GemEnchantable:AddEnchantment(enchant, tier, slotless)
     if self.enchants[enchant] ~= nil then
         print("[WARN] Added enchantment \"" .. enchant .. "\", was already applied.")
     end
@@ -148,14 +148,16 @@ function GemEnchantable:AddEnchantment(enchant, tier)
         GEM_DEFS[enchant].fns.onapply(self.inst, tier)
     end
 
-    self.slots = self.slots - 1
+    if not slotless then
+        self.slots = self.slots - 1
+    end
 
     self.dirty = true
 
     self.inst:PushEvent("onaddenchant", { enchant = enchant, tier = tier })
 end
 
-function GemEnchantable:RemoveEnchantment(enchant)
+function GemEnchantable:RemoveEnchantment(enchant, slotless)
     assert(GEM_DEFS[enchant] ~= nil, "Attempted to remove unknown enchantment: " .. enchant)
     assert(self.enchants[enchant], "Could not remove enchantment \"" .. enchant .. "\". Enchantment is not applied.")
 
@@ -172,7 +174,9 @@ function GemEnchantable:RemoveEnchantment(enchant)
 
     self.enchants[enchant] = nil
 
-    self.slots = self.slots + 1
+    if not slotless then
+        self.slots = self.slots + 1
+    end
 
     self.inst.persistent_gemology_data[enchant] = {} --clear data for this effect.
     self.inst.volatile_gemology_data[enchant] = {}   --clear data for this effect.

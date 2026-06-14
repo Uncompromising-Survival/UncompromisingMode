@@ -271,8 +271,7 @@ local function addRandomGemEffects(inst)
     if inst.persistent_gemology_data.um_gemologygreengem2.gem_effects then
         for k, v in pairs(inst.persistent_gemology_data.um_gemologygreengem2.gem_effects) do
             if inst.components.gem_enchantable.enchants[k] then
-                inst.components.gem_enchantable:RemoveEnchantment(k)
-                inst.components.gem_enchantable.slots = inst.components.gem_enchantable.slots - 1
+                inst.components.gem_enchantable:RemoveEnchantment(k, true)
             end
         end
     end
@@ -284,8 +283,7 @@ local function addRandomGemEffects(inst)
     while enchant_nums < max_enchants and tries > 0 do
         local enchant = valid_enchants[math.random(#valid_enchants)]
         if IsEnchantValid(enchant) and not inst.components.gem_enchantable:HasEnchantment(enchant) and (GEM_DEFS[enchant].canapply ~= nil and GEM_DEFS[enchant].canapply(inst, tier) or GEM_DEFS[enchant].canapply == nil) then --don't add already existing other enchants.
-            inst.components.gem_enchantable:AddEnchantment(enchant, tier)
-            inst.components.gem_enchantable:AddSlot(1)                                                                                                                                                                          --don't consume a slot when adding extra enchant.
+            inst.components.gem_enchantable:AddEnchantment(enchant, tier, true)
             inst.persistent_gemology_data.um_gemologygreengem2.gem_effects[enchant] = tier
             enchant_nums = enchant_nums + 1
         end
@@ -693,7 +691,6 @@ local function OnDropedIfDeadGiveBack(inst) -- This is the only one that has an 
     local owner = FindEntity(inst, 10, function(ent) return ent:HasTag("player") end)
 
     inst:DoTaskInTime(math.random(), function(inst)
-
         if owner and (owner.components.health:IsDead() or owner.sg ~= nil and owner.sg:HasStateTag("dead") or owner:HasTag("playerghost")) then -- If this happens, the owner has just died.
             if tier ~= 1 then
                 for i = 1, tier do
