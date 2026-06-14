@@ -298,6 +298,9 @@ TUNING.DSTU = {
     WANDA_NERF = GetModConfigData("wanda_nerf"),
     -- Wortox
     -- WORTOX = GetModConfigData("wortox"),
+    -- Walter
+    WOBY_DIG_COST = 1,
+    WOBY_DIG_SNOW_PILE_COST = 3,
     -- Mobs
     RAIDRAT_HEALTH = 100,
     RAIDRAT_DAMAGE = 20,

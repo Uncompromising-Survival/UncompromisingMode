@@ -340,7 +340,11 @@ local states = {
 
 				if inst.wobytarget ~= nil then
 					if inst.wobytarget:HasTag("snowpile") then
-						inst.components.hunger:DoDelta(-3)
+						local cost = TUNING.DSTU.WOBY_DIG_SNOW_PILE_COST
+						if inst:HasEndurance() then
+							cost = cost * TUNING.SKILLS.WALTER.WOBY_ENDURANCE_HUNGER_RATE_MOD
+						end
+						inst.components.hunger:DoDelta(-cost)
 						inst.SoundEmitter:PlaySound("wixie/characters/wixie/woby_hunger")
 					end
 
@@ -408,7 +412,11 @@ local states = {
 					local stump_or_pile = inst.wobytarget:HasTag("stump") and "stump" or inst.wobytarget:HasTag("snowpile_basic") and "snowpile_basic" or nil
 				
 					if stump_or_pile ~= nil then
-						inst.components.hunger:DoDelta(stump_or_pile == "snowpile_basic" and -5 or -1)
+						local cost = stump_or_pile == "snowpile_basic" and TUNING.DSTU.WOBY_DIG_SNOW_PILE_COST or TUNING.DSTU.WOBY_DIG_COST
+						if inst:HasEndurance() then
+							cost = cost * TUNING.SKILLS.WALTER.WOBY_ENDURANCE_HUNGER_RATE_MOD
+						end
+						inst.components.hunger:DoDelta(-cost)
 						inst.SoundEmitter:PlaySound("wixie/characters/wixie/woby_hunger")
 						inst.oldwobytarget = inst.wobytarget
 						inst.wobytarget = nil
@@ -426,7 +434,11 @@ local states = {
 							end
 						end
 					else
-						inst.components.hunger:DoDelta(-1)
+						local cost = TUNING.DSTU.WOBY_DIG_COST
+						if inst:HasEndurance() then
+							cost = cost * TUNING.SKILLS.WALTER.WOBY_ENDURANCE_HUNGER_RATE_MOD
+						end
+						inst.components.hunger:DoDelta(-cost)
 						inst.SoundEmitter:PlaySound("wixie/characters/wixie/woby_hunger")
 						inst.oldwobytarget = nil
 						inst.wobytarget = nil
