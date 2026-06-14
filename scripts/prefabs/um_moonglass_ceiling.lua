@@ -1,18 +1,19 @@
 local assets =
 {
     Asset("ANIM", "anim/um_moonglass_ceiling.zip"),
-    
+
     Asset("IMAGE", "images/map_icons/um_grotto_glass_icon.tex"),
-    Asset("ATLAS", "images/map_icons/um_grotto_glass_icon.xml"),    
+    Asset("ATLAS", "images/map_icons/um_grotto_glass_icon.xml"),
 }
 
-local function Regrow(inst,data)
+local function Regrow(inst, data)
     inst.fullness = inst.fullness + 1
-    inst.AnimState:PlayAnimation("full",true)
+    inst.AnimState:PlayAnimation("shatter_to_full" .. inst.style)
+    inst.AnimState:PushAnimation("idle_full" .. inst.style, true)
 end
 
-local NON_DAMAGEABLE_TAGS = {"INLIMBO", "notarget", "noattack", "playerghost", "irreplaceable", "outofreach", "quakeimmune"}
-local DAMAGEABLE_TAGS = {"smashable", "quakedebris", "_combat"}
+local NON_DAMAGEABLE_TAGS = { "INLIMBO", "notarget", "noattack", "playerghost", "irreplaceable", "outofreach", "quakeimmune" }
+local DAMAGEABLE_TAGS = { "smashable", "quakedebris", "_combat" }
 local function DamageSurroundings(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
     local ents = TheSim:FindEntities(x, y, z, 2, nil, NON_DAMAGEABLE_TAGS, DAMAGEABLE_TAGS)
@@ -32,7 +33,7 @@ end
 local function ListenForCrash(geode)
     if geode.entity:IsAwake() then
         geode.listenfall = geode:DoPeriodicTask(.1, function(geode)
-            local x,y,z = geode.Transform:GetWorldPosition()
+            local x, y, z = geode.Transform:GetWorldPosition()
             if y < .5 then
                 DamageSurroundings(geode)
                 geode.listenfall:Cancel()
@@ -40,8 +41,8 @@ local function ListenForCrash(geode)
             end
         end)
     else
-        local x,y,z = geode.Transform:GetWorldPosition()
-        geode.Transform:SetPosition(x,0,z)
+        local x, y, z = geode.Transform:GetWorldPosition()
+        geode.Transform:SetPosition(x, 0, z)
         DamageSurroundings(geode)
     end
 end
@@ -50,16 +51,18 @@ local function DropLoot(inst)
     if math.random() < 0.25 then
         if inst.fullness ~= 0 then
             inst.fullness = inst.fullness - 1
-            inst.AnimState:PlayAnimation("empty",true)
-        end
 
-        local x,y,z = inst.Transform:GetWorldPosition()
-        local geode = SpawnPrefab("um_gemology_geode_glass")
-        geode.Transform:SetPosition(x, y + 10, z)
-        ListenForCrash(geode)
+            inst.AnimState:PlayAnimation("shatter" .. inst.style)
+            inst.AnimState:PushAnimation("idle_empty" .. inst.style, true)
 
-        if inst.components.timer and not inst.components.timer:TimerExists("regrow") then
-            inst.components.timer:StartTimer("regrow", 80 * 8 * 5)
+            local x, y, z = inst.Transform:GetWorldPosition()
+            local geode = SpawnPrefab("um_gemology_geode_glass")
+            geode.Transform:SetPosition(x, y + 10, z)
+            ListenForCrash(geode)
+
+            if inst.components.timer and not inst.components.timer:TimerExists("regrow") then
+                inst.components.timer:StartTimer("regrow", 80 * 8 * 5)
+            end
         end
     end
 end
@@ -75,11 +78,15 @@ local function fn()
 
     inst.AnimState:SetBuild("um_moonglass_ceiling")
     inst.AnimState:SetBank("um_moonglass_ceiling")
-    inst.AnimState:PlayAnimation("full", true)
+    inst.AnimState:PlayAnimation("idle_full1", true)
 
     inst:AddTag("NOCLICK")
     inst.MiniMapEntity:SetIcon("um_grotto_glass_icon.tex")
     inst.no_wet_prefix = true
+
+    inst.scrapbook_inspectonseen = true
+
+    inst.style = math.random(0, 1)
 
     inst.entity:SetPristine()
 
@@ -87,7 +94,7 @@ local function fn()
         return inst
     end
 
-    inst:DoTaskInTime(0,function(inst)
+    inst:DoTaskInTime(0, function(inst)
         if not inst.rotation then
             inst.rotation = math.random(0, 1)
             if inst.rotation == 0 then
@@ -96,19 +103,24 @@ local function fn()
         end
         if not inst.fullness then
             inst.fullness = 1
-            inst.AnimState:PlayAnimation("full")
+            inst.AnimState:PlayAnimation("idle_full" .. inst.style)
         end
     end)
 
-    inst.OnSave = function(inst,data)
+    inst.OnSave = function(inst, data)
         if data then
             data.rotation = inst.rotation or nil
             data.fullness = inst.fullness
+            data.style = inst.style
         end
     end
 
-    inst.OnLoad = function(inst,data)
+    inst.OnLoad = function(inst, data)
         if data then
+            if data.style then
+                inst.style = data.style
+            end
+
             if data.rotation then
                 inst.rotation = data.rotation
                 if inst.rotation == 0 then
@@ -118,18 +130,18 @@ local function fn()
             if data.fullness then
                 inst.fullness = data.fullness
                 if inst.fullness == 1 then
-                    inst.AnimState:PlayAnimation("full")
+                    inst.AnimState:PlayAnimation("idle_full" .. inst.style)
                 else
-                    inst.AnimState:PlayAnimation("empty")
+                    inst.AnimState:PlayAnimation("idle_empty" .. inst.style)
                 end
             end
         end
     end
 
     inst:AddComponent("timer")
-    inst:ListenForEvent("timerdone",Regrow)
+    inst:ListenForEvent("timerdone", Regrow)
 
-    inst:ListenForEvent("startquake", function() inst:DoTaskInTime(math.random(4, 10), DropLoot) end, TheWorld.net)    
+    inst:ListenForEvent("startquake", function() inst:DoTaskInTime(math.random(4, 10), DropLoot) end, TheWorld.net)
 
     return inst
 end
