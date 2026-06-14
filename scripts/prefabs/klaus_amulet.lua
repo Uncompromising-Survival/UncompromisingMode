@@ -97,7 +97,7 @@ local function fn()
     armor:InitIndestructible(TUNING.DSTU.KLAUS_AMULET_ABSORPTION)
 
     local shadowlevel = inst:AddComponent("shadowlevel")
-    shadowlevel:SetDefaultLevel(TUNING.AMULET_SHADOW_LEVEL)
+    shadowlevel:SetDefaultLevel(TUNING.DSTU.KLAUS_AMULET_SHADOW_LEVEL)
 
     return inst
 end

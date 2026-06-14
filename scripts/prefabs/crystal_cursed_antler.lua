@@ -143,9 +143,6 @@ local function fn()
 
     inst:AddComponent("inventoryitem")
 
-    inst:AddComponent("shadowlevel")
-    inst.components.shadowlevel:SetDefaultLevel(TUNING.VOIDCLOTH_SCYTHE_SHADOW_LEVEL)
-
     inst:AddComponent("equippable")
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)

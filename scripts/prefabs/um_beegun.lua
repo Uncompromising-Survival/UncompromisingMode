@@ -228,7 +228,7 @@ local function fn(anim, name, swap, beetype)
     end
 
     local shadowlevel = inst:AddComponent("shadowlevel")
-    shadowlevel:SetDefaultLevel(TUNING.AMULET_SHADOW_LEVEL)
+    shadowlevel:SetDefaultLevel(TUNING.DSTU.BEEGUN_SHADOW_LEVEL)
 
     inst.beetype = beetype
     inst.swap = swap

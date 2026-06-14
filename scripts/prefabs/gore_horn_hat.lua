@@ -276,7 +276,7 @@ local function fn()
     inst:ListenForEvent("percentusedchange", checkiffull)
 
     inst:AddComponent("shadowlevel")
-    inst.components.shadowlevel:SetDefaultLevel(TUNING.AMULET_SHADOW_LEVEL * 2)
+    inst.components.shadowlevel:SetDefaultLevel(TUNING.DSTU.GOREHORN_SHADOW_LEVEL)
 
     inst.fueltask = nil
     inst.fuelmetask = nil
