@@ -218,8 +218,8 @@ configuration_options = {
     -- { description = "90%", data = 0.1 }, { description = "INSANITY", data = 0 } },
     -- default = 0.8
     -- },
-    BinaryConfig("compromising_vortex", "Non-lethal Shadow Vortex",
-        "Shadow Vortex now teleports you to some random place.", false),
+    --BinaryConfig("compromising_vortex", "Non-lethal Shadow Vortex",
+    --    "Shadow Vortex now teleports you to some random place.", false),
     BinaryConfig("foodregen", "Over Time Food Stats",
         "Health and Sanity from foods is applied over time, each food acting as a seperate stackable health or sanity regen buff.",
         true),
