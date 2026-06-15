@@ -4,7 +4,7 @@ return Class(function(self, inst)
 
     self.ocupi = {}
 
-    local function CountOcupi()
+    function self:CountOcupi()
         --can't use #self.ocupi because it's a map, doesn't have a numerical idx
         local count = 0
         for k, v in pairs(self.ocupi) do
@@ -15,9 +15,9 @@ return Class(function(self, inst)
     end
 
     local function CheckForOtherOcupi(pos)
-        if CountOcupi() > 0 then
+        if self:CountOcupi() > 0 then
             for guid, ent in pairs(self.ocupi) do
-                if ent ~= nil and ent:IsValid() and ent:GetDistanceSqToPoint(pos.x, 0, pos.z) <= 40 * 40 then
+                if ent ~= nil and ent:IsValid() and ent:GetDistanceSqToPoint(pos.x, 0, pos.z) <= 250 * 250 then
                     return false
                 end
             end
@@ -35,7 +35,6 @@ return Class(function(self, inst)
             target_location.z = v.z
 
             if CheckForOtherOcupi(target_location) then
-                --print("found valid location")
                 target_location.x = v.x + offset
                 target_location.z = v.z + offset
 
@@ -53,7 +52,7 @@ return Class(function(self, inst)
         end
     end
 
-    local function SpawnOcupi()
+    function self:SpawnOcupi()
         local pos = FindLocation()
         if pos then --If you maxwelled the whole ocean I swear
             SpawnPrefab("um_ocupus").Transform:SetPosition(pos.x, 0, pos.z)
@@ -61,27 +60,27 @@ return Class(function(self, inst)
     end
 
     local function OnSeasonTick(src, data)
-        local Ocupus = CountOcupi()
+        local Ocupus = self:CountOcupi()
         if Ocupus and Ocupus < 1 then
-            SpawnOcupi()
-            SpawnOcupi()
+            self:SpawnOcupi()
+            self:SpawnOcupi()
         elseif Ocupus < 3 then
-            SpawnOcupi()
+            self:SpawnOcupi()
         elseif Ocupus < 4 and math.random() > 0.5 then
-            SpawnOcupi()
+            self:SpawnOcupi()
         elseif Ocupus < 6 and math.random() > 0.75 then
-            SpawnOcupi()
+            self:SpawnOcupi()
         end
     end
 
     function self:FirstRun()
-        SpawnOcupi()
-        SpawnOcupi()
-        SpawnOcupi()
+        self:SpawnOcupi()
+        self:SpawnOcupi()
+        self:SpawnOcupi()
     end
 
     function self:RegisterOcupus(ent)
-        if ent ~= nil and ent:IsValid() then
+        if ent ~= nil and ent:IsValid() and self.ocupi[ent.GUID] == nil then
             self.ocupi[ent.GUID] = ent
         end
     end
@@ -101,20 +100,14 @@ return Class(function(self, inst)
 
     function self:OnSave()
         local data = {}
+
         data.firstrun = self.firstrun
-        data.ocupi = {}
 
-        local references = {}
-
-        for k, v in pairs(self.ocupi) do
-            table.insert(data.ocupi, v.GUID)
-            table.insert(references, v.GUID)
-        end
-
-        return data, references
+        return data
     end
 
     function self:OnLoad(data)
+
         if data then
             if data.firstrun then
                 self.firstrun = data.firstrun
@@ -130,16 +123,6 @@ return Class(function(self, inst)
                 self.firstrun = true
             end
         end)
-    end
-
-    function self:LoadPostPass(newents, savedata)
-        if savedata.ocupi then
-            for k, guid in pairs(savedata.ocupi) do
-                if newents[guid] then
-                    self.ocupi[guid] = newents[guid]
-                end
-            end
-        end
     end
 
     self.inst:ListenForEvent("seasontick", OnSeasonTick, TheWorld)

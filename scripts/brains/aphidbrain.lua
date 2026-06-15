@@ -57,7 +57,7 @@ local function CanReach(item, inst)
 end
 
 local function EatFoodAction(inst)
-    local EAT_CANT_TAGS = { "outofreach" }
+    local EAT_CANT_TAGS = { "outofreach", "event_trigger" }
     local EAT_ONEOF_TAGS = {
         "edible_GENERIC",
         "edible_VEGGIE",
@@ -68,6 +68,7 @@ local function EatFoodAction(inst)
         "edible_MEAT",
         "pickable",
         "harvestable",
+        --"plant"
     }
 
     if inst.sg:HasStateTag("busy") or inst:GetTimeAlive() < 5 or

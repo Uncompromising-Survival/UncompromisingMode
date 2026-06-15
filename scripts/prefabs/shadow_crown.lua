@@ -97,7 +97,7 @@ local function fn()
     inst.components.equippable.walkspeedmult = TUNING.CANE_SPEED_MULT
 
     inst:AddComponent("shadowlevel")
-    inst.components.shadowlevel:SetDefaultLevel(TUNING.THURIBLE_SHADOW_LEVEL)
+    inst.components.shadowlevel:SetDefaultLevel(TUNING.DSTU.SHADOW_CROWN_SHADOW_LEVEL)
 
     MakeHauntableLaunch(inst)
     --------------------------------------------------------------

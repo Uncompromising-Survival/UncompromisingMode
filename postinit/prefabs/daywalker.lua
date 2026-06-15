@@ -1,74 +1,138 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-local _lootsetfn
-local function lootsetfn(lootdropper, ...)
-    local ret = _lootsetfn and _lootsetfn(lootdropper, ...)
-    --[[lootdropper:ClearRandomLoot()
-    if TheWorld.components.riftspawner and TheWorld.components.riftspawner:GetLunarRiftsEnabled() then
-        --lootdropper:AddRandomLoot("um_boatbottle_blueprint", 1)
-    end
-
-    lootdropper.numrandomloot = 1]]
-    local inst = lootdropper.inst
-    if inst.UMUpdateLoot then inst:UMUpdateLoot(lootdropper) end
-    return ret
-end
-
-local lootitemstoremove = {
-    ["wagpunkhat_blueprint"] = true,
-    ["armorwagpunk_blueprint"] = true,
-    ["chestupgrade_stacksize_blueprint"] = true,
-    ["wagpunkbits_kit_blueprint"] = true,
-    ["wagpunkbits_kit"] = true
+local WAGSTAFF_LEVERS =
+{
+	um_cookpot_wagstaff_lever = true,
+	um_cookpot_wagstaff_lever2 = true,
 }
 
-local function UpdateLoot(inst, lootdropper)
-    local randomloot = lootdropper.randomloot
-    if randomloot then
-        for id, loot in pairs(randomloot) do
-            if loot.prefab and lootitemstoremove[loot.prefab] then
-                table.remove(lootdropper.randomloot, id)
-                lootdropper.totalrandomweight = lootdropper.totalrandomweight - loot.weight
-                if not next(randomloot) then lootdropper:ClearRandomLoot() end
-            end
-        end
-    end
+local function GetData()
+	TheWorld.WagstaffLevers = TheWorld.WagstaffLevers or {}
+	return TheWorld.WagstaffLevers
 end
 
-SetSharedLootTable("um_daywalker2",
-    {
-        { "gears",                            0.5 },
-        { "wagpunk_bits",                     1 },
-        { "wagpunk_bits",                     1 },
-        { "wagpunk_bits",                     1 },
-        { "wagpunk_bits",                     1 },
-        { "wagpunk_bits",                     1 },
-        { "wagpunk_bits",                     0.5 },
-        { "um_cookpot_wagstaff_lever",        1 },
-        { "um_cookpot_wagstaff_lever2",       1 },
-        { "armorwagpunk_blueprint",           1 },
-        { "wagpunkhat_blueprint",             1 },
-        { "um_boatbottle_blueprint",          1 },
-        { "chestupgrade_stacksize_blueprint", 1 },
-        { "wagpunkbits_kit_blueprint",        1 },
-        { "chesspiece_daywalker2_sketch",     1 }
-    })
+env.AddPrefabPostInit("world", function(inst)
+	if not TheWorld.ismastersim then
+		return
+	end
 
+	inst.WagstaffLevers = inst.WagstaffLevers or {}
+	TheWorld.WagstaffLevers = inst.WagstaffLevers
+
+	local old_OnSave = inst.OnSave
+	inst.OnSave = function(inst, data)
+		if old_OnSave ~= nil then
+			old_OnSave(inst, data)
+		end
+
+		data.WagstaffLevers = inst.WagstaffLevers
+	end
+
+	local old_OnLoad = inst.OnLoad
+	inst.OnLoad = function(inst, data)
+		if old_OnLoad ~= nil then
+			old_OnLoad(inst, data)
+		end
+
+		inst.WagstaffLevers = data ~= nil and data.WagstaffLevers or {}
+		TheWorld.WagstaffLevers = inst.WagstaffLevers
+	end
+end)
+
+SetSharedLootTable("um_daywalker2",
+{
+	{ "gears",							0.5 },
+	{ "wagpunk_bits",					1 },
+	{ "wagpunk_bits",					1 },
+	{ "wagpunk_bits",					1 },
+	{ "wagpunk_bits",					1 },
+	{ "wagpunk_bits",					1 },
+	{ "wagpunk_bits",					0.5 },
+
+	{ "um_cookpot_wagstaff_lever",		1 },
+	{ "um_cookpot_wagstaff_lever2",		1 },
+
+	{ "armorwagpunk_blueprint",			1 },
+	{ "wagpunkhat_blueprint",			1 },
+	{ "um_boatbottle_blueprint",		1 },
+	{ "chestupgrade_stacksize_blueprint",	1 },
+	{ "wagpunkbits_kit_blueprint",		1 },
+	{ "chesspiece_daywalker2_sketch",	1 },
+})
+
+local function RemoveLevers(loot)
+	local dropped = GetData()
+
+	if loot ~= nil then
+		for i = #loot, 1, -1 do
+			local prefab = loot[i]
+
+			if WAGSTAFF_LEVERS[prefab] and dropped[prefab] then
+				table.remove(loot, i)
+			end
+		end
+	end
+end
+
+local function MarkLevers(inst)
+	local lootdropper = inst.components.lootdropper
+
+	if lootdropper._um_old_droploot ~= nil then
+		return
+	end
+
+	lootdropper._um_old_droploot = lootdropper.DropLoot
+
+	lootdropper.DropLoot = function(self, ...)
+		local dropped = GetData()
+		local old_SpawnLootPrefab = self.SpawnLootPrefab
+
+		self.SpawnLootPrefab = function(self, prefab, ...)
+			local loot = old_SpawnLootPrefab(self, prefab, ...)
+
+			if WAGSTAFF_LEVERS[prefab] then
+				dropped[prefab] = true
+			end
+
+			return loot
+		end
+
+		local ret = self._um_old_droploot(self, ...)
+
+		self.SpawnLootPrefab = old_SpawnLootPrefab
+
+		return ret
+	end
+end
+
+local function HookLoot(inst)
+	local lootdropper = inst.components.lootdropper
+
+	if lootdropper._um_old_generateloot ~= nil then
+		return
+	end
+
+	lootdropper._um_old_generateloot = lootdropper.GenerateLoot
+
+	lootdropper.GenerateLoot = function(self, ...)
+		local loot = self:_um_old_generateloot(...)
+
+		RemoveLevers(loot)
+
+		return loot
+	end
+end
 
 env.AddPrefabPostInit("daywalker2", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
+	if not TheWorld.ismastersim then
+		return
+	end
 
-    inst.components.lootdropper:SetChanceLootTable('um_daywalker2')
+	inst.components.lootdropper:SetChanceLootTable("um_daywalker2")
 
-    if not _lootsetfn then
-        _lootsetfn = inst.components.lootdropper.lootsetupfn
-    end
-    inst.components.lootdropper:SetLootSetupFn(lootsetfn)
-
-    inst.UMUpdateLoot = UpdateLoot
+	HookLoot(inst)
+	MarkLevers(inst)
 end)
 
 --technically not daywalker but i'm putting it here anyway

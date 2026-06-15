@@ -7,7 +7,7 @@ end
 
 --MAJOR.MINOR.FIX
 --INCREASE THIS VERSION
-local _version = "5.8.1"
+local _version = "5.11.1"
 
 description = [[
     󰀔 ["On The Rocks!" v1.6  (Beta ver: v]] .. _version .. [[)]
@@ -157,6 +157,7 @@ configuration_options = {
         default = "blue",
         client = true
     },
+    BinaryConfig("ui_healthpenalty_grey", "Grey Health Penalty", "Color/Colour Health Penalty as grey when below 25%.", true, true),
 
     SkipSpace(),
 
@@ -217,8 +218,8 @@ configuration_options = {
     -- { description = "90%", data = 0.1 }, { description = "INSANITY", data = 0 } },
     -- default = 0.8
     -- },
-    BinaryConfig("compromising_vortex", "Non-lethal Shadow Vortex",
-        "Shadow Vortex now teleports you to some random place.", false),
+    --BinaryConfig("compromising_vortex", "Non-lethal Shadow Vortex",
+    --    "Shadow Vortex now teleports you to some random place.", false),
     BinaryConfig("foodregen", "Over Time Food Stats",
         "Health and Sanity from foods is applied over time, each food acting as a seperate stackable health or sanity regen buff.",
         true),
@@ -230,7 +231,7 @@ configuration_options = {
         "Veteran's curse is an optional difficulty mode, which increases risk & reward.",
         options = {
             { description = "Default", data = "default" }, { description = "Always On", data = "always" },
-            { description = "Off",     data = "off" } },
+            { description = "Off", data = "off" } },
         default =
         "default"
     },

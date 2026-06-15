@@ -92,10 +92,11 @@ local function OcupusKilled(inst) --The ocupus sustained enough damage to be kil
     if inst.beak then
         inst.beak.retract(inst.beak)
     end
+    local x, y, z = inst.Transform:GetWorldPosition()
+
     inst:DoTaskInTime(math.random(3, 5), function(inst) --Loot Time
         local boat = inst.boatvictim
-        local x, y, z = inst.Transform:GetWorldPosition()
-        if inst.beakkilled then --AXE If you broke the beak, you'll get it as a drop
+        if inst.beakkilled then                         --AXE If you broke the beak, you'll get it as a drop
             SpawnLoot(inst, x, y, z, "ocupus_beak")
         end
         for i = 1, 4 do
@@ -153,8 +154,8 @@ local function FindPointEyeTentacle(inst, x, y, z, rot, stalkinggrounds) --Note 
         x = x + 10 * math.cos(rot) + math.random(-2, 2)
         z = z + 10 * math.sin(rot) + math.random(-2, 2)
     end
-    if IsOcean(x, y, z) then                                                               --okay.. just some basic tests here.... are we near a tentacle already? are we in the water?
-        return x, y, z                                                                     --good, now we can finally spawn a SINGULAR tentacle.
+    if IsOcean(x, y, z) then --okay.. just some basic tests here.... are we near a tentacle already? are we in the water?
+        return x, y, z       --good, now we can finally spawn a SINGULAR tentacle.
     elseif max_tries > 0 then
         max_tries = max_tries - 1
         return FindPointEyeTentacle(inst, oldx, oldy, oldz, oldrot + 2.5, stalkinggrounds) --yeah something didn't work, the land thing is highly unlikely unless someone spawned the creature on land, should add a remove to the prefab itself if it happens to appear on land (likely via console meddling).
@@ -169,7 +170,10 @@ local function AddEyeTentacle(inst, x, y, z, rot, stalkinggrounds) -- Do it one 
     local tent = SpawnPrefab("um_ocupus_eye")
     tent.core = inst
     local homex, homey, homez = FindPointEyeTentacle(inst, x, y, z, rot, stalkinggrounds)
-    if not homex then tent:Remove() return end
+    if not homex then
+        tent:Remove()
+        return
+    end
     tent.rot = rot --Idk why I pass the rotation to the tentacle, it doesn't need it, probably depricated. (this is what happens when you drop something for some time then come back.)
     tent.Transform:SetPosition(homex, homey, homez)
     if not inst.undertents then
@@ -438,12 +442,11 @@ local function fn()
 
     inst:Hide()
 
-    inst:DoTaskInTime(0, function()
-        TheWorld.components.um_ocupusappearinator:RegisterOcupus(inst)
-    end)
+    TheWorld.components.um_ocupusappearinator:RegisterOcupus(inst)
 
     inst:ListenForEvent("onremove", function()
         TheWorld.components.um_ocupusappearinator:UnregisterOcupus(inst)
+        RemoveAllTentacles(inst)
     end)
 
     inst.OnSave = function(inst, data)

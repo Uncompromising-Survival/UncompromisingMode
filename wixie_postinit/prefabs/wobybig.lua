@@ -69,7 +69,7 @@ local function ResetWalterWorry(inst)
 end
 
 local function redirect_to_ownersanity(inst, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb)
-    if amount and amount >= 0 then return false end
+    if amount and amount >= 0 or not TheNet:GetPVPEnabled() and afflicter and afflicter.isplayer then return end
     if inst.sanityhittask == nil and inst._playerlink ~= nil and inst._playerlink.components.sanity ~= nil then
         inst.sanityhittask = inst:DoTaskInTime(.3, ResetSanityHit)
         if inst.walterworrytask == nil and inst._playerlink ~= nil and inst._playerlink.components.talker then

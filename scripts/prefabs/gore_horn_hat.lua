@@ -276,7 +276,7 @@ local function fn()
     inst:ListenForEvent("percentusedchange", checkiffull)
 
     inst:AddComponent("shadowlevel")
-    inst.components.shadowlevel:SetDefaultLevel(TUNING.AMULET_SHADOW_LEVEL * 2)
+    inst.components.shadowlevel:SetDefaultLevel(TUNING.DSTU.GOREHORN_SHADOW_LEVEL)
 
     inst.fueltask = nil
     inst.fuelmetask = nil
@@ -321,15 +321,14 @@ local function onothercollide(inst, other, owner)
 end
 
 local NOTAGS = {"fx", "INLIMBO", "player", "bird", "butterfly", "boat", "wall", "companion", "shadowminion", "abigail"}
-local NO_RAM_LEADER_TAGS = {"player", "bell"}
 local function oncollide(inst)
-    if inst.owner ~= nil then
-        local x, y, z = inst.owner.Transform:GetWorldPosition()
+    local owner = inst.owner and inst.owner:IsValid() and inst.owner
+    if owner then
+        local x, y, z = owner.Transform:GetWorldPosition()
         local ents = TheSim:FindEntities(x, y, z, 3, nil, NOTAGS)
         for i, v in ipairs(ents) do
-            local leader = v.components.follower and v.components.follower:GetLeader()
-            if not (leader and leader:HasAnyTag(NO_RAM_LEADER_TAGS)) then
-                onothercollide(inst, v, inst.owner)
+            if owner.components.combat:CanTarget(v) and not owner.components.combat:IsAlly(v) then
+                onothercollide(inst, v, owner)
             end
         end
     end

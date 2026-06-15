@@ -1006,6 +1006,7 @@ end
 if TUNING.DSTU.ICEBOX_TWEAKS then
     containers.params.saltbox.lowpriorityselection = true
     containers.params.icebox.lowpriorityselection = true
+    containers.params.treasurechest.lowpriorityselection = true
     local oldicebox = containers.params.icebox.itemtestfn
     function containers.params.icebox.itemtestfn(container, item, slot, ...)
         if cooking.IsCookingIngredient(item.prefab) and not item:HasTag("smallcreature") or item.replica.gem_enchantable ~= nil and item.replica.gem_enchantable:HasEnchantment("um_gemologybluegem2") then

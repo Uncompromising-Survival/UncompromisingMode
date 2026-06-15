@@ -23,8 +23,6 @@ local function fn()
         return inst
     end
 
-    inst:AddTag("garbagepatch_inventory")
-
     inst:AddComponent("inventory")
     inst.components.inventory.maxslots = 100
 

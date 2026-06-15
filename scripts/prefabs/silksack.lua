@@ -115,7 +115,6 @@ local function fn()
     inst.AnimState:SetBuild("swap_silksack")
     inst.AnimState:PlayAnimation("idle")
 
-
     inst.foleysound = "dontstarve/movement/foley/backpack"
 
     inst:AddTag("backpack")
@@ -134,8 +133,6 @@ local function fn()
         end
         return inst
     end
-
-
 
     inst:AddComponent("tradable")
     inst:AddComponent("inspectable")
@@ -164,14 +161,12 @@ local function fn()
     end
     inst.components.container:WidgetSetup("silksack")
 
-
     MakeHauntableLaunchAndDropFirstItem(inst)
 
     inst.WrapStuff = WrapStuff
 
     inst:AddComponent("timer")
     inst:ListenForEvent("timerdone", OnTimerDone)
-
 
     return inst
 end

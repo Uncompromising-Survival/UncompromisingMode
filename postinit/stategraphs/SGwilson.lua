@@ -105,12 +105,10 @@ env.AddStategraphPostInit("wilson", function(inst)
         end
     end
 
-    local SLEEPREPEL_MUST_TAGS = { "_combat" }
-    local SLEEPREPEL_CANT_TAGS = { "player", "companion", "abigail", "shadowminion", "shadow", "playerghost", "INLIMBO", "wixieshoved", "invisible",
-        "hiding", "NOTARGET", "flight", "toadstool" }
-    local SHIELD_CANT_TAGS = { "player", "companion", "abigail", "playerghost", "INLIMBO", "wixieshoved", "invisible",
-        "hiding", "NOTARGET", "flight", "toadstool", "bird", "wall" }
-    local NO_SHOVE_TAGS = {"stageusher", "toadstool"}
+    local SLEEPREPEL_MUST_TAGS = {"_combat"}
+    local SLEEPREPEL_CANT_TAGS = {"player", "companion", "abigail", "shadowminion", "playerghost", "INLIMBO", "wixieshoved", "invisible", "hiding", "NOTARGET", "flight"}
+    local SHIELD_CANT_TAGS = {"player", "companion", "abigail", "shadowminion", "playerghost", "INLIMBO", "wixieshoved", "invisible", "hiding", "NOTARGET", "flight", "bird", "wall"}
+    local NO_SHOVE_TAGS = {"stageusher", "toadstool", "rooted"}
     local function CheckShield(inst)
         local x, y, z = inst.Transform:GetWorldPosition()
         local ents = TheSim:FindEntities(x, y, z, 3.5, SLEEPREPEL_MUST_TAGS, SHIELD_CANT_TAGS)
@@ -125,7 +123,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
                 if v.components.locomotor ~= nil and not v:HasAnyTag(NO_SHOVE_TAGS) then
                     for i = 1, 50 do
-                        v:DoTaskInTime((i - 1) / 50, function(v)
+                        v:DoTaskInTime((i - 1) / 75, function(v)
                             if v and v:IsValid() and inst then
                                 local x, y, z = inst.Transform:GetWorldPosition()
                                 local tx, ty, tz = v.Transform:GetWorldPosition()
@@ -180,7 +178,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
                 if v.components.locomotor ~= nil and not v:HasAnyTag(NO_SHOVE_TAGS) then
                     for i = 1, 50 do
-                        v:DoTaskInTime((i - 1) / 50, function(v)
+                        v:DoTaskInTime((i - 1) / 75, function(v)
                             if v and v:IsValid() and inst then
                                 local x, y, z = inst.Transform:GetWorldPosition()
                                 local tx, ty, tz = v.Transform:GetWorldPosition()
@@ -208,14 +206,14 @@ env.AddStategraphPostInit("wilson", function(inst)
                                         v.Transform:SetPosition(dx, dy, dz)
                                     end
                                 end
-
-                                if i >= 50 then
-                                    v:RemoveTag("wixieshoved")
-                                end
                             end
                         end)
                     end
                 end
+
+                v:DoTaskInTime(1, function(v)
+                    v:RemoveTag("wixieshoved")
+                end)
             end
         end
     end

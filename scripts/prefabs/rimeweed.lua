@@ -169,7 +169,7 @@ end
 local function AnimateRetaliateOver(inst)
     inst.retaliating = nil
     if not (inst.components.health and inst.components.health:IsDead()) then
-        inst.AnimState:PlayAnimation("bramble_"..inst.type.."_idle", true)
+        inst.AnimState:PlayAnimation("bramble_" .. inst.type .. "_idle", true)
     end
     inst:RemoveEventCallback("animover", AnimateRetaliateOver)
 end
@@ -189,7 +189,7 @@ local function Retaliate(inst)
             inst.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
         end
         if not (inst.components.health and inst.components.health:IsDead()) then
-            inst.AnimState:PlayAnimation("bramble_"..inst.type.."_hit", false)
+            inst.AnimState:PlayAnimation("bramble_" .. inst.type .. "_hit", false)
             inst:ListenForEvent("animover", function(inst)
                 AnimateRetaliateOver(inst)
             end)
@@ -200,7 +200,7 @@ end
 local function BarrierRemove(inst)
     if not inst.nospread then
         local x, y, z = inst.Transform:GetWorldPosition()
-        local ents = TheSim:FindEntities(x, y, z, 5, {"rimeweed"})
+        local ents = TheSim:FindEntities(x, y, z, 5, { "rimeweed" })
         for i = 1, #ents do
             local v = ents[i]
             if v and v:IsValid() and v ~= inst and v.prefab == "rimeweed_barrier" then
@@ -220,7 +220,7 @@ end
 local function BarrierDie(inst)
     --TheNet:Announce("DODEATH")
     RemovePhysicsColliders(inst)
-    inst.AnimState:PlayAnimation("bramble_"..(inst.type or math.random(0, 2)).."_shrink", false)
+    inst.AnimState:PlayAnimation("bramble_" .. (inst.type or math.random(0, 2)) .. "_shrink", false)
     if math.random() < .1 and not inst.noloot then
         inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
     end
@@ -229,7 +229,7 @@ local function BarrierDie(inst)
     end
     if not inst.nospread then
         local x, y, z = inst.Transform:GetWorldPosition()
-        for i, v in ipairs(TheSim:FindEntities(x, y, z, 5, {"rimeweed"})) do
+        for i, v in ipairs(TheSim:FindEntities(x, y, z, 5, { "rimeweed" })) do
             if v ~= inst and v.prefab == "rimeweed_barrier" then
                 v.nospread = true
                 v:DoTaskInTime(.5 * inst:GetDistanceSqToInst(v) ^ .5, function(v)
@@ -254,7 +254,7 @@ end
 local function BarrierLoad(inst, data)
     if data and data.type then
         inst.type = data.type
-        inst.AnimState:PushAnimation("bramble_"..inst.type.."_idle", true)
+        inst.AnimState:PushAnimation("bramble_" .. inst.type .. "_idle", true)
     end
 end
 
@@ -326,7 +326,7 @@ local function barrierweed()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
-    
+
     inst.AnimState:SetBank("um_rimeweed")
     inst.AnimState:SetBuild("um_rimeweed")
 
@@ -385,7 +385,7 @@ local function barrierweed()
     inst:DoTaskInTime(0, function(inst)
         if not inst.type then
             inst.type = math.random(0, 2)
-            inst.AnimState:PlayAnimation("bramble_"..inst.type.."_idle", true)
+            inst.AnimState:PlayAnimation("bramble_" .. inst.type .. "_idle", true)
         end
     end)
     inst:WatchWorldState("season", KillOffRimeweed)
@@ -465,7 +465,7 @@ local function MainDie(inst)
             end
         end
     end
-    inst.AnimState:PlayAnimation("flower_"..((inst.stage or 1) - 1).."_shrink", false)
+    inst.AnimState:PlayAnimation("flower_" .. ((inst.stage or 1) - 1) .. "_shrink", false)
     if not inst.stage then return end
     if inst.stage >= 1 and not inst.noloot then
         inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
@@ -489,15 +489,15 @@ end
 
 local function PlayStagedAnim(inst)
     if not inst:HasTag("dead") then
-        inst.AnimState:PushAnimation("flower_"..(inst.stage - 1).."_idle")
+        inst.AnimState:PushAnimation("flower_" .. (inst.stage - 1) .. "_idle")
     end
 end
 
 local function InitializePlant(inst)
     inst.stage = 1
     inst.components.timer:StartTimer("grow", .5 * 8 * 60)
-    inst.AnimState:PlayAnimation("flower_"..(inst.stage - 1).."_grow", false)
-    inst.AnimState:PushAnimation("flower_"..(inst.stage - 1).."_idle")
+    inst.AnimState:PlayAnimation("flower_" .. (inst.stage - 1) .. "_grow", false)
+    inst.AnimState:PushAnimation("flower_" .. (inst.stage - 1) .. "_idle")
 end
 
 local function ChangeMiniMapIcon(inst)
@@ -516,6 +516,7 @@ local function SetStage(inst)
     PlayStagedAnim(inst)
     ChangeMiniMapIcon(inst)
     if inst.stage >= 3 then
+        TheWorld.components.um_snowstormmanager:RegisterRimeweed(inst)
         inst:AddTag("miniblizzard")
     end
 end
@@ -541,8 +542,8 @@ local function TryGrowPoint(inst, x, z)
         weed.Transform:SetPosition(x, 0, z)
         table.insert(inst.bramble, weed)
         weed.type = math.random(0, 2)
-        weed.AnimState:PlayAnimation("bramble_"..weed.type.."_grow", false)
-        weed.AnimState:PushAnimation("bramble_"..weed.type.."_idle", true)
+        weed.AnimState:PlayAnimation("bramble_" .. weed.type .. "_grow", false)
+        weed.AnimState:PushAnimation("bramble_" .. weed.type .. "_idle", true)
     end
 end
 
@@ -600,7 +601,7 @@ end
 
 local function TimerDone(inst, data)
     if data and data.name == "grow" then
-        inst.AnimState:PlayAnimation("flower_"..(inst.stage).."_grow", false)
+        inst.AnimState:PlayAnimation("flower_" .. (inst.stage) .. "_grow", false)
         inst.stage = inst.stage + 1
         if inst.stage == 2 and not inst:HasTag("dead") then
             inst.components.timer:StartTimer("growbranch", .5 * 8 * 60)
@@ -676,6 +677,7 @@ local function mainweed()
         return inst
     end
 
+
     local scale = 1.5
     inst.Transform:SetScale(scale, scale, scale)
 
@@ -701,8 +703,8 @@ local function mainweed()
                     inst.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
                 end
             end
-            inst.AnimState:PlayAnimation("flower_"..(inst.stage - 1).."_hit")
-            inst.AnimState:PushAnimation("flower_"..(inst.stage - 1).."_idle")
+            inst.AnimState:PlayAnimation("flower_" .. (inst.stage - 1) .. "_hit")
+            inst.AnimState:PushAnimation("flower_" .. (inst.stage - 1) .. "_idle")
         end
     end)
 
@@ -718,6 +720,11 @@ local function mainweed()
     inst:DoTaskInTime(0, SetStage)
     inst:WatchWorldState("season", KillOffRimeweed)
     inst:WatchWorldState("startrain", KillOffRimeweed)
+
+    inst:ListenForEvent("onremove", function(inst)
+        TheWorld.components.um_snowstormmanager:UnregisterRimeweed(inst)
+    end)
+
     if not inst.bramble then
         inst.bramble = {}
     end
@@ -757,17 +764,17 @@ local function onattackwhip(inst, attacker, target, naughtlock)
         bonusdamage = bonusdamage * coldness / resistance
 
         --if target.sg and target.sg:HasStateTag("frozen") then
-            --SpawnPrefab("bramblefx_rime"):SetFXOwner(target)
+        --SpawnPrefab("bramblefx_rime"):SetFXOwner(target)
         --end
 
         target.components.combat:GetAttacked(attacker, bonusdamage) -- Frost-type damage, which is based on how close to freezing the enemy is
         target.components.freezable:SpawnShatterFX()
-        
-        target.components.freezable:AddColdness(coldval / (resistance > coldness + 2 and 1 or resistance > coldness + 1 and 4 or 8))        
-        
+
+        target.components.freezable:AddColdness(coldval / (resistance > coldness + 2 and 1 or resistance > coldness + 1 and 4 or 8))
+
         -- Lavae Vanilla bug fix
         --if target.components.freezable.coldness >= resistance then
-            --target:DoTaskInTime(0, function(target) target.components.freezable:AddColdness(20) end)
+        --target:DoTaskInTime(0, function(target) target.components.freezable:AddColdness(20) end)
         --end
     end
 end
@@ -1005,7 +1012,7 @@ end
 
 local function OnUseBandage(inst, target)
     if target and target.components.temperature then
-        target.components.temperature:DoDelta(-target.components.temperature.current-1)
+        target.components.temperature:DoDelta(-target.components.temperature.current - 1)
     end
 end
 

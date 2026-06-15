@@ -376,11 +376,12 @@ local function frockfn()
     inst:AddComponent("rechargeable")
 
     inst:AddComponent("shadowlevel")
-    inst.components.shadowlevel:SetDefaultLevel(TUNING.AMULET_SHADOW_LEVEL)
+    inst.components.shadowlevel:SetDefaultLevel(TUNING.DSTU.FEATHER_FROCK_SHADOW_LEVEL)
 
     inst:AddComponent("equippable")
     inst.components.equippable.equipslot = EQUIPSLOTS.BODY
 
+    inst.components.equippable.insulated = true
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)
 

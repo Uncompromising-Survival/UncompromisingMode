@@ -218,14 +218,22 @@ local function SapTask(inst)
                 if chest.components.fueled and chest.components.fueled:GetPercent() < 1 then
                     local maxfuel = chest.components.fueled.maxfuel
                     chest.components.fueled:DoDelta(0.005*maxfuel)
+                    --Fueled:StopConsuming() self.consuming = false
+                    --function Fueled:SetMultiplierFn(fn)
+	                    --self.multfn = fn
+                    --end
                 end
                 if chest.components.finiteuses and chest.components.finiteuses:GetPercent() < 1  then
                     local maxuses = chest.components.finiteuses.total
                     chest.components.finiteuses:Use(-0.005*maxuses)
+                    --FiniteUses:SetConsumption(action, uses)
                 end
                 if chest.components.armor and chest.components.armor:GetPercent() < 1 then
                     local maxfuel = chest.components.armor.maxcondition
                     chest.components.armor:Repair(0.005*maxfuel)
+                    --if equip ~= nil and equip.components.armor ~= nil then
+                        --equip.components.armor.conditionlossmultipliers:SetModifier(inst, TUNING.DSTU.BATTLESONG_LUNAR_DURABILITY_MOD_ARMOR)
+                    --end
                 end    
             end
         end
@@ -423,7 +431,9 @@ local function WathomEnterDark(inst)
 end]]
 
 local function CheckLight(inst)
-    if inst:IsInLight() then
+    local x,y,z = inst.Transform:GetWorldPosition()
+    local light = TheSim:GetLightAtPoint(x, y, z)
+    if light and light > .9 then
         if not inst.updatewathomvisiontask then
             inst.updatewathomvisiontask = inst:DoTaskInTime(2, function()
                 inst.components.playervision:SetCustomCCTable(nil)

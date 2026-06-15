@@ -46,20 +46,21 @@ function SnowStormWatcher:SnowstormLevel()
 end
 
 local function MiniBlizzNear(inst)
+    local um_snowstormmanager = TheWorld.components.um_snowstormmanager
+    if not um_snowstormmanager then return end
     local x, y, z = inst.Transform:GetWorldPosition()
-    local miniblizzards = TheSim:FindEntities(x, y, z, 32, {"miniblizzard"})
-    if #miniblizzards > 0 then
-        return true
-    end
+    local miniblizzards = um_snowstormmanager:CheckForOtherRimeweeds({ x = x, y = y, z = z }, 32 * 32)
+
+    return miniblizzards > 0
 end
 
 local function SnowstormImmune(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, 6, nil, nil, {"wall", "fire", "shelter", "snowstorm_protection_high"})
+    local ents = TheSim:FindEntities(x, y, z, 6, nil, nil, { "wall", "fire", "shelter", "snowstorm_protection_high" })
     local suppressorNearby = (#ents > 0)
     return inst.components.playervision:HasGoggleVision() or inst.components.playervision:HasGhostVision() or inst.components.rider:IsRiding()
         or suppressorNearby or (inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
-        and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY).prefab == "beargervest")
+            and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY).prefab == "beargervest")
         or IsUnderRainDomeAtXZ(x, z) or inst:HasTag("weerclops")
 end
 
@@ -86,7 +87,13 @@ end
 
 function TrySpawning(v)
     local x1, y1, z1 = v.Transform:GetWorldPosition()
-    local nearbyplayers2 = TheSim:FindEntities(x1, y1, z1, 50, nil, nil, { "player" })
+    local nearbyplayers2 = {}
+
+    for k, v in pairs(AllPlayers) do
+        if v:GetDistanceSqToPoint(x1, y1, z1) <= 50 * 50 then
+            table.insert(nearbyplayers2, v)
+        end
+    end
 
     local playervalue2 = #nearbyplayers2 * 0.1
 
@@ -113,8 +120,15 @@ local NOTAGS = { "playerghost", "HASHEATER" }
 
 local function SnowpileChance(inst, self)
     local x, y, z = self.inst.Transform:GetWorldPosition()
-    local nearbyplayers1 = TheSim:FindEntities(x, y, z, 50, nil, nil, { "player" })
-    local ents4 = TheSim:FindEntities(x, y, z, 50, nil, { "snowpiledin", "hive", "snowpileblocker" }, { "structure" })
+    local nearbyplayers1 = {}
+
+    for k, v in pairs(AllPlayers) do
+        if v:GetDistanceSqToPoint(x, y, z) <= 50 * 50 then
+            table.insert(nearbyplayers1, v)
+        end
+    end
+
+    local ents4 = TheSim:FindEntities(x, y, z, 32, nil, { "snowpiledin", "hive", "snowpileblocker" }, { "structure" })
     local chancer = math.random()
 
     local playervalue1 = #nearbyplayers1 * 0.025

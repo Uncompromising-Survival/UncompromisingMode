@@ -10,8 +10,6 @@ CONSTRUCTION_PLANS["multiplayer_portal_moonrock_constr"] = {
     Ingredient("moonglass", 5)
 }
 
-AllRecipes["compass"].ingredients = { Ingredient("goldnugget", 2), Ingredient("flint", 2) }
-
 if TUNING.DSTU.WARLY_CHANGES == 1 then
     AllRecipes["spicepack"].ingredients = { Ingredient("pigskin", 2), Ingredient("silk", 4), Ingredient("nitre", 4) }
 end
@@ -465,3 +463,10 @@ AllRecipes["blueprint_craftingset_ruins_builder"].no_builder_skill = "wathom_all
 --AllRecipes["blueprint_craftingset_ruins_builder"].forward_ingredients = {"wathom_blueprint_craftingset_ruins_builder"}
 AllRecipes["blueprint_craftingset_ruinsglow_builder"].no_builder_skill = "wathom_allegiance_neutral"
 --AllRecipes["blueprint_craftingset_ruinsglow_builder"].forward_ingredients = {"wathom_blueprint_craftingset_ruinsglow_builder"}
+
+-- Thermic tools recipe overrides
+AllRecipes["fumaroleaxe"].ingredients = { Ingredient("axe", 1), Ingredient("mitegland", 2), Ingredient("um_fyrite", 3) }
+AllRecipes["fumarolepickaxe"].ingredients = { Ingredient("pickaxe", 1), Ingredient("mitegland", 2), Ingredient("um_fyrite", 3) }
+AllRecipes["fumaroleshovel"].ingredients = { Ingredient("shovel", 1), Ingredient("mitegland", 2), Ingredient("um_fyrite", 3) }
+AllRecipes["fumarolehammer"].ingredients = { Ingredient("hammer", 1), Ingredient("mitegland", 2), Ingredient("um_fyrite", 3) }
+AllRecipes["fumarole_farm_hoe"].ingredients = { Ingredient("farm_hoe", 1), Ingredient("mitegland", 2), Ingredient("um_fyrite", 3) }

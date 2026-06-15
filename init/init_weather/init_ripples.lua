@@ -17,20 +17,16 @@ local function RobustFloodCheck(inst) -- For players, check to see if they're on
     end
 end
 
-
-for i, v in ipairs(TUNING.DSTU.RIPPLE_BLACKLIST_PREFABS) do
-    env.AddPrefabPostInit(v, function(inst)
+for _, prefab in ipairs(TUNING.DSTU.RIPPLE_BLACKLIST_PREFABS) do
+    env.AddPrefabPostInit(prefab, function(inst)
         inst.um_ripple_blacklist = true
     end)
 end
 
-
 -- AXE Add ripples to plants, structures, and items
 env.AddPrefabPostInitAny(function(inst)
-    for i,v in ipairs(TUNING.DSTU.RIPPLE_BLACKLIST_TAGS) do
-        if inst:HasTag(v) then
-            inst.um_ripple_blacklist = true
-        end
+    if inst:HasAnyTag(TUNING.DSTU.RIPPLE_BLACKLIST_TAGS) then
+        inst.um_ripple_blacklist = true
     end
 
     if (inst:HasAnyTag("structure", "boulder", "plant") or inst.components.inventoryitem) and not inst.um_ripple_blacklist then
@@ -60,13 +56,21 @@ env.AddPrefabPostInitAny(function(inst)
     end
 end)
 
-
 env.AddClassPostConstruct("components/inventoryitem_replica", function(self) --AXE Add the ripples to the client side of items
-    if not self.inst.components.umripples then
+    if not self.inst.components.umripples and not self.inst:HasAnyTag(TUNING.DSTU.RIPPLE_BLACKLIST_TAGS) then
         self.inst:AddComponent("umripples")
         if not self.inst.components.floatable then
             local umripples = self.inst.components.umripples
             umripples.vert_offset = 0.1
+        end
+    end
+end)
+
+env.AddClassPostConstruct("components/health_replica", function(self) --AXE Add ripples to the client side of any creature, including modded followers whose mob tags are server-only
+    if not self.inst.components.umripples and not self.inst:HasAnyTag(JoinArrays(TUNING.DSTU.RIPPLE_BLACKLIST_TAGS, {"shadow", "flying", "gestalt", "ghost", "playerghost"})) then
+        self.inst:AddComponent("umripples")
+        if not self.inst.components.floatable then
+            self.inst.components.umripples.vert_offset = 0.2
         end
     end
 end)
@@ -83,7 +87,6 @@ local function AddRipples(prefab, xscale, yscale, zscale, vert_offset) --AXE The
         umripples.zscale = zscale and zscale or 1
     end)
 end
-
 
 -- AXE TODO convert the many function calls to a table and a loop... would that even be cleaner though? It's already about as complex as a table...? What do you think?
 
@@ -117,7 +120,6 @@ for _, v in ipairs(pigmanlike_minions) do
     AddRipples(v, 1.2, 1.2, 1.2, 0.2)
 end
 --
-
 
 env.AddPlayerPostInit(function(inst)
     if not inst.components.umripples then
@@ -422,10 +424,10 @@ local function AdjustSpeed(inst)
     local body = GetBodyItem(inst)
 
     if body ~= nil and body.prefab == "armor_sharksuit_um" then
-		inst.components.locomotor:SetExternalSpeedMultiplier(inst, "um_floodedwater", 1.2)
-		return
+        inst.components.locomotor:SetExternalSpeedMultiplier(inst, "um_floodedwater", 1.2)
+        return
     end
-	
+    
     local waterproofness = GetBodyWetnessProtection(inst)
 
     local mod = 0.5
@@ -437,10 +439,10 @@ local function AdjustSpeed(inst)
     elseif waterproofness > 0 then
         mod = 0.6
     end
-	
-	if inst.components.rider and inst.components.rider:IsRiding() and mod < 1 then
-		mod = (mod + 1) / 2
-	end
+    
+    if inst.components.rider and inst.components.rider:IsRiding() and mod < 1 then
+        mod = (mod + 1) / 2
+    end
 
     inst.components.locomotor:SetExternalSpeedMultiplier(inst, "um_floodedwater", mod)
 end
@@ -453,8 +455,8 @@ local function IsFloodWater(inst)
 end
 
 local function FloodMoistureRamp(inst)
-	if inst.components.moisture ~= nil then
-		local body = GetBodyItem(inst)
+    if inst.components.moisture ~= nil then
+        local body = GetBodyItem(inst)
 
         local mod
 
@@ -468,13 +470,13 @@ local function FloodMoistureRamp(inst)
             inst.components.burnable:Extinguish()
         end
 
-		local wetness_gain = 3 * (1 - mod)
+        local wetness_gain = 3 * (1 - mod)
 
-		if inst.components.rider and inst.components.rider:IsRiding() then
-			wetness_gain = wetness_gain * 0.5
-		end
+        if inst.components.rider and inst.components.rider:IsRiding() then
+            wetness_gain = wetness_gain * 0.5
+        end
 
-		inst.components.moisture:DoDelta(wetness_gain, true)
+        inst.components.moisture:DoDelta(wetness_gain, true)
     end
 end
 
@@ -549,9 +551,9 @@ env.AddComponentPostInit("locomotor", function(self)
                         inst.um_worm_bubble_task = nil
                     end
                 end
+                self.inst:RemoveEventCallback("equip", AdjustSpeed)
+                self.inst:RemoveEventCallback("unequip", AdjustSpeed)
                 if self._externalspeedmultipliers and self._externalspeedmultipliers[inst] and self._externalspeedmultipliers[inst].multipliers["um_floodedwater"] then
-                    self.inst:RemoveEventCallback("equip", AdjustSpeed)
-                    self.inst:RemoveEventCallback("unequip", AdjustSpeed)
                     self:RemoveExternalSpeedMultiplier(inst, "um_floodedwater")
                 end
             end

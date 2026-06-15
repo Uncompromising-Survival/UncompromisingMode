@@ -1,5 +1,6 @@
+local EXCLUDE_TAGS = {"player", "playerghost", "ghost", "shadow", "shadowminion", "noauradamage", "INLIMBO", "notarget", "noattack", "invisible", "wixieshoved", "rooted"}
 function WixieShove(inst, target, speed, billiard, distancemod, bonus_ammo_reduction, applyslow)
-    if target and inst and not target:HasAnyTag("wixieshoved", "shadow", "shadowcreature", "shadowminion", "stalkerminion", "shadowchesspiece", "eyeplant", "bowlingpin")
+    if target and inst and not target:HasAnyTag("wixieshoved", "shadow", "shadowcreature", "shadowminion", "stalkerminion", "shadowchesspiece", "eyeplant", "bowlingpin", "rooted")
         and target.components and target.components.locomotor then
         SpawnPrefab("round_puff_fx_sm").Transform:SetPosition(target.Transform:GetWorldPosition())
 
@@ -13,12 +14,10 @@ function WixieShove(inst, target, speed, billiard, distancemod, bonus_ammo_reduc
         local x, y, z = inst.Transform:GetWorldPosition()
 
         for i = 1, 50 do
-            inst:DoTaskInTime((i - 1) / 50, function(inst)
+            inst:DoTaskInTime((i - 1) / 75, function(inst)
                 local tx, ty, tz = target.Transform:GetWorldPosition()
                     
-                if tx ~= nil then
-                    local EXCLUDE_TAGS = {"player", "playerghost", "ghost", "shadow", "shadowminion", "noauradamage", "INLIMBO", "notarget", "noattack", "invisible", "wixieshoved"}
-                        
+                if tx ~= nil then    
                     if i == 1 and applyslow then
                         --print("ADD SPEED")
                         target.components.locomotor:SetExternalSpeedMultiplier(target, "wixieshoved", .01)
@@ -50,7 +49,7 @@ function WixieShove(inst, target, speed, billiard, distancemod, bonus_ammo_reduc
                                     v:AddTag("wixieshoved")
 
                                     for iv = 1, 50 do
-                                        inst:DoTaskInTime((iv - 1) / 50, function(inst)
+                                        inst:DoTaskInTime((iv - 1) / 75, function(inst)
                                             if v ~= nil and v.Transform:GetWorldPosition() and target ~= nil and tx ~= nil then
                                                 if v == 1 and applyslow then
                                                     v.components.locomotor:SetExternalSpeedMultiplier(target, "wixieshoved", .01)
@@ -119,7 +118,7 @@ function WixieShove(inst, target, speed, billiard, distancemod, bonus_ammo_reduc
                     local velz = -math.sin(rad) --* 4.5
 
                     local giantreduction = bonus_ammo_reduction and (target:HasTag("epic") and 8 or target:HasTag("smallcreature") and 2 or 3)
-                        or target:HasTag("epic") and 1.5 or target:HasTag("smallcreature") and .8 or 1
+                        or target:HasTag("smallepic") and 2 or target:HasTag("epic") and 4.5 or target:HasTag("smallcreature") and .8 or 1
                     local debuffmultiplier = inst:HasTag("wixie_shove_3") and 1.3 or inst:HasTag("wixie_shove_2") and 1.2
                         or inst:HasTag("wixie_shove_1") and 1.1 or 1
                     local distancemultiplier = distancemod ~= nil and 1 + (distancemod / 10) or 1

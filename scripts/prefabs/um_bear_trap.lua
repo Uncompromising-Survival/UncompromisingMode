@@ -101,12 +101,16 @@ local function OnExplode(inst, target)
             if target.components.locomotor then
                 target.components.locomotor:SetExternalSpeedMultiplier(target, debuffkey, inst.traptype and 0.35 or 0.2)
                 target._bear_trap_speedmulttask = target:DoTaskInTime(inst.traptype and 30 or 10, function(i)
-                    i.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey)
+                    if i.components.locomotor then
+                        i.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey)
+                    end
                     i._bear_trap_speedmulttask = nil
                 end)
 
                 local function RemoveSpeed(inst)
-                    inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, debuffkey)
+                    if inst.components.locomotor then
+                        inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, debuffkey)
+                    end
                     if inst._bear_trap_speedmulttask then
                         inst._bear_trap_speedmulttask:Cancel()
                         inst._bear_trap_speedmulttask = nil
@@ -371,20 +375,20 @@ local function old_fn(build)
 end
 
 local function OnTrapLand(inst, target)
-	if FindEntity(inst,DEPLOYSPACING.LESS,nil,{"bear_trap"}) then
-		if inst.traptype then
-			inst.trap = SpawnPrefab("um_bear_trap_equippable_"..inst.traptype) 
-		end	
-	else
-		inst.trap = SpawnPrefab("um_bear_trap")
-	end
-	if inst.trap then
-		inst.trap.Transform:SetPosition(inst.Transform:GetWorldPosition())
-		if inst.components.finiteuses and inst.trap.components.finiteuses then
-			inst.components.finiteuses:SetUses(inst.components.finiteuses:GetUses())
-		end
-	end
-	inst:Remove()	
+    if FindEntity(inst,DEPLOYSPACING.LESS,nil,{"bear_trap"}) then
+        if inst.traptype then
+            inst.trap = SpawnPrefab("um_bear_trap_equippable_"..inst.traptype) 
+        end    
+    else
+        inst.trap = SpawnPrefab("um_bear_trap")
+    end
+    if inst.trap then
+        inst.trap.Transform:SetPosition(inst.Transform:GetWorldPosition())
+        if inst.components.finiteuses and inst.trap.components.finiteuses then
+            inst.components.finiteuses:SetUses(inst.components.finiteuses:GetUses())
+        end
+    end
+    inst:Remove()    
 end
 
 local function OnHitTarget(inst, target)
@@ -729,7 +733,7 @@ local function equiptoothfn()
 
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem:SetOnDroppedFn(OnDropped)
-	inst:AddComponent("stackable")
+    inst:AddComponent("stackable")
     inst:AddComponent("inspectable")
 
     inst.traptype = "tooth"
@@ -737,7 +741,7 @@ local function equiptoothfn()
     inst:AddComponent("equippable")
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)
-	inst.components.equippable.equipstack = true
+    inst.components.equippable.equipstack = true
     inst:AddComponent("health")
     inst.components.health.canmurder = false
     inst.components.health:SetMaxHealth(TUNING.WALRUS_HEALTH / 2)

@@ -10,7 +10,7 @@ local function ShouldTriggerPanic(inst, ...)
     local takingfiredamage
     local health = inst.components.health
     if inst:HasTag("ice_shielded") and health and health.takingfiredamage then
-        takingfiredamage = inst.components.health.takingfiredamage
+        takingfiredamage = health.takingfiredamage
         health.takingfiredamage = false
     end
     local ret = _ShouldTriggerPanic(inst, ...)

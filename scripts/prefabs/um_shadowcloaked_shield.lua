@@ -52,7 +52,7 @@ local function TimeoutRepel(inst, creatures, task)
 end
 
 local SLEEPREPEL_MUST_TAGS = { "player", "locomotor" }
-local SLEEPREPEL_CANT_TAGS = { "playerghost", "INLIMBO" }
+local SLEEPREPEL_CANT_TAGS = { "playerghost", "INLIMBO", "rooted" }
 
 local function StartRepel(inst)
     local x, y, z = inst.Transform:GetWorldPosition()

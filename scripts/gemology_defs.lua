@@ -74,25 +74,23 @@ function DamageInfiniteItemGem(enchant, item, value)
         and not item.components.fueled
         and not item.components.armor
         and not item.components.perishable
-        and]] item.components.gem_enchantable:HasDurabilityEnabled("um_gemology" .. enchant) then
+        and]] item.components.gem_enchantable:HasEnchantment("um_gemology" .. enchant) and item.components.gem_enchantable:HasDurabilityEnabled("um_gemology" .. enchant) then
         item.components.gem_enchantable:DoDurabilityDelta("um_gemology" .. enchant, -value)
     end
 end
 
 ------------------------------------------------------------------
 --REDGEM2
-local burn_damage = { 8, 16, 34 }
-local burn_portion = { 0.05, 0.2 }
 
 AddUMGemDef("redgem2", {
     color = RGB(233, 153, 153),
     fns = {
         onattack = function(inst, attacker, target, tier)
             if target.components.health then
-                target.components.health:DoFireDamage(burn_damage[tier], attacker, true)
+                target.components.health:DoFireDamage(TUNING.DSTU["REDGEM2_DAMAGE_" .. tier], attacker, true)
                 SpawnPrefab("deer_fire_burst").Transform:SetPosition(target.Transform:GetWorldPosition())
                 if tier ~= 1 and target.components.burnable and target.components.burnable:IsBurning() then
-                    target.components.health:DoFireDamage(inst.components.weapon:GetDamage(attacker, target) * burn_portion[tier - 1], attacker, true)
+                    target.components.health:DoFireDamage(inst.components.weapon:GetDamage(attacker, target) * TUNING.DSTU["REDGEM2_BURNING_MULT_" .. tier], attacker, true)
                     target.components.burnable:ExtendBurning()
                 end
                 DamageInfiniteItemGem("redgem2", inst, GENERIC_GEM_USES)
@@ -107,22 +105,22 @@ AddUMGemDef("redgem2", {
 -------------------------------------------------------------------
 --REDGEM1
 local devour_tags = { "animal", "pig", "monster", "smallcreature" }
-local devour_mults = { 1 / 10, 1 / 5 } -- it's what the document said.... I guess the damage isn't what we're really looking for, it's being able to eat part of the mob
+local devour_mults = { 1 / 10, 1 / 5 }
 
 AddUMGemDef("redgem1", {
     color = RGB(233, 153, 153),
     fns = {
         onattack = function(inst, attacker, target, tier)
             if tier ~= 1 and target:HasOneOfTags(devour_tags) and math.random() > 0.75 then -- arbitrarily said "a chance", I have no idea how common this should be
-                local mult = devour_mults[tier - 1]
+                local mult = TUNING.DSTU["REDGEM1_DEVOUR_MULT_" .. tier]
                 attacker.components.combat:DoAttack(target, inst, nil, nil, mult, 0)        -- gotta use a bit more durability...
                 mult = inst.components.weapon:GetDamage(attacker, target) * mult
                 --owner.components.sanity:DoDelta(-mult)
-                attacker.components.hunger:DoDelta(mult / 2)
+                attacker.components.hunger:DoDelta(mult * TUNING.DSTU.REDGEM1_HUNGER_MULT)
             end
 
             if target.components.health ~= nil and target.components.health:IsDead() then -- Devour
-                local recover = target.components.health.maxhealth * 0.01 * tier
+                local recover = target.components.health.maxhealth * TUNING.DSTU.REDGEM1_HEALTH_MULT * tier
                 attacker.components.health:DoDelta(recover)
                 attacker.components.sanity:DoDelta(recover)
             end
@@ -143,9 +141,8 @@ local melee_speeds = { 1.1, 1.2, 1.4 } -- Related to the tiering system
 
 local function GetRandomTargetOfSameType(attacker, target)
     local x, y, z = target.Transform:GetWorldPosition()
-    local tag_to_search = {}
 
-    local ents = TheSim:FindEntities(x, y, z, 24)
+    local ents = TheSim:FindEntities(x, y, z, TUNING.DSTU.GREENGEM1_SHADOW_CLONE_FIND_MAX_DIST)
     local ent_same_prefab = {}
     for i, v in ipairs(ents) do
         if v.prefab == target.prefab and ((not v:HasTag("stump") and not v:HasTag("stump")) or (target:HasTag("stump") and v:HasTag("stump"))) and target ~= v then
@@ -190,10 +187,10 @@ local swilson_symbols_to_hide = {
 local function SendShadowClone(item, owner, target, tier)
     DamageInfiniteItemGem("greengem1", item, GENERIC_GEM_USES) --damage on any attack/work because it speeds it up.
 
-    if target:IsValid() and (tier - 1) * 0.3 > math.random() and tier > 1 then
-        if owner:GetDistanceSqToInst(target) > 50 ^ 2 and owner.components.sanity then --Long ways away, it's taking from your mind to send swilsons there
+    if target:IsValid() and (tier - 1) * TUNING.DSTU.GREENGEM1_SHADOW_CLONE_CHANCE_MULT > math.random() and tier > 1 then
+        if owner:GetDistanceSqToInst(target) > TUNING.DSTU.GREENGEM1_SHADOW_CLONE_MAX_DIST and owner.components.sanity then --Long ways away, it's taking from your mind to send swilsons there
             if target.components.combat then
-                owner.components.sanity:DoDelta(-5)                                    --If using for combat, be significantly more expensive
+                owner.components.sanity:DoDelta(TUNING.DSTU.GREENGEM1_SHADOW_CLONE_SANITY_COST)                             --If using for combat, be significantly more expensive
             end
         end
 
@@ -226,7 +223,7 @@ AddUMGemDef("greengem1", {
     color = RGB(175, 245, 172),
     fns = {
         onapply = function(item, tier)
-            item.um_neurotic_mod = melee_speeds[tier]
+            item.um_neurotic_mod = TUNING.DSTU["GREENGEM1_MELEE_SPEED_" .. tier] --melee_speeds[tier]
 
             local tool = item.components.tool
 
@@ -239,7 +236,7 @@ AddUMGemDef("greengem1", {
 
                 for i, v in ipairs(action_list) do
                     if tool.actions[v] then
-                        tool.actions[v] = tool.actions[v] * (1 + tier / 4)
+                        tool.actions[v] = tool.actions[v] * (1 + tier * TUNING.DSTU.GREENGEM1_TOOL_EFFICENCY_MOD)
                     end
                 end
             end
@@ -271,21 +268,18 @@ local function addRandomGemEffects(inst)
     if inst.persistent_gemology_data.um_gemologygreengem2.gem_effects then
         for k, v in pairs(inst.persistent_gemology_data.um_gemologygreengem2.gem_effects) do
             if inst.components.gem_enchantable.enchants[k] then
-                inst.components.gem_enchantable:RemoveEnchantment(k)
-                inst.components.gem_enchantable.slots = inst.components.gem_enchantable.slots - 1
+                inst.components.gem_enchantable:RemoveEnchantment(k, true)
             end
         end
     end
 
     local tries = 10
     local enchant_nums = 0
-    local max_enchants = 3
 
-    while enchant_nums < max_enchants and tries > 0 do
+    while enchant_nums < TUNING.DSTU.GREENGEM2_MAX_ENCHANTS and tries > 0 do
         local enchant = valid_enchants[math.random(#valid_enchants)]
         if IsEnchantValid(enchant) and not inst.components.gem_enchantable:HasEnchantment(enchant) and (GEM_DEFS[enchant].canapply ~= nil and GEM_DEFS[enchant].canapply(inst, tier) or GEM_DEFS[enchant].canapply == nil) then --don't add already existing other enchants.
-            inst.components.gem_enchantable:AddEnchantment(enchant, tier)
-            inst.components.gem_enchantable:AddSlot(1)                                                                                                                                                                          --don't consume a slot when adding extra enchant.
+            inst.components.gem_enchantable:AddEnchantment(enchant, tier, true)
             inst.persistent_gemology_data.um_gemologygreengem2.gem_effects[enchant] = tier
             enchant_nums = enchant_nums + 1
         end
@@ -345,9 +339,6 @@ AddUMGemDef("greengem2", {
 -----------------------------------------------------------------------------------
 ---Yellow1
 
-local sanities = { TUNING.DAPPERNESS_SMALL / 2, TUNING.DAPPERNESS_SMALL, TUNING.DAPPERNESS_SMALL * 2 }
-
-
 AddUMGemDef("yellowgem1", {
     color = RGB(255, 228, 153),
     fns = {
@@ -356,15 +347,15 @@ AddUMGemDef("yellowgem1", {
                 item.volatile_gemology_data.um_gemologyyellowgem1.old_dapperness = item.components.equippable.dapperness
 
                 if item.components.equippable.dapperness then
-                    item.components.equippable.dapperness = item.components.equippable.dapperness + sanities[tier]
+                    item.components.equippable.dapperness = item.components.equippable.dapperness + TUNING.DSTU["YELLOWGEM1_SANITY_" .. tier] --sanities[tier]
                 else
-                    item.components.equippable.dapperness = sanities[tier]
+                    item.components.equippable.dapperness = TUNING.DSTU["YELLOWGEM1_SANITY_" .. tier]
                 end
             end
         end,
         onupdate = function(item, tier)
             if item.components.equippable:IsEquipped() then
-                DamageInfiniteItemGem("yellowgem1", item, 1 / (TUNING.TOTAL_DAY_TIME * 8))
+                DamageInfiniteItemGem("yellowgem1", item, 1 / TUNING.DSTU.YELLOWGEM1_DURATION)
             end
         end,
         onremove = function(item, tier)
@@ -378,12 +369,9 @@ AddUMGemDef("yellowgem1", {
 -----------------------------------------------------------------------------------
 ---Yellow2
 
-local static_mods = { 5, 10, 15 }
-
 local arc_cantarget = { "_health", "_combat" }
 local arc_canttarget = { "player", "playerghost", "arcgrounded", "wall", "INLIMBO", "companion", "abigail", "invisible", "hiding", "notarget", "noattack" }
 
-local electric_wet_multiplier = 1.5
 
 local function WetCheck(target)
     return target ~= nil and target:IsValid() and target.GetWetMultiplier ~= nil and target:GetWetMultiplier() > 0
@@ -397,10 +385,10 @@ end
 
 local function YellowDamage(inst, attacker, target, tier)
     if target ~= nil and target:IsValid() and target.components.combat ~= nil then
-        local damage = static_mods[tier]
+        local damage = TUNING.DSTU["YELLOWGEM2_SHOCK_DAMAGE_" .. tier]
 
         if WetCheck(target) then
-            damage = damage * electric_wet_multiplier
+            damage = damage * TUNING.DSTU.YELLOWGEM2_SHOCK_WET_MULT
         end
 
         target.components.combat:GetAttacked(attacker, damage, inst, "electric")
@@ -410,21 +398,17 @@ end
 
 local function ShockChain(inst, attacker, target, ShockAgain, tier)
     local x, y, z = target.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, 4, arc_cantarget, arc_canttarget)
+    local ents = TheSim:FindEntities(x, y, z, TUNING.DSTU.YELLOWGEM2_SHOCK_RANGE, arc_cantarget, arc_canttarget)
 
     for i, v in ipairs(ents) do
         if v ~= target and v.components.health ~= nil and not v.components.health:IsDead() and attacker.components.combat ~= nil and not attacker.components.combat:IsAlly(v) and attacker.components.combat:CanTarget(v) then
             local dist = math.sqrt(target:GetDistanceSqToInst(v))
 
-            v:DoTaskInTime(dist / 5, function(v)
+            v:DoTaskInTime(dist / TUNING.DSTU.YELLOWGEM2_ATTACK_TIME_FACTOR, function(v)
                 if v:IsValid() and v.components.health ~= nil and not v.components.health:IsDead() and not v:HasTag("arcgrounded") then
-                    local mult = 2 - dist
+                    local mult = TUNING.DSTU.YELLOWGEM2_SHOCK_DIST_FACTOR - dist
 
-                    if tier == 2 then
-                        mult = math.clamp(mult, 0.1, 1.25)
-                    elseif tier == 3 then
-                        mult = math.clamp(mult, 0.25, 1.5)
-                    end
+                    mult = math.clamp(mult, TUNING.DSTU["YELLOWGEM2_MIN_SHOCK_MULT_" .. tier], TUNING.DSTU["YELLOWGEM2_MAX_SHOCK_MULT_" .. tier])
 
                     local damage = inst.components.weapon:GetDamage(attacker, v) * mult
 
@@ -434,7 +418,7 @@ local function ShockChain(inst, attacker, target, ShockAgain, tier)
 
                     SpawnPrefab("electricchargedfx").Transform:SetPosition(v.Transform:GetWorldPosition())
 
-                    v:DoTaskInTime(3, function(v)
+                    v:DoTaskInTime(TUNING.DSTU.YELLOWGEM2_SHOCK_COOLDOWN, function(v)
                         if v:IsValid() then
                             v:RemoveTag("arcgrounded")
                         end
@@ -456,7 +440,7 @@ local function ElectricAttack(inst, attacker, target, tier)
         ShockChain(inst, attacker, target, ElectricAttack, tier)
 
         target:AddTag("arcgrounded")
-        target:DoTaskInTime(3, function(target)
+        target:DoTaskInTime(TUNING.DSTU.YELLOWGEM2_SHOCK_COOLDOWN, function(target)
             if target:IsValid() then
                 target:RemoveTag("arcgrounded")
             end
@@ -474,7 +458,7 @@ AddUMGemDef("yellowgem2", {
     fns = {
         onapply = function(item, tier)
             if item.prefab == "hambat" then
-                item.new_max_damage = TUNING.HAMBAT_DAMAGE + static_mods[tier]
+                item.new_max_damage = TUNING.HAMBAT_DAMAGE + TUNING.DSTU["YELLOWGEM2_SHOCK_DAMAGE_" .. tier]
             end
 
             item.volatile_gemology_data.um_gemologyyellowgem2.old_stimuli = item.components.weapon.stimuli
@@ -517,10 +501,10 @@ AddUMGemDef("palegem1", {
                 item.volatile_gemology_data.um_gemologypalegem1.weapon_damage = damage
                 if type(damage) == "function" then
                     item.components.weapon:SetDamage(function(inst, attacker, target)
-                        return damage(inst, attacker, target) + (34 / 2 * (tier - 1))
+                        return damage(inst, attacker, target) + (TUNING.DSTU.PALEGEM1_EXTRA_DAMAGE_PER_TIER * (tier - 1))
                     end)
                 else
-                    item.components.weapon:SetDamage(damage + (34 / 2 * (tier - 1)))
+                    item.components.weapon:SetDamage(damage + (TUNING.DSTU.PALEGEM1_EXTRA_DAMAGE_PER_TIER * (tier - 1)))
                 end
             end
         end,
@@ -579,7 +563,7 @@ AddUMGemDef("palegem2", {
                     item.volatile_gemology_data.um_gemologypalegem2.old_use = _Use
                     item.components.finiteuses.Use = function(self, num) -- Modify only this item's version of finiteuses
                         local chance = math.random()
-                        if (chance > 0.7 and tier == 2) or (chance > 0.4 and tier == 3) then
+                        if chance > TUNING.DSTU["PALEGEM2_USE_CHANCE_" .. tier] then
                             _Use(self, num)
                         end
                     end
@@ -587,10 +571,10 @@ AddUMGemDef("palegem2", {
             end
         end,
         onattack = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("palegem2", item, 0.0025)
+            DamageInfiniteItemGem("palegem2", item, TUNING.DSTU.PALEGEM2_USES)
         end,
         onwork = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("palegem2", item, 0.0025)
+            DamageInfiniteItemGem("palegem2", item, TUNING.DSTU.PALEGEM2_USES)
         end,
 
         onremove = function(item, tier)
@@ -640,8 +624,8 @@ local function HambatUpdateDamage(inst)
         local dmg = TUNING.HAMBAT_DAMAGE * inst.components.perishable:GetPercent()
         dmg = Remap(dmg, 0, inst.new_max_damage and inst.new_max_damage or TUNING.HAMBAT_DAMAGE, TUNING.HAMBAT_MIN_DAMAGE_MODIFIER / 2 * TUNING.HAMBAT_DAMAGE,
             TUNING.HAMBAT_DAMAGE)
-        if dmg < 50 and inst.components.gem_enchantable ~= nil and inst.components.gem_enchantable:HasEnchantment("um_gemologypurplegem1") then
-            dmg = dmg + dmg * inst.components.gem_enchantable:GetEnchantmentTier("um_gemologypurplegem1") * 0.25
+        if dmg < TUNING.DSTU.PURPLEGEM1_EXTRA_DAMAGE_THRESHOLD and inst.components.gem_enchantable ~= nil and inst.components.gem_enchantable:HasEnchantment("um_gemologypurplegem1") then
+            dmg = dmg + dmg * inst.components.gem_enchantable:GetEnchantmentTier("um_gemologypurplegem1") * TUNING.DSTU.PURPLEGEM1_EXTRA_DAMAGE_MULT
         end
         inst.components.weapon:SetDamage(dmg)
     end
@@ -660,8 +644,8 @@ AddUMGemDef("purplegem1", {
         onattack = function(item, attacker, target, tier)
             if item.tier ~= 1 and item.components.weapon ~= nil then
                 local damage = item.components.weapon:GetDamage(attacker, target)
-                if damage < 50 and item.prefab ~= "hambat" then
-                    damage = damage * tier * 0.25
+                if damage < TUNING.DSTU.PURPLEGEM1_EXTRA_DAMAGE_THRESHOLD and item.prefab ~= "hambat" then
+                    damage = damage * tier * TUNING.DSTU.PURPLEGEM1_EXTRA_DAMAGE_MULT
                     local stimuli = item.components.weapon.stimuli and item.components.weapon.stimuli or nil
                     target.components.combat:GetAttacked(attacker, damage, nil, stimuli)
                     DamageInfiniteItemGem("purplegem1", item, GENERIC_GEM_USES)
@@ -680,25 +664,33 @@ AddUMGemDef("purplegem1", {
 ---Purple2
 ---
 local function GrabNearItem(inst, owner)
-    local item = FindEntity(owner, 8, function(ent) return ent.components.inventoryitem and ent ~= inst end)
+    local item = FindEntity(owner, TUNING.DSTU.PURPLEGEM2_ITEM_GRAB_RANGE, function(ent) return ent.components.inventoryitem and ent ~= inst end)
     if item then
+        local fx = SpawnPrefab("shadow_puff")
+        fx.Transform:SetPosition(item.Transform:GetWorldPosition())
         owner.components.inventory:GiveItem(item)
     end
 end
 
 local function OnDropedIfDeadGiveBack(inst) -- This is the only one that has an "ondropped" effects
     local tier = inst.components.gem_enchantable:GetEnchantmentTier("um_gemologypurplegem2")
-    local x, y, z = inst.Transform:GetWorldPosition()
-    local owner = FindEntity(inst, 10, function(ent) return ent:HasTag("player") and ent.components.health and ent.components.health:IsDead() end)
-    if owner and owner.components.health:IsDead() then -- If this happens, the owner has just died.
-        if tier ~= 1 then
-            for i = 1, tier do
-                GrabNearItem(inst, owner)
+    local owner = FindEntity(inst, TUNING.DSTU.PURPLEGEM2_OWNER_RANGE, function(ent) return ent:HasTag("player") end)
+
+    inst:DoTaskInTime(math.random(), function(inst)
+        if owner and (owner.components.health:IsDead() or owner.sg ~= nil and owner.sg:HasStateTag("dead") or owner:HasTag("playerghost")) then -- If this happens, the owner has just died.
+            if tier ~= 1 then
+                for i = 1, tier do
+                    GrabNearItem(inst, owner)
+                end
             end
+
+            owner.components.inventory:GiveItem(inst) -- Give the ghost back the item
+            local fx = SpawnPrefab("shadow_puff")
+            fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
+
+            DamageInfiniteItemGem("purplegem2", inst, TUNING.DSTU.PURPLEGEM2_USES)
         end
-        owner.components.inventory:GiveItem(inst) -- Give the ghost back the item
-        DamageInfiniteItemGem("purplegem2", inst, 0.25)
-    end
+    end)
 
     if inst.volatile_gemology_data.um_gemologypurplegem2.old_ondropfn then
         inst.volatile_gemology_data.um_gemologypurplegem2.old_ondropfn(inst)
@@ -726,14 +718,14 @@ AddUMGemDef("purplegem2", {
 local function FindUniqueBaseStructures(inst, tier)
     if inst.entity:IsAwake() then
         local x, y, z = inst.Transform:GetWorldPosition()
-        local ents = TheSim:FindEntities(x, y, z, 48, { "structure" })
+        local ents = TheSim:FindEntities(x, y, z, TUNING.DSTU.ORANGEGEM1_STRUCTURE_RANGE, { "structure" })
         local uniquestructures = {}
         for i, v in ipairs(ents) do
             if not table.contains(uniquestructures, v.prefab) then
                 table.insert(uniquestructures, v.prefab)
             end
         end
-        inst.structurebonus = math.clamp(#uniquestructures, 0, 30) * tier / 150
+        inst.structurebonus = math.clamp(#uniquestructures, 0, TUNING.DSTU.ORANGEGEM1_MAX_STRUCTURES) * tier / TUNING.DSTU.ORANGEGEM1_BONUS_FACTOR
     end
 end
 
@@ -769,9 +761,9 @@ AddUMGemDef("orangegem1", {
 
 local function UpdateSanityStat(inst, count, tier)
     if inst.volatile_gemology_data.um_gemologyorangegem2.old_dapperness then
-        inst.components.equippable.dapperness = inst.volatile_gemology_data.um_gemologyorangegem2.old_dapperness + count * tier * TUNING.DAPPERNESS_SMALL / 5
+        inst.components.equippable.dapperness = inst.volatile_gemology_data.um_gemologyorangegem2.old_dapperness + count * tier * TUNING.DSTU.ORANGEGEM2_OLD_DAPPERNESS_PER_TIER
     else
-        inst.components.equippable.dapperness = count * tier * TUNING.DAPPERNESS_SMALL / 10
+        inst.components.equippable.dapperness = count * tier * TUNING.DSTU.ORANGEGEM2_DAPPERNESS_PER_TIER 
     end
 end
 
@@ -863,7 +855,7 @@ AddUMGemDef("bluegem1", {
                 item.volatile_gemology_data.um_gemologybluegem1.old_insulation = item.components.insulator.insulation
             end
             item.components.insulator:SetSummer()
-            item.components.insulator:SetInsulation(TUNING.INSULATION_SMALL * tier) -- A bit too easy...
+            item.components.insulator:SetInsulation(TUNING.DSTU.BLUEGEM1_INSULATION_PER_TIER * tier) -- A bit too easy...
         end,
         onremove = function(item, tier)
             if item.volatile_gemology_data.um_gemologybluegem1.added_insulator then
@@ -875,11 +867,11 @@ AddUMGemDef("bluegem1", {
         end,
         onattack = function(item, attacker, target, tier)
             if target.components.freezable then
-                target.components.freezable:AddColdness(0.15 * tier)
+                target.components.freezable:AddColdness(TUNING.DSTU.BLUEGEM1_COLDNESS_PER_TIER * tier)
                 target.components.freezable:SpawnShatterFX()
                 if target.components.freezable:IsFrozen() and tier ~= 1 then
                     local ice_shield = SpawnPrefab("um_ice_shield")
-                    ice_shield:Init(attacker, "swap_body", .25 + (tier * 0.125))
+                    ice_shield:Init(attacker, "swap_body", TUNING.DSTU.BLUEGEM1_ICE_SHIELD_TIER_BASE + (tier * TUNING.DSTU.BLUEGEM1_ICE_SHIELD_TIER_PER_TIER))
                 end
                 DamageInfiniteItemGem("bluegem1", item, GENERIC_GEM_USES)
             end
@@ -943,13 +935,13 @@ AddUMGemDef("bluegem2", {
                 item.volatile_gemology_data.um_gemologybluegem2.old_perishtime = item.components.perishable.perishtime
                 maxval = item.components.perishable.perishremainingtime
                 if tier ~= 1 then
-                    maxval = maxval * ((1 + tier) * 0.5)
+                    maxval = maxval * ((1 + tier) * TUNING.DSTU.BLUEGEM2_PERISHABLE_EXTRA_TIME_MULT)
                 end
             elseif not item.components.perishable then
                 item:AddComponent("perishable")
             end
 
-            item.components.perishable:SetPerishTime(maxval * tier * (was_perishable and 2 or 4))
+            item.components.perishable:SetPerishTime(maxval * tier * (was_perishable and TUNING.DSTU.BLUEGEM2_PERISHABLE_MULT or TUNING.DSTU.BLUEGEM2_NON_PERISHABLE_MULT))
             item.components.perishable:StartPerishing()
             item.components.perishable.onperishreplacement = "spoiled_food"
             item.components.perishable:SetPercent(pct)

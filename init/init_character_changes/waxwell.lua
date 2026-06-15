@@ -1,6 +1,62 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
+local UpvalueHacker = require("tools/upvaluehacker")
+local ShadowWaxwellBrain = require("brains/shadowwaxwellbrain")
+
+local DIG_TAGS = {"snowpile_basic", "snowpile"}
+local TOWORK_CANT_TAGS = {"sludgestack"}
+
+local _DIG_TAGS = UpvalueHacker.GetUpvalue(ShadowWaxwellBrain.OnStart, "DIG_TAGS")
+local _TOWORK_CANT_TAGS = UpvalueHacker.GetUpvalue(ShadowWaxwellBrain.OnStart, "FindEntityToWorkAction", "TOWORK_CANT_TAGS")
+
+for i,TAG in pairs(DIG_TAGS) do
+    table.insert(_DIG_TAGS, TAG)
+end
+
+for i,TAG in pairs(TOWORK_CANT_TAGS) do
+    table.insert(_TOWORK_CANT_TAGS, TAG)
+end
+
+if TUNING.DSTU.WAXWELL then
+    local _IsLeaderInCombat = UpvalueHacker.GetUpvalue(ShadowWaxwellBrain.OnStart, "IsLeaderInCombat")
+    if _IsLeaderInCombat then
+        local function IsLeaderInCombat() return false end
+        UpvalueHacker.SetUpvalue(ShadowWaxwellBrain.OnStart, IsLeaderInCombat, "IsLeaderInCombat")
+    end
+
+    local _ShouldAvoidExplosive = UpvalueHacker.GetUpvalue(ShadowWaxwellBrain.OnStart, "ShouldAvoidExplosive")
+    local _ShouldRunAway = UpvalueHacker.GetUpvalue(ShadowWaxwellBrain.OnStart, "ShouldRunAway")
+
+    local function RemoveNode(self, brainnode)
+        if not brainnode then return end
+        for id, node in pairs(self.bt.root.children) do
+            if node.hunterfn and node.hunterfn == brainnode then
+                table.remove(self.bt.root.children, id)
+            end
+        end
+    end
+
+    env.AddBrainPostInit("shadowwaxwellbrain", function(self)
+        RemoveNode(self, _ShouldAvoidExplosive)
+        RemoveNode(self, _ShouldRunAway)
+    end)
+
+    local shadows = {"shadowdancer", "shadowworker", "shadowprotector"}
+    for _, prefab in pairs(shadows) do
+        env.AddPrefabPostInit(prefab, function(inst)
+            if not TheWorld.ismastersim then return end
+            local locomotor = inst.components.locomotor
+            if locomotor and locomotor.pathcaps then
+                local pathcaps = {"allowocean", "ignorewalls"}
+                for _, pathcap in pairs(pathcaps) do
+                    locomotor.pathcaps[pathcap] = true
+                end
+            end
+        end)
+    end
+end
+
 --[[local ICON_SCALE = .6
 local ICON_RADIUS = 50
 local SPELLBOOK_RADIUS = 100
@@ -260,11 +316,13 @@ local function WaxwellUMStuff(inst)
     inst:ListenForEvent("ms_becameghost", OnBecameGhost)
     inst:ListenForEvent("ms_playerreroll", ForceDespawnShadowMinions)]]
 
-    inst:ListenForEvent("itemget", OnGetItem)
-    inst:ListenForEvent("equip", OnGetItem)
-    inst:ListenForEvent("itemlose", OnLoseItem)
-    inst:ListenForEvent("unequip", OnLoseItem)
-    inst:ListenForEvent("builditem", UnlockShadowGear)
+    if TUNING.DSTU.WAXWELL then
+        inst:ListenForEvent("itemget", OnGetItem)
+        inst:ListenForEvent("equip", OnGetItem)
+        inst:ListenForEvent("itemlose", OnLoseItem)
+        inst:ListenForEvent("unequip", OnLoseItem)
+        inst:ListenForEvent("builditem", UnlockShadowGear)
+    end
 
     --[[local petleash = inst.components.petleash
     if petleash then
@@ -409,12 +467,14 @@ do
         inst.onPreBuilt = ShadowGearOnPreBuilt
     end
 
-    local shadowgear = {"nightsword", "armor_sanity"}
-    for _, prefab in pairs(shadowgear) do
-        env.AddPrefabPostInit(prefab, function(inst)
-            ShadowGearClientFunctions(inst)
-            if not TheWorld.ismastersim then return end
-            ShadowGearFunctions(inst)
-        end)
+    if TUNING.DSTU.WAXWELL then
+        local shadowgear = {"nightsword", "armor_sanity"}
+        for _, prefab in pairs(shadowgear) do
+            env.AddPrefabPostInit(prefab, function(inst)
+                ShadowGearClientFunctions(inst)
+                if not TheWorld.ismastersim then return end
+                ShadowGearFunctions(inst)
+            end)
+        end
     end
 end

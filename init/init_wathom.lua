@@ -28,9 +28,11 @@ local function SpreadGoo(inst,number)
     for i = 1,circle do
         local x1 = x+radius*math.cos(2*3.14*i/circle)
         local z1 = z+radius*math.sin(2*3.14*i/circle)
-        local puddle = GLOBAL.SpawnPrefab("wathom_puddle")
-        puddle.Transform:SetPosition(x1,y,z1)
-        puddle.wathom = inst
+        if TheWorld.Map:IsPassableAtPoint(x1, y, z1) then
+            local puddle = GLOBAL.SpawnPrefab("wathom_puddle")
+            puddle.Transform:SetPosition(x1,y,z1)
+            puddle.wathom = inst
+        end
     end
 
     if number < 2 then
@@ -208,7 +210,7 @@ end
 -- This is Scrimble's Shove Code, it's used for both Charles T. Horse and Wixie, be appreciative, swine.
 local SLEEPREPEL_MUST_TAGS = {"_combat"}
 local SLEEPREPEL_CANT_TAGS = {"player", "companion", "abigail", "shadowminion", "playerghost", "INLIMBO", "wixieshoved", "invisible",
-    "hiding", "notarget", "noattack", "flight", "wall"}
+    "hiding", "notarget", "noattack", "flight", "wall", "rooted"}
 local NO_SHOVE_TAGS = {"stageusher", "toadstool"}
 local function Check_Bowling(inst, target)
     local x, y, z = inst.Transform:GetWorldPosition()
@@ -225,8 +227,8 @@ local function Check_Bowling(inst, target)
 
             if v.components.locomotor ~= nil and not v:HasAnyTag(NO_SHOVE_TAGS) then
                 for i = 1, 50 do
-                    v:DoTaskInTime((i - 1) / 50, function(v)
-                        if v ~= nil and inst ~= nil then
+                    v:DoTaskInTime((i - 1) / 75, function(v)
+                        if v and v:IsValid() and inst then
                             local x, y, z = inst.Transform:GetWorldPosition()
                             local tx, ty, tz = v.Transform:GetWorldPosition()
 

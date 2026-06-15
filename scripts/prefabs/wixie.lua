@@ -67,7 +67,7 @@ end
 
 local function CanGainClaustrophobia(inst)
     local isghost = (inst.player_classified and inst.player_classified.isghostmode:value()) or (not inst.player_classified and inst:HasTag("playerghost"))
-    return not (isghost or inst.components.health and inst.components.health:IsDead() or inst.replica and inst.replica.health and inst.replica.health:IsDead())
+    return not (inst.no_claustrophobia or isghost or inst.components.health and (inst.components.health:IsDead() or inst.components.health:IsInvincible()) or inst.replica and inst.replica.health and inst.replica.health:IsDead())
 end
 
 local function OnCooldown(inst)
@@ -100,7 +100,7 @@ local function updateclaustrophobia(inst)
                     --print("distance_rate"..distance_rate)
                     if inst:GetClaustrophobia() < 1 then
                         local adjustrate = v:HasTag("smallcreature") and v:HasAnyTag("insect", "rabbit", "bird", "companion") and .0005
-                            or v:HasTag("smallcreature") and .0008 or v:HasTag("epic") and (v.prefab == "klaus" and .008 or .006) or .0025
+                            or v:HasTag("smallcreature") and .0008 or v:HasTag("smallepic") and .0035 or v:HasTag("epic") and (v.prefab == "klaus" and .008 or .006) or .0025
                         inst.claustrophobiarate = math.clamp(inst.claustrophobiarate + (adjustrate * distance_rate), 0, .008)
                     end
                 end

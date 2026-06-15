@@ -4,7 +4,8 @@ local assets =
 }
 
 local SLEEPREPEL_MUST_TAGS = { "_combat" }
-local SLEEPREPEL_CANT_TAGS = { "player", "companion", "shadow", "playerghost", "INLIMBO", "toadstool", "notarget" }
+local SLEEPREPEL_CANT_TAGS = { "player", "companion", "shadow", "playerghost", "INLIMBO", "notarget" }
+local NO_SHOVE_TAGS = {"stageusher", "toadstool", "rooted"}
 
 require("wixie_shove")
 
@@ -19,7 +20,7 @@ local function StartRepel(inst)
 				v:PushEvent("attacked", { attacker = inst.host, damage = 0, weapon = nil })
 			end
 
-			if v.components.locomotor ~= nil and not v:HasTag("stageusher") and (v.sg ~= nil and not v.sg:HasStateTag("noshove") or v.sg == nil) then
+			if v.components.locomotor ~= nil and not v:HasAnyTag(NO_SHOVE_TAGS) and (v.sg ~= nil and not v.sg:HasStateTag("noshove") or v.sg == nil) then
 				WixieShove(inst.host, v, 2, false, nil, nil, true)
 			end
 		end
