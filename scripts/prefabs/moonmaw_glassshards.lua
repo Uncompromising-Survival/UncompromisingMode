@@ -97,7 +97,7 @@ local function shardring_fn()
     if not TheWorld.ismastersim then
         return inst
     end
-	inst.anim = math.random(0,4)
+	inst.anim = tostring(math.random(0,4))
 	inst.AnimState:PlayAnimation(inst.anim, true)
     local light = inst.entity:AddLight()
     inst.Light:Enable(true)
@@ -134,7 +134,6 @@ local function pipethrown(inst)
 end
 
 local function onhit(inst, attacker, target)
-
     if not target:IsValid() or target:HasTag("moonglasscreature") then
         --target killed or removed in combat damage phase
         return
@@ -174,7 +173,6 @@ local function shard_fn()
     inst.Light:SetFalloff(0.5)
     inst.Light:SetIntensity(.75)
     inst.Light:SetColour(121/255,235/255,12/255)	
-
 	
     inst:AddTag("NOCLICK")
     inst:AddTag("sharp")
@@ -182,13 +180,12 @@ local function shard_fn()
     inst:AddTag("projectile")
 	inst:AddTag("lunar_aligned")
 
-
     inst.entity:SetPristine()
 	
     if not TheWorld.ismastersim then
         return inst
     end
-	inst.anim = 1
+	inst.anim = "0"
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(0)
 	
