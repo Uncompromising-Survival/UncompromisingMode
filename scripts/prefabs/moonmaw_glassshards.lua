@@ -101,7 +101,7 @@ local function shardring_fn()
 
     if not TheWorld.ismastersim then return inst end
 
-    inst.anim = math.random(0, 4)
+    inst.anim = tostring(math.random(0, 4))
     inst.AnimState:PlayAnimation(inst.anim, true)
 
     inst:AddComponent("linearcircler")
@@ -134,7 +134,6 @@ local function pipethrown(inst)
 end
 
 local function onhit(inst, attacker, target)
-
     if not target:IsValid() or target:HasTag("moonglasscreature") then
         --target killed or removed in combat damage phase
         return
@@ -185,7 +184,8 @@ local function shard_fn()
 
     if not TheWorld.ismastersim then return inst end
 
-    inst.anim = 1
+    inst.anim = "0"
+
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(0)
 
