@@ -1977,7 +1977,9 @@ Assets = {
 
     Asset("ANIM", "anim/blueprinting_kit.zip"),
 
-    Asset("ANIM", "anim/um_bomb_vortex.zip")
+    Asset("ANIM", "anim/um_bomb_vortex.zip"),
+
+    Asset("ANIM", "anim/ui_krampusbag_2x5.zip")
 }
 
 for _, asset in pairs(inventoryitems) do

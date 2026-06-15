@@ -329,8 +329,8 @@ modparams.um_backpack_amuletuse =
     widget =
     {
         slotpos = {},
-        animbank = "ui_piggyback_2x6",
-        animbuild = "ui_piggyback_2x6",
+        animbank = "ui_krampusbag_2x5",
+        animbuild = "ui_krampusbag_2x5",
         --pos = Vector3(-5, -70, 0),
         pos = Vector3(-5, -90, 0),
         slotbg =
@@ -349,14 +349,14 @@ modparams.um_backpack_amuletuse =
     issidewidget = true,
     type = "pack",
     openlimit = 1,
-
 }
+
 for y = 0, 3 do
-    table.insert(modparams.um_backpack_amuletuse.widget.slotpos, Vector3(-162, -75 * y + 170, 0))
-    table.insert(modparams.um_backpack_amuletuse.widget.slotpos, Vector3(-162 + 75, -75 * y + 170, 0))
+    table.insert(modparams.um_backpack_amuletuse.widget.slotpos, Vector3(-162, -75 * y + 110, 0))
+    table.insert(modparams.um_backpack_amuletuse.widget.slotpos, Vector3(-162 + 75, -75 * y + 110, 0))
 end
 
-table.insert(modparams.um_backpack_amuletuse.widget.slotpos, Vector3(-162 + 37.5, -60 * 4.5 + 135, 0))
+table.insert(modparams.um_backpack_amuletuse.widget.slotpos, Vector3(-162 + 37.5, -60 * 4.5 + 82.5, 0))
 
 modparams.crabclaw =
 {
