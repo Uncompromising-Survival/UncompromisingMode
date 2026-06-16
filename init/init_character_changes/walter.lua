@@ -13,11 +13,15 @@ local function VetCurseMaxSanityLoss(inst, data)
         local overtime = data and data.overtime or nil
         local amount = data.amount < 0 and data.amount or 0 -- you can do "overtime and 0" if freezing/overheating shouldn't count
         local sanitypenalty = math.min(((math.abs(amount) * (overtime and 0.25 or 0.5)) / TUNING.WALTER_SANITY) * inst._sanity_damage_protection:Get() + inst.components.sanity:GetPenaltyPercent(), .75)
-        inst.components.sanity:AddSanityPenalty(inst, sanitypenalty) --Basically, 1/4 of the sanity damage due to health loss.
-        if not inst.components.timer:TimerExists("um_walterpenalty_passiveheal") then
-            inst.components.timer:StartTimer("um_walterpenalty_passiveheal", TUNING.TOTAL_DAY_TIME)
-        else
-            inst.components.timer:SetTimeLeft("um_walterpenalty_passiveheal", TUNING.TOTAL_DAY_TIME)
+        if amount < 0 then
+            inst.components.sanity:AddSanityPenalty(inst, sanitypenalty) --Basically, 1/4 of the sanity damage due to health loss.
+            if not inst.components.timer:TimerExists("um_walterpenalty_passiveheal") then
+                inst.components.timer:StartTimer("um_walterpenalty_passiveheal", TUNING.TOTAL_DAY_TIME)
+            elseif inst.components.timer:IsPaused("um_walterpenalty_passiveheal") then
+                inst.components.timer:ResumeTimer("um_walterpenalty_passiveheal")
+            else
+                inst.components.timer:SetTimeLeft("um_walterpenalty_passiveheal", TUNING.TOTAL_DAY_TIME)
+            end
         end
     end
     --_OnHealthDelta(inst,data)
@@ -29,13 +33,12 @@ local function OnPenaltyTimerDone(inst)
     if inst.components.sanity:GetPenaltyPercent() ~= 0 then
         inst.components.timer:StartTimer("um_walterpenalty_passiveheal", TUNING.TOTAL_DAY_TIME)
     end
+    inst.components.talker:Say(GetString(inst, "UM_WALTER_PENALTY_HEAL"))
 end
 
 local function ToggleUniqueVetCurse(inst, toggle)
     if toggle then
         inst:ListenForEvent("healthdelta", VetCurseMaxSanityLoss)
-        --inst:ListenForEvent("attacked", VetCurseMaxSanityLoss)
-        --UpvalueHacker.SetUpvalue(Prefabs.walter.master_postinit, OnHealthDelta, "OnHealthDelta")
         inst:ListenForEvent("timerdone", OnPenaltyTimerDone)
     else
         inst:RemoveEventCallback("healthdelta", VetCurseMaxSanityLoss)
@@ -45,5 +48,20 @@ end
 
 env.AddPrefabPostInit("walter", function(inst)
     if not TheWorld.ismastersim then return end
+    local _OnSave = inst.OnSave
+    local _OnLoad = inst.OnLoad
+    local function OnSave(inst, data, ...)
+        data.um_walter_penalty = inst.components.sanity:GetPenaltyPercent()
+        _OnSave(inst, data, ...)
+    end
+
+    local function OnLoad(inst, data, ...)
+        if data then
+            inst.components.sanity:AddSanityPenalty(inst, data.um_walter_penalty)
+        end
+        _OnLoad(inst, data, ...)
+    end
+    inst.OnSave = OnSave
+    inst.OnLoad = OnLoad
     inst.UMToggleUniqueVetCurse = ToggleUniqueVetCurse
 end)
