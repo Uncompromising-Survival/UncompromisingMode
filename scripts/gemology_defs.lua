@@ -355,7 +355,7 @@ AddUMGemDef("yellowgem1", {
             end
         end,
         onupdate = function(item, tier)
-            if item.components.equippable:IsEquipped() then
+            if item ~= nil and item.components.equippable:IsEquipped() then
                 DamageInfiniteItemGem("yellowgem1", item, 1 / TUNING.DSTU.YELLOWGEM1_DURATION)
             end
         end,
