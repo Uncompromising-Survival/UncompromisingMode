@@ -103,11 +103,11 @@ local data = {
     --um_hat_bee_moon [x]
     --um_eyebalm [x]
     --um_backpack_amuletuse [x]
-    --um_beemine_moon_item
-    --um_bomb_moon
-    --zaspberry
-    --zaspberry_lesser
-    --um_tentaclespot_moom
+    --um_beemine_moon_item [x]
+    --um_bomb_moon [x]
+    --zaspberry [x]
+    --zaspberry_lesser [x]
+    --um_tentaclespot_moon [x]
     --um_tentaclespike_moon
     --um_detonator
 
@@ -124,12 +124,20 @@ local data = {
     um_astral_projector = { name = "um_astral_projector", tex = "um_astral_projector.tex", subcat = "structure", type = "thing", prefab = "um_astral_projector", build = "um_archives_projectinator", bank = "um_archives_projectinator", anim = "idle", workable = "HAMMER", deps = { "um_astral_projector_target", "purplemooneye", "thulecite", "moonrocknugget" } },
     um_astral_projector_target = { name = "um_astral_projector_target", tex = "um_astral_projector_target.tex", subcat = "structure", type = "thing", prefab = "um_astral_projector_target", build = "um_archives_receptionator", bank = "um_archives_receptionator", anim = "idle", workable = "HAMMER", deps = { "moonglass", "thulecite", "moonrocknugget" } },
 
-    um_meathoney = CreateBasicEntry("um_meathoney", "food", nil, { healthvalue = 3, hungervalue = 9.8, sanityvalue = -10, foodtype = "MEAT", perishable = TUNING.PERISH_SUPERSLOW, stacksize = 40, deps = { "spoiledfood" } }),
+    um_meathoney = CreateBasicEntry("um_meathoney", "food", nil, { healthvalue = 3, hungervalue = 9.8, sanityvalue = -10, foodtype = "MEAT", perishable = TUNING.PERISH_SUPERSLOW, stacksize = 40, deps = { "spoiled_food" } }),
     um_meatcomb = CreateBasicEntry("um_meathoney", "food", nil, { stacksize = 20 }),
-    um_hat_bee_moon = { name = "um_hat_bee_moon", tex = "um_hat_bee_moon.tex", subcat = "hat", type = "item", prefab = "um_hat_bee_moon", build = "um_hat_bee_moon", bank = "catcoonhat", anim = "anim", perishable = 3 * TUNING.PERISH_TWO_DAY, insulator = TUNING.INSULATION_SMALL, insulator_type = "winter", dapperness = TUNING.CRAZINESS_SMALL, fueltype = "BURNABLE", fuelvalue = TUNING.LARGE_FUEL, snowmandecor = true, deps = { "um_bee_moon", "spoiledfood", "silk", "um_meathoney", "researchlab2" } },
+    um_hat_bee_moon = { name = "um_hat_bee_moon", tex = "um_hat_bee_moon.tex", subcat = "hat", type = "item", prefab = "um_hat_bee_moon", build = "um_hat_bee_moon", bank = "catcoonhat", anim = "anim", perishable = 3 * TUNING.PERISH_TWO_DAY, insulator = TUNING.INSULATION_SMALL, insulator_type = "winter", dapperness = TUNING.CRAZINESS_SMALL, fueltype = "BURNABLE", fuelvalue = TUNING.LARGE_FUEL, snowmandecor = true, deps = { "um_bee_moon", "spoiled_food", "silk", "um_meathoney", "researchlab2" } },
     um_eyebalm = CreateBasicEntry("um_eyebalm", "item", nil, { stacksize = 40, deps = { "um_meatcomb", "um_meathoney", "mosquitosack", "researchlab2" } }),
     um_backpack_amuletuse = CreateBasicEntry("um_backpack_amuletuse", "item", nil, { deps = { "um_tentaclespot_moon", "um_gemologypurplegem1", "goldnugget", "moon_altar_cosmic" } }),
-    um_beemine_moon_item = {name = "um_beemine_moon_item", tex=  "um_beemine_moon_item.tex", prefab = "um_beemine_moon_item", type = "item", subcat= "weapon", },
+    um_beemine_moon_item = { name = "um_beemine_moon_item", tex = "um_beemine_moon_item.tex", prefab = "um_beemine_moon_item", type = "item", subcat = "weapon", anim = "idle", bank = "um_beemine_moon", build = "um_beemine_moon" },
+    um_bomb_moon = { name = "um_bomb_moon", tex = "um_bomb_moon.tex", subcat = "weapon", type = "item", prefab = "um_bomb_moon", stacksize = 20, weapondamage = "49.5-450", weaponrange = 10, build = "um_boomberry_bomb", bank = "um_boomberry_bomb", anim = "idle", deps = { "um_tentaclespot_moon", "wagpunk_bits", "moonglass", "researchlab2" } },
+
+    zaspberry_lesser = { name = "zaspberry_lesser", tex = "zaspberry_lesser.tex", prefab = "zaspberry_lesser", type = "food", stacksize = 10, fueltype = "WORMLIGHT", bank = "zaspberry", build = "zaspberry", anim = "idle_lesser", foodtype = "VEGGIE", fuelvalue = TUNING.MED_FUEL, healthvalue = TUNING.HEALING_SMALL * 2, hungervalue = TUNING.CALORIES_SMALL, sanityvalue = -TUNING.SANITY_MED, perishable = TUNING.PERISH_MED, deps = { "zaspberry_plant", "spoiled_food" } },
+    zaspberry = { name = "zaspberry", tex = "zaspberry.tex", prefab = "zaspberry", type = "food", stacksize = 10, fueltype = "WORMLIGHT", bank = "zaspberry", build = "zaspberry", anim = "idle", foodtype = "VEGGIE", fuelvalue = TUNING.LARGE_FUEL * 1.33, healthvalue = TUNING.HEALING_MED, hungervalue = TUNING.CALORIES_MED, sanityvalue = -TUNING.SANITY_MED, perishable = TUNING.PERISH_MED, deps = { "shockworm", "spoiled_food" } },
+
+    um_tentaclespot_moon = {name="um_tentaclespot_moon", tex="um_tentaclespot_moon.tex", type="item", prefab="um_tentaclespot_moon", stacksize=20, build="um_tentaclespot_moon", bank="um_tentaclespot_moon", anim="idle", fueltype="BURNABLE", fuelvalue=TUNING.SMALL_FUEL, burnable=true},
+
+
 
     --hooded forest
     hoodedtrapdoor = { name = "hoodedtrapdoor", tex = "hoodedtrapdoor.tex", type = "thing", prefab = "hoodedtrapdoor", build = "rock_flipping_moss", bank = "flipping_rock", anim = "idle", workable = "MINE", deps = { "rocks", "spider_trapdoor_hooded" }, use_bg = true },
@@ -212,7 +220,7 @@ local data = {
     rimeweed_whip = { name = "rimeweed_whip", tex = "rimeweed_whip.tex", subcat = "weapon", type = "item", prefab = "rimeweed_whip", weapondamage = 51, weaponrange = 2, finiteuses = 150, build = "um_rimelash", bank = "whip", anim = "idle", deps = { "rimeweed_main", "um_rimeweed_itemvine" } },
 
     --magma caves
-    gloomcap = { name = "gloomcap", prefab = "gloomcap", tex = "gloomcap.tex", anim = "idle", bank = "gloomcap_item", build = "gloomcap_item", foodtype = "VEGGIE", hungervalue = 18.8, healthvalue = -20, sanityvalue = -33, burnable = true, perishable = 3 * TUNING.PERISH_TWO_DAY, stacksize = 40, deps = { "mushtree_shadow", "spoiledfood" } },
+    gloomcap = { name = "gloomcap", prefab = "gloomcap", tex = "gloomcap.tex", anim = "idle", bank = "gloomcap_item", build = "gloomcap_item", foodtype = "VEGGIE", hungervalue = 18.8, healthvalue = -20, sanityvalue = -33, burnable = true, perishable = 3 * TUNING.PERISH_TWO_DAY, stacksize = 40, deps = { "mushtree_shadow", "spoiled_food" } },
     mushtree_shadow = { name = "mushtree_shadow", tex = "mushtree_shadow.tex", type = "thing", prefab = "mushtree_shadow", build = "gloomcap", bank = "gloomcap", anim = "idle_loop", sanityaura = -TUNING.SANITYAURA_MED, workable = "AXE", deps = { "log", "gloomcap" }, use_bg = true },
     um_fyrite = CreateBasicEntry("um_fyrite", "item", nil, { stacksize = 40, weapondamage = 50, deps = { "fyriterock", "um_pyrite_ceiling" } }),
     um_ghost_pepper_item = CreateBasicEntry("um_ghost_pepper_item", "item", nil, { stacksize = 40, foodtype = "VEGGIE", perishable = TUNING.PERISH_FAST / 6, healthvalue = -3, hungervalue = 12.5, sanityvalue = -10, deps = { "pepper", "um_ghost_pepper" } }),
