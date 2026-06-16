@@ -28,6 +28,7 @@ local GemEnchantable = Class(function(self, inst)
     self.enchant_durabilty = {} --[enchantment name] = durability (0-1)%
     self.slots = DEFAULT_SLOTS
     self.hidden_enchants = {}   --WARNING: NOT SAVED
+    self.slotless_enchants = {}
     self.dirty = false
 
     --this data saves
@@ -148,7 +149,11 @@ function GemEnchantable:AddEnchantment(enchant, tier, slotless)
         GEM_DEFS[enchant].fns.onapply(self.inst, tier)
     end
 
-    if not slotless then
+
+
+    if slotless then
+        self.slotless_enchants[enchant] = true
+    else
         self.slots = self.slots - 1
     end
 
@@ -157,7 +162,7 @@ function GemEnchantable:AddEnchantment(enchant, tier, slotless)
     self.inst:PushEvent("onaddenchant", { enchant = enchant, tier = tier })
 end
 
-function GemEnchantable:RemoveEnchantment(enchant, slotless)
+function GemEnchantable:RemoveEnchantment(enchant)
     assert(GEM_DEFS[enchant] ~= nil, "Attempted to remove unknown enchantment: " .. enchant)
     assert(self.enchants[enchant], "Could not remove enchantment \"" .. enchant .. "\". Enchantment is not applied.")
 
@@ -174,7 +179,10 @@ function GemEnchantable:RemoveEnchantment(enchant, slotless)
 
     self.enchants[enchant] = nil
 
-    if not slotless then
+    local slotless = self.slotless_enchants[enchant] ~= nil
+    if slotless then
+        self.slotless_enchants[enchant] = nil
+    else
         self.slots = self.slots + 1
     end
 
@@ -191,7 +199,8 @@ end
 function GemEnchantable:OnSave()
     local _enchants = {}
     for k, v in pairs(self.enchants) do
-        if v ~= nil then
+        --do not save hidden enchants (chaotic re-applies them on apply)
+        if v ~= nil and not table.contains(self.hidden_enchants, k) then
             _enchants[k] = v
         end
     end
