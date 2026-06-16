@@ -39,10 +39,15 @@ UMCommonFns.ShouldKnockback = function(inst)
         and (not bodyslot or not bodyslot:HasAnyTag(UMCommonFns.KNOCKBACK_ARMOR_CANT_TAGS))
 end
 
-UMCommonFns.IsAlly = function(inst, guy, tags) -- Used for UMIsAlly on certain creatures.
+UMCommonFns.IsAlly_GetLeader = function(inst)
     local follower = inst.replica.follower
-    local guy_combat, guy_follower = guy.replica.combat, guy.replica.follower
-    if not (tags and guy_combat) or follower and follower:GetLeader() or guy_follower and guy_follower:GetLeader() then return false end
+    return follower and follower:GetLeader()
+end
+
+UMCommonFns.IsAlly = function(inst, guy, tags) -- Used for UMIsAlly on certain creatures.
+    local guy_combat = guy.replica.combat
+    local myleader, guyleader = UMCommonFns.IsAlly_GetLeader(inst), UMCommonFns.IsAlly_GetLeader(guy)
+    if not (tags and guy_combat) or myleader or guyleader then return false end
     return inst.replica.combat:GetTarget() ~= guy and guy_combat:GetTarget() ~= inst and guy:HasAnyTag(tags)
 end
 
