@@ -196,7 +196,7 @@ local function fn()
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)
     inst.components.equippable:SetOnEquipToModel(onequiptomodel)
-    inst.components.equippable.walkspeedmult = TUNING.CANE_SPEED_MULT - .1
+    inst.components.equippable.walkspeedmult = TUNING.CANE_SPEED_MULT - .15
 
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(TUNING.CANE_DAMAGE)

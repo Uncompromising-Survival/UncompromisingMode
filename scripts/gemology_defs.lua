@@ -268,7 +268,7 @@ local function addRandomGemEffects(inst)
     if inst.persistent_gemology_data.um_gemologygreengem2.gem_effects then
         for k, v in pairs(inst.persistent_gemology_data.um_gemologygreengem2.gem_effects) do
             if inst.components.gem_enchantable.enchants[k] then
-                inst.components.gem_enchantable:RemoveEnchantment(k, true)
+                inst.components.gem_enchantable:RemoveEnchantment(k)
             end
         end
     end
@@ -302,6 +302,7 @@ AddUMGemDef("greengem2", {
                 addRandomGemEffects(item)
             else
                 for k, v in pairs(item.persistent_gemology_data.um_gemologygreengem2.gem_effects) do
+                    item.components.gem_enchantable:AddEnchantment(k, tier, true)
                     table.insert(item.components.gem_enchantable.hidden_enchants, k)
                 end
             end
@@ -354,7 +355,7 @@ AddUMGemDef("yellowgem1", {
             end
         end,
         onupdate = function(item, tier)
-            if item.components.equippable:IsEquipped() then
+            if item ~= nil and item.components.equippable:IsEquipped() then
                 DamageInfiniteItemGem("yellowgem1", item, 1 / TUNING.DSTU.YELLOWGEM1_DURATION)
             end
         end,

@@ -41,6 +41,20 @@ if TUNING.DSTU.WAXWELL then
         RemoveNode(self, _ShouldAvoidExplosive)
         RemoveNode(self, _ShouldRunAway)
     end)
+
+    local shadows = {"shadowdancer", "shadowworker", "shadowprotector"}
+    for _, prefab in pairs(shadows) do
+        env.AddPrefabPostInit(prefab, function(inst)
+            if not TheWorld.ismastersim then return end
+            local locomotor = inst.components.locomotor
+            if locomotor and locomotor.pathcaps then
+                local pathcaps = {"allowocean", "ignorewalls"}
+                for _, pathcap in pairs(pathcaps) do
+                    locomotor.pathcaps[pathcap] = true
+                end
+            end
+        end)
+    end
 end
 
 --[[local ICON_SCALE = .6

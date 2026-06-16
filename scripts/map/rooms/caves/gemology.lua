@@ -21,7 +21,7 @@ AddRoom("RedMushForest_Petrified", {
 
             slurper = 0.001,
         },
-        countprefabs = {um_poofshroom_node_red = 6},
+        --countprefabs = {um_poofshroom_node_red = 6},
     }
 })
 AddRoom("RedSpiderForest_Petrified", {
@@ -47,7 +47,7 @@ AddRoom("RedSpiderForest_Petrified", {
 
             slurper = 0.001,
         },
-        countprefabs = {um_poofshroom_node_red = 6},
+        --countprefabs = {um_poofshroom_node_red = 6},
     }
 })
 
@@ -73,7 +73,7 @@ AddRoom("GreenMushForest_Petrified", {
 
             slurper = 0.001,
         },
-        countprefabs = {um_poofshroom_node_green = 6},
+        --countprefabs = {um_poofshroom_node_green = 6},
     }
 })
 
@@ -110,7 +110,7 @@ AddRoom("GreenMushRabbits_Petrified", {
             slurper = 0.001,
             rabbithouse = 0.005,
         },
-        countprefabs = {um_poofshroom_node_green = 6}
+        --countprefabs = {um_poofshroom_node_green = 6}
     }
 })
 --- BLUE
@@ -134,7 +134,7 @@ AddRoom("BlueMushForest_Petrified", {
 
             slurper = 0.001,
         },
-        countprefabs = {um_poofshroom_node_blue = 6}
+        --countprefabs = {um_poofshroom_node_blue = 6}
     }
 })
 
@@ -159,7 +159,7 @@ AddRoom("BlueSpiderForest_Petrified", {
 
             slurper = 0.001,
         },
-        countprefabs = {um_poofshroom_node_blue = 9}
+        --countprefabs = {um_poofshroom_node_blue = 9}
     }
 })
 -- NOISE
@@ -189,9 +189,9 @@ AddRoom("FungusNoiseForest_Petrified", {
             slurper = 0.001,
         },
         countprefabs = {
-            um_poofshroom_node_blue = 1,
-            um_poofshroom_node_green = 1,
-            um_poofshroom_node_red = 1,      
+            --um_poofshroom_node_blue = 1,
+            --um_poofshroom_node_green = 1,
+            --um_poofshroom_node_red = 1,      
         }
     }
 })
@@ -221,9 +221,9 @@ AddRoom("FungusNoiseMeadow_Petrified", {
             slurper = 0.001,
         },
         countprefabs = {
-            um_poofshroom_node_blue = 1,
-            um_poofshroom_node_green = 1,
-            um_poofshroom_node_red = 1,      
+            --um_poofshroom_node_blue = 1,
+            --um_poofshroom_node_green = 1,
+            --um_poofshroom_node_red = 1,      
         }
     }
 })

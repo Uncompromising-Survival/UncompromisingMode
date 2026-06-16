@@ -12,7 +12,7 @@ env.AddComponentPostInit("playeractionpicker", function(self)
         end
 
         local actions = nil
-        local useitem = self.inst.replica.inventory:GetActiveItem()
+        local useitem = self.inst.replica.inventory and self.inst.replica.inventory:GetActiveItem()
 
         --if we're specifically using an bottle, see if we can use it on the target boat, because the game only does exclusion for that on right click for repairables.
         if useitem ~= nil and useitem:IsValid() and target ~= nil and target:HasTag("walkableplatform") and useitem:HasTag("boatbottle") then

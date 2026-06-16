@@ -93,7 +93,7 @@ local function ExplodeSpellFn(inst, doer, pos)
     for i, v in ipairs(ents) do
         if v:HasTag("INLIMBO") and v.components.inventoryitem and not TheNet:GetPVPEnabled() then
             local owner = v.components.inventoryitem:GetGrandOwner()
-            if owner:HasTag("player") and owner ~= doer then
+            if owner ~= nil and owner:HasTag("player") and owner ~= doer then
                 return
             end
         end

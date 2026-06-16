@@ -16,6 +16,7 @@ local function ShouldWeaponPierce(inst, weapon, attacker)
     return attacker and attacker:HasTag("pierces_ice_shield")
         or weapon and (weapon.components.gem_enchantable and weapon.components.gem_enchantable:HasEnchantment("um_gemologyredgem2")
             or weapon:HasTag("pierces_ice_shield") or weapon.components.obsidiantool
+            or weapon.components.fumaroletool and weapon.components.fumaroletool:GetTempRange() > 2
             or weapon.components.weapon and (weapon.components.weapon.stimuli == "fire" or weapon.components.weapon:GetDamage(attacker, inst) == 0))
 end
 
@@ -24,7 +25,10 @@ local function ShouldRecoilIceShield(inst, attacker, weapon, damage)
     if shouldrecoil and attacker and attacker.components.talker and attacker:HasTag("player") then
         attacker.components.talker:Say(GetString(attacker, "ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD"))
     end
-    return shouldrecoil, (ShouldWeaponPierce(inst, weapon, attacker) or not inst:HasTag("ice_shielded")) and damage or damage and damage / 2 or nil
+
+    local fumarolemult = weapon and weapon.components.fumaroletool and weapon.components.fumaroletool:GetTempRange() or 1
+
+    return shouldrecoil, (ShouldWeaponPierce(inst, weapon, attacker) or not inst:HasTag("ice_shielded")) and damage and damage * fumarolemult or damage and (damage / 2) * fumarolemult or nil
 end
 
 
@@ -64,7 +68,7 @@ local function Init(inst, parent, fx_symbol, tier)
                     amount = amount * 10
                     SpawnPrefab("washashore_puddle_fx").Transform:SetPosition(parent.Transform:GetWorldPosition())
                     if inst._parent.components.moisture then
-                        inst._parent.components.moisture:DoDelta(math.abs(amount/10))
+                        inst._parent.components.moisture:DoDelta(math.abs(amount / 10))
                     end
                 end
 
@@ -134,9 +138,7 @@ local function fn()
         local value = 1 * inst.tier * temperature_scale
         if value < 0 then
             local fx = SpawnPrefab("washashore_puddle_fx")
-            local scale = math.abs(1 * inst.tier * temperature_scale) / 2
             fx.Transform:SetPosition(inst._parent.Transform:GetWorldPosition())
-            fx.Transform:SetScale(scale, scale, scale)
 
             if inst._parent.components.moisture then
                 inst._parent.components.moisture:DoDelta(math.abs(value))
