@@ -43,7 +43,7 @@ UMCommonFns.IsAlly = function(inst, guy, tags) -- Used for UMIsAlly on certain c
     local follower = inst.replica.follower
     local guy_combat, guy_follower = guy.replica.combat, guy.replica.follower
     if not (tags and guy_combat) or follower and follower:GetLeader() or guy_follower and guy_follower:GetLeader() then return false end
-    return inst.replica.combat:GetTarget() ~= guy and guy.replica.combat:GetTarget() ~= inst and guy:HasAnyTag(tags)
+    return inst.replica.combat:GetTarget() ~= guy and guy_combat:GetTarget() ~= inst and guy:HasAnyTag(tags)
 end
 
 UMCommonFns.IsNotFriendly = function(attacker, target) -- Is the target an ally or my leader's ally?
