@@ -241,7 +241,7 @@ env.AddComponentPostInit("health", function(self)
 
     local _SetPenalty = self.SetPenalty
     function self:SetPenalty(penalty, ...)
-        if self.inst.prefab == "waxwell" and (self.inst:HasTag("vetcurse") or self.um_vetcursed) and not self.disable_penalty then
+        if not self.disable_penalty and self.inst.prefab == "waxwell" and (self.inst:HasTag("vetcurse") or self.um_vetcursed) then
             self.penalty = math.clamp(penalty, 0, .99)
             return
         end
