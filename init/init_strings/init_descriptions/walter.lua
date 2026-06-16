@@ -5,7 +5,6 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WALTER.ACTIONFAIL
 --	[ 		Walter Descriptions		]   --
 
 ANNOUNCE.UM_WALTER_PENALTY_HEAL = { --walter_only
-
     "I... I feel calmer now.",
     "Hey, cheer up girl! I'm fine! See?",
     "We'll get through this together, Woby! No curse can stop us!",
