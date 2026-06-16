@@ -51,6 +51,19 @@ UMCommonFns.IsAlly = function(inst, guy, tags) -- Used for UMIsAlly on certain c
     return inst.replica.combat:GetTarget() ~= guy and guy_combat:GetTarget() ~= inst and guy:HasAnyTag(tags)
 end
 
+--[[UMCommonFns.IsAlly_IsAlly = function(inst, guy)
+    local combat, guy_combat = inst.replica.combat, guy.replica.combat
+    return combat and combat:GetTarget() ~= guy and guy_combat and guy_combat:GetTarget() ~= inst and combat:IsAlly(guy)
+end
+
+UMCommonFns.IsAlly = function(inst, guy, tags) -- Used for UMIsAlly on certain creatures.
+    local guy_combat = guy.replica.combat
+    if not (tags and guy_combat) or not (inst.replica.combat:GetTarget() ~= guy and guy_combat and guy_combat:GetTarget() ~= inst) then return false end
+    local myleader, guyleader = UMCommonFns.IsAlly_GetLeader(inst), UMCommonFns.IsAlly_GetLeader(guy)
+    if myleader and guyleader and guyleader == myleader then return false end	
+    return ((not myleader and not guyleader or myleader and (not guyleader or (guyleader == myleader or UMCommonFns.IsAlly_IsAlly(guyleader, myleader))))) and guy:HasAnyTag(tags)
+end]]
+
 UMCommonFns.IsNotFriendly = function(attacker, target) -- Is the target an ally or my leader's ally?
     if not (attacker and attacker:IsValid()) or not target.components.health then return true end
     local attackercombat = attacker and attacker.components.combat
