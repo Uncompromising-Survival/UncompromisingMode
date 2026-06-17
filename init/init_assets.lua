@@ -653,24 +653,22 @@ Assets = {
     Asset("ATLAS", "images/cookbook_viperjam.xml"),
     Asset("IMAGE", "images/cookbook_zaspberryparfait.tex"),
     Asset("ATLAS", "images/cookbook_zaspberryparfait.xml"),
-
     Asset("IMAGE", "images/cookbook_um_durian_cream_marshcake.tex"),
     Asset("ATLAS", "images/cookbook_um_durian_cream_marshcake.xml"),
-
     Asset("IMAGE", "images/cookbook_um_chiles_en_nogada.tex"),
     Asset("ATLAS", "images/cookbook_um_chiles_en_nogada.xml"),
-
     Asset("IMAGE", "images/cookbook_um_rice_pudding.tex"),
     Asset("ATLAS", "images/cookbook_um_rice_pudding.xml"),
-
     Asset("IMAGE", "images/cookbook_um_kebab.tex"),
     Asset("ATLAS", "images/cookbook_um_kebab.xml"),
-
     Asset("IMAGE", "images/cookbook_um_sponge_cake.tex"),
     Asset("ATLAS", "images/cookbook_um_sponge_cake.xml"),
-
     Asset("IMAGE", "images/cookbook_um_boomberrypie.tex"),
     Asset("ATLAS", "images/cookbook_um_boomberrypie.xml"),
+    Asset("IMAGE", "images/cookbook_um_boom_tart.tex"),
+    Asset("ATLAS", "images/cookbook_um_boom_tart.xml"),
+    Asset("IMAGE", "images/cookbook_um_ghost_fajita.tex"),
+    Asset("ATLAS", "images/cookbook_um_ghost_fajita.xml"),
 
     --crafting menu avatars
     Asset("IMAGE", "images/crafting_menu_avatars/avatar_wixie.tex"),
