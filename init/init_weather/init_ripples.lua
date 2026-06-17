@@ -29,7 +29,7 @@ env.AddPrefabPostInitAny(function(inst)
         inst.um_ripple_blacklist = true
     end
 
-    if (inst:HasAnyTag("structure", "boulder", "plant") or inst.components.inventoryitem) and not inst.um_ripple_blacklist then
+    if (inst:HasAnyTag("structure", "boulder", "plant") --[[or inst.components.inventoryitem]]) and not inst.um_ripple_blacklist then
         if not inst.components.umripples then
             inst:AddComponent("umripples")
         end
@@ -49,14 +49,14 @@ env.AddPrefabPostInitAny(function(inst)
             umripples.bob_percent = floater.bob_percent
             umripples.splash = floater.splash
         end
-        if inst.components.inventoryitem and not inst.components.floatable then
+        --[[if inst.components.inventoryitem and not inst.components.floater then
             local umripples = inst.components.umripples
             umripples.vert_offset = 0.1
-        end
+        end]]
     end
 end)
 
-env.AddClassPostConstruct("components/inventoryitem_replica", function(self) --AXE Add the ripples to the client side of items
+--[[env.AddClassPostConstruct("components/inventoryitem_replica", function(self) --AXE Add the ripples to the client side of items
     if not self.inst.components.umripples and not self.inst:HasAnyTag(TUNING.DSTU.RIPPLE_BLACKLIST_TAGS) then
         self.inst:AddComponent("umripples")
         if not self.inst.components.floatable then
@@ -73,7 +73,7 @@ env.AddClassPostConstruct("components/health_replica", function(self) --AXE Add 
             self.inst.components.umripples.vert_offset = 0.2
         end
     end
-end)
+end)]]
 
 local function AddRipples(prefab, xscale, yscale, zscale, vert_offset) --AXE These calls need to be both on client and server
     env.AddPrefabPostInit(prefab, function(inst)
@@ -289,7 +289,9 @@ env.AddStategraphPostInit("bird", function(inst)
     local state = inst.states["flyaway"]
     local _onenter = state.onenter
     state.onenter = function(inst, ...)
-        inst.components.umripples:OnNoLongerLandedServer()
+        if inst.components.umripples then
+            inst.components.umripples:OnNoLongerLandedServer()
+        end
         _onenter(inst, ...)
     end
 end)
