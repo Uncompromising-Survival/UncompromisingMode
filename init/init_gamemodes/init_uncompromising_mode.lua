@@ -250,7 +250,7 @@ if GetModConfigData("armorrework") then
     modimport("postinit/armor_rework")
 end
 
-modimport("init/init_weather/init_ripples")
+--modimport("init/init_weather/init_ripples")
 modimport("init/init_weather/init_thicket")
 modimport("init/init_insightcompat")
 modimport("init/init_magmatiles")
