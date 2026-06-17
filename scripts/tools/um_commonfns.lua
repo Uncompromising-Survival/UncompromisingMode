@@ -46,23 +46,13 @@ end
 
 UMCommonFns.IsAlly = function(inst, guy, tags) -- Used for UMIsAlly on certain creatures.
     local guy_combat = guy.replica.combat
-    local myleader, guyleader = UMCommonFns.IsAlly_GetLeader(inst), UMCommonFns.IsAlly_GetLeader(guy)
-    if not (tags and guy_combat) or myleader or guyleader then return false end
-    return inst.replica.combat:GetTarget() ~= guy and guy_combat:GetTarget() ~= inst and guy:HasAnyTag(tags)
-end
-
---[[UMCommonFns.IsAlly_IsAlly = function(inst, guy)
-    local combat, guy_combat = inst.replica.combat, guy.replica.combat
-    return combat and combat:GetTarget() ~= guy and guy_combat and guy_combat:GetTarget() ~= inst and combat:IsAlly(guy)
-end
-
-UMCommonFns.IsAlly = function(inst, guy, tags) -- Used for UMIsAlly on certain creatures.
-    local guy_combat = guy.replica.combat
     if not (tags and guy_combat) or not (inst.replica.combat:GetTarget() ~= guy and guy_combat and guy_combat:GetTarget() ~= inst) then return false end
     local myleader, guyleader = UMCommonFns.IsAlly_GetLeader(inst), UMCommonFns.IsAlly_GetLeader(guy)
-    if myleader and guyleader and guyleader == myleader then return false end	
-    return ((not myleader and not guyleader or myleader and (not guyleader or (guyleader == myleader or UMCommonFns.IsAlly_IsAlly(guyleader, myleader))))) and guy:HasAnyTag(tags)
-end]]
+    local myleader_leader, guyleader_leader = myleader and UMCommonFns.IsAlly_GetLeader(myleader), guyleader and UMCommonFns.IsAlly_GetLeader(guyleader)
+    if myleader and myleader.isplayer or guyleader and guyleader.isplayer then return false end
+    if myleader_leader and myleader_leader.isplayer or guyleader_leader and guyleader_leader.isplayer then return true end
+    return guy:HasAnyTag(tags)
+end
 
 UMCommonFns.IsNotFriendly = function(attacker, target) -- Is the target an ally or my leader's ally?
     if not (attacker and attacker:IsValid()) or not target.components.health then return true end

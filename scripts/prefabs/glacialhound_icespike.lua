@@ -374,11 +374,11 @@ local function spikefn()
 
     inst:AddTag("groundspike")
     inst:AddTag("frozen")
+    inst:AddTag("houndfriend")
 
     inst.islarge = net_bool(inst.GUID, "glacialhound_icespike.islarge")
 
     inst.scrapbook_inspectonseen = true
-
 
     inst._pfpos = nil
     inst._ispathfinding = net_bool(inst.GUID, "_ispathfinding", "onispathfindingdirty")
