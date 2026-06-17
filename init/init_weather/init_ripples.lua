@@ -59,7 +59,7 @@ end)
 --[[env.AddClassPostConstruct("components/inventoryitem_replica", function(self) --AXE Add the ripples to the client side of items
     if not self.inst.components.umripples and not self.inst:HasAnyTag(TUNING.DSTU.RIPPLE_BLACKLIST_TAGS) then
         self.inst:AddComponent("umripples")
-        if not self.inst.components.floatable then
+        if not self.inst.components.floater then
             local umripples = self.inst.components.umripples
             umripples.vert_offset = 0.1
         end
@@ -69,7 +69,7 @@ end)
 env.AddClassPostConstruct("components/health_replica", function(self) --AXE Add ripples to the client side of any creature, including modded followers whose mob tags are server-only
     if not self.inst.components.umripples and not self.inst:HasAnyTag(JoinArrays(TUNING.DSTU.RIPPLE_BLACKLIST_TAGS, {"shadow", "flying", "gestalt", "ghost", "playerghost"})) then
         self.inst:AddComponent("umripples")
-        if not self.inst.components.floatable then
+        if not self.inst.components.floater then
             self.inst.components.umripples.vert_offset = 0.2
         end
     end
