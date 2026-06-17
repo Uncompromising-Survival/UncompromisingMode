@@ -1,7 +1,6 @@
 local TARGET_IGNORE_TAGS = {"INLIMBO", "moonglasscreature", "player" --[[, "companion", "abigail"]] }
 
 local function destroystuff(inst)
-
     if inst.WINDSTAFF_CASTER == nil then inst:Remove() end
     if inst.destroy and inst.hidden ~= true then
         local x, y, z = inst.Transform:GetWorldPosition()
@@ -115,8 +114,9 @@ local function fn_glassshards()
 
     if not TheWorld.ismastersim then return inst end
 
-    local anim = math.random(0, 4)
+    local anim = tostring(math.random(0, 4))
     inst.AnimState:PlayAnimation(anim, true)
+
     inst:AddComponent("linearcircler")
 
     inst.WINDSTAFF_CASTER = nil
@@ -129,6 +129,7 @@ local function fn_glassshards()
         inst:DoPeriodicTask(.2, destroystuff)
         inst:DoPeriodicTask(10, CheckDist)
     end)
+
     inst.damagetime = 0.1
     inst:DoTaskInTime(inst.damagetime, Reposition)
 
@@ -138,6 +139,7 @@ local function fn_glassshards()
     inst.PlayBreakSound = PlayBreakSound
     inst.BreakShard = BreakShard
     inst.SummonShard = SummonShard
+
     return inst
 end
 
