@@ -82,9 +82,9 @@ local function oneat(inst, data)
     --[[local foodaffinitysanitybuff = inst:HasTag("playermerm") and (data.food.prefab == "kelp" or data.food.prefab == "kelp_cooked") and 0 or inst.components.foodaffinity:HasPrefabAffinity(data.food) and 15 or 0
     sanity_delta = sanity_delta + foodaffinitysanitybuff]]
 
-    if inst:HasTag("wathom") and inst.components.foodaffinity:HasPrefabAffinity(data.food) then
+    --[[if inst:HasTag("wathom") and inst.components.foodaffinity:HasPrefabAffinity(data.food) then --That's not how it works
         health_delta = health_delta + 20
-    end
+    end]]
 
     if health_delta > 3 and not inst:HasAnyTag("ignores_foodregen", "ignores_healthregen") then
         inst.components.debuffable:AddDebuff("healthregenbuff_vetcurse_" .. data.food.prefab, "healthregenbuff_vetcurse", { duration = (health_delta * .1) })
