@@ -391,7 +391,6 @@ local function spikefn()
 
     inst.entity:SetPristine()
 
-
     if not TheWorld.ismastersim then
         return inst
     end
