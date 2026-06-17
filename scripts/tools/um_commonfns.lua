@@ -50,7 +50,7 @@ UMCommonFns.IsAlly = function(inst, guy, tags) -- Used for UMIsAlly on certain c
     local myleader, guyleader = UMCommonFns.IsAlly_GetLeader(inst), UMCommonFns.IsAlly_GetLeader(guy)
     local myleader_leader, guyleader_leader = myleader and UMCommonFns.IsAlly_GetLeader(myleader), guyleader and UMCommonFns.IsAlly_GetLeader(guyleader)
     if myleader and myleader.isplayer or guyleader and guyleader.isplayer then return false end
-    if myleader_leader and myleader_leader.isplayer or guyleader_leader and guyleader_leader.isplayer then return true end
+    if myleader_leader and myleader_leader.isplayer or guyleader_leader and guyleader_leader.isplayer then return false end
     return guy:HasAnyTag(tags)
 end
 
