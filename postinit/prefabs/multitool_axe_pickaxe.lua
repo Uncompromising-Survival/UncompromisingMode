@@ -1,6 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
------------------------------------------------------------------\
+-----------------------------------------------------------------
 
 local function Working(owner, data)
     if owner and not owner:HasTag("equipmentmodel") then
