@@ -17,6 +17,15 @@ local function RobustFloodCheck(inst) -- For players, check to see if they're on
     end
 end
 
+env.AddComponentPostInit("floater", function(self)
+    local _ShouldShowEffect = self.ShouldShowEffect
+    function self:ShouldShowEffect(...)
+        local pos_x, pos_y, pos_z = self.inst.Transform:GetWorldPosition()
+        if TheWorld.Map:GetTileAtPoint(pos_x, 0, pos_z) == WORLD_TILES.UM_FLOODWATER_GROTTO and not (self.inst.sg and self.inst.sg:HasStateTag("flying")) then return true end
+        return _ShouldShowEffect(self, ...)
+    end
+end)
+
 for _, prefab in ipairs(TUNING.DSTU.RIPPLE_BLACKLIST_PREFABS) do
     env.AddPrefabPostInit(prefab, function(inst)
         inst.um_ripple_blacklist = true
