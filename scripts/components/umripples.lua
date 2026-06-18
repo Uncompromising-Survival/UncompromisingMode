@@ -29,7 +29,9 @@ local function onzscale(self, scale)
 end
 
 local function onvertoffset(self, offset)
-    self.inst.replica.umripples:SetVerticalOffset(offset)
+    if offset then
+        self.inst.replica.umripples:SetVerticalOffset(offset)
+    end
 end
 
 local function onbobpercent(self, bobpercent)
@@ -58,7 +60,7 @@ local Umripples = Class(function(self, inst)
         self.inst:ListenForEvent("on_no_longer_landed", function() self:OnNoLongerLandedServer() end)
         self.inst:ListenForEvent("ondropped", function() self:OnLandedServer() end)
         self.inst:ListenForEvent("onremove", function() self:OnNoLongerLandedServer() end)
-		if self.inst:HasTag("player") then
+        if self.inst:HasTag("player") then
             self.inst:ListenForEvent("mounted", function()
                 if self.inst.replica.rider then
                     self:ShouldChangeToRiding(self.inst.replica.rider:IsRiding())
@@ -94,7 +96,7 @@ nil,
     yscale = onyscale,
     zscale = onzscale,
     vert_offset = onvertoffset,
-	bob_percent = onbobpercent,
+    bob_percent = onbobpercent,
     should_parent_effect = onshouldparenteffect,
     is_landed = onlanded,
     resize_target = onresizetarget,
