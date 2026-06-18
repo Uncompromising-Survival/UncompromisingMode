@@ -36,7 +36,7 @@ end
 
 -- AXE Add ripples to plants, structures, and items
 env.AddPrefabPostInitAny(function(inst)
-	if not TheWorld.ismastersim then return end
+    if not TheWorld.ismastersim then return end
     if inst:HasAnyTag(TUNING.DSTU.RIPPLE_BLACKLIST_TAGS) then
         inst.um_ripple_blacklist = true
     end
@@ -70,7 +70,7 @@ end)]]
 
 local function AddRipples(prefab, xscale, yscale, zscale, vert_offset) --AXE These calls need to be both on client and server
     env.AddPrefabPostInit(prefab, function(inst)
-		if not TheWorld.ismastersim then return end
+        if not TheWorld.ismastersim then return end
         if not inst.components.umripples then
             inst:AddComponent("umripples")
         end
@@ -116,7 +116,7 @@ end
 --
 
 env.AddPlayerPostInit(function(inst)
-	if not TheWorld.ismastersim then return end
+    if not TheWorld.ismastersim then return end
     if not inst.components.umripples then
         inst:AddComponent("umripples")
     end
@@ -127,7 +127,7 @@ end)
 
 --AXE Mobs
 env.AddPrefabPostInitAny(function(inst)
-	if not TheWorld.ismastersim then return end
+    if not TheWorld.ismastersim then return end
     if (inst:HasAnyTag("_health", "animal", "EPIC", "monster") and not inst:HasAnyTag("shadow", "flying", "gestalt", "ghost")) and not inst.prefab == "webbedcreature" then
         if not inst.components.umripples then
             inst:AddComponent("umripples")
@@ -188,9 +188,7 @@ local um_flood_speed_immune = { "frog", "molebat","lunarfrog" }
 
 for i, v in ipairs(um_flood_speed_immune) do
     env.AddPrefabPostInit(v, function(inst)
-        if not TheWorld.ismastersim then
-            return inst
-        end
+        if not TheWorld.ismastersim then return inst end
         inst.components.umripples.speed_immune = true
     end)
 end
