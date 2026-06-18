@@ -32,8 +32,8 @@ local function onvertoffset(self, offset)
     self.inst.replica.umripples:SetVerticalOffset(offset)
 end
 
-local function onvertoffset(self, offset)
-    self.inst.replica.umripples:SetVerticalOffset(offset)
+local function onbobpercent(self, bobpercent)
+    self.inst.replica.umripples.onbobpercent:set(bobpercent)
 end
 
 local function onshouldparenteffect(self, parenteffect)
