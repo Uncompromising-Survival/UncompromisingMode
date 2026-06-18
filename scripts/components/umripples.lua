@@ -35,7 +35,7 @@ local function onvertoffset(self, offset)
 end
 
 local function onbobpercent(self, bobpercent)
-    self.inst.replica.umripples.onbobpercent:set(bobpercent)
+    self.inst.replica.umripples.bob_percent:set(bobpercent)
 end
 
 local function onshouldparenteffect(self, parenteffect)

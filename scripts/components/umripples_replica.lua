@@ -21,7 +21,7 @@ local Umripples = Class(function(self, inst)
 
     self.xscale = net_string(inst.GUID, "umripples.xscale")
     self.yscale = net_string(inst.GUID, "umripples.yscale")
-    self.zscale = net_string(inst.GUID, "umripples.xscale")
+    self.zscale = net_string(inst.GUID, "umripples.zscale")
     self.vert_offset = net_string(inst.GUID, "umripples.vert_offset")
 	self.bob_percent = net_string(inst.GUID, "umripples.bob_percent")
     self.should_parent_effect = net_bool(inst.GUID, "umripples.should_parent_effect")
