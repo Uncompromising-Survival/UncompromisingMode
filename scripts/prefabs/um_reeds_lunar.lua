@@ -68,7 +68,6 @@ local function on_burnt(inst)
     inst:Remove()
 end
 
-
 local function fn()
     local inst = CreateEntity()
 
