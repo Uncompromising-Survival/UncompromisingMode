@@ -17,6 +17,7 @@ local function UpdateRippleFXTransform(ripples)
 end
 
 local function onxscale(self, scale)
+    if self.inst:HasTag("player") then print(scale) end
     self.inst.replica.umripples:SetXScale(scale)
 end
 
@@ -54,6 +55,10 @@ local function onresizetarget(self, data)
     self.inst.replica.umripples:ResizeTarget(data)
 end
 
+local function OnMountedDismounted(inst, data)
+    inst.components.umripples:ShouldChangeToRiding(inst.components.rider:IsRiding())
+end
+
 local Umripples = Class(function(self, inst)
     self.inst = inst
 
@@ -65,19 +70,16 @@ local Umripples = Class(function(self, inst)
         self.inst:ListenForEvent("ondropped", function() self:OnLandedServer() end)
         self.inst:ListenForEvent("onremove", function() self:OnNoLongerLandedServer() end)
         if self.inst:HasTag("player") then
-            self.inst:ListenForEvent("mounted", function()
-                if self.inst.replica.rider then
-                    self:ShouldChangeToRiding(self.inst.replica.rider:IsRiding())
-                end
-            end)
+            self.inst:ListenForEvent("mounted", OnMountedDismounted)
+            self.inst:ListenForEvent("dismounted", OnMountedDismounted)
         end
 
         -- On server load, check to see if I should be showing effect
-        --[[self.inst:DoTaskInTime(0,function(inst)
+        self.inst:DoTaskInTime(0,function(inst)
             if self:ShouldShowEffect() then
                 self:OnLandedServer()
             end
-        end)]]
+        end)
     end
     
     self.size = "small"
@@ -232,7 +234,6 @@ function Umripples:SwitchToFloatAnim()
         end
     end
 end
-
 
 function Umripples:OnLandedServer(forced)
     if not self.showing_effect and (self:ShouldShowEffect() or forced) then

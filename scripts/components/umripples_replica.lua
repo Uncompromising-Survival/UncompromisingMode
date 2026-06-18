@@ -1,17 +1,20 @@
-local function UpdateRippleFXTransform(ripples)
+local function UpdateRippleFXTransform(inst)
+    local ripples = inst.replica.umripples
     local front_fx, back_fx = ripples.front_fx, ripples.back_fx
-    if front_fx ~= nil then
-        front_fx.Transform:SetScale(ripples.xscale, ripples.yscale, ripples.zscale)
+    local xscale, yscale, zscale = ripples.xscale and ripples.xscale:value(), ripples.yscale and ripples.yscale:value(), ripples.zscale and ripples.zscale:value()
+    if front_fx then
+        front_fx.Transform:SetScale(xscale, yscale, zscale)
     end
-    if back_fx ~= nil then
-        back_fx.Transform:SetScale(ripples.xscale, ripples.yscale, ripples.zscale)
+    if back_fx then
+        back_fx.Transform:SetScale(xscale, yscale, zscale)
     end
-    if ripples.vert_offset ~= nil then
-        if front_fx ~= nil then
-            front_fx.Transform:SetPosition(0, ripples.vert_offset, 0)
+    local vert_offset = ripples.vert_offset and ripples.vert_offset:value()
+    if vert_offset then
+        if front_fx then
+            front_fx.Transform:SetPosition(0, vert_offset, 0)
         end
-        if back_fx ~= nil then
-            back_fx.Transform:SetPosition(0, ripples.vert_offset, 0)
+        if back_fx then
+            back_fx.Transform:SetPosition(0, vert_offset, 0)
         end
     end
 end
@@ -28,6 +31,7 @@ local Umripples = Class(function(self, inst)
     self.should_parent_effect = net_bool(inst.GUID, "umripples.should_parent_effect")
     self._is_landed = net_bool(inst.GUID, "umripples._is_landed", "landeddirty")
     --self._resize_target = net_ushortarray(inst.GUID, "umripples._resize_target", "resize_ripple_dirty")
+    self.update_ripples = net_event(inst.GUID, "umripples.update_ripples")
 
     self.ismastersim = TheNet:GetIsMasterSimulation()
 
@@ -39,6 +43,7 @@ local Umripples = Class(function(self, inst)
                 self:OnNoLongerLandedClient()
             end
         end)
+        self.inst:ListenForEvent("umripples.update_ripples", UpdateRippleFXTransform)
         --[[if self.inst:HasTag("player") then
             self.inst:ListenForEvent("isridingdirty", function()
                 if self.inst.replica.rider then
@@ -74,7 +79,8 @@ function Umripples:ShouldChangeToRiding(riding)
         self.zscale = 0.75
         self.yscale = 1
     end
-    UpdateRippleFXTransform(self)
+    self.update_ripples:push()
+    --UpdateRippleFXTransform(self)
 end
 
 function Umripples:ShouldChangeSize()
@@ -86,7 +92,8 @@ function Umripples:ShouldChangeSize()
     if self.vert_offset and resize[4] then
         self.vert_offset:set(resize[4])
     end
-    UpdateRippleFXTransform(self)
+    self.update_ripples:push()
+    --UpdateRippleFXTransform(self)
 end
 
 function Umripples:SetIsObstacle(bool)
@@ -100,22 +107,26 @@ end
 
 function Umripples:SetVerticalOffset(offset)
     self.vert_offset:set(offset)
-    UpdateRippleFXTransform(self)
+    self.update_ripples:push()
+    --UpdateRippleFXTransform(self)
 end
 
 function Umripples:SetXScale(scale)
     self.xscale:set(scale)
-    UpdateRippleFXTransform(self)
+    self.update_ripples:push()
+    --UpdateRippleFXTransform(self)
 end
 
 function Umripples:SetYScale(scale)
     self.yscale:set(scale)
-    UpdateRippleFXTransform(self)
+    self.update_ripples:push()
+    --UpdateRippleFXTransform(self)
 end
 
 function Umripples:SetZScale(scale)
     self.zscale:set(scale)
-    UpdateRippleFXTransform(self)
+    self.update_ripples:push()
+    --UpdateRippleFXTransform(self)
 end
 
 function Umripples:AttachEffect(effect)
