@@ -23,7 +23,8 @@ local Umripples = Class(function(self, inst)
     self.yscale = net_string(inst.GUID, "umripples.yscale")
     self.zscale = net_string(inst.GUID, "umripples.zscale")
     self.vert_offset = net_string(inst.GUID, "umripples.vert_offset")
-	self.bob_percent = net_string(inst.GUID, "umripples.bob_percent")
+    self.bob_percent = net_string(inst.GUID, "umripples.bob_percent")
+    self.size = net_string(inst.GUID, "umripples.size")
     self.should_parent_effect = net_bool(inst.GUID, "umripples.should_parent_effect")
     self._is_landed = net_bool(inst.GUID, "umripples._is_landed", "landeddirty")
     --self._resize_target = net_ushortarray(inst.GUID, "umripples._resize_target", "resize_ripple_dirty")
@@ -49,8 +50,7 @@ local Umripples = Class(function(self, inst)
             self:ShouldChangeSize()
         end)]]
     end
-    
-    self.size = "small"
+
     self.showing_effect = false
 end)
 
