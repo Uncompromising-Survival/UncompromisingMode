@@ -38,8 +38,8 @@ local function onbobpercent(self, bobpercent)
     self.inst.replica.umripples.bob_percent:set(bobpercent)
 end
 
-local function onsize(self, size)
-    self.inst.replica.umripples.size:set(size)
+local function onsize(self, sizetype)
+    self.inst.replica.umripples.size:set(sizetype)
 end
 
 local function onshouldparenteffect(self, parenteffect)
