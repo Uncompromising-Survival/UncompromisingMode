@@ -117,6 +117,7 @@ local function IsOcean(x, y, z)
 end
 
 local function FindStalkingGrounds(inst, alreadyused)
+    if not inst:IsValid() then return end
     local x, y, z = inst.Transform:GetWorldPosition()
     local seastacks = TheSim:FindEntities(x, y, z, 25, { "seastack" })
     local choice
