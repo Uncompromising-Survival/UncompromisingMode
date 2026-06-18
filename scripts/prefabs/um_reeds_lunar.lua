@@ -4,7 +4,6 @@ local assets =
     --Asset("MINIMAP_IMAGE", "driftwood_small1"),
 }
 
-
 SetSharedLootTable( 'um_reeds_lunar',
 {
     {'cutreeds',           1.0},
@@ -28,7 +27,6 @@ local function RemoveWorkable(inst)
     inst:RemoveComponent("workable")
     inst.AnimState:PushAnimation("idle_chopped",true)
 end
-
 
 local function on_chopped_down(inst, chopper)
     inst.SoundEmitter:PlaySound("dontstarve/forest/appear_wood")
@@ -118,7 +116,6 @@ local function fn()
             AddWorkable(inst)
         end
     end)
-
 
     inst:AddComponent("timer")
     inst:ListenForEvent("timerdone",Regrow)
