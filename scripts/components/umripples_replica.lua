@@ -8,7 +8,7 @@ local function UpdateRippleFXTransform(inst)
     if back_fx then
         back_fx.Transform:SetScale(xscale, yscale, zscale)
     end
-    local vert_offset = ripples.vert_offset and ripples.vert_offset:value()
+    local vert_offset = ripples.vert_offset and ripples.vert_offset:value() and tonumber(ripples.vert_offset:value())
     if vert_offset then
         if front_fx then
             front_fx.Transform:SetPosition(0, vert_offset, 0)
@@ -132,10 +132,10 @@ end
 function Umripples:AttachEffect(effect)
     if self.should_parent_effect and self.should_parent_effect:value() then
         effect.entity:SetParent(self.inst.entity)
-        effect.Transform:SetPosition(0, self.vert_offset and self.vert_offset:value() or 0, 0)
+        effect.Transform:SetPosition(0, self.vert_offset and self.vert_offset:value() and tonumber(self.vert_offset:value()) or 0, 0)
     else
         local my_x, my_y, my_z = self.inst.Transform:GetWorldPosition()
-        effect.Transform:SetPosition(my_x, my_y + (self.vert_offset and self.vert_offset:value() or 0), my_z)
+        effect.Transform:SetPosition(my_x, my_y + (self.vert_offset and self.vert_offset:value() and tonumber(self.vert_offset:value()) or 0), my_z)
     end
 
     effect.Transform:SetScale(self.xscale and self.xscale:value(), self.yscale and self.yscale:value(), self.zscale and self.zscale:value())
