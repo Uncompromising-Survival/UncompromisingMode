@@ -38,7 +38,7 @@ env.AddPrefabPostInitAny(function(inst)
         inst.um_ripple_blacklist = true
     end
 
-    if (inst:HasAnyTag("structure", "boulder", "plant") --[[or inst.components.inventoryitem]]) and not inst.um_ripple_blacklist then
+    if (inst:HasAnyTag("structure", "boulder", "plant") --[[or inst.components.inventoryitem]]) and not inst.components.floater and not inst.um_ripple_blacklist then
         if not inst.components.umripples then
             inst:AddComponent("umripples")
         end
