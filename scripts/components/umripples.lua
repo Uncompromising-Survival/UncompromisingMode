@@ -87,7 +87,7 @@ local Umripples = Class(function(self, inst)
     self.bob_percent = 0
     self.splash = true
     self.is_landed = false
-end
+end,
 nil,
 {
     xscale = onxscale,
