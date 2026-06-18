@@ -62,13 +62,11 @@ local function lobbedprojectilefn()
     inst.entity:AddPhysics()
     inst.entity:AddNetwork()
 
-
     --[[
     inst.AnimState:SetBank("spat_bomb")
     inst.AnimState:SetBuild("web_net_shot")
     inst.AnimState:PlayAnimation("spin_loop", true)
     ]]
-
 
     inst.entity:SetPristine()
 
@@ -221,9 +219,9 @@ local function lobbedminefn()
 
     inst:AddComponent("hauntable")
     inst.components.hauntable:SetOnHauntFn(OnExplode)
-	
-	inst:AddComponent("weapon")
-	inst.components.weapon:SetDamage(0)		
+
+    inst:AddComponent("weapon")
+    inst.components.weapon:SetDamage(0)        
 
     inst.deathtask = inst:DoTaskInTime(math.random(2,6), OnExplode)
 
@@ -290,7 +288,6 @@ local function common_fn(bank, build, anim, tag, isinventoryitem)
 
     inst:AddComponent("locomotor")
 
-
     inst:AddComponent("complexprojectile")
 
     return inst
@@ -356,7 +353,6 @@ local function thrownfn()
 
     inst:AddComponent("locomotor")
 
-
     inst:AddComponent("complexprojectile")
 
     inst.components.complexprojectile:SetHorizontalSpeed(20)
@@ -385,5 +381,5 @@ local function thrownfn()
 end
 
 return Prefab("um_tentacle_moon_projectile", lobbedprojectilefn,assets),
-Prefab("um_tentacle_moon_mine", lobbedminefn,assets),
-Prefab("um_tentaclespike_moon", thrownfn, assets)
+    Prefab("um_tentacle_moon_mine", lobbedminefn,assets),
+    Prefab("um_tentaclespike_moon", thrownfn, assets)
