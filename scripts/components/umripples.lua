@@ -115,13 +115,13 @@ function Umripples:ShouldChangeToRiding(riding)
     UpdateRippleFXTransform(self)
 end
 
-function Umripples:ShouldChangeSize()
-    local resize = self._resize_target:value()
+function Umripples:ResizeTarget(resize_target)
+    local resize = resize_target
     if not (resize[1] and resize[2] and resize[3]) then return end
     self.xscale = resize[1]/100
     self.yscale = resize[2]/100
     self.zscale = resize[3]/100
-    if resize[4] then
+    if self.vert_offset and resize[4] then
         self.vert_offset = resize[4]
     end
     UpdateRippleFXTransform(self)
