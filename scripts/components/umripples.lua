@@ -53,7 +53,7 @@ local Umripples = Class(function(self, inst)
 
         -- On server load, check to see if I should be showing effect
         self.inst:DoTaskInTime(0,function(inst)
-            if self:ShouldShowEffect() then
+            if not self.inst:IsInLimbo() and self:ShouldShowEffect() then
                 self:OnLandedServer()
             end
         end)
