@@ -85,7 +85,7 @@ local function fn()
     inst:AddComponent("perishable")
     inst.components.perishable:SetPerishTime(TUNING.PERISH_SUPERSLOW/2)
 
-    inst.type = 1
+    inst.type = "1"
 
     inst.AnimState:PlayAnimation(inst.type)
     inst.rotation = math.random(-180, 180)
