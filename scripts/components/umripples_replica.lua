@@ -1,7 +1,7 @@
 local function UpdateRippleFXTransform(inst)
     local ripples = inst.replica.umripples
     local front_fx, back_fx = ripples.front_fx, ripples.back_fx
-    local xscale, yscale, zscale = ripples.xscale and ripples.xscale:value(), ripples.yscale and ripples.yscale:value(), ripples.zscale and ripples.zscale:value()
+    local xscale, yscale, zscale = ripples.xscale and ripples.xscale:value() and tonumber(ripples.xscale:value()), ripples.yscale and ripples.yscale:value() and tonumber(ripples.yscale:value()), ripples.zscale and ripples.zscale:value() and tonumber(ripples.zscale:value())
     if front_fx then
         front_fx.Transform:SetScale(xscale, yscale, zscale)
     end
@@ -115,12 +115,12 @@ function Umripples:OnLandedClient()
         self.back_fx.AnimState:PlayAnimation("idle_back_" .. (self.size and self.size:value() or "small"), true)
     end
 
-    self.inst.AnimState:SetFloatParams(-0.05, 1.0, self.bob_percent and self.bob_percent:value() or 0)
+    self.inst.AnimState:SetFloatParams(-.05, 1.0, self.bob_percent and self.bob_percent:value() and tonumber(self.bob_percent:value()) or 0)
 end
 
 function Umripples:OnNoLongerLandedClient()
     self.showing_effect = false
-    self.inst.AnimState:SetFloatParams(0.0, 0.0, 0.0)
+    self.inst.AnimState:SetFloatParams(0, 0, 0)
 
     if self.front_fx ~= nil and self.front_fx:IsValid() then
         self.front_fx:Remove()
