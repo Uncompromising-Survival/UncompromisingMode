@@ -128,7 +128,7 @@ end)
 --AXE Mobs
 env.AddPrefabPostInitAny(function(inst)
     if not TheWorld.ismastersim then return end
-    if (inst:HasAnyTag("_health", "animal", "EPIC", "monster") and not inst:HasAnyTag("shadow", "flying", "gestalt", "ghost")) and not inst.prefab == "webbedcreature" then
+    if inst:HasAnyTag("_health", "animal", "epic", "monster") and not inst:HasAnyTag("shadow", "flying", "gestalt", "ghost") and not inst.prefab == "webbedcreature" then
         if not inst.components.umripples then
             inst:AddComponent("umripples")
         end
