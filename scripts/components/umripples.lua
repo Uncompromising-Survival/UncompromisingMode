@@ -17,7 +17,6 @@ local function UpdateRippleFXTransform(ripples)
 end
 
 local function onxscale(self, scale)
-    if self.inst:HasTag("player") then print(scale) end
     self.inst.replica.umripples:SetXScale(scale)
 end
 
@@ -179,10 +178,10 @@ end
 local function CheckForY0(inst)
     local x,y,z = inst.Transform:GetWorldPosition()
     if y < 0.6 and inst.components.umripples then
-        inst.Transform:SetPosition(x,0,z)
+        --[[inst.Transform:SetPosition(x, 0, z)
         if inst.Physics then
             inst.Physics:Stop()
-        end
+        end]]
         inst.components.umripples:OnLandedServer()
         if inst.falling then
             inst.falling:Cancel()
