@@ -440,17 +440,14 @@ local function CheckLight(inst)
                 inst.components.playervision:ForceNightVision(false)
                 inst:RemoveTag("WathomInDark")
 
-                if inst.updatewathomvisiontask ~= nil then
-                    inst.updatewathomvisiontask:Cancel()
-                end
+                inst.updatewathomvisiontask = nil
             end)
         end
     else
         if inst.updatewathomvisiontask then
             inst.updatewathomvisiontask:Cancel()
+            inst.updatewathomvisiontask = nil
         end
-
-        inst.updatewathomvisiontask = nil
         --print(NIGHTVISION_CCS, TUNING.DSTU.WATHOM_NIGHTVISON_CC, NIGHTVISION_CCS[TUNING.DSTU.WATHOM_NIGHTVISON_CC])
         inst.components.playervision:SetCustomCCTable(NIGHTVISION_CCS[TUNING.DSTU.WATHOM_NIGHTVISON_CC])
         inst.components.playervision:ForceNightVision(true)

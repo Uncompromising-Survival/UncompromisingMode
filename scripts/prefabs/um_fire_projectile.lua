@@ -19,7 +19,7 @@ local function ChillSurroundings(inst)
             v.components.burnable:Extinguish(true)
         end
         if v.components.health and v:IsValid() then
-            v.components.health:DoDelta(-damage, false, inst.damager)
+            v.components.health:DoDelta(-damage, false, inst.damager ~= nil and inst.damager.prefab or nil, nil, inst.damager)
         end
         if v.components.combat and inst.damager then
             v.components.combat:SuggestTarget(inst.damager)

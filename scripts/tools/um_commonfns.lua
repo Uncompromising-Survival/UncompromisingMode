@@ -39,11 +39,19 @@ UMCommonFns.ShouldKnockback = function(inst)
         and (not bodyslot or not bodyslot:HasAnyTag(UMCommonFns.KNOCKBACK_ARMOR_CANT_TAGS))
 end
 
-UMCommonFns.IsAlly = function(inst, guy, tags) -- Used for UMIsAlly on certain creatures.
+UMCommonFns.IsAlly_GetLeader = function(inst)
     local follower = inst.replica.follower
-    local guy_combat, guy_follower = guy.replica.combat, guy.replica.follower
-    if not (tags and guy_combat) or follower and follower:GetLeader() or guy_follower and guy_follower:GetLeader() then return false end
-    return inst.replica.combat:GetTarget() ~= guy and guy.replica.combat:GetTarget() ~= inst and guy:HasAnyTag(tags)
+    return follower and follower:GetLeader()
+end
+
+UMCommonFns.IsAlly = function(inst, guy, tags) -- Used for UMIsAlly on certain creatures.
+    local guy_combat = guy.replica.combat
+    if not (tags and guy_combat) or not (inst.replica.combat:GetTarget() ~= guy and guy_combat and guy_combat:GetTarget() ~= inst) then return false end
+    local myleader, guyleader = UMCommonFns.IsAlly_GetLeader(inst), UMCommonFns.IsAlly_GetLeader(guy)
+    local myleader_leader, guyleader_leader = myleader and UMCommonFns.IsAlly_GetLeader(myleader), guyleader and UMCommonFns.IsAlly_GetLeader(guyleader)
+    if myleader and myleader.isplayer or guyleader and guyleader.isplayer then return false end
+    if myleader_leader and myleader_leader.isplayer or guyleader_leader and guyleader_leader.isplayer then return false end
+    return guy:HasAnyTag(tags)
 end
 
 UMCommonFns.IsNotFriendly = function(attacker, target) -- Is the target an ally or my leader's ally?
@@ -73,29 +81,7 @@ UMCommonFns.VetcurseUnequip = function(inst, owner, slot)
     end
 end
 
---[[UMCommonFns.GetLMBActionIsAction = function(leftactions, action)
-    if leftactions then
-        for k, v in pairs(leftactions) do
-            if v.action == action then
-                return true
-            end
-        end
-    end
-end]]
-
 local ignoredactions = {ACTIONS.LOOKAT, ACTIONS.WALKTO}
---[[UMCommonFns.CanOverrideAction = function(rightactions, leftactions)
-    local count = 0
-    if rightactions then
-        for k, v in pairs(rightactions) do
-            if not table.contains(ignoredactions, v.action) and not UMCommonFns.GetLMBActionIsAction(leftactions, v.action) then
-                count = count + 1
-            end
-        end
-    end
-    return count >= 1
-end]]
-
 UMCommonFns.HasRightClickAction = function(inst, doer, pos, target)
     if inst.um_checkingactions then return true end
     inst.um_checkingactions = true

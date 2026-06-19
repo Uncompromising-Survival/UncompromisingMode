@@ -93,6 +93,7 @@ end
 
 function Umripples:ShouldChangeSize()
     local resize = self._resize_target:value()
+    if not (resize[1] and resize[2] and resize[3]) then return end
     self.xscale = resize[1]/100
     self.yscale = resize[2]/100
     self.zscale = resize[3]/100
@@ -165,7 +166,9 @@ function Umripples:ShouldShowEffect()
     local x,y,z = self.inst.Transform:GetWorldPosition()
     if TheWorld.Map:GetTileAtPoint(x,0,z) == WORLD_TILES.UM_FLOODWATER_GROTTO and not (self.inst.sg and self.inst.sg:HasStateTag("flying")) then
         if y > 0 and self.inst.components.inventoryitem then
-            self.inst.umripples_falling = self.inst:DoPeriodicTask(FRAMES, CheckForY0)
+            if not self.inst.umripples_falling then
+                self.inst.umripples_falling = self.inst:DoPeriodicTask(FRAMES, CheckForY0)
+            end
             return false
         else
             return true
@@ -248,7 +251,9 @@ function Umripples:OnLandedClient()
         self.back_fx.AnimState:PlayAnimation("idle_back_" .. self.size, true)
     end
 
-    self.inst.AnimState:SetFloatParams(-0.1, 1.0, self.bob_percent)
+    if self.inst.AnimState then
+        self.inst.AnimState:SetFloatParams(-0.1, 1.0, self.bob_percent)
+    end
 end
 
 function Umripples:SwitchToDefaultAnim(force_switch)
@@ -277,8 +282,10 @@ function Umripples:OnNoLongerLandedServer()
 end
 
 function Umripples:OnNoLongerLandedClient()
+    if self.showing_effect and self.inst.AnimState then
+        self.inst.AnimState:SetFloatParams(0.0, 0.0, 0.0)
+    end
     self.showing_effect = false
-    self.inst.AnimState:SetFloatParams(0.0, 0.0, 0.0)
 
     if self.front_fx ~= nil and self.front_fx:IsValid() then
         self.front_fx:Remove()

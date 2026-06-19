@@ -69,7 +69,7 @@ AddRecipe2("sporepack", { Ingredient("shroom_skin", 1), Ingredient("rope", 2), I
 ChangeSortKey("sporepack", "icepack", "CLOTHING", true)
 ChangeSortKey("sporepack", "icepack", "CONTAINERS", true)
 
-AddRecipe2("um_backpack_amuletuse", { Ingredient("um_tentaclespot_moon", 3), Ingredient("um_gemologypurplegem1", 1), Ingredient("goldnugget", 6) }, TECH.CELESTIAL_ONE, { nounlock = true }, { "CLOTHING", "CONTAINERS" })
+AddRecipe2("um_backpack_amuletuse", { Ingredient("um_tentaclespot_moon", 3), Ingredient("um_gemologypurplegem2", 1), Ingredient("goldnugget", 6) }, TECH.CELESTIAL_ONE, { nounlock = true }, { "CLOTHING", "CONTAINERS" })
 ChangeSortKey("um_backpack_amuletuse", "bathbomb", "CRAFTING_STATION", true)
 ChangeSortKey("um_backpack_amuletuse", "backpack", "CLOTHING", true)
 ChangeSortKey("um_backpack_amuletuse", "backpack", "CONTAINERS", true)

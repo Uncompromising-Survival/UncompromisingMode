@@ -4,6 +4,18 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WALTER.ACTIONFAIL
 
 --	[ 		Walter Descriptions		]   --
 
+ANNOUNCE.UM_WALTER_PENALTY_HEAL = { --walter_only
+    "I... I feel calmer now.",
+    "Hey, cheer up girl! I'm fine! See?",
+    "We'll get through this together, Woby! No curse can stop us!",
+    "Phew, that bruise finally stopped hurting!",
+    "A Pinetree Pioneer can survive the harshest of situations! Even evil curses!",
+    "I still think the wilderness is quite relaxing, just gotta take in the environment!",
+    "Yeah, yeah, I'll be more careful. Don't need to give me that look, Woby!",
+    "Yeowch... hat one hurt for longer than usual...",
+    "C'mon, Walter... breathe in, breathe out...",
+}
+
 ANNOUNCE.DREADEYE_SPOOKED = "Hey! Don't sneak up one me like that!"
 ANNOUNCE.ANNOUNCE_HARDCORE_RES = "You need my help! And your body..."
 ANNOUNCE.ANNOUNCE_WINONAGEN =

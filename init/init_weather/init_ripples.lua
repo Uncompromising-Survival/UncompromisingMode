@@ -17,6 +17,15 @@ local function RobustFloodCheck(inst) -- For players, check to see if they're on
     end
 end
 
+env.AddComponentPostInit("floater", function(self)
+    local _ShouldShowEffect = self.ShouldShowEffect
+    function self:ShouldShowEffect(...)
+        local pos_x, pos_y, pos_z = self.inst.Transform:GetWorldPosition()
+        if TheWorld.Map:GetTileAtPoint(pos_x, 0, pos_z) == WORLD_TILES.UM_FLOODWATER_GROTTO and not (self.inst.sg and self.inst.sg:HasStateTag("flying")) then return true end
+        return _ShouldShowEffect(self, ...)
+    end
+end)
+
 for _, prefab in ipairs(TUNING.DSTU.RIPPLE_BLACKLIST_PREFABS) do
     env.AddPrefabPostInit(prefab, function(inst)
         inst.um_ripple_blacklist = true
@@ -29,7 +38,7 @@ env.AddPrefabPostInitAny(function(inst)
         inst.um_ripple_blacklist = true
     end
 
-    if (inst:HasAnyTag("structure", "boulder", "plant") or inst.components.inventoryitem) and not inst.um_ripple_blacklist then
+    if (inst:HasAnyTag("structure", "boulder", "plant") --[[or inst.components.inventoryitem]]) and not inst.components.floater and not inst.um_ripple_blacklist then
         if not inst.components.umripples then
             inst:AddComponent("umripples")
         end
@@ -49,17 +58,17 @@ env.AddPrefabPostInitAny(function(inst)
             umripples.bob_percent = floater.bob_percent
             umripples.splash = floater.splash
         end
-        if inst.components.inventoryitem and not inst.components.floatable then
+        --[[if inst.components.inventoryitem and not inst.components.floater then
             local umripples = inst.components.umripples
             umripples.vert_offset = 0.1
-        end
+        end]]
     end
 end)
 
-env.AddClassPostConstruct("components/inventoryitem_replica", function(self) --AXE Add the ripples to the client side of items
+--[[env.AddClassPostConstruct("components/inventoryitem_replica", function(self) --AXE Add the ripples to the client side of items
     if not self.inst.components.umripples and not self.inst:HasAnyTag(TUNING.DSTU.RIPPLE_BLACKLIST_TAGS) then
         self.inst:AddComponent("umripples")
-        if not self.inst.components.floatable then
+        if not self.inst.components.floater then
             local umripples = self.inst.components.umripples
             umripples.vert_offset = 0.1
         end
@@ -69,11 +78,11 @@ end)
 env.AddClassPostConstruct("components/health_replica", function(self) --AXE Add ripples to the client side of any creature, including modded followers whose mob tags are server-only
     if not self.inst.components.umripples and not self.inst:HasAnyTag(JoinArrays(TUNING.DSTU.RIPPLE_BLACKLIST_TAGS, {"shadow", "flying", "gestalt", "ghost", "playerghost"})) then
         self.inst:AddComponent("umripples")
-        if not self.inst.components.floatable then
+        if not self.inst.components.floater then
             self.inst.components.umripples.vert_offset = 0.2
         end
     end
-end)
+end)]]
 
 local function AddRipples(prefab, xscale, yscale, zscale, vert_offset) --AXE These calls need to be both on client and server
     env.AddPrefabPostInit(prefab, function(inst)
@@ -289,7 +298,9 @@ env.AddStategraphPostInit("bird", function(inst)
     local state = inst.states["flyaway"]
     local _onenter = state.onenter
     state.onenter = function(inst, ...)
-        inst.components.umripples:OnNoLongerLandedServer()
+        if inst.components.umripples then
+            inst.components.umripples:OnNoLongerLandedServer()
+        end
         _onenter(inst, ...)
     end
 end)

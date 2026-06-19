@@ -13,8 +13,9 @@ env.AddClassPostConstruct("components/combat_replica", function(self)
         --elseif guy.prefab == "ancient_trepidation" and not guy:HasTag("hostile") then
         --    return true
         end
-        if self.inst.UMIsAlly and self.inst:UMIsAlly(guy) then return true end
-        return _IsAlly(self, guy, ...)
+        local ret = _IsAlly(self, guy, ...)
+        if not ret and self.inst.UMIsAlly and self.inst:UMIsAlly(guy) then return true end
+        return ret
     end
 
     local _CanTarget = self.CanTarget

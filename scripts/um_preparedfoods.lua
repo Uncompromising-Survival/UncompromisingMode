@@ -693,7 +693,7 @@ local um_preparedfoods =
         foodtype = FOODTYPE.MEAT,
         perishtime = 4 * TUNING.PERISH_TWO_DAY,
         floater = { "med", .05, .65 },
-        card_def = { ingredients = { { "um_rimeweed_itemvine", 3 }, { "um_ice_tail", 1 }, { "bird_egg", 1 } } },
+        card_def = { ingredients = { { "um_rimeweed_itemvine", 2 }, { "um_ice_tail", 1 }, { "bird_egg", 1 } } },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_RIMEWEED_SPAGETT,
         oneatenfn = function(inst, eater)
             if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
