@@ -66,7 +66,7 @@ local Umripples = Class(function(self, inst)
         -- Calls from elsewhere
         self.inst:ListenForEvent("on_landed", function() self:OnLandedServer() end)
         self.inst:ListenForEvent("on_no_longer_landed", function() self:OnNoLongerLandedServer() end)
-        self.inst:ListenForEvent("ondropped", function() self:OnLandedServer() end)
+        --self.inst:ListenForEvent("ondropped", function() self:OnLandedServer() end)
         self.inst:ListenForEvent("onremove", function() self:OnNoLongerLandedServer() end)
         if self.inst:HasTag("player") then
             self.inst:ListenForEvent("mounted", OnMountedDismounted)
@@ -175,7 +175,7 @@ function Umripples:SetSwapData(swap_data)
     self.swap_data = swap_data
 end
 
-local function CheckForY0(inst)
+--[[local function CheckForY0(inst)
     local x,y,z = inst.Transform:GetWorldPosition()
     if y < 0.6 and inst.components.umripples then
         inst.Transform:SetPosition(x, 0, z)
@@ -192,19 +192,19 @@ local function CheckForY0(inst)
             inst.umripples_falling = nil
         end
     end
-end
+end]]
 
 function Umripples:ShouldShowEffect()
     local x,y,z = self.inst.Transform:GetWorldPosition()
     if TheWorld.Map:GetTileAtPoint(x,0,z) == WORLD_TILES.UM_FLOODWATER_GROTTO and not (self.inst.sg and self.inst.sg:HasStateTag("flying")) then
-        if y > 0 and self.inst.components.inventoryitem then
+        --[[if y > 0 and self.inst.components.inventoryitem then
             if not self.inst.umripples_falling then
                 self.inst.umripples_falling = self.inst:DoPeriodicTask(FRAMES, CheckForY0)
             end
             return false
-        else
+        else]]
             return true
-        end
+        --end
     end
 end
 
