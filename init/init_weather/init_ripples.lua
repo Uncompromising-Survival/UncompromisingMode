@@ -17,6 +17,8 @@ local function RobustFloodCheck(inst) -- For players, check to see if they're on
     end
 end
 
+env.AddReplicableComponent("umripples")
+
 env.AddComponentPostInit("floater", function(self)
     local _ShouldShowEffect = self.ShouldShowEffect
     function self:ShouldShowEffect(...)
@@ -34,34 +36,16 @@ end
 
 -- AXE Add ripples to plants, structures, and items
 env.AddPrefabPostInitAny(function(inst)
+    if not TheWorld.ismastersim then return end
     if inst:HasAnyTag(TUNING.DSTU.RIPPLE_BLACKLIST_TAGS) then
         inst.um_ripple_blacklist = true
     end
 
-    if (inst:HasAnyTag("structure", "boulder", "plant") --[[or inst.components.inventoryitem]]) and not inst.components.floater and not inst.um_ripple_blacklist then
-        if not inst.components.umripples then
-            inst:AddComponent("umripples")
-        end
-        if inst.components.floater then
-            local floater = inst.components.floater
-            local umripples = inst.components.umripples
-            umripples.size = floater.size
-            umripples.vert_offset = floater.vert_offset
-            umripples.xscale = floater.xscale
-            umripples.yscale = floater.yscale
-            umripples.zscale = floater.zscale
-            umripples.should_parent_effect = floater.should_parent_effect
-            umripples.do_bank_swap = floater.do_bank_swap
-            umripples.float_index = floater.float_index
-            umripples.swap_data = floater.swap_data
-            umripples.showing_effect = floater.showing_effect
-            umripples.bob_percent = floater.bob_percent
-            umripples.splash = floater.splash
-        end
-        --[[if inst.components.inventoryitem and not inst.components.floater then
-            local umripples = inst.components.umripples
+    if (inst:HasAnyTag("structure", "boulder", "plant") or inst.components.inventoryitem) and not inst.components.floater and not inst.um_ripple_blacklist then
+        local umripples = inst.components.umripples or inst:AddComponent("umripples")
+        if inst.components.inventoryitem and not inst.components.floater then
             umripples.vert_offset = 0.1
-        end]]
+        end
     end
 end)
 
@@ -86,6 +70,7 @@ end)]]
 
 local function AddRipples(prefab, xscale, yscale, zscale, vert_offset) --AXE These calls need to be both on client and server
     env.AddPrefabPostInit(prefab, function(inst)
+        if not TheWorld.ismastersim then return end
         if not inst.components.umripples then
             inst:AddComponent("umripples")
         end
@@ -131,6 +116,7 @@ end
 --
 
 env.AddPlayerPostInit(function(inst)
+    if not TheWorld.ismastersim then return end
     if not inst.components.umripples then
         inst:AddComponent("umripples")
     end
@@ -141,7 +127,8 @@ end)
 
 --AXE Mobs
 env.AddPrefabPostInitAny(function(inst)
-    if (inst:HasAnyTag("_health", "animal", "EPIC", "monster") and not inst:HasAnyTag("shadow", "flying", "gestalt", "ghost")) and not inst.prefab == "webbedcreature" then
+    if not TheWorld.ismastersim then return end
+    if inst:HasAnyTag("_health", "animal", "epic", "monster") and not inst:HasAnyTag("shadow", "flying", "gestalt", "ghost") and not inst.prefab == "webbedcreature" then
         if not inst.components.umripples then
             inst:AddComponent("umripples")
         end
@@ -178,7 +165,7 @@ env.AddStategraphPostInit("wilson", function(inst)
         state.onenter = function(inst, ...)
             inst:DoTaskInTime(state_time_ent[iname], function(inst)
                 if RobustFloodCheck(inst) and inst.sg.currentstate.name == statenames[iname] then
-                    inst.components.umripples._resize_target:set({ 250, 250, 250 })
+                    inst.components.umripples:ResizeTarget({ 250, 250, 250 })
                 end
             end)
             _onenter(inst, ...)
@@ -188,7 +175,7 @@ env.AddStategraphPostInit("wilson", function(inst)
         state.onexit = function(inst, ...)
             inst:DoTaskInTime(state_time_ext[iname], function(inst)
                 if RobustFloodCheck(inst) then
-                    inst.components.umripples._resize_target:set({ 75, 100, 75 })
+                    inst.components.umripples:ResizeTarget({ 75, 100, 75 })
                 end
             end)
             _onexit(inst, ...)
@@ -201,9 +188,7 @@ local um_flood_speed_immune = { "frog", "molebat","lunarfrog" }
 
 for i, v in ipairs(um_flood_speed_immune) do
     env.AddPrefabPostInit(v, function(inst)
-        if not TheWorld.ismastersim then
-            return inst
-        end
+        if not TheWorld.ismastersim then return inst end
         inst.components.umripples.speed_immune = true
     end)
 end
