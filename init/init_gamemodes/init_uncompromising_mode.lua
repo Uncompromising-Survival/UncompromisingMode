@@ -103,7 +103,6 @@ modimport("init/init_scrapbook/gemology")
 modimport("init/init_creatures/init_treebuffs")
 modimport("init/init_creatures/init_harder_monsters")
 --end
-modimport("init/init_creatures/init_beardlords")
 
 if GetModConfigData("livingtree_legacy") then
     modimport("init/init_creatures/init_treebuffs")
