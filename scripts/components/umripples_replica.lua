@@ -30,7 +30,6 @@ local Umripples = Class(function(self, inst)
     self.size = net_string(inst.GUID, "umripples.size")
     self.should_parent_effect = net_bool(inst.GUID, "umripples.should_parent_effect")
     self._is_landed = net_bool(inst.GUID, "umripples._is_landed", "landeddirty")
-    --self._resize_target = net_ushortarray(inst.GUID, "umripples._resize_target", "resize_ripple_dirty")
     self.update_ripples = net_event(inst.GUID, "umripples.update_ripples")
 
     self.ismastersim = TheNet:GetIsMasterSimulation()
@@ -44,16 +43,6 @@ local Umripples = Class(function(self, inst)
             end
         end)
         self.inst:ListenForEvent("umripples.update_ripples", UpdateRippleFXTransform)
-        --[[if self.inst:HasTag("player") then
-            self.inst:ListenForEvent("isridingdirty", function()
-                if self.inst.replica.rider then
-                    self:ShouldChangeToRiding(self.inst.replica.rider:IsRiding())
-                end
-            end)
-        end
-        self.inst:ListenForEvent("resize_ripple_dirty", function()
-            self:ShouldChangeSize()
-        end)]]
     end
 
     self.showing_effect = false
@@ -61,39 +50,6 @@ end)
 
 function Umripples:IsLanded(islanded)
     self._is_landed:set(islanded)
-end
-
-function Umripples:ResizeTarget(data)
-    self._resize_target:set(data)
-end
-
-function Umripples:ShouldChangeToRiding(riding)
-    if riding == true then --AXE Player gets beefalo FX
-        self.xscale = 3
-        self.yscale = 3
-        self.zscale = 3
-        self.vert_offset = 0.5
-    else -- Player gets player FX
-        self.vert_offset = 0.2
-        self.xscale = 0.75
-        self.zscale = 0.75
-        self.yscale = 1
-    end
-    self.update_ripples:push()
-    --UpdateRippleFXTransform(self)
-end
-
-function Umripples:ShouldChangeSize()
-    local resize = self._resize_target:value()
-    if not (resize[1] and resize[2] and resize[3]) then return end
-    self.xscale = resize[1]/100
-    self.yscale = resize[2]/100
-    self.zscale = resize[3]/100
-    if self.vert_offset and resize[4] then
-        self.vert_offset:set(resize[4])
-    end
-    self.update_ripples:push()
-    --UpdateRippleFXTransform(self)
 end
 
 function Umripples:SetIsObstacle(bool)

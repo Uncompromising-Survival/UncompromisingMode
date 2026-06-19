@@ -1,21 +1,3 @@
-local function UpdateRippleFXTransform(ripples)
-    local front_fx, back_fx = ripples.front_fx, ripples.back_fx
-    if front_fx ~= nil then
-        front_fx.Transform:SetScale(ripples.xscale, ripples.yscale, ripples.zscale)
-    end
-    if back_fx ~= nil then
-        back_fx.Transform:SetScale(ripples.xscale, ripples.yscale, ripples.zscale)
-    end
-    if ripples.vert_offset ~= nil then
-        if front_fx ~= nil then
-            front_fx.Transform:SetPosition(0, ripples.vert_offset, 0)
-        end
-        if back_fx ~= nil then
-            back_fx.Transform:SetPosition(0, ripples.vert_offset, 0)
-        end
-    end
-end
-
 local function onxscale(self, scale)
     self.inst.replica.umripples:SetXScale(scale)
 end
@@ -48,10 +30,6 @@ end
 
 local function onlanded(self, landed)
     self.inst.replica.umripples:IsLanded(landed)
-end
-
-local function onresizetarget(self, data)
-    self.inst.replica.umripples:ResizeTarget(data)
 end
 
 local function OnMountedDismounted(inst, data)
@@ -105,7 +83,6 @@ nil,
     size = onsize,
     should_parent_effect = onshouldparenteffect,
     is_landed = onlanded,
-    resize_target = onresizetarget,
 })
 
 function Umripples:ShouldChangeToRiding(riding)
@@ -120,7 +97,6 @@ function Umripples:ShouldChangeToRiding(riding)
         self.zscale = 0.75
         self.yscale = 1
     end
-    --UpdateRippleFXTransform(self)
 end
 
 function Umripples:ResizeTarget(resize_target)
@@ -132,7 +108,6 @@ function Umripples:ResizeTarget(resize_target)
     if self.vert_offset and resize[4] then
         self.vert_offset = resize[4]
     end
-    --UpdateRippleFXTransform(self)
 end
 
 function Umripples:SetIsObstacle(bool)
@@ -160,8 +135,6 @@ function Umripples:SetScale(scale)
             self.yscale = scale
             self.zscale = scale
         end
-
-        UpdateRippleFXTransform(self)
     end
 end
 
@@ -239,12 +212,21 @@ function Umripples:OnLandedServer(forced)
         -- If something lands in a place where the water effect should be shown, and it has an inventory component,
         -- update the inventory component to represent the associated wetness.
         -- Don't apply the wetness to something held by someone, though.
-        if self.inst.components.inventoryitem ~= nil and not self.inst.components.inventoryitem:IsHeld() and not self.inst:HasTag("likewateroffducksback") then
-            self.inst.components.inventoryitem:MakeMoistureAtLeast(TUNING.OCEAN_WETNESS)
+        local hotsplash
+        if self.inst.components.inventoryitem and not self.inst.components.inventoryitem:IsHeld() then
+            if not self.inst:HasTag("likewateroffducksback") then
+                self.inst.components.inventoryitem:MakeMoistureAtLeast(TUNING.OCEAN_WETNESS)
+            end
+            local oldtemperature = self.inst.components.inventoryitem:GetTemperaturePercent()
+            self.inst.components.inventoryitem:SetTemperaturePercentAtMost(TUNING.OCEAN_TEMPERATURE_PENALTY_PERCENT)
+            local newtemperature = self.inst.components.inventoryitem:GetTemperaturePercent()
+            if oldtemperature and newtemperature and oldtemperature - newtemperature > TUNING.FLOATER_HOT_SIZZLE_THRESHOLD then
+                hotsplash = true
+            end
         end
 
         if self.splash and (not self.inst.components.inventoryitem or not self.inst.components.inventoryitem:IsHeld()) then
-            local splash = SpawnPrefab("splash_green")
+            local splash = SpawnPrefab(self.inst.components.inventoryitem and (hotsplash and "hot_splash" or "splash") or "splash_green")
             splash.Transform:SetPosition(self.inst.Transform:GetWorldPosition())
         end
 
