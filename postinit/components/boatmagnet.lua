@@ -32,7 +32,7 @@ env.AddComponentPostInit("boatmagnet", function(self)
         local magnetboatdirection = self.boat.components.boatphysics:GetMoveDirection()
         local magnetdir_x, magnetdir_z = VecUtil_NormalizeNoNaN(magnetboatdirection.x, magnetboatdirection.z)
 
-        local beaconboatdirection = (beaconboat == nil and followtarget.components.locomotor and Vector3(followtarget.Physics:GetVelocity()))
+        local beaconboatdirection = (beaconboat == nil and followtarget.components.locomotor and followtarget.Physics ~= nil and Vector3(followtarget.Physics:GetVelocity()))
             or (beaconboat ~= nil and beaconboat.components.boatphysics:GetMoveDirection())
             or Vector3(0, 0, 0)
         local beacondir_x, beacondir_z = VecUtil_NormalizeNoNaN(beaconboatdirection.x, beaconboatdirection.z)
