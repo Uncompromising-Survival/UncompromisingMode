@@ -24,7 +24,6 @@ local splashfxlist =
 
 local AURA_EXCLUDE_TAGS = { "shadow", "shadowminion", "INLIMBO", "notarget", "noattack", "flight"}
 
-
 local function SpawnHecklerGooTrail(inst,despawn_on_day)
     local x,y,z = inst.Transform:GetWorldPosition()
     local ents = TheSim:FindEntities(x,0,z,2)
@@ -248,15 +247,13 @@ local function guardiansplat()
 end
 
 
-local function FadeAway(inst,fast)
+local function FadeAway(inst, fast)
     inst.fading = true
     inst.AnimState:PlayAnimation("idle", false)
     if fast then
         inst.AnimState:SetDeltaTimeMultiplier(10) -- not the right function call...
     end
-    inst:ListenForEvent("animover",function(inst)
-        inst:Remove() 
-    end)
+    inst:ListenForEvent("animover", inst.Remove)
 end
 
 local function RainedOnParade(inst)
@@ -377,7 +374,7 @@ local function fngoo()
 
     end]]
 
-    inst:ListenForEvent("timerdone",TryRemove)
+    inst:ListenForEvent("timerdone", TryRemove)
 
     inst:ListenForEvent("entitysleep", EntitySleep)
     inst:ListenForEvent("entitywake", EntityWake)
