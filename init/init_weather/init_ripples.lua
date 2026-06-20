@@ -71,10 +71,7 @@ end)]]
 local function AddRipples(prefab, xscale, yscale, zscale, vert_offset) --AXE These calls need to be both on client and server
     env.AddPrefabPostInit(prefab, function(inst)
         if not TheWorld.ismastersim then return end
-        if not inst.components.umripples then
-            inst:AddComponent("umripples")
-        end
-        local umripples = inst.components.umripples
+        local umripples = inst.components.umripples or inst:AddComponent("umripples")
         umripples.vert_offset = vert_offset and vert_offset or 0
         umripples.xscale = xscale and xscale or 1
         umripples.yscale = yscale and yscale or 1
@@ -117,40 +114,32 @@ end
 
 env.AddPlayerPostInit(function(inst)
     if not TheWorld.ismastersim then return end
-    if not inst.components.umripples then
-        inst:AddComponent("umripples")
-    end
-    inst.components.umripples.xscale = 0.75
-    inst.components.umripples.zscale = 0.75
-    inst.components.umripples.vert_offset = 0.2
+    local umripples = inst.components.umripples or inst:AddComponent("umripples")
+    umripples.xscale = 0.75
+    umripples.zscale = 0.75
+    umripples.vert_offset = 0.2
 end)
 
 --AXE Mobs
 env.AddPrefabPostInitAny(function(inst)
     if not TheWorld.ismastersim then return end
     if inst:HasAnyTag("_health", "animal", "epic", "monster") and not inst:HasAnyTag("shadow", "flying", "gestalt", "ghost") and not inst.prefab == "webbedcreature" then
-        if not inst.components.umripples then
-            inst:AddComponent("umripples")
-        end
-        inst.components.umripples.vert_offset = 0.2
+        local umripples = inst.components.umripples or inst:AddComponent("umripples")
+        umripples.vert_offset = 0.2
     end
     if inst:HasTag("spider") and not inst:HasTag("player") then
-        if not inst.components.umripples then
-            inst:AddComponent("umripples")
-        end
-        inst.components.umripples.xscale = 2
-        inst.components.umripples.zscale = 2
-        inst.components.umripples.yscale = 1.4
-        inst.components.umripples.vert_offset = 0.35
+        local umripples = inst.components.umripples or inst:AddComponent("umripples")
+        umripples.xscale = 2
+        umripples.yscale = 1.4
+        umripples.zscale = 2
+        umripples.vert_offset = 0.35
     end
     if inst:HasTag("largecreature") and not inst:HasTag("flying") then
-        if not inst.components.umripples then
-            inst:AddComponent("umripples")
-        end
-        inst.components.umripples.xscale = 3
-        inst.components.umripples.zscale = 3
-        inst.components.umripples.yscale = 3
-        inst.components.umripples.vert_offset = 0.5
+        local umripples = inst.components.umripples or inst:AddComponent("umripples")
+        umripples.xscale = 3
+        umripples.yscale = 3
+        umripples.zscale = 3
+        umripples.vert_offset = 0.5
     end
 end)
 
@@ -193,7 +182,6 @@ for i, v in ipairs(um_flood_speed_immune) do
     end)
 end
 
-
 env.AddPrefabPostInit("mole_move_fx", function(inst)
     inst:DoTaskInTime(0, function(inst)
         if RobustFloodCheck(inst) then
@@ -225,7 +213,6 @@ env.AddStategraphPostInit("frog", function(inst)
         end
     end
 end)
-
 
 env.AddStategraphPostInit("molebat", function(inst)
     local state = inst.states["walk"]
