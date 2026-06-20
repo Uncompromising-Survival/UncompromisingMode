@@ -322,7 +322,6 @@ local package_post = {
     ["shadeeffects"] = "shadeeffects",
 }
 
-
 local _require = GLOBAL.require
 function GLOBAL.require(modulename, ...)
     local post_modulename = package_post[modulename] or nil
@@ -387,7 +386,6 @@ if GetModConfigData("wixie_walter") then
     RemapSoundEvent("dontstarve/characters/wixie/carol", "wixie/characters/wixie/carol")
     RemapSoundEvent("dontstarve/characters/wixie/sinking", "wixie/characters/wixie/sinking")
 end
-
 
 if GetModConfigData("hangyperds") then
     table.insert(stategraph_post, "perd")

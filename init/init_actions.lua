@@ -672,6 +672,8 @@ GLOBAL.ACTIONS.HARVEST.fn = function(act)
     end
 end
 
+GLOBAL.ACTIONS.CAST_NET.mount_valid = false
+
 -- Scythes can reach into the thicket without needing to be on top of them
 GLOBAL.ACTIONS.SCYTHE.distance = 2.5
 
@@ -767,7 +769,6 @@ ENV.AddComponentAction("SCENE", "gem_forge", function(inst, doer, actions, right
 end)
 
 ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.UM_FORGE_GEM, "doshortaction"))
-
 
 local MAKE_BLUEPRINT = Action({ mount_valid = false, priority = 10, rmb = false })
 MAKE_BLUEPRINT.id = "MAKE_BLUEPRINT"
