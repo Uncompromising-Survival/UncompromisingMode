@@ -88,7 +88,7 @@ end, nil, {
 function GemEnchantable:HasEnchantment(enchant, tier)
     assert(GEM_DEFS[enchant] ~= nil, "Attempted to check unknown enchantment: " .. enchant)
     if tier ~= nil then
-        assert(tier <= MAX_GEM_TIER and tier >= MIN_GEM_TIER, "Attempted to check gem enchantment with invalid tier: \"" .. tier .. "\" Gem tiers are " .. MIN_GEM_TIER .. " to " .. MAX_GEM_TIER .. ".")
+        assert(tier <= MAX_GEM_TIER and tier >= MIN_GEM_ENCHANT_TIER, "Attempted to check gem enchantment with invalid tier: \"" .. tier .. "\" Gem tiers are " .. MIN_GEM_ENCHANT_TIER .. " to " .. MAX_GEM_TIER .. ".")
         assert(type(tier) == 'number', "Invalid argument #2 for HasEnchant, required type: number - provided type: " .. type(tier))
     end
 
@@ -141,7 +141,7 @@ function GemEnchantable:AddEnchantment(enchant, tier, slotless)
     end
 
     assert(GEM_DEFS[enchant] ~= nil, "Attempted to add unknown enchantment: " .. enchant)
-    assert(tier <= MAX_GEM_TIER and tier >= MIN_GEM_TIER, "Attempted to add gem enchantment with invalid tier: \"" .. tier .. "\" Gem tiers are " .. MIN_GEM_TIER .. " to " .. MAX_GEM_TIER .. ".")
+    assert(tier <= MAX_GEM_TIER and tier >= MIN_GEM_ENCHANT_TIER, "Attempted to add gem enchantment with invalid tier: \"" .. tier .. "\" Gem tiers are " .. MIN_GEM_ENCHANT_TIER .. " to " .. MAX_GEM_TIER .. ".")
 
     self.enchants[enchant] = tier
 
