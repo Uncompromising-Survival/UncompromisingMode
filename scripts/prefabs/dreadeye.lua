@@ -744,8 +744,8 @@ local situational_disguises =
     },
     {
         name = "hooded_fern",
-        bank = "largefern",
-        build = "largefern",
+        bank = "um_thicket",
+        build = "um_thicket",
         anim = "idle",
     },
     {
@@ -777,6 +777,12 @@ local situational_disguises =
         bank = "track",
         build = "koalefant_tracks",
         anim = "idle_pile",
+    },
+    {
+        name = "um_bear_trap_old",
+        bank = "um_bear_trap",
+        build = "um_bear_trap_old",
+        anim = "idle",
     },
 }
 
@@ -973,6 +979,12 @@ local function shadowdisguise_fn(bank, build, anim, icon, tag, multcolour)
 
                                 inst.color = .5 + math.random() * .5
                                 inst.AnimState:SetMultColour(inst.color, inst.color, inst.color, 1)
+                            elseif v.name == "hooded_fern" then
+                                if math.random() > .99 or TUNING.DSTU.DATES.APRIL_FOOLS then
+                                    --print("I'm an Easter Egg babeeyyy")
+                                    inst.AnimState:SetBank("largefern")
+                                    inst.AnimState:SetBuild("largefern")
+                                end
                             end
 
                             inst.AnimState:PlayAnimation(v.anim, true)
@@ -1006,6 +1018,17 @@ local function shadowdisguise_fn(bank, build, anim, icon, tag, multcolour)
                             inst.front_fx.Transform:SetPosition(0, 0.1, 0)
                             inst.front_fx.AnimState:PlayAnimation("idle_front_med", true)
                             inst.front_fx.Transform:SetScale(1.1, 0.9, 1.1)
+                            for i = 1, 5 do
+                                local symbols_to_hide = {
+                                    "paint"..i.."_a",
+                                    "paint"..i.."_b"
+                                }
+                                for _, v in pairs(symbols_to_hide) do
+                                    if math.random() > .2 then
+                                        inst.AnimState:HideSymbol(v)
+                                    end
+                                end
+                            end
                         elseif v.name == "messagebottle" then
                             inst.front_fx = SpawnPrefab("float_fx_front")
                             inst.front_fx.entity:SetParent(inst.entity)
@@ -1032,6 +1055,18 @@ local function shadowdisguise_fn(bank, build, anim, icon, tag, multcolour)
                         inst.front_fx.Transform:SetPosition(0, 0.1, 0)
                         inst.front_fx.AnimState:PlayAnimation("idle_front_med", true)
                         inst.front_fx.Transform:SetScale(1.1, 0.9, 1.1)
+                        for i = 1, 5 do
+                            local symbols_to_hide = {
+                                "paint"..i.."_a",
+                                "paint"..i.."_b"
+                            }
+                            for _, v in pairs(symbols_to_hide) do
+
+                                if math.random() > .2 then
+                                    inst.AnimState:HideSymbol(v)
+                                end
+                            end
+                        end
                     elseif v.name == "messagebottle" then
                         inst.front_fx = SpawnPrefab("float_fx_front")
                         inst.front_fx.entity:SetParent(inst.entity)
