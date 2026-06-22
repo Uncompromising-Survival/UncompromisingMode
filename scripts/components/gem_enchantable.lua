@@ -135,9 +135,21 @@ function GemEnchantable:GetDurability(enchantment)
     return self.enchant_durabilty[enchantment]
 end
 
-function GemEnchantable:AddEnchantment(enchant, tier, slotless)
+function GemEnchantable:AddEnchantment(enchant, tier, slotless, fix_tier)
     if self.enchants[enchant] ~= nil then
         print("[WARN] Added enchantment \"" .. enchant .. "\", was already applied.")
+    end
+
+    --for fixing saves where invalid gem tiers happened.
+    --only doing this onsave, its best if it fails the assert below this so you know you're screwing up.
+    if fix_tier then
+        if tier > MAX_GEM_TIER then
+            print("[WARN] Fixed invalid tier on load for enchantment \"" .. enchant .. "\". Tier was " .. tier .. ", should be between " .. MIN_GEM_ENCHANT_TIER .. " and " .. MAX_GEM_TIER .. ".")
+            tier = MAX_GEM_TIER
+        elseif tier < MIN_GEM_ENCHANT_TIER then
+            print("[WARN] Fixed invalid tier on load for enchantment \"" .. enchant .. "\". Tier was " .. tier .. ", should be between " .. MIN_GEM_ENCHANT_TIER .. " and " .. MAX_GEM_TIER .. ".")
+            tier = MIN_GEM_ENCHANT_TIER
+        end
     end
 
     assert(GEM_DEFS[enchant] ~= nil, "Attempted to add unknown enchantment: " .. enchant)
@@ -220,7 +232,7 @@ function GemEnchantable:OnLoad(data)
     self.inst.persistent_gemology_data = data.gem_data
 
     for enchant, tier in pairs(_enchants) do
-        self:AddEnchantment(enchant, tier) --running add enchant to re-apply onapply effects.
+        self:AddEnchantment(enchant, tier, nil, true) --running add enchant to re-apply onapply effects.
     end
 
     self.enchant_durabilty = data.durability
