@@ -235,11 +235,7 @@ local function fn()
     inst:ListenForEvent("itemget", OnContainerChanged)
 
     inst:AddComponent("equippable")
-    if EQUIPSLOTS["BACK"] ~= nil then
-        inst.components.equippable.equipslot = EQUIPSLOTS.BACK
-    else
-        inst.components.equippable.equipslot = EQUIPSLOTS.BODY
-    end
+    inst.components.equippable.equipslot = EQUIPSLOTS.BACK or EQUIPSLOTS.BODY
 
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)
@@ -256,6 +252,7 @@ local function fn()
     MakeHauntableLaunchAndDropFirstItem(inst)
 
     inst.supported_amulets = supportedAmulets
+
     return inst
 end
 
