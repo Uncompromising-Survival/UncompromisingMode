@@ -32,7 +32,7 @@ local function onequip(inst, owner)
     local amuseitem = inst.amuseitem and inst.amuseitem:IsValid() and inst.amuseitem
     if inst.AmusementEquipFn and amuseitem then
         inst.AmusementEquipFn(amuseitem, inst.owner)
-        if inst.AmusementEquipFn2 then                               -- AXE Modded amulets can also define these if they so choose.
+        if inst.AmusementEquipFn2 then -- AXE Modded amulets can also define these if they so choose.
             inst:AmusementEquipFn2(inst.owner, amuseitem) -- Triggered for things relevent to the amusement pack
         end
         --AXE Undo anything that visually changed
