@@ -29,10 +29,11 @@ local assets = {
 
 local function onequip(inst, owner)
     inst.owner = owner
-    if inst.AmusementEquipFn and inst.amuseitem then
-        inst.AmusementEquipFn(inst.amuseitem, inst.owner)
+    local amuseitem = inst.amuseitem and inst.amuseitem:IsValid() and inst.amuseitem
+    if inst.AmusementEquipFn and amuseitem then
+        inst.AmusementEquipFn(amuseitem, inst.owner)
         if inst.AmusementEquipFn2 then                               -- AXE Modded amulets can also define these if they so choose.
-            inst.AmusementEquipFn2(inst, inst.owner, inst.amuseitem) -- Triggered for things relevent to the amusement pack
+            inst:AmusementEquipFn2(inst.owner, amuseitem) -- Triggered for things relevent to the amusement pack
         end
         --AXE Undo anything that visually changed
         if owner.sg == nil or owner.sg.currentstate.name ~= "amulet_rebirth" then
@@ -53,10 +54,11 @@ local function onequip(inst, owner)
 end
 
 local function onunequip(inst, owner)
-    if inst.AmusementUnequipFn and inst.amuseitem then
-        inst.AmusementUnequipFn(inst.amuseitem, inst.owner)
+    local amuseitem = inst.amuseitem and inst.amuseitem:IsValid() and inst.amuseitem
+    if inst.AmusementUnequipFn and amuseitem then
+        inst.AmusementUnequipFn(amuseitem, inst.owner)
         if inst.AmusementUnequipFn2 then -- AXE Modded amulets can also define these if they so choose.
-            inst.AmusementUnequipFn2(inst, inst.owner, inst.amuseitem)
+            inst:AmusementUnequipFn2(inst.owner, amuseitem)
         end
     end
     -- Last step.
@@ -67,12 +69,11 @@ local function onunequip(inst, owner)
 end
 
 local function ClearAmusementIfAny(inst)
-    if inst.AmusementUnequipFn and inst.amuseitem and inst.owner then
-        if inst.amuseitem:IsValid() then
-            inst.AmusementUnequipFn(inst.amuseitem, inst.owner)
-        end
+    local amuseitem = inst.amuseitem and inst.amuseitem:IsValid() and inst.amuseitem
+    if inst.AmusementUnequipFn and amuseitem and inst.owner then
+        inst.AmusementUnequipFn(amuseitem, inst.owner)
         if inst.AmusementUnequipFn2 then -- AXE Modded amulets can also define these if they so choose.
-            inst.AmusementUnequipFn2(inst, inst.owner, inst.amuseitem)
+            inst:AmusementUnequipFn2(inst.owner, amuseitem)
         end
     end
 
@@ -134,11 +135,7 @@ local function CheckToSeeIfAmuletChanged(inst)
 end
 
 local function OnContainerChanged(inst)
-    if inst.components.container:IsEmpty() then
-        inst.components.inventoryitem.cangoincontainer = true
-    else
-        inst.components.inventoryitem.cangoincontainer = false
-    end
+    inst.components.inventoryitem.cangoincontainer = inst.components.container:IsEmpty() or false
     CheckToSeeIfAmuletChanged(inst)
 end
 
