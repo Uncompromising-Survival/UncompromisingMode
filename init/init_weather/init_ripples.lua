@@ -1,7 +1,8 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-local um_flood_speed_immune_TAGS = { "turfrunner_279", "turfrunner_280", "turfrunner_281", "swampbro", "playermerm", "woosegoose", "merm" }
+local um_flood_speed_immune_no_turfrunner_TAGS = {"swampbro", "playermerm", "woosegoose", "merm"}
+local um_flood_speed_immune_TAGS = JoinArrays(um_flood_speed_immune_no_turfrunner_tags, {"turfrunner_279", "turfrunner_280", "turfrunner_281"})
 
 local function RobustFloodCheck(inst) -- For players, check to see if they're on the edge of a tile, you can walk on the "Void" to avoid the effects of the tile you're standing on, similar to spider webbings
     --IsVisualGroundAtPoint(x,y,z)... not sure how this can help?
@@ -472,7 +473,7 @@ local function RemoveFloodCheck(inst)
     if inst.components.umripples then --AXE check if should update ripples
         inst.components.umripples:OnNoLongerLandedServer()
     end
-    if not inst:HasAnyTag("playermerm", "woosegoose", "swampbro") then --Wurt's Swamp Pathfinder kinda bugs this out so can't use um_flood_speed_immune_TAGS
+    if not inst:HasAnyTag(um_flood_speed_immune_no_turfrunner_TAGS) then --Wurt's Swamp Pathfinder kinda bugs this out so can't use um_flood_speed_immune_TAGS
         inst:PushEvent("carefulwalking", { careful = false })
     end
 end
