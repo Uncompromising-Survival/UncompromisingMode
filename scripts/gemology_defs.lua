@@ -45,11 +45,12 @@ This is so we can save some gem-specific data so it can probably revert when rem
 
 local GEM_DEFS = {}
 local GEM_LOOKUP = {}
-local GENERIC_GEM_USES = 1 / 250
 function AddGemDef(name, def)
     GEM_LOOKUP[#GEM_LOOKUP + 1] = name
     GEM_DEFS[name] = def
 end
+
+local GEM_USES = TUNING.DSTU.GEM_USES
 
 local function AddUMGemDef(name, def) --helper function to just skip some re-used things we do.
     def.build = "um_gemologygems"
@@ -69,12 +70,8 @@ function IsEnchantValid(gem)
     return GEM_DEFS[gem] ~= nil
 end
 
-function DamageInfiniteItemGem(enchant, item, value)
-    if --[[not item.components.finiteuses
-        and not item.components.fueled
-        and not item.components.armor
-        and not item.components.perishable
-        and]] item.components.gem_enchantable:HasEnchantment("um_gemology" .. enchant) and item.components.gem_enchantable:HasDurabilityEnabled("um_gemology" .. enchant) then
+function DamageGem(enchant, item, value)
+    if item.components.gem_enchantable:HasEnchantment("um_gemology" .. enchant) and item.components.gem_enchantable:HasDurabilityEnabled("um_gemology" .. enchant) then
         item.components.gem_enchantable:DoDurabilityDelta("um_gemology" .. enchant, -value)
     end
 end
@@ -87,13 +84,13 @@ AddUMGemDef("redgem2", {
     fns = {
         onattack = function(inst, attacker, target, tier)
             if target.components.health then
-                target.components.health:DoFireDamage(TUNING.DSTU["REDGEM2_DAMAGE_" .. tier], attacker, true)
+                target.components.health:DoFireDamage(TUNING.DSTU.REDGEM2_DAMAGE[tier], attacker, true)
                 SpawnPrefab("deer_fire_burst").Transform:SetPosition(target.Transform:GetWorldPosition())
                 if tier ~= 1 and target.components.burnable and target.components.burnable:IsBurning() then
-                    target.components.health:DoFireDamage(inst.components.weapon:GetDamage(attacker, target) * TUNING.DSTU["REDGEM2_BURNING_MULT_" .. tier], attacker, true)
+                    target.components.health:DoFireDamage(inst.components.weapon:GetDamage(attacker, target) * TUNING.DSTU.REDGEM2_BURNING_MULT[tier], attacker, true)
                     target.components.burnable:ExtendBurning()
                 end
-                DamageInfiniteItemGem("redgem2", inst, GENERIC_GEM_USES)
+                DamageGem("redgem2", inst, GEM_USES[tier])
             end
         end,
         canapply = function(item, tier)
@@ -112,7 +109,7 @@ AddUMGemDef("redgem1", {
     fns = {
         onattack = function(inst, attacker, target, tier)
             if tier ~= 1 and target:HasOneOfTags(devour_tags) and math.random() > 0.75 then -- arbitrarily said "a chance", I have no idea how common this should be
-                local mult = TUNING.DSTU["REDGEM1_DEVOUR_MULT_" .. tier]
+                local mult = TUNING.DSTU.REDGEM1_DEVOUR_MULT[tier]
                 attacker.components.combat:DoAttack(target, inst, nil, nil, mult, 0)        -- gotta use a bit more durability...
                 mult = inst.components.weapon:GetDamage(attacker, target) * mult
                 --owner.components.sanity:DoDelta(-mult)
@@ -125,7 +122,7 @@ AddUMGemDef("redgem1", {
                 attacker.components.sanity:DoDelta(recover)
             end
 
-            DamageInfiniteItemGem("redgem1", inst, GENERIC_GEM_USES)
+            DamageGem("redgem1", inst, GEM_USES[tier])
         end,
         canapply = function(item, tier)
             return item.components.weapon ~= nil
@@ -185,7 +182,7 @@ local swilson_symbols_to_hide = {
 }
 
 local function SendShadowClone(item, owner, target, tier)
-    DamageInfiniteItemGem("greengem1", item, GENERIC_GEM_USES) --damage on any attack/work because it speeds it up.
+    DamageGem("greengem1", item, GEM_USES[tier]) --damage on any attack/work because it speeds it up.
 
     if target:IsValid() and (tier - 1) * TUNING.DSTU.GREENGEM1_SHADOW_CLONE_CHANCE_MULT > math.random() and tier > 1 then
         if owner:GetDistanceSqToInst(target) > TUNING.DSTU.GREENGEM1_SHADOW_CLONE_MAX_DIST and owner.components.sanity then --Long ways away, it's taking from your mind to send swilsons there
@@ -223,7 +220,7 @@ AddUMGemDef("greengem1", {
     color = RGB(175, 245, 172),
     fns = {
         onapply = function(item, tier)
-            item.um_neurotic_mod = TUNING.DSTU["GREENGEM1_MELEE_SPEED_" .. tier] --melee_speeds[tier]
+            item.um_neurotic_mod = TUNING.DSTU.GREENGEM1_MELEE_SPEED[tier] --melee_speeds[tier]
 
             local tool = item.components.tool
 
@@ -328,10 +325,10 @@ AddUMGemDef("greengem2", {
             item:StopWatchingWorldState("startday", addRandomGemEffects)
         end,
         onattack = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("greengem2", item, GENERIC_GEM_USES)
+            DamageGem("greengem2", item, GEM_USES[tier])
         end,
         onwork = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("greengem2", item, GENERIC_GEM_USES)
+            DamageGem("greengem2", item, GEM_USES[tier])
         end
 
     }
@@ -348,15 +345,15 @@ AddUMGemDef("yellowgem1", {
                 item.volatile_gemology_data.um_gemologyyellowgem1.old_dapperness = item.components.equippable.dapperness
 
                 if item.components.equippable.dapperness then
-                    item.components.equippable.dapperness = item.components.equippable.dapperness + TUNING.DSTU["YELLOWGEM1_SANITY_" .. tier] --sanities[tier]
+                    item.components.equippable.dapperness = item.components.equippable.dapperness + TUNING.DSTU.YELLOWGEM1_SANITY[tier]
                 else
-                    item.components.equippable.dapperness = TUNING.DSTU["YELLOWGEM1_SANITY_" .. tier]
+                    item.components.equippable.dapperness = TUNING.DSTU.YELLOWGEM1_SANITY[tier]
                 end
             end
         end,
         onupdate = function(item, tier)
             if item ~= nil and item.components.equippable:IsEquipped() then
-                DamageInfiniteItemGem("yellowgem1", item, 1 / TUNING.DSTU.YELLOWGEM1_DURATION)
+                DamageGem("yellowgem1", item, 1 / TUNING.DSTU.YELLOWGEM1_DURATION[tier])
             end
         end,
         onremove = function(item, tier)
@@ -386,7 +383,7 @@ end
 
 local function YellowDamage(inst, attacker, target, tier)
     if target ~= nil and target:IsValid() and target.components.combat ~= nil then
-        local damage = TUNING.DSTU["YELLOWGEM2_SHOCK_DAMAGE_" .. tier]
+        local damage = TUNING.DSTU.YELLOWGEM2_SHOCK_DAMAGE[tier]
 
         if WetCheck(target) then
             damage = damage * TUNING.DSTU.YELLOWGEM2_SHOCK_WET_MULT
@@ -409,7 +406,7 @@ local function ShockChain(inst, attacker, target, ShockAgain, tier)
                 if v:IsValid() and v.components.health ~= nil and not v.components.health:IsDead() and not v:HasTag("arcgrounded") then
                     local mult = TUNING.DSTU.YELLOWGEM2_SHOCK_DIST_FACTOR - dist
 
-                    mult = math.clamp(mult, TUNING.DSTU["YELLOWGEM2_MIN_SHOCK_MULT_" .. tier], TUNING.DSTU["YELLOWGEM2_MAX_SHOCK_MULT_" .. tier])
+                    mult = math.clamp(mult, TUNING.DSTU.YELLOWGEM2_SHOCK_MULT_RANGES[tier][1], TUNING.DSTU.YELLOWGEM2_SHOCK_MULT_RANGES[tier][2])
 
                     local damage = inst.components.weapon:GetDamage(attacker, v) * mult
 
@@ -450,7 +447,7 @@ local function ElectricAttack(inst, attacker, target, tier)
 
     YellowDamage(inst, attacker, target, tier)
 
-    DamageInfiniteItemGem("yellowgem2", inst, GENERIC_GEM_USES)
+    DamageGem("yellowgem2", inst, GEM_USES[tier])
 end
 
 AddUMGemDef("yellowgem2", {
@@ -459,7 +456,7 @@ AddUMGemDef("yellowgem2", {
     fns = {
         onapply = function(item, tier)
             if item.prefab == "hambat" then
-                item.new_max_damage = TUNING.HAMBAT_DAMAGE + TUNING.DSTU["YELLOWGEM2_SHOCK_DAMAGE_" .. tier]
+                item.new_max_damage = TUNING.HAMBAT_DAMAGE + TUNING.DSTU.YELLOWGEM2_SHOCK_DAMAGE[tier]
             end
 
             item.volatile_gemology_data.um_gemologyyellowgem2.old_stimuli = item.components.weapon.stimuli
@@ -510,7 +507,7 @@ AddUMGemDef("palegem1", {
             end
         end,
         onattack = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("palegem1", item, GENERIC_GEM_USES)
+            DamageGem("palegem1", item, GEM_USES[tier])
         end,
         onremove = function(item, tier)
             if item.volatile_gemology_data.um_gemologypalegem1 and item.volatile_gemology_data.um_gemologypalegem1.weapon_damage then
@@ -564,7 +561,7 @@ AddUMGemDef("palegem2", {
                     item.volatile_gemology_data.um_gemologypalegem2.old_use = _Use
                     item.components.finiteuses.Use = function(self, num) -- Modify only this item's version of finiteuses
                         local chance = math.random()
-                        if chance > TUNING.DSTU["PALEGEM2_USE_CHANCE_" .. tier] then
+                        if chance > TUNING.DSTU.PALEGEM2_USE_CHANCE[tier] then
                             _Use(self, num)
                         end
                     end
@@ -572,10 +569,10 @@ AddUMGemDef("palegem2", {
             end
         end,
         onattack = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("palegem2", item, TUNING.DSTU.PALEGEM2_USES)
+            DamageGem("palegem2", item, TUNING.DSTU.PALEGEM2_USES[tier])
         end,
         onwork = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("palegem2", item, TUNING.DSTU.PALEGEM2_USES)
+            DamageGem("palegem2", item, TUNING.DSTU.PALEGEM2_USES[tier])
         end,
 
         onremove = function(item, tier)
@@ -649,7 +646,7 @@ AddUMGemDef("purplegem1", {
                     damage = damage * tier * TUNING.DSTU.PURPLEGEM1_EXTRA_DAMAGE_MULT
                     local stimuli = item.components.weapon.stimuli and item.components.weapon.stimuli or nil
                     target.components.combat:GetAttacked(attacker, damage, nil, stimuli)
-                    DamageInfiniteItemGem("purplegem1", item, GENERIC_GEM_USES)
+                    DamageGem("purplegem1", item, GEM_USES[tier])
                 end
             end
         end,
@@ -689,7 +686,7 @@ local function OnDropedIfDeadGiveBack(inst) -- This is the only one that has an 
             local fx = SpawnPrefab("shadow_puff")
             fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
 
-            DamageInfiniteItemGem("purplegem2", inst, TUNING.DSTU.PURPLEGEM2_USES)
+            DamageGem("purplegem2", inst, TUNING.DSTU.PURPLEGEM2_USES[tier])
         end
     end)
 
@@ -731,7 +728,7 @@ local function FindUniqueBaseStructures(inst, tier)
 end
 
 local function BaseSitterAttack(item, attacker, target, tier)
-    DamageInfiniteItemGem("orangegem1", item, GENERIC_GEM_USES)
+    DamageGem("orangegem1", item, GEM_USES[tier])
 
     if tier ~= 1 then
         local damage = item.components.weapon:GetDamage(attacker, target)
@@ -751,7 +748,7 @@ AddUMGemDef("orangegem1", {
             item.structure_bonus = nil
         end,
         onwork = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("orangegem1", item, GENERIC_GEM_USES)
+            DamageGem("orangegem1", item, GEM_USES[tier])
         end,
         onupdate = FindUniqueBaseStructures
     }
@@ -819,10 +816,10 @@ AddUMGemDef("orangegem2", {
             end
         end,
         onattack = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("orangegem2", item, GENERIC_GEM_USES)
+            DamageGem("orangegem2", item, GEM_USES[tier])
         end,
         onwork = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("orangegem2", item, GENERIC_GEM_USES)
+            DamageGem("orangegem2", item, GEM_USES[tier])
         end,
         onremove = function(item, tier)
             if item.HarvestPickable then
@@ -874,7 +871,7 @@ AddUMGemDef("bluegem1", {
                     local ice_shield = SpawnPrefab("um_ice_shield")
                     ice_shield:Init(attacker, "swap_body", TUNING.DSTU.BLUEGEM1_ICE_SHIELD_TIER_BASE + (tier * TUNING.DSTU.BLUEGEM1_ICE_SHIELD_TIER_PER_TIER))
                 end
-                DamageInfiniteItemGem("bluegem1", item, GENERIC_GEM_USES)
+                DamageGem("bluegem1", item, GEM_USES[tier])
             end
         end
     }
