@@ -20,7 +20,6 @@ end
 
 env.AddStategraphPostInit("gestalt", function(inst)
     local attackstate = inst.states["attack"]
-    
     local _DoSpecialAttack = attackstate and UpvalueHacker.GetUpvalue(attackstate.onupdate, "DoSpecialAttack")
     if _DoSpecialAttack then
         local function DoSpecialAttack(inst, target, ...)
