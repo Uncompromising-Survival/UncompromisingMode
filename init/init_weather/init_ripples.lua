@@ -73,10 +73,10 @@ local function AddRipples(prefab, xscale, yscale, zscale, vert_offset) --AXE The
     env.AddPrefabPostInit(prefab, function(inst)
         if not TheWorld.ismastersim then return end
         local umripples = inst.components.umripples or inst:AddComponent("umripples")
-        umripples.vert_offset = vert_offset and vert_offset or 0
-        umripples.xscale = xscale and xscale or 1
-        umripples.yscale = yscale and yscale or 1
-        umripples.zscale = zscale and zscale or 1
+        umripples.vert_offset = vert_offset or 0
+        umripples.xscale = xscale or 1
+        umripples.yscale = yscale or 1
+        umripples.zscale = zscale or 1
     end)
 end
 
@@ -178,7 +178,7 @@ local um_flood_speed_immune = { "frog", "molebat","lunarfrog" }
 
 for i, v in ipairs(um_flood_speed_immune) do
     env.AddPrefabPostInit(v, function(inst)
-        if not TheWorld.ismastersim then return inst end
+        if not TheWorld.ismastersim then return end
         inst.components.umripples.speed_immune = true
     end)
 end
