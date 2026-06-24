@@ -735,11 +735,41 @@ end)
 
 ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.SCAN_GEMOLOGY_GEM, "doshortaction"))
 
-local um_forge_gem = Action({ priority = 1, mount_valid = true })
-um_forge_gem.id = "UM_FORGE_GEM"
-um_forge_gem.str = STRINGS.UI.APPLY_GEM
-um_forge_gem.rmb = true
-um_forge_gem.fn = function(act)
+local UM_GEM_REPAIR = Action({ mound_valid = true, priority = 10, rmb = true })
+UM_GEM_REPAIR.id = "UM_GEM_REPAIR"
+UM_GEM_REPAIR.str = "Repair"
+ENV.AddAction(UM_GEM_REPAIR)
+
+UM_GEM_REPAIR.fn = function(act)
+    local target = act.target
+    local repairtool = act.invobject
+
+    if repairtool ~= nil and repairtool.components.gemrepairer ~= nil and target ~= nil and target.components.gem_enchantable ~= nil then
+        local success, reason = repairtool.components.gemrepairer:OnUsed(target, act.doer)
+
+        if not success then
+            if act.doer ~= nil and act.doer.components.talker ~= nil then
+                act.doer.components.talker:Say(GetActionFailString(act.doer, UM_GEM_REPAIR.id, reason))
+            end
+        end
+
+        return success, reason
+    end
+end
+
+ENV.AddComponentAction("USEITEM", "gemrepairer", function(inst, doer, target, actions, right)
+    if inst ~= nil and inst:HasTag("gemrepairer") and target ~= nil and target.replica.gem_enchantable ~= nil and right then
+        table.insert(actions, ACTIONS.UM_GEM_REPAIR)
+    end
+end)
+
+ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.UM_GEM_REPAIR, "dolongaction"))
+
+local UM_FORGE_GEM = Action({ priority = 1, mount_valid = true })
+UM_FORGE_GEM.id = "UM_FORGE_GEM"
+UM_FORGE_GEM.str = STRINGS.UI.APPLY_GEM
+UM_FORGE_GEM.rmb = true
+UM_FORGE_GEM.fn = function(act)
     if act.target.ForgeGem ~= nil then
         local success, reason = act.target:ForgeGem()
 
@@ -748,7 +778,7 @@ um_forge_gem.fn = function(act)
             --when called by the SG action handler it does actually give the action fail string, but when
             --sent from the RPC in the widget button, it does not.
             if act.doer ~= nil and act.doer.components.talker ~= nil then
-                act.doer.components.talker:Say(GetActionFailString(act.doer, um_forge_gem.id, reason))
+                act.doer.components.talker:Say(GetActionFailString(act.doer, UM_FORGE_GEM.id, reason))
             end
             return false, reason
         end
@@ -757,7 +787,7 @@ um_forge_gem.fn = function(act)
     end
 end
 
-ENV.AddAction(um_forge_gem)
+ENV.AddAction(UM_FORGE_GEM)
 
 ENV.AddComponentAction("SCENE", "gem_forge", function(inst, doer, actions, right)
     if right and (inst.replica.container ~= nil and
@@ -785,7 +815,7 @@ MAKE_BLUEPRINT.fn = function(act)
 end
 
 ENV.AddComponentAction("USEITEM", "blueprinter", function(inst, doer, target, actions, right)
-    if target ~= nil and (doer.replica.builder ~= nil and doer.replica.builder:KnowsRecipe(target.prefab) and PrefabExists(target.prefab.."_blueprint") or string.find(target.prefab, "blueprint")) then
+    if target ~= nil and (doer.replica.builder ~= nil and doer.replica.builder:KnowsRecipe(target.prefab) and PrefabExists(target.prefab .. "_blueprint") or string.find(target.prefab, "blueprint")) then
         table.insert(actions, ACTIONS.MAKE_BLUEPRINT)
     end
 end)

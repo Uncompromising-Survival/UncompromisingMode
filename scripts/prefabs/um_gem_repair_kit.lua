@@ -16,8 +16,8 @@ function CreateGemRepairKit(name, durability, build, bank, common_fn)
         inst.AnimState:SetBank(bank ~= nil and bank or name)
         inst.AnimState:PlayAnimation("idle")
 
-        --from blueprinter component
-        inst:AddTag("blueprinter")
+        --from gemrepairer component
+        inst:AddTag("gemrepairer")
 
         MakeInventoryFloatable(inst, "med", nil, 0.6)
 
@@ -32,8 +32,8 @@ function CreateGemRepairKit(name, durability, build, bank, common_fn)
         inst:AddComponent("inspectable")
         inst:AddComponent("inventoryitem")
 
-        inst:AddComponent("blueprinter")
-        inst.components.blueprinter:SetOnUsedFn(function(inst, target, owner, recipe)
+        inst:AddComponent("gemrepairer")
+        inst.components.gemrepairer:SetOnUsedFn(function(inst, target, owner)
             if inst.components.finiteuses ~= nil then
                 inst.components.finiteuses:Use(1)
             end
@@ -52,4 +52,4 @@ function CreateGemRepairKit(name, durability, build, bank, common_fn)
     return Prefab(name, fn, assets)
 end
 
-return CreateGemRepairKit("um_blueprinting_kit", 2, "blueprinting_kit", "blueprinting_kit")
+return CreateGemRepairKit("um_gem_repair_kit", 10, "blueprinting_kit", "blueprinting_kit")

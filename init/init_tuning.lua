@@ -648,6 +648,14 @@ TUNING.DSTU = {
 
     BLUEGEM2_PERISHABLE_MULT = 2,
     BLUEGEM2_NON_PERISHABLE_MULT = 4,
+
+    GEM_REPAIRER_REPAIR_VALUE = {
+        0.6, --first
+        0.4,
+        0.2,
+        0.1, --min repair value
+    }
+
 }
 
 -- [              DST Related Overrides              ]
