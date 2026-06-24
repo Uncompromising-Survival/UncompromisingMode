@@ -2,7 +2,7 @@ local assets = {
     Asset("ANIM", "anim/blueprinting_kit.zip"),
 }
 
-function CreateGemRepairKit(name, durability, build, bank, common_fn)
+function CreateBlueprintingKit(name, durability, build, bank, common_fn)
     local function fn()
         local inst = CreateEntity()
 
@@ -52,4 +52,4 @@ function CreateGemRepairKit(name, durability, build, bank, common_fn)
     return Prefab(name, fn, assets)
 end
 
-return CreateGemRepairKit("um_blueprinting_kit", 2, "blueprinting_kit", "blueprinting_kit")
+return CreateBlueprintingKit("um_blueprinting_kit", 2, "blueprinting_kit", "blueprinting_kit")

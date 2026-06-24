@@ -310,7 +310,7 @@ ACTIONFAIL.UM_FORGE_GEM = {
 ACTIONFAIL.UM_GEM_REPAIR = {
     NO_REPAIR_NEEDED = "It's fully repaired."
 }
-ANNOUNCE.ANNOUNCE_GEM_REPAIR_MAXED = "It's hard repair this further."
+ANNOUNCE.ANNOUNCE_GEM_REPAIR_MAXED = "It's hard to repair this further."
 -- Xmas Update
 DESCRIBE.MAGMAHOUND = "Hot dog!"
 DESCRIBE.LIGHTNINGHOUND = "Watch it, that one stings!"
