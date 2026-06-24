@@ -73,10 +73,10 @@ local function AddRipples(prefab, xscale, yscale, zscale, vert_offset) --AXE The
     env.AddPrefabPostInit(prefab, function(inst)
         if not TheWorld.ismastersim then return end
         local umripples = inst.components.umripples or inst:AddComponent("umripples")
-        umripples.vert_offset = vert_offset or 0
         umripples.xscale = xscale or 1
         umripples.yscale = yscale or 1
         umripples.zscale = zscale or 1
+        umripples.vert_offset = vert_offset or 0
     end)
 end
 
