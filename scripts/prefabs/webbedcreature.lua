@@ -114,8 +114,18 @@ local function OnKilled(inst)
 
     --creature
     if not table.contains(COCOON_CHARACTERS, inst.cocoon_creature) then
+        if inst.cocoon_creature == "KOALEFANT_SUMMER" and TheWorld.state.iswinter then
+            inst.cocoon_creature = "KOALEFANT_WINTER"
+        elseif inst.cocoon_creature == "SLURTLE" and math.random() > .5 then
+            inst.cocoon_creature = "SNURTLE"
+        elseif inst.cocoon_creature == "SNAILDRAKE_MAGMA" and math.random() > .5 then
+            inst.cocoon_creature = "SNAILDRAKE_SLIME"
+        end
         local deadcreature = SpawnPrefab(inst.cocoon_creature)
         deadcreature.Transform:SetPosition(x, y, z)
+        if deadcreature.components.scaler then
+            deadcreature.components.scaler:SetScale(TUNING.ROCKY_MAX_SCALE)
+        end
         deadcreature:DoTaskInTime(0, function()
             if deadcreature.brain then deadcreature.brain:Stop() end
             deadcreature.components.health:Kill()

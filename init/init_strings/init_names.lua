@@ -863,7 +863,7 @@ NAMES.UM_BACKPACK_AMULETUSE = "Amusement Pack"
 NAMES.UM_MUSHROOM_MOON = "Moon Mushroom"
 NAMES.UM_POOFSHROOM = "Poofshroom"
 NAMES.UM_BLUEPRINTING_KIT = "Blueprinting Kit"
-
+NAMES.UM_GEM_REPAIR_KIT = "Mending Kit"
 
 
 

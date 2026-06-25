@@ -26,7 +26,7 @@ AddClassPostConstruct("screens/consolescreen", function(self, inst)
         "vetcurse()",
         "vetcurseitems()",
         "wobygodmode()",
-        "spawncocoon()",
+        "spawncocoon(",
     }
 
     self.console_edit:AddWordPredictionDictionary({ words = prediction_command, delim = "c_um_", num_chars = 0 })

@@ -10,6 +10,7 @@ local UIAnim = require "widgets/uianim"
 --Common stuff for every gem.
 
 --Add the gem enchantable components
+--DO NOT TOGGLE THIS WITH A CONFIG WHENEVER WE DO THAT.
 env.AddReplicableComponent("gem_enchantable")
 env.AddPrefabPostInitAny(function(inst)
     if not TheWorld.ismastersim then
@@ -18,6 +19,24 @@ env.AddPrefabPostInitAny(function(inst)
 
     if inst.components.equippable and inst.components.equippable.equipslot == EQUIPSLOTS.HANDS and (inst.components.tool or inst.components.weapon) and not inst.components.stackable and not inst.components.gem_enchantable then
         inst:AddComponent("gem_enchantable")
+
+        inst.repair_count = 1
+
+        local _OnSave = inst.OnSave
+        local _OnLoad = inst.OnLoad
+        local function OnSave(inst, data)
+            data.repair_count = inst.repair_count
+            return _OnSave and _OnSave(inst, data) or data
+        end
+        local function OnLoad(inst, data)
+            _OnLoad(inst, data)
+            if data and data.repair_count then
+                inst.repair_count = data.repair_count
+            end
+        end
+
+        inst.OnSave = OnSave
+        inst.OnLoad = OnLoad
     end
 end)
 

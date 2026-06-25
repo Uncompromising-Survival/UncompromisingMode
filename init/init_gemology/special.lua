@@ -1,7 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-function DamageInfiniteItemGem(enchant, item, value)
+function DamageGem(enchant, item, value)
     if --[[not item.components.finiteuses
         and not item.components.fueled
         and not item.components.armor
@@ -211,7 +211,7 @@ env.AddComponentPostInit("combat", function(self)
                 inst:DoTaskInTime(0, function(inst)
                     inst:AddDebuff("buff_furious" .. furious, "buff_furious" .. furious)
                 end)
-                DamageInfiniteItemGem("purplegem1", tool, 0.005)
+                DamageGem("purplegem1", tool, TUNING.DSTU.GEM_USES[furious])
             end
         end
         if self.inst:HasTag("agony_gas") then
@@ -238,7 +238,7 @@ env.AddComponentPostInit("container", function(self)
     local _GiveItem = self.GiveItem
     function self:GiveItem(item, slot, src_pos, drop_on_fail)
         local ret = _GiveItem(self, item, slot, src_pos, drop_on_fail)
-    
+
         if item.components.gem_enchantable ~= nil and item.components.gem_enchantable:HasEnchantment("um_gemologybluegem2") and not self:IsHolding(item) then
             self.inst:DoTaskInTime(0, function()
                 self:GiveItem(item, slot, src_pos, drop_on_fail)
