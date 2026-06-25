@@ -18,10 +18,10 @@ local TARGET_IGNORE_TAGS = { "gmooseegg", "INLIMBO", "mothergoose", "mossling", 
 
 local function destroystuff(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-	
-	local sizecheck = 1 + (inst.Transform:GetScale() * 1.7) or 0
+    
+    local sizecheck = 1 + (inst.Transform:GetScale() * 1.7) or 0
     local ents = TheSim:FindEntities(x, y, z, sizecheck, nil, TARGET_IGNORE_TAGS, TARGET_TAGS)
-	
+    
     for i, v in ipairs(ents) do
         --stuff might become invalid as we work or damage during iteration
         if v ~= inst.WINDSTAFF_CASTER and v:IsValid() then
@@ -55,18 +55,16 @@ end
 local TARGET_IGNORE_TAGS_MINI = { "player", "INLIMBO", "companion", "abigail" }
 
 local function destroystuff_mini(inst)
+    local caster = inst.WINDSTAFF_CASTER and inst.WINDSTAFF_CASTER:IsValid() and inst.WINDSTAFF_CASTER or nil
+    local castercombat = caster and caster.components.combat or nil
     local x, y, z = inst.Transform:GetWorldPosition()
-	
-	local sizecheck = 1 + (inst.Transform:GetScale() * 1.9) or 0
+    local sizecheck = 1 + (inst.Transform:GetScale() * 1.9) or 0
     local ents = TheSim:FindEntities(x, y, z, sizecheck, nil, TARGET_IGNORE_TAGS_MINI, TARGET_TAGS)
-	
     for i, v in ipairs(ents) do
         --stuff might become invalid as we work or damage during iteration
-        if v ~= inst.WINDSTAFF_CASTER and v:IsValid() then
-            if v.components.health ~= nil and
-                not v.components.health:IsDead() and
-                v.components.combat ~= nil and
-                v.components.combat:CanBeAttacked() then
+        if v ~= caster and v.entity:IsVisible() then
+            if not (v.components.health and v.components.health:IsDead())
+                and not (castercombat and castercombat:IsAlly(v)) then
                 local damage = TUNING.TORNADO_DAMAGE
                 v.components.combat:GetAttacked(inst, damage, nil, "wind")
                 if v:IsValid() and
@@ -103,31 +101,31 @@ local function SetDuration(inst, duration)
 end
 
 local function Disappear(inst)
-	if inst.WINDSTAFF_CASTER ~= nil then
-		inst.WINDSTAFF_CASTER.tornado_tracking = nil
-	end
-	
-	inst.components.sizetweener:StartTween(0.05, 0.8, inst.Remove)
+    if inst.WINDSTAFF_CASTER ~= nil then
+        inst.WINDSTAFF_CASTER.tornado_tracking = nil
+    end
+    
+    inst.components.sizetweener:StartTween(0.05, 0.8, inst.Remove)
 end
 
 local function shrink(inst)
-	--inst.sg:GoToState("run")
-	inst.components.sizetweener:StartTween(0.4, 1, Disappear)
+    --inst.sg:GoToState("run")
+    inst.components.sizetweener:StartTween(0.4, 1, Disappear)
 end
 
 local function shrinktask(inst)
-	--inst:DoPeriodicTask(0.5, function(inst) inst.components.circler.distance = inst.components.circler.distance + 0.1 end)
-	
+    --inst:DoPeriodicTask(0.5, function(inst) inst.components.circler.distance = inst.components.circler.distance + 0.1 end)
+    
     if inst.components.linearcircler.clockwise then
-		inst:DoTaskInTime(5, shrink)
-	else
-		inst:DoTaskInTime(12, shrink)
-	end
+        inst:DoTaskInTime(5, shrink)
+    else
+        inst:DoTaskInTime(12, shrink)
+    end
 end
-		
+        
 local function grow(inst, time, startsize, endsize)
-	inst.Transform:SetScale(0.1, 0.1, 0.1)
-	inst.components.sizetweener:StartTween(2, 1, shrinktask)
+    inst.Transform:SetScale(0.1, 0.1, 0.1)
+    inst.components.sizetweener:StartTween(2, 1, shrinktask)
 end
 
 local function tornado_fn()
@@ -138,7 +136,7 @@ local function tornado_fn()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
 
-	inst.AnimState:SetFinalOffset(2)
+    inst.AnimState:SetFinalOffset(2)
     inst.AnimState:SetBank("tornado")
     inst.AnimState:SetBuild("tornado")
     inst.AnimState:PlayAnimation("tornado_loop", true)
@@ -153,63 +151,63 @@ local function tornado_fn()
     if not TheWorld.ismastersim then
         return inst
     end
-	
-	inst.timetorun = false
+    
+    inst.timetorun = false
 
     --inst:AddComponent("knownlocations")
-	
-	inst:AddComponent("sizetweener")
-	
-	inst:AddComponent("linearcircler")
-	inst.components.linearcircler.distance_max = 18
-	inst.components.linearcircler.distance_max_clockwise = 20
-	inst.components.linearcircler.distance_limit = 21
-	inst.components.linearcircler.speed = .3
-	inst.components.linearcircler.setspeed = .3
-	--[[inst.components.circler.scale = 1
-	inst.components.circler.speed = 6
-	inst.components.circler.minSpeed = 6
-	inst.components.circler.maxSpeed = 6
-	inst.components.circler.minDist = 1
-	inst.components.circler.minScale = 1
-	inst.components.circler.maxScale = 1]]
+    
+    inst:AddComponent("sizetweener")
+    
+    inst:AddComponent("linearcircler")
+    inst.components.linearcircler.distance_max = 18
+    inst.components.linearcircler.distance_max_clockwise = 20
+    inst.components.linearcircler.distance_limit = 21
+    inst.components.linearcircler.speed = .3
+    inst.components.linearcircler.setspeed = .3
+    --[[inst.components.circler.scale = 1
+    inst.components.circler.speed = 6
+    inst.components.circler.minSpeed = 6
+    inst.components.circler.maxSpeed = 6
+    inst.components.circler.minDist = 1
+    inst.components.circler.minScale = 1
+    inst.components.circler.maxScale = 1]]
 
     --[[inst:AddComponent("locomotor")
     inst.components.locomotor.walkspeed = 6
     inst.components.locomotor.runspeed = 6]]
 
     --inst:SetStateGraph("SGmothergoose_tornado")
-	--inst.sg:GoToState("idle")
+    --inst.sg:GoToState("idle")
 
     inst.WINDSTAFF_CASTER = nil
     inst.persists = false
-	inst.grow = grow
-	inst:grow()
+    inst.grow = grow
+    inst:grow()
 
     inst.SetDuration = SetDuration
     inst:SetDuration(3000)
-	
-	inst:DoPeriodicTask(.4, destroystuff, 1)
+    
+    inst:DoPeriodicTask(.4, destroystuff, 1)
 
     return inst
 end
 
 local function Disappear_mini(inst)
-	inst.components.sizetweener:StartTween(0.05, 0.2, inst.Remove)
+    inst.components.sizetweener:StartTween(0.05, 0.2, inst.Remove)
 end
 
 local function shrink_mini(inst)
-	--inst.sg:GoToState("run")
-	inst.components.sizetweener:StartTween(0.2, 0.8, Disappear_mini)
+    --inst.sg:GoToState("run")
+    inst.components.sizetweener:StartTween(0.2, 0.8, Disappear_mini)
 end
 
 local function shrinktask_mini(inst)
-	inst:DoTaskInTime(1.5, shrink_mini)
+    inst:DoTaskInTime(1.5, shrink_mini)
 end
-		
+        
 local function grow_mini(inst, time, startsize, endsize)
-	inst.Transform:SetScale(0.1, 0.1, 0.1)
-	inst.components.sizetweener:StartTween(0.8, 0.7, shrinktask_mini)
+    inst.Transform:SetScale(0.1, 0.1, 0.1)
+    inst.components.sizetweener:StartTween(0.8, 0.7, shrinktask_mini)
 end
 
 local function minitornado_fn()
@@ -220,7 +218,7 @@ local function minitornado_fn()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
 
-	inst.AnimState:SetFinalOffset(2)
+    inst.AnimState:SetFinalOffset(2)
     inst.AnimState:SetBank("tornado")
     inst.AnimState:SetBuild("tornado")
     inst.AnimState:PlayAnimation("tornado_loop", true)
@@ -235,44 +233,44 @@ local function minitornado_fn()
     if not TheWorld.ismastersim then
         return inst
     end
-	
-	inst.timetorun = false
+    
+    inst.timetorun = false
 
     --inst:AddComponent("knownlocations")
-	
-	inst:AddComponent("sizetweener")
-	
-	inst:AddComponent("linearcircler")
-	--[[inst.components.circler.scale = 1
-	inst.components.circler.speed = 6
-	inst.components.circler.minSpeed = 6
-	inst.components.circler.maxSpeed = 6
-	inst.components.circler.minDist = 1
-	inst.components.circler.maxDist = 1
-	inst.components.circler.minScale = 1
-	inst.components.circler.maxScale = 1]]
+    
+    inst:AddComponent("sizetweener")
+    
+    inst:AddComponent("linearcircler")
+    --[[inst.components.circler.scale = 1
+    inst.components.circler.speed = 6
+    inst.components.circler.minSpeed = 6
+    inst.components.circler.maxSpeed = 6
+    inst.components.circler.minDist = 1
+    inst.components.circler.maxDist = 1
+    inst.components.circler.minScale = 1
+    inst.components.circler.maxScale = 1]]
 
     --[[inst:AddComponent("locomotor")
     inst.components.locomotor.walkspeed = 6
     inst.components.locomotor.runspeed = 6]]
 
     --inst:SetStateGraph("SGmothergoose_tornado")
-	--inst.sg:GoToState("idle")
+    --inst.sg:GoToState("idle")
 
     inst.WINDSTAFF_CASTER = nil
     inst.persists = false
-	inst.grow_mini = grow_mini
-	inst:grow_mini()
+    inst.grow_mini = grow_mini
+    inst:grow_mini()
 
     inst.SetDuration = SetDuration
     inst:SetDuration(3000)
-	
-	inst:DoTaskInTime(0.2, function(inst)
-		inst:DoPeriodicTask(.4, destroystuff_mini)
-	end)
+    
+    inst:DoTaskInTime(0.2, function(inst)
+        inst:DoPeriodicTask(.4, destroystuff_mini)
+    end)
 
     return inst
 end
 
 return Prefab("mothergoose_tornado", tornado_fn, assets),
-		Prefab("mini_mothergoose_tornado", minitornado_fn, assets)
+        Prefab("mini_mothergoose_tornado", minitornado_fn, assets)

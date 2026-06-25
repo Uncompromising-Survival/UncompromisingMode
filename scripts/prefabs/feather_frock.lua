@@ -110,14 +110,13 @@ local function SpawnThorns(inst, feather, owner, damage)
                 elseif feather == "malbatross_feather" then
                     v.components.combat:GetAttacked(owner, damage)
                 end
-            end
-
-            if impactfx ~= nil and v.components.combat then
-                local follower = impactfx.entity:AddFollower()
-                follower:FollowSymbol(v.GUID, v.components.combat.hiteffectsymbol, 0, 0, 0)
-                if owner ~= nil and owner:IsValid() then
-                    impactfx:FacePoint(owner.Transform:GetWorldPosition())
-                    impactfx.Transform:SetScale(inst.fxscale, inst.fxscale, inst.fxscale)
+                if impactfx ~= nil then
+                    local follower = impactfx.entity:AddFollower()
+                    follower:FollowSymbol(v.GUID, v.components.combat.hiteffectsymbol, 0, 0, 0)
+                    if owner ~= nil and owner:IsValid() then
+                        impactfx:FacePoint(owner.Transform:GetWorldPosition())
+                        impactfx.Transform:SetScale(inst.fxscale, inst.fxscale, inst.fxscale)
+                    end
                 end
             end
         end
@@ -150,8 +149,7 @@ local function SpawnThorns(inst, feather, owner, damage)
     end
 
     owner.components.locomotor:SetExternalSpeedMultiplier(inst, "wingsuit", 1.5 + inst.speedboost)
-    owner:DoTaskInTime(1.5 + inst.speedboost,
-        function(owner) owner.components.locomotor:RemoveExternalSpeedMultiplier(inst, "wingsuit") end)
+    owner:DoTaskInTime(1.5 + inst.speedboost, function(owner) owner.components.locomotor:RemoveExternalSpeedMultiplier(inst, "wingsuit") end)
 end
 
 --local function charged(inst)
