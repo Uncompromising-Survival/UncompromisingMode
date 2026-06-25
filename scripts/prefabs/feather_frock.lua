@@ -72,54 +72,52 @@ local function SpawnThorns(inst, feather, owner, damage)
             if owner ~= nil and not owner:IsValid() then
                 owner = nil
             end
-            if owner ~= nil then
-                if owner.components.combat ~= nil and owner.components.combat:CanTarget(v) then
-                    if feather == "feather_robin" and v.components.fueled == nil and
-                        v.components.burnable ~= nil and
-                        not v.components.burnable:IsBurning() and
-                        not v:HasTag("burnt") then
-                        v.components.burnable:Ignite(nil, owner, owner)
-                        v.components.combat:GetAttacked(owner, damage)
+            if owner and owner.components.combat ~= nil and owner.components.combat:CanTarget(v) and not inst.components.combat:IsAlly(v) then
+                if feather == "feather_robin" and v.components.fueled == nil and
+                    v.components.burnable ~= nil and
+                    not v.components.burnable:IsBurning() and
+                    not v:HasTag("burnt") then
+                    v.components.burnable:Ignite(nil, owner, owner)
+                    v.components.combat:GetAttacked(owner, damage)
 
-                        if v.components.freezable then
-                            v.components.freezable:Unfreeze()
-                        end
-                    elseif feather == "feather_robin_winter" then
-                        v.components.combat:GetAttacked(owner, damage)
-
-                        inst.fxscale = 1.5
-                    elseif feather == "feather_crow" and v.components.locomotor ~= nil then
-                        local debuffkey = inst.prefab
-
-                        if v._wingsuit_speedmulttask ~= nil then
-                            v._wingsuit_speedmulttask:Cancel()
-                        end
-                        v._wingsuit_speedmulttask = v:DoTaskInTime(5,
-                            function(i)
-                                i.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey)
-                                i._wingsuit_speedmulttask = nil
-                            end)
-
-                        local slowamount = 0.7
-
-                        v.components.locomotor:SetExternalSpeedMultiplier(v, debuffkey, slowamount)
-                        v.components.combat:GetAttacked(owner, damage)
-                    elseif feather == "feather_canary" then
-                        SpawnPrefab("electricchargedfx"):SetTarget(v)
-                        SpawnPrefab("shockotherfx"):SetFXOwner(owner)
-                        v.components.combat:GetAttacked(owner, damage)
-                    elseif feather == "malbatross_feather" then
-                        v.components.combat:GetAttacked(owner, damage)
+                    if v.components.freezable then
+                        v.components.freezable:Unfreeze()
                     end
+                elseif feather == "feather_robin_winter" then
+                    v.components.combat:GetAttacked(owner, damage)
+
+                    inst.fxscale = 1.5
+                elseif feather == "feather_crow" and v.components.locomotor ~= nil then
+                    local debuffkey = inst.prefab
+
+                    if v._wingsuit_speedmulttask ~= nil then
+                        v._wingsuit_speedmulttask:Cancel()
+                    end
+                    v._wingsuit_speedmulttask = v:DoTaskInTime(5,
+                        function(i)
+                            i.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey)
+                            i._wingsuit_speedmulttask = nil
+                        end)
+
+                    local slowamount = 0.7
+
+                    v.components.locomotor:SetExternalSpeedMultiplier(v, debuffkey, slowamount)
+                    v.components.combat:GetAttacked(owner, damage)
+                elseif feather == "feather_canary" then
+                    SpawnPrefab("electricchargedfx"):SetTarget(v)
+                    SpawnPrefab("shockotherfx"):SetFXOwner(owner)
+                    v.components.combat:GetAttacked(owner, damage)
+                elseif feather == "malbatross_feather" then
+                    v.components.combat:GetAttacked(owner, damage)
                 end
+            end
 
-                if impactfx ~= nil and v.components.combat then
-                    local follower = impactfx.entity:AddFollower()
-                    follower:FollowSymbol(v.GUID, v.components.combat.hiteffectsymbol, 0, 0, 0)
-                    if owner ~= nil and owner:IsValid() then
-                        impactfx:FacePoint(owner.Transform:GetWorldPosition())
-                        impactfx.Transform:SetScale(inst.fxscale, inst.fxscale, inst.fxscale)
-                    end
+            if impactfx ~= nil and v.components.combat then
+                local follower = impactfx.entity:AddFollower()
+                follower:FollowSymbol(v.GUID, v.components.combat.hiteffectsymbol, 0, 0, 0)
+                if owner ~= nil and owner:IsValid() then
+                    impactfx:FacePoint(owner.Transform:GetWorldPosition())
+                    impactfx.Transform:SetScale(inst.fxscale, inst.fxscale, inst.fxscale)
                 end
             end
         end
