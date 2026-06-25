@@ -72,7 +72,7 @@ local function SpawnThorns(inst, feather, owner, damage)
             if owner ~= nil and not owner:IsValid() then
                 owner = nil
             end
-            if owner and owner.components.combat ~= nil and owner.components.combat:CanTarget(v) and not inst.components.combat:IsAlly(v) then
+            if owner and owner.components.combat ~= nil and owner.components.combat:CanTarget(v) and not owner.components.combat:IsAlly(v) then
                 if feather == "feather_robin" and v.components.fueled == nil and
                     v.components.burnable ~= nil and
                     not v.components.burnable:IsBurning() and
