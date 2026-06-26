@@ -29,8 +29,6 @@ env.AddStategraphPostInit("gestalt", function(inst)
             if HasSkill(target,"wathom_allegiance_shadow") and target.components.health then
                 target.components.health:DeltaPenalty(1/6)
             end
-            --[[local grogginess = target.components.grogginess
-            if grogginess then grogginess:SetPercent(1) end]]
             local ret = _DoSpecialAttack(inst, target, ...)
             target:DoTaskInTime(2, function(target)
                 if target.components.grogginess and target.components.grogginess:IsKnockedOut() and not target.gestalt_hungry_sleep then
