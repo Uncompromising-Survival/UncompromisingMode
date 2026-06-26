@@ -313,7 +313,8 @@ local brain_post = {
     "walrus",
     "deer",
     "hound",
-    "iceshield"
+    "iceshield",
+    "brightmare_gestalt"
 }
 
 --package post system courtesy of IA team!
