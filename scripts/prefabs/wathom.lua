@@ -220,7 +220,7 @@ local function SapTask(inst)
                     chest.components.fueled:DoDelta(0.005*maxfuel)
                     --Fueled:StopConsuming() self.consuming = false
                     --function Fueled:SetMultiplierFn(fn)
-	                    --self.multfn = fn
+                        --self.multfn = fn
                     --end
                 end
                 if chest.components.finiteuses and chest.components.finiteuses:GetPercent() < 1  then
@@ -431,19 +431,8 @@ local function WathomEnterDark(inst)
 end]]
 
 local function CheckLight(inst)
-    local x,y,z = inst.Transform:GetWorldPosition()
-    local light = TheSim:GetLightAtPoint(x, y, z)
-    if light and light > .9 then
-        if not inst.updatewathomvisiontask then
-            inst.updatewathomvisiontask = inst:DoTaskInTime(2, function()
-                inst.components.playervision:SetCustomCCTable(nil)
-                inst.components.playervision:ForceNightVision(false)
-                inst:RemoveTag("WathomInDark")
-
-                inst.updatewathomvisiontask = nil
-            end)
-        end
-    else
+    local x, y, z = inst.Transform:GetWorldPosition()
+    if TheWorld.state.isnight and not TheWorld.state.isfullmoon and TheSim:GetLightAtPoint(x, y, z) <= .9 then
         if inst.updatewathomvisiontask then
             inst.updatewathomvisiontask:Cancel()
             inst.updatewathomvisiontask = nil
@@ -451,7 +440,20 @@ local function CheckLight(inst)
         --print(NIGHTVISION_CCS, TUNING.DSTU.WATHOM_NIGHTVISON_CC, NIGHTVISION_CCS[TUNING.DSTU.WATHOM_NIGHTVISON_CC])
         inst.components.playervision:SetCustomCCTable(NIGHTVISION_CCS[TUNING.DSTU.WATHOM_NIGHTVISON_CC])
         inst.components.playervision:ForceNightVision(true)
-        inst:AddTag("WathomInDark")
+        if TheWorld.ismastersim then
+            inst:AddTag("WathomInDark")
+        end
+    else
+        if not inst.updatewathomvisiontask then
+            inst.updatewathomvisiontask = inst:DoTaskInTime(2, function()
+                inst.components.playervision:SetCustomCCTable(nil)
+                inst.components.playervision:ForceNightVision(false)
+                if TheWorld.ismastersim then
+                    inst:RemoveTag("WathomInDark")
+                end
+                inst.updatewathomvisiontask = nil
+            end)
+        end
     end
 end
 
@@ -471,7 +473,6 @@ local function onload(inst, data)
             inst:AddTag("amped")
             SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "WathomMusicToggle"), inst.userid, GetMusicValues(inst))
         end
-
         if data.deathamped then
             inst:AddTag("deathamp")
             SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "WathomMusicToggle"), inst.userid, GetMusicValues(inst))
@@ -759,10 +760,6 @@ local function master_postinit(inst)
     inst:ListenForEvent("ms_respawnedfromghost", SetupKnockOutTest)
     SetupKnockOutTest(inst)
 
-    inst:DoPeriodicTask(.3, CheckLight)
-    --[[inst:ListenForEvent("enterdark", WathomEnterDark)
-    inst:ListenForEvent("enterlight", WathomEnterLight)]]
-
     -- stuff relating to Wathom's adrenaline timer. This can most likely be optimized.
     inst:DoPeriodicTask(1.5, function() AmpTimer(inst) end)
     inst:DoPeriodicTask(1, function() SapTask(inst) end)
@@ -811,7 +808,7 @@ local function master_postinit(inst)
     inst.components.sanity.night_drain_mult = 0
 
     -- Night Vision enabler
-    --    inst.components.playervision:ForceNightVision(true) -- Should only force this if it's night or in caves.
+    -- inst.components.playervision:ForceNightVision(true) -- Should only force this if it's night or in caves.
 
     -- Doubles Wathom's attack range so he can jump at things from further away.
     -- inst.components.combat.attackrange = 4
