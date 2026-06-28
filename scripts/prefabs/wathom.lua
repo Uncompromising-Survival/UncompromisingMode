@@ -513,7 +513,7 @@ local function UpdateAdrenaline(inst, data)
     local item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
 
     --seperate 'if's so all sounds can play at once, in theory. (And I don't have to worry about elseif order...)
-    if data.oldpercent < 0.75 and data.newpercent >= 0.75 then
+    --[[if data.oldpercent < 0.75 and data.newpercent >= 0.75 then
         SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "WathomAdrenalineStinger"), inst.userid, "wathom_ampstage_04")
     end
     if data.oldpercent < 0.5 and data.newpercent >= 0.5 then
@@ -528,7 +528,7 @@ local function UpdateAdrenaline(inst, data)
     end
     if data.oldpercent >= 0 and data.newpercent == 0 and inst:HasTag("amped") then
         SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "WathomAdrenalineStinger"), inst.userid, "wathom_breathe")
-    end
+    end]]
 
     CheckForCaneRun(inst)
 
