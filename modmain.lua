@@ -154,13 +154,13 @@ local function WathomMusicToggle(level)
 end
 
 -- wathomcustomvoice/wathomvoiceevent
-local function DoAdrenalineUpStinger(sound)
+--[[local function DoAdrenalineUpStinger(sound)
     if type(sound) == "string" then
         GLOBAL.TheFrontEnd:GetSound():PlaySound("wathomcustomvoice/wathomvoiceevent/" .. sound)
     else
         GLOBAL.TheFrontEnd:GetSound():PlaySound("dontstarve_DLC001/characters/wathgrithr/inspiration_down")
     end
-end
+end]]
 
 local function GetTargetFocus(player, telebase, telestaff) telestaff.target_focus = telebase end
 
@@ -206,7 +206,7 @@ AddModRPCHandler("UncompromisingSurvival", "PianoPuzzleComplete2", PianoPuzzleCo
 AddModRPCHandler("UncompromisingSurvival", "PianoPuzzleComplete3", PianoPuzzleComplete3)
 
 AddClientModRPCHandler("UncompromisingSurvival", "WathomMusicToggle", WathomMusicToggle)
-AddClientModRPCHandler("UncompromisingSurvival", "WathomAdrenalineStinger", DoAdrenalineUpStinger)
+--AddClientModRPCHandler("UncompromisingSurvival", "WathomAdrenalineStinger", DoAdrenalineUpStinger)
 
 local function ToggleLagCompOn(self)
     if --[[not GLOBAL.IsDefaultScreen() or]] GLOBAL.ThePlayer == nil or GLOBAL.ThePlayer.hadcompenabled ~= nil then
