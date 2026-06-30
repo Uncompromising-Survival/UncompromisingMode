@@ -461,7 +461,7 @@ local function FloodMoistureRamp(inst)
         end
 
         inst.components.moisture:DoDelta(wetness_gain, true)
-        --DoDeltaMoistureToEntity(inst, wetness_gain)
+        --DoDeltaMoistureToEntity(inst, wetness_gain, nil, nil, true)
     end
 end
 
