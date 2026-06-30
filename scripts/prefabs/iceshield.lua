@@ -33,6 +33,18 @@ end
 
 
 local function Init(inst, parent, fx_symbol, tier)
+    if parent.ice_shield then
+        parent.ice_shield:Remove()
+    end
+
+    if parent.shield_fx2 then
+        parent.shield_fx2:Remove()
+    end
+
+    if parent.shield_fx then
+        parent.shield_fx:Remove()
+    end
+
     inst.tier = tier
     inst._parent = parent
 
@@ -44,11 +56,6 @@ local function Init(inst, parent, fx_symbol, tier)
     fx.Transform:SetPosition(parent.Transform:GetWorldPosition())
     fx.entity:AddFollower()
     fx.Follower:FollowSymbol(parent.GUID, fx_symbol, 0, 0, 0)
-
-
-    if parent.ice_shield then
-        parent.ice_shield:Remove()
-    end
 
     parent.ice_shield = inst
     inst.entity:SetParent(parent.entity)
@@ -82,15 +89,6 @@ local function Init(inst, parent, fx_symbol, tier)
     if parent.components.combat then
         parent.components.combat:SetShouldRecoilFn(ShouldRecoilIceShield)
     end
-
-    if parent.shield_fx2 then
-        parent.shield_fx2:Remove()
-    end
-
-    if parent.shield_fx then
-        parent.shield_fx:Remove()
-    end
-
 
     parent.shield_fx = SpawnPrefab("deer_ice_flakes")
     parent.shield_fx.Transform:SetPosition(parent.Transform:GetWorldPosition())

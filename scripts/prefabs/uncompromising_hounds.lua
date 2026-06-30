@@ -861,7 +861,6 @@ local function fnglacial()
     inst.components.combat:SetDefaultDamage(TUNING.HOUND_DAMAGE * 2)
     inst.components.health:SetMaxHealth(TUNING.WARGLET_HEALTH * 1.25)
 
-
     inst.task = nil
 
     inst:ListenForEvent("attacked", OnGlacialAttacked)
