@@ -10,15 +10,10 @@ local AVOID_PLAYER_STOP = 12
 local AVOID_DIST = 10
 local AVOID_STOP = 12
 
-local FINDFOOD_CANT_TAGS = { "outofreach", "INLIMBO" }
-local DONTEAT_TAGS = {"bee", "mosquito"}
+local FINDFOOD_MUST_TAGS = {"_inventoryitem"}
+local FINDFOOD_CANT_TAGS = {"outofreach", "INLIMBO", "bee", "mosquito"}
 local function IsFoodValid(item, inst)
-    return item.prefab ~= "mandrake"
-        and not (item.components.burnable and item.components.burnable:IsBurning())
-        --and item:IsOnPassablePoint()
-        and item:IsOnValidGround()
-        and not item:HasAnyTag(DONTEAT_TAGS)
-        and inst.components.eater and inst.components.eater:CanEat(item)
+    return inst.components.eater and inst.components.eater:CanEat(item) and item:IsOnPassablePoint()
 end
 
 local function EatFoodAction(inst)
@@ -33,7 +28,7 @@ local function EatFoodAction(inst)
     --[[local target = FindEntity(inst, SEE_DIST, function(item) return inst.components.eater:CanEat(item) and item:IsOnPassablePoint(true) end)
     return target ~= nil and BufferedAction(inst, target, ACTIONS.EAT) or nil
     ]]
-    local target = FindEntity(inst, SEE_DIST, IsFoodValid, nil, FINDFOOD_CANT_TAGS, inst.components.eater and inst.components.eater:GetEdibleTags() or nil)
+    local target = FindEntity(inst, SEE_DIST, IsFoodValid, FINDFOOD_MUST_TAGS, FINDFOOD_CANT_TAGS, inst.components.eater and inst.components.eater:GetEdibleTags() or nil)
     return target and BufferedAction(inst, target, ACTIONS.PICKUP) or nil
 end
 
