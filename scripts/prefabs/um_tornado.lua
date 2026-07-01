@@ -142,7 +142,7 @@ local function TornadoEnviromentTask(inst)
     if config ~= "minimal" then
         -- if GetClosestInstWithTag("player", inst, PLAYER_CAMERA_SEE_DISTANCE * 1.125) ~= nil then -- tornado doesn't sleep. Using alt distance-based check.
         -- PICKABLES
-        local pickables = TheSim:FindEntities(x, y, z, 12, nil, { "prototyper", "INLIMBO", "trap", "flower", "heavy", "tornado_nosucky" }, { "pickable", "HACK_workable" })
+        local pickables = TheSim:FindEntities(x, y, z, 12, nil, {"prototyper", "INLIMBO", "trap", "flower", "heavy", "tornado_nosucky"}, {"pickable", "HACK_workable"})
         for k, v in ipairs(pickables) do
             if v.prefab ~= "sculptingtable" then
                 local _x, _y, _z = v.Transform:GetWorldPosition()
@@ -171,8 +171,7 @@ local function TornadoEnviromentTask(inst)
         end
 
         -- WORKING
-        local workables = TheSim:FindEntities(x, y, z, 6, nil, { "heavy", "irreplaceable", "INLIMBO", "trap", "winter_tree", "farm_plant", "_inventory", "sign", "drawable", "tornado_nosucky", "waxedplant" },
-            { "DIG_workable", "CHOP_workable" })
+        local workables = TheSim:FindEntities(x, y, z, 6, nil, {"heavy", "irreplaceable", "INLIMBO", "trap", "winter_tree", "farm_plant", "_inventory", "sign", "drawable", "tornado_nosucky", "waxedplant"}, {"DIG_workable", "CHOP_workable"})
 
         for k, v in ipairs(workables) do
             local _x, _y, _z = v.Transform:GetWorldPosition()
@@ -195,12 +194,11 @@ local function TornadoEnviromentTask(inst)
         end
 
         -- ITEM PICKING
-        local items_pick = TheSim:FindEntities(x, y, z, 6, { "_inventoryitem" }, --no dome check because dome component adds nosucky tag.
-            { "irreplaceable", "tornado_nosucky", "trap", "INLIMBO", "heavy", "backpack" })
+        local items_pick = TheSim:FindEntities(x, y, z, 6, {"_inventoryitem"}, {"irreplaceable", "tornado_nosucky", "trap", "INLIMBO", "heavy", "backpack"}) --no dome check because dome component adds nosucky tag.
         for k, v in ipairs(items_pick) do
             if v.prefab == "staff_tornado" then
-                if not v.empowered then
-                    v.ChargeUp(v)
+                if not v.empowered and v.ChargeUp then
+                    v:ChargeUp()
                     SpawnPrefab("lightning").Transform:SetPosition(v.Transform:GetWorldPosition())
                 end
             else
@@ -219,8 +217,7 @@ local function TornadoEnviromentTask(inst)
     end
 
     -- DAMAGING
-    local AURA_EXCLUDE_TAGS = { "noclaustrophobia", "rabbit", "playerghost", "player", "ghost", "shadow",
-        "shadowminion", "noauradamage", "INLIMBO", "notarget", "noattack", "invisible", "trap", "tornado_nosucky" }
+    local AURA_EXCLUDE_TAGS = {"noclaustrophobia", "rabbit", "playerghost", "player", "ghost", "shadow", "shadowminion", "noauradamage", "INLIMBO", "notarget", "noattack", "invisible", "trap", "tornado_nosucky"}
 
     local targets = TheSim:FindEntities(x, y, z, 4, nil, AURA_EXCLUDE_TAGS, { "_combat", "um_tornado_redirector" })
 

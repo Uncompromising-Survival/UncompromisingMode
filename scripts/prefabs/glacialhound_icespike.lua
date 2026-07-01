@@ -15,7 +15,6 @@ local RADIUS = 0.8
 local RADIUS_LARGE = 1.4
 local NUM_VARIATIONS = 3
 
-
 --------------------------------------------------------------------------
 
 local function OnIsPathFindingDirty(inst)
@@ -63,7 +62,6 @@ local function onremove(inst)
 end
 
 --------------------------------------------------------------------------
-
 
 local DAMAGE_RADIUS_PADDING = 1.0
 
@@ -158,7 +156,7 @@ end
 
 local function DoDamage(inst)
     inst.dmgtask = nil
-    local attacker = inst.owner and inst.owner:IsValid() and inst.owner or inst
+    local attacker = inst.owner and inst.owner:IsValid() and inst.owner or nil
     local radius = inst.islarge:value() and RADIUS_LARGE or RADIUS
     local x, y, z = inst.Transform:GetWorldPosition()
     local ents = TheSim:FindEntities(x, 0, z, radius + DAMAGE_RADIUS_PADDING, nil, NON_COLLAPSIBLE_TAGS, COLLAPSIBLE_TAGS)
@@ -394,8 +392,6 @@ local function spikefn()
     if not TheWorld.ismastersim then
         return inst
     end
-
-    inst.owner = nil --set when the spike is spawned by the glacial hounds.
 
     inst.variation = 1
     inst.AnimState:PushAnimation("spike1", false)
