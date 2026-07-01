@@ -349,6 +349,7 @@ DESCRIBE.CORNCAN = "Where did this can come from?"
 DESCRIBE.SKULLCHEST_CHILD = "If only I could fit inside."
 
 DESCRIBE.SLOBBERLOBBER = "A portable loogie launcher."
+DESCRIBE.UM_ANTLIONSTAFF = "Feed it stones, summon spikes."
 DESCRIBE.GORE_HORN_HAT =
 "My mind was always the greatest weapon but... yeah, you get the idea."
 DESCRIBE.BEARGERCLAW = "Sticks and stones can break some bones."

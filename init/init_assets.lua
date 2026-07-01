@@ -18,6 +18,7 @@ local inventoryitems =
 {
     "um_buttery_fly",
     "um_ghost_pepper_item",
+    "um_antlionstaff",
     "air_conditioner",
     "ancient_amulet_red",
     "aphid",
@@ -1628,6 +1629,8 @@ Assets = {
     Asset("ANIM", "anim/um_bear_trap_tooth.zip"),
     Asset("ANIM", "anim/um_bear_trap_gold.zip"),
 
+    Asset("ANIM", "anim/um_antlionstaff.zip"),
+
     Asset("ANIM", "anim/slobberlobber.zip"),
 
     Asset("ANIM", "anim/beargerclaw.zip"),
@@ -1837,6 +1840,8 @@ Assets = {
     Asset("ANIM", "anim/swap_slobberlobber.zip"),
 
     Asset("ANIM", "anim/swap_beargerclaw.zip"),
+
+    Asset("ANIM", "anim/swap_antlionstaff.zip"),
 
     Asset("ANIM", "anim/swap_um_harpoon.zip"),
 
