@@ -9,7 +9,7 @@ env.AddComponentPostInit("propagator", function(self)
     function self:OnUpdate(dt, ...)
         --[[local _FindEntities
         local damager = self.inst.damager and self.inst.damager:IsValid() and self.inst.damager
-        if damager then
+        if self.spreading and damager then
             local TheSimMetaTable = getmetatable(TheSim).__index
             _FindEntities = TheSim.FindEntities
             function TheSimMetaTable.FindEntities(self, x, y, z, radius, musttags, canttags, oneoftags, ...)
