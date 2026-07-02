@@ -171,7 +171,6 @@ local function fnfire()
         return inst
     end
 
-    inst.doer = nil
     inst.Light:Enable(false)
 
     inst.Physics:SetMass(1)

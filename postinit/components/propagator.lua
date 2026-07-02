@@ -1,8 +1,21 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 ------------------------Fire spread is less efficient in winter-----------------------------------------
-local TARGET_CANT_TAGS = { "INLIMBO" }
-local TARGET_MELT_MUST_TAGS = { "frozen", "firemelt" }
+local TARGET_CANT_TAGS = {"INLIMBO"}
+local TARGET_MELT_MUST_TAGS = {"frozen", "firemelt"}
+
+--[[local TheSimMetaTable = getmetatable(TheSim).__index
+local _FindEntities = TheSim.FindEntities
+function TheSimMetaTable.FindEntities(self, x, y, z, radius, musttags, canttags, oneoftags, ...)
+	local ret = _FindEntities(self, x, y, z, radius, musttags, canttags, oneoftags, ...)
+	local ents_to_pass = {}
+	for k, v in pairs(ret) do
+		if v:IsValid() and UMCommonFns.IsNotFriendly(self.inst.damager, v)
+			ents_to_pass[k] = v
+		end
+	end
+	return next(ents_to_pass) and ents_to_pass or ret
+end]]
 
 env.AddComponentPostInit("propagator", function(self)
     local _OnUpdate = self.OnUpdate
