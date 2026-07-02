@@ -13,9 +13,7 @@ local UIAnim = require "widgets/uianim"
 --DO NOT TOGGLE THIS WITH A CONFIG WHENEVER WE DO THAT.
 env.AddReplicableComponent("gem_enchantable")
 env.AddPrefabPostInitAny(function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
+    if not TheWorld.ismastersim then return end
 
     if inst.components.equippable and inst.components.equippable.equipslot == EQUIPSLOTS.HANDS and (inst.components.tool or inst.components.weapon) and not inst.components.stackable and not inst.components.gem_enchantable then
         inst:AddComponent("gem_enchantable")
@@ -23,16 +21,19 @@ env.AddPrefabPostInitAny(function(inst)
         inst.repair_count = 1
 
         local _OnSave = inst.OnSave
-        local _OnLoad = inst.OnLoad
-        local function OnSave(inst, data)
+        local function OnSave(inst, data, ...)
+            local ret = _OnSave and _OnSave(inst, data, ...)
             data.repair_count = inst.repair_count
-            return _OnSave and _OnSave(inst, data) or data
+            return ret
         end
-        local function OnLoad(inst, data)
-            _OnLoad(inst, data)
+
+        local _OnLoad = inst.OnLoad
+        local function OnLoad(inst, data, ...)
+            local ret = _OnLoad and _OnLoad(inst, data, ...)
             if data and data.repair_count then
                 inst.repair_count = data.repair_count
             end
+            return ret
         end
 
         inst.OnSave = OnSave
