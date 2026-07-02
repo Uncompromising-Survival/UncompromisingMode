@@ -10,7 +10,7 @@ function TheSimMetaTable.FindEntities(self, x, y, z, radius, musttags, canttags,
 	local ret = _FindEntities(self, x, y, z, radius, musttags, canttags, oneoftags, ...)
 	local ents_to_pass = {}
 	for k, v in pairs(ret) do
-		if v:IsValid() and UMCommonFns.IsNotFriendly(self.inst.damager, v)
+		if v:IsValid() and UMCommonFns.IsNotFriendly(self.inst.damager, v) then
 			ents_to_pass[k] = v
 		end
 	end
