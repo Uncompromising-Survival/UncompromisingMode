@@ -4,22 +4,25 @@ GLOBAL.setfenv(1, GLOBAL)
 local TARGET_CANT_TAGS = {"INLIMBO"}
 local TARGET_MELT_MUST_TAGS = {"frozen", "firemelt"}
 
---[[local TheSimMetaTable = getmetatable(TheSim).__index
-local _FindEntities = TheSim.FindEntities
-function TheSimMetaTable.FindEntities(self, x, y, z, radius, musttags, canttags, oneoftags, ...)
-    local ret = _FindEntities(self, x, y, z, radius, musttags, canttags, oneoftags, ...)
-    local ents_to_pass = {}
-    for k, v in pairs(ret) do
-        if v:IsValid() and UMCommonFns.IsNotFriendly(self.inst.damager, v) then
-            table.insert(ents_to_pass, v)
-        end
-    end
-    return next(ents_to_pass) and ents_to_pass or ret
-end]]
-
 env.AddComponentPostInit("propagator", function(self)
     local _OnUpdate = self.OnUpdate
     function self:OnUpdate(dt, ...)
+        --[[local _FindEntities
+        local damager = self.inst.damager and self.inst.damager:IsValid() and self.inst.damager
+        if damager then
+            local TheSimMetaTable = getmetatable(TheSim).__index
+            _FindEntities = TheSim.FindEntities
+            function TheSimMetaTable.FindEntities(self, x, y, z, radius, musttags, canttags, oneoftags, ...)
+                local ret = _FindEntities(self, x, y, z, radius, musttags, canttags, oneoftags, ...)
+                local ents_to_pass = {}
+                for k, v in pairs(ret) do
+                    if v:IsValid() and UMCommonFns.IsNotFriendly(damager, v) then
+                        table.insert(ents_to_pass, v)
+                    end
+                end
+                return next(ents_to_pass) and ents_to_pass or ret
+            end
+        end]]
         if TheWorld.state.season == "winter" and not self.inst.sg then
             self:CalculateHeatCap()
 
@@ -98,5 +101,6 @@ env.AddComponentPostInit("propagator", function(self)
         else
             _OnUpdate(self, dt, ...)
         end
+        --if _FindEntities then TheSimMetaTable.FindEntities = _FindEntities end
     end
 end)
