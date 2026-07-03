@@ -136,6 +136,18 @@ end
 
 local function onequip(inst, owner)
     if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.HANDS) then return end
+    if not owner:HasTag("player") then
+        local leader = owner.components.follower and owner.components.follower:GetLeader()
+        if leader == nil or not leader:HasTag("vetcurse") then
+            inst:DoTaskInTime(0, function(inst)
+                if inst:IsValid() and inst.components.inventoryitem and inst.components.inventoryitem.owner == owner
+                    and owner.components.inventory then
+                    owner.components.inventory:DropItem(inst)
+                end
+            end)
+            return
+        end
+    end
     owner.AnimState:OverrideSymbol("swap_object", "swap_beargerclaw", "swap_shovel")
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
