@@ -23,8 +23,8 @@ local function OnLand(inst)
 
     local ents = TheSim:FindEntities(x, y, z, 1.5, should_hit, shouldnt_hit)
     for i, v in ipairs(ents) do
-        if v.prefab ~= inst.attacker.prefab and not (inst.attacker_faction and v:HasTag(inst.attacker_faction)) then
-            v.components.combat:GetAttacked(inst.attacker and inst.attacker or nil,20,inst)
+        if inst.attacker and v.prefab ~= inst.attacker.prefab and not (inst.attacker_faction and v:HasTag(inst.attacker_faction)) then
+            v.components.combat:GetAttacked(inst.attacker and inst.attacker:IsValid() and inst.attacker or nil, 20, inst)
         end
     end
     inst:Remove()
@@ -46,7 +46,6 @@ local function onthrown(inst, attacker, targetPos)
     inst.Physics:CollidesWith(COLLISION.GROUND)
     inst.Physics:CollidesWith(COLLISION.OBSTACLES)
     inst.Physics:CollidesWith(COLLISION.ITEMS)
-    
 
     if attacker then
         inst.attacker = attacker
@@ -139,7 +138,7 @@ local function DoDamageEffect(inst, target)
 
     if not plague then
         if target.components.combat and not target.components.health:IsDead() then
-            target.components.combat:GetAttacked(inst.attacker and inst.attacker or nil, 20, inst)
+            target.components.combat:GetAttacked(inst.attacker and inst.attacker:IsValid() and inst.attacker or nil, 20, inst)
             DeathSpoil(target)
         end
         target:PushEvent("knockback", { knocker = inst, radius = 1.5, strengthmult = 1.5, forcelanded = true })
@@ -158,11 +157,7 @@ local function OnExplode(inst, target)
     local ents = TheSim:FindEntities(x, y, z, TUNING.TRAP_TEETH_RADIUS)
     for i, v in ipairs(ents) do
         if v.components.inventoryitem and v.components.perishable then
-            if v.components.inventoryitem:IsHeld() then
-                v.components.perishable:SetPercent(v.components.perishable:GetPercent() - .05)
-            else
-                v.components.perishable:SetPercent(0)
-            end
+            v.components.perishable:SetPercent(v.components.inventoryitem:IsHeld() and v.components.perishable:GetPercent() - .05 or 0)
         end
     end
     inst.SoundEmitter:PlaySound("dontstarve/common/together/infection_burst")
@@ -229,7 +224,6 @@ local function lobbedminefn()
 end
 
 local shouldnt_hit = {"INLIMBO", "notarget", "noattack", "playerghost"}
-
 
 local function common_fn(bank, build, anim, tag, isinventoryitem)
     local inst = CreateEntity()
