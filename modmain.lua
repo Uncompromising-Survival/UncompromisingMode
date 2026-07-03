@@ -24,7 +24,7 @@ ReloadPreloadAssets()
 -- Start the game mode
 SignFiles = require("uncompromising_writeables")
 
-local vanilla = require "screens/redux/scrapbookdata"
+--[[local vanilla = require "screens/redux/scrapbookdata"
 local uncomp = require "screens/redux/scrapbookdata_changes"
 
 local valid_data = {
@@ -61,7 +61,7 @@ local valid_data = {
     "picakble",
     "insulator",
     "insulator_type"
-}
+}]]
 
 AddPrefabPostInit("world", function(inst)
     -- this broke and we lost access to data generation :((((((
