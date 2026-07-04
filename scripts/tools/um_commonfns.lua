@@ -64,15 +64,17 @@ UMCommonFns.IsNotFriendly = function(attacker, target) -- Is the target an ally 
 end
 
 UMCommonFns.VetcurseUnequip = function(inst, owner, slot)
+    if owner.components.inventory.isloading then return end
     if owner:HasTag("player") then
-        if not owner:HasTag("vetcurse") and not owner.components.inventory.isloading then
+        if not owner:HasTag("vetcurse") then
             inst:DoTaskInTime(0, function(inst)
                 --local owner = inst.components.inventoryitem and inst.components.inventoryitem.owner
-                local tool = owner and owner.components.inventory:GetEquippedItem(slot)
-                if tool and owner then
-                    owner.components.inventory:Unequip(slot)
-                    owner.components.inventory:DropItem(tool)
-                    owner.components.inventory:GiveItem(inst)
+                local inventory = owner and owner.components.inventory
+                local tool = inventory and inventory:GetEquippedItem(slot)
+                if inventory and tool then
+                    inventory:Unequip(slot)
+                    inventory:DropItem(tool)
+                    inventory:GiveItem(inst)
                     UMCommonFns.Say(owner, GetString(owner, "CURSED_ITEM_EQUIP"))
                     inst.SoundEmitter:PlaySound("dontstarve_DLC001/common/HUD_hot_level1")
                     if owner.sg then owner.sg:GoToState("hit") end
@@ -80,16 +82,16 @@ UMCommonFns.VetcurseUnequip = function(inst, owner, slot)
             end)
             return true
         end
-    elseif not owner:HasTag("equipmentmodel") and not (owner.components.inventory and owner.components.inventory.isloading) then
-        inst:DoTaskInTime(0, function(inst)
-            if not (inst:IsValid() and inst.components.inventoryitem and inst.components.inventoryitem.owner == owner) then
-                return
-            end
-            local leader = owner.components.follower and owner.components.follower:GetLeader()
-            if (not leader or not leader:HasTag("vetcurse")) and owner.components.inventory then
-                owner.components.inventory:DropItem(inst)
-            end
-        end)
+    elseif not owner:HasTag("equipmentmodel") then
+        local leader = owner.components.follower and owner.components.follower:GetLeader()
+        if not leader or not leader:HasTag("vetcurse") then
+            inst:DoTaskInTime(0, function(inst)
+                if owner.components.inventory and inst.components.inventoryitem and inst.components.inventoryitem.owner == owner then
+                    owner.components.inventory:DropItem(inst)
+                end
+            end)
+            return true
+        end
     end
 end
 
