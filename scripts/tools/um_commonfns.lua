@@ -80,16 +80,16 @@ UMCommonFns.VetcurseUnequip = function(inst, owner, slot)
             end)
             return true
         end
-    elseif not owner:HasTag("equipmentmodel") then
-        local leader = owner.components.follower and owner.components.follower:GetLeader()
-        if not leader or not leader:HasTag("vetcurse") then
-            inst:DoTaskInTime(0, function(inst)
-                if owner.components.inventory and inst:IsValid() and inst.components.inventoryitem and inst.components.inventoryitem.owner == owner then
-                    owner.components.inventory:DropItem(inst)
-                end
-            end)
-            return true
-        end
+    elseif not owner:HasTag("equipmentmodel") and not (owner.components.inventory and owner.components.inventory.isloading) then
+        inst:DoTaskInTime(0, function(inst)
+            if not (inst:IsValid() and inst.components.inventoryitem and inst.components.inventoryitem.owner == owner) then
+                return
+            end
+            local leader = owner.components.follower and owner.components.follower:GetLeader()
+            if (not leader or not leader:HasTag("vetcurse")) and owner.components.inventory then
+                owner.components.inventory:DropItem(inst)
+            end
+        end)
     end
 end
 
