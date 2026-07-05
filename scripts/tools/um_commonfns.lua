@@ -71,7 +71,7 @@ UMCommonFns.VetcurseUnequip = function(inst, owner, slot)
                 --local owner = inst.components.inventoryitem and inst.components.inventoryitem.owner
                 local inventory = owner and owner.components.inventory
                 local tool = inventory and inventory:GetEquippedItem(slot)
-                if inventory and tool then
+                if tool then
                     inventory:Unequip(slot)
                     inventory:DropItem(tool)
                     inventory:GiveItem(inst)
@@ -86,7 +86,7 @@ UMCommonFns.VetcurseUnequip = function(inst, owner, slot)
         local leader = owner.components.follower and owner.components.follower:GetLeader()
         if not leader or not leader:HasTag("vetcurse") then
             inst:DoTaskInTime(0, function(inst)
-                if owner.components.inventory and inst.components.inventoryitem and inst.components.inventoryitem.owner == owner then
+                if inst.components.inventoryitem and inst.components.inventoryitem.owner == owner and owner.components.inventory then
                     owner.components.inventory:DropItem(inst)
                 end
             end)

@@ -4,9 +4,9 @@ local assets =
 }
 
 SetSharedLootTable('um_ocupus_eyetacle',
-    {
-        { 'um_ocupus_eyetacle_item', 1.00 },
-    })
+{
+    { 'um_ocupus_eyetacle_item', 1.00 },
+})
 
 local function RemoveAllTentacles(inst) --This is mainly meant to catch any stragglers, usually the boat itself is saved in the tentacles, so it shouldn't miss em
     --TheNet:Announce("toldtoremove")
@@ -120,7 +120,6 @@ local function FindStalkingGrounds(inst, alreadyused)
     if not inst:IsValid() then return end
     local x, y, z = inst.Transform:GetWorldPosition()
     local seastacks = TheSim:FindEntities(x, y, z, 25, { "seastack" })
-    local choice
     for i, v in ipairs(seastacks) do
         local x, y, z = v.Transform:GetWorldPosition()
         if TheWorld.Map:GetTileAtPoint(x, 0, z) == WORLD_TILES.OCEAN_HAZARDOUS or TheWorld.Map:GetTileAtPoint(x, 0, z) == WORLD_TILES.OCEAN_ROUGH and v ~= alreadyused then
@@ -128,14 +127,12 @@ local function FindStalkingGrounds(inst, alreadyused)
             return v
         end
     end
-    if not choice then
-        return inst
-    end
+    return inst
 end
 
 local max_tries = 10
 local function FindPointEyeTentacle(inst, x, y, z, rot, stalkinggrounds) --Note that "rot" stands for "rotation" referring to how the submerged eyetacles are spread around a point.
-    if not rot then                                                      -- If rot is somehow not passed (shouldn't ever happen) then have some dummy values JIC
+    if not rot then -- If rot is somehow not passed (shouldn't ever happen) then have some dummy values JIC
         rot = math.random(1, 5)
     end
     local oldx, oldy, oldz, oldrot = x, y, z, rot
@@ -186,6 +183,7 @@ end
 local function Born(inst)
     --TheNet:Announce("born")
     local stalkinggrounds = FindStalkingGrounds(inst)
+    if not stalkinggrounds then return end
     local x, y, z = stalkinggrounds.Transform:GetWorldPosition()
     if stalkinggrounds == inst then
         x = x + math.random(-5, 5)
@@ -214,7 +212,6 @@ local function AddEyeTentacle2(inst)
         tent.core = inst
         local x, y, z = inst.boatvictim.Transform:GetWorldPosition()
         local offset = GetOffset(inst) --For this case, will need to make sure we don't accidentally spawn under a boat, using this nifty function gnarwails use.
-
         if offset then
             tent.Transform:SetPosition(x + offset.x, y + offset.y, z + offset.z)
             tent.boatvictim = inst.boatvictim
@@ -245,10 +242,11 @@ local function EyeTentKilled(inst)
 end
 
 local function SpawnTentacle(inst)
+    local offset = GetOffset(inst) --For this case, will need to make sure we don't accidentally spawn under a boat, using this nifty function gnarwails use.
+    if not offset then return end
+    local x, y, z = inst.boatvictim.Transform:GetWorldPosition()
     local tent = SpawnPrefab("um_ocupus_tentacle")
     tent.core = inst
-    local x, y, z = inst.boatvictim.Transform:GetWorldPosition()
-    local offset = GetOffset(inst) --For this case, will need to make sure we don't accidentally spawn under a boat, using this nifty function gnarwails use.
     if not inst.regulartents then
         inst.regulartents = {}
     end
@@ -457,7 +455,7 @@ local function fn()
             end
             --[[if inst.boatvictim then
                 data.engagedboat = inst.boatvictim
-            end        ]]
+            end]]
         end
     end
     inst.OnLoad = function(inst, data)
