@@ -81,7 +81,6 @@ env.AddComponentPostInit("battleborn", function(self)
         end
     end
 
-
     local _OnDeath = self.OnDeath
     function self:OnDeath(...)
         local ret = _OnDeath(self, ...)
