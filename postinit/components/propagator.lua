@@ -1,9 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 ------------------------Fire spread is less efficient in winter-----------------------------------------
-local TARGET_CANT_TAGS = {"INLIMBO"}
-local TARGET_MELT_MUST_TAGS = {"frozen", "firemelt"}
-
 --[[local function PreventAllyFireDamage(ret, inst)
     for k, v in pairs(ret) do
         if v:IsValid() and v.components.propagator and v.components.health
