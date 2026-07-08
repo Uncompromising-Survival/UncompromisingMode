@@ -22,7 +22,7 @@ env.AddComponentPostInit("propagator", function(self)
             UMSimTempOverride.data = {fn = PreventAllyFireDamage, inst = damager}
         end]]
         local propagaterange_damagerange
-        if TheWorld.state.season == "winter" and not self.inst.sg then
+        if TheWorld.state.iswinter and not self.inst.sg then
             propagaterange_damagerange = {propagaterange = self.propagaterange, damagerange = self.damagerange}
             self.propagaterange = self.propagaterange * TUNING.DSTU.WINTER_FIRE_MOD
             self.damagerange = self.damagerange * TUNING.DSTU.WINTER_FIRE_MOD
