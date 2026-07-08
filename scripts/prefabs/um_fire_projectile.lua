@@ -187,12 +187,13 @@ local function fnfire()
     inst:DoTaskInTime(0, ShootFire)
     inst.dont_hit_tags = JoinArrays(UMCommonFns.GHOSTLIKE_TAGS, {"INLIMBO", "notarget", "noattack", "invisible"})
 
+    inst.persists = false
+
     return inst
 end
 -- Fire Projectile
 
 -- Shock Projectile
-
 local function Redirection(inst, flooded) -- See where the arc should be pointing next
     local x,y,z = inst.Transform:GetWorldPosition()
     local living_things = TheSim:FindEntities(x,y,z,flooded and 32 or 16,{"_health"},inst.dont_hit_tags) -- Do a wide search for things to hit
@@ -301,6 +302,7 @@ local function fnshock()
 
     inst.speed = 10
     inst.persists = false
+
     return inst
 end
 

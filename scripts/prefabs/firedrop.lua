@@ -130,12 +130,13 @@ local function magmafn()
     inst.components.burnable:Ignite()
     inst.components.burnable:SetOnBurntFn(inst.Remove)
 
-    inst:DoTaskInTime(1+math.random(), function(inst) inst.components.burnable:Extinguish() end)
+    inst:DoTaskInTime(1 + math.random(), function(inst) inst.components.burnable:Extinguish() end)
+
+    inst.persists = false
 
     return inst
 end
 
 return Prefab("firedrop", fn, assets),
-        Prefab("fireloot", smallfn, assets),
-        Prefab("magmafire", magmafn, assets)
-        
+    Prefab("fireloot", smallfn, assets),
+    Prefab("magmafire", magmafn, assets)

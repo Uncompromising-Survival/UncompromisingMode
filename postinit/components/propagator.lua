@@ -1,7 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 ------------------------Fire spread is less efficient in winter-----------------------------------------
---[[local function PreventAllyFireDamage(ret, inst)
+local function PreventAllyFireDamage(ret, inst)
     for k, v in pairs(ret) do
         if v:IsValid() and v.components.propagator and v.components.health
             and v.components.health.vulnerabletoheatdamage ~= false and not UMCommonFns.IsNotFriendly(inst, v) then
@@ -9,15 +9,15 @@ GLOBAL.setfenv(1, GLOBAL)
         end
     end
     return ret
-end]]
+end
 
 env.AddComponentPostInit("propagator", function(self)
     local _OnUpdate = self.OnUpdate
     function self:OnUpdate(dt, ...)
-        --[[local damager = self.inst.damager and self.inst.damager:IsValid() and self.inst.damager
+        local damager = self.inst.damager and self.inst.damager:IsValid() and self.inst.damager
         if UMSimTempOverride and damager and self.spreading and self.damages then
             UMSimTempOverride.data = {fn = PreventAllyFireDamage, inst = damager}
-        end]]
+        end
         local propagaterange_damagerange
         if TheWorld.state.iswinter and not self.inst.sg then
             propagaterange_damagerange = {propagaterange = self.propagaterange, damagerange = self.damagerange}

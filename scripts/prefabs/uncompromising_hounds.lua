@@ -1002,27 +1002,18 @@ end
 
 local function MagmaCharging(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-
     local x1 = x + math.random(-2, 2)
     local z1 = z + math.random(-2, 2)
     local y1 = 0 + .25 * math.random()
-
     local chance = math.random()
-
-    if chance >= .66 then
-        SpawnPrefab("halloween_firepuff_1").Transform:SetPosition(x1, y1, z1)
-        SpawnPrefab("magmafire").Transform:SetPosition(x1, 0, z1)
-    elseif chance >= .33 and chance < .66 then
-        SpawnPrefab("halloween_firepuff_2").Transform:SetPosition(x1, y1, z1)
-        SpawnPrefab("magmafire").Transform:SetPosition(x1, 0, z1)
-    else
-        SpawnPrefab("halloween_firepuff_3").Transform:SetPosition(x1, y1, z1)
-        SpawnPrefab("magmafire").Transform:SetPosition(x1, 0, z1)
-    end
+    SpawnPrefab(chance >= .66 and "halloween_firepuff_1" or chance >= .33 and chance < .66 and "halloween_firepuff_2" or "halloween_firepuff_3").Transform:SetPosition(x1, y1, z1)
+    local magmafire = SpawnPrefab("magmafire")
+    magmafire.Transform:SetPosition(x1, 0, z1)
+    magmafire.damager = inst
 end
 
 local function CancelMagmaCharge(inst)
-    if inst.task ~= nil then
+    if inst.task then
         inst.task:Cancel()
         inst.task = nil
     end
@@ -1104,7 +1095,9 @@ local function FirePoof(inst) --AXE Visual support for when the fire hound is br
     local z1 = z + 0.05 * math.random(-10, 10)
     local y1 = 0 + .25 * math.random()
     SpawnPrefab("halloween_firepuff_1").Transform:SetPosition(x1, y1, z1)
-    SpawnPrefab("magmafire").Transform:SetPosition(x1, 0, z1)
+    local magmafire = SpawnPrefab("magmafire")
+    magmafire.Transform:SetPosition(x1, 0, z1)
+    magmafire.damager = inst
 end
 
 local function OnHitOtherBurn(inst, data)

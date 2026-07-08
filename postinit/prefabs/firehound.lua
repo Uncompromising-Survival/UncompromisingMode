@@ -36,9 +36,10 @@ local function FirePoof(inst) --AXE Visual support for when the fire hound is br
     local z1 = z + 0.05 * math.random(-10, 10)
     local y1 = 0 + .25 * math.random()
     SpawnPrefab("halloween_firepuff_1").Transform:SetPosition(x1, y1, z1)
-    SpawnPrefab("magmafire").Transform:SetPosition(x1, 0, z1)
+    local magmafire = SpawnPrefab("magmafire")
+    magmafire.Transform:SetPosition(x1, 0, z1)
+    magmafire.damager = inst
 end
-
 
 local function OnHitOtherBurn(inst, data)
     local other = data.target
@@ -55,9 +56,7 @@ local function IsAlly(inst, guy)
 end
 
 env.AddPrefabPostInit("firehound", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
+    if not TheWorld.ismastersim then return end
 
     inst.UMIsAlly = IsAlly
 

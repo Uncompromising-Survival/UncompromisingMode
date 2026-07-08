@@ -166,7 +166,7 @@ function CanEntitySeeInStorm(inst, ...)
     return _CanEntitySeeInStorm(inst, ...) or um_CanEntitySeeInStorm(inst)
 end
 
---[[_G.UMSimTempOverride = {}
+_G.UMSimTempOverride = {}
 local TheSimMetaTable = getmetatable(TheSim).__index
 local _FindEntities = TheSim.FindEntities
 function TheSimMetaTable.FindEntities(self, x, y, z, radius, musttags, canttags, oneoftags, ...)
@@ -177,4 +177,4 @@ function TheSimMetaTable.FindEntities(self, x, y, z, radius, musttags, canttags,
         UMSimTempOverride.data = nil
     end
     return ret
-end]]
+end
