@@ -171,7 +171,6 @@ env.AddPrefabPostInit("staff_tornado", function(inst)
                 tornado.overridepkpet = true
             end
 
-            
             if inst.empowered then
                 tornado.Transform:SetPosition(x+math.random(-1,1),0,z+math.random(-1,1))
                 tornado:SetDuration(3*TUNING.TORNADO_LIFETIME)
