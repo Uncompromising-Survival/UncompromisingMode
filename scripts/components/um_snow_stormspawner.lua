@@ -151,6 +151,12 @@ local function OnSeasonChange(self)
     end
 end
 
+-- Snowstorm
+_worldsettingstimer:AddTimer(UM_SNOWSTORM_TIMERNAME, _spawninterval + math.random(0, 120), true, StartStorming)
+_worldsettingstimer:AddTimer(UM_STOPSNOWSTORM_TIMERNAME, _despawninterval + math.random(80, 120), true, StopSnowstorm)
+-- Rimeweed
+_worldsettingstimer:AddTimer(UM_RIMEWEED_TIMERNAME, _rimebasetime + math.random(0, 30), true, SpawnRimeweeds)
+
 local SnowstormInitiator = Class(function(self, inst)
     assert(TheWorld.ismastersim, "SnowstormInitiator should not exist on client!")
 
@@ -168,21 +174,6 @@ end)
 
 
 function SnowstormInitiator:OnPostInit()
-    -- Snowstorm
-    if not _worldsettingstimer:ActiveTimerExists(UM_SNOWSTORM_TIMERNAME) then
-        _worldsettingstimer:AddTimer(UM_SNOWSTORM_TIMERNAME, _spawninterval + math.random(0, 120), true, StartStorming)
-    end
-    if not _worldsettingstimer:ActiveTimerExists(UM_STOPSNOWSTORM_TIMERNAME) then
-        _worldsettingstimer:AddTimer(UM_STOPSNOWSTORM_TIMERNAME, _despawninterval + math.random(80, 120), true,
-            StopSnowstorm)
-    end
-
-    -- Rimeweed
-    if not _worldsettingstimer:ActiveTimerExists(UM_RIMEWEED_TIMERNAME) then
-        _worldsettingstimer:AddTimer(UM_RIMEWEED_TIMERNAME, _rimebasetime + math.random(0, 30), true, SpawnRimeweeds)
-    end
-
-
     OnSeasonChange()
 end
 

@@ -405,7 +405,7 @@ local function fn()
     inst.Transform:SetFourFaced()
     inst.AnimState:SetBank("um_ocupus")
     inst.AnimState:SetBuild("ocupus")
-    inst.AnimState:PlayAnimation("eyetacle_idle_down", true)
+    inst.AnimState:PlayAnimation("eyetacle_idle", true)
 
     inst:AddTag("noattack")
 

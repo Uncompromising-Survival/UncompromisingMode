@@ -295,7 +295,7 @@ end
 
 local function decorload(inst, data)
     if data and data.category then
-        inst.category = data.category
+        inst.category = type(data.category) ~= "string" and tostring(data.category) or data.category
         inst.AnimState:PlayAnimation(inst.category)
     end
 end

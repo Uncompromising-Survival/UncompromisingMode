@@ -2,17 +2,16 @@ require "brains/fruitbatbrain"
 require "stategraphs/SGfruitbat"
 
 SetSharedLootTable('fruitbat',
-    {
-        { 'giant_blueberry', 1 },
-        { 'um_leafwing', 1 },
-    })
+{
+    { 'giant_blueberry', 1 },
+    { 'um_leafwing', 1 },
+})
 
-
+local brain = require "brains/fruitbatbrain"
 
 local MAX_TARGET_SHARES = 100
 local SHARE_TARGET_DIST = 100
 --Thanks for these functions scrimbles
-
 
 local function OnEat(inst, data) --Data is actually the thing being eaten...
 end
@@ -24,6 +23,7 @@ end
 local function OnWingDownShadow(inst)
     inst.SoundEmitter:PlaySound("dontstarve_DLC003/creatures/enemy/vampire_bat/distant_flap")
 end
+
 local function OnSleepGoHome(inst)
     inst._hometask = nil
     local home = inst.components.homeseeker ~= nil and inst.components.homeseeker.home or nil
@@ -57,27 +57,26 @@ local function StartWatchingNight(inst)
 end
 
 local function Ascend(inst)
-	local x,y,z = inst.Transform:GetWorldPosition()
-	if y < 10 then
-		inst.Transform:SetPosition(x,y+0.1,z)
-	end
+    local x,y,z = inst.Transform:GetWorldPosition()
+    if y < 10 then
+        inst.Transform:SetPosition(x,y+0.1,z)
+    end
 end
 
 local function Descend(inst)
-	local x,y,z = inst.Transform:GetWorldPosition()
-	if y > 0 then
-		inst.Transform:SetPosition(x,y-0.1,z)
-	end
+    local x,y,z = inst.Transform:GetWorldPosition()
+    if y > 0 then
+        inst.Transform:SetPosition(x,y-0.1,z)
+    end
 end
 
 local function FernsQuestionMark(inst)
-	if FindEntity(inst,2,nil,{"briar_plants"}) then
-		Ascend(inst)
-	else
-		Descend(inst)
-	end
+    if FindEntity(inst,2,nil,{"briar_plants"}) then
+        Ascend(inst)
+    else
+        Descend(inst)
+    end
 end
-
 
 local function OnEntitySleep(inst)
     inst:ListenForEvent("enterlimbo", StopWatchingNight)
@@ -85,10 +84,10 @@ local function OnEntitySleep(inst)
     if not inst:IsInLimbo() then
         StartWatchingNight(inst)
     end
-	if inst.FernsTask then
-		inst.FernsTask:Cancel()
-		inst.FernsTask = nil
-	end
+    if inst.FernsTask then
+        inst.FernsTask:Cancel()
+        inst.FernsTask = nil
+    end
 end
 
 local function OnEntityWake(inst)
@@ -97,7 +96,7 @@ local function OnEntityWake(inst)
     if not inst:IsInLimbo() then
         StopWatchingNight(inst)
     end
-	inst.FernsTask = inst:DoPeriodicTask(FRAMES,FernsQuestionMark)
+    inst.FernsTask = inst:DoPeriodicTask(FRAMES,FernsQuestionMark)
 end
 
 -- TEAM ATTACKER STUFF
@@ -164,8 +163,8 @@ local function OnAttackOther(inst, data)
             inst.food_baby.brain:Stop()
             inst.food_baby.sg:Stop()
         end
-		inst.food_baby.persists = false
-		inst.food_baby:DoTaskInTime(60,function(inst) inst:Remove() end) -- Backup removal if it's somehow interrupted
+        inst.food_baby.persists = false
+        inst.food_baby:DoTaskInTime(60,function(inst) inst:Remove() end) -- Backup removal if it's somehow interrupted
         inst.food_baby:AddTag("fruitbat_eating")
         inst.sg:GoToState("eat_loop")
     end
@@ -173,21 +172,21 @@ end
 
 local function fn()
     local inst = CreateEntity()
-
-    inst.entity:AddTransform()
-    inst.entity:AddAnimState()
-    inst.entity:AddSoundEmitter()
-
+    local trans = inst.entity:AddTransform()
+    local anim = inst.entity:AddAnimState()
+    local sound = inst.entity:AddSoundEmitter()
     local shadow = inst.entity:AddDynamicShadow()
-    shadow:SetSize(1.5, .75)
-    inst.entity:AddNetwork()
-    inst.entity:AddLightWatcher()
-    inst.Transform:SetFourFaced()
+    local network = inst.entity:AddNetwork()
 
-    inst.Transform:SetFourFaced()
-    inst.Transform:SetScale(0.9, 0.9, 0.9)
     MakeFlyingCharacterPhysics(inst, 1, .5)
 
+    shadow:SetSize(1.5, .75)
+
+    trans:SetFourFaced()
+    trans:SetScale(0.9, 0.9, 0.9)
+
+    anim:SetBank("fruitbat")
+    anim:SetBuild("fruitbat")
 
     --inst:AddTag("animal")
     inst:AddTag("fruitbat")
@@ -202,8 +201,6 @@ local function fn()
         return inst
     end
 
-    inst.AnimState:SetBank("fruitbat")
-    inst.AnimState:SetBuild("fruitbat")
     inst:AddComponent("locomotor")
     inst.components.locomotor:SetSlowMultiplier(1)
     inst.components.locomotor:SetTriggersCreep(false)
@@ -214,29 +211,23 @@ local function fn()
     inst.components.health:SetMaxHealth(100)
     inst.components.health.destroytime = 4
 
-
-
     inst:AddComponent("sleeper")
     inst.components.sleeper:SetResistance(3)
 
     inst:SetStateGraph("SGfruitbat")
-
-    local brain = require "brains/fruitbatbrain"
     inst:SetBrain(brain)
 
     inst:AddComponent("lootdropper")
-	--inst.components.lootdropper:SetChanceLootTable('fruitbat')
-	
+    --inst.components.lootdropper:SetChanceLootTable('fruitbat')
+
     inst:AddComponent("inventory")
 
     inst:AddComponent("inspectable")
     inst:AddComponent("knownlocations")
 
-    inst:DoTaskInTime(1 * FRAMES,
-        function()
-            inst.components.knownlocations:RememberLocation("home", Vector3(inst.Transform:GetWorldPosition()),
-                true)
-        end)
+    inst:DoTaskInTime(1 * FRAMES, function()
+        inst.components.knownlocations:RememberLocation("home", Vector3(inst.Transform:GetWorldPosition()), true)
+    end)
 
     inst:ListenForEvent("wingdown", OnWingDown)
     inst:ListenForEvent("attacked", OnAttacked)
@@ -262,8 +253,7 @@ local function fn()
     inst.OnLoad = onload
 
     inst.cavebat = false
-	
-	
+
     return inst
 end
 
