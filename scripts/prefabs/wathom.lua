@@ -695,10 +695,8 @@ local function WathomWarnsEarly(inst, threattype)
     inst.owner.components.talker:Say("Others can't hear, "..threattype.." is coming.")
 end
 
-local AMP_TAGS = {"amped", "deathamp"}
-
 local function CanSleepInBagFn(wathom, bed)
-    if not wathom:HasAnyTag(AMP_TAGS) then
+    if not wathom:HasAnyTag("amped", "deathamp") then
         return true
     else
         return false, "ANNOUNCE_NOHUNGERSLEEP"
