@@ -32,8 +32,6 @@ local Umripples = Class(function(self, inst)
     self._is_landed = net_bool(inst.GUID, "umripples._is_landed", "landeddirty")
     self.update_ripples = net_event(inst.GUID, "umripples.update_ripples")
 
-    self.ismastersim = TheNet:GetIsMasterSimulation()
-
     if not TheNet:IsDedicated() then
         self.inst:ListenForEvent("landeddirty", function()
             if self._is_landed:value() then
