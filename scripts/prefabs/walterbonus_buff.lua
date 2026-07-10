@@ -1,12 +1,11 @@
 local function OnTick(inst, target, data)
-    if target.components.health ~= nil and
-        not target.components.health:IsDead() and
-        not target:HasTag("playerghost") then
-		
-		local fx = SpawnPrefab("walter_heal_fx")
-		fx.entity:SetParent(target.entity)
-		fx.Transform:SetPosition(0, 0, 0)
-		
+    if target:IsValid() and target.components.health
+        and not target.components.health:IsDead() and not target:HasTag("playerghost") then
+
+        local fx = SpawnPrefab("walter_heal_fx")
+        fx.entity:SetParent(target.entity)
+        fx.Transform:SetPosition(0, 0, 0)
+
         target.components.health:DoDelta(target:HasTag("player") and 1 or 2, nil, inst.prefab)
     else
         inst.components.debuff:Stop()
@@ -14,7 +13,7 @@ local function OnTick(inst, target, data)
 end
 
 local function OnAttached(inst, target, followsymbol, followoffset, data)
-	local duration = data ~= nil and data.duration and data.duration + 0.1 or 1
+    local duration = data ~= nil and data.duration and data.duration + 0.1 or 1
     inst.components.timer:StartTimer("walterbonus_timer", duration)
 
     inst.task = inst:DoPeriodicTask(1, OnTick, nil, target)
@@ -30,22 +29,20 @@ local function OnTimerDone(inst, data)
 end
 
 local function OnExtended(inst, target, followsymbol, followoffset, data)
-	local duration = data ~= nil and data.duration and data.duration + 0.1 or 1
-	
+    local duration = data ~= nil and data.duration and data.duration + 0.1 or 1
+
     local time_remaining = inst.components.timer:GetTimeLeft("walterbonus_timer")
-	if time_remaining ~= nil then
-		local newduration = time_remaining + data.duration
-		inst.components.timer:SetTimeLeft("walterbonus_timer", newduration)
-	else
-		inst.components.timer:StopTimer("walterbonus_timer")
-		inst.components.timer:StartTimer("walterbonus_timer", data.duration)
-	end
-	
-	if inst.task ~= nil then
-		inst.task:Cancel()
-	end
-	
-	inst.task = nil
+    if time_remaining ~= nil then
+        local newduration = time_remaining + data.duration
+        inst.components.timer:SetTimeLeft("walterbonus_timer", newduration)
+    else
+        inst.components.timer:StopTimer("walterbonus_timer")
+        inst.components.timer:StartTimer("walterbonus_timer", data.duration)
+    end
+
+    if inst.task then
+        inst.task:Cancel()
+    end
     inst.task = inst:DoPeriodicTask(1, OnTick, nil, target)
 end
 
@@ -86,27 +83,27 @@ local function fn_fx()
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
-	inst.entity:AddNetwork()
+    inst.entity:AddNetwork()
 
     inst.AnimState:SetBank("walter_heal_fx")
     inst.AnimState:SetBuild("walter_heal_fx")
     inst.AnimState:PlayAnimation("heal_"..math.random(2))
-	inst.AnimState:SetFinalOffset(1)
+    inst.AnimState:SetFinalOffset(1)
 
-	inst:AddTag("FX")
+    inst:AddTag("FX")
 
-	inst.entity:SetPristine()
+    inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
         return inst
     end
 
     inst.persists = false
-	
-	inst:ListenForEvent("animover", inst.Remove)
+    
+    inst:ListenForEvent("animover", inst.Remove)
 
     return inst
 end
 
 return Prefab("walterbonus_buff", fn_health),
-		Prefab("walter_heal_fx", fn_fx)
+    Prefab("walter_heal_fx", fn_fx)
