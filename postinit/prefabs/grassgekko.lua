@@ -83,7 +83,7 @@ local function GrassGekkoFunctions(inst)
 end
 
 env.AddSimPostInit(function(inst)
-    local _ontimerdone = Prefabs.grassgekko and UpvalueHacker.GetUpvalue(Prefabs.grassgekko.fn, "ontimerdone")
+    local _ontimerdone = UpvalueHacker.GetUpvalue(Prefabs.grassgekko.fn, "ontimerdone")
     if _ontimerdone then
         local function ontimerdone(inst, data, ...)
             if data.name == "growTail" and inst:IsInLimbo() then
