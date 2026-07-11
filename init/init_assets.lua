@@ -553,7 +553,8 @@ local minimap_icons = {
     "sludgestack_corked",
     "um_scrapper",
     "um_astral_projector",
-    "um_astral_projector_target"
+    "um_astral_projector_target",
+    "um_hotspring"
 }
 
 for _, item in ipairs(inventoryitems) do
