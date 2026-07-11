@@ -1119,10 +1119,6 @@ local function fnmagma()
 
     inst.UMIsAlly = IsAlly
 
-    if inst.components.combat then
-        inst:ListenForEvent("onhitother", OnHitOtherBurn)
-    end
-
     inst.ShootFire = ShootFireMagmaHound
 
     --[[if inst.sg ~= nil then
@@ -1151,6 +1147,7 @@ local function fnmagma()
 
     inst:ListenForEvent("attacked", OnMagmaAttacked)
     inst:ListenForEvent("death", DoMagmaExplosion)
+    inst:ListenForEvent("onhitother", OnHitOtherBurn)
 
     inst.foogley = 0
 
@@ -1160,7 +1157,7 @@ local function fnmagma()
     return inst
 end
 
-local function OnAttackOther_Spore(inst, data)
+local function OnHitOther_Spore(inst, data)
     if data.target and data.target:HasTag("player") and not data.target:HasAnyTag("hasplaguemask", "automaton") and TUNING.DSTU.MAXHPHITTERS then
         data.target.components.health:DeltaPenalty(.05)
     end
@@ -1186,7 +1183,7 @@ local function fnspore()
     MakeMediumFreezableCharacter(inst, "hound_body")
     MakeMediumBurnableCharacter(inst, "hound_body")
 
-    inst:ListenForEvent("onattackother", OnAttackOther_Spore)
+    inst:ListenForEvent("onhitother", OnHitOther_Spore)
 
     return inst
 end
