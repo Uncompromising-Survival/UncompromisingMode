@@ -401,7 +401,6 @@ if GetModConfigData("wixie_walter") then
 
     AddClientModRPCHandler("WixieTheDelinquent", "ClaustrophobiaHidden", ClaustrophobiaHidden)
 
-
     AddModCharacter("wixie", "FEMALE")
 
     GLOBAL.TUNING.WIXIE_HEALTH = 130
