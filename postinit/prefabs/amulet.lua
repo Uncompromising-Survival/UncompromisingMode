@@ -492,3 +492,13 @@ env.AddPrefabPostInit("purpleamulet", function(inst)
 
     PurpleAmuletPostInit(inst)
 end)
+
+local function BlueAmuletPostinit(inst)
+    inst.components.fueled:InitializeFuelLevel(TUNING.BLUEAMULET_FUEL*1.5) -- AXE Increase durability
+end
+
+env.AddPrefabPostInit("blueamulet", function(inst)
+    if not TheWorld.ismastersim then return end
+
+    BlueAmuletPostinit(inst)
+end)
