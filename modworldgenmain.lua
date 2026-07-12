@@ -14,14 +14,18 @@ if GetModConfigData("worldgenmastertoggle") then
     ---- XX[[ Forest Task Adjustments ]]XX ----
     local tasks_forest = {
         "make_a_pick",     -- Make a Pick changes (Starter Biome), Wixie, Veteran's Curse
-        "speak_to_the_king", -- Change to force Glommer to more consistently spawn away from Pig King, to make it easier to escape with him without drawing buffed werepig aggro
         "dig_that_rock",   -- UMSS compatibility changes, Ratacombs entrance
         "squeltch",        -- Rice, Marsh bushes and mist
         "merged_desert",   -- Oasis Overhaul to include rooms lost from Badlands -> Broiling Hills
         "broiling_hills",  -- Changes Badlands -> Broiling Hills
         "giant_trees",     -- Changes Forest Hunters -> Hooded Forest
         "the_hunters",     -- Adds Trapdoors and Ghost Walruses
-        "for_a_nice_walk", -- Guarantees a living tree spawns
+
+        "speak_to_the_king_and_for_a_nice_walk",
+        -- 50/50 chance to swap the style of their tasks
+        -- Change to force Glommer to more consistently spawn away from Pig King, to make it easier to escape with him without drawing buffed werepig aggro
+        -- Guarantees a living tree spawns
+        
         "ocean_general",   -- All Ocean Changes (For Now)
         "moonisland",      -- Lunar Bees
     }

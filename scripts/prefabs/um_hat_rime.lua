@@ -26,10 +26,10 @@ local function TemperatureChange(owner)
 	if hat and owner.components.temperature then
 		local temp = owner.components.temperature.current
 		local defense = 0.85 - 0.01*(temp)
-		if defense < 0.4 then
-			defense = 0.4
-		elseif defense > 0.75 then
-			defense = 0.75
+		if defense < 0.7 then
+			defense = 0.7
+		elseif defense > 0.8 then
+			defense = 0.8
 		end
 		hat.components.armor:InitIndestructible(defense)
 	end
