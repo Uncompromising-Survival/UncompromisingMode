@@ -51,9 +51,9 @@ end
 local function OnActivate_Clock(inst, doer)
     if inst.hourdangle and inst.seconddangle and inst.minutedangle then
         local x, y, z = inst.Transform:GetWorldPosition()
-        local nearbyplayers = TheSim:FindEntities(x, y, z, 30, {"player"})
+        --local nearbyplayers = TheSim:FindEntities(x, y, z, 30, {"player"})
         if inst.final_code_ready and inst.hourdangle.count == 12 and inst.minutedangle.count == 2 and inst.seconddangle.count == 7 then
-            if nearbyplayers and #nearbyplayers == #AllPlayers then
+            --if nearbyplayers and #nearbyplayers == #AllPlayers then
                 inst.canbeused = false
                 --print("ding dong the witch is dead")
                 for i = 1, 8 do
@@ -75,9 +75,9 @@ local function OnActivate_Clock(inst, doer)
                 inst.final_code_ready = false
                 inst.components.timer:StartTimer("reset_use", 9600)
                 TheNet:SystemMessage("The time has come...")
-            else
+            --[[else
                 TheNet:SystemMessage("All must be gathered before you can proceed...")
-            end
+            end]]
         elseif inst.hourdangle.count == 10 and inst.minutedangle.count == 9 and inst.seconddangle.count == 1 then
             --print("SpawnKey")
             local papyrus = SpawnPrefab("wixie_piano_card")
