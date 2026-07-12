@@ -4,67 +4,11 @@ local assets =
     Asset("ANIM", "anim/swap_cursed_antler.zip"),
 }
 
-local function charged(inst)
-    local fx = SpawnPrefab("dr_warm_loop_1")
-
-    local owner = inst.components.inventoryitem.owner
-
-    if inst.components.equippable:IsEquipped() and owner ~= nil then
-        fx.entity:SetParent(owner.entity)
-        fx.entity:AddFollower()
-        fx.Follower:FollowSymbol(owner.GUID, "swap_object", 0, -275, 0)
-        fx.Transform:SetScale(1.33, 1.33, 1.33)
-    else
-        fx.entity:SetParent(inst.entity)
-        fx.Transform:SetPosition(0, 2.35, 0)
-        fx.Transform:SetScale(1.33, 1.33, 1.33)
-    end
+local function GetAntlerDamage(inst, attacker, target)
+    return inst.components.rechargeable and inst.components.rechargeable:IsCharged() and 100 or 34
 end
 
-local function OnCharged(inst)
-    --local fx = SpawnPrefab("dr_warm_loop_1")
-
-    --local owner = inst.components.inventoryitem.owner
-
-    --if inst.components.equippable:IsEquipped() and owner ~= nil then
-        --fx.entity:SetParent(owner.entity)
-        --fx.entity:AddFollower()
-        --fx.Follower:FollowSymbol(owner.GUID, "swap_object", 0, -275, 0)
-        --fx.Transform:SetScale(1.33, 1.33, 1.33)
-    --else
-        --fx.entity:SetParent(inst.entity)
-        --fx.Transform:SetPosition(0, 2.35, 0)
-        --fx.Transform:SetScale(1.33, 1.33, 1.33)
-    --end
-    inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/charge")
-    inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/taunt_howl", nil, .4)
-end
-
-local function onequip(inst, owner)
-    if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.HANDS) then return end
-    local skin_build = inst:GetSkinBuild()
-    if skin_build ~= nil then
-        owner:PushEvent("equipskinneditem", inst:GetSkinName())
-        owner.AnimState:OverrideItemSkinSymbol("swap_object", "swap_" .. skin_build, "swap_twisted_antler", inst.GUID, "swap_cursed_antler")
-    else
-        owner.AnimState:OverrideSymbol("swap_object", "swap_cursed_antler", "swap_cursed_antler")
-    end
-
-    owner.AnimState:Show("ARM_carry")
-    owner.AnimState:Hide("ARM_normal")
-end
-
-local function onunequip(inst, owner)
-    local skin_build = inst:GetSkinBuild()
-    if skin_build ~= nil then
-        owner:PushEvent("unequipskinneditem", inst:GetSkinName())
-    end
-
-    owner.AnimState:Hide("ARM_carry")
-    owner.AnimState:Show("ARM_normal")
-end
-
-local function onattack(inst, attacker, target)
+local function OnAttack(inst, attacker, target)
     if target and target:IsValid() and attacker and attacker:IsValid() and inst.components.rechargeable:IsCharged() then
         UMCommonFns.StartRechargeableCooldown(inst, {cooldown = TUNING.DSTU.CURSED_ANTLER_COOLDOWN, tags = {"cursedantler"}})
 
@@ -96,8 +40,64 @@ local function onattack(inst, attacker, target)
     end
 end
 
-local function GetAntlerDamage(inst, attacker, target)
-    return inst.components.rechargeable and inst.components.rechargeable:IsCharged() and 100 or 34
+local function OnEquip(inst, owner)
+    if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.HANDS) then return end
+    local skin_build = inst:GetSkinBuild()
+    if skin_build ~= nil then
+        owner:PushEvent("equipskinneditem", inst:GetSkinName())
+        owner.AnimState:OverrideItemSkinSymbol("swap_object", "swap_" .. skin_build, "swap_twisted_antler", inst.GUID, "swap_cursed_antler")
+    else
+        owner.AnimState:OverrideSymbol("swap_object", "swap_cursed_antler", "swap_cursed_antler")
+    end
+
+    owner.AnimState:Show("ARM_carry")
+    owner.AnimState:Hide("ARM_normal")
+end
+
+local function OnUnequip(inst, owner)
+    local skin_build = inst:GetSkinBuild()
+    if skin_build ~= nil then
+        owner:PushEvent("unequipskinneditem", inst:GetSkinName())
+    end
+
+    owner.AnimState:Hide("ARM_carry")
+    owner.AnimState:Show("ARM_normal")
+end
+
+--[[local function charged(inst)
+    local fx = SpawnPrefab("dr_warm_loop_1")
+
+    local owner = inst.components.inventoryitem.owner
+
+    if inst.components.equippable:IsEquipped() and owner ~= nil then
+        fx.entity:SetParent(owner.entity)
+        fx.entity:AddFollower()
+        fx.Follower:FollowSymbol(owner.GUID, "swap_object", 0, -275, 0)
+        fx.Transform:SetScale(1.33, 1.33, 1.33)
+    else
+        fx.entity:SetParent(inst.entity)
+        fx.Transform:SetPosition(0, 2.35, 0)
+        fx.Transform:SetScale(1.33, 1.33, 1.33)
+    end
+end]]
+
+local function OnCharged(inst)
+    --local fx = SpawnPrefab("dr_warm_loop_1")
+
+    --local owner = inst.components.inventoryitem.owner
+
+    --if inst.components.equippable:IsEquipped() and owner ~= nil then
+        --fx.entity:SetParent(owner.entity)
+        --fx.entity:AddFollower()
+        --fx.Follower:FollowSymbol(owner.GUID, "swap_object", 0, -275, 0)
+        --fx.Transform:SetScale(1.33, 1.33, 1.33)
+    --else
+        --fx.entity:SetParent(inst.entity)
+        --fx.Transform:SetPosition(0, 2.35, 0)
+        --fx.Transform:SetScale(1.33, 1.33, 1.33)
+    --end
+    inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/charge")
+    inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/taunt_howl", nil, .4)
 end
 
 local function fn()
@@ -118,7 +118,7 @@ local function fn()
     inst:AddTag("vetcurse_item")
     inst:AddTag("donotautopick")
     
-    MakeInventoryFloatable(inst, "med", 0.2, 0.65)
+    MakeInventoryFloatable(inst, "med", .2, .65)
 
     inst.entity:SetPristine()
 
@@ -126,24 +126,24 @@ local function fn()
         return inst
     end
 
+    inst:AddComponent("inventoryitem")
+
     inst:AddComponent("tradable")
     inst:AddComponent("inspectable")
 
-    inst:AddComponent("weapon")
-    inst.components.weapon:SetDamage(GetAntlerDamage)
-    inst.components.weapon:SetOnAttack(onattack)
+    local weapon = inst:AddComponent("weapon")
+    weapon:SetDamage(GetAntlerDamage)
+    weapon:SetOnAttack(OnAttack)
 
-    inst:AddComponent("inventoryitem")
+    local shadowlevel = inst:AddComponent("shadowlevel")
+    shadowlevel:SetDefaultLevel(TUNING.DSTU.CURSED_ANTLER_SHADOW_LEVEL)
 
-    inst:AddComponent("shadowlevel")
-    inst.components.shadowlevel:SetDefaultLevel(TUNING.DSTU.CURSED_ANTLER_SHADOW_LEVEL)
+    local equippable = inst:AddComponent("equippable")
+    equippable:SetOnEquip(OnEquip)
+    equippable:SetOnUnequip(OnUnequip)
 
-    inst:AddComponent("equippable")
-    inst.components.equippable:SetOnEquip(onequip)
-    inst.components.equippable:SetOnUnequip(onunequip)
-
-    inst:AddComponent("rechargeable")
-    inst.components.rechargeable:SetOnChargedFn(OnCharged)
+    local rechargeable = inst:AddComponent("rechargeable")
+    rechargeable:SetOnChargedFn(OnCharged)
 
     MakeHauntableLaunch(inst)
 
