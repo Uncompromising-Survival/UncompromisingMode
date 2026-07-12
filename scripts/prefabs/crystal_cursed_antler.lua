@@ -178,7 +178,7 @@ local function OnUpdateIceCircle(inst)
             and not (v.components.health and v.components.health:IsDead())
             and not (castercombat and castercombat:IsAlly(v)) then
             if v.components.locomotor then
-                v.components.locomotor:SetExternalSpeedMultiplier(v, debuffkey, 0.5)
+                v.components.locomotor:SetExternalSpeedMultiplier(v, debuffkey, .5)
                 v.um_ice_circle = v:DoPeriodicTask(1, function(guy)
                     if not FindEntity(guy, 3, function(ent) return ent.prefab == "antler_ice_circle" end) then
                         if guy.components.locomotor then
@@ -216,7 +216,7 @@ local function antler_ice_circle_fn()
     inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
     inst.AnimState:SetLayer(LAYER_BACKGROUND)
     inst.AnimState:SetSortOrder(3)
-    inst.AnimState:SetScale(1.0, 1.0)
+    inst.AnimState:SetScale(1, 1)
 
     inst.entity:SetPristine()
 
@@ -224,7 +224,7 @@ local function antler_ice_circle_fn()
         return inst
     end
 
-    inst.freezelimit = 0.7
+    inst.freezelimit = .7
 
     inst.Transform:SetRotation(math.random() * 360)
 
