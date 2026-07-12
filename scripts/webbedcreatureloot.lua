@@ -1123,6 +1123,11 @@ AddCompatCharacterCocoon("2997213431", "swire", {
     Item("swire_weapon", 1, 1, true),
     Item("swire_lipstick", 1, .5, true),
     Item("lgd_hat", 1, .5, true),
+    Item("swire_nightvisionhat", 1, .75),
+    Item("swire_bottle", 10, 1),
+    Item("swire_bottle", 10, .5),
+    Item("lungmendollars", 20, .5),
+    Item("lungmendollars", 20, .5),
 })
 
 AddCompatCharacterCocoon("3583633595", "kris_m", {
