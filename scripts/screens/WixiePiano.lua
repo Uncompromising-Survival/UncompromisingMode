@@ -61,7 +61,7 @@ local WixiePiano = Class(Screen, function(self, title, text, buttons, scale_bg, 
         self.code = self.code == 1 and 2 or 0
         self.code2 = 0
         if self.code3 == 7 then
-            SendModRPCToServer(GetModRPC("UncompromisingSurvival", "PianoPuzzleComplete2"), nil)
+            SendModRPCToServer(GetModRPC("UncompromisingSurvival", "PianoPuzzleComplete2"))
         end
         self.code3 = self.code3 == 1 and 2 or 0
         TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/A")
@@ -76,7 +76,7 @@ local WixiePiano = Class(Screen, function(self, title, text, buttons, scale_bg, 
         self.code = 0
         self.code3 = 0
         if self.code2 == 7 then
-            SendModRPCToServer(GetModRPC("UncompromisingSurvival", "PianoPuzzleComplete3"), nil)
+            SendModRPCToServer(GetModRPC("UncompromisingSurvival", "PianoPuzzleComplete3"))
         end
         self.code2 = self.code2 == 1 and 2 or 0
         TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/B")
@@ -175,7 +175,7 @@ local WixiePiano = Class(Screen, function(self, title, text, buttons, scale_bg, 
         self.code2 = 0
         self.code3 = 0
         if self.code == 7 then
-            SendModRPCToServer(GetModRPC("UncompromisingSurvival", "PianoPuzzleComplete1"), nil)
+            SendModRPCToServer(GetModRPC("UncompromisingSurvival", "PianoPuzzleComplete1"))
         end
         self.code = self.code == 4 and 5 or 0
         TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/C#")
