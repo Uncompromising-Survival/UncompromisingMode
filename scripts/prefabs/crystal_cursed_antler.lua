@@ -207,8 +207,6 @@ local function antler_ice_circle_fn()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
-    inst:AddTag("FX")
-    inst:AddTag("NOCLICK")
 
     inst.AnimState:SetBank("deer_ice_circle")
     inst.AnimState:SetBuild("deer_ice_circle")
@@ -217,6 +215,9 @@ local function antler_ice_circle_fn()
     inst.AnimState:SetLayer(LAYER_BACKGROUND)
     inst.AnimState:SetSortOrder(3)
     inst.AnimState:SetScale(1, 1)
+
+    inst:AddTag("FX")
+    inst:AddTag("NOCLICK")
 
     inst.entity:SetPristine()
 
