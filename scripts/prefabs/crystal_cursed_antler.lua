@@ -4,9 +4,9 @@ local assets =
     Asset("ANIM", "anim/swap_crystal_cursed_antler.zip"),
 }
 
-local function GetAntlerDamage(inst, attacker, target)
+--[[local function GetAntlerDamage(inst, attacker, target)
     return 34
-end
+end]]
 
 local function OnAttack(inst, attacker, target)
     if target and target:IsValid() and attacker and attacker:IsValid() and inst.components.rechargeable:IsCharged() then
@@ -144,7 +144,7 @@ local function fn()
     inst:AddComponent("inspectable")
 
     local weapon = inst:AddComponent("weapon")
-    weapon:SetDamage(GetAntlerDamage)
+    weapon:SetDamage(34) -- Give this a TUNING value and remove this comment!
     weapon:SetOnAttack(OnAttack)
 
     local planardamage = inst:AddComponent("planardamage")
