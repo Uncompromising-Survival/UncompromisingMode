@@ -93,19 +93,20 @@ end
 
 local function pianocardfn()
     local inst = CreateEntity()
+
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
-    inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
 
     MakeInventoryPhysics(inst)
-    MakeInventoryFloatable(inst, "med", nil, 0.75)
 
     inst.AnimState:SetBank("mapscroll")
     inst.AnimState:SetBuild("mapscroll")
     inst.AnimState:PlayAnimation("idle")
 
-    inst:AddTag("irreplacable")
+    MakeInventoryFloatable(inst, "med", nil, .85)
+
+    inst.pickupsound = "paper"
 
     inst.entity:SetPristine()
 
@@ -113,18 +114,20 @@ local function pianocardfn()
         return inst
     end
 
+    inst:AddComponent("inventoryitem")
+    --inst.components.inventoryitem:ChangeImageName("mapscroll")
+
     inst:AddComponent("inspectable")
     inst.components.inspectable.getspecialdescription = getdesc
 
-    inst:AddComponent("named")
-
-    inst:AddComponent("inventoryitem")
+    inst:AddComponent("erasablepaper")
 
     inst:AddComponent("fuel")
     inst.components.fuel.fuelvalue = TUNING.SMALL_FUEL
 
     MakeSmallBurnable(inst, TUNING.SMALL_BURNTIME)
     MakeSmallPropagator(inst)
+
     MakeHauntableLaunch(inst)
 
     inst.persists = false
