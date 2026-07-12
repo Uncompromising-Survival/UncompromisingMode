@@ -376,31 +376,32 @@ end
 
 AddModRPCHandler("AllMouseGags", "GetTheInput", TornadoHandlingFunction)
 
-local function ClaustrophobiaPanic(player)
-    if not (player.components.health and player.components.health:IsDead()) and not player.sg:HasStateTag("wixiepanic") then
-        player.sg:GoToState("claustrophobic")
-    end
-end
-
-AddModRPCHandler("WixieTheDelinquent", "ClaustrophobiaPanic", ClaustrophobiaPanic)
-
-local function ClaustrophobiaEquipMult(claustrophobiamodifier)
-    if GLOBAL.ThePlayer then
-        GLOBAL.ThePlayer.claustrophobiamodifier = type(claustrophobiamodifier) == "string" and GLOBAL.tonumber(claustrophobiamodifier) or claustrophobiamodifier
-    end
-end
-
-AddClientModRPCHandler("WixieTheDelinquent", "ClaustrophobiaEquipMult", ClaustrophobiaEquipMult)
-
-local function ClaustrophobiaHidden(claustrophobiahidden)
-    if GLOBAL.ThePlayer then
-        GLOBAL.ThePlayer.claustrophobiahidden = claustrophobiahidden
-    end
-end
-
-AddClientModRPCHandler("WixieTheDelinquent", "ClaustrophobiaHidden", ClaustrophobiaHidden)
-
 if GetModConfigData("wixie_walter") then
+    local function ClaustrophobiaPanic(player)
+        if not (player.components.health and player.components.health:IsDead()) and not player.sg:HasStateTag("wixiepanic") then
+            player.sg:GoToState("claustrophobic")
+        end
+    end
+
+    AddModRPCHandler("WixieTheDelinquent", "ClaustrophobiaPanic", ClaustrophobiaPanic)
+
+    local function ClaustrophobiaEquipMult(claustrophobiamodifier)
+        if GLOBAL.ThePlayer then
+            GLOBAL.ThePlayer.claustrophobiamodifier = type(claustrophobiamodifier) == "string" and GLOBAL.tonumber(claustrophobiamodifier) or claustrophobiamodifier
+        end
+    end
+
+    AddClientModRPCHandler("WixieTheDelinquent", "ClaustrophobiaEquipMult", ClaustrophobiaEquipMult)
+
+    local function ClaustrophobiaHidden(claustrophobiahidden)
+        if GLOBAL.ThePlayer then
+            GLOBAL.ThePlayer.claustrophobiahidden = claustrophobiahidden
+        end
+    end
+
+    AddClientModRPCHandler("WixieTheDelinquent", "ClaustrophobiaHidden", ClaustrophobiaHidden)
+
+
     AddModCharacter("wixie", "FEMALE")
 
     GLOBAL.TUNING.WIXIE_HEALTH = 130
