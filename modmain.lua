@@ -326,32 +326,6 @@ AddClientModRPCHandler("UncompromisingSurvival", "OnTerraform", function(data)
     end
 end)
 
--- WIXIE RELATED RPC'S
-
-local function HandlerFunction(player, mouseposx, mouseposy, mouseposz)
-    if GLOBAL.TheWorld.ismastersim then
-        if mouseposx ~= nil then
-            player.wixiepointx = mouseposx
-        end
-
-        if mouseposy ~= nil then
-            player.wixiepointy = mouseposy
-        end
-
-        if mouseposz ~= nil then
-            player.wixiepointz = mouseposz
-        end
-    else
-        local wixieposition = GLOBAL.TheInput:GetWorldPosition()
-
-        player.wixiepointx = wixieposition.x
-        player.wixiepointy = wixieposition.y
-        player.wixiepointz = wixieposition.z
-    end
-end
-
-AddModRPCHandler("WixieTheDelinquent", "GetTheInput", HandlerFunction)
-
 local function TornadoHandlingFunction(player, mouseposx, mouseposy, mouseposz)
     if GLOBAL.TheWorld.ismastersim then
         if mouseposx ~= nil then
@@ -377,6 +351,32 @@ end
 AddModRPCHandler("AllMouseGags", "GetTheInput", TornadoHandlingFunction)
 
 if GetModConfigData("wixie_walter") then
+    -- WIXIE RELATED RPC'S
+
+    local function HandlerFunction(player, mouseposx, mouseposy, mouseposz)
+        if GLOBAL.TheWorld.ismastersim then
+            if mouseposx ~= nil then
+                player.wixiepointx = mouseposx
+            end
+
+            if mouseposy ~= nil then
+                player.wixiepointy = mouseposy
+            end
+
+            if mouseposz ~= nil then
+                player.wixiepointz = mouseposz
+            end
+        else
+            local wixieposition = GLOBAL.TheInput:GetWorldPosition()
+
+            player.wixiepointx = wixieposition.x
+            player.wixiepointy = wixieposition.y
+            player.wixiepointz = wixieposition.z
+        end
+    end
+
+    AddModRPCHandler("WixieTheDelinquent", "GetTheInput", HandlerFunction)
+
     local function ClaustrophobiaPanic(player)
         if not (player.components.health and player.components.health:IsDead()) and not player.sg:HasStateTag("wixiepanic") then
             player.sg:GoToState("claustrophobic")
@@ -445,7 +445,6 @@ end
         -- end
     -- end
 -- end
-
 
 --[[
 AddShardModRPCHandler("UncompromisingSurvival", "AcidMushroomsUpdate", function(shard_id, data)
