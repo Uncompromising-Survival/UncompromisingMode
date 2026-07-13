@@ -5,12 +5,12 @@ local assets =
 }
 
 --[[local function GetAntlerDamage(inst, attacker, target)
-    return 34
+    return TUNING.DSTU.CRYSTAL_CURSED_ANTLER_DAMAGE
 end]]
 
 local function OnAttack(inst, attacker, target)
     if target and target:IsValid() and attacker and attacker:IsValid() and inst.components.rechargeable:IsCharged() then
-        UMCommonFns.StartRechargeableCooldown(inst, {cooldown = TUNING.DSTU.CURSED_ANTLER_COOLDOWN, tags = {"cursedantler"}})
+        UMCommonFns.StartRechargeableCooldown(inst, {cooldown = TUNING.DSTU.CRYSTAL_CURSED_ANTLER_COOLDOWN, tags = {"cursedantler"}})
 
         local x, y, z = target.Transform:GetWorldPosition()
         local ice_circle = SpawnPrefab("antler_ice_circle")
@@ -32,7 +32,7 @@ local function OnAttack(inst, attacker, target)
             if v ~= inst and v ~= target and v:IsValid() and not v:IsInLimbo() then
                 if v.components.combat and not (v.components.health and v.components.health:IsDead())
                     and attacker.components.combat:CanTarget(v) and not attacker.components.combat:IsAlly(v) then
-                    v.components.combat:GetAttacked(attacker, 34, inst, nil, {planar = 17})
+                    v.components.combat:GetAttacked(attacker, TUNING.DSTU.CRYSTAL_CURSED_ANTLER_AOE_DAMAGE, inst, nil, {planar = TUNING.DSTU.CRYSTAL_CURSED_ANTLER_AOE_PLANAR_DAMAGE})
 
                     if v.components.freezable and not v.components.freezable:IsFrozen() then
                         v.components.freezable:AddColdness(.5)
@@ -44,10 +44,14 @@ local function OnAttack(inst, attacker, target)
     end
 end
 
-local function SetPlanarDamage(inst, toggle)
+--[[local function SetPlanarDamage(inst, toggle)
     local planardamage = inst.components.planardamage
     if not planardamage then return end
-    planardamage:SetBaseDamage(toggle and 116 or 17)
+    planardamage:SetBaseDamage(toggle and TUNING.DSTU.CRYSTAL_CURSED_ANTLER_CHARGED_PLANAR_DAMAGE or TUNING.DSTU.CRYSTAL_CURSED_ANTLER_PLANAR_DAMAGE)
+end]]
+
+local function GetAntlerPlanarDamage(inst)
+    return inst.components.rechargeable and inst.components.rechargeable:IsCharged() and TUNING.DSTU.CRYSTAL_CURSED_ANTLER_CHARGED_PLANAR_DAMAGE or TUNING.DSTU.CRYSTAL_CURSED_ANTLER_PLANAR_DAMAGE
 end
 
 local function OnEquip(inst, owner)
@@ -84,9 +88,9 @@ end
     end
 end]]
 
-local function OnDischarged(inst)
+--[[local function OnDischarged(inst)
     SetPlanarDamage(inst)
-end
+end]]
 
 local function OnCharged(inst)
     --local fx = SpawnPrefab("dr_warm_loop_1")
@@ -103,14 +107,14 @@ local function OnCharged(inst)
         --fx.Transform:SetPosition(0, 2.35, 0)
         --fx.Transform:SetScale(1.33, 1.33, 1.33)
     --end
-    SetPlanarDamage(inst, true)
+    --SetPlanarDamage(inst, true)
     inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/charge")
     inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/taunt_howl", nil, .4)
 end
 
-local function OnLoad(inst, data)
+--[[local function OnLoad(inst, data)
     if data.rechargeable then SetPlanarDamage(inst) end
-end
+end]]
 
 local function fn()
     local inst = CreateEntity()
@@ -144,23 +148,24 @@ local function fn()
     inst:AddComponent("inspectable")
 
     local weapon = inst:AddComponent("weapon")
-    weapon:SetDamage(34) -- Give this a TUNING value and remove this comment!
+    weapon:SetDamage(TUNING.DSTU.CRYSTAL_CURSED_ANTLER_DAMAGE)
     weapon:SetOnAttack(OnAttack)
 
     local planardamage = inst:AddComponent("planardamage")
-    SetPlanarDamage(inst, true)
+    planardamage.um_getplanardamagefn = GetAntlerPlanarDamage
+    --SetPlanarDamage(inst, true)
 
     local equippable = inst:AddComponent("equippable")
     equippable:SetOnEquip(OnEquip)
     equippable:SetOnUnequip(OnUnequip)
 
     local rechargeable = inst:AddComponent("rechargeable")
-    rechargeable:SetOnDischargedFn(OnDischarged)
+    --rechargeable:SetOnDischargedFn(OnDischarged)
     rechargeable:SetOnChargedFn(OnCharged)
 
     MakeHauntableLaunch(inst)
 
-    inst.OnLoad = OnLoad
+    --inst.OnLoad = OnLoad
 
     return inst
 end

@@ -5,7 +5,7 @@ local assets =
 }
 
 local function GetAntlerDamage(inst, attacker, target)
-    return inst.components.rechargeable and inst.components.rechargeable:IsCharged() and 100 or 34
+    return inst.components.rechargeable and inst.components.rechargeable:IsCharged() and TUNING.DSTU.CURSED_ANTLER_CHARGED_DAMAGE or TUNING.DSTU.CURSED_ANTLER_DAMAGE
 end
 
 local function OnAttack(inst, attacker, target)
@@ -28,7 +28,7 @@ local function OnAttack(inst, attacker, target)
             if v ~= inst and v ~= target and v:IsValid() and not v:IsInLimbo() then
                 if v.components.combat and not (v.components.health and v.components.health:IsDead())
                     and attacker.components.combat:CanTarget(v) and not attacker.components.combat:IsAlly(v) then
-                    v.components.combat:GetAttacked(attacker, 34)
+                    v.components.combat:GetAttacked(attacker, TUNING.DSTU.CURSED_ANTLER_AOE_DAMAGE)
 
                     if v.components.freezable and not v.components.freezable:IsFrozen() then
                         v.components.freezable:AddColdness(.5)

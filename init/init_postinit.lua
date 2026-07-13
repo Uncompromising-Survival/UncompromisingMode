@@ -43,6 +43,7 @@ local component_post = {
     "weather",
     "worldtemperature",
     "worldwind",
+    "planardamage",
     "planarentity",
     "firedetector",
     "unwrappable",
