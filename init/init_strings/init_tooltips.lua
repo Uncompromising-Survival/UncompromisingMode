@@ -112,6 +112,8 @@ STRINGS.UNCOMP_TOOLTIP = {
     UM_MAGNIFIER_PURPLEGEM = "- Reveals the quality of Strange Gems.\n- Discovering new Strange Gems permanently reveals the name\nand catalogues effects to the Scrapbook.",
     UM_MAGNIFIER_OBSIDIAN = "- Reveals the quality of Strange Gems.\n- Discovering new Strange Gems permanently reveals the name\nand catalogues effects to the Scrapbook..",
     UM_MAGNERANG = "- Temporarily holds targets in place.",
+
+    SPIDER_HEALER_ITEM = "- Increases maximum health of spider-kind for a day"
 }
 local TOOLTIPS = STRINGS.UNCOMP_TOOLTIP
 
