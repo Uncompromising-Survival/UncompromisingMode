@@ -84,29 +84,56 @@ local function SpinWall(inst, speed)
     end
 end
 
-local function Honey(inst, angle, count, variation, slowness)
+local UMCommonFns = require("tools/um_commonfns")
+
+local function Honey(inst, angle, count, variation, slowness,added_distance)
     local x, y, z = inst.Transform:GetWorldPosition()
     if TheWorld.Map:IsPassableAtPoint(x, 0, z) then
-        local fx = SpawnPrefab((inst.prefab == "cherry_beequeen" or inst.prefab == "cherry_honey_trail") and
-            "cherry_honey_trail" or "honey_trail")
-        if inst.prefab == "cherry_beequeen" or inst.prefab == "cherry_honey_trail" then
-            fx.slowness = inst.flowerbuffs and fx.slowness + inst.flowerbuffs.honeyslowness or slowness
-        end
-
+        local pt = {}
         if not variation then
             variation = 0
         end
+        if not added_distance then
+            added_distance = 0
+        end
+        pt.x = x + (3+added_distance) * math.cos(angle) + variation * math.cos(angle + 3.14 / 2)
+        pt.y = 0
+        pt.z = z + (3+added_distance) * math.sin(angle) + variation * math.sin(angle + 3.14 / 2)
 
-        fx.Transform:SetPosition(x + 2 * math.cos(angle) + variation * math.cos(angle + 3.14 / 2), 0,
-            z + 2 * math.sin(angle) + variation * math.sin(angle + 3.14 / 2))
-        fx:SetVariation(math.random(1, 7), GetRandomMinMax(1, 1.3), 4)
-        fx.count = count - 1
-        fx.angle = angle
+        local goo_prefab
+        if inst.prefab == "cherry_beequeen" or inst.prefab == "cherry_honey_trail" then
+            goo_prefab = "cherry_honey_trail"
+        else
+            goo_prefab = "honey_trail"
+        end
 
-        if count > 0 then
-            fx:DoTaskInTime(0.2, function(fx)
-                Honey(fx, fx.angle, fx.count, nil, fx.slowness)
-            end)
+        local goo = UMCommonFns.GooCheckAndPlace(pt,goo_prefab,2)
+
+        --[[fx.Transform:SetPosition(x + 2 * math.cos(angle) + variation * math.cos(angle + 3.14 / 2), 0,
+            z + 2 * math.sin(angle) + variation * math.sin(angle + 3.14 / 2))]]
+        if goo then
+            -- Allows for cherry BQ buffing
+            if inst.prefab == "cherry_beequeen" or inst.prefab == "cherry_honey_trail" then
+                goo.slowness = inst.flowerbuffs and goo.slowness + inst.flowerbuffs.honeyslowness or slowness
+            end
+
+            goo:SetVariation(math.random(1, 7), GetRandomMinMax(1, 1.3), 60)
+            count = count - 1
+            added_distance = 0
+
+            if count > 0 then
+                goo:DoTaskInTime(0.2, function(goo)
+                    Honey(goo, angle, count, nil, goo.slowness)
+                end)
+            end
+        else
+            count = count - 1
+            added_distance = added_distance + 3
+            if count > 0 then
+                inst:DoTaskInTime(0.2, function(inst)
+                    Honey(inst, angle, count,nil,nil,added_distance)
+                end)
+            end           
         end
     else
         SpawnPrefab("ocean_splash_ripple"..tostring(math.random(2))).Transform:SetPosition(x, 0, z)
