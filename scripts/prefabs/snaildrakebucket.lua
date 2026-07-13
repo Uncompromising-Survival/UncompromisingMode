@@ -80,12 +80,12 @@ local function SpreadProtectionAtPoint(x, y, z, dist) -- This is taken from Wate
     end
 
     -- Goo
-    local ents = TheSim:FindEntities(x, y, z, 2*dist, {"um_washable_goo"})
+    local ents = TheSim:FindEntities(x, y, z, dist, {"um_washable_goo"})
     for i, v in ipairs(ents) do
         if v.prefab == "ratpoison" then
             v:Remove()
-        elseif not (v.isfading and v._isfading:value()) then
-            v.OnStartFade(v)
+        elseif not (v._isfading and v._isfading:value()) and v.FadeAway then
+            v:FadeAway(v)
         end
     end
 
@@ -109,7 +109,7 @@ local function ondeploy(inst, pt, deployer)
         effect.persists = false
     elseif inst.contains == "water" then
         effect = SpawnPrefab("mudpuddle_splash")
-        SpreadProtectionAtPoint(pt.x,pt.y,pt.z,4)
+        SpreadProtectionAtPoint(pt.x,pt.y,pt.z,12)
         effect.Transform:SetScale(2,1,2)
     end
     if effect then
@@ -118,7 +118,7 @@ local function ondeploy(inst, pt, deployer)
     
     inst.uses = inst.uses - 1
     if inst.uses == 0 then
-        inst.components.fueled:StopConsuming()
+        --inst.components.fueled:StopConsuming()
         inst:RemoveComponent("deployable")
     end
     ChangeSprite(inst)
@@ -139,23 +139,23 @@ local function EnableDeploy(inst)
 end
 
 local function FillWater(inst)
-    if TheWorld.state.iswinter then
+    --[[if TheWorld.state.iswinter then
         inst.components.fueled.rate = 20
     else
         inst.components.fueled.rate = 1
-    end
+    end]]
     inst.SoundEmitter:PlaySound("turnoftides/common/together/water/emerge/small")
     inst.contains = "water"
 end
 
 local function FillLava(inst)
-    inst.components.fueled.rate = 5
+    --inst.components.fueled.rate = 5
     inst.contains = "lava"
 end
 
 local function OnFill(inst, from_object)
     inst.uses = 3
-    inst.components.fueled:StartConsuming()
+    --inst.components.fueled:StartConsuming()
      
     if not inst.components.deployable then
         EnableDeploy(inst)
@@ -274,13 +274,14 @@ local function fn()
 
     inst.uses = 0 -- Not using finiteuses because we'll be using durability for the shell itself, the image will change to represent how much liquid is in it.
     
-    inst:AddComponent("fueled")
+    --[[inst:AddComponent("fueled")
     inst.components.fueled.fueltype = FUELTYPE.USAGE
     inst.components.fueled:InitializeFuelLevel(8*60*70) -- Standard rate is a whole year
     inst.components.fueled:SetDepletedFn(ExplodeContents)
     inst.components.fueled.no_sewing = true
-    
-    inst:WatchWorldState("iswinter", EvaluateFueledRate) -- Dynamic fuel consumption rate for shell w/ water in it during winter
+    ]]
+
+    --inst:WatchWorldState("iswinter", EvaluateFueledRate) -- Dynamic fuel consumption rate for shell w/ water in it during winter
 
     inst.OnSave = OnSave
     inst.OnLoad = OnLoad
