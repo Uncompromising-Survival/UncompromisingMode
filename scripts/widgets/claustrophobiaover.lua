@@ -33,11 +33,11 @@ function ClaustrophobiaOver:OnUpdate(dt)
         TheFocalPoint.SoundEmitter:KillSound("claustrophobicdrone")
     else
         self:Show()
-        if self.owner.claustrophobia then
-            local claustrophobia = self.owner.claustrophobia
+        local claustrophobia = self.owner.claustrophobia and self.owner.claustrophobia:value() and tonumber(self.owner.claustrophobia:value())
+        if claustrophobia then
             self.bg2:SetTint(1,1,1, claustrophobia)
 
-            if claustrophobia >= 0.25 then
+            if claustrophobia >= .25 then
                 TheFocalPoint.SoundEmitter:PlaySound("wixie/characters/wixie/claustrophobia", "claustrophobicdrone")
             else
                 TheFocalPoint.SoundEmitter:KillSound("claustrophobicdrone")

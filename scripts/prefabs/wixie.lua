@@ -50,7 +50,7 @@ local function customidleanimfn(inst)
     return item ~= nil and item.prefab == "the_real_charles_t_horse" and "idle_woodie" or "idle_wixie"
 end
 
-local function OnKilledOther(inst, data)
+--[[local function OnKilledOther(inst, data)
     if data and data.victim and data.victim.prefab then
         local naughtiness = NAUGHTY_VALUE[data.victim.prefab]
         if naughtiness then
@@ -59,10 +59,10 @@ local function OnKilledOther(inst, data)
             inst.components.sanity:DoDelta(naughtyresolve)
         end
     end
-end
+end]]
 
 local function GetClaustrophobia(inst)
-    return inst.claustrophobia or 0
+    return inst.claustrophobia and inst.claustrophobia:value() and tonumber(inst.claustrophobia:value()) or 0
 end
 
 local function CanGainClaustrophobia(inst)
@@ -91,14 +91,15 @@ local function updateclaustrophobia(inst)
             end
         end
 
-        if not inst.wixiepanic and ents and #ents >= 1 or inst.claustrophobiarate > 0 or inst.replica.rider and inst.replica.rider:IsRiding() then
+        local current_claustrophobia = inst:GetClaustrophobia()
+        if not inst.wixiepanic and ents and #ents >= 1 or inst.claustrophobiarate > 0 or inst.components.rider and inst.components.rider:IsRiding() then
             if ents and #ents >= 1 then
                 for i, v in ipairs(ents) do
                     local distsq = v:IsValid() and inst:GetDistanceSqToInst(v) or 1
                     local distance_rate = 1.5 - (distsq / 33)
                     --print("distsq"..distsq)
                     --print("distance_rate"..distance_rate)
-                    if inst:GetClaustrophobia() < 1 then
+                    if current_claustrophobia < 1 then
                         local adjustrate = v:HasTag("smallcreature") and v:HasAnyTag("insect", "rabbit", "bird", "companion") and .0005
                             or v:HasTag("smallcreature") and .0008 or v:HasTag("smallepic") and .0035 or v:HasTag("epic") and (v.prefab == "klaus" and .008 or .006) or .0025
                         inst.claustrophobiarate = math.clamp(inst.claustrophobiarate + (adjustrate * distance_rate), 0, .008)
@@ -106,34 +107,43 @@ local function updateclaustrophobia(inst)
                 end
             end
 
-            if inst.replica.rider and inst.replica.rider:IsRiding() then
+            if inst.components.rider and inst.components.rider:IsRiding() then
                 inst.claustrophobiarate = math.clamp(inst.claustrophobiarate + .0005, 0, .008)
             end
 
-            inst.claustrophobia = math.clamp(inst.claustrophobia + inst.claustrophobiarate, 0, 1)
+            inst.claustrophobia:set(math.clamp(current_claustrophobia + inst.claustrophobiarate, 0, 1))
+            current_claustrophobia = inst:GetClaustrophobia()
 
-            if inst:GetClaustrophobia() >= 1 then
+            if current_claustrophobia >= 1 then
                 if not inst.wixiepanic then
                     inst.wixiepanic = true
-                    SendModRPCToServer(GetModRPC("WixieTheDelinquent", "ClaustrophobiaPanic"), inst)
+                    inst:PushEvent("um_claustrophobiapanic")
                 end
             end
         else
             if inst.wixiepanic then
-                inst.claustrophobia = math.max(inst.claustrophobia - .0075, 0)
+                inst.claustrophobia:set(math.max(current_claustrophobia - .0075, 0))
+                current_claustrophobia = inst:GetClaustrophobia()
             end
 
             local minimum_claustrophobia = inst.claustrophobiamodifier + objectmodifier
-            inst.claustrophobia = not inst.wixiepanic and inst:GetClaustrophobia() <= minimum_claustrophobia
-                and math.clamp(inst.claustrophobia + .002, 0, minimum_claustrophobia) or math.max(inst.claustrophobia - .001, 0)
+            inst.claustrophobia:set(not inst.wixiepanic and current_claustrophobia <= minimum_claustrophobia
+                and math.clamp(current_claustrophobia + .002, 0, minimum_claustrophobia) or math.max(current_claustrophobia - .001, 0))
+            current_claustrophobia = inst:GetClaustrophobia()
 
-            if inst:GetClaustrophobia() <= 0 then
+            if current_claustrophobia <= 0 then
                 if inst.wixiepanic then
                     inst.wixiepanic = false
                     inst._claustrophobiacdtask = inst:DoTaskInTime(10, OnCooldown)
                 end
             end
         end
+    end
+end
+
+local function ClaustrophobiaPanic(inst)
+    if not (inst.components.health and inst.components.health:IsDead()) and not inst.sg:HasStateTag("wixiepanic") then
+        inst.sg:GoToState("claustrophobic")
     end
 end
 
@@ -146,8 +156,6 @@ local function EquipUnequipCount(inst, data)
     inst.bodymodifier = bodyequipped and bodyequipped.components.armor and not bodyequipped:HasAnyTag(NOT_CLAUSTROPHOBIC_ARMOR_TAGS) and 0.2 or 0
 
     inst.claustrophobiamodifier = inst.headmodifier + inst.bodymodifier
-
-    SendModRPCToClient(GetClientModRPC("WixieTheDelinquent", "ClaustrophobiaEquipMult"), inst.userid, tostring(inst.claustrophobiamodifier))
 end
 
 local function EquipedCount(inst, data)
@@ -162,7 +170,6 @@ end
 local function OnNewState(inst, data)
     if inst.sg:HasStateTag("hiding") or inst.claustrophobiahidden then
         inst.claustrophobiahidden = inst.sg:HasStateTag("hiding") or nil
-        SendModRPCToClient(GetClientModRPC("WixieTheDelinquent", "ClaustrophobiaHidden"), inst.userid, inst.claustrophobiahidden)
     end
 end
 
@@ -171,9 +178,6 @@ local function OnInit(inst)
         inst.wixietask = inst:DoPeriodicTask(FRAMES, updateclaustrophobia)
     end
 end
-
-local MAPREVEAL_SCALE = 450
-local MAPREVEAL_STEPS = 10
 
 local function OnNewSpawn(inst)
     inst:DoTaskInTime(0, function()
@@ -252,7 +256,7 @@ local function OnSetOwner(inst)
     end
 end
 
-local function OnBuildAmmo(inst, data)
+--[[local function OnBuildAmmo(inst, data)
     if data.recipe.product and data.item and (inst:HasTag("wixie_ammocraft_3") and data.item:HasTag("wixieammo_special")
         or inst:HasTag("wixie_ammocraft_2") and data.item:HasTag("wixieammo_basic")) then
         for i = 1, 5 do
@@ -261,7 +265,7 @@ local function OnBuildAmmo(inst, data)
             inst.components.inventory:GiveItem(addt_prod, nil, inst:GetPosition())
         end
     end
-end
+end]]
 
 local function OnAttackOther(inst, data)
     local target, weapon = data.target, data.weapon
@@ -317,22 +321,8 @@ local function common_postinit(inst)
     inst:AddTag("slingshot_sharpshooter")
     inst:AddTag("troublemaker")
 
-    inst.claustrophobia = 0
-    inst.claustrophobiamodifier = 0
-    inst.wixiepanic = false
-
-    inst.GetClaustrophobia = GetClaustrophobia
-    inst.CanGainClaustrophobia = CanGainClaustrophobia
-
-    if not TheWorld.ismastersim or not TheNet:IsDedicated() then
-        inst:DoTaskInTime(0, OnInit)
-    end
-
-    if TheWorld.ismastersim then
-        inst:ListenForEvent("equip", EquipedCount)
-        inst:ListenForEvent("unequip", EquipUnequipCount)
-        inst:ListenForEvent("newstate", OnNewState)
-    end
+    inst.claustrophobia = net_string(inst.GUID, "wixie.claustrophobia")
+    inst.claustrophobia:set(0)
 end
 
 local function master_postinit(inst)
@@ -357,6 +347,19 @@ local function master_postinit(inst)
     inst.soundsname = "wixie"
 
     --inst:ListenForEvent("builditem", OnBuildAmmo)
+
+    inst.claustrophobiamodifier = 0
+    inst.wixiepanic = false
+
+    inst.GetClaustrophobia = GetClaustrophobia
+    inst.CanGainClaustrophobia = CanGainClaustrophobia
+
+    inst:ListenForEvent("equip", EquipedCount)
+    inst:ListenForEvent("unequip", EquipUnequipCount)
+    inst:ListenForEvent("newstate", OnNewState)
+    inst:ListenForEvent("um_claustrophobiapanic", ClaustrophobiaPanic)
+
+    inst:DoTaskInTime(0, OnInit)
 
     inst.OnNewSpawn = OnNewSpawn
 end

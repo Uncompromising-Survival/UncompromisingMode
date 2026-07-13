@@ -377,30 +377,6 @@ if GetModConfigData("wixie_walter") then
 
     AddModRPCHandler("WixieTheDelinquent", "GetTheInput", HandlerFunction)
 
-    local function ClaustrophobiaPanic(player, inst)
-        if inst and not (inst.components.health and inst.components.health:IsDead()) and not inst.sg:HasStateTag("wixiepanic") then
-            inst.sg:GoToState("claustrophobic")
-        end
-    end
-
-    AddModRPCHandler("WixieTheDelinquent", "ClaustrophobiaPanic", ClaustrophobiaPanic)
-
-    local function ClaustrophobiaEquipMult(claustrophobiamodifier)
-        if GLOBAL.ThePlayer then
-            GLOBAL.ThePlayer.claustrophobiamodifier = type(claustrophobiamodifier) == "string" and GLOBAL.tonumber(claustrophobiamodifier) or claustrophobiamodifier
-        end
-    end
-
-    AddClientModRPCHandler("WixieTheDelinquent", "ClaustrophobiaEquipMult", ClaustrophobiaEquipMult)
-
-    local function ClaustrophobiaHidden(claustrophobiahidden)
-        if GLOBAL.ThePlayer then
-            GLOBAL.ThePlayer.claustrophobiahidden = claustrophobiahidden
-        end
-    end
-
-    AddClientModRPCHandler("WixieTheDelinquent", "ClaustrophobiaHidden", ClaustrophobiaHidden)
-
     AddModCharacter("wixie", "FEMALE")
 
     GLOBAL.TUNING.WIXIE_HEALTH = 130
