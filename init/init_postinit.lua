@@ -259,7 +259,10 @@ local prefab_post = {
     "cane",
     "onemanband",
     "cursed_monkey_token",
-    "slurtle_shellpieces"
+    "slurtle_shellpieces",
+    "wateringcan",
+    "honey_trail", -- Add washable tags to both Vanilla and Cherry Forest Honey Trails - allows washing away
+    "spider_healer_item" -- Add to the existing capabilities, make it apply a health buff to all spider-kind it influences
 }
 
 local stategraph_post = {
