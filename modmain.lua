@@ -377,9 +377,9 @@ if GetModConfigData("wixie_walter") then
 
     AddModRPCHandler("WixieTheDelinquent", "GetTheInput", HandlerFunction)
 
-    local function ClaustrophobiaPanic(player)
-        if not (player.components.health and player.components.health:IsDead()) and not player.sg:HasStateTag("wixiepanic") then
-            player.sg:GoToState("claustrophobic")
+    local function ClaustrophobiaPanic(player, inst)
+        if inst and not (inst.components.health and inst.components.health:IsDead()) and not inst.sg:HasStateTag("wixiepanic") then
+            inst.sg:GoToState("claustrophobic")
         end
     end
 

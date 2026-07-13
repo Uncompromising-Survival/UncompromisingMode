@@ -115,7 +115,7 @@ local function updateclaustrophobia(inst)
             if inst:GetClaustrophobia() >= 1 then
                 if not inst.wixiepanic then
                     inst.wixiepanic = true
-                    SendModRPCToServer(GetModRPC("WixieTheDelinquent", "ClaustrophobiaPanic"))
+                    SendModRPCToServer(GetModRPC("WixieTheDelinquent", "ClaustrophobiaPanic"), inst)
                 end
             end
         else
