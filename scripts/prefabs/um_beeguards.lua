@@ -148,14 +148,27 @@ end
 
 local function Honey(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    local fx = SpawnPrefab(inst.queen ~= nil and inst.queen.prefab == "cherry_beequeen" and "cherry_honey_trail" or
-        "honey_trail")
-    if fx.prefab == "cherry_honey_trail" then
-        fx.slowness = inst.queen ~= nil and fx.slowness ~= nil and fx.slowness + inst.queen.flowerbuffs.honeyslowness or
-            fx.slowness
+    if TheWorld.Map:IsPassableAtPoint(x, 0, z) then
+        local pt = {}
+        pt.x = x 
+        pt.y = 0
+        pt.z = z 
+        local goo_prefab
+        if inst.prefab == "cherry_beequeen" then
+            goo_prefab = "cherry_honey_trail"
+        else
+            goo_prefab = "honey_trail"
+        end  
+        local goo = UMCommonFns.GooCheckAndPlace(pt,goo_prefab,2)
+
+        if goo then
+            -- Allows for cherry BQ buffing
+            if inst.queen.prefab == "cherry_beequeen" then
+                goo.slowness = inst.flowerbuffs and goo.slowness + inst.flowerbuffs.honeyslowness or slowness
+            end
+            goo:SetVariation(math.random(1, 7), GetRandomMinMax(1, 1.3), 60)
+        end
     end
-    fx.Transform:SetPosition(x, 0, z)
-    fx:SetVariation(math.random(1, 7), GetRandomMinMax(1, 1.3), math.random(45, 60))
 end
 
 local function MortarAttack(inst)
