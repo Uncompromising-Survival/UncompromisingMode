@@ -274,7 +274,7 @@ end
 
 local function OnUpdate(inst)
     local should_tentacle
-    if FindEntity(inst, 3, nil,{"locomotor" },{"flying", "playerghost", "INLIMBO","shadow"}) then
+    if FindEntity(inst, 2, nil,{"locomotor" },{"flying", "playerghost", "INLIMBO","shadow"}) then
         should_tentacle = true
     end
     if should_tentacle and not FindEntity(inst, 3, function(ent) return ent.prefab == "bigshadowtentacle" end) then
@@ -311,7 +311,7 @@ end
 
 local function OnInit(inst)
     inst:AddComponent("unevenground")
-    inst.components.unevenground.radius = inst.Transform:GetScale()
+    inst.components.unevenground.radius = inst.Transform:GetScale()*0.8
     SetUpTentacleChecking(inst)
     inst.SoundEmitter:PlaySound("dontstarve/creatures/together/bee_queen/honey_drip")
 
@@ -371,11 +371,13 @@ local function fngoo()
 
     --[[inst.OnSave = function(inst, data)
 
-    end
+    end]]
 
     inst.OnLoad = function(inst, data)
-
-    end]]
+        if data.tutorial then
+            inst.components.timer:StartTimer("fadeout",140*TUNING.TOTAL_DAY_TIME) -- Surely you'll see this year 1
+        end
+    end
 
     inst:ListenForEvent("timerdone",TryRemove)
 

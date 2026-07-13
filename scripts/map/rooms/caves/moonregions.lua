@@ -70,6 +70,32 @@ AddRoom("GrottoStairs",  {
 	},
 })
 
+Layouts["skeleton_reedsuit"] = StaticLayout.Get("map/static_layouts/skeleton_reedsuit")
+AddRoom("LightFloodEntrance", {
+    colour={r=0.1,g=0.1,b=0.8,a=0.9},
+    value = WORLD_TILES.UM_GROTTO_LIGHTFLOODED,
+	tags = {"not_mainland"},
+	SafeFromDisconnect = true,
+    contents =  {
+        countstaticlayouts =
+        {
+            ["GrottoPoolSmall"] = 2,
+            ["skeleton_reedsuit"] = 1,
+        },
+        countprefabs =
+        {
+			cavelight = 2,
+        },
+        distributepercent = 0.25,
+        distributeprefabs =
+        {
+			um_reeds_lunar = 0.005,
+            twigs = 0.005,
+            flint = 0.0025,
+        },
+    }
+})
+
 AddRoom("GrottoGrass",  {
     colour={r=0.3,g=0.2,b=0.1,a=0.3},
 	tags = {"not_mainland"},

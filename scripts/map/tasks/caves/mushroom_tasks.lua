@@ -67,6 +67,7 @@ AddTask("PatchyFloodedGrotto", {
 		locks={LOCKS.TIER1},
 		keys_given={KEYS.TIER2},
 		level_set_piece_blocker = true,
+		entrance_room = "LightFloodEntrance",
 		room_choices={
 			["GrottoGrass"] = 1,
 			["GrottoLightFlood"] = 3,
