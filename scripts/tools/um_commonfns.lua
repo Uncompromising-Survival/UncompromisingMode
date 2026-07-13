@@ -135,5 +135,20 @@ UMCommonFns.AreaFloodCheck = function(inst) -- For players, check to see if they
 end
 
 
+UMCommonFns.GooCheckAndPlace = function(pt,goo_prefab,radius) -- Check to see if goo may be placed again at a location, if not, reset timer
+    local ents = TheSim:FindEntities(pt.x,pt.y,pt.z,radius)
+    local goos = {}
+    for i,v in ipairs(ents) do
+        if v.prefab == goo_prefab then
+            return
+        end
+    end
+    local goo = SpawnPrefab(goo_prefab)
+    goo.Transform:SetPosition(pt.x,pt.y,pt.z)
+
+    return goo
+end
+
+
 
 return UMCommonFns
