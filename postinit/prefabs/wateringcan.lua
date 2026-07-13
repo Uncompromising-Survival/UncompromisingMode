@@ -8,6 +8,7 @@ if TUNING.DSTU.WATERING_TEMPERATURE then
 		end
 
 		inst.components.wateryprotection.temperaturereduction = 0
+		inst.components.wateryprotection.protection_dist = 4
 	end)
 
 	env.AddPrefabPostInit("premiumwateringcan", function(inst)
@@ -16,5 +17,6 @@ if TUNING.DSTU.WATERING_TEMPERATURE then
 		end
 
 		inst.components.wateryprotection.temperaturereduction = 0
+		inst.components.wateryprotection.protection_dist = 6
 	end)
 end
