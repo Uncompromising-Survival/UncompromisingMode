@@ -500,7 +500,8 @@ local function blueberryexplosion()
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddNetwork()
-
+    inst.entity:AddSoundEmitter()
+    
     MakeInventoryPhysics(inst)
 
     inst.Transform:SetScale(1.5, 1.5, 1.5)
@@ -549,7 +550,6 @@ local function blueberrypuddle()
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddNetwork()
-    inst.entity:AddSoundEmitter()
 
     MakeInventoryPhysics(inst)
 
