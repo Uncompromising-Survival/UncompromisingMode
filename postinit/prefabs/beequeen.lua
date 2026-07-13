@@ -700,15 +700,15 @@ local function BeeQueenPost(inst)
 
     inst.StartHoney = function(inst) end
 
-    inst:DoPeriodicTask(10, function(inst)
+    inst:DoPeriodicTask(30, function(inst)
         local x, y, z = inst.Transform:GetWorldPosition()
         local ents = TheSim:FindEntities(x, y, z, 20, { "epic" }, { "beequeen", "cherrybeequeen", "lordfruitfly" } )
         
-        --[[for i, v in pairs(ents) do
+        for i, v in pairs(ents) do
             if v ~= nil and v.components.combat and v.components.combat.target and v.components.combat.target == inst then
                 inst:PushEvent("flee")
             end
-        end]]
+        end
 
         if inst.components.health and not inst.components.health:IsDead() and not inst.sg:HasStateTag("busy")
             and inst.components.combat and inst.components.combat.target and not ShouldChase(inst) then
