@@ -15,6 +15,45 @@ local function smallfury_detatch(inst, target)
     end
 end
 
+
+local function maxhealth_change(ent, amount) --AXE Borrowed from WX78,ditched the loading check for the badge update.
+    if ent.components.health ~= nil then
+        local current_health_percent = ent.components.health:GetPercent()
+
+        ent.components.health.maxhealth = ent.components.health.maxhealth + amount
+
+        ent.components.health:SetPercent(current_health_percent)
+
+        if ent:HasTag("player") then
+            -- We want to force a badge pulse, but also maintain the health percent as much as we can.
+            local badgedelta = (amount > 0 and 0.01) or -0.01
+            ent.components.health:DoDelta(badgedelta, false, nil, true)
+        end
+    end
+end
+
+local function spider_health_buff_attach(inst, target)
+    if target.components.health ~= nil then
+        if target:HasTag("player") and target:HasTag("spiderwhisperer") then
+            maxhealth_change(target,75)
+        elseif not target:HasTag("player") then
+            local maxhealth = target.components.health.maxhealth
+            maxhealth_change(target,2*maxhealth)
+        end
+    end
+end
+
+local function spider_health_buff_detatch(inst, target)
+    if target.components.health ~= nil then
+        if target:HasTag("player") and target:HasTag("spiderwhisperer") then
+            maxhealth_change(target,-75)
+        elseif not target:HasTag("player") then
+            local maxhealth = target.components.health.maxhealth
+            maxhealth_change(target,-2*maxhealth/3)
+        end       
+    end
+end
+
 local function medfury_attach(inst, target)
     if target.components.health ~= nil then
         target.components.health.externalabsorbmodifiers:SetModifier(inst, 0.1)
@@ -152,8 +191,15 @@ local function OnHitOtherBoomberry(inst, data)
             end
         end
         SpawnPrefab("blueberryexplosion").Transform:SetPosition(other.Transform:GetWorldPosition())
-        local puddle = SpawnPrefab("blueberrypuddle")
-        puddle.Transform:SetPosition(other.Transform:GetWorldPosition())
+        local pt = {}
+        pt.x = x
+        pt.y = 0 
+        pt.z = z
+        local goo_prefab = "blueberrypuddle"
+        local puddle = UMCommonFns.GooCheckAndPlace(pt,goo_prefab,2)
+        if puddle then
+            puddle.playermade = true
+        end
         if inst:HasTag("player") then puddle.playermade = true end
     end
 end
@@ -455,4 +501,5 @@ return MakeBuff("electricretaliation", attachretaliationdamage, electric_extend,
     MakeBuff("smallcourage", smallcourage_attach, smallcourage_extend, smallcourage_detach, 8 * 60, 2, true),
     MakeBuff("furious1", smallfury_attach, nil, smallfury_detatch, 5, true, true),
     MakeBuff("furious2", medfury_attach, nil, medfury_detatch, 5, true, true),
-    MakeBuff("furious3", largefury_attach, nil, largefury_detatch, 5, true, true)
+    MakeBuff("furious3", largefury_attach, nil, largefury_detatch, 5, true, true),
+    MakeBuff("spider_maxhealth", spider_health_buff_attach, nil, spider_health_buff_detatch, TUNING.TOTAL_DAY_TIME, true, true) 
