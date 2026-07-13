@@ -3,15 +3,26 @@ local um_boomberry_bomb_assets =
 	Asset("ANIM", "anim/um_boomberry_bomb.zip"),
     Asset("ANIM", "anim/swap_um_boomberry_bomb.zip"),
 }
-local shouldnt_hit = { "FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost" }
-local function OnHitBoomBerry(inst, attacker, target)
-	local x,y,z = inst.Transform:GetWorldPosition()
-	SpawnPrefab("blueberryexplosion").Transform:SetPosition(x,y,z)
-	local puddle = SpawnPrefab("blueberrypuddle")
-	puddle.Transform:SetPosition(x,y,z)
-	puddle.playermade = true
 
-	puddle.SoundEmitter:PlaySound("turnoftides/creatures/together/starfishtrap/trap")
+local shouldnt_hit = { "FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost" }
+
+local function OnHitBoomBerry(inst, attacker, target)
+
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local explosion = SpawnPrefab("blueberryexplosion")
+    explosion.Transform:SetPosition(x,y,z)
+    explosion.SoundEmitter:PlaySound("turnoftides/creatures/together/starfishtrap/trap")
+
+    local pt = {}
+    pt.x = x
+    pt.y = 0 
+    pt.z = z
+    local goo_prefab = "blueberrypuddle"
+    local puddle = UMCommonFns.GooCheckAndPlace(pt,goo_prefab,2)
+    if puddle then
+        puddle.playermade = true
+    end
+
 	local ents = TheSim:FindEntities(x, y, z, 3, nil,shouldnt_hit)
 	if #ents > 0 then
 		for i, v in pairs(ents) do
@@ -22,7 +33,6 @@ local function OnHitBoomBerry(inst, attacker, target)
 			end
 		end
 	end
-	inst:Hide()
 	inst.components.wateryprotection:SpreadProtection(inst)
 	inst:Remove()
 end

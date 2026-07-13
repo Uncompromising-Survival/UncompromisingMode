@@ -111,10 +111,17 @@ local function BoomPieGo(inst, eater)
 
         SpawnPrefab("explode_small").Transform:SetPosition(x, y, z)
         SpawnPrefab("blueberryexplosion").Transform:SetPosition(x, y, z)
-        local puddle = SpawnPrefab("blueberrypuddle")
-        puddle.Transform:SetPosition(x, y, z)
-        puddle.playermade = true
-        puddle.SoundEmitter:PlaySound("turnoftides/creatures/together/starfishtrap/trap")
+
+        local pt = {}
+        pt.x = x
+        pt.y = 0 
+        pt.z = z
+        local goo_prefab = "blueberrypuddle"
+        local puddle = UMCommonFns.GooCheckAndPlace(pt,goo_prefab,2)
+        if puddle then
+            puddle.playermade = true
+            puddle.playermade = true
+        end
 
         local casualties = TheSim:FindEntities(x, y, z, 2, nil, pie_shouldnt_hit)
         if #casualties > 0 then
