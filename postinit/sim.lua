@@ -173,8 +173,8 @@ function TheSimMetaTable.FindEntities(self, x, y, z, radius, musttags, canttags,
     local ret = _FindEntities(self, x, y, z, radius, musttags, canttags, oneoftags, ...)
     local data = UMSimTempOverride and UMSimTempOverride.data
     if data then
-        ret = data.fn(ret, data.inst)
         UMSimTempOverride.data = nil
+        ret = data.fn(ret, data.inst)
     end
     return ret
 end
