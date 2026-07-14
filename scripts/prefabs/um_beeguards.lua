@@ -275,6 +275,7 @@ local function fnmain(bee, build)
     inst:AddTag("flying")
     inst:AddTag("ignorewalkableplatformdrowning")
     inst:AddTag("soulless") --Overload for wortox..
+    --inst:AddTag("companion")
 
     MakeInventoryFloatable(inst)
 
@@ -337,7 +338,6 @@ local function fnmain(bee, build)
     inst.EnableBuzz = EnableBuzz
     inst.OnEntitySleep = OnEntitySleep
     inst.OnEntityWake = OnEntityWake
-    inst:AddTag("companion")
 
     if bee == "blocker" then
         inst.components.health:SetMaxHealth(15 * TUNING.BEEGUARD_HEALTH)
@@ -392,6 +392,7 @@ local function fntarget()
     end
 
     inst:AddComponent("combat")
+
     return inst
 end
 
@@ -407,12 +408,12 @@ local function honeyexplosion()
     inst.AnimState:SetBank("treegrowthsolution")
     inst.AnimState:SetBuild("um_goo_honey")
 
-
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
         return inst
     end
+
     inst.Transform:SetScale(1.5, 1.5, 1.5)
     inst.AnimState:PlayAnimation("use", false)
     inst:ListenForEvent("animover", function(inst) inst:Remove() end)

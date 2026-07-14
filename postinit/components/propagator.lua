@@ -2,10 +2,11 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 ------------------------Fire spread is less efficient in winter-----------------------------------------
 local function PreventAllyFireDamage(ret, inst)
-    for k, v in pairs(ret) do
+    for i = #ret, 1, -1 do
+        local v = ret[i]
         if v:IsValid() and v.components.propagator and v.components.health
             and v.components.health.vulnerabletoheatdamage ~= false and not UMCommonFns.IsNotFriendly(inst, v) then
-            table.remove(ret, k)
+            table.remove(ret, i)
         end
     end
     return ret

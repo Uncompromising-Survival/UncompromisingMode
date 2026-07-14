@@ -196,7 +196,7 @@ end
 -- Shock Projectile
 local function Redirection(inst, flooded) -- See where the arc should be pointing next
     local x,y,z = inst.Transform:GetWorldPosition()
-    local living_things = TheSim:FindEntities(x,y,z,flooded and 32 or 16,{"_health"},inst.dont_hit_tags) -- Do a wide search for things to hit
+    local living_things = TheSim:FindEntities(x, y, z, flooded and 32 or 16, {"_health"}, inst.dont_hit_tags) -- Do a wide search for things to hit
     local shoot_offcourse
     if math.random() > 0.8 then -- chance for the arc to zig-zag
         shoot_offcourse = true
