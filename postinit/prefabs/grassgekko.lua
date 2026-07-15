@@ -82,7 +82,7 @@ local function GrassGekkoFunctions(inst)
     inst.restoredatafromtrap = RestoreGekkoFromTrap
 end
 
-env.AddSimPostInit(function(inst)
+env.AddSimPostInit(function()
     local _ontimerdone = UpvalueHacker.GetUpvalue(Prefabs.grassgekko.fn, "ontimerdone")
     if _ontimerdone then
         local function ontimerdone(inst, data, ...)
@@ -94,20 +94,6 @@ env.AddSimPostInit(function(inst)
         UpvalueHacker.SetUpvalue(Prefabs.grassgekko.fn, ontimerdone, "ontimerdone")
     end
 end)
-
---[[env.AddPrefabPostInit("world", function(inst) -- Supposedly, this is better since it's called once for each "world" prefab, which usually only spawns once per shard.
-    if not TheWorld.ismastersim then return end
-    local _ontimerdone = UpvalueHacker.GetUpvalue(Prefabs.grassgekko.fn, "ontimerdone")
-    if _ontimerdone then
-        local function ontimerdone(inst, data, ...)
-            if data.name == "growTail" and inst:IsInLimbo() then
-               PlayGrowTailSound(inst)
-            end
-            return _ontimerdone(inst, data, ...)
-        end
-        UpvalueHacker.SetUpvalue(Prefabs.grassgekko.fn, ontimerdone, "ontimerdone")
-    end
-end)]]
 
 env.AddPrefabPostInit("grassgekko", function(inst)
     inst:AddTag("canbetrapped")

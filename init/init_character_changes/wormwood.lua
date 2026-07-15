@@ -415,9 +415,8 @@ local function StartGrowing(inst, giver, product)
 end
 
 local UpvalueHacker = require("tools/upvaluehacker")
-env.AddPrefabPostInit("world", function(inst) -- AXE Assuming Max said this -> Supposedly, this is better since it's called once for each "world" prefab, which usually only spawns once per shard.
-    if not _G.TheWorld.ismastersim then return end
-    UpvalueHacker.SetUpvalue(_G.Prefabs.mushroom_farm.fn, StartGrowing, "onacceptitem", "StartGrowing")
+env.AddSimPostInit(function()
+    UpvalueHacker.SetUpvalue(Prefabs.mushroom_farm.fn, StartGrowing, "onacceptitem", "StartGrowing")
 end)
 
 local TREESTATES =
