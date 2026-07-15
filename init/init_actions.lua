@@ -350,6 +350,13 @@ GLOBAL.ACTIONS.USESPELLBOOK.strfn = function(act)
     return target:HasTag("telestaff") and "TELESTAFF" or _UseSpellBookStrFn ~= nil and _UseSpellBookStrFn(act) or "BOOK"
 end
 
+local _UseSpellBookStrFn2 = GLOBAL.ACTIONS.USESPELLBOOK.strfn
+
+GLOBAL.ACTIONS.USESPELLBOOK.strfn = function(act)
+    local target = act.invobject or act.target
+    return target:HasTag("um_antlionstaff") and "UM_ANTLIONSTAFF" or _UseSpellBookStrFn2(act)
+end
+
 --give priority is 0 (default) so we need to be above it so we can do this action on the pocket watches
 local SET_CUSTOM_NAME = GLOBAL.Action({ distance = 2, mount_valid = true, priority = 1 })
 SET_CUSTOM_NAME.id = "SET_CUSTOM_NAME"

@@ -166,6 +166,14 @@ local function GetTargetFocus(player, telebase, telestaff) telestaff.target_focu
 
 AddModRPCHandler("UncompromisingSurvival", "GetTargetFocus", GetTargetFocus)
 
+local function SetAntStaffMode(player, staff, mode)
+    if staff and staff:IsValid() and staff.um_setspellmode then
+        staff.um_setspellmode(staff, mode)
+    end
+end
+
+AddModRPCHandler("UncompromisingSurvival", "SetAntStaffMode", SetAntStaffMode)
+
 local function GetAllActiveTelebases()
     local valid_telebases = {}
     for k, telebase in pairs(Ents) do

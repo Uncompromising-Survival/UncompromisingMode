@@ -622,6 +622,15 @@ Assets = {
     Asset("IMAGE", "images/um_tornado_icon.tex"),
     Asset("ATLAS", "images/um_tornado_icon.xml"),
 
+    Asset("IMAGE", "images/antstaff_icon1.tex"),
+    Asset("ATLAS", "images/antstaff_icon1.xml"),
+    Asset("IMAGE", "images/antstaff_icon2.tex"),
+    Asset("ATLAS", "images/antstaff_icon2.xml"),
+    Asset("IMAGE", "images/antstaff_icon1b.tex"),
+    Asset("ATLAS", "images/antstaff_icon1b.xml"),
+    Asset("IMAGE", "images/antstaff_icon2b.tex"),
+    Asset("ATLAS", "images/antstaff_icon2b.xml"),
+
     -- Cookbook HQ Icons
     Asset("IMAGE", "images/cookbook_beefalowings.tex"),
     Asset("ATLAS", "images/cookbook_beefalowings.xml"),
@@ -1898,6 +1907,9 @@ Assets = {
 
     Asset("ATLAS", "images/bee_slot.xml"),
     Asset("IMAGE", "images/bee_slot.tex"),
+
+    Asset("ATLAS", "images/townportaltalisman_slot.xml"),
+    Asset("IMAGE", "images/townportaltalisman_slot.tex"),
 
     Asset("ATLAS", "images/um_inkubator_fuelslot.xml"),
     Asset("IMAGE", "images/um_inkubator_fuelslot.tex"),

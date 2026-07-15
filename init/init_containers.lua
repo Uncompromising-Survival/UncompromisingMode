@@ -482,7 +482,6 @@ modparams.um_flamethrower =
     type = "hand_inv",
 }
 
-
 modparams.frigginbirdpail =
 {
     widget =
