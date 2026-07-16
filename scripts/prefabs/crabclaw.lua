@@ -14,8 +14,6 @@ local prefabs =
     "shadowtentacle",
 }
 
-
-
 local function DamageCalculation(inst, isattack)
     if isattack then
         local item1 = inst.components.container.slots[1]
@@ -327,6 +325,24 @@ local function NoHoles(pt)
     return not TheWorld.Map:IsPointNearHole(pt)
 end
 
+local function GetDamage(inst)
+    local opalgem = #inst.components.container:FindItems(function(item) return item.prefab == "opalpreciousgem_cracked" end)
+
+    local redgem = #inst.components.container:FindItems(function(item) return item.prefab == "redgem_cracked" end)
+
+    local yellowgem = #inst.components.container:FindItems(function(item) return item.prefab == "yellowgem_cracked" end)
+
+    local bluegem = #inst.components.container:FindItems(function(item) return item.prefab == "bluegem_cracked" end)
+
+    local greengem = #inst.components.container:FindItems(function(item) return item.prefab == "greengem_cracked" end)
+
+    local purplegem = #inst.components.container:FindItems(function(item) return item.prefab == "purplegem_cracked" end)
+
+    local orangegem = #inst.components.container:FindItems(function(item) return item.prefab == "orangegem_cracked" end)
+
+    return 40 + (5 * opalgem) + (5 * (redgem + bluegem + yellowgem + greengem + orangegem + purplegem + (math.abs(inst.components.gem_enchantable.slots - 4))))
+end
+
 local function onattack(inst, owner, target)
     local opalgem = #
         inst.components.container:FindItems(function(item) return item.prefab == "opalpreciousgem_cracked" end)
@@ -421,7 +437,7 @@ local function OnOpen(inst)
 end
 
 local function GetShadowLevel(inst)
-    return inst.components.container ~= nil and #inst.components.container:FindItems(function(item) return item.prefab == "purplegem_cracked" end) + TUNING.DSTU.CRABCLAW_SHADOW_LEVEL
+    return inst.components.container and #inst.components.container:FindItems(function(item) return item.prefab == "purplegem_cracked" end) + TUNING.DSTU.CRABCLAW_SHADOW_LEVEL
 end
 
 local function fn()
@@ -435,18 +451,17 @@ local function fn()
     MakeInventoryPhysics(inst)
 
     inst:AddTag("blunt")
-
-    --weapon (from weapon component) added to pristine state for optimization
     inst:AddTag("weapon")
+    inst:AddTag("shadowlevel")
     inst:AddTag("vetcurse_item")
-    inst:AddTag("donotautopick")
     inst:AddTag("gem_enchantable")
+    inst:AddTag("donotautopick")
 
     inst.AnimState:SetBank("cursedcrabclaw")
     inst.AnimState:SetBuild("cursedcrabclaw")
     inst.AnimState:PlayAnimation("idle")
 
-    MakeInventoryFloatable(inst, "med", 0.05)
+    MakeInventoryFloatable(inst, "med", .05)
 
     inst.entity:SetPristine()
 
@@ -459,56 +474,37 @@ local function fn()
     inst.slot3_inserted = false
     inst.slot4_inserted = false
 
-    inst:AddComponent("weapon")
-    inst.components.weapon:SetDamage(function(inst)
-        local opalgem = #inst.components.container:FindItems(function(item) return item.prefab == "opalpreciousgem_cracked" end)
+    local weapon = inst:AddComponent("weapon")
+    weapon:SetDamage(GetDamage)
+    weapon:SetOnAttack(onattack)
 
-        local redgem = #inst.components.container:FindItems(function(item) return item.prefab == "redgem_cracked" end)
-
-        local yellowgem = #inst.components.container:FindItems(function(item) return item.prefab == "yellowgem_cracked" end)
-
-        local bluegem = #inst.components.container:FindItems(function(item) return item.prefab == "bluegem_cracked" end)
-
-        local greengem = #inst.components.container:FindItems(function(item) return item.prefab == "greengem_cracked" end)
-
-        local purplegem = #inst.components.container:FindItems(function(item) return item.prefab == "purplegem_cracked" end)
-
-        local orangegem = #inst.components.container:FindItems(function(item) return item.prefab == "orangegem_cracked" end)
-
-        return 40 + (5 * opalgem) + (5 * (redgem + bluegem + yellowgem + greengem + orangegem + purplegem + (math.abs(inst.components.gem_enchantable.slots - 4))))
-    end)
-
-    inst.components.weapon:SetOnAttack(onattack)
-
-    inst:AddComponent("gem_enchantable")
-    inst.components.gem_enchantable.slots = 4
+    local gem_enchantable = inst:AddComponent("gem_enchantable")
+    gem_enchantable.slots = 4
 
     inst:ListenForEvent("onaddenchant", OnEnchantmentChanged)
     inst:ListenForEvent("onremoveenchant", OnEnchantmentChanged)
 
-    -------
-
     inst:AddComponent("tradable")
     inst:AddComponent("inspectable")
 
-    inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem:SetSinks(false)
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/crabclaw.xml"
+    local inventoryitem = inst:AddComponent("inventoryitem")
+    inventoryitem.atlasname = "images/inventoryimages/crabclaw.xml"
 
-    inst:AddComponent("shadowlevel")
-    inst.components.shadowlevel:SetLevelFn(GetShadowLevel)
-
-    inst:AddComponent("container")
-    inst.components.container:WidgetSetup("crabclaw")
-    inst.components.container.canbeopened = true
-    inst.components.container.onopenfn = OnOpen
+    local container = inst:AddComponent("container")
+    container:WidgetSetup("crabclaw")
+    container.canbeopened = true
+    container.onopenfn = OnOpen
 
     inst:ListenForEvent("itemget", ItemGet)
     inst:ListenForEvent("itemlose", ItemLose)
 
-    inst:AddComponent("equippable")
-    inst.components.equippable:SetOnEquip(onequip)
-    inst.components.equippable:SetOnUnequip(onunequip)
+    local equippable = inst:AddComponent("equippable")
+    equippable:SetOnEquip(onequip)
+    equippable:SetOnUnequip(onunequip)
+
+    local shadowlevel = inst:AddComponent("shadowlevel")
+    shadowlevel:SetDefaultLevel(TUNING.DSTU.CRABCLAW_SHADOW_LEVEL)
+    shadowlevel:SetLevelFn(GetShadowLevel)
 
     MakeHauntableLaunch(inst)
 

@@ -324,28 +324,29 @@ local function staff_fn()
     inst.AnimState:SetBuild("um_antlionstaff")
     inst.AnimState:PlayAnimation("idle")
 
-    inst:AddTag("nopunch")
-    inst:AddTag("donotautopick")
     inst:AddTag("um_antlionstaff")
     inst:AddTag("quickcast")
     inst:AddTag("vetcurse_item")
     inst:AddTag("rechargeable")
     inst:AddTag("weapon")
-    inst:AddTag("inventoryitem")
+    inst:AddTag("shadowlevel")
+    inst:AddTag("donotautopick")
 
     MakeInventoryFloatable(inst)
 
+    local reticule = inst:AddComponent("reticule")
+    reticule.targetfn = light_reticuletargetfn
+    reticule.mouseenabled = true
+    reticule.ease = true
+    reticule.ispassableatallpoints = true
+
+    local spellbook = inst:AddComponent("spellbook")
+    spellbook:SetItems(GetSpellwheelItems(inst))
+    spellbook:SetRequiredTag("um_antlionstaff_spellbook_user")
+
+    inst.um_cancastontarget = UMCommonFns.DefaultCanCastOnTarget
+
     inst.entity:SetPristine()
-
-    inst:AddComponent("reticule")
-    inst.components.reticule.targetfn = light_reticuletargetfn
-    inst.components.reticule.mouseenabled = true
-    inst.components.reticule.ease = true
-    inst.components.reticule.ispassableatallpoints = true
-
-    inst:AddComponent("spellbook")
-    inst.components.spellbook:SetItems(GetSpellwheelItems(inst))
-    inst.components.spellbook:SetRequiredTag("um_antlionstaff_spellbook_user")
 
     if not TheWorld.ismastersim then
         inst.OnEntityReplicated = function(inst)
@@ -370,33 +371,33 @@ local function staff_fn()
 
     inst:AddComponent("inventoryitem")
 
-    inst:AddComponent("equippable")
-    inst.components.equippable:SetOnEquip(onequip)
-    inst.components.equippable:SetOnUnequip(onunequip)
+    local equippable = inst:AddComponent("equippable")
+    equippable:SetOnEquip(onequip)
+    equippable:SetOnUnequip(onunequip)
 
-    inst:AddComponent("shadowlevel")
-    inst.components.shadowlevel:SetDefaultLevel(TUNING.DSTU.ANTLIONSTAFF_SHADOW_LEVEL)
+    local shadowlevel = inst:AddComponent("shadowlevel")
+    shadowlevel:SetDefaultLevel(TUNING.DSTU.ANTLIONSTAFF_SHADOW_LEVEL)
 
-    inst:AddComponent("weapon")
-    inst.components.weapon:SetDamage(TUNING.DSTU.ANTLIONSTAFF_DAMAGE)
+    local weapon = inst:AddComponent("weapon")
+    weapon:SetDamage(TUNING.DSTU.ANTLIONSTAFF_DAMAGE)
 
-    inst:AddComponent("spellcaster")
-    inst.components.spellcaster:SetSpellFn(CastSpell)
-    inst.components.spellcaster.canuseontargets = true
-    inst.components.spellcaster.canonlyuseonworkable = true
-    inst.components.spellcaster.canonlyuseoncombat = true
-    inst.components.spellcaster.canuseonpoint = true
-    inst.components.spellcaster.canuseonpoint_water = false
-    inst.components.spellcaster.quickcast = true
+    local spellcaster = inst:AddComponent("spellcaster")
+    spellcaster:SetSpellFn(CastSpell)
+    spellcaster.canuseontargets = true
+    spellcaster.canonlyuseonworkable = true
+    spellcaster.canonlyuseoncombat = true
+    spellcaster.canuseonpoint = true
+    spellcaster.canuseonpoint_water = false
+    spellcaster.quickcast = true
 
-    inst:AddComponent("rechargeable")
-    inst.components.rechargeable:SetOnChargedFn(OnCharged)
+    local rechargeable = inst:AddComponent("rechargeable")
+    rechargeable:SetOnChargedFn(OnCharged)
 
     inst.um_setspellmode = SetSpellMode
 
-    inst:AddComponent("container")
-    inst.components.container:WidgetSetup(nil, container_params)
-    inst.components.container:Close()
+    local container = inst:AddComponent("container")
+    container:WidgetSetup(nil, container_params)
+    container:Close()
 
     MakeHauntableLaunch(inst)
 

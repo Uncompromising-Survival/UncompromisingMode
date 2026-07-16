@@ -104,10 +104,6 @@ local function OnVetcurseDirty(inst)
 	end
 end
 
-local function CantCastOnTarget(inst, doer, pos, target, actioncount)
-    return actioncount
-end
-
 local function OnCharged(inst)
     inst.SoundEmitter:PlaySound("terraria1/eyeofterror/charge", nil, .4)
 end
@@ -165,7 +161,7 @@ env.AddPrefabPostInit("shieldofterror", function(inst)
 
     inst:ListenForEvent("vetcursedirty", OnVetcurseDirty)
 
-    inst.um_cantcastontarget = CantCastOnTarget
+    inst.um_cancastontarget = UMCommonFns.DefaultCanCastOnTarget
 
     if not TheWorld.ismastersim then return end
 

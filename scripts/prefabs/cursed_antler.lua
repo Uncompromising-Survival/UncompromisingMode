@@ -116,6 +116,9 @@ local function fn()
 
     inst:AddTag("cursedantler")
     inst:AddTag("vetcurse_item")
+    inst:AddTag("weapon")
+    inst:AddTag("shadowlevel")
+    inst:AddTag("rechargeable")
     inst:AddTag("donotautopick")
     
     MakeInventoryFloatable(inst, "med", .2, .65)
@@ -135,12 +138,12 @@ local function fn()
     weapon:SetDamage(GetAntlerDamage)
     weapon:SetOnAttack(OnAttack)
 
-    local shadowlevel = inst:AddComponent("shadowlevel")
-    shadowlevel:SetDefaultLevel(TUNING.DSTU.CURSED_ANTLER_SHADOW_LEVEL)
-
     local equippable = inst:AddComponent("equippable")
     equippable:SetOnEquip(OnEquip)
     equippable:SetOnUnequip(OnUnequip)
+
+    local shadowlevel = inst:AddComponent("shadowlevel")
+    shadowlevel:SetDefaultLevel(TUNING.DSTU.CURSED_ANTLER_SHADOW_LEVEL)
 
     local rechargeable = inst:AddComponent("rechargeable")
     rechargeable:SetOnChargedFn(OnCharged)

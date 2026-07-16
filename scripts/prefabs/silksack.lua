@@ -98,6 +98,10 @@ local function OnContainerChanged(inst)
     end
 end
 
+local function ItemTest(container, item)
+    return true --container.inst.components.equippable.isequipped or not container:IsEmpty()
+end
+
 local function fn()
     local inst = CreateEntity()
 
@@ -121,6 +125,7 @@ local function fn()
     inst:AddTag("pocketbackpack")
     inst:AddTag("vetcurse_item")
     inst:AddTag("silksack")
+    inst:AddTag("waterproofer")
     inst:AddTag("donotautopick")
 
     MakeInventoryFloatable(inst, "med", 0.1, 0.65)
@@ -142,24 +147,17 @@ local function fn()
     inst:ListenForEvent("itemlose", OnContainerChanged)
     inst:ListenForEvent("itemget", OnContainerChanged)
 
-    inst:AddComponent("equippable")
-    if EQUIPSLOTS["BACK"] ~= nil then
-        inst.components.equippable.equipslot = EQUIPSLOTS.BACK
-    else
-        inst.components.equippable.equipslot = EQUIPSLOTS.BODY
-    end
+    local equippable = inst:AddComponent("equippable")
+    equippable.equipslot = EQUIPSLOTS.BACK or EQUIPSLOTS.BODY
+    equippable:SetOnEquip(onequip)
+    equippable:SetOnUnequip(onunequip)
 
-    inst.components.equippable:SetOnEquip(onequip)
-    inst.components.equippable:SetOnUnequip(onunequip)
+    local waterproofer = inst:AddComponent("waterproofer")
+    waterproofer:SetEffectiveness(0)
 
-    inst:AddComponent("waterproofer")
-    inst.components.waterproofer:SetEffectiveness(0)
-
-    inst:AddComponent("container")
-    inst.components.container.itemtestfn = function(container, item)
-        return true--container.inst.components.equippable.isequipped or not container:IsEmpty()
-    end
-    inst.components.container:WidgetSetup("silksack")
+    local container = inst:AddComponent("container")
+    container.itemtestfn = ItemTest
+    container:WidgetSetup("silksack")
 
     MakeHauntableLaunchAndDropFirstItem(inst)
 

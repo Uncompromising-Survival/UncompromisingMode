@@ -107,6 +107,10 @@ UMCommonFns.HasRightClickAction = function(inst, doer, pos, target)
     return rmb and not table.contains(ignoredactions, rmb.action)
 end
 
+UMCommonFns.DefaultCanCastOnTarget = function(inst, doer, pos, target, actioncount)
+    return not actioncount
+end
+
 -- Unified megaflare timer reduction used by all seasonal boss spawners
 UMCommonFns.MegaFlareTimerReduction = function(time)
     if time > 480 * 8 then

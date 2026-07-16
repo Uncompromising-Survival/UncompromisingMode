@@ -132,6 +132,8 @@ local function fn()
 
     inst:AddTag("cursedantler")
     inst:AddTag("vetcurse_item")
+    inst:AddTag("weapon")
+    inst:AddTag("rechargeable")
     inst:AddTag("donotautopick")
 
     MakeInventoryFloatable(inst, "med", .2, .65)

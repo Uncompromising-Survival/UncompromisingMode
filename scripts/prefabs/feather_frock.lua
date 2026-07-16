@@ -346,8 +346,9 @@ local function frockfn()
     --inst:AddTag("wingsuit")
     --inst:AddTag("backpack")
     inst:AddTag("vetcurse_item")
-    inst:AddTag("donotautopick")
     inst:AddTag("um_feather_frock")
+    inst:AddTag("shadowlevel")
+    inst:AddTag("donotautopick")
     --inst.foleysound = "dontstarve/movement/foley/cactus_armor"
 
     inst.displaynamefn = GetDisplayName --TEMP UNTIL SCRAPBOOK.
@@ -371,25 +372,24 @@ local function frockfn()
     inst:AddComponent("inventoryitem")
     inst:AddComponent("rechargeable")
 
-    inst:AddComponent("shadowlevel")
-    inst.components.shadowlevel:SetDefaultLevel(TUNING.DSTU.FEATHER_FROCK_SHADOW_LEVEL)
+    local equippable = inst:AddComponent("equippable")
+    equippable.equipslot = EQUIPSLOTS.BODY
+    equippable.insulated = true
+    equippable:SetOnEquip(onequip)
+    equippable:SetOnUnequip(onunequip)
 
-    inst:AddComponent("equippable")
-    inst.components.equippable.equipslot = EQUIPSLOTS.BODY
+    local shadowlevel = inst:AddComponent("shadowlevel")
+    shadowlevel:SetDefaultLevel(TUNING.DSTU.FEATHER_FROCK_SHADOW_LEVEL)
 
-    inst.components.equippable.insulated = true
-    inst.components.equippable:SetOnEquip(onequip)
-    inst.components.equippable:SetOnUnequip(onunequip)
+    local container = inst:AddComponent("container")
+    container:WidgetSetup("wingsuit")
+    container.canbeopened = false
 
-    inst:AddComponent("container")
-    inst.components.container:WidgetSetup("wingsuit")
-    inst.components.container.canbeopened = false
+    local useableitem = inst:AddComponent("useableitem")
+    useableitem:SetOnUseFn(OnUse)
 
-    inst:AddComponent("useableitem")
-    inst.components.useableitem:SetOnUseFn(OnUse)
-
-    inst:AddComponent("waterproofer")
-    inst.components.waterproofer:SetEffectiveness(TUNING.WATERPROOFNESS_HUGE)
+    local waterproofer = inst:AddComponent("waterproofer")
+    waterproofer:SetEffectiveness(TUNING.WATERPROOFNESS_HUGE)
 
     inst:ListenForEvent("itemget", OnAmmoLoaded)
     inst:ListenForEvent("itemlose", OnAmmoUnloaded)
