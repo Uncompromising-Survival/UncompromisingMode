@@ -326,13 +326,13 @@ local function staff_fn()
 
     inst:AddTag("nopunch")
     inst:AddTag("donotautopick")
-
     inst:AddTag("um_antlionstaff")
     inst:AddTag("quickcast")
     inst:AddTag("vetcurse_item")
     inst:AddTag("rechargeable")
     inst:AddTag("weapon")
     inst:AddTag("inventoryitem")
+
     MakeInventoryFloatable(inst)
 
     inst.entity:SetPristine()
