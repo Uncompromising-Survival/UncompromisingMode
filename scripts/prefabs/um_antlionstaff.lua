@@ -190,6 +190,8 @@ end
 
 local SPELLWHEEL_ICON_SCALE = .6
 local SPELLWHEEL_ICON_RADIUS = 50
+local SPELLWHEEL_RADIUS = 120
+local SPELLWHEEL_FOCUS_RADIUS = 123
 
 function GetSpellwheelItems(inst)
     local items =
@@ -343,6 +345,8 @@ local function staff_fn()
     local spellbook = inst:AddComponent("spellbook")
     spellbook:SetItems(GetSpellwheelItems(inst))
     spellbook:SetRequiredTag("um_antlionstaff_spellbook_user")
+    spellbook:SetRadius(SPELLWHEEL_RADIUS)
+    spellbook:SetFocusRadius(SPELLWHEEL_FOCUS_RADIUS)
 
     inst.um_cancastontarget = UMCommonFns.DefaultCanCastOnTarget
 
