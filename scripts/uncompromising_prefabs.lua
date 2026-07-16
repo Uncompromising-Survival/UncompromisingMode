@@ -501,7 +501,7 @@ local prefabs = {
     "feather_frock",
     "slobberlobber",
     "beargerclaw",
-    "antlionstaff",
+    "um_antlionstaff",
     "klaus_amulet",
     "gore_horn_hat",
     "crabclaw",
