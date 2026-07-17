@@ -74,8 +74,8 @@ local function OnCooldown(inst)
     inst._claustrophobiacdtask = nil
 end
 
-local NOT_CLAUSTROPHOBIC_TAGS = {"noclaustrophobia", "balloon", "structure", "wall", "fx", "NOCLICK", "INLIMBO", "invisible", "player", "playerghost", "ghost", "shadow", "shadowcreature",
-    "shadowminion", "stalkerminion", "shadowchesspiece", "boatbumper", "spore", "pigelite", "oceanfishable", "trap", "companion", "isdead", "deckcontainer"}
+local NOT_CLAUSTROPHOBIC_TAGS = JoinArrays(UMCommonFns.GHOSTLIKE_TAGS, {"noclaustrophobia", "balloon", "structure", "wall", "fx", "NOCLICK", "INLIMBO", "invisible", "player",
+    "stalkerminion", "boatbumper", "spore", "pigelite", "oceanfishable", "trap", "companion", "isdead", "deckcontainer"})
 local function updateclaustrophobia(inst)
     inst.claustrophobiarate = inst.claustrophobiahidden and .005 or 0
     local objectmodifier = 0

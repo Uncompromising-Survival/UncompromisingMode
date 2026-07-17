@@ -1733,7 +1733,7 @@ Assets = {
 
     Asset("ANIM", "anim/hat_sunglasses.zip"),
 
-    Asset("ANIM", "anim/moontear.zip"),
+    --Asset("ANIM", "anim/um_moontear.zip"), -- Loaded in the prefab's assets!
 
     Asset("ANIM", "anim/hat_shadowcrown.zip"),
 

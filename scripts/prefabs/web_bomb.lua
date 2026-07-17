@@ -289,13 +289,9 @@ local function projectilelobfn()
     inst.entity:AddPhysics()
     inst.entity:AddNetwork()
 
-
-
     inst.AnimState:SetBank("spat_bomb")
     inst.AnimState:SetBuild("web_net_shot")
     inst.AnimState:PlayAnimation("spin_loop", true)
-
-
 
     inst.entity:SetPristine()
 
@@ -316,7 +312,6 @@ local function projectilelobfn()
     return inst
 end
 
-
 local function webbingfn()
     local inst = CreateEntity()
     inst.entity:AddTransform()
@@ -326,14 +321,20 @@ local function webbingfn()
     inst.entity:AddSoundEmitter()
     inst.entity:AddGroundCreepEntity()
 
+    MakeInventoryPhysics(inst)
+
     inst.AnimState:SetBank("widowwebgoop")
     inst.AnimState:SetBuild("widowwebgoop")
     inst.AnimState:PlayAnimation("appear")
     inst.AnimState:PushAnimation("idle")
-    MakeInventoryPhysics(inst)
+
     inst.GroundCreepEntity:SetRadius(3)
+
     inst:AddTag("queensstuff")
-    inst:AddTag("noauradamage")
+    --inst:AddTag("noauradamage")
+    inst:AddTag("noclaustrophobia")
+    inst:AddTag("soulless")
+    inst:AddTag("noember")
 
     inst.entity:SetPristine()
 
@@ -363,8 +364,7 @@ local function webbingfn()
     -------------------
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(100)
-    inst:AddTag("soulless")
-    inst:AddTag("noember")
+
     inst:AddComponent("combat")
 
     inst:DoTaskInTime(0, function(inst)
@@ -377,10 +377,9 @@ local function webbingfn()
 	if not inst.components.timer:TimerExists("kill_web") then
 		inst.components.timer:StartTimer("kill_web",8*60*5) -- Auto break in 5 Days
 	end
-	
+
 	inst:ListenForEvent("timerdone",function(inst) if inst.components.health and not inst.components.health:IsDead() then inst.components.health:Kill() end end)
-	
-	
+
     return inst
 end
 
@@ -392,11 +391,14 @@ local function webdetriusfn()
     inst.entity:AddDynamicShadow()
     inst.entity:AddSoundEmitter()
 
+    MakeInventoryPhysics(inst)
+
     inst.AnimState:SetBank("widowwebgoop")
     inst.AnimState:SetBuild("widowwebgoop")
     inst.AnimState:PlayAnimation("idle")
-    MakeInventoryPhysics(inst)
+
     inst:AddTag("webchord")
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
