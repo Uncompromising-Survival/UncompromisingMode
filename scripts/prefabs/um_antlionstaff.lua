@@ -357,20 +357,6 @@ local function staff_fn()
             inst.replica.container:WidgetSetup(nil, container_params)
         end
 
-        if ThePlayer ~= nil then
-            inst:ListenForEvent("unequip", function(player, data)
-                if data.item == inst and ThePlayer.components.playercontroller ~= nil then
-                    ThePlayer.components.playercontroller:RefreshReticule()
-                end
-            end, ThePlayer)
-
-            inst:ListenForEvent("equip", function(player, data)
-                if data.eslot == EQUIPSLOTS.HANDS and data.item ~= inst and ThePlayer.components.playercontroller ~= nil then
-                    ThePlayer.components.playercontroller:RefreshReticule()
-                end
-            end, ThePlayer)
-        end
-
         return inst
     end
 
