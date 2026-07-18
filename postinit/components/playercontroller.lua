@@ -23,6 +23,75 @@ This exempts just that one guard condition for this item, the rest of the reticu
 
 --[[local UpvalueHacker = require("tools/upvaluehacker")
 
+local function OnEquip(inst, data)
+    if data.eslot ~= EQUIPSLOTS.HANDS then
+        return
+    end
+
+    local self = inst.components.playercontroller
+    if self.reticule ~= nil and self.reticule.inst:HasTag("um_antlionstaff") and inst.HUD ~= nil and inst.HUD:IsSpellWheelOpen() then
+        --Make sure the wheel doesnt leave IsEnabled() reporting false for whatever is getting equipped, which would hide its fresh reticule
+        inst.HUD:CloseSpellWheel()
+    end
+
+    if self.reticule ~= nil and self.reticule.inst.components.spellbook ~= nil and not self.reticule.inst:HasTag("um_antlionstaff") then
+        --Ignore when targeting with spellbook
+        return
+    elseif data.item.components.aoetargeting ~= nil and data.item.components.aoetargeting:IsEnabled() then
+        if self.reticule ~= nil then
+            self.reticule:DestroyReticule()
+            self.reticule = nil
+        end
+        data.item.components.aoetargeting:StopTargeting()
+    else
+        local newreticule = data.item.components.reticule or inst.components.reticule
+        if newreticule ~= self.reticule then
+            if self.reticule ~= nil then
+                self.reticule:DestroyReticule()
+            end
+            self.reticule = newreticule
+            if newreticule ~= nil and newreticule.reticule == nil and (newreticule.mouseenabled or TheInput:ControllerAttached()) then
+                newreticule:CreateReticule()
+                if newreticule.reticule ~= nil and (not self:IsEnabled() or newreticule:ShouldHide()) then
+                    newreticule.reticule:Hide()
+                end
+            end
+        end
+    end
+end
+
+local function OnUnequip(inst, data)
+    if data.eslot ~= EQUIPSLOTS.HANDS then
+        return
+    end
+
+    local self = inst.components.playercontroller
+    if self.reticule == nil then
+        return
+    end
+
+    if self.reticule.inst.components.spellbook ~= nil and not self.reticule.inst:HasTag("um_antlionstaff") then
+        --Ignore when targeting with spellbook
+        return
+    elseif self.reticule.inst:HasTag("um_antlionstaff") and inst.HUD ~= nil and inst.HUD:IsSpellWheelOpen() then
+        inst.HUD:CloseSpellWheel()
+    end
+
+    if self.reticule ~= inst.components.reticule then
+        local equip = inst.replica.inventory:GetEquippedItem(data.eslot)
+        if equip == nil or self.reticule ~= equip.components.reticule then
+            self.reticule:DestroyReticule()
+            self.reticule = inst.components.reticule
+            if self.reticule ~= nil and self.reticule.reticule == nil and (self.reticule.mouseenabled or TheInput:ControllerAttached()) then
+                self.reticule:CreateReticule()
+                if self.reticule.reticule ~= nil and (not self:IsEnabled() or self.reticule:ShouldHide()) then
+                    self.reticule.reticule:Hide()
+                end
+            end
+        end
+    end
+end
+
 local _OnEquip
 local function OnEquip(inst, data, ...)
     return _OnEquip and _OnEquip(inst, data, ...)
