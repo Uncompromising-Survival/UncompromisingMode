@@ -55,7 +55,7 @@ local component_post = {
     "spellcaster",
     "raindome",
     "fillable",
-
+    "canopyshadows",
     --"raindome"
     "stewer",
     "boatmagnet",

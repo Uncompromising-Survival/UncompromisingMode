@@ -22,6 +22,10 @@ local function removecanopyshadow(inst)
     end
 end
 
+local function OnRemoveEntity(inst)
+    inst._hascanopy:set(false)
+end
+
 local function makefn()
     local inst = CreateEntity()
 
@@ -35,26 +39,31 @@ local function makefn()
 
     inst:AddTag("NOBLOCK")
     inst:AddTag("shadecanopysmall")
+
     if not TheNet:IsDedicated() then
-        inst:AddComponent("distancefade")
-        inst.components.distancefade:Setup(15, 25)
+        local distancefade = inst:AddComponent("distancefade")
+        distancefade:Setup(15, 25)
+
+        local canopyshadows = inst:AddComponent("canopyshadows")
+        canopyshadows.range = math.floor(TUNING.SHADE_CANOPY_RANGE_SMALL / 4)
+		canopyshadows.um_canopyshadows = true
+
+        inst:ListenForEvent("hascanopydirty", function()
+            if not inst._hascanopy:value() then
+                inst:RemoveComponent("canopyshadows")
+            end
+        end)
     end
 
-    inst._hascanopy = net_bool(inst.GUID, "oceantree_pillar._hascanopy", "hascanopydirty")
+    inst._hascanopy = net_bool(inst.GUID, "extracanopyspawner._hascanopy", "hascanopydirty")
     inst._hascanopy:set(true)
-    inst:DoTaskInTime(0, function()
-        inst.canopy_data = CANOPY_SHADOW_DATA.spawnshadow(inst, math.floor(TUNING.SHADE_CANOPY_RANGE_SMALL / 4), true)
-    end)
-
-    inst:ListenForEvent("hascanopydirty", function()
-        if not inst._hascanopy:value() then
-            removecanopyshadow(inst)
-        end
-    end)
 
     if not TheWorld.ismastersim then
         return inst
     end
+
+    inst.OnRemoveEntity = OnRemoveEntity
+
     return inst
 end
 
