@@ -98,9 +98,8 @@ end
 
 local function TestProjectileLand(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    if y <= inst:GetPhysicsRadius() + 0.05 then
+    if y <= inst:GetPhysicsRadius() + .05 then
         doprojectilehit(inst)
-        inst:Remove()
     end
 end
 
