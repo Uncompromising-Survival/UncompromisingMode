@@ -193,7 +193,7 @@ local SPELLWHEEL_ICON_RADIUS = 50
 local SPELLWHEEL_RADIUS = 120
 local SPELLWHEEL_FOCUS_RADIUS = 123
 
-function GetSpellwheelItems(inst)
+GetSpellwheelItems = function(inst)
     local items =
     {
         {
@@ -327,6 +327,7 @@ local function staff_fn()
     inst.AnimState:PlayAnimation("idle")
 
     inst:AddTag("um_antlionstaff")
+    inst:AddTag("um_killreticuleonequipchange")
     inst:AddTag("quickcast")
     inst:AddTag("vetcurse_item")
     inst:AddTag("rechargeable")

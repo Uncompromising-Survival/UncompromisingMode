@@ -21,9 +21,9 @@ end)]]
 
 This exempts just that one guard condition for this item, the rest of the reticule cleanup logic is still intact, so it should be safe to do this]]
 
---[[local UpvalueHacker = require("tools/upvaluehacker")
+local UpvalueHacker = require("tools/upvaluehacker")
 
-local function OnEquip(inst, data)
+--[[local function OnEquip(inst, data)
     if data.eslot ~= EQUIPSLOTS.HANDS then
         return
     end
@@ -90,15 +90,32 @@ local function OnUnequip(inst, data)
             end
         end
     end
-end
+end]]
 
 local _OnEquip
 local function OnEquip(inst, data, ...)
+    if data.eslot == EQUIPSLOTS.HANDS then
+        local self = inst.components.playercontroller
+        if self.reticule and self.reticule.inst:HasTag("um_killreticuleonequipchange") then
+            --Make sure the wheel doesnt leave IsEnabled() reporting false for whatever is getting equipped, which would hide its fresh reticule
+            if inst.HUD and inst.HUD:IsSpellWheelOpen() then inst.HUD:CloseSpellWheel() end
+            self.reticule:DestroyReticule()
+            self.reticule = nil
+        end
+    end
     return _OnEquip and _OnEquip(inst, data, ...)
 end
 
 local _OnUnequip
 local function OnUnequip(inst, data, ...)
+    if data.eslot == EQUIPSLOTS.HANDS then
+        local self = inst.components.playercontroller
+        if self.reticule and self.reticule.inst:HasTag("um_killreticuleonequipchange") then
+            if inst.HUD and inst.HUD:IsSpellWheelOpen() then inst.HUD:CloseSpellWheel() end
+            self.reticule:DestroyReticule()
+            self.reticule = nil
+        end
+    end
     return _OnUnequip and _OnUnequip(inst, data, ...)
 end
 
@@ -109,4 +126,4 @@ env.AddComponentPostInit("playercontroller", function(self)
         _OnUnequip = UpvalueHacker.GetUpvalue(self.Activate, "OnUnequip")
         UpvalueHacker.SetUpvalue(self.Activate, OnUnequip, "OnUnequip")
     end
-end)]]
+end)
