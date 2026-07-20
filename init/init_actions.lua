@@ -233,13 +233,13 @@ GLOBAL.ACTIONS.CHOP.fn = function(act)
     return _ChopFn(act)
 end
 
-local _spellbookstrfn = GLOBAL.ACTIONS.USESPELLBOOK.strfn
-GLOBAL.ACTIONS.USESPELLBOOK.strfn = function(act)
-    if act and act.invobject and act.invobject.prefab == "um_detonator" then
-        return "UM_DETONATE"
-    else
-        return _spellbookstrfn(act)
-    end
+local _USESPELLBOOK_strfn = GLOBAL.ACTIONS.USESPELLBOOK.strfn
+GLOBAL.ACTIONS.USESPELLBOOK.strfn = function(act, ...)
+    local invobject = act.invobject
+    return invobject and (invobject.prefab == "um_detonator" and "UM_DETONATE"
+        or invobject:HasTag("telestaff") and "TELESTAFF"
+        or invobject:HasTag("um_antlionstaff") and "UM_ANTLIONSTAFF")
+        or _USESPELLBOOK_strfn(act, ...)
 end
 
 --[[local _lookatstrfn = GLOBAL.ACTIONS.LOOKAT.strfn
@@ -343,20 +343,6 @@ GLOBAL.ACTIONS.ADDWETFUEL.fn = function(act) -- I'M GOING TO ***BOMB KLEI*** WHY
     end
 end
 
-local _UseSpellBookStrFn = GLOBAL.ACTIONS.USESPELLBOOK.strfn
-
-GLOBAL.ACTIONS.USESPELLBOOK.strfn = function(act)
-    local target = act.invobject or act.target
-    return target:HasTag("telestaff") and "TELESTAFF" or _UseSpellBookStrFn ~= nil and _UseSpellBookStrFn(act) or "BOOK"
-end
-
-local _UseSpellBookStrFn2 = GLOBAL.ACTIONS.USESPELLBOOK.strfn
-
-GLOBAL.ACTIONS.USESPELLBOOK.strfn = function(act)
-    local target = act.invobject or act.target
-    return target:HasTag("um_antlionstaff") and "UM_ANTLIONSTAFF" or _UseSpellBookStrFn2(act)
-end
-
 --give priority is 0 (default) so we need to be above it so we can do this action on the pocket watches
 local SET_CUSTOM_NAME = GLOBAL.Action({ distance = 2, mount_valid = true, priority = 1 })
 SET_CUSTOM_NAME.id = "SET_CUSTOM_NAME"
@@ -397,7 +383,9 @@ STORE_BOAT.fn = function(act)
 
     if boat ~= nil and boat:HasTag("walkableplatform") and boat.components.walkableplatform ~= nil then
         for ent in pairs(boat.components.walkableplatform:GetEntitiesOnPlatform()) do
-            if ent:HasAnyTag("player", "irreplaceable", "companion", "abigail", "shadowminion") or ent.components.follower ~= nil and ent.components.follower.leader:HasTag("player") then
+            local follower = ent.components.follower
+            local leader = follower and follower:GetLeader()
+            if ent:HasAnyTag("player", "irreplaceable", "companion", "abigail", "shadowminion") or leader and leader:HasTag("player") then
                 return false, "PLAYER_ON_PLATFORM"
             end
 
@@ -443,7 +431,6 @@ end
 
 AddAction(STORE_BOAT)
 --RELEVANT: playeractionpicker postinit
-
 
 AddComponentAction("USEITEM", "drawingtool",
     function(inst, doer, target, actions, right)
