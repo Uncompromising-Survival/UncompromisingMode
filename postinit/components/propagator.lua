@@ -30,6 +30,9 @@ env.AddComponentPostInit("propagator", function(self)
             self.propagaterange = propagaterange_damagerange.propagaterange
             self.damagerange = propagaterange_damagerange.damagerange
         end
+        if UMSimTempOverride and UMSimTempOverride.data then
+            UMSimTempOverride.data = nil
+        end
         return ret
     end
 end)
