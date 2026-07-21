@@ -5,9 +5,8 @@ GLOBAL.setfenv(1, GLOBAL)
 -- scrimbles
 
 env.AddComponentPostInit("inventory", function(self)
-    local _OldIsInsulated = self.IsInsulated
-
-    function self:IsInsulated()
+    local _IsInsulated = self.IsInsulated
+    function self:IsInsulated(...)
         if self.isexternallyinsulated == nil or self.isexternallyinsulated:Get() == nil then
             for k, v in pairs(self.equipslots) do
                 if v and v.components.equippable:IsInsulated() then
@@ -15,7 +14,7 @@ env.AddComponentPostInit("inventory", function(self)
                 end
             end
         else
-            return _OldIsInsulated(self)
+            return _IsInsulated(self, ...)
         end
     end
 
