@@ -157,9 +157,7 @@ local function onpickedfn(inst, picker)
         inst.BrushingTest:Cancel()
         inst.BrushingTest = nil
     end
-    if picker and picker.components.combat and not (picker.components.inventory and 
-    (picker.components.inventory:EquipHasTag("bramble_resistant") or picker.components.inventory:EquipHasTag("lazy_forager"))) and not picker:HasAnyTag("shadowminion", "aphid", "channelingpicker") 
-    and not (picker.components.skilltreeupdater and picker.components.skilltreeupdater:IsActivated("wormwood_prick_adept")) then
+    if picker and picker.components.combat and not (picker.components.inventory and picker.components.inventory:EquipHasTag("bramble_resistant")) and not picker:HasAnyTag("shadowminion", "aphid") then
         picker.components.combat:GetAttacked(inst, TUNING.CACTUS_DAMAGE)
         picker:PushEvent("thorns")
     end
@@ -182,11 +180,10 @@ local function onpickedfn(inst, picker)
             picker.full_belly = nil
         end)
     end
-
     inst:DoTaskInTime(0, UnregisterPathFinding)
 end
 
-local thicket_equipment = { "um_hat_leafwing", "armor_bramble", "um_armor_bramble_rimeweed", "armor_lunarplant_husk" }
+local thicket_equipment = {"um_hat_leafwing", "armor_bramble", "um_armor_bramble_rimeweed", "armor_lunarplant_husk"}
 local function WearingThicketResist(inst)
     local head
     local body

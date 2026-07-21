@@ -191,6 +191,10 @@ local supportedAmulets = {
     ["frostwalkeramulet"] = { name = "frostwalkeramulet", onequipfn = BlueEquip, onunequipfn = BlueUnEquip, color = "ice_blue" },]]
 }
 
+local function ItemTest(container, item)
+    return true --container.inst.components.equippable.isequipped or not container:IsEmpty()
+end
+
 local function fn()
     local inst = CreateEntity()
 
@@ -244,9 +248,7 @@ local function fn()
     inst.components.waterproofer:SetEffectiveness(0)
 
     inst:AddComponent("container")
-    inst.components.container.itemtestfn = function(container, item)
-        return true --container.inst.components.equippable.isequipped or not container:IsEmpty()
-    end
+    inst.components.container.itemtestfn = ItemTest
     inst.components.container:WidgetSetup("um_backpack_amuletuse")
 
     MakeHauntableLaunchAndDropFirstItem(inst)

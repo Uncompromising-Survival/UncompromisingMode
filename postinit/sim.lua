@@ -143,7 +143,9 @@ function FindPickupableItem(owner, radius, furthestfirst, positionoverride, igno
             local ispickable = v:HasTag("pickable") and not (v.components.pickable and v.components.pickable:IsStuck())
             if UM_FindPickupableItem_filter(v, ba, owner, radius, furthestfirst, positionoverride, ignorethese, onlytheseprefabs, true, ispickable, worker, PickUpFilter, inventoryoverride) then
                 if v and ispickable and v.components.pickable then
+                    owner:AddTag("um_thornimmune")
                     v.components.pickable:Pick(owner)
+                    owner:RemoveTag("um_thornimmune")
                     SpawnPrefab("sand_puff").Transform:SetPosition(v.Transform:GetWorldPosition())
                     owner.um_orangeamulet.components.finiteuses:Use(1)
                     if owner.components.sanity then owner.components.sanity:DoDelta(-.25) end
