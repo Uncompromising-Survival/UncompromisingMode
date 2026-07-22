@@ -794,22 +794,24 @@ end)
 
 ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.UM_FORGE_GEM, "doshortaction"))
 
+local function CanMakeBlueprintWithTarget(builder, target)
+    return builder and builder:CanLearn(target.prefab) and builder:KnowsRecipe(target.prefab) and PrefabExists(target.prefab .. "_blueprint")
+end
+
 local MAKE_BLUEPRINT = Action({ mount_valid = false, priority = 10, rmb = false })
 MAKE_BLUEPRINT.id = "MAKE_BLUEPRINT"
 MAKE_BLUEPRINT.str = "Sketch Blueprint"
 ENV.AddAction(MAKE_BLUEPRINT)
 MAKE_BLUEPRINT.fn = function(act)
-    local target = act.target
-    if act.invobject.components.blueprinter ~= nil
-        and (act.doer.components.builder ~= nil and act.doer.components.builder:CanLearn(target.prefab) and act.doer.components.builder:KnowsRecipe(target.prefab, false)
-            or target.components.teacher ~= nil) then
-        return act.invobject.components.blueprinter:OnUsed(target, act.doer)
+    local doer, target, invobject = act.doer, act.target, act.invobject
+    if target and target.prefab and (CanMakeBlueprintWithTarget(doer.components.builder, target) or target.components.teacher) and invobject.components.blueprinter then
+        return invobject.components.blueprinter:OnUsed(target, act.doer)
     end
     return false
 end
 
 ENV.AddComponentAction("USEITEM", "blueprinter", function(inst, doer, target, actions, right)
-    if target ~= nil and (doer.replica.builder ~= nil and doer.replica.builder:KnowsRecipe(target.prefab) and PrefabExists(target.prefab .. "_blueprint") or string.find(target.prefab, "blueprint")) then
+    if target and target.prefab and (CanMakeBlueprintWithTarget(doer.replica.builder, target) or string.find(target.prefab, "blueprint")) then
         table.insert(actions, ACTIONS.MAKE_BLUEPRINT)
     end
 end)
