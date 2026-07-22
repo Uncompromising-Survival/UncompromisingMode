@@ -803,9 +803,9 @@ MAKE_BLUEPRINT.id = "MAKE_BLUEPRINT"
 MAKE_BLUEPRINT.str = "Sketch Blueprint"
 ENV.AddAction(MAKE_BLUEPRINT)
 MAKE_BLUEPRINT.fn = function(act)
-    local doer, target, invobject = act.doer, act.target, act.invobject
+    local target, doer, invobject = act.target, act.doer, act.invobject
     if target and target.prefab and (CanMakeBlueprintWithTarget(doer.components.builder, target) or target.components.teacher) and invobject.components.blueprinter then
-        return invobject.components.blueprinter:OnUsed(target, act.doer)
+        return invobject.components.blueprinter:OnUsed(target, doer)
     end
     return false
 end
