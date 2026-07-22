@@ -121,7 +121,6 @@ end
 
 function Umripples:SetVerticalOffset(offset)
     self.vert_offset = offset
-    UpdateRippleFXTransform(self)
 end
 
 function Umripples:SetScale(scale)
