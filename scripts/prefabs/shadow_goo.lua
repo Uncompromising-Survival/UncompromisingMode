@@ -71,9 +71,9 @@ end
 local function doprojectilehit(inst, other)
     DoSplatFx(inst)
     local caster = inst._caster ~= nil and inst._caster:IsValid() and inst._caster or nil
-    local x,y,z = inst.Transform:GetWorldPosition()
+    local x, y, z = inst.Transform:GetWorldPosition()
     local others = TheSim:FindEntities(x, y, z, 1.5, {"_combat", "_health", "player"}, {"INLIMBO", "shadow", "minotaur"}) --I messed around with the funni goo, its range is actually a bit small, so I bumped it up a tad.
-    for i,other in ipairs(others) do
+    for i, other in ipairs(others) do
         if other and other ~= caster and not other.components.health:IsDead() then
             local inkable, sanity = other.components.inkable, other.components.sanity
             if inst.prefab == "shadow_goo" and not other:HasTag("shadowdominance") then
