@@ -404,6 +404,7 @@ if TUNING.DSTU.WAXWELL then
 
     local function ConvertToMaxwellSummon(inst)
         inst:AddTag("nosteal")
+        inst:AddTag("stickygrip")
         inst:AddTag("um_maxwellsummon")
         inst:AddTag("um_nodeconstruct")
         local timer = inst.components.timer or inst:AddComponent("timer")
