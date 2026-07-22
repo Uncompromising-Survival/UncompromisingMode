@@ -163,7 +163,7 @@ end
 end]]
 
 local function SetAntStaffMode(player, staff, mode)
-    if staff and type(staff) == "table" and staff:IsValid() and staff.um_setspellmode then
+    if staff and checkentity(staff) and staff:IsValid() and staff.um_setspellmode then
         staff:um_setspellmode(mode)
     end
 end
