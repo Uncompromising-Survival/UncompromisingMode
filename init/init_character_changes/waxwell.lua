@@ -404,7 +404,8 @@ if TUNING.DSTU.WAXWELL then
 
     local function ConvertToMaxwellSummon(inst)
         inst:AddTag("nosteal")
-        inst:AddTag("stickygrip")
+        local equippable = inst.components.equippable
+        if equippable and equippable.equipslot == EQUIPSLOTS.HANDS then inst:AddTag("stickygrip") end
         inst:AddTag("um_maxwellsummon")
         inst:AddTag("um_nodeconstruct")
         local timer = inst.components.timer or inst:AddComponent("timer")
