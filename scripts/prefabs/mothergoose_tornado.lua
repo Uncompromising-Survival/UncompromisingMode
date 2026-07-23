@@ -66,7 +66,10 @@ local function destroystuff_mini(inst)
             if not (v.components.health and v.components.health:IsDead())
                 and v.components.combat and not (castercombat and castercombat:IsAlly(v)) then
                 v.components.combat:GetAttacked(inst, TUNING.TORNADO_DAMAGE, nil, "wind")
-                v.components.combat:SuggestTarget(caster)
+                if v:IsValid() and v.components.combat
+                    and not (v.components.health ~= nil and v.components.health:IsDead()) then
+                    v.components.combat:SuggestTarget(caster)
+                end
             elseif v.components.workable ~= nil and
                 v.components.workable:CanBeWorked() and
                 v.components.workable:GetWorkAction() and
