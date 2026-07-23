@@ -207,7 +207,7 @@ local characters = {
             Item("sewing_tape", 2),
             Item("sewing_tape", 2, .5),
             Item("nitre", 4),
-            Item("niter", 4, .5),
+            Item("nitre", 4, .5),
             Item("rocks", 6),
             Item("rocks", 8, .8),
             Item("wagpunk_bits", 4, .5),

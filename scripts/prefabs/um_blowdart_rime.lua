@@ -96,7 +96,7 @@ local function fn()
 
     inst.AnimState:SetBank("um_blowdart_rime")
     inst.AnimState:SetBuild("um_blowdart_rime")
-    inst.AnimState:PlayAnimation("dart_rime")
+    inst.AnimState:PlayAnimation("idle_rime")
 
     MakeInventoryFloatable(inst, "small", 0.05, { 0.75, 0.5, 0.75 })
     local swap_data = { sym_build = "swap_blowdart", bank = "um_blowdart_rime", anim = "idle_rime" }
