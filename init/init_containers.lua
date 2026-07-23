@@ -1016,6 +1016,32 @@ if TUNING.DSTU.ICEBOX_TWEAKS then
     end
 end
 
+containers.params.um_antlionstaff =
+{
+    widget =
+    {
+        slotpos =
+        {
+            Vector3(0, 2, 0),
+        },
+        slotbg =
+        {
+            { image = "townportaltalisman_slot.tex", atlas = "images/townportaltalisman_slot.xml" },
+        },
+        animbank = "ui_antlionhat_1x1",
+        animbuild = "ui_antlionhat_1x1",
+        pos = Vector3(0, 40, 0),
+        side_align_tip = 160,
+    },
+    usespecificslotsforitems = true,
+    type = "hand_inv",
+    excludefromcrafting = true,
+}
+
+function containers.params.um_antlionstaff.itemtestfn(inst, item, slot)
+    return item.prefab == "townportaltalisman"
+end
+
 local function addItemSlotNetvarsInContainer(inst)
     if (#inst._itemspool < containers.MAXITEMSLOTS) then
         for i = #inst._itemspool + 1, containers.MAXITEMSLOTS do

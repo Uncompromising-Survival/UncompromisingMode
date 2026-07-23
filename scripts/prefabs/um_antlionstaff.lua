@@ -260,32 +260,6 @@ local function light_reticuletargetfn()
     return pos
 end
 
-local container_params =
-{
-    widget =
-    {
-        slotpos =
-        {
-            Vector3(0, 2, 0),
-        },
-        slotbg =
-        {
-            { image = "townportaltalisman_slot.tex", atlas = "images/townportaltalisman_slot.xml" },
-        },
-        animbank = "ui_antlionhat_1x1",
-        animbuild = "ui_antlionhat_1x1",
-        pos = Vector3(0, 40, 0),
-        side_align_tip = 160,
-    },
-    usespecificslotsforitems = true,
-    type = "hand_inv",
-    excludefromcrafting = true,
-}
-
-function container_params.itemtestfn(inst, item, slot)
-    return item.prefab == "townportaltalisman"
-end
-
 local function onequip(inst, owner)
     if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.HANDS) then return end
     owner.AnimState:OverrideSymbol("swap_object", "swap_antlionstaff", "symbol0")
@@ -355,7 +329,7 @@ local function staff_fn()
 
     if not TheWorld.ismastersim then
         inst.OnEntityReplicated = function(inst)
-            inst.replica.container:WidgetSetup(nil, container_params)
+            inst.replica.container:WidgetSetup("um_antlionstaff")
         end
 
         return inst
@@ -393,7 +367,7 @@ local function staff_fn()
     inst.um_setspellmode = SetSpellMode
 
     local container = inst:AddComponent("container")
-    container:WidgetSetup(nil, container_params)
+    container:WidgetSetup("um_antlionstaff")
     container.canbeopened = false
 
     MakeHauntableLaunch(inst)
