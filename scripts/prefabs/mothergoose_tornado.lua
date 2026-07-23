@@ -64,18 +64,9 @@ local function destroystuff_mini(inst)
         --stuff might become invalid as we work or damage during iteration
         if v ~= caster and v.entity:IsVisible() then
             if not (v.components.health and v.components.health:IsDead())
-                and not (castercombat and castercombat:IsAlly(v)) then
-                local damage = TUNING.TORNADO_DAMAGE
-                v.components.combat:GetAttacked(inst, damage, nil, "wind")
-                if v:IsValid() and
-                    inst.WINDSTAFF_CASTER ~= nil and inst.WINDSTAFF_CASTER:IsValid() and
-                    v.components.combat ~= nil and
-                    not (v.components.health ~= nil and v.components.health:IsDead()) and
-                    not (v.components.follower ~= nil and
-                        v.components.follower.keepleaderonattacked and
-                        v.components.follower:GetLeader() == inst.WINDSTAFF_CASTER) then
-                    v.components.combat:SuggestTarget(inst.WINDSTAFF_CASTER)
-                end
+                and v.components.combat and not (castercombat and castercombat:IsAlly(v)) then
+                v.components.combat:GetAttacked(inst, TUNING.TORNADO_DAMAGE, nil, "wind")
+                v.components.combat:SuggestTarget(caster)
             elseif v.components.workable ~= nil and
                 v.components.workable:CanBeWorked() and
                 v.components.workable:GetWorkAction() and
