@@ -394,7 +394,7 @@ local function staff_fn()
 
     local container = inst:AddComponent("container")
     container:WidgetSetup(nil, container_params)
-    container:Close()
+    container.canbeopened = false
 
     MakeHauntableLaunch(inst)
 
