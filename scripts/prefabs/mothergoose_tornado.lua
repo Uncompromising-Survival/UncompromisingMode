@@ -67,13 +67,11 @@ local function destroystuff_mini(inst)
                 and v.components.combat and not (castercombat and castercombat:IsAlly(v)) then
                 v.components.combat:GetAttacked(inst, TUNING.TORNADO_DAMAGE, nil, "wind")
                 if v:IsValid() and v.components.combat
-                    and not (v.components.health ~= nil and v.components.health:IsDead()) then
+                    and not (v.components.health and v.components.health:IsDead()) then
                     v.components.combat:SuggestTarget(caster)
                 end
-            elseif v.components.workable ~= nil and
-                v.components.workable:CanBeWorked() and
-                v.components.workable:GetWorkAction() and
-                WORK_ACTIONS[v.components.workable:GetWorkAction().id] then
+            elseif v.components.workable and v.components.workable:CanBeWorked()
+				and v.components.workable:GetWorkAction() and WORK_ACTIONS[v.components.workable:GetWorkAction().id] then
                 SpawnPrefab("collapse_small").Transform:SetPosition(v.Transform:GetWorldPosition())
                 v.components.workable:WorkedBy(inst, 2)
                 --v.components.workable:Destroy(inst)
