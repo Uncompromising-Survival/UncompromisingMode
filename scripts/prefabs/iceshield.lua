@@ -167,7 +167,9 @@ local function fn()
     inst:ListenForEvent("onremove", function(inst)
         if inst._parent then
             inst._parent:RemoveTag("ice_shielded")
-            inst._parent.components.health.redirect = inst.redirect_old and inst.redirect_old or nil
+            if inst._parent.components.health and inst.um_redirect_old then
+                inst._parent.components.health.redirect = inst.um_redirect_old
+            end
 
             if inst._parent.components.temperature and UPDATE_CHECK then
                 inst._parent.components.temperature:RemoveInsulationModifier(SEASONS.SUMMER, inst)
