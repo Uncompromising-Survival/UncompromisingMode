@@ -19,17 +19,19 @@ local function ChillSurroundings(inst)
             if v.components.burnable and not (v.prefab == "um_fire_projectile" and v.chilly) then
                 v.components.burnable:Extinguish(true)
             end
-            if v.components.health then
-                v.components.health:DoDelta(-damage, false, inst.damager and inst.damager.prefab or nil, nil, inst.damager)
-            end
-            if v.components.combat and inst.damager then
-                v.components.combat:SuggestTarget(inst.damager)
-            end
-            if v.components.freezable then
-                v.components.freezable:AddColdness(0.15, 3)
-            end
-            if v.components.temperature and v.components.temperature.current > -15 then
-                v.components.temperature:DoDelta(-1)
+            if not v:HasTag("wall") then
+                if v.components.health then
+                    v.components.health:DoDelta(-damage, false, inst.damager and inst.damager.prefab or nil, nil, inst.damager)
+                end
+                if v.components.combat and inst.damager then
+                    v.components.combat:SuggestTarget(inst.damager)
+                end
+                if v.components.freezable then
+                    v.components.freezable:AddColdness(0.15, 3)
+                end
+                if v.components.temperature and v.components.temperature.current > -15 then
+                    v.components.temperature:DoDelta(-1)
+                end
             end
         end
     end
@@ -50,14 +52,16 @@ local function BurnSurroundings(inst)
             if not v.components.fueled and v.components.burnable and not v.components.burnable:IsBurning() and not v:HasTag("burnt") then
                 v.components.burnable:Ignite(true, inst, inst.damager)
             end
-            if v.components.health then
-                v.components.health:DoFireDamage(damage, inst.damager, true)
-            end
-            if v.components.combat and inst.damager then
-                v.components.combat:SuggestTarget(inst.damager)
-            end
-            if v.components.temperature and v.components.temperature.current < 90 then
-                v.components.temperature:DoDelta(1)
+            if not v:HasTag("wall") then
+                if v.components.health then
+                    v.components.health:DoFireDamage(damage, inst.damager, true)
+                end
+                if v.components.combat and inst.damager then
+                    v.components.combat:SuggestTarget(inst.damager)
+                end
+                if v.components.temperature and v.components.temperature.current < 90 then
+                    v.components.temperature:DoDelta(1)
+                end
             end
         end
     end

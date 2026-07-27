@@ -13,8 +13,6 @@ end
 local function SetUpFire(inst, degrand, speed, scale, damage)
     local x, y, z = inst.Transform:GetWorldPosition()
     local projectile = SpawnPrefab("um_fire_projectile")
-    projectile.damager = inst
-
     local rot = inst.Transform:GetRotation()
     local dx = 1 * math.sin((rot + 90 + degrand) * DEGREES)
     local dz = 1 * math.cos((rot + 90 + degrand) * DEGREES)
@@ -24,6 +22,7 @@ local function SetUpFire(inst, degrand, speed, scale, damage)
     projectile.speed = speed
     projectile.scale = scale -- scale up sometimes.
     projectile.damage = damage
+    projectile.damager = inst
 end
 
 local function ShootFire(inst) --AXE this one is called by fire hound for its short-range spitfire attack

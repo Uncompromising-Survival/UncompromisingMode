@@ -79,33 +79,32 @@ local function PoofNearby(inst)
                     v.components.burnable:Ignite()
                 end
                 if v.components.health then
-                    v.components.health:DoFireDamage(10,nil,true)
+                    v.components.health:DoFireDamage(10, nil, true)
                 end
             end
         end
     end
 end
 
-local function ShootFire(inst,total_flame)
-    for i = 1,total_flame do
-        inst:DoTaskInTime(0+math.random(1,15)*FRAMES,function(inst)
+local function ShootFire(inst, total_flame)
+    for i = 1, total_flame do
+        inst:DoTaskInTime(0 + math.random(1, 15) * FRAMES, function(inst)
             local x,y,z = inst.Transform:GetWorldPosition()
             local projectile = SpawnPrefab("um_fire_projectile")
-            if inst.coldfire then
-                projectile.chilly = true
-            end
             local rot = inst.Transform:GetRotation() 
             local degrand = 5
-            local dx = 4*math.sin((rot+ 90+degrand) * DEGREES)
-            local dz = 4*math.cos((rot+ 90+degrand) * DEGREES)
-            rot = rot + math.random(-20,20)
+            local dx = 4 * math.sin((rot + 90 + degrand) * DEGREES)
+            local dz = 4 * math.cos((rot + 90 + degrand) * DEGREES)
+            rot = rot + math.random(-20, 20)
             projectile.Transform:SetPosition(x + dx,2,z+dz)
             projectile.Transform:SetRotation(rot)
             projectile.speed = 15
-            projectile.scale = 1 + math.random(0,10)/100 -- scale up sometimes.
+            projectile.scale = 1 + math.random(0, 10) / 100 -- scale up sometimes.
             projectile.damage = 3
             projectile.damager = inst
-            if not inst.coldfire then
+            if inst.coldfire then
+                projectile.chilly = true
+            else
                 PoofNearby(inst)
             end
         end)
@@ -164,8 +163,6 @@ local states=
                 BounceStuff(inst)
             end),
         },
-
-
     },
                 
     State{
@@ -182,7 +179,6 @@ local states=
                 inst.AnimState:PlayAnimation("idle1", true)
             end
         end,
-
     },
 
     State{
@@ -260,17 +256,19 @@ local states=
                 PoofMouthFire(inst)
             end),
         },
+
         onupdate = function(inst)
             if inst.components.combat and inst.components.combat.target then
                 inst:ForceFacePoint(inst.components.combat.target:GetPosition())
             end
         end,
+
         events=
         {
             EventHandler("animqueueover", function(inst) inst.sg:GoToState("flame") end),
         },
     },
-    
+
     State{
         name = "flame",
         tags = {"attack", "busy"},
@@ -285,23 +283,25 @@ local states=
                 inst:ForceFacePoint(inst.components.combat.target:GetPosition())
             end
         end,
+
         timeline=
         {
             TimeEvent(4*FRAMES, function(inst) ShootFire(inst,math.random(5,8))  end),
         },
+
         events=
         {
-            EventHandler("animqueueover", 
-                function(inst) 
-                    inst.flamecount = inst.flamecount + 1
-                    if inst.flamecount > inst.flamecount_total or (inst.components.combat and not inst.components.combat.target) then -- no target condition or after you're tired of breathing fire.
-                        inst.sg:GoToState("flame_pst")
-                    else
-                        inst.sg:GoToState("flame") 
-                    end
-                end),
+            EventHandler("animqueueover", function(inst) 
+                inst.flamecount = inst.flamecount + 1
+                if inst.flamecount > inst.flamecount_total or (inst.components.combat and not inst.components.combat.target) then -- no target condition or after you're tired of breathing fire.
+                    inst.sg:GoToState("flame_pst")
+                else
+                    inst.sg:GoToState("flame") 
+                end
+            end),
         },
     },
+
     State{
         name = "flame_pst",
         tags = {"attack", "busy"},
@@ -310,7 +310,7 @@ local states=
             inst.Physics:Stop()
             inst.flamecount = 0
             inst.AnimState:PlayAnimation("flame_pst", false)
-            inst.components.timer:StartTimer("flame_cd",20)
+            inst.components.timer:StartTimer("flame_cd", 20)
             inst.components.combat:SetRange(3)
         end,
 
@@ -327,16 +327,19 @@ local states=
                 PoofMouthFire(inst)
             end),
         },
+
         onexit = function(inst)
             if inst.coldfire then
                 inst.coldfire = false
             end
         end,
+
         onupdate = function(inst)
             if inst.components.combat and inst.components.combat.target then
                 inst:ForceFacePoint(inst.components.combat.target:GetPosition())
             end
         end,
+
         events=
         {
             EventHandler("animqueueover", function(inst) inst.sg:GoToState("idle") end),
@@ -354,10 +357,7 @@ local states=
             inst.AnimState:PlayAnimation("hit")
             inst.Physics:Stop()
             CommonHandlers.UpdateHitRecoveryDelay(inst)
-            if inst.components.timer:TimerExists("pissedoff") then
-                inst.components.timer:StopTimer("pissedoff")
-            end
-            inst.components.timer:StartTimer("pissedoff",60) -- 1 minute of piss off time.
+            UMCommonFns.RestartTimer(inst, {name = "pissedoff", time = 60}) -- 1 minute of piss off time.
             if not inst.components.timer:TimerExists("flame_cd") then
                 inst.components.combat:SetRange(8,3) --AXE He should be ready to breath fire, set his range to be longer than usual so he doesn't walk up to the player to start the attack
             end
