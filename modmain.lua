@@ -1,5 +1,9 @@
 local require = GLOBAL.require
 
+--live: 󰀕 white skull
+--beta: 󰀕 red skull
+GLOBAL.rawset(GLOBAL, "UNCOMPROMISING_MODE", string.find(GLOBAL.KnownModIndex:GetModFancyName(modname), "󰀕") ~= nil and "LIVE" or "BETA")
+
 require "um_pocketdimensioncontainers"
 
 GLOBAL.UPDATE_CHECK = GLOBAL.CurrentRelease.GreaterOrEqualTo("R42_HEATED_VAULT") -- REMEMBER TO ALWAYS UPDATE THIS WITH NEW BETAS.

@@ -1,3 +1,6 @@
+
+--live: 󰀕 white skull
+--beta: 󰀕 red skull
 name = "󰀕 Uncompromising Mode"
 -- borrowed from IA
 folder_name = folder_name or "workshop-"
