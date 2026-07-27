@@ -1,5 +1,9 @@
 local require = GLOBAL.require
 
+--live: 󰀕 white skull
+--beta: 󰀕 red skull
+GLOBAL.rawset(GLOBAL, "UNCOMPROMISING_MODE", string.find(GLOBAL.KnownModIndex:GetModFancyName(modname), "󰀕") ~= nil and "LIVE" or "BETA")
+
 require "um_pocketdimensioncontainers"
 
 GLOBAL.UMCommonFns = require("tools/um_commonfns")
