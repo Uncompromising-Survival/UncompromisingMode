@@ -9,19 +9,12 @@ local prefabs =
 {
     "monstersmallmeat",
 }
-if TUNING.DSTU.MONSTERSMALLMEAT then
-    SetSharedLootTable("aphid_loot",
-        {
-            { 'monstersmallmeat', 0.25 },
-            { 'steelwool', 0.33 },
-        })
-else
-    SetSharedLootTable("aphid_loot",
-        {
-            { 'monstermeat', 0.25 },
-            { 'steelwool', 0.33 },
-        })
-end
+
+SetSharedLootTable("aphid_loot",
+{
+	{ TUNING.DSTU.MONSTERSMALLMEAT and 'monstersmallmeat' or 'monstermeat', 0.25 },
+	{ 'steelwool', 0.33 },
+})
 
 local brain = require "brains/aphidbrain"
 
@@ -119,6 +112,7 @@ local function fn()
     inst.AnimState:PlayAnimation("idle")
 
     inst:AddTag("scarytoprey")
+    inst:AddTag("monster")
     inst:AddTag("insect")
     inst:AddTag("hostile")
     inst:AddTag("canbetrapped")

@@ -51,34 +51,34 @@ local treasure_templates = {
                 preset_weight = 1,
 
                 guaranteed_loot = {
-                    gears = {2, 4}, -- more gears?
-                    thulecite = {4, 8},
-                    thulecite_pieces = {8, 16},
+                    gears = { 2, 4 }, -- more gears?
+                    thulecite = { 4, 8 },
+                    thulecite_pieces = { 8, 16 },
                     lantern = 1
                 },
                 randomly_selected_loot = {
-                    {yellowstaff = 0.33, greenstaff = 0.33, orangestaff = 0.33}, -- staffs and amulets instead of raw gems, lowered chance.
-                    {yellowamulet = 0.33, greenamulet = 0.33, orangeamulet = 0.33},
-                    {ruinshat = 0.33, armorruins = 0.33, ruins_bat = 0.33} -- chance for both thule suit and crown.
+                    { yellowstaff = 0.33,  greenstaff = 0.33,  orangestaff = 0.33 }, -- staffs and amulets instead of raw gems, lowered chance.
+                    { yellowamulet = 0.33, greenamulet = 0.33, orangeamulet = 0.33 },
+                    { ruinshat = 0.33,     armorruins = 0.33,  ruins_bat = 0.33 } -- chance for both thule suit and crown.
 
                 }
             },
 
             -------- Modded presets.
 
-            inventor = {preset_weight = 1, guaranteed_loot = {trident = 1, papyrus = {3, 5}, charcoal = {4, 7}, goldenpickaxe = 1, blueprint = {1, 3}}, randomly_selected_loot = {{stinger = 0.5, nitre = 0.5}, {stinger = 0.5, nitre = 0.5}, {stinger = 0.5, nitre = 0.5}, {stinger = 0.5, nitre = 0.5}}},
+            inventor = { preset_weight = 1, guaranteed_loot = { trident = 1, papyrus = { 3, 5 }, charcoal = { 4, 7 }, goldenpickaxe = 1, blueprint = { 1, 3 } }, randomly_selected_loot = { { stinger = 0.5, nitre = 0.5 }, { stinger = 0.5, nitre = 0.5 }, { stinger = 0.5, nitre = 0.5 }, { stinger = 0.5, nitre = 0.5 } } },
             ------------------
-            scientist = {preset_weight = 1, guaranteed_loot = {molehat = 1, nightstick = 1, transistor = {1, 2}, goldenpickaxe = 1}, randomly_selected_loot = {{gunpowder = 0.30, slurtleslime = 0.50, wormlight = 0.20}}},
+            scientist = { preset_weight = 1, guaranteed_loot = { molehat = 1, nightstick = 1, transistor = { 1, 2 }, goldenpickaxe = 1 }, randomly_selected_loot = { { gunpowder = 0.30, slurtleslime = 0.50, wormlight = 0.20 } } },
             ------------------
-            farmer = {preset_weight = 1, guaranteed_loot = {treegrowthsolution = {3, 5}, fig = {5, 10}, gnarwail_horn = 1, glommerfuel = {5, 10}, dug_berrybush = {0, 5}, dug_berrybush2 = {0, 5}}, randomly_selected_loot = {{gnarwail_horn = 0.5, malbatross_beak = 0.25}, {nutrientsgoggleshat = 0.10, plantregistryhat = 0.90}}},
+            farmer = { preset_weight = 1, guaranteed_loot = { treegrowthsolution = { 3, 5 }, fig = { 5, 10 }, gnarwail_horn = 1, glommerfuel = { 5, 10 }, dug_berrybush = { 0, 5 }, dug_berrybush2 = { 0, 5 } }, randomly_selected_loot = { { gnarwail_horn = 0.5, malbatross_beak = 0.25 }, { nutrientsgoggleshat = 0.10, plantregistryhat = 0.90 } } },
 
             ------------------
-            cave_hunter = {preset_weight = 1, guaranteed_loot = {multitool_axe_pickaxe = 1, slurper_pelt = {3, 6}, silk = {6, 10}, mole = {2, 3}, goldnugget = {4, 10}}, randomly_selected_loot = {{tentaclespike = 0.5, batbat = 0.5}, {wormlight = 0.2, wormlight_lesser = .6, minerhat = 0.2}}},
+            cave_hunter = { preset_weight = 1, guaranteed_loot = { multitool_axe_pickaxe = 1, slurper_pelt = { 3, 6 }, silk = { 6, 10 }, mole = { 2, 3 }, goldnugget = { 4, 10 } }, randomly_selected_loot = { { tentaclespike = 0.5, batbat = 0.5 }, { wormlight = 0.2, wormlight_lesser = .6, minerhat = 0.2 } } },
             ------------------
-            resource_stash = {preset_weight = 1, guaranteed_loot = {cutgrass = {20, 40}, twigs = {20, 40}, silk = {6, 10}, rocks = {10, 30}, goldnugget = {4, 10}}, randomly_selected_loot = {}},
+            resource_stash = { preset_weight = 1, guaranteed_loot = { cutgrass = { 20, 40 }, twigs = { 20, 40 }, silk = { 6, 10 }, rocks = { 10, 30 }, goldnugget = { 4, 10 } }, randomly_selected_loot = {} },
             ------------------
-            kings_stash = {preset_weight = 1, guaranteed_loot = {greengem = {1, 3}, yellowgem = {1, 3}, purplegem = {1, 3}, orangegem = {1, 3}, bluegem = {1, 3}, redgem = {1, 3}}, randomly_selected_loot = {{opalpreciousgem = 0.25}}},
-            whaler = {preset_weight = 1, guaranteed_loot = {sludge = {1, 10}, um_magnerang = 1, sludge_cork = {1, 2}, boneshard = {4, 10}}, randomly_selected_loot = {{gnarwail_horn = 0.5, rockjawleather = 0.5}, {gnarwail_horn = 0.5, rockjawleather = 0.5}}}
+            kings_stash = { preset_weight = 1, guaranteed_loot = { greengem = { 1, 3 }, yellowgem = { 1, 3 }, purplegem = { 1, 3 }, orangegem = { 1, 3 }, bluegem = { 1, 3 }, redgem = { 1, 3 } }, randomly_selected_loot = { { opalpreciousgem = 0.25 } } },
+            whaler = { preset_weight = 1, guaranteed_loot = { sludge = { 1, 10 }, um_magnerang = 1, sludge_cork = { 1, 2 }, boneshard = { 4, 10 } }, randomly_selected_loot = { { gnarwail_horn = 0.5, rockjawleather = 0.5 }, { gnarwail_horn = 0.5, rockjawleather = 0.5 } } }
 
         }
     },
@@ -86,34 +86,34 @@ local treasure_templates = {
         treasure_type_weight = 0.5,
 
         presets = {
-            traveler = {preset_weight = 1, guaranteed_loot = {cane = 1, gnarwail_horn = 1, papyrus = {4, 8}, featherpencil = {2, 4}}, randomly_selected_loot = {{compass = 0.25, goggleshat = 0.75}}},
+            traveler = { preset_weight = 1, guaranteed_loot = { cane = 1, gnarwail_horn = 1, papyrus = { 4, 8 }, featherpencil = { 2, 4 } }, randomly_selected_loot = { { compass = 0.25, goggleshat = 0.75 } } },
             ----------------
-            cave_hunter = {preset_weight = 1, guaranteed_loot = {multitool_axe_pickaxe = 1, slurper_pelt = {3, 6}, silk = {6, 10}}, randomly_selected_loot = {{tentaclespike = 0.5, batbat = 0.5}, {wormlight = 0.2, wormlight_lesser = .6, minerhat = 0.2}}},
+            cave_hunter = { preset_weight = 1, guaranteed_loot = { multitool_axe_pickaxe = 1, slurper_pelt = { 3, 6 }, silk = { 6, 10 } }, randomly_selected_loot = { { tentaclespike = 0.5, batbat = 0.5 }, { wormlight = 0.2, wormlight_lesser = .6, minerhat = 0.2 } } },
             ------------------
-            scientist = {preset_weight = 1, guaranteed_loot = {molehat = 1, nightstick = 1, transistor = {1, 2}}, randomly_selected_loot = {{wormlight = 0.20}}},
+            scientist = { preset_weight = 1, guaranteed_loot = { molehat = 1, nightstick = 1, transistor = { 1, 2 } }, randomly_selected_loot = { { wormlight = 0.20 } } },
             -------------
-            inventor = {preset_weight = 1, guaranteed_loot = {staff_tornado = 1, papyrus = {3, 5}, blueprint = {1, 3}}, randomly_selected_loot = {}},
+            inventor = { preset_weight = 1, guaranteed_loot = { staff_tornado = 1, papyrus = { 3, 5 }, blueprint = { 1, 3 } }, randomly_selected_loot = {} },
             ---------------
-            kings_stash = {preset_weight = 1, guaranteed_loot = {greengem = {1, 2}, yellowgem = {1, 2}, purplegem = {1, 2}, orangegem = {1, 2}, bluegem = {1, 2}, redgem = {1, 2}}, randomly_selected_loot = {{opalpreciousgem = 0.25}}},
+            kings_stash = { preset_weight = 1, guaranteed_loot = { greengem = { 1, 2 }, yellowgem = { 1, 2 }, purplegem = { 1, 2 }, orangegem = { 1, 2 }, bluegem = { 1, 2 }, redgem = { 1, 2 } }, randomly_selected_loot = { { opalpreciousgem = 0.25 } } },
             theukon1 = {
                 preset_weight = 1,
                 guaranteed_loot = {
-                    moonglass = {10, 15},
-                    messagebottleempty = {5, 10},
+                    moonglass = { 10, 15 },
+                    messagebottleempty = { 5, 10 },
                     messagebottle = 2
                     -- alterguardianhatshard = { 3, 4 },
                 },
-                randomly_selected_loot = {{yellowstaff = 0.2, greenstaff = 0.2, orangestaff = 0.2, telestaff = 0.2}, {yellowamulet = 0.25, orangeamulet = 0.25, greenamulet = 0.25, purpleamulet = 0.25}, {trinket_26 = 0.1}}
+                randomly_selected_loot = { { yellowstaff = 0.2, greenstaff = 0.2, orangestaff = 0.2, telestaff = 0.2 }, { yellowamulet = 0.25, orangeamulet = 0.25, greenamulet = 0.25, purpleamulet = 0.25 }, { trinket_26 = 0.1 } }
             }
         }
     },
 
-    sunkenchest_royal_red = {treasure_type_weight = 0, presets = {red = {preset_weight = 1, guaranteed_loot = {armor_crab_maxhp_blueprint = 1, ancient_amulet_red = 1, sludge = {4, 8}, redgem = {1, 2}, nitre = {1, 4}}}}},
-    sunkenchest_royal_blue = {treasure_type_weight = 0, presets = {blue = {preset_weight = 1, guaranteed_loot = {hat_crab_ice_blueprint = 1, blueamulet = 1, ice = {4, 8}, bluegem = {1, 2}}}}},
-    sunkenchest_royal_purple = {treasure_type_weight = 0, presets = {purple = {preset_weight = 1, guaranteed_loot = {trident_blueprint = 1, kelp = 2, gnarwail_horn = {1, 2}, purplegem = {1, 2}}}}},
-    sunkenchest_royal_orange = {treasure_type_weight = 0, presets = {orange = {preset_weight = 1, guaranteed_loot = {hat_crab_blueprint = 1, rocks = 4, cutstone = {1, 2}, orangegem = {1, 2}}}}},
-    sunkenchest_royal_yellow = {treasure_type_weight = 0, presets = {yellow = {preset_weight = 1, guaranteed_loot = {staff_starfall_blueprint = 1, goldnugget = 4, feather_canary = {1, 2}, yellowgem = {1, 2}}}}},
-    sunkenchest_royal_green = {treasure_type_weight = 0, presets = {green = {preset_weight = 1, guaranteed_loot = {armor_crab_regen_blueprint = 1, cutreeds = 4, rocks = {1, 3}, greengem = {1, 2}}}}},
+    sunkenchest_royal_red = { treasure_type_weight = 0, presets = { red = { preset_weight = 1, guaranteed_loot = { armor_crab_maxhp_blueprint = 1, ancient_amulet_red = 1, sludge = { 4, 8 }, redgem = { 1, 2 }, nitre = { 1, 4 } } } } },
+    sunkenchest_royal_blue = { treasure_type_weight = 0, presets = { blue = { preset_weight = 1, guaranteed_loot = { hat_crab_ice_blueprint = 1, blueamulet = 1, ice = { 4, 8 }, bluegem = { 1, 2 } } } } },
+    sunkenchest_royal_purple = { treasure_type_weight = 0, presets = { purple = { preset_weight = 1, guaranteed_loot = { trident_blueprint = 1, kelp = 2, gnarwail_horn = { 1, 2 }, purplegem = { 1, 2 } } } } },
+    sunkenchest_royal_orange = { treasure_type_weight = 0, presets = { orange = { preset_weight = 1, guaranteed_loot = { hat_crab_blueprint = 1, rocks = 4, cutstone = { 1, 2 }, orangegem = { 1, 2 } } } } },
+    sunkenchest_royal_yellow = { treasure_type_weight = 0, presets = { yellow = { preset_weight = 1, guaranteed_loot = { staff_starfall_blueprint = 1, goldnugget = 4, feather_canary = { 1, 2 }, yellowgem = { 1, 2 } } } } },
+    sunkenchest_royal_green = { treasure_type_weight = 0, presets = { green = { preset_weight = 1, guaranteed_loot = { armor_crab_regen_blueprint = 1, cutreeds = 4, rocks = { 1, 3 }, greengem = { 1, 2 } } } } },
     sunkenchest_royal_rainbow = {
         treasure_type_weight = 0,
 
@@ -123,17 +123,17 @@ local treasure_templates = {
 
                 guaranteed_loot = {
                     kaleidoscope_blueprint = 1,
-                    moonrocknugget = {1, 4},
-                    moonglass = {0, 5},
-                    moonstorm_spark = {1, 3}, -- Teehee :)
-                    moonglass_charged = {1, 5}
+                    moonrocknugget = { 1, 4 },
+                    moonglass = { 0, 5 },
+                    moonstorm_spark = { 1, 3 }, -- Teehee :)
+                    moonglass_charged = { 1, 5 }
                 }
             }
         }
     }
 }
 
-local trinkets = {"trinket_3", "trinket_4", "trinket_5", "trinket_6", "trinket_7", "trinket_8", "trinket_9", "trinket_17", "trinket_22", "trinket_27"}
+local trinkets = { "trinket_3", "trinket_4", "trinket_5", "trinket_6", "trinket_7", "trinket_8", "trinket_9", "trinket_17", "trinket_22", "trinket_27" }
 
 local TRINKET_CHANCE = 0.02
 
@@ -196,7 +196,7 @@ local function GenerateTreasure(pt, overrideprefab, spawn_as_empty, postfn, doer
                             local tries = 10
                             while not item.components.gem_enchantable:IsEnchanted() and tries > 0 do
                                 local enchant = GEM_LOOKUP[math.random(#GEM_LOOKUP)]
-                                local tier = math.random(MIN_GEM_TIER, MAX_GEM_TIER)
+                                local tier = math.random(MIN_GEM_ENCHANT_TIER, MAX_GEM_TIER)
                                 if GEM_DEFS[enchant].canapply ~= nil and GEM_DEFS[enchant].canapply(item, tier) or GEM_DEFS[enchant].canapply == nil then
                                     item.components.gem_enchantable:AddEnchantment(enchant, tier)
                                     item.components.gem_enchantable:SetDurability(enchant, 1)
@@ -229,7 +229,7 @@ local function GenerateTreasure(pt, overrideprefab, spawn_as_empty, postfn, doer
 end
 
 local function GetPrefabs()
-    local prefabscontain = {ancienttree_seed = true}
+    local prefabscontain = { ancienttree_seed = true }
 
     for treasureprefab, weighted_lists in pairs(weighted_treasure_contents) do
         prefabscontain[treasureprefab] = true -- Chests, etc
@@ -265,4 +265,4 @@ local function GetPrefabs()
     return prefablist
 end
 
-return {GenerateTreasure = GenerateTreasure, GetPrefabs = GetPrefabs, treasure_templates = treasure_templates}
+return { GenerateTreasure = GenerateTreasure, GetPrefabs = GetPrefabs, treasure_templates = treasure_templates }

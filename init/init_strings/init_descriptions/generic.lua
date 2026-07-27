@@ -307,6 +307,10 @@ ACTIONFAIL.SCAN_GEMOLOGY_GEM = {
 ACTIONFAIL.UM_FORGE_GEM = {
     NOT_COMPATIBLE = "It's not the right gem for this."
 }
+ACTIONFAIL.UM_GEM_REPAIR = {
+    NO_REPAIR_NEEDED = "It's fully repaired."
+}
+ANNOUNCE.ANNOUNCE_GEM_REPAIR_MAXED = "It's hard to repair this further."
 -- Xmas Update
 DESCRIBE.MAGMAHOUND = "Hot dog!"
 DESCRIBE.LIGHTNINGHOUND = "Watch it, that one stings!"
@@ -345,6 +349,7 @@ DESCRIBE.CORNCAN = "Where did this can come from?"
 DESCRIBE.SKULLCHEST_CHILD = "If only I could fit inside."
 
 DESCRIBE.SLOBBERLOBBER = "A portable loogie launcher."
+DESCRIBE.UM_ANTLIONSTAFF = "Feed it stones, summon spikes."
 DESCRIBE.GORE_HORN_HAT =
 "My mind was always the greatest weapon but... yeah, you get the idea."
 DESCRIBE.BEARGERCLAW = "Sticks and stones can break some bones."
@@ -693,7 +698,7 @@ DESCRIBE.WATHOM_CORPSE = "I think he's still breathing!"
 
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "I have nothing to fear standing behind it!"
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "I should break this ice with some hot topics!"
-DESCRIBE.UM_THULECITE_RAZOR= "Thulecite razor! A classic!"
+DESCRIBE.UM_THULECITE_RAZOR = "Thulecite razor! A classic!"
 DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "The scent is... statistically significant."
 ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
     SPRING = "The novelty has certainly washed away by the rain.",

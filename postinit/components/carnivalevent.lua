@@ -6,7 +6,7 @@ GLOBAL.setfenv(1, GLOBAL)
 --fully comented out so the IDE stops yelling at me
 --env.AddComponentPostInit("carnivalevent", function(self)
 
-	local _OldSpawnCarnivalHost = self.SpawnCarnivalHost
+	--local _OldSpawnCarnivalHost = self.SpawnCarnivalHost
 
 	--[[local _OldOnSave = self.OnSave
 	local _OldOnLoad = self.OnLoad

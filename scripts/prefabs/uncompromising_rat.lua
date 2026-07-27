@@ -29,7 +29,7 @@ local function on_burnt(inst)
     inst:Remove()
 end
 
-local function OnAttackOther(inst, data)
+local function OnHitOther(inst, data)
     if data.target ~= nil and data.target:HasTag("player") and not data.target:HasAnyTag("hasplaguemask", "ratfriend", "automaton", "ratwhisperer") and TUNING.DSTU.MAXHPHITTERS then data.target.components.health:DeltaPenalty(.01) end
 
     --[[if data.target ~= nil and data.target:HasTag("player") and inst.components.thief ~= nil then
@@ -141,8 +141,6 @@ local function Trapped(inst)
         end)
     end
 end
-
-local function OnHitOther(inst, other) inst.components.thief:StealItem(other) end
 
 local RETARGET_CANT_TAGS = { "wall", "raidrat", "ratfriend" }
 local function rattargetfn(inst)
@@ -399,7 +397,6 @@ local function fn()
     inst.components.combat:SetAttackPeriod(TUNING.DSTU.RAIDRAT_ATTACK_PERIOD)
     inst.components.combat:SetRange(TUNING.DSTU.RAIDRAT_ATTACK_RANGE)
     inst.components.combat.hiteffectsymbol = "carrat_body"
-    -- inst.components.combat.onhitotherfn = OnHitOther
     -- inst.components.combat:SetRetargetFunction(3, rattargetfn)
     -- inst.components.combat:SetKeepTargetFunction(KeepTargetFn)
     inst.components.combat:SetPlayerStunlock(PLAYERSTUNLOCK.RARELY)
@@ -461,7 +458,7 @@ local function fn()
     inst.components.trader.onrefuse = OnRefuseItem_Winky
     inst.components.trader.deleteitemonaccept = false
 
-    inst:ListenForEvent("onattackother", OnAttackOther)
+    inst:ListenForEvent("onhitother", OnHitOther)
     inst:ListenForEvent("attacked", OnAttacked)
     inst:ListenForEvent("death", OnDeath)
     inst:ListenForEvent("onpickupitem", OnPickup)
@@ -675,7 +672,7 @@ local function junkfn()
     inst.components.periodicspawner:Start()
     -- inst.components.periodicspawner.spawnoffscreen = true]]
 
-    inst:ListenForEvent("onattackother", OnAttackOther)
+    inst:ListenForEvent("onhitother", OnHitOther)
     inst:ListenForEvent("attacked", OnJunkAttacked)
     inst:ListenForEvent("death", OnDeath)
     MakeHauntablePanic(inst)
@@ -834,7 +831,7 @@ local function packfn()
     inst.components.periodicspawner:Start()
     -- inst.components.periodicspawner.spawnoffscreen = true]]
 
-    inst:ListenForEvent("onattackother", OnAttackOther)
+    inst:ListenForEvent("onhitother", OnHitOther)
     inst:ListenForEvent("attacked", OnAttacked)
     inst:ListenForEvent("death", OnDeath)
     -- inst:ListenForEvent("trapped", Trapped)

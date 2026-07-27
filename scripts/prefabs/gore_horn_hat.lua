@@ -250,15 +250,12 @@ local function fn()
     inst:AddTag("hat")
     inst:AddTag("gore_horn")
     inst:AddTag("vetcurse_item")
+    inst:AddTag("shadowlevel")
     inst:AddTag("donotautopick")
     
-    MakeInventoryFloatable(inst)
+    MakeInventoryFloatable(inst, "med", .1, .63)
 
     inst.entity:SetPristine()
-
-    inst.components.floater:SetSize("med")
-    inst.components.floater:SetVerticalOffset(0.1)
-    inst.components.floater:SetScale(0.63)
 
     if not TheWorld.ismastersim then
         return inst
@@ -269,14 +266,11 @@ local function fn()
     inst:AddComponent("tradable")
     inst:AddComponent("inspectable")
 
-    inst:AddComponent("fueled")
-    inst.components.fueled:InitializeFuelLevel(200)
-    inst.components.fueled.accepting = false
-    inst.components.fueled:SetDepletedFn(stoprunning)
+    local fueled = inst:AddComponent("fueled")
+    fueled:InitializeFuelLevel(200)
+    fueled.accepting = false
+    fueled:SetDepletedFn(stoprunning)
     inst:ListenForEvent("percentusedchange", checkiffull)
-
-    inst:AddComponent("shadowlevel")
-    inst.components.shadowlevel:SetDefaultLevel(TUNING.DSTU.GOREHORN_SHADOW_LEVEL)
 
     inst.fueltask = nil
     inst.fuelmetask = nil
@@ -287,10 +281,13 @@ local function fn()
         inst.fuelmetask = inst:DoPeriodicTask(0.5, fuelme)
     end
 
-    inst:AddComponent("equippable")
-    inst.components.equippable.equipslot = EQUIPSLOTS.HEAD
-    inst.components.equippable:SetOnEquip(onequip)
-    inst.components.equippable:SetOnUnequip(onunequip)
+    local equippable = inst:AddComponent("equippable")
+    equippable.equipslot = EQUIPSLOTS.HEAD
+    equippable:SetOnEquip(onequip)
+    equippable:SetOnUnequip(onunequip)
+
+    local shadowlevel = inst:AddComponent("shadowlevel")
+    shadowlevel:SetDefaultLevel(TUNING.DSTU.GOREHORN_SHADOW_LEVEL)
 
     MakeHauntableLaunch(inst)
 
@@ -349,8 +346,7 @@ local function physboxfn()
 
     inst.AnimState:SetMultColour(0, 0, 0, 1)
 
-    inst:AddTag("fx")
-
+    inst:AddTag("FX")
     inst:AddTag("NOCLICK")
 
     inst.entity:SetPristine()

@@ -265,11 +265,7 @@ env.AddComponentPostInit("health", function(self)
         TUNING.WX78_MAXHEALTH2_MULT = 0
         local _SetMaxHealth = self.SetMaxHealth
         function self:SetMaxHealth(amount)
-            if self.inst:HasTag("player") then
-                return _SetMaxHealth(self, 1)
-            else
-                return _SetMaxHealth(self, amount)
-            end
+            return _SetMaxHealth(self, self.inst:HasTag("player") and 1 or amount)
         end    
     end
 end)

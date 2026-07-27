@@ -1,7 +1,8 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-local um_flood_speed_immune_TAGS = { "turfrunner_279", "turfrunner_280", "turfrunner_281", "swampbro", "playermerm", "woosegoose", "merm" }
+local um_flood_speed_immune_no_turfrunner_TAGS = {"swampbro", "playermerm", "woosegoose", "merm"}
+local um_flood_speed_immune_TAGS = ConcatArrays({"turfrunner_279", "turfrunner_280", "turfrunner_281"}, um_flood_speed_immune_no_turfrunner_TAGS)
 
 local function RobustFloodCheck(inst) -- For players, check to see if they're on the edge of a tile, you can walk on the "Void" to avoid the effects of the tile you're standing on, similar to spider webbings
     --IsVisualGroundAtPoint(x,y,z)... not sure how this can help?
@@ -17,6 +18,17 @@ local function RobustFloodCheck(inst) -- For players, check to see if they're on
     end
 end
 
+env.AddReplicableComponent("umripples")
+
+env.AddComponentPostInit("floater", function(self)
+    local _ShouldShowEffect = self.ShouldShowEffect
+    function self:ShouldShowEffect(...)
+        local pos_x, pos_y, pos_z = self.inst.Transform:GetWorldPosition()
+        if TheWorld.Map:GetTileAtPoint(pos_x, 0, pos_z) == WORLD_TILES.UM_FLOODWATER_GROTTO and not (self.inst.sg and self.inst.sg:HasStateTag("flying")) then return true end
+        return _ShouldShowEffect(self, ...)
+    end
+end)
+
 for _, prefab in ipairs(TUNING.DSTU.RIPPLE_BLACKLIST_PREFABS) do
     env.AddPrefabPostInit(prefab, function(inst)
         inst.um_ripple_blacklist = true
@@ -25,41 +37,23 @@ end
 
 -- AXE Add ripples to plants, structures, and items
 env.AddPrefabPostInitAny(function(inst)
+    if not TheWorld.ismastersim then return end
     if inst:HasAnyTag(TUNING.DSTU.RIPPLE_BLACKLIST_TAGS) then
         inst.um_ripple_blacklist = true
     end
 
-    if (inst:HasAnyTag("structure", "boulder", "plant") or inst.components.inventoryitem) and not inst.um_ripple_blacklist then
-        if not inst.components.umripples then
-            inst:AddComponent("umripples")
-        end
-        if inst.components.floater then
-            local floater = inst.components.floater
-            local umripples = inst.components.umripples
-            umripples.size = floater.size
-            umripples.vert_offset = floater.vert_offset
-            umripples.xscale = floater.xscale
-            umripples.yscale = floater.yscale
-            umripples.zscale = floater.zscale
-            umripples.should_parent_effect = floater.should_parent_effect
-            umripples.do_bank_swap = floater.do_bank_swap
-            umripples.float_index = floater.float_index
-            umripples.swap_data = floater.swap_data
-            umripples.showing_effect = floater.showing_effect
-            umripples.bob_percent = floater.bob_percent
-            umripples.splash = floater.splash
-        end
-        if inst.components.inventoryitem and not inst.components.floatable then
-            local umripples = inst.components.umripples
+    if (inst:HasAnyTag("structure", "boulder", "plant") or inst.components.inventoryitem) and not inst.components.floater and not inst.um_ripple_blacklist then
+        local umripples = inst.components.umripples or inst:AddComponent("umripples")
+        if inst.components.inventoryitem and not inst.components.floater then
             umripples.vert_offset = 0.1
         end
     end
 end)
 
-env.AddClassPostConstruct("components/inventoryitem_replica", function(self) --AXE Add the ripples to the client side of items
+--[[env.AddClassPostConstruct("components/inventoryitem_replica", function(self) --AXE Add the ripples to the client side of items
     if not self.inst.components.umripples and not self.inst:HasAnyTag(TUNING.DSTU.RIPPLE_BLACKLIST_TAGS) then
         self.inst:AddComponent("umripples")
-        if not self.inst.components.floatable then
+        if not self.inst.components.floater then
             local umripples = self.inst.components.umripples
             umripples.vert_offset = 0.1
         end
@@ -69,22 +63,20 @@ end)
 env.AddClassPostConstruct("components/health_replica", function(self) --AXE Add ripples to the client side of any creature, including modded followers whose mob tags are server-only
     if not self.inst.components.umripples and not self.inst:HasAnyTag(JoinArrays(TUNING.DSTU.RIPPLE_BLACKLIST_TAGS, {"shadow", "flying", "gestalt", "ghost", "playerghost"})) then
         self.inst:AddComponent("umripples")
-        if not self.inst.components.floatable then
+        if not self.inst.components.floater then
             self.inst.components.umripples.vert_offset = 0.2
         end
     end
-end)
+end)]]
 
 local function AddRipples(prefab, xscale, yscale, zscale, vert_offset) --AXE These calls need to be both on client and server
     env.AddPrefabPostInit(prefab, function(inst)
-        if not inst.components.umripples then
-            inst:AddComponent("umripples")
-        end
-        local umripples = inst.components.umripples
-        umripples.vert_offset = vert_offset and vert_offset or 0
-        umripples.xscale = xscale and xscale or 1
-        umripples.yscale = yscale and yscale or 1
-        umripples.zscale = zscale and zscale or 1
+        if not TheWorld.ismastersim then return end
+        local umripples = inst.components.umripples or inst:AddComponent("umripples")
+        umripples.xscale = xscale or 1
+        umripples.yscale = yscale or 1
+        umripples.zscale = zscale or 1
+        umripples.vert_offset = vert_offset or 0
     end)
 end
 
@@ -122,39 +114,33 @@ end
 --
 
 env.AddPlayerPostInit(function(inst)
-    if not inst.components.umripples then
-        inst:AddComponent("umripples")
-    end
-    inst.components.umripples.xscale = 0.75
-    inst.components.umripples.zscale = 0.75
-    inst.components.umripples.vert_offset = 0.2
+    if not TheWorld.ismastersim then return end
+    local umripples = inst.components.umripples or inst:AddComponent("umripples")
+    umripples.xscale = 0.75
+    umripples.zscale = 0.75
+    umripples.vert_offset = 0.2
 end)
 
 --AXE Mobs
 env.AddPrefabPostInitAny(function(inst)
-    if (inst:HasAnyTag("_health", "animal", "EPIC", "monster") and not inst:HasAnyTag("shadow", "flying", "gestalt", "ghost")) and not inst.prefab == "webbedcreature" then
-        if not inst.components.umripples then
-            inst:AddComponent("umripples")
-        end
-        inst.components.umripples.vert_offset = 0.2
+    if not TheWorld.ismastersim then return end
+    if inst:HasAnyTag("_health", "animal", "epic", "monster") and not inst:HasAnyTag("shadow", "flying", "gestalt", "ghost") and not inst.prefab == "webbedcreature" then
+        local umripples = inst.components.umripples or inst:AddComponent("umripples")
+        umripples.vert_offset = 0.2
     end
     if inst:HasTag("spider") and not inst:HasTag("player") then
-        if not inst.components.umripples then
-            inst:AddComponent("umripples")
-        end
-        inst.components.umripples.xscale = 2
-        inst.components.umripples.zscale = 2
-        inst.components.umripples.yscale = 1.4
-        inst.components.umripples.vert_offset = 0.35
+        local umripples = inst.components.umripples or inst:AddComponent("umripples")
+        umripples.xscale = 2
+        umripples.yscale = 1.4
+        umripples.zscale = 2
+        umripples.vert_offset = 0.35
     end
     if inst:HasTag("largecreature") and not inst:HasTag("flying") then
-        if not inst.components.umripples then
-            inst:AddComponent("umripples")
-        end
-        inst.components.umripples.xscale = 3
-        inst.components.umripples.zscale = 3
-        inst.components.umripples.yscale = 3
-        inst.components.umripples.vert_offset = 0.5
+        local umripples = inst.components.umripples or inst:AddComponent("umripples")
+        umripples.xscale = 3
+        umripples.yscale = 3
+        umripples.zscale = 3
+        umripples.vert_offset = 0.5
     end
 end)
 
@@ -169,7 +155,7 @@ env.AddStategraphPostInit("wilson", function(inst)
         state.onenter = function(inst, ...)
             inst:DoTaskInTime(state_time_ent[iname], function(inst)
                 if RobustFloodCheck(inst) and inst.sg.currentstate.name == statenames[iname] then
-                    inst.components.umripples._resize_target:set({ 250, 250, 250 })
+                    inst.components.umripples:ResizeTarget({ 250, 250, 250 })
                 end
             end)
             _onenter(inst, ...)
@@ -179,7 +165,7 @@ env.AddStategraphPostInit("wilson", function(inst)
         state.onexit = function(inst, ...)
             inst:DoTaskInTime(state_time_ext[iname], function(inst)
                 if RobustFloodCheck(inst) then
-                    inst.components.umripples._resize_target:set({ 75, 100, 75 })
+                    inst.components.umripples:ResizeTarget({ 75, 100, 75 })
                 end
             end)
             _onexit(inst, ...)
@@ -192,13 +178,10 @@ local um_flood_speed_immune = { "frog", "molebat","lunarfrog" }
 
 for i, v in ipairs(um_flood_speed_immune) do
     env.AddPrefabPostInit(v, function(inst)
-        if not TheWorld.ismastersim then
-            return inst
-        end
+        if not TheWorld.ismastersim then return end
         inst.components.umripples.speed_immune = true
     end)
 end
-
 
 env.AddPrefabPostInit("mole_move_fx", function(inst)
     inst:DoTaskInTime(0, function(inst)
@@ -231,7 +214,6 @@ env.AddStategraphPostInit("frog", function(inst)
         end
     end
 end)
-
 
 env.AddStategraphPostInit("molebat", function(inst)
     local state = inst.states["walk"]
@@ -289,7 +271,9 @@ env.AddStategraphPostInit("bird", function(inst)
     local state = inst.states["flyaway"]
     local _onenter = state.onenter
     state.onenter = function(inst, ...)
-        inst.components.umripples:OnNoLongerLandedServer()
+        if inst.components.umripples then
+            inst.components.umripples:OnNoLongerLandedServer()
+        end
         _onenter(inst, ...)
     end
 end)
@@ -477,6 +461,7 @@ local function FloodMoistureRamp(inst)
         end
 
         inst.components.moisture:DoDelta(wetness_gain, true)
+        --DoDeltaMoistureToEntity(inst, wetness_gain, nil, nil, true)
     end
 end
 
@@ -489,7 +474,7 @@ local function RemoveFloodCheck(inst)
     if inst.components.umripples then --AXE check if should update ripples
         inst.components.umripples:OnNoLongerLandedServer()
     end
-    if not inst:HasAnyTag("playermerm", "woosegoose", "swampbro") then --Wurt's Swamp Pathfinder kinda bugs this out so can't use um_flood_speed_immune_TAGS
+    if not inst:HasAnyTag(um_flood_speed_immune_no_turfrunner_TAGS) then --Wurt's Swamp Pathfinder kinda bugs this out so can't use um_flood_speed_immune_TAGS
         inst:PushEvent("carefulwalking", { careful = false })
     end
 end

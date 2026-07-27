@@ -615,7 +615,10 @@ local function RegisterPathFinding(inst)
     end
 end
 
-
+local function OnRemoveEntity(inst)
+    UnregisterPathFinding(inst)
+    inst._hascanopy:set(false)
+end
 
 local function giant_treefn()
     local inst = CreateEntity()
@@ -628,8 +631,8 @@ local function giant_treefn()
 
     inst.MiniMapEntity:SetIcon("um_hoodedtree.tex")
     inst.MiniMapEntity:SetPriority(-1)
-    MakeObstaclePhysics(inst, 2.35)
 
+    MakeObstaclePhysics(inst, 2.35)
 
     inst:AddTag("tree")
     inst:AddTag("giant_tree")
@@ -639,52 +642,55 @@ local function giant_treefn()
     inst:DoTaskInTime(0, RegisterPathFinding)
 
     if not TheNet:IsDedicated() then
-        inst:AddComponent("distancefade")
-        inst.components.distancefade:Setup(15, 25)
+        local distancefade = inst:AddComponent("distancefade")
+        distancefade:Setup(15, 25)
+
+        local canopyshadows = inst:AddComponent("canopyshadows")
+        canopyshadows.range = math.floor(TUNING.SHADE_CANOPY_RANGE_SMALL / 4)
+		canopyshadows.um_canopyshadows = true
+
+        inst:ListenForEvent("hascanopydirty", function()
+            if not inst._hascanopy:value() then
+                inst:RemoveComponent("canopyshadows")
+            end
+        end)
     end
 
-    inst._hascanopy = net_bool(inst.GUID, "oceantree_pillar._hascanopy", "hascanopydirty")
+    inst._hascanopy = net_bool(inst.GUID, "giant_tree._hascanopy", "hascanopydirty")
     inst._hascanopy:set(true)
-    inst:DoTaskInTime(0, function()
-        inst.canopy_data = CANOPY_SHADOW_DATA.spawnshadow(inst, math.floor(TUNING.SHADE_CANOPY_RANGE_SMALL / 4), true)
-    end)
-
-    inst:ListenForEvent("hascanopydirty", function()
-        if not inst._hascanopy:value() then
-            RemoveCanopyShadow(inst)
-        end
-    end)
 
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
         return inst
     end
+
     inst:DoTaskInTime(0, PickBuild)
-    ----------------------------------
-    inst:AddComponent("workable")
-    inst.components.workable:SetWorkAction(ACTIONS.CHOP)
-    inst.components.workable:SetWorkLeft(25)
-    inst.components.workable:SetOnWorkCallback(on_chop)
-    inst.components.workable:SetOnFinishCallback(on_chopped_down)
-    ----------------------------------
+
+    local workable = inst:AddComponent("workable")
+    workable:SetWorkAction(ACTIONS.CHOP)
+    workable:SetWorkLeft(25)
+    workable:SetOnWorkCallback(on_chop)
+    workable:SetOnFinishCallback(on_chopped_down)
+
     local shaveable = inst:AddComponent("shaveable")
     shaveable:SetPrize("um_moss", 0)
     shaveable.can_shave_test = CanShave
     shaveable.on_shaved = OnShaved
-    ----------------------------------
+
     inst:AddComponent("timer")
     inst:ListenForEvent("timerdone", Regrow)
-    ----------------------------------
+
     inst:AddComponent("inspectable")
     inst.previouschops = nil
 
     inst.partchops = 0
     inst.OnSave = OnSave
     inst.OnLoad = OnLoad
-    inst:AddComponent("lightningblocker")
-    inst.components.lightningblocker:SetBlockRange(TUNING.SHADE_CANOPY_RANGE_SMALL)
-    inst.components.lightningblocker:SetOnLightningStrike(OnLightningStrike)
+
+    local lightningblocker = inst:AddComponent("lightningblocker")
+    lightningblocker:SetBlockRange(TUNING.SHADE_CANOPY_RANGE_SMALL)
+    lightningblocker:SetOnLightningStrike(OnLightningStrike)
 
     inst.PickBuild = PickBuild
     --inst.HideAllMoss = HideAllMoss
@@ -707,10 +713,7 @@ local function giant_treefn()
     end)]]
     inst:ListenForEvent("animover", AnimNext)
 
-    inst.OnRemoveEntity = function(inst)
-        RemoveCanopyShadow(inst)
-        UnregisterPathFinding(inst)
-    end
+    inst.OnRemoveEntity = OnRemoveEntity
 
     inst.SpawnDebris = SpawnDebris
 

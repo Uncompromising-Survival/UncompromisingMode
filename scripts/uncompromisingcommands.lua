@@ -74,6 +74,7 @@ function c_um_vetcurseitems()
         "cursed_antler",
         "beargerclaw",
         "slobberlobber",
+        "um_antlionstaff",
         "feather_frock",
         "gore_horn_hat",
         "klaus_amulet",

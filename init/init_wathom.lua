@@ -1404,8 +1404,7 @@ AddPrefabPostInit("cutlichen", function(inst)
 end)
 
 local UpvalueHacker = require("tools/upvaluehacker")
-env.AddPrefabPostInit("world", function(inst) -- Supposedly, this is better since it's called once for each "world" prefab, which usually only spawns once per shard.
-    if not _G.TheWorld.ismastersim then return end
+AddSimPostInit(function()
     local _tryproc = UpvalueHacker.GetUpvalue(_G.Prefabs.ruinshat.fn, "tryproc")
     if _tryproc then
         local _ruinshat_proc = UpvalueHacker.GetUpvalue(_tryproc, "ruinshat_proc")

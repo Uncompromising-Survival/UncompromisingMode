@@ -19,7 +19,6 @@ local MAX_CHASE_TIME = 8
 local RUN_AWAY_DIST = 3
 local STOP_RUN_AWAY_DIST = 5
 
-
 local DAMAGE_UNTIL_SHIELD = 100
 local SHIELD_TIME = 3
 local AVOID_PROJECTILE_ATTACKS = false
@@ -57,7 +56,7 @@ local function CanReach(item, inst)
 end
 
 local function EatFoodAction(inst)
-    local EAT_CANT_TAGS = { "outofreach", "event_trigger" }
+    local EAT_CANT_TAGS = {"outofreach", "event_trigger"}
     local EAT_ONEOF_TAGS = {
         "edible_GENERIC",
         "edible_VEGGIE",
@@ -68,55 +67,34 @@ local function EatFoodAction(inst)
         "edible_MEAT",
         "pickable",
         "harvestable",
+        "readyforharvest",
         --"plant"
     }
 
-    if inst.sg:HasStateTag("busy") or inst:GetTimeAlive() < 5 or
-        (inst.components.eater:TimeSinceLastEating() ~= nil and inst.components.eater:TimeSinceLastEating() < 5) then
+    if inst.sg:HasStateTag("busy") or inst:GetTimeAlive() < 5
+        or (inst.components.eater:TimeSinceLastEating() and inst.components.eater:TimeSinceLastEating() < 5) then
         return
-    elseif inst.components.inventory ~= nil then
-        if inst.components.eater ~= nil then
-            local target = inst.components.inventory:FindItem(function(item) return inst.components.eater:CanEat(item) end)
-            if target ~= nil then
-                return BufferedAction(inst, target, ACTIONS.EAT)
-            end
-        end
-        if inst.components.inventory:IsFull() then
+    elseif inst.components.inventory and inst.components.eater then
+        local target = inst.components.inventory:FindItem(function(item) return inst.components.eater:CanEat(item) end)
+        if target then
+            return BufferedAction(inst, target, ACTIONS.EAT)
+        elseif inst.components.inventory:IsFull() then
             return
         end
     end
 
     local x, y, z = inst.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z,
-        TUNING.WORM_FOOD_DIST,
-        nil,
-        EAT_CANT_TAGS,
-        EAT_ONEOF_TAGS)
+    local ents = TheSim:FindEntities(x, y, z, TUNING.WORM_FOOD_DIST, nil, EAT_CANT_TAGS, EAT_ONEOF_TAGS)
 
     --Look for food on the ground, pick it up
     for i, item in ipairs(ents) do
-        if item:GetTimeAlive() > 8 and inst.components.eater and inst.components.eater:CanEat(item)
-            and not (item.components.inventoryitem and item.components.inventoryitem:IsHeld())
-            and CanReach(item, inst) then
-            return BufferedAction(inst, item, ACTIONS.PICKUP)
+        local action = item:HasTag("pickable") and ACTIONS.PICK or item:HasAnyTag("harvestable", "readyforharvest") and ACTIONS.HARVEST
+            or not (item.components.inventoryitem and item.components.inventoryitem:IsHeld())
+            and inst.components.eater and inst.components.eater:CanEat(item) and ACTIONS.PICKUP
+        if item ~= inst and item:GetTimeAlive() > 8 and action and CanReach(item, inst) then
+            return BufferedAction(inst, item, action)
         end
     end
-
-    for i, item in ipairs(ents) do
-        if item.prefab ~= inst.prefab
-            and item.components.pickable ~= nil
-            and item.components.pickable.caninteractwith
-            and item.components.pickable:CanBePicked() and CanReach(item, inst) then
-            return BufferedAction(inst, item, ACTIONS.PICK)
-        end
-    end
-
-    for i, item in ipairs(ents) do
-        if item.components.crop ~= nil and item.components.crop:IsReadyForHarvest() and CanReach(item, inst) then
-            return BufferedAction(inst, item, ACTIONS.HARVEST)
-        end
-    end
-
 
     --[[
     local target = FindEntity(inst, SEE_FOOD_DIST, function(item) return inst.components.eater:CanEat(item) and item:IsOnValidGround() end) --May have to give checks so it doesn't try to get food on water.
@@ -128,16 +106,12 @@ local function GetLeader(inst)
     return inst.components.follower.leader
 end
 
-
 local MIN_FOLLOW_DIST = 2
 local TARGET_FOLLOW_DIST = 3
 local MAX_FOLLOW_DIST = 7
 local AphidBrain = Class(Brain, function(self, inst)
     Brain._ctor(self, inst)
 end)
-
-
-
 
 function AphidBrain:OnStart()
     local root = PriorityNode(

@@ -109,6 +109,8 @@ return Class(function(self, inst)
             end
         end)
     end
+    _worldsettingstimer:AddTimer(UM_HEATWAVE_TIMERNAME, _spawninterval + math.random(0, 120), true, StartHeatWaving)
+    _worldsettingstimer:AddTimer(UM_STOPHEATWAVE_TIMERNAME, _despawninterval + math.random(80, 120), true, StopHeatwave)
 
     function self:OnSave()
         local data = {
@@ -149,10 +151,6 @@ return Class(function(self, inst)
     end
 
     function self:OnPostInit()
-        _worldsettingstimer:AddTimer(UM_HEATWAVE_TIMERNAME, _spawninterval + math.random(0, 120), true, StartHeatWaving)
-        _worldsettingstimer:AddTimer(UM_STOPHEATWAVE_TIMERNAME, _despawninterval + math.random(80, 120), true,
-            StopHeatwave)
-
         OnSeasonChange(self)
     end
 

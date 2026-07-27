@@ -105,6 +105,4 @@ env.AddPrefabPostInit("world", function(inst)
 
 		return _CanDeployAtPoint(Map,pt, inst, mouseover)
 	end
-
-		
 end)

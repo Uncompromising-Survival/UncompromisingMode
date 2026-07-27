@@ -18,6 +18,7 @@ local inventoryitems =
 {
     "um_buttery_fly",
     "um_ghost_pepper_item",
+    "um_antlionstaff",
     "air_conditioner",
     "ancient_amulet_red",
     "aphid",
@@ -558,7 +559,8 @@ local minimap_icons = {
     "sludgestack_corked",
     "um_scrapper",
     "um_astral_projector",
-    "um_astral_projector_target"
+    "um_astral_projector_target",
+    "um_hotspring"
 }
 
 for _, item in ipairs(inventoryitems) do
@@ -687,6 +689,15 @@ Assets = {
     Asset("IMAGE", "images/um_tornado_icon.tex"),
     Asset("ATLAS", "images/um_tornado_icon.xml"),
 
+    Asset("IMAGE", "images/antstaff_icon1.tex"),
+    Asset("ATLAS", "images/antstaff_icon1.xml"),
+    Asset("IMAGE", "images/antstaff_icon2.tex"),
+    Asset("ATLAS", "images/antstaff_icon2.xml"),
+    Asset("IMAGE", "images/antstaff_icon1b.tex"),
+    Asset("ATLAS", "images/antstaff_icon1b.xml"),
+    Asset("IMAGE", "images/antstaff_icon2b.tex"),
+    Asset("ATLAS", "images/antstaff_icon2b.xml"),
+
     -- Cookbook HQ Icons
     Asset("IMAGE", "images/cookbook_beefalowings.tex"),
     Asset("ATLAS", "images/cookbook_beefalowings.xml"),
@@ -720,24 +731,22 @@ Assets = {
     Asset("ATLAS", "images/cookbook_viperjam.xml"),
     Asset("IMAGE", "images/cookbook_zaspberryparfait.tex"),
     Asset("ATLAS", "images/cookbook_zaspberryparfait.xml"),
-
     Asset("IMAGE", "images/cookbook_um_durian_cream_marshcake.tex"),
     Asset("ATLAS", "images/cookbook_um_durian_cream_marshcake.xml"),
-
     Asset("IMAGE", "images/cookbook_um_chiles_en_nogada.tex"),
     Asset("ATLAS", "images/cookbook_um_chiles_en_nogada.xml"),
-
     Asset("IMAGE", "images/cookbook_um_rice_pudding.tex"),
     Asset("ATLAS", "images/cookbook_um_rice_pudding.xml"),
-
     Asset("IMAGE", "images/cookbook_um_kebab.tex"),
     Asset("ATLAS", "images/cookbook_um_kebab.xml"),
-
     Asset("IMAGE", "images/cookbook_um_sponge_cake.tex"),
     Asset("ATLAS", "images/cookbook_um_sponge_cake.xml"),
-
     Asset("IMAGE", "images/cookbook_um_boomberrypie.tex"),
     Asset("ATLAS", "images/cookbook_um_boomberrypie.xml"),
+    Asset("IMAGE", "images/cookbook_um_boom_tart.tex"),
+    Asset("ATLAS", "images/cookbook_um_boom_tart.xml"),
+    Asset("IMAGE", "images/cookbook_um_ghost_fajita.tex"),
+    Asset("ATLAS", "images/cookbook_um_ghost_fajita.xml"),
 
     --crafting menu avatars
     Asset("IMAGE", "images/crafting_menu_avatars/avatar_wixie.tex"),
@@ -1697,6 +1706,8 @@ Assets = {
     Asset("ANIM", "anim/um_bear_trap_tooth.zip"),
     Asset("ANIM", "anim/um_bear_trap_gold.zip"),
 
+    Asset("ANIM", "anim/um_antlionstaff.zip"),
+
     Asset("ANIM", "anim/slobberlobber.zip"),
 
     Asset("ANIM", "anim/beargerclaw.zip"),
@@ -1789,7 +1800,7 @@ Assets = {
 
     Asset("ANIM", "anim/hat_sunglasses.zip"),
 
-    Asset("ANIM", "anim/moontear.zip"),
+    --Asset("ANIM", "anim/um_moontear.zip"), -- Loaded in the prefab's assets!
 
     Asset("ANIM", "anim/hat_shadowcrown.zip"),
 
@@ -1907,6 +1918,8 @@ Assets = {
 
     Asset("ANIM", "anim/swap_beargerclaw.zip"),
 
+    Asset("ANIM", "anim/swap_antlionstaff.zip"),
+
     Asset("ANIM", "anim/swap_um_harpoon.zip"),
 
     Asset("ANIM", "anim/swap_magnerang.zip"),
@@ -1961,6 +1974,9 @@ Assets = {
 
     Asset("ATLAS", "images/bee_slot.xml"),
     Asset("IMAGE", "images/bee_slot.tex"),
+
+    Asset("ATLAS", "images/townportaltalisman_slot.xml"),
+    Asset("IMAGE", "images/townportaltalisman_slot.tex"),
 
     Asset("ATLAS", "images/um_inkubator_fuelslot.xml"),
     Asset("IMAGE", "images/um_inkubator_fuelslot.tex"),

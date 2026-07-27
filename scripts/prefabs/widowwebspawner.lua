@@ -83,8 +83,7 @@ local function SpawnDecor(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
     for j = 1, math.random(3, 4) do
         for i = 1, cap do
-            local type = i
-            TrySpawnDecor(x, z, type)
+            TrySpawnDecor(x, z, tostring(i))
         end
     end
 end

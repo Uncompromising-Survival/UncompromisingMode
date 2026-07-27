@@ -422,6 +422,8 @@ local function realfn()
     inst.components.reticule.mouseenabled = true
     inst.components.reticule.ispassableatallpoints = true
 
+    inst.um_cancastontarget = UMCommonFns.DefaultCanCastOnTarget
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then return inst end
@@ -437,7 +439,6 @@ local function realfn()
     inst:AddComponent("inventoryitem")
 
     inst:AddComponent("equippable")
-
     inst.components.equippable:SetOnEquip(onequip_real)
     inst.components.equippable:SetOnUnequip(onunequip_real)
     inst.components.equippable.walkspeedmult = inst.multiplier

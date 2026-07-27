@@ -206,7 +206,9 @@ local states =
                         x = x + math.random(2 * offset) - offset
                         z = z + math.random(2 * offset) - offset
                         local playercheck = TheSim:FindEntities(x, y, z, 10, nil, nil, { "player", "antlion_sinkhole_blocker" })
-                        if not TheWorld.Map:GetPlatformAtPoint(x, z) and (TheWorld.Map:IsOceanAtPoint(x, y, z) or TheWorld.Map:IsPassableAtPoint(x, y, z)) and (playercheck == nil or #playercheck == 0) then
+                        local INTHICKET_MUSTTAGS = {"briar_plants"}
+                        local ents_thicket = TheSim:FindEntities(x, y, z, 1.75, INTHICKET_MUSTTAGS)
+                        if not TheWorld.Map:GetPlatformAtPoint(x, z) and (TheWorld.Map:IsOceanAtPoint(x, y, z) or TheWorld.Map:IsPassableAtPoint(x, y, z)) and (playercheck == nil or #playercheck == 0) and (ents_thicket == nil or #ents_thicket == 0) then
                             inst.Physics:Teleport(x, y, z)
                             break
                         end
@@ -634,9 +636,11 @@ local states =
                             x = x + math.random(2 * offset) - offset
                             z = z + math.random(2 * offset) - offset
 
-                            local playercheck = TheSim:FindEntities(x, y, z, 5, { "player", "antlion_sinkhole_blocker" })
+                            local INTHICKET_MUSTTAGS = {"briar_plants"}
+                            local ents_thicket = TheSim:FindEntities(x, y, z, 1.75, INTHICKET_MUSTTAGS)
+                            local playercheck = TheSim:FindEntities(x, y, z, 5, {"player", "antlion_sinkhole_blocker"})
 
-                            if not TheWorld.Map:GetPlatformAtPoint(x, z) and (TheWorld.Map:IsOceanAtPoint(x, y, z) or TheWorld.Map:IsPassableAtPoint(x, y, z)) and (playercheck == nil or #playercheck == 0) then
+                            if not TheWorld.Map:GetPlatformAtPoint(x, z) and (TheWorld.Map:IsOceanAtPoint(x, y, z) or TheWorld.Map:IsPassableAtPoint(x, y, z)) and (playercheck == nil or #playercheck == 0) and (ents_thicket == nil or #ents_thicket == 0) then
                                 inst.Physics:Teleport(x, y, z)
                                 break
                             end

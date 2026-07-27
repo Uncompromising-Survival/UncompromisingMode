@@ -3,15 +3,7 @@ GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 
 local UpvalueHacker = require("tools/upvaluehacker")
-
-local function BecomeGemMite(inst)
-    inst.isGeode = true
-    inst.AnimState:SetBuild("um_mite_cave")
-    inst.components.lootdropper:AddChanceLoot("um_gemology_geode_vent", 1)
-end
-
-env.AddPrefabPostInit("world", function(inst) -- Supposedly, this is better since it's called once for each "world" prefab, which usually only spawns once per shard.
-    if not TheWorld.ismastersim then return end
+env.AddSimPostInit(function()
     local _SetUpChanceLoot = UpvalueHacker.GetUpvalue(Prefabs.cave_vent_mite.fn, "SetShield", "SetUpChanceLoot")
     if _SetUpChanceLoot then
         local function SetUpChanceLoot(inst, ...)
@@ -26,6 +18,12 @@ env.AddPrefabPostInit("world", function(inst) -- Supposedly, this is better sinc
         UpvalueHacker.SetUpvalue(Prefabs.cave_vent_mite.fn, SetUpChanceLoot, "SetShield", "SetUpChanceLoot")
     end
 end)
+
+local function BecomeGemMite(inst)
+    inst.isGeode = true
+    inst.AnimState:SetBuild("um_mite_cave")
+    inst.components.lootdropper:AddChanceLoot("um_gemology_geode_vent", 1)
+end
 
 env.AddPrefabPostInit("cave_vent_mite", function(inst)
     if not TheWorld.ismastersim then return end

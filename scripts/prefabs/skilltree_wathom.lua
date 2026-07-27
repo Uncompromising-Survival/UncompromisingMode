@@ -16,7 +16,7 @@ local function HasSkill(inst,name)
     return inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated(name)
 end
 
-local brain = require "brains/um_pissedgestaltbrain"
+--local brain = require "brains/um_pissedgestaltbrain"
 local function CheckForGreater(inst)
     local x,y,z = inst.Transform:GetWorldPosition()
     local guards = TheSim:FindEntities(x,y,z,24,{"brightmare_guard"})

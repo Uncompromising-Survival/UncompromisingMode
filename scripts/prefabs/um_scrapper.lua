@@ -196,8 +196,7 @@ local function DoPuff(inst, channeler)
 			end
 		end
 
-		local fooditems = inst.components.container:FindItems(function(item) return item:HasTag("preparedfood") end)
-
+		local fooditems = inst.components.container:FindItems(function(item) return item:HasAnyTag("preparedfood", "dustmothfood") end)
 		for i, v in ipairs(fooditems) do
 			local cube = "um_bland_cube"
 			local ed_comp = v.components.edible

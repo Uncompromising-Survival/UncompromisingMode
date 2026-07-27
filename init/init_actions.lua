@@ -233,13 +233,13 @@ GLOBAL.ACTIONS.CHOP.fn = function(act)
     return _ChopFn(act)
 end
 
-local _spellbookstrfn = GLOBAL.ACTIONS.USESPELLBOOK.strfn
-GLOBAL.ACTIONS.USESPELLBOOK.strfn = function(act)
-    if act and act.invobject and act.invobject.prefab == "um_detonator" then
-        return "UM_DETONATE"
-    else
-        return _spellbookstrfn(act)
-    end
+local _USESPELLBOOK_strfn = GLOBAL.ACTIONS.USESPELLBOOK.strfn
+GLOBAL.ACTIONS.USESPELLBOOK.strfn = function(act, ...)
+    local invobject = act.invobject
+    return invobject and (invobject.prefab == "um_detonator" and "UM_DETONATE"
+        or invobject:HasTag("telestaff") and "TELESTAFF"
+        or invobject:HasTag("um_antlionstaff") and "UM_ANTLIONSTAFF")
+        or _USESPELLBOOK_strfn(act, ...)
 end
 
 --[[local _lookatstrfn = GLOBAL.ACTIONS.LOOKAT.strfn
@@ -343,13 +343,6 @@ GLOBAL.ACTIONS.ADDWETFUEL.fn = function(act) -- I'M GOING TO ***BOMB KLEI*** WHY
     end
 end
 
-local _UseSpellBookStrFn = GLOBAL.ACTIONS.USESPELLBOOK.strfn
-
-GLOBAL.ACTIONS.USESPELLBOOK.strfn = function(act)
-    local target = act.invobject or act.target
-    return target:HasTag("telestaff") and "TELESTAFF" or _UseSpellBookStrFn ~= nil and _UseSpellBookStrFn(act) or "BOOK"
-end
-
 --give priority is 0 (default) so we need to be above it so we can do this action on the pocket watches
 local SET_CUSTOM_NAME = GLOBAL.Action({ distance = 2, mount_valid = true, priority = 1 })
 SET_CUSTOM_NAME.id = "SET_CUSTOM_NAME"
@@ -390,7 +383,9 @@ STORE_BOAT.fn = function(act)
 
     if boat ~= nil and boat:HasTag("walkableplatform") and boat.components.walkableplatform ~= nil then
         for ent in pairs(boat.components.walkableplatform:GetEntitiesOnPlatform()) do
-            if ent:HasAnyTag("player", "irreplaceable", "companion", "abigail", "shadowminion") or ent.components.follower ~= nil and ent.components.follower.leader:HasTag("player") then
+            local follower = ent.components.follower
+            local leader = follower and follower:GetLeader()
+            if ent:HasAnyTag("player", "irreplaceable", "companion", "abigail", "shadowminion") or leader and leader:HasTag("player") then
                 return false, "PLAYER_ON_PLATFORM"
             end
 
@@ -436,7 +431,6 @@ end
 
 AddAction(STORE_BOAT)
 --RELEVANT: playeractionpicker postinit
-
 
 AddComponentAction("USEITEM", "drawingtool",
     function(inst, doer, target, actions, right)
@@ -663,32 +657,6 @@ AddSimPostInit(function()
     end
 end)
 
-AddSimPostInit(function()
-    -- Workaround for a vanilla bug: if a mod only calls AddComponentAction server-side, connected clients receive the net var sync but have no entry in MOD_ACTION_COMPONENT_IDS -Deimos
-    local MOD_ACTION_COMPONENT_IDS = UpvalueHacker.GetUpvalue(GLOBAL.EntityScript.RegisterComponentActions, "MOD_ACTION_COMPONENT_IDS")
-    if not MOD_ACTION_COMPONENT_IDS then
-        return
-    end
-    local old_UnregisterComponentActions = GLOBAL.EntityScript.UnregisterComponentActions
-    function GLOBAL.EntityScript:UnregisterComponentActions(name)
-        if self.modactioncomponents ~= nil then
-            local stale = nil
-            for modname in pairs(self.modactioncomponents) do
-                if MOD_ACTION_COMPONENT_IDS[modname] == nil then
-                    if stale == nil then stale = {} end
-                    stale[#stale + 1] = modname
-                end
-            end
-            if stale ~= nil then
-                for i = 1, #stale do
-                    self.modactioncomponents[stale[i]] = nil
-                end
-            end
-        end
-        return old_UnregisterComponentActions(self, name)
-    end
-end)
-
 local _OldHarvest = GLOBAL.ACTIONS.HARVEST.fn
 GLOBAL.ACTIONS.HARVEST.fn = function(act)
     if act.target.prefab == "um_cookpot_wagstaff" then
@@ -697,6 +665,8 @@ GLOBAL.ACTIONS.HARVEST.fn = function(act)
         return _OldHarvest(act)
     end
 end
+
+GLOBAL.ACTIONS.CAST_NET.mount_valid = false
 
 -- Scythes can reach into the thicket without needing to be on top of them
 GLOBAL.ACTIONS.SCYTHE.distance = 2.5
@@ -759,11 +729,41 @@ end)
 
 ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.SCAN_GEMOLOGY_GEM, "doshortaction"))
 
-local um_forge_gem = Action({ priority = 1, mount_valid = true })
-um_forge_gem.id = "UM_FORGE_GEM"
-um_forge_gem.str = STRINGS.UI.APPLY_GEM
-um_forge_gem.rmb = true
-um_forge_gem.fn = function(act)
+local UM_GEM_REPAIR = Action({ mound_valid = true, priority = 10, rmb = true })
+UM_GEM_REPAIR.id = "UM_GEM_REPAIR"
+UM_GEM_REPAIR.str = "Repair"
+ENV.AddAction(UM_GEM_REPAIR)
+
+UM_GEM_REPAIR.fn = function(act)
+    local target = act.target
+    local repairtool = act.invobject
+
+    if repairtool ~= nil and repairtool.components.gemrepairer ~= nil and target ~= nil and target.components.gem_enchantable ~= nil then
+        local success, reason = repairtool.components.gemrepairer:OnUsed(target, act.doer)
+
+        if not success then
+            if act.doer ~= nil and act.doer.components.talker ~= nil then
+                act.doer.components.talker:Say(GetActionFailString(act.doer, UM_GEM_REPAIR.id, reason))
+            end
+        end
+
+        return success, reason
+    end
+end
+
+ENV.AddComponentAction("USEITEM", "gemrepairer", function(inst, doer, target, actions, right)
+    if inst ~= nil and inst:HasTag("gemrepairer") and target ~= nil and target.replica.gem_enchantable ~= nil and right then
+        table.insert(actions, ACTIONS.UM_GEM_REPAIR)
+    end
+end)
+
+ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.UM_GEM_REPAIR, "dolongaction"))
+
+local UM_FORGE_GEM = Action({ priority = 1, mount_valid = true })
+UM_FORGE_GEM.id = "UM_FORGE_GEM"
+UM_FORGE_GEM.str = STRINGS.UI.APPLY_GEM
+UM_FORGE_GEM.rmb = true
+UM_FORGE_GEM.fn = function(act)
     if act.target.ForgeGem ~= nil then
         local success, reason = act.target:ForgeGem()
 
@@ -772,7 +772,7 @@ um_forge_gem.fn = function(act)
             --when called by the SG action handler it does actually give the action fail string, but when
             --sent from the RPC in the widget button, it does not.
             if act.doer ~= nil and act.doer.components.talker ~= nil then
-                act.doer.components.talker:Say(GetActionFailString(act.doer, um_forge_gem.id, reason))
+                act.doer.components.talker:Say(GetActionFailString(act.doer, UM_FORGE_GEM.id, reason))
             end
             return false, reason
         end
@@ -781,7 +781,7 @@ um_forge_gem.fn = function(act)
     end
 end
 
-ENV.AddAction(um_forge_gem)
+ENV.AddAction(UM_FORGE_GEM)
 
 ENV.AddComponentAction("SCENE", "gem_forge", function(inst, doer, actions, right)
     if right and (inst.replica.container ~= nil and
@@ -794,23 +794,24 @@ end)
 
 ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.UM_FORGE_GEM, "doshortaction"))
 
+local function CanMakeBlueprintWithTarget(builder, target)
+    return builder and builder:CanLearn(target.prefab) and builder:KnowsRecipe(target.prefab) and PrefabExists(target.prefab .. "_blueprint")
+end
 
 local MAKE_BLUEPRINT = Action({ mount_valid = false, priority = 10, rmb = false })
 MAKE_BLUEPRINT.id = "MAKE_BLUEPRINT"
 MAKE_BLUEPRINT.str = "Sketch Blueprint"
 ENV.AddAction(MAKE_BLUEPRINT)
 MAKE_BLUEPRINT.fn = function(act)
-    local target = act.target
-    if act.invobject.components.blueprinter ~= nil
-        and (act.doer.components.builder ~= nil and act.doer.components.builder:CanLearn(target.prefab) and act.doer.components.builder:KnowsRecipe(target.prefab, false)
-            or target.components.teacher ~= nil) then
-        return act.invobject.components.blueprinter:OnUsed(target, act.doer)
+    local target, doer, invobject = act.target, act.doer, act.invobject
+    if target and target.prefab and (CanMakeBlueprintWithTarget(doer.components.builder, target) or target.components.teacher) and invobject.components.blueprinter then
+        return invobject.components.blueprinter:OnUsed(target, doer)
     end
     return false
 end
 
 ENV.AddComponentAction("USEITEM", "blueprinter", function(inst, doer, target, actions, right)
-    if target ~= nil and (doer.replica.builder ~= nil and doer.replica.builder:KnowsRecipe(target.prefab) and PrefabExists(target.prefab.."_blueprint") or string.find(target.prefab, "blueprint")) then
+    if target and target.prefab and (CanMakeBlueprintWithTarget(doer.replica.builder, target) or string.find(target.prefab, "blueprint")) then
         table.insert(actions, ACTIONS.MAKE_BLUEPRINT)
     end
 end)

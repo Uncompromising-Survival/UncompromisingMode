@@ -13,22 +13,26 @@ local function ChillSurroundings(inst)
     local burnables = TheSim:FindEntities(x, 0, z, inst.scale * 2, nil, inst.dont_hit_tags) -- There isn't a way to search for entities tagged as burnable.... (there is no burnable tag)
     local damage = inst.damage or 1
     for i, v in ipairs(burnables) do
-        local attackable = UMCommonFns.IsNotFriendly(inst.damager, v)
-        if not attackable then return end
-        if v.components.burnable and not (v.prefab == "um_fire_projectile" and v.chilly) then
-            v.components.burnable:Extinguish(true)
-        end
-        if v.components.health and v:IsValid() then
-            v.components.health:DoDelta(-damage, false, inst.damager ~= nil and inst.damager.prefab or nil, nil, inst.damager)
-        end
-        if v.components.combat and inst.damager then
-            v.components.combat:SuggestTarget(inst.damager)
-        end
-        if v.components.freezable then
-            v.components.freezable:AddColdness(0.15, 3)
-        end
-        if v.components.temperature and v.components.temperature.current > -15 then
-            v.components.temperature:DoDelta(-1)
+        if v:IsValid() then
+            local attackable = UMCommonFns.IsNotFriendly(inst.damager, v)
+            if not attackable then return end
+            if v.components.burnable and not (v.prefab == "um_fire_projectile" and v.chilly) then
+                v.components.burnable:Extinguish(true)
+            end
+            if not v:HasTag("wall") then
+                if v.components.health then
+                    v.components.health:DoDelta(-damage, false, inst.damager and inst.damager.prefab or nil, nil, inst.damager)
+                end
+                if v.components.combat and inst.damager then
+                    v.components.combat:SuggestTarget(inst.damager)
+                end
+                if v.components.freezable then
+                    v.components.freezable:AddColdness(0.15, 3)
+                end
+                if v.components.temperature and v.components.temperature.current > -15 then
+                    v.components.temperature:DoDelta(-1)
+                end
+            end
         end
     end
 end
@@ -38,23 +42,27 @@ local function BurnSurroundings(inst)
     local burnables = TheSim:FindEntities(x, 0, z, inst.scale * 2, nil, inst.dont_hit_tags) -- There isn't a way to search for entities tagged as burnable.... (there is no burnable tag)
     local damage = inst.damage or 1
     for i, v in ipairs(burnables) do
-        local attackable = UMCommonFns.IsNotFriendly(inst.damager, v)
-        if not attackable then return end
-        if not v.components.fueled and v.components.burnable and not v.components.burnable:IsBurning() and not v:HasTag("burnt") then
-            v.components.burnable:Ignite(true, inst, inst.damager)
-        end
-        if v.components.health and v:IsValid() then
-            v.components.health:DoFireDamage(damage, inst.damager, true)
-        end
-        if v.components.combat and inst.damager then
-            v.components.combat:SuggestTarget(inst.damager)
-        end
-        if v.components.temperature and v.components.temperature.current < 90 then
-            v.components.temperature:DoDelta(1)
-        end
-        if v.prefab == "snowpile" then
-            SpawnPrefab("splash_snow_fx").Transform:SetPosition(v.Transform:GetWorldPosition())
-            v:Remove()
+        if v:IsValid() then
+            if v.prefab == "snowpile" then
+                SpawnPrefab("splash_snow_fx").Transform:SetPosition(v.Transform:GetWorldPosition())
+                v:Remove()
+            end
+            local attackable = UMCommonFns.IsNotFriendly(inst.damager, v)
+            if not attackable then return end
+            if not v.components.fueled and v.components.burnable and not v.components.burnable:IsBurning() and not v:HasTag("burnt") then
+                v.components.burnable:Ignite(true, inst, inst.damager)
+            end
+            if not v:HasTag("wall") then
+                if v.components.health then
+                    v.components.health:DoFireDamage(damage, inst.damager, true)
+                end
+                if v.components.combat and inst.damager then
+                    v.components.combat:SuggestTarget(inst.damager)
+                end
+                if v.components.temperature and v.components.temperature.current < 90 then
+                    v.components.temperature:DoDelta(1)
+                end
+            end
         end
     end
 end
@@ -167,7 +175,6 @@ local function fnfire()
         return inst
     end
 
-    inst.doer = nil
     inst.Light:Enable(false)
 
     inst.Physics:SetMass(1)
@@ -184,15 +191,16 @@ local function fnfire()
     inst:DoTaskInTime(0, ShootFire)
     inst.dont_hit_tags = JoinArrays(UMCommonFns.GHOSTLIKE_TAGS, {"INLIMBO", "notarget", "noattack", "invisible"})
 
+    inst.persists = false
+
     return inst
 end
 -- Fire Projectile
 
 -- Shock Projectile
-
-local function Redirection(inst,flooded) -- See where the arc should be pointing next
+local function Redirection(inst, flooded) -- See where the arc should be pointing next
     local x,y,z = inst.Transform:GetWorldPosition()
-    local living_things = TheSim:FindEntities(x,y,z,flooded and 32 or 16,{"_health"},inst.dont_hit_tags) -- Do a wide search for things to hit
+    local living_things = TheSim:FindEntities(x, y, z, flooded and 32 or 16, {"_health"}, inst.dont_hit_tags) -- Do a wide search for things to hit
     local shoot_offcourse
     if math.random() > 0.8 then -- chance for the arc to zig-zag
         shoot_offcourse = true
@@ -218,7 +226,7 @@ local function Redirection(inst,flooded) -- See where the arc should be pointing
 end
 
 local function GenerateArcs(inst)
-     local x,y,z = inst.Transform:GetWorldPosition()
+    local x,y,z = inst.Transform:GetWorldPosition()
     SpawnPrefab("sparks").Transform:SetPosition(x + math.random(-10,10)/10,0,z + math.random(-10,10)/10)
 
     local current_tile = TheWorld.Map:GetTileAtPoint(x,y,z)
@@ -228,7 +236,7 @@ local function GenerateArcs(inst)
         flooded = true
     else
         inst.lifetime = inst.lifetime - 0.7 -- Longer projectile lifetime on flooded tiles
-    end	
+    end    
 
     if inst.counter then -- AXE The purpose of this is to make this function only do the damage and search every 0.33 seconds, where the sparking fx generates every 0.167 seconds. Keeping only 1 DoTaskInTime for this function
         SpawnPrefab("electricchargedfx").Transform:SetPosition(inst.Transform:GetWorldPosition())
@@ -248,8 +256,6 @@ local function GenerateArcs(inst)
         inst.counter = true
     end
 
-    
-
     if inst.lifetime < 0 then
         inst:Remove()
     end
@@ -265,7 +271,6 @@ local function ShootShock(inst)
     --[[inst:DoPeriodicTask(0.08,function(inst)
         SpawnPrefab("electricchargedfx").Transform:SetPosition(inst.Transform:GetWorldPosition())
     end)]]
-
 end
 
 local function fnshock()
@@ -301,8 +306,9 @@ local function fnshock()
 
     inst.speed = 10
     inst.persists = false
+
     return inst
 end
 
 return Prefab("um_fire_projectile", fnfire),
-    Prefab("um_shock_projectile",fnshock)
+    Prefab("um_shock_projectile", fnshock)

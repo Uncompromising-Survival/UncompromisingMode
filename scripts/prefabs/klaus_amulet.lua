@@ -68,13 +68,14 @@ local function fn()
     anim:SetBuild("amulet_klaus")
     anim:PlayAnimation("klausamulet")
 
+    inst:AddTag("vetcurse_item")
+    inst:AddTag("hide_percentage")
+    inst:AddTag("shadowlevel")
+    inst:AddTag("donotautopick")
+
     inst.foleysound = "dontstarve/movement/foley/jewlery"
 
     MakeInventoryFloatable(inst, "med", nil, .6)
-
-    inst:AddTag("vetcurse_item")
-    inst:AddTag("donotautopick")
-    inst:AddTag("hide_percentage")
     
     inst.entity:SetPristine()
 

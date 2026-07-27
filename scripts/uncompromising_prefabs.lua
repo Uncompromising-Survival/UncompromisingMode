@@ -501,6 +501,7 @@ local prefabs = {
     "feather_frock",
     "slobberlobber",
     "beargerclaw",
+    "um_antlionstaff",
     "klaus_amulet",
     "gore_horn_hat",
     "crabclaw",
@@ -636,7 +637,8 @@ local prefabs = {
     "gemology_book",
     "magma_tile",
     "um_blueprinting_kit",
-    "minerstatue"
+    "minerstatue",
+    "um_gem_repair_kit"
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then

@@ -43,6 +43,7 @@ local component_post = {
     "weather",
     "worldtemperature",
     "worldwind",
+    "planardamage",
     "planarentity",
     "firedetector",
     "unwrappable",
@@ -54,7 +55,7 @@ local component_post = {
     "spellcaster",
     "raindome",
     "fillable",
-
+    "canopyshadows",
     --"raindome"
     "stewer",
     "boatmagnet",
@@ -313,7 +314,8 @@ local brain_post = {
     "walrus",
     "deer",
     "hound",
-    "iceshield"
+    "iceshield",
+    "brightmare_gestalt"
 }
 
 --package post system courtesy of IA team!
@@ -321,7 +323,6 @@ local package_post = {
     ["components/map"] = "map",
     ["shadeeffects"] = "shadeeffects",
 }
-
 
 local _require = GLOBAL.require
 function GLOBAL.require(modulename, ...)
@@ -387,7 +388,6 @@ if GetModConfigData("wixie_walter") then
     RemapSoundEvent("dontstarve/characters/wixie/carol", "wixie/characters/wixie/carol")
     RemapSoundEvent("dontstarve/characters/wixie/sinking", "wixie/characters/wixie/sinking")
 end
-
 
 if GetModConfigData("hangyperds") then
     table.insert(stategraph_post, "perd")

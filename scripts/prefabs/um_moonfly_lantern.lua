@@ -171,8 +171,8 @@ local function fn()
     inst:AddTag("light")
     inst:AddTag("nopunch")
     inst:AddTag("vetcurse_item")
-    inst:AddTag("donotautopick")
     inst:AddTag("gestaltprotection")
+    inst:AddTag("donotautopick")
 
     MakeInventoryFloatable(inst, "med", .3)
 
@@ -187,19 +187,19 @@ local function fn()
     inst:AddComponent("tradable")
     inst:AddComponent("inspectable")
 
-    inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem:SetOnDroppedFn(ondropped)
-    inst.components.inventoryitem:SetOnPutInInventoryFn(turnoff)
-    inst.components.inventoryitem:SetSinks(false)
+    local inventoryitem = inst:AddComponent("inventoryitem")
+    inventoryitem:SetOnDroppedFn(ondropped)
+    inventoryitem:SetOnPutInInventoryFn(turnoff)
+    inventoryitem:SetSinks(false)
 
-    inst:AddComponent("equippable")
-    inst.components.equippable:SetOnEquip(onequip)
-    inst.components.equippable:SetOnUnequip(onunequip)
-    inst.components.equippable:SetOnEquipToModel(onequiptomodel)
-    inst.components.equippable.walkspeedmult = TUNING.CANE_SPEED_MULT - .15
+    local equippable = inst:AddComponent("equippable")
+    equippable:SetOnEquip(onequip)
+    equippable:SetOnUnequip(onunequip)
+    equippable:SetOnEquipToModel(onequiptomodel)
+    equippable.walkspeedmult = TUNING.CANE_SPEED_MULT - .15
 
-    inst:AddComponent("weapon")
-    inst.components.weapon:SetDamage(TUNING.CANE_DAMAGE)
+    local weapon = inst:AddComponent("weapon")
+    weapon:SetDamage(TUNING.CANE_DAMAGE)
 
     MakeHauntableLaunch(inst)
 

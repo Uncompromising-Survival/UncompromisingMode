@@ -39,9 +39,9 @@ COCOON_DEFS.SHIPWRECKED = {}
 
 setmetatable(COCOON_DEFS.CHARACTER, {
     __newindex = function(t, k, v)
-        printwrap("t", t)
+        --[[printwrap("t", t)
         print(k)
-        printwrap("v", v)
+        printwrap("v", v)]]
         table.insert(COCOON_CHARACTERS, k)
 
         v.size = 1          --automatically set size
@@ -207,7 +207,7 @@ local characters = {
             Item("sewing_tape", 2),
             Item("sewing_tape", 2, .5),
             Item("nitre", 4),
-            Item("niter", 4, .5),
+            Item("nitre", 4, .5),
             Item("rocks", 6),
             Item("rocks", 8, .8),
             Item("wagpunk_bits", 4, .5),
@@ -375,6 +375,15 @@ local characters = {
     },
 }
 
+local function GemologyRoll(inst)
+    if inst and inst:HasTag("gemology_gem") then
+        if math.random() <= .1 then
+            inst:SetTier(3)
+        else
+            inst:SetTier(2)
+        end
+    end
+end
 
 local default = {
     BEEGUARD = {
@@ -388,20 +397,12 @@ local default = {
             Item("royal_jelly", 1),
         }
     },
-    PIED_RAT = {
-        size = COCOON_SIZE.MEDIUM,
-        name = "Grotesque",
-        loot = {
-            Item("monstermeat", 2),
-            Item("monstermeat", 1, .5),
-            Item("rat_tail", 2),
-        }
-    },
     EYEOFTERROR_MINI = {
         size = COCOON_SIZE.SMALL,
         name = "Grotesque",
         loot = {
-            Item("milkywhites", 2),
+            Item("milkywhites", 3),
+            Item("milkywhites", 1, .5),
             Item("monstermeat", 1),
             Item("monstermeat", 1, .5),
         }
@@ -410,8 +411,18 @@ local default = {
         size = COCOON_SIZE.SMALL,
         name = "Hairy",
         loot = {
-            Item("meat", 1, .5),
-            Item("coontail", 4)
+            Item("meat"),
+            Item("coontail", 4),
+            Item(function() return RandomItem("pondfish", "robin", "robin_winter", "canary", "rabbit", "mole", "butterfly", "um_buttery_fly") end, 1, 1, false, function(inst) 
+                if inst and inst.sg and inst.sg:HasState("stunned") then
+                    inst.sg:GoToState("stunned")
+                end
+                if inst and Prefabs["feather_"..inst.prefab] then
+                    for i = 1, 2 do
+                        inst.components.lootdropper:SpawnLootPrefab("feather_"..inst.prefab)
+                    end
+                end
+            end)
         }
     },
     ALPHA_LIGHTNINGGOAT = {
@@ -422,19 +433,21 @@ local default = {
             Item("lightninggoathorn")
         }
     },
-    -- BISHOP = {
-        -- size = COCOON_SIZE.SMALL,
-        -- name = "Hardened",
-        -- loot = {
-            -- Item("trinket_6", 2),
-        -- }
-    -- },
+    BISHOP = {
+        size = COCOON_SIZE.SMALL,
+        name = "Hardened",
+        loot = {
+            Item("trinket_6", 2),
+        }
+    },
     MERM = {
         size = COCOON_SIZE.SMALL,
-        name = "Scaly",
+        name = "Soggy",
         loot = {
-            Item("fishmeat", 1, .5),
+            Item("froglegs", 1, 1),
             Item("tentaclespots", 2),
+            Item("cutreeds", 6),
+            Item("cutreeds", 2, .5),
         }
     },
     PIGMAN = {
@@ -443,13 +456,70 @@ local default = {
         loot = {
             Item("meat"),
             Item("pigskin"),
+            Item("pigskin", 1, .5),
             Item("tophat"),
+            Item("goldnugget", 3),
+            Item("goldnugget", 1, .5),
             Item("pig_token", 1, .1),
+        }
+    },
+    OTTER = {
+        size = COCOON_SIZE.SMALL,
+        name = "Soggy",
+        loot = {
+            Item("smallmeat"),
+            Item("kelp", 4),
+            Item("kelp", 2, .75),
+            Item("kelp", 1, .5),
+            Item("barnacle", 1, .5),
+            Item("barnacle", 1, .25),
+            Item("messagebottle"),
+            Item("bullkelp_root", 3),
+            Item("bullkelp_root", 1, .5),
+            Item(function() return RandomItem("oceanfish_small_4_inv", "oceanfish_small_3_inv", "oceanfish_small_9_inv", "oceanfish_medium_1_inv") end, 1),
+            Item(function()
+                return TheWorld.state.isautumn and "oceanfish_small_6_inv" or
+                    TheWorld.state.iswinter and "oceanfish_medium_8_inv" or
+                    TheWorld.state.isspring and "oceanfish_small_7_inv" or
+                    TheWorld.state.issummer and "oceanfish_small_8_inv" or
+                    "wobster_sheller_land"
+            end, 1, 1)
+        }
+    },
+    SLURTLE = { --50/50 for snurtle
+        size = COCOON_SIZE.SMALL,
+        name = "Soggy",
+        loot = {
+            Item("slurtleslime", 4),
+            Item("slurtleslime", 2, .5),
+            Item("slurtle_shellpieces", 4),
+            Item("nitre", 5),
+            Item("nitre", 3, .5),
+            Item("greengem", 1, .3),
+            Item(function() return RandomItem("um_gemologygreengem1", "um_gemologygreengem2") end, 1, 1, nil, GemologyRoll),
+        }
+    },
+    PIED_RAT = {
+        size = COCOON_SIZE.MEDIUM,
+        name = "Grotesque",
+        loot = {
+            Item("monstermeat", 2),
+            Item("monstermeat", 1, .5),
+            Item("rat_tail", 2),
+            Item("rat_tail", 1, .5),
+            Item("beardhair", 3),
+            Item("beardhair", 1, .5)
         }
     },
     MOSSLING = {
         size = COCOON_SIZE.MEDIUM,
-        name = "Feathery"
+        name = "Feathery",
+        loot = {
+            Item(function() return RandomItem("meat", "drumstick") end, 1),
+            Item("drumstick"),
+            Item("goose_feather"),
+            Item("goose_feather", 1, .5)
+        }
     },
     TALLBIRD = {
         size = COCOON_SIZE.MEDIUM,
@@ -467,15 +537,17 @@ local default = {
             Item("feather_canary", 1, .25)
         }
     },
-    DEER = {
+    UM_FERN_FOX = {
         size = COCOON_SIZE.MEDIUM,
         name = "Hairy",
         loot = {
-            Item("meat"),
-            Item("meat", 1, .5),
-            Item("deer_antler"),
-            Item("redgem"),
-            Item("bluegem"),
+            Item("plantmeat", 1, 1),
+            Item("um_moss", 3),
+            Item("um_moss", 1, .5),
+            Item("cutgrass", 4),
+            Item("twigs", 4),
+            Item("cactus_flower", 3),
+            Item("cactus_flower", 1, .5),
         }
     },
     KRAMPUS = {
@@ -490,57 +562,80 @@ local default = {
             Item("redgem"),
         }
     },
-    OTTER = {
-        size = COCOON_SIZE.MEDIUM,
-        name = "Scaly", -- this doesn't make sense but whatever
-        loot = {
-            Item("smallmeat"),
-            Item("kelp", 2),
-            Item("kelp", 2, .75),
-            Item("kelp", 1, .5),
-            Item("barnacle", 1, .5),
-            Item("barnacle", 1, .25),
-            Item("messagebottle"),
-            Item("bullkelp_root"),
-            Item("oceanfish_small_4_inv", 1, .75),
-            Item("oceanfish_medium_1_inv", 1, .2),
-            Item("oceanfish_small_3_inv", 1, .1),
-            Item(function()
-                return TheWorld.state.isautumn and "oceanfish_small_6_inv" or
-                    TheWorld.state.iswinter and "oceanfish_medium_8_inv" or
-                    TheWorld.state.isspring and "oceanfish_small_7_inv" or
-                    TheWorld.state.issummer and "oceanfish_small_8_inv" or
-                    "wobster_sheller_land"
-            end, 1, 1)
-        }
-    },
     WALRUS = {
         size = COCOON_SIZE.MEDIUM,
         name = "Leathery",
         loot = {
             Item("meat", 1, .5),
-            Item("um_bear_trap_equippable_tooth", 1, .5),
             Item("walrus_tusk"),
+            Item(function() return RandomItem("um_bear_trap_equippable_tooth", "um_bear_trap_equippable_gold") end, 1),
+            Item(function() return RandomItem("um_blowdart_pyre", "um_blowdart_rime", "blowdart_pipe", "blowdart_fire", "blowdart_sleep", "blowdart_yellow") end, 1),
+        }
+    },
+    GLACIALHOUND = {
+        size = COCOON_SIZE.MEDIUM,
+        name = "Grotesque",
+        loot = {
+            Item("monstermeat", 1, .5),
+            Item("ice", 6),
+            Item("ice", 4, .5),
+            Item("bluegem"),
+            Item("houndstooth", 2),
+            Item("houndstooth", 1, .5),
+            Item("um_rimeweed_itemflower")
+        }
+    },
+    SNOWMONG = {
+        size = COCOON_SIZE.MEDIUM,
+        name = "Soggy",
+        loot = {
+            Item("charcoal", 2),
+            Item("um_ice_tail"),
+            Item("um_ice_tail", 1, .5),
+            Item("snowball_item", 4),
+            Item("snowball_item", 2, .5),
+            Item("ice", 10),
+            Item("ice", 4, .5),
+            Item("um_rimeweed_itemvine", 3, 1),
+            Item("um_rimeweed_itemvine", 1, .5),
+            Item(function() return RandomItem("um_gemologybluegem1", "um_gemologybluegem2") end, 1, 1, nil, GemologyRoll),
+        }
+    },
+    SNAILDRAKE_MAGMA = { --50/50 for snaildrake_slime
+        size = COCOON_SIZE.MEDIUM,
+        name = "Soggy",
+        loot = {
+            Item("snapalm", 5),
+            Item("snapalm", 1, .5),
+            Item("slurtle_shellpieces", 4),
+            Item("slurtle_shellpieces", 1, .5),
+            Item("redgem"),
+            Item("redgem", 1, .5),
+            Item("um_fyrite", 5),
+            Item("um_fyrite", 1, .5),
+            Item(function() return RandomItem("um_gemologyredgem1", "um_gemologyredgem2") end, 1, 1, nil, GemologyRoll),
         }
     },
     LORDFRUITFLY = {
         size = COCOON_SIZE.LARGE,
         name = "Buggy",
         loot = {
-            Item("plantmeat", 1, .5),
+            Item("plantmeat"),
             Item("seeds", 4),
-            Item("seeds", 4, .25)
+            Item("seeds", 4, .25),
+            Item(function() return RandomItem("dug_sapling", "dug_grass", "dug_monkeytail", "dug_berrybush", "dug_berrybush2", "dug_berrybush_juicy") end, 4),
         }
     },
     SPIDERQUEEN = {
         size = COCOON_SIZE.LARGE,
         name = "Buggy",
         loot = {
-            Item("monstermeat"),
+            Item("monstermeat", 2),
             Item("monstermeat", 1, .5),
             Item("silk"),
             Item("silk", 1, .5),
             Item("spidereggsack", 1, .25),
+            Item("spider_healer", 1, 1),
         }
     },
     BEEFALO = {
@@ -549,9 +644,10 @@ local default = {
         loot = {
             Item("meat"),
             Item("meat", 1, .5),
+            Item("beefalowool", 2, 1),
             Item("beefalowool", 1, .5),
-            Item("beefalowool", 1, .25),
             Item("horn"),
+            Item("poop", 3),
             Item("poop", 1, .5)
         }
     },
@@ -560,12 +656,66 @@ local default = {
         name = "Hairy",
         loot = {
             Item("monstermeat"),
-            Item("houndstooth", 2),
+            Item("houndstooth", 3),
             Item("houndstooth", 1, .5),
-            Item("boneshard"),
+            Item("boneshard", 4),
             Item("boneshard", 1, .5),
             Item("bluegem"),
             Item("redgem"),
+            Item("purplegem"),
+        }
+    },
+    KOALEFANT_SUMMER = {
+        size = COCOON_SIZE.LARGE,
+        name = "Leathery",
+        loot = {
+            Item("meat", 3),
+            Item("meat", 1, .5),
+            Item("poop", 1, .5)
+        }
+    },
+    LEIF_SPARSE = {
+        size = COCOON_SIZE.LARGE,
+        name = "Hardened",
+        loot = {
+            Item("plantmeat", 1),
+            Item("livinglog", 2, .5),
+            Item("log", 10, .75),
+            Item("log", 10),
+        }
+    },
+    ROCKY = { --Used to be Boulder Crab, RIP. -CB
+        size = COCOON_SIZE.LARGE,
+        name = "Hardened",
+        loot = {
+            Item("meat", 2),
+            Item("meat", 1, .5),
+            Item("smallmeat", 3, .5),
+            Item("moonrocknugget", 3),
+            Item("moonrocknugget", 2, .5),
+            Item("rocks", 10),
+            Item("rocks", 2, .5),
+            Item("flint", 4),
+            Item("flint", 2, .5),
+            Item("goldnugget", 3),
+            Item("goldnugget", 2, .5),
+            Item("nitre", 3),
+            Item("nitre", 2, .5),
+            Item("marble", 4),
+            Item("marble", 2, .5),
+            Item(function() return RandomItem("um_gemologypalegem1", "um_gemologypalegem2") end, 1, 1, nil, GemologyRoll),
+        }
+    },
+    --[[
+    DEER = {
+        size = COCOON_SIZE.MEDIUM,
+        name = "Hairy",
+        loot = {
+            Item("meat"),
+            Item("meat", 1, .5),
+            Item("deer_antler"),
+            Item("redgem"),
+            Item("bluegem"),
         }
     },
     ROOK = {
@@ -578,15 +728,6 @@ local default = {
             Item("trinket_6", 2),
             Item("trinket_6", 1, .5),
             Item("trinket_1", 1),
-        }
-    },
-    KOALEFANT_SUMMER = {
-        size = COCOON_SIZE.LARGE,
-        name = "Leathery",
-        loot = {
-            Item("meat", 3),
-            Item("meat", 1, .5),
-            Item("poop", 1, .5)
         }
     },
     SHARK = { --I don't like this one i'm ngl. - Atobá
@@ -610,17 +751,7 @@ local default = {
             Item("cactus_flower", 3),
             Item("cactus_flower", 3, .5),
         }
-    },
-    LEIF_SPARSE = {
-        size = COCOON_SIZE.LARGE,
-        name = "Leafy",
-        loot = {
-            Item("plantmeat", 1),
-            Item("livinglog", 2, .5),
-            Item("log", 10, .75),
-            Item("log", 10),
-        }
-    }
+    },]]
 }
 
 
@@ -992,6 +1123,11 @@ AddCompatCharacterCocoon("2997213431", "swire", {
     Item("swire_weapon", 1, 1, true),
     Item("swire_lipstick", 1, .5, true),
     Item("lgd_hat", 1, .5, true),
+    Item("swire_nightvisionhat", 1, .75),
+    Item("swire_bottle", 10, 1),
+    Item("swire_bottle", 10, .5),
+    Item("lungmendollars", 20, .5),
+    Item("lungmendollars", 20, .5),
 })
 
 AddCompatCharacterCocoon("3583633595", "kris_m", {
