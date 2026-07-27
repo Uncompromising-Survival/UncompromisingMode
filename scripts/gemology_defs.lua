@@ -15,9 +15,7 @@ The values are:
     }
     color = RGB(r,g,b) --color for the text/durability border in the UI
     -- for mineral logbook
-    sources = {
-    prefab_name = {build = "string", bank = "string", anim = "string" }} --anim defaults to idle. Should these actually be the inv image instead, though?
-    desc = { --For scrapbook ad insight.
+    desc = { --For scrapbook and insight.
         [1] = "Description for tier 1 gem"
         [2] = "Description for tier 2 gem"
         ...and so forth

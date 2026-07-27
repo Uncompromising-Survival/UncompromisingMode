@@ -26,9 +26,9 @@ function SpawnDurabilityLoot(inst, loot, amount, chance)
     end
 end
 
-function LootFn(inst, loot, fn)
+function LootFn(cocoon, loot, fn)
     if fn then
-        fn(inst.components.lootdropper:SpawnLootPrefab(type(loot) == "function" and loot() or loot, inst:GetPosition()), inst)
+        fn(cocoon.components.lootdropper:SpawnLootPrefab(type(loot) == "function" and loot() or loot, cocoon:GetPosition()), cocoon)
     end
 end
 
