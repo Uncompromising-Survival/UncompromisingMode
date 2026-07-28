@@ -6,7 +6,7 @@ local function AddChanceLoot(inst, loot, chance, amount)
     end
 end
 
-function SpawnDurabilityLoot(inst, loot, amount, chance)
+local function SpawnDurabilityLoot(inst, loot, amount, chance)
     for i = 1, amount do
         if chance >= 1 or math.random() < chance then
             local item = inst.components.lootdropper:SpawnLootPrefab(type(loot) == "function" and loot() or loot, inst:GetPosition())
@@ -26,7 +26,7 @@ function SpawnDurabilityLoot(inst, loot, amount, chance)
     end
 end
 
-function LootFn(cocoon, loot, fn)
+local function LootFn(cocoon, loot, fn)
     if fn then
         fn(cocoon.components.lootdropper:SpawnLootPrefab(type(loot) == "function" and loot() or loot, cocoon:GetPosition()), cocoon)
     end
