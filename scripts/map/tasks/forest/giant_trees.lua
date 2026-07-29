@@ -8,7 +8,6 @@ if GetModConfigData("hoodedforest") then               -- Lock Everything Behind
         table.insert(tasksetdata.required_prefabs, "widowwebspawner")
     end)
 
-
     -- Giant Trees (Hooded Forest) replaces the "Forest hunters" task. In DST layman's speak this is the moonbase forest with the single mactusk camp.
     AddTaskPreInit("Forest hunters", function(task)
         GLOBAL.require("map/rooms/forest/gianttreesrooms")
@@ -52,8 +51,6 @@ if GetModConfigData("hoodedforest") then               -- Lock Everything Behind
             end
         end
     end)
-
-
 
     -- [IA Compatibility] --
     -- [Create New Giant Trees IA Task] --

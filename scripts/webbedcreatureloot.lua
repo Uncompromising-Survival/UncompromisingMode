@@ -4,7 +4,9 @@
 ---@param use_durability? boolean Whether to set the durability of the item, if any durability-esque component is present
 ---@param lootfn? function A function that gets called when the item is dropped, with the spawned item prefab as an argument.
 ---@return table loot_table
-function Item(item, count, chance, use_durability, lootfn)
+_G.UMWebbedCreatureUtil = {}
+
+UMWebbedCreatureUtil.Item = function(item, count, chance, use_durability, lootfn)
     return {
         prefab = item,
         amount = count or 1,
@@ -16,9 +18,12 @@ end
 
 ---@param ... string number of item prefabs - NOT A TABLE! var-arg!
 ---@return function item a function that returns a random str from the provided strings.
-function RandomItem(...)
+UMWebbedCreatureUtil.RandomItem = function(...)
     return function() return arg[math.random(#arg)] end
 end
+
+local Item = UMWebbedCreatureUtil.Item
+local RandomItem = UMWebbedCreatureUtil.RandomItem
 
 COCOON_SIZE = {
     SMALL = 0,
@@ -30,7 +35,6 @@ COCOON_SIZE = {
 COCOON_CREATURES_DEFAULT = {}
 COCOON_CREATURES_SHIPWRECKED = {}
 COCOON_CHARACTERS = {}
-
 
 COCOON_DEFS = {}
 COCOON_DEFS.CHARACTER = {}
@@ -86,14 +90,16 @@ local characters = {
             Item("blueprint", 2, .5),
             Item("beardhair", 4),
             Item("beardhair", 2, .5),
-            Item(RandomItem("bluegem", "redgem", "purplegem"), 2) }
+            Item(RandomItem("bluegem", "redgem", "purplegem"), 2)
+		}
     },
     WILLOW = {
         loot = {
             Item("firestaff"),
             Item("sludge_oil"),
             Item("lighter", 1, 1, true),
-            Item(RandomItem("snapalm", "slurtleslime"), 4, .5), }
+            Item(RandomItem("snapalm", "slurtleslime"), 4, .5)
+		}
     },
     WOLFGANG = {
         loot = {
@@ -103,7 +109,8 @@ local characters = {
             Item("potato_cooked", 3, 1, true),
             Item("potato_cooked", 3, .3, true),
             Item("armorslurper", 1, .2, true),
-            Item("bonestew", 1, .3, true) }
+            Item("bonestew", 1, .3, true)
+		}
     },
     WENDY = {
         loot = {
@@ -116,7 +123,8 @@ local characters = {
             Item("ghostlyelixir_revive", 2, .5),
             Item(RandomItem("halloweenpotion_sanity_large", "halloweenpotion_sanity_small"), 2),
             Item(RandomItem("halloweenpotion_health_large", "halloweenpotion_health_small"), 2),
-            Item("butterfly", 4, .5), }
+            Item("butterfly", 4, .5)
+		}
     },
     WX78 = {
         loot = {
@@ -128,7 +136,8 @@ local characters = {
             Item("zaspberry_lesser", 2, 1, true),
             Item("zaspberry_lesser", 2, .5, true),
             Item("zaspberry", 1, .5),
-            Item(function() return TheWorld.state.isspring and RandomItem("raincoat", "rainhat") or nil end, 1, .1, true), }
+            Item(function() return TheWorld.state.isspring and RandomItem("raincoat", "rainhat") or nil end, 1, .1, true)
+		}
     },
     WICKERBOTTOM = {
         loot = {
@@ -161,7 +170,8 @@ local characters = {
                         end
                     end
                 end
-            end) }
+            end)
+		}
     },
     WOODIE = {
         loot = {
@@ -169,7 +179,8 @@ local characters = {
             Item("boards", 10, .5),
             Item("log", 10),
             Item("log", 20, .75),
-            Item(RandomItem("wereitem_beaver", "wereitem_moose", "wereitem_goose"), 1, 1, true), }
+            Item(RandomItem("wereitem_beaver", "wereitem_moose", "wereitem_goose"), 1, 1, true)
+		}
     },
     WAXWELL = {
         loot = {
@@ -178,7 +189,8 @@ local characters = {
             Item("tophat", 1, 1, true),
             Item("rabbit"),
             Item("purpleamulet", 1, .2),
-            Item(RandomItem("nightsword", "armor_sanity"), 1, 1, true), }
+            Item(RandomItem("nightsword", "armor_sanity"), 1, 1, true)
+		}
     },
     WATHGRITHR = {
         loot = {
@@ -190,7 +202,8 @@ local characters = {
             Item("wathgrithrhat"),
             Item("wathgrithrhat", 1, .5, true),
             Item("spear_wathgrithr", 1, 1, true),
-            Item("spear_wathgrithr", 1, .5, true), }
+            Item("spear_wathgrithr", 1, .5, true)
+		}
     },
     WEBBER = {
         loot = {
@@ -200,7 +213,8 @@ local characters = {
             Item("healingsalve", 3),
             Item("healingsalve", 3, .5),
             Item(RandomItem("monstermeat", "monstersmallmeat"), 6, .5, true),
-            Item("sewing_kit") }
+            Item("sewing_kit")
+		}
     },
     WINONA = {
         loot = {
@@ -212,7 +226,8 @@ local characters = {
             Item("rocks", 8, .8),
             Item("wagpunk_bits", 4, .5),
             Item("powercell", 2, .5),
-            Item(RandomItem("nightstick", "bugzapper"), 1, .1, true), }
+            Item(RandomItem("nightstick", "bugzapper"), 1, .1, true)
+		}
     },
     WARLY = {
         loot = {
@@ -226,7 +241,8 @@ local characters = {
             Item(RandomItem("moqueca_spice_salt", "bonesoup_spice_garlic", "freshfruitcrepes"), 1, .3, true),
             Item(RandomItem("theatercorn_spice_salt", "beefalowings_spice_garlic", "stuffed_peeper_poppers"), 1, .3, true),
             Item(RandomItem("zaspberryparfait_spice_sugar", "snotroast_spice_chili", "viperjam_spice_sugar"), 1, .3, true),
-            Item(RandomItem("um_rimeweed_spagett", "um_rimeweed_tequila"), 1, .3, true), }
+            Item(RandomItem("um_rimeweed_spagett", "um_rimeweed_tequila"), 1, .3, true)
+		}
 
     },
     WORTOX = {
@@ -241,7 +257,8 @@ local characters = {
             Item("beemine"),
             Item("cotl_trinket", 1, .3),
             Item("panflute", 1, .1),
-            Item("krampus_sack", 1, .01), }
+            Item("krampus_sack", 1, .01)
+		}
     },
     WORMWOOD = {
         loot = {
@@ -256,7 +273,8 @@ local characters = {
             Item("lightflier", 6, .3),
             Item(function() return TheWorld.state.iswinter and "um_armor_bramble_rimeweed" or "armor_bramble" end, 1, .5, true),
             Item("trap_bramble", 3, .5),
-            Item("lureplantbulb", 1, .2), }
+            Item("lureplantbulb", 1, .2)
+		}
     },
     WURT = {
         loot = {
@@ -270,7 +288,8 @@ local characters = {
             Item("mosquitosack", 6, .5),
             Item("pondfish", 4, .5),
             Item("tentaclespike", 3, .75, true),
-            Item("mermhat", 1, .2, true), }
+            Item("mermhat", 1, .2, true)
+		}
     },
     WALTER = {
         loot = {
@@ -283,7 +302,8 @@ local characters = {
             Item("brine_balm", 2, .2),
             Item(RandomItem("portabletent_item", "bedroll_furry"), 1, .3, true),
             Item(RandomItem("meatrack_hat", "walterhat", "bushhat"), 1, .5, true),
-            Item("um_record_walter", 1, .05), }
+            Item("um_record_walter", 1, .05)
+		}
     },
     WANDA = {
         loot = {
@@ -295,7 +315,8 @@ local characters = {
             Item("armor_sanity", 1, .5, true),
             Item("walrus_tusk", 1, .5),
             Item("purplegem", 1, .5),
-            Item("oldager_become_younger_front_fx", 1, .5), }
+            Item("oldager_become_younger_front_fx", 1, .5)
+		}
     },
     WINKY = {
         loot = {
@@ -320,7 +341,8 @@ local characters = {
             Item(RandomItem("cctrinket_don", "cctrinket_freddo"), 1, .2),
             Item(RandomItem("cctrinket_names", "trinket_jazzy"), 1, .2),
             Item("corncan", 1, .2),
-            Item("um_record_winky", 1, .05), }
+            Item("um_record_winky", 1, .05)
+		}
     },
     WATHOM = {
         loot = {
@@ -333,7 +355,8 @@ local characters = {
             Item(RandomItem("ruins_bat", "hambat"), 1, .5, true),
             Item("thulecite", 1),
             Item("thulecite", 5, .3),
-            Item("um_record_wathom", 1, .05), }
+            Item("um_record_wathom", 1, .05)
+		}
     },
     WIXIE = {
         loot = {
@@ -349,7 +372,8 @@ local characters = {
             Item(RandomItem("sludge", "saltrock"), 4, .5),
             Item(RandomItem("moonrocknugget", "moonglass"), 6),
             Item("townportaltalisman", 3, .1),
-            Item("um_record_wixie", 1, .05), }
+            Item("um_record_wixie", 1, .05)
+		}
 
     },
     WES = {
@@ -360,7 +384,8 @@ local characters = {
             Item("freshfruitcrepes", 1),
             Item("balloonhat", 1),
             Item("balloonvest", 1),
-            Item("waterballoon", 10, .3), }
+            Item("waterballoon", 10, .3)
+		}
     },
     WAGSTAFF = {
         loot = {
@@ -371,7 +396,8 @@ local characters = {
             Item("transistor", 1),
             Item("moonglass", 6),
             Item("moonglass", 6, .5),
-            Item("goggleshat", 1, 1, true), }
+            Item("goggleshat", 1, 1, true)
+		}
     },
 }
 
@@ -394,7 +420,7 @@ local default = {
             Item("honey", 5),
             Item("honey", 1, .5),
             Item("stinger", 1, .1),
-            Item("royal_jelly", 1),
+            Item("royal_jelly", 1)
         }
     },
     EYEOFTERROR_MINI = {
@@ -404,7 +430,7 @@ local default = {
             Item("milkywhites", 3),
             Item("milkywhites", 1, .5),
             Item("monstermeat", 1),
-            Item("monstermeat", 1, .5),
+            Item("monstermeat", 1, .5)
         }
     },
     CATCOON = {
@@ -437,7 +463,7 @@ local default = {
         size = COCOON_SIZE.SMALL,
         name = "Hardened",
         loot = {
-            Item("trinket_6", 2),
+            Item("trinket_6", 2)
         }
     },
     MERM = {
@@ -447,7 +473,7 @@ local default = {
             Item("froglegs", 1, 1),
             Item("tentaclespots", 2),
             Item("cutreeds", 6),
-            Item("cutreeds", 2, .5),
+            Item("cutreeds", 2, .5)
         }
     },
     PIGMAN = {
@@ -460,7 +486,7 @@ local default = {
             Item("tophat"),
             Item("goldnugget", 3),
             Item("goldnugget", 1, .5),
-            Item("pig_token", 1, .1),
+            Item("pig_token", 1, .1)
         }
     },
     OTTER = {
@@ -496,7 +522,7 @@ local default = {
             Item("nitre", 5),
             Item("nitre", 3, .5),
             Item("greengem", 1, .3),
-            Item(RandomItem("um_gemologygreengem1", "um_gemologygreengem2"), 1, 1, nil, GemologyRoll),
+            Item(RandomItem("um_gemologygreengem1", "um_gemologygreengem2"), 1, 1, nil, GemologyRoll)
         }
     },
     PIED_RAT = {
@@ -547,7 +573,7 @@ local default = {
             Item("cutgrass", 4),
             Item("twigs", 4),
             Item("cactus_flower", 3),
-            Item("cactus_flower", 1, .5),
+            Item("cactus_flower", 1, .5)
         }
     },
     KRAMPUS = {
@@ -559,7 +585,7 @@ local default = {
             Item("boneshard"),
             Item("krampus_sack", 1, .05),
             Item("bluegem"),
-            Item("redgem"),
+            Item("redgem")
         }
     },
     WALRUS = {
@@ -569,7 +595,7 @@ local default = {
             Item("meat", 1, .5),
             Item("walrus_tusk"),
             Item(RandomItem("um_bear_trap_equippable_tooth", "um_bear_trap_equippable_gold"), 1),
-            Item(RandomItem("um_blowdart_pyre", "um_blowdart_rime", "blowdart_pipe", "blowdart_fire", "blowdart_sleep", "blowdart_yellow"), 1),
+            Item(RandomItem("um_blowdart_pyre", "um_blowdart_rime", "blowdart_pipe", "blowdart_fire", "blowdart_sleep", "blowdart_yellow"), 1)
         }
     },
     GLACIALHOUND = {
@@ -598,7 +624,7 @@ local default = {
             Item("ice", 4, .5),
             Item("um_rimeweed_itemvine", 3, 1),
             Item("um_rimeweed_itemvine", 1, .5),
-            Item(RandomItem("um_gemologybluegem1", "um_gemologybluegem2"), 1, 1, nil, GemologyRoll),
+            Item(RandomItem("um_gemologybluegem1", "um_gemologybluegem2"), 1, 1, nil, GemologyRoll)
         }
     },
     SNAILDRAKE_MAGMA = { --50/50 for snaildrake_slime
@@ -613,7 +639,7 @@ local default = {
             Item("redgem", 1, .5),
             Item("um_fyrite", 5),
             Item("um_fyrite", 1, .5),
-            Item(RandomItem("um_gemologyredgem1", "um_gemologyredgem2"), 1, 1, nil, GemologyRoll),
+            Item(RandomItem("um_gemologyredgem1", "um_gemologyredgem2"), 1, 1, nil, GemologyRoll)
         }
     },
     LORDFRUITFLY = {
@@ -623,7 +649,7 @@ local default = {
             Item("plantmeat"),
             Item("seeds", 4),
             Item("seeds", 4, .25),
-            Item(RandomItem("dug_sapling", "dug_grass", "dug_monkeytail", "dug_berrybush", "dug_berrybush2", "dug_berrybush_juicy"), 4),
+            Item(RandomItem("dug_sapling", "dug_grass", "dug_monkeytail", "dug_berrybush", "dug_berrybush2", "dug_berrybush_juicy"), 4)
         }
     },
     SPIDERQUEEN = {
@@ -635,7 +661,7 @@ local default = {
             Item("silk"),
             Item("silk", 1, .5),
             Item("spidereggsack", 1, .25),
-            Item("spider_healer", 1, 1),
+            Item("spider_healer", 1, 1)
         }
     },
     BEEFALO = {
@@ -662,7 +688,7 @@ local default = {
             Item("boneshard", 1, .5),
             Item("bluegem"),
             Item("redgem"),
-            Item("purplegem"),
+            Item("purplegem")
         }
     },
     KOALEFANT_SUMMER = {
@@ -681,7 +707,7 @@ local default = {
             Item("plantmeat", 1),
             Item("livinglog", 2, .5),
             Item("log", 10, .75),
-            Item("log", 10),
+            Item("log", 10)
         }
     },
     ROCKY = { --Used to be Boulder Crab, RIP. -CB
@@ -703,7 +729,7 @@ local default = {
             Item("nitre", 2, .5),
             Item("marble", 4),
             Item("marble", 2, .5),
-            Item(RandomItem("um_gemologypalegem1", "um_gemologypalegem2"), 1, 1, nil, GemologyRoll),
+            Item(RandomItem("um_gemologypalegem1", "um_gemologypalegem2"), 1, 1, nil, GemologyRoll)
         }
     },
     --[[
@@ -715,7 +741,7 @@ local default = {
             Item("meat", 1, .5),
             Item("deer_antler"),
             Item("redgem"),
-            Item("bluegem"),
+            Item("bluegem")
         }
     },
     ROOK = {
@@ -727,7 +753,7 @@ local default = {
             Item("transistor", 2),
             Item("trinket_6", 2),
             Item("trinket_6", 1, .5),
-            Item("trinket_1", 1),
+            Item("trinket_1", 1)
         }
     },
     SHARK = { --I don't like this one i'm ngl. - Atobá
@@ -738,7 +764,7 @@ local default = {
             Item("barnacle", 3),
             Item("rocks", 3),
             Item("nitre", 2),
-            Item("nitre", 2, .5),
+            Item("nitre", 2, .5)
         }
     },
     GRASSGATOR = {
@@ -749,11 +775,10 @@ local default = {
             Item("cutgrass", 4),
             Item("twigs", 4),
             Item("cactus_flower", 3),
-            Item("cactus_flower", 3, .5),
+            Item("cactus_flower", 3, .5)
         }
     },]]
 }
-
 
 --todo:
 --snake monster morsel
@@ -802,7 +827,7 @@ local sw = {
             Item("meat", 1, .5),
             Item("ox_horn"),
             Item("poop", 2),
-            Item("poop", 4, .25),
+            Item("poop", 4, .25)
         }
     },
     CROCODOG = {
@@ -819,7 +844,7 @@ local sw = {
         loot = {
             Item("meat"),
             Item("pigskin"),
-            Item(RandomItem("tophat", "gashat", "piratehat", "snakeskinhat", "shark_teethhat")),
+            Item(RandomItem("tophat", "gashat", "piratehat", "snakeskinhat", "shark_teethhat"))
         }
     },
     STUNGRAY = {
@@ -862,8 +887,7 @@ local sw = {
     KRAMPUS = default.KRAMPUS,
     BEEGUARD = default.BEEGUARD,
     TALLBIRD = default.TALLBIRD,
-    SPIDERQUEEN = default.SPIDERQUEEN,
-
+    SPIDERQUEEN = default.SPIDERQUEEN
 }
 
 --poopulate globals.
@@ -882,7 +906,7 @@ end
 ---@param modid string The mod id of the character's mod. You can see the modid in the end of the link of the workshop page.
 ---@param character string The character's prefab name.
 ---@param loot_pool table The loot pool for the character. See above and below for examples.
-function AddCompatCharacterCocoon(modid, character, loot_pool)
+UMWebbedCreatureUtil.AddCompatCharacterCocoon = function(modid, character, loot_pool)
     assert(type(modid), "Bad argument #1 to AddCompatCharacterCocoon. Expected string, got " .. type(modid))
     assert(type(character), "Bad argument #2 to AddCompatCharacterCocoon. Expected string, got " .. type(character))
     assert(type(loot_pool) == "table", "Bad argument #3 to AddCompatCharacterCocoon. Expected table, got " .. type(loot_pool))
@@ -897,7 +921,7 @@ end
 ---@param prefix string the cocoon prefix
 ---@param loot_pool table the loot table.
 ---@param sw? boolean whether it's a shipwrecked cocoon
-function AddCocoon(creature, size, prefix, loot_pool, sw)
+UMWebbedCreatureUtil.AddCocoon = function(creature, size, prefix, loot_pool, sw)
     assert(type(creature), "Bad argument #1 to AddCocoon. Expected string, got " .. type(creature))
     assert(type(size), "Bad argument #2 to AddCocoon. Expected number, got " .. type(size))
     assert(type(prefix), "Bad argument #3 to AddCocoon. Expected string, got " .. type(prefix))
@@ -922,14 +946,14 @@ end
 
 ---@param character string The character's prefab name.
 ---@param loot_pool table The loot pool for the character. See above and below for examples.
-function AddCharacterCocoon(character, loot_pool)
+UMWebbedCreatureUtil.AddCharacterCocoon = function(character, loot_pool)
     assert(type(character), "Bad argument #1 to AddCharacterCocoon. Expected string, got " .. type(character))
     assert(type(loot_pool) == "table", "Bad argument #2 to AddCharacterCocoon. Expected table, got " .. type(loot_pool))
 
     COCOON_DEFS.CHARACTER[string.upper(character)] = { loot = loot_pool }
 end
 
-AddCompatCharacterCocoon("3484995444", "wieneke", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon("3484995444", "wieneke", {
     Item("koalefant_carcass", 1, 1, nil, function(inst)
         if not inst.SetMeatPct then return end
         inst:SetMeatPct(.25) -- Not sure if 25% is the right amount to have the second-to-last decay stage, might need to fiddle to get it right!
@@ -941,7 +965,7 @@ AddCompatCharacterCocoon("3484995444", "wieneke", {
     Item("halloweencandy_8")
 })
 
-AddCompatCharacterCocoon("2496686961", "flaire", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon("2496686961", "flaire", {
     Item("nightsword"),
     Item("familiarsword", 1, 1, true),
     Item("pureaspectgem"),
@@ -961,9 +985,8 @@ AddCompatCharacterCocoon("2496686961", "flaire", {
     end)
 })
 
-
 --reign of runts
-AddCompatCharacterCocoon("2010472942", "weerclops", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon("2010472942", "weerclops", {
     Item("ice", 12),
     Item("ice", 12, .5),
     Item("snowball_item", 4, 1, true),
@@ -976,7 +999,7 @@ AddCompatCharacterCocoon("2010472942", "weerclops", {
     Item(RandomItem("um_hat_rime", "rimeweed_whip"), 1, .5),
     Item(RandomItem("beakbasher", "hammer"), 1, .5)
 })
-AddCompatCharacterCocoon("2010472942", "woose", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon("2010472942", "woose", {
     Item("tallbirdegg"),
     Item("dug_sapling"),
     Item("twigs", 6),
@@ -992,7 +1015,7 @@ AddCompatCharacterCocoon("2010472942", "woose", {
     Item("malbatross_feather", .5, 6),
     Item("featherfan", .5, 3, true)
 })
-AddCompatCharacterCocoon("2010472942", "wearger", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon("2010472942", "wearger", {
     Item("honey", 4, 1, true),
     Item("honey", 4, .5, true),
     Item("honeycomb"),
@@ -1003,7 +1026,7 @@ AddCompatCharacterCocoon("2010472942", "wearger", {
     Item("furtuft", 12),
     Item("furtuft", 30, .5)
 })
-AddCompatCharacterCocoon("2010472942", "wragonfly", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon("2010472942", "wragonfly", {
     Item("ash", 6),
     Item("ash", 14, .5),
     Item("charcoal", 6),
@@ -1022,7 +1045,7 @@ AddCompatCharacterCocoon("2010472942", "wragonfly", {
 })
 
 --island adventures
-AddCompatCharacterCocoon("3435352667", "wilbur", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon("3435352667", "wilbur", {
     Item("dug_monkeytail", 2),
     Item("dug_monkeytail", 2, .5),
     Item("dug_bananabush", .1, 2),
@@ -1035,7 +1058,7 @@ AddCompatCharacterCocoon("3435352667", "wilbur", {
     Item("blackflag", 1, 1, true),
     Item(RandomItem("cutlass", "cutless"), 1, .9, true)
 })
-AddCompatCharacterCocoon("3435352667", "walani", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon("3435352667", "walani", {
     Item("seashell", 4),
     Item("seashell", 4, .5),
     Item("boards", 2),
@@ -1048,7 +1071,7 @@ AddCompatCharacterCocoon("3435352667", "walani", {
     Item("coconade", .3, 2),
     Item(RandomItem("cutlass", "spear_launcher"), 1, .9, true)
 })
-AddCompatCharacterCocoon("3435352667", "woodlegs", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon("3435352667", "woodlegs", {
     Item("woodlegshat", 1, 1, true),
     Item(RandomItem("supertelescope", "telescope"), 1, 1, true),
     Item("dubloon", 10),
@@ -1062,7 +1085,7 @@ AddCompatCharacterCocoon("3435352667", "woodlegs", {
 })
 
 --cherry forest
-AddCompatCharacterCocoon("1289779251", "wirlywings", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon("1289779251", "wirlywings", {
     Item("cherrytrinket_1"),
     Item("cherrytrinket_2"),
     Item("cherryscepter", 1, 1, true),
@@ -1078,7 +1101,7 @@ AddCompatCharacterCocoon("1289779251", "wirlywings", {
 })
 
 --black death
-AddCompatCharacterCocoon("1947892074", "wade", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon("1947892074", "wade", {
     Item("tiddlestick", 1, 1, true),
     Item("tiddle_detector", 1, 1, true),
     Item("tiddle_sponge", 3),
@@ -1092,7 +1115,7 @@ AddCompatCharacterCocoon("1947892074", "wade", {
 })
 
 --wonderwhy
-AddCompatCharacterCocoon("2879092392", "wonderwhy", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon("2879092392", "wonderwhy", {
     Item("thulecite_pieces", 6),
     Item("thulecite_pieces", 6, .5),
     Item("nitre", 3),
@@ -1109,7 +1132,7 @@ AddCompatCharacterCocoon("2879092392", "wonderwhy", {
 })
 
 --wuzzy
-AddCompatCharacterCocoon("1836542884", "zeta", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon("1836542884", "zeta", {
     Item("honey_splash"),
     Item("honey", 8, 1, true),
     Item("honey", 6, .5, true),
@@ -1123,7 +1146,7 @@ AddCompatCharacterCocoon("1836542884", "zeta", {
 })
 
 --whimsy
-AddCompatCharacterCocoon("2618885209", "whimsy", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon("2618885209", "whimsy", {
     Item("purplegem"),
     Item(RandomItem("redgem", "bluegem"), 3, .75),
     Item(RandomItem("yellowgem", "orangegem"), 3, .15),
@@ -1141,19 +1164,19 @@ local seamaterial = TUNING.DSTU.ISLAND_ADVENTURES and "bamboo" or "driftwood_log
 local boatkit = TUNING.DSTU.ISLAND_ADVENTURES and "boatrepairkit" or "boatpatch_sludge"
 local sail = TUNING.DSTU.ISLAND_ADVENTURES and "ironwind" or "mast_malbatross_item"
 
-AddCompatCharacterCocoon("3118176896", "whiskey", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon("3118176896", "whiskey", {
     Item("depthsword", 1, 1, true),
     Item("whiskeyhat", 1, 1, true),
     Item("whiskeysonar", 1, 1, true),
     Item(RandomItem(algae, seamaterial), 6),
     Item(RandomItem("greengem", "orangegem"), 1, .25),
     Item(boatkit, 1, .5, true),
-    Item(sail, 1, .5),
+    Item(sail, 1, .5)
 })
 
 --swire
 -- will have better loot once the skilltree comes out. For now funny gold piñata
-AddCompatCharacterCocoon("2997213431", "swire", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon("2997213431", "swire", {
     Item("goldnugget", 2, 1),
     Item("goldnugget", 2, .5),
     Item("goldnugget", 2, .5),
@@ -1168,10 +1191,10 @@ AddCompatCharacterCocoon("2997213431", "swire", {
     Item("swire_bottle", 10, 1),
     Item("swire_bottle", 10, .5),
     Item("lungmendollars", 20, .5),
-    Item("lungmendollars", 20, .5),
+    Item("lungmendollars", 20, .5)
 })
 
-AddCompatCharacterCocoon("3583633595", "kris_m", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon("3583633595", "kris_m", {
     Item("um_moss", 4, 1),
     Item("um_moss", 3, .5),
     Item("nightsword", 1, 1, true),
@@ -1181,10 +1204,10 @@ AddCompatCharacterCocoon("3583633595", "kris_m", {
     Item("firepen", 1, 1, true),
     Item("nightcaphat", 1, .5, true),
     Item("bedroll_furry", 1, 1, true),
-    Item("um_armor_pyre_nettles", 1, .5, true),
+    Item("um_armor_pyre_nettles", 1, .5, true)
 })
 
-AddCompatCharacterCocoon("3583633595", "susie_m", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon("3583633595", "susie_m", {
     Item(RandomItem("playing_card", "papyrus"), 1, 1, true),
     Item(RandomItem("beefalofeed", "beefalotreat", "um_moss"), 2, 1, true),
     Item(RandomItem("goldenaxe", "moonglassaxe", "jawed_scythe", "um_ice_sicle"), 1, 1, true),
@@ -1195,10 +1218,10 @@ AddCompatCharacterCocoon("3583633595", "susie_m", {
     Item("tillweedsalve", 1, .5),
     Item("mosquitosack", 5, 1),
     Item("houndstooth", 2, 1),
-    Item("houndstooth", 4, .75),
+    Item("houndstooth", 4, .75)
 })
 
-AddCompatCharacterCocoon("3583633595", "ralsei_m", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon("3583633595", "ralsei_m", {
     Item("carnival_vest_a", 1, 1, true),
     Item(RandomItem("ralsei_cake", "ralsei_butterscotch_cake"), 1, 1, true),
     Item("nightmarefuel", 4, 1),
@@ -1209,10 +1232,10 @@ AddCompatCharacterCocoon("3583633595", "ralsei_m", {
     Item(RandomItem("bandage", "um_rimeweed_icepack"), 3, 1),
     Item(RandomItem("floral_bandage", "brine_balm"), 1, 1),
     Item("floral_bandage", 1, .3),
-    Item("lightninggoathorn", 1, .05),
+    Item("lightninggoathorn", 1, .05)
 })
 
-AddCompatCharacterCocoon("2978133982", "whispy", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon("2978133982", "whispy", {
     Item(RandomItem("vegiepick", "vegieaxe", "vegiebat", "vegie_sword"), 1, 1, true),
     Item(RandomItem("potato_hat", "vegie_amu", "vegie_amu2", "wateringcan"), 1, 1, true),
     Item(RandomItem("seed_forget", "seed_fire", "seed_till"), 8, .75, true),
@@ -1224,10 +1247,10 @@ AddCompatCharacterCocoon("2978133982", "whispy", {
     Item(RandomItem("carrot", "carrot_soup", "carrot_honey", "carrot_puree", "carrot_cake", "carrot_fry"), 1, 1, true),
     Item("manrabbit_tail", 1, 1),
     Item("hareball", 1, 1, true),
-    Item("slipper", 1, .25),
+    Item("slipper", 1, .25)
 })
 
-AddCompatCharacterCocoon("618785273", "womp", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon("618785273", "womp", {
     Item(RandomItem("kelphat", "watermelonhat", "icehat"), 1, 1, true),
     Item("monstermeat", 6, 1, true),
     Item("waterballoon", 4, 1),
@@ -1235,20 +1258,20 @@ AddCompatCharacterCocoon("618785273", "womp", {
     Item("tentaclespots", 2, 1),
     Item(RandomItem("tentaclespots", "um_tentaclespot_moon"), 1, .2),
     Item("tentaclespike", 2, 1, true),
-    Item("tentaclespike", 2, .5, true),
+    Item("tentaclespike", 2, .5, true)
 })
 
-AddCompatCharacterCocoon("3620352512", "weetie", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon("3620352512", "weetie", {
     Item("taffy", 2, 1, true),
     Item("honey", 2, 1, true),
     Item("royal_jelly", 4, 1, true),
     Item("weetie_honeybutter", 4, 1, true),
     Item("honeycomb", 4, 1),
     Item("killerbee", 20, 1, true),
-    Item("weetie_royalbee", 10, .1, true),
+    Item("weetie_royalbee", 10, .1, true)
 })
 
-AddCompatCharacterCocoon("3221411434", "welina", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon("3221411434", "welina", {
     Item(function()
         return RandomItem("rat_tail", "shroom_skin", "phlegm", "spoiled_fish", "spoiled_fish_small", "wetgoop", "rottenegg", "spoiled_food", "slurper_pelt",
             "yotpfood2", "wintersfeastfuel", "pigskin", "manrabbit_tail", "winter_food4")
@@ -1267,10 +1290,10 @@ AddCompatCharacterCocoon("3221411434", "welina", {
     Item("coontail", 3, .5),
     Item("rat_tail", 6, 1),
     Item("welina_catnip", 1, 1),
-    Item("snowgoggles", 1, 1),
+    Item("snowgoggles", 1, 1)
 })
 
-AddCompatCharacterCocoon("2858309592", "whisky", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon("2858309592", "whisky", {
     Item(RandomItem("whiskysunhat", "whiskysunglasses", "whiskyribbon"), 1, 1, true),
     Item("whiskyyarn", 3, 1),
     Item("whiskyyarn", 3, .5),
@@ -1283,10 +1306,10 @@ AddCompatCharacterCocoon("2858309592", "whisky", {
     Item(function()
         return RandomItem("spider", "spider_dropper", "spider_healer", "spider_hider", "spider_moon", "spider_spitter", "spider_trapdoor", "spider_trapdoor_hooded",
             "spider_warrior", "spider_water")
-    end, 2, 1),
+    end, 2, 1)
 })
 
-AddCompatCharacterCocoon("3021568491", "wildcard", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon("3021568491", "wildcard", {
     Item("nightmarefuel", 2, 1),
     Item("nightmarefuel", 14, .5),
     Item("rabbit", 4, 1, true),
@@ -1295,28 +1318,26 @@ AddCompatCharacterCocoon("3021568491", "wildcard", {
     Item("wcard_throwingcard", 4, .5),
     Item("papyrus", 1, 1),
     Item("tophat", 1, 1, true),
-    Item(RandomItem("feather_crow", "feather_robin", "feather_robin_winter", "feather_canary", "goose_feather", "malbatross_feather"), 6, 1),
+    Item(RandomItem("feather_crow", "feather_robin", "feather_robin_winter", "feather_canary", "goose_feather", "malbatross_feather"), 6, 1)
 })
 
---[[AddCompatCharacterCocoon("3385306425", "warrick", {
+--[[UMWebbedCreatureUtil.AddCompatCharacterCocoon("3385306425", "warrick", {
     Item("feather_canary", 1, 1),
     Item("silk", 5, 1),
-    Item("horn", 1, 1),
+    Item("horn", 1, 1)
 })
 
 -- Wandering Done -- Is crashing for some reason, sooo gonna have to keep this out
-AddCompatCharacterCocoon("3385306425", "tvheadguy", {
-    Item("cctrinket_freddo", 1, 1),
+UMWebbedCreatureUtil.AddCompatCharacterCocoon("3385306425", "tvheadguy", {
+    Item("cctrinket_freddo", 1, 1)
 })]]
 
---[[AddCompatCharacterCocoon("???", "warne", {
+--[[UMWebbedCreatureUtil.AddCompatCharacterCocoon("???", "warne", {
     Item(RandomItem("warnebone_generic", "warnebone_arm", "warnebone_leg", "warnebone_ribcage", "warnebone_skull"), 4, 1, true),
     Item("boneshard", 6, 1),
     Item("boneshard", 6, .5),
     Item("purplegem", 1, 1),
     Item("purplegem", 1, .5),
     Item("nightmarefuel", 8, 1),
-    Item("nightmarefuel", 6, .5),
+    Item("nightmarefuel", 6, .5)
 })]]
-
-return COCOON_DEFS

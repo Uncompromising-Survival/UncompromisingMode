@@ -26,8 +26,6 @@ modimport("init/init_strings/init_names")
 modimport("init/init_strings/init_tooltips") --load before postinit please!
 modimport("init/init_bonusdescriptors")      -- doesn't contain strings
 
-
-
 -- Character descriptions
 modimport("init/init_strings/init_descriptions/generic")
 modimport("init/init_strings/init_descriptions/willow")
@@ -49,8 +47,6 @@ modimport("init/init_strings/init_descriptions/walter")
 modimport("init/init_strings/init_descriptions/wanda")
 modimport("init/init_strings/init_descriptions/winky")
 modimport("init/init_strings/init_descriptions/wathom")
-
-
 
 --    [         Number Tuning and PostInits        ]    --
 modimport("init/init_postinit")
@@ -83,11 +79,11 @@ local GAMEMODE_CUSTOM_SETTINGS = 2;
 
 --    [                 Features            ]    --
 
+require("webbedcreatureloot")
 --if GetModConfigData("harder_monsters") then4
 if GetModConfigData("horriblefood") then
     modimport("init/init_horriblefood")
 end
-
 
 modimport("init/init_gemology/common")
 modimport("init/init_gemology/special")
