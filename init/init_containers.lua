@@ -532,9 +532,9 @@ modparams.um_feather_totem =
     {
         slotpos =
         {
-            Vector3(-(64 + 12), 0, 0),
-            Vector3(0, 0, 0),
-            Vector3(64 + 12, 0, 0),
+            Vector3(15+(-(64 + 12)), 0, 0),
+            Vector3(15, 0, 0),
+            Vector3(15+(64 + 12), 0, 0), 
         },
         slotbg =
         {
@@ -542,9 +542,9 @@ modparams.um_feather_totem =
             { image = "feather_slot.tex", atlas = "images/feather_slot.xml" },
             { image = "feather_slot.tex", atlas = "images/feather_slot.xml" },
         },
-        animbank = "ui_beard_3x1",
-        animbuild = "ui_beard_3x1",
-        pos = Vector3(0, 220, 0),
+        animbank = "ui_um_feather_totem",
+        animbuild = "ui_um_feather_totem",
+        pos = Vector3(0, 130, 0),
         side_align_tip = 160,
     },
     type = "chest",

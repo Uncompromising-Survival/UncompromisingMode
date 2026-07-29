@@ -471,7 +471,8 @@ local inventoryitems =
     "um_astral_projector_target",
     "um_blueprinting_kit",
     "um_cookpot_wagstaff_lever",
-    "um_cookpot_wagstaff_lever2"
+    "um_cookpot_wagstaff_lever2",
+    "um_feather_totem"
 }
 
 local minimap_icons = {
@@ -554,7 +555,8 @@ local minimap_icons = {
     "um_scrapper",
     "um_astral_projector",
     "um_astral_projector_target",
-    "um_hotspring"
+    "um_hotspring",
+    "um_feather_totem"
 }
 
 for _, item in ipairs(inventoryitems) do
