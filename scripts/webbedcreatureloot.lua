@@ -912,7 +912,7 @@ UMWebbedCreatureUtil.AddCompatCharacterCocoon = function(modid, character, loot_
     assert(type(loot_pool) == "table", "Bad argument #3 to AddCompatCharacterCocoon. Expected table, got " .. type(loot_pool))
 
     if KnownModIndex:IsModEnabled("workshop-" .. modid) then
-        COCOON_DEFS.CHARACTER[string.upper(character)] = { loot = loot_pool }
+        UMWebbedCreatureUtil.COCOON_DEFS.CHARACTER[string.upper(character)] = { loot = loot_pool }
     end
 end
 
