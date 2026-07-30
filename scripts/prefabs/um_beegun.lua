@@ -257,8 +257,6 @@ local function fn(anim, name, swap, beetype)
     spellcaster:SetSpellFn(collectbees)
     spellcaster:SetCanCastFn(can_cast_fn)
     spellcaster.canuseontargets = true
-    spellcaster.canonlyuseonworkable = true
-    spellcaster.canonlyuseoncombat = true
     spellcaster.canuseonpoint = true
     spellcaster.canuseonpoint_water = true
 
