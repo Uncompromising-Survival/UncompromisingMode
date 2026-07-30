@@ -1,11 +1,12 @@
+
+UMWebbedCreatureUtil = {}
+
 ---@param item string|function The loot item prefab, or a function that returns a prefab.
 ---@param count? number The number of items to spawn
 ---@param chance? number The chance to spawn the item
 ---@param use_durability? boolean Whether to set the durability of the item, if any durability-esque component is present
 ---@param lootfn? function A function that gets called when the item is dropped, with the spawned item prefab as an argument.
 ---@return table loot_table
-UMWebbedCreatureUtil = {}
-
 UMWebbedCreatureUtil.Item = function(item, count, chance, use_durability, lootfn)
     return {
         prefab = item,
