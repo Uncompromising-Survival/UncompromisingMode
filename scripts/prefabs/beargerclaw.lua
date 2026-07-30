@@ -164,6 +164,7 @@ local function staff_fn()
 
     inst:AddTag("nopunch")
     inst:AddTag("beargerclaw")
+    inst:AddTag("allow_action_on_impassable")
     inst:AddTag("quickcast")
     inst:AddTag("vetcurse_item")
     inst:AddTag("tool")
@@ -207,8 +208,6 @@ local function staff_fn()
     local spellcaster = inst:AddComponent("spellcaster")
     spellcaster:SetSpellFn(createlight)
     spellcaster.canuseontargets = true
-    spellcaster.canonlyuseonworkable = true
-    spellcaster.canonlyuseoncombat = true
     spellcaster.canuseonpoint = true
     spellcaster.canuseonpoint_water = true
 
