@@ -82,7 +82,7 @@ function c_um_vetcurseitems()
         "um_moonfly_lantern",
         "silksack",
         "crystal_cursed_antler",
-		"shieldofterror",
+        "shieldofterror",
     }
     for k, v in ipairs(items) do
         c_give(v)
@@ -275,7 +275,7 @@ end
 function c_um_setclaustrophobia(p)
     local player = ConsoleCommandPlayer()
     if player ~= nil and player.claustrophobia ~= nil then
-		player.claustrophobia:set(math.clamp(p, 0, 1))
+        player.claustrophobia:set(math.clamp(p, 0, 1))
         if p >= 1 and not player.wixiepanic then
             player.wixiepanic = true
         end
