@@ -1724,7 +1724,7 @@ local function Sniffertime(owner, sniffer)
 
     for i, v in ipairs(ents) do
         if v:IsValid() and v.components.inventoryitem ~= nil then
-            local container = v.components.inventoryitem:IsHeld() and (v.components.inventoryitem:GetGrandOwner() or v.components.inventoryitem.owner)
+            local container = v.components.inventoryitem:GetGrandOwner() or v.components.inventoryitem.owner
             if IsProperContainer(container) then
                 FoodScoreCalculations(container, v, owner)
             end
@@ -1766,7 +1766,7 @@ local function TimeForACheckUp(inst, dev)
     if ents then
         for i, v in ipairs(ents) do
             if (inst.ratscore + inst.foodscore + inst.burrowbonus) < 300 then
-                local container = v.components.inventoryitem:IsHeld() and (v.components.inventoryitem:GetGrandOwner() or v.components.inventoryitem.owner)
+                local container = v.components.inventoryitem:GetGrandOwner() or v.components.inventoryitem.owner
                 if IsProperContainer(container) then
                     if container then
                         SnifferFoodScoreCalculations(inst, true, v)

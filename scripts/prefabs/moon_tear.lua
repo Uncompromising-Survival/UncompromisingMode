@@ -5,14 +5,9 @@ local assets =
 }
 
 local function startcrying(inst)
-    local owner = inst.components.inventoryitem.owner
-
-    if owner and owner.components.inventoryitem then
-        owner = owner.components.inventoryitem.owner
-    end
-
-    local moisture = owner.components.moisture
-    if owner and not owner:HasTag("waterproofer") and moisture and moisture:GetMoisture() < 48 then
+    local owner = inst.components.inventoryitem:GetGrandOwner()
+    local moisture = owner and not owner:HasTag("waterproofer") and owner.components.moisture
+    if moisture and moisture:GetMoisture() < 48 then
         moisture:DoDelta(3)
     end
 end
