@@ -36,7 +36,7 @@ local function TrySpawnCocoon(x, z, type)
         cocoon.Transform:SetPosition(xi, 0, zi)
         if type ~= nil then -- if cocoon nil, remove
             cocoon.cocoon_creature = type
-            cocoon.cocoon_data = COCOON_DEFS.DEFAULT[type]
+            cocoon.cocoon_data = UMWebbedCreatureUtil.COCOON_DEFS.DEFAULT[type]
 		else
 			cocoon:Remove()
         end
