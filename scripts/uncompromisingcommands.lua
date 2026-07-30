@@ -1,5 +1,3 @@
-require "webbedcreatureloot"
-
 -- toggle snowstorm
 function c_um_snowstorm(instant)
     if TheWorld.components.um_snow_stormspawner ~= nil and TheWorld.state.iswinter then
@@ -49,7 +47,6 @@ function c_um_bosstimers()
         print("c_um_debug_bosstimers only works as the host")
     end
 end
-
 
 -- toggles vetcurse
 function c_um_vetcurse()
@@ -278,10 +275,9 @@ end
 function c_um_setclaustrophobia(p)
     local player = ConsoleCommandPlayer()
     if player ~= nil and player.claustrophobia ~= nil then
-        player.claustrophobia = p
+		player.claustrophobia:set(math.clamp(p, 0, 1))
         if p >= 1 and not player.wixiepanic then
             player.wixiepanic = true
-            SendModRPCToServer(GetModRPC("WixieTheDelinquent", "ClaustrophobiaPanic"), player)
         end
     end
 end
@@ -296,7 +292,7 @@ function c_um_godmodeclaustrophobia(player)
     if player and player.claustrophobia and player:HasTag("troublemaker") then
         SuUsed("c_um_godmodeclaustrophobia", true)
         if not player.no_claustrophobia then
-            player.claustrophobia = 0
+            player.claustrophobia:set(0)
             player.no_claustrophobia = true
             print("No Claustrophobia mode: On")
         else
@@ -439,7 +435,7 @@ end
 function c_um_spawncocoon(type)
     type = string.upper(type)
 
-    if table.contains(COCOON_CREATURES_DEFAULT, type) or table.contains(COCOON_CREATURES_SHIPWRECKED, type) or table.contains(COCOON_CHARACTERS, type) then
+    if table.contains(UMWebbedCreatureUtil.COCOON_CREATURES_DEFAULT, type) or table.contains(UMWebbedCreatureUtil.COCOON_CREATURES_SHIPWRECKED, type) or table.contains(UMWebbedCreatureUtil.COCOON_CHARACTERS, type) then
         local pos = ConsoleWorldPosition()
         print("Spawning cocoon at position X:" .. pos.x .. " Z:" .. pos.z .. " with type " .. type)
 
@@ -447,11 +443,11 @@ function c_um_spawncocoon(type)
         cocoon.Transform:SetPosition(pos.x, 0, pos.z)
 
         cocoon.cocoon_creature = type
-        cocoon.cocoon_data = COCOON_DEFS.DEFAULT[cocoon.cocoon_creature] ~= nil and COCOON_DEFS.DEFAULT[cocoon.cocoon_creature]
-            or COCOON_DEFS.SHIPWRECKED[cocoon.cocoon_creature] ~= nil and COCOON_DEFS.SHIPWRECKED[cocoon.cocoon_creature]
-            or COCOON_DEFS.CHARACTER[cocoon.cocoon_creature]
+        cocoon.cocoon_data = UMWebbedCreatureUtil.COCOON_DEFS.DEFAULT[cocoon.cocoon_creature] ~= nil and UMWebbedCreatureUtil.COCOON_DEFS.DEFAULT[cocoon.cocoon_creature]
+            or UMWebbedCreatureUtil.COCOON_DEFS.SHIPWRECKED[cocoon.cocoon_creature] ~= nil and UMWebbedCreatureUtil.COCOON_DEFS.SHIPWRECKED[cocoon.cocoon_creature]
+            or UMWebbedCreatureUtil.COCOON_DEFS.CHARACTER[cocoon.cocoon_creature]
 
-        if COCOON_DEFS.CHARACTER[cocoon.cocoon_creature] ~= nil then
+        if UMWebbedCreatureUtil.COCOON_DEFS.CHARACTER[cocoon.cocoon_creature] ~= nil then
             cocoon.cocoon_data.size = 1
             cocoon.cocoon_data.name = "Shrouded"
         end
