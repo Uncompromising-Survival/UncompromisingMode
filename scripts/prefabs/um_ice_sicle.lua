@@ -188,6 +188,7 @@ local function onattack_blue(inst, attacker, target, skipsanity)
     if attacker.components.temperature ~= nil and attacker.components.temperature:GetCurrent() >= 4 and not TheWorld.state.iswinter then
         attacker.components.temperature:DoDelta(-3)
     end
+
     OnScythed(inst, {doer = attacker})
 end
 
