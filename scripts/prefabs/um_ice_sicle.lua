@@ -185,7 +185,7 @@ local function onattack_blue(inst, attacker, target, skipsanity)
         target.components.freezable:SpawnShatterFX()
     end
 
-    if attacker.components.temperature:GetCurrent() >= 4 and not TheWorld.state.iswinter then
+    if attacker.components.temperature ~= nil and attacker.components.temperature:GetCurrent() >= 4 and not TheWorld.state.iswinter then
         attacker.components.temperature:DoDelta(-3)
     end
     OnScythed(inst, {doer = attacker})
