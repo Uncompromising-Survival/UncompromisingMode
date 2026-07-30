@@ -128,7 +128,7 @@ local function fn()
         return inst
     end
 
-    inst.NoTags = JoinArrays(UMCommonFns.GHOSTLIKE_TAGS, {"INLIMBO", "structure", "wall"})
+    inst.NoTags = JoinArrays(UMCommonFns.GHOSTLIKE_TAGS, {"INLIMBO", "structure", "wall", "walkableplatform", "walkableperipheral"})
 
     inst.task = inst:DoPeriodicTask(0.05, Sparks)
 
