@@ -79,21 +79,20 @@ local function SetCocoonSize(inst, size)
     SetStage(inst, stage)
 end
 
-
 ---sets the data of the cocoonn.
 ---@param inst any The instance of the cocooon
 local function SetUpCocoon(inst)
     if not inst.cocoon_creature then
         local is_character = math.random() > .95 --roughly same chance as before.
         if is_character then
-            inst.cocoon_creature = COCOON_CHARACTERS[math.random(#COCOON_CHARACTERS)]
-            inst.cocoon_data = COCOON_DEFS.CHARACTER[inst.cocoon_creature]
+            inst.cocoon_creature = UMWebbedCreatureUtil.COCOON_CHARACTERS[math.random(#UMWebbedCreatureUtil.COCOON_CHARACTERS)]
+            inst.cocoon_data = UMWebbedCreatureUtil.COCOON_DEFS.CHARACTER[inst.cocoon_creature]
         elseif IsIslandWorld() then
-            inst.cocoon_creature = COCOON_CREATURES_SHIPWRECKED[math.random(#COCOON_CREATURES_SHIPWRECKED)]
-            inst.cocoon_data = COCOON_DEFS.SHIPWRECKED[inst.cocoon_creature]
+            inst.cocoon_creature = UMWebbedCreatureUtil.COCOON_CREATURES_SHIPWRECKED[math.random(#UMWebbedCreatureUtil.COCOON_CREATURES_SHIPWRECKED)]
+            inst.cocoon_data = UMWebbedCreatureUtil.COCOON_DEFS.SHIPWRECKED[inst.cocoon_creature]
         else
-            inst.cocoon_creature = COCOON_CREATURES_DEFAULT[math.random(#COCOON_CREATURES_DEFAULT)]
-            inst.cocoon_data = COCOON_DEFS.DEFAULT[inst.cocoon_creature]
+            inst.cocoon_creature = UMWebbedCreatureUtil.COCOON_CREATURES_DEFAULT[math.random(#UMWebbedCreatureUtil.COCOON_CREATURES_DEFAULT)]
+            inst.cocoon_data = UMWebbedCreatureUtil.COCOON_DEFS.DEFAULT[inst.cocoon_creature]
         end
     end
     if not (inst.cocoon_data and inst.cocoon_creature) then
@@ -111,7 +110,7 @@ local function OnKilled(inst)
     inst.SoundEmitter:PlaySound("dontstarve/creatures/spider/spiderLair_destroy")
 
     --creature
-    if not table.contains(COCOON_CHARACTERS, inst.cocoon_creature) then
+    if not table.contains(UMWebbedCreatureUtil.COCOON_CHARACTERS, inst.cocoon_creature) then
         if inst.cocoon_creature == "KOALEFANT_SUMMER" and TheWorld.state.iswinter then
             inst.cocoon_creature = "KOALEFANT_WINTER"
         elseif inst.cocoon_creature == "SLURTLE" and math.random() > .5 then
@@ -169,8 +168,8 @@ local function onload(inst, data)
         --This here could be better
         --ideally we should be saving which type of cocoon as well instead of searching across the different defs.
         --in case there's the same creature with different loot; but it works for now so, too bad! - Atobá.
-        inst.cocoon_data = COCOON_DEFS.DEFAULT[inst.cocoon_creature] or COCOON_DEFS.SHIPWRECKED[inst.cocoon_creature]
-            or COCOON_DEFS.CHARACTER[inst.cocoon_creature]
+        inst.cocoon_data = UMWebbedCreatureUtil.COCOON_DEFS.DEFAULT[inst.cocoon_creature] or UMWebbedCreatureUtil.COCOON_DEFS.SHIPWRECKED[inst.cocoon_creature]
+            or UMWebbedCreatureUtil.COCOON_DEFS.CHARACTER[inst.cocoon_creature]
     end
 end
 
@@ -244,6 +243,8 @@ local function fn()
     inst:AddTag("ignorewalkableplatforms")
     inst:AddTag("ignorewalkableplatformdrowning")
 
+    MakeSnowCoveredPristine(inst)
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
@@ -258,8 +259,8 @@ local function fn()
     health:StartRegen(300, .1)
     --health.invincible = true
 
-    inst:AddComponent("combat")
-    inst.components.combat:SetShouldRecoilFn(ShouldRecoil)
+    local combat = inst:AddComponent("combat")
+    combat:SetShouldRecoilFn(ShouldRecoil)
 
     inst:ListenForEvent("attacked", Regen)
     inst:ListenForEvent("death", OnKilled)

@@ -4,7 +4,7 @@
 ---@param use_durability? boolean Whether to set the durability of the item, if any durability-esque component is present
 ---@param lootfn? function A function that gets called when the item is dropped, with the spawned item prefab as an argument.
 ---@return table loot_table
-_G.UMWebbedCreatureUtil = {}
+UMWebbedCreatureUtil = {}
 
 UMWebbedCreatureUtil.Item = function(item, count, chance, use_durability, lootfn)
     return {
@@ -25,28 +25,28 @@ end
 local Item = UMWebbedCreatureUtil.Item
 local RandomItem = UMWebbedCreatureUtil.RandomItem
 
-COCOON_SIZE = {
+UMWebbedCreatureUtil.COCOON_SIZE = {
     SMALL = 0,
     MEDIUM = 1,
     LARGE = 2
 }
 
 --automatically populated by metatable.
-COCOON_CREATURES_DEFAULT = {}
-COCOON_CREATURES_SHIPWRECKED = {}
-COCOON_CHARACTERS = {}
+UMWebbedCreatureUtil.COCOON_CREATURES_DEFAULT = {}
+UMWebbedCreatureUtil.COCOON_CREATURES_SHIPWRECKED = {}
+UMWebbedCreatureUtil.COCOON_CHARACTERS = {}
 
-COCOON_DEFS = {}
-COCOON_DEFS.CHARACTER = {}
-COCOON_DEFS.DEFAULT = {}
-COCOON_DEFS.SHIPWRECKED = {}
+UMWebbedCreatureUtil.COCOON_DEFS = {}
+UMWebbedCreatureUtil.COCOON_DEFS.CHARACTER = {}
+UMWebbedCreatureUtil.COCOON_DEFS.DEFAULT = {}
+UMWebbedCreatureUtil.COCOON_DEFS.SHIPWRECKED = {}
 
-setmetatable(COCOON_DEFS.CHARACTER, {
+setmetatable(UMWebbedCreatureUtil.COCOON_DEFS.CHARACTER, {
     __newindex = function(t, k, v)
         --[[printwrap("t", t)
         print(k)
         printwrap("v", v)]]
-        table.insert(COCOON_CHARACTERS, k)
+        table.insert(UMWebbedCreatureUtil.COCOON_CHARACTERS, k)
 
         v.size = 1          --automatically set size
         v.name = "Shrouded" --and name for character cocoons.
@@ -55,16 +55,16 @@ setmetatable(COCOON_DEFS.CHARACTER, {
     end
 })
 
-setmetatable(COCOON_DEFS.DEFAULT, {
+setmetatable(UMWebbedCreatureUtil.COCOON_DEFS.DEFAULT, {
     __newindex = function(t, k, v)
-        table.insert(COCOON_CREATURES_DEFAULT, k)
+        table.insert(UMWebbedCreatureUtil.COCOON_CREATURES_DEFAULT, k)
         rawset(t, k, v)
     end
 })
 
-setmetatable(COCOON_DEFS.SHIPWRECKED, {
+setmetatable(UMWebbedCreatureUtil.COCOON_DEFS.SHIPWRECKED, {
     __newindex = function(t, k, v)
-        table.insert(COCOON_CREATURES_SHIPWRECKED, k)
+        table.insert(UMWebbedCreatureUtil.COCOON_CREATURES_SHIPWRECKED, k)
         rawset(t, k, v)
     end
 })
@@ -413,7 +413,7 @@ end
 
 local default = {
     BEEGUARD = {
-        size = COCOON_SIZE.SMALL,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.SMALL,
         name = "Buggy",
         loot = {
             Item("honeycomb", 2),
@@ -424,7 +424,7 @@ local default = {
         }
     },
     EYEOFTERROR_MINI = {
-        size = COCOON_SIZE.SMALL,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.SMALL,
         name = "Grotesque",
         loot = {
             Item("milkywhites", 3),
@@ -434,7 +434,7 @@ local default = {
         }
     },
     CATCOON = {
-        size = COCOON_SIZE.SMALL,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.SMALL,
         name = "Hairy",
         loot = {
             Item("meat"),
@@ -452,7 +452,7 @@ local default = {
         }
     },
     ALPHA_LIGHTNINGGOAT = {
-        size = COCOON_SIZE.SMALL,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.SMALL,
         name = "Hairy",
         loot = {
             Item("meat", 1, .5),
@@ -460,14 +460,14 @@ local default = {
         }
     },
     BISHOP = {
-        size = COCOON_SIZE.SMALL,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.SMALL,
         name = "Hardened",
         loot = {
             Item("trinket_6", 2)
         }
     },
     MERM = {
-        size = COCOON_SIZE.SMALL,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.SMALL,
         name = "Soggy",
         loot = {
             Item("froglegs", 1, 1),
@@ -477,7 +477,7 @@ local default = {
         }
     },
     PIGMAN = {
-        size = COCOON_SIZE.SMALL,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.SMALL,
         name = "Leathery",
         loot = {
             Item("meat"),
@@ -490,7 +490,7 @@ local default = {
         }
     },
     OTTER = {
-        size = COCOON_SIZE.SMALL,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.SMALL,
         name = "Soggy",
         loot = {
             Item("smallmeat"),
@@ -513,7 +513,7 @@ local default = {
         }
     },
     SLURTLE = { --50/50 for snurtle
-        size = COCOON_SIZE.SMALL,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.SMALL,
         name = "Soggy",
         loot = {
             Item("slurtleslime", 4),
@@ -526,7 +526,7 @@ local default = {
         }
     },
     PIED_RAT = {
-        size = COCOON_SIZE.MEDIUM,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.MEDIUM,
         name = "Grotesque",
         loot = {
             Item("monstermeat", 2),
@@ -538,7 +538,7 @@ local default = {
         }
     },
     MOSSLING = {
-        size = COCOON_SIZE.MEDIUM,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.MEDIUM,
         name = "Feathery",
         loot = {
             Item(RandomItem("meat", "drumstick"), 1),
@@ -548,7 +548,7 @@ local default = {
         }
     },
     TALLBIRD = {
-        size = COCOON_SIZE.MEDIUM,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.MEDIUM,
         name = "Feathery",
         loot = {
             Item("tallbirdegg"),
@@ -564,7 +564,7 @@ local default = {
         }
     },
     UM_FERN_FOX = {
-        size = COCOON_SIZE.MEDIUM,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.MEDIUM,
         name = "Hairy",
         loot = {
             Item("plantmeat", 1, 1),
@@ -577,7 +577,7 @@ local default = {
         }
     },
     KRAMPUS = {
-        size = COCOON_SIZE.MEDIUM,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.MEDIUM,
         name = "Grotesque",
         loot = {
             Item("monstermeat", 1, .5),
@@ -589,7 +589,7 @@ local default = {
         }
     },
     WALRUS = {
-        size = COCOON_SIZE.MEDIUM,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.MEDIUM,
         name = "Leathery",
         loot = {
             Item("meat", 1, .5),
@@ -599,7 +599,7 @@ local default = {
         }
     },
     GLACIALHOUND = {
-        size = COCOON_SIZE.MEDIUM,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.MEDIUM,
         name = "Grotesque",
         loot = {
             Item("monstermeat", 1, .5),
@@ -612,7 +612,7 @@ local default = {
         }
     },
     SNOWMONG = {
-        size = COCOON_SIZE.MEDIUM,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.MEDIUM,
         name = "Soggy",
         loot = {
             Item("charcoal", 2),
@@ -628,7 +628,7 @@ local default = {
         }
     },
     SNAILDRAKE_MAGMA = { --50/50 for snaildrake_slime
-        size = COCOON_SIZE.MEDIUM,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.MEDIUM,
         name = "Soggy",
         loot = {
             Item("snapalm", 5),
@@ -643,7 +643,7 @@ local default = {
         }
     },
     LORDFRUITFLY = {
-        size = COCOON_SIZE.LARGE,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.LARGE,
         name = "Buggy",
         loot = {
             Item("plantmeat"),
@@ -653,7 +653,7 @@ local default = {
         }
     },
     SPIDERQUEEN = {
-        size = COCOON_SIZE.LARGE,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.LARGE,
         name = "Buggy",
         loot = {
             Item("monstermeat", 2),
@@ -665,7 +665,7 @@ local default = {
         }
     },
     BEEFALO = {
-        size = COCOON_SIZE.LARGE,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.LARGE,
         name = "Hairy",
         loot = {
             Item("meat"),
@@ -678,7 +678,7 @@ local default = {
         }
     },
     WARG = {
-        size = COCOON_SIZE.LARGE,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.LARGE,
         name = "Hairy",
         loot = {
             Item("monstermeat"),
@@ -692,7 +692,7 @@ local default = {
         }
     },
     KOALEFANT_SUMMER = {
-        size = COCOON_SIZE.LARGE,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.LARGE,
         name = "Leathery",
         loot = {
             Item("meat", 3),
@@ -701,7 +701,7 @@ local default = {
         }
     },
     LEIF_SPARSE = {
-        size = COCOON_SIZE.LARGE,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.LARGE,
         name = "Hardened",
         loot = {
             Item("plantmeat", 1),
@@ -711,7 +711,7 @@ local default = {
         }
     },
     ROCKY = { --Used to be Boulder Crab, RIP. -CB
-        size = COCOON_SIZE.LARGE,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.LARGE,
         name = "Hardened",
         loot = {
             Item("meat", 2),
@@ -734,7 +734,7 @@ local default = {
     },
     --[[
     DEER = {
-        size = COCOON_SIZE.MEDIUM,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.MEDIUM,
         name = "Hairy",
         loot = {
             Item("meat"),
@@ -745,7 +745,7 @@ local default = {
         }
     },
     ROOK = {
-        size = COCOON_SIZE.LARGE,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.LARGE,
         name = "Hardened",
         loot = {
             Item("gears", 2),
@@ -757,7 +757,7 @@ local default = {
         }
     },
     SHARK = { --I don't like this one i'm ngl. - Atobá
-        size = COCOON_SIZE.LARGE,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.LARGE,
         name = "Leathery",
         loot = {
             Item("fishmeat", 1, .5),
@@ -768,7 +768,7 @@ local default = {
         }
     },
     GRASSGATOR = {
-        size = COCOON_SIZE.LARGE,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.LARGE,
         name = "Leafy",
         loot = {
             Item("plantmeat", 1, .5),
@@ -790,7 +790,7 @@ local default = {
 ]]
 local sw = {
     SHARKITTEN = {
-        size = COCOON_SIZE.MEDIUM,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.MEDIUM,
         name = "Leathery",
         loot = {
             Item("shark_gills"),
@@ -800,7 +800,7 @@ local sw = {
         }
     },
     MERMFISHER = {
-        size = COCOON_SIZE.SMALL,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.SMALL,
         name = "Scaly",
         loot = {
             Item(RandomItem("pondpurple_grouper", "pondneon_quattro", "pondpierrot_fish")),
@@ -808,7 +808,7 @@ local sw = {
         }
     },
     PRIMEAPE = {
-        size = COCOON_SIZE.SMALL,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.SMALL,
         name = "Hairy",
         loot = {
             Item("poop", 2),
@@ -820,7 +820,7 @@ local sw = {
         }
     },
     OX = {
-        size = COCOON_SIZE.LARGE,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.LARGE,
         name = "Hairy",
         loot = {
             Item("meat"),
@@ -831,7 +831,7 @@ local sw = {
         }
     },
     CROCODOG = {
-        size = COCOON_SIZE.MEDIUM,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.MEDIUM,
         name = "Scaly",
         loot = {
             Item("houndstooth"),
@@ -839,7 +839,7 @@ local sw = {
         }
     },
     WILDBORE = {
-        size = COCOON_SIZE.MEDIUM,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.MEDIUM,
         name = "Leathery",
         loot = {
             Item("meat"),
@@ -848,7 +848,7 @@ local sw = {
         }
     },
     STUNGRAY = {
-        size = COCOON_SIZE.SMALL,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.SMALL,
         name = "Leathery",
         loot = {
             Item("monstermeat"),
@@ -857,14 +857,14 @@ local sw = {
         }
     },
     DOYDOY = {
-        size = COCOON_SIZE.MEDIUM,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.MEDIUM,
         name = "Feathery",
         loot = {
             Item("doydoyegg")
         }
     },
     LEIF_PALM = {
-        size = COCOON_SIZE.LARGE,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.LARGE,
         name = "Leafy",
         loot = {
             Item("plantmeat", 1),
@@ -876,7 +876,7 @@ local sw = {
         }
     },
     DRAGOON = {
-        size = COCOON_SIZE.MEDIUM,
+        size = UMWebbedCreatureUtil.COCOON_SIZE.MEDIUM,
         name = "Scaly",
         loot = {
             Item("obsidian"),
@@ -892,15 +892,15 @@ local sw = {
 
 --poopulate globals.
 for k, v in pairs(characters) do
-    COCOON_DEFS.CHARACTER[k] = v
+    UMWebbedCreatureUtil.COCOON_DEFS.CHARACTER[k] = v
 end
 
 for k, v in pairs(default) do
-    COCOON_DEFS.DEFAULT[k] = v
+    UMWebbedCreatureUtil.COCOON_DEFS.DEFAULT[k] = v
 end
 
 for k, v in pairs(sw) do
-    COCOON_DEFS.SHIPWRECKED[k] = v
+    UMWebbedCreatureUtil.COCOON_DEFS.SHIPWRECKED[k] = v
 end
 
 ---@param modid string The mod id of the character's mod. You can see the modid in the end of the link of the workshop page.
@@ -930,13 +930,13 @@ UMWebbedCreatureUtil.AddCocoon = function(creature, size, prefix, loot_pool, sw)
     assert(size >= 0 and size <= 2, "Cocoon size for " .. creature .. " must be between 0 and 2. (was " .. size .. ")")
 
     if sw then
-        COCOON_DEFS.SHIPWRECKED[string.upper(creature)] = {
+        UMWebbedCreatureUtil.COCOON_DEFS.SHIPWRECKED[string.upper(creature)] = {
             size = size,
             name = prefix,
             loot = loot_pool
         }
     else
-        COCOON_DEFS.DEFAULT[string.upper(creature)] = {
+        UMWebbedCreatureUtil.COCOON_DEFS.DEFAULT[string.upper(creature)] = {
             size = size,
             name = prefix,
             loot = loot_pool
@@ -950,7 +950,7 @@ UMWebbedCreatureUtil.AddCharacterCocoon = function(character, loot_pool)
     assert(type(character), "Bad argument #1 to AddCharacterCocoon. Expected string, got " .. type(character))
     assert(type(loot_pool) == "table", "Bad argument #2 to AddCharacterCocoon. Expected table, got " .. type(loot_pool))
 
-    COCOON_DEFS.CHARACTER[string.upper(character)] = { loot = loot_pool }
+    UMWebbedCreatureUtil.COCOON_DEFS.CHARACTER[string.upper(character)] = { loot = loot_pool }
 end
 
 UMWebbedCreatureUtil.AddCompatCharacterCocoon("3484995444", "wieneke", {
