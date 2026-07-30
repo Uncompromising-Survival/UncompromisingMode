@@ -91,7 +91,7 @@ local characters = {
             Item("beardhair", 4),
             Item("beardhair", 2, .5),
             Item(RandomItem("bluegem", "redgem", "purplegem"), 2)
-		}
+        }
     },
     WILLOW = {
         loot = {
@@ -99,7 +99,7 @@ local characters = {
             Item("sludge_oil"),
             Item("lighter", 1, 1, true),
             Item(RandomItem("snapalm", "slurtleslime"), 4, .5)
-		}
+        }
     },
     WOLFGANG = {
         loot = {
@@ -110,7 +110,7 @@ local characters = {
             Item("potato_cooked", 3, .3, true),
             Item("armorslurper", 1, .2, true),
             Item("bonestew", 1, .3, true)
-		}
+        }
     },
     WENDY = {
         loot = {
@@ -124,7 +124,7 @@ local characters = {
             Item(RandomItem("halloweenpotion_sanity_large", "halloweenpotion_sanity_small"), 2),
             Item(RandomItem("halloweenpotion_health_large", "halloweenpotion_health_small"), 2),
             Item("butterfly", 4, .5)
-		}
+        }
     },
     WX78 = {
         loot = {
@@ -137,7 +137,7 @@ local characters = {
             Item("zaspberry_lesser", 2, .5, true),
             Item("zaspberry", 1, .5),
             Item(function() return TheWorld.state.isspring and RandomItem("raincoat", "rainhat") or nil end, 1, .1, true)
-		}
+        }
     },
     WICKERBOTTOM = {
         loot = {
@@ -171,7 +171,7 @@ local characters = {
                     end
                 end
             end)
-		}
+        }
     },
     WOODIE = {
         loot = {
@@ -180,7 +180,7 @@ local characters = {
             Item("log", 10),
             Item("log", 20, .75),
             Item(RandomItem("wereitem_beaver", "wereitem_moose", "wereitem_goose"), 1, 1, true)
-		}
+        }
     },
     WAXWELL = {
         loot = {
@@ -190,7 +190,7 @@ local characters = {
             Item("rabbit"),
             Item("purpleamulet", 1, .2),
             Item(RandomItem("nightsword", "armor_sanity"), 1, 1, true)
-		}
+        }
     },
     WATHGRITHR = {
         loot = {
@@ -203,7 +203,7 @@ local characters = {
             Item("wathgrithrhat", 1, .5, true),
             Item("spear_wathgrithr", 1, 1, true),
             Item("spear_wathgrithr", 1, .5, true)
-		}
+        }
     },
     WEBBER = {
         loot = {
@@ -214,7 +214,7 @@ local characters = {
             Item("healingsalve", 3, .5),
             Item(RandomItem("monstermeat", "monstersmallmeat"), 6, .5, true),
             Item("sewing_kit")
-		}
+        }
     },
     WINONA = {
         loot = {
@@ -227,7 +227,7 @@ local characters = {
             Item("wagpunk_bits", 4, .5),
             Item("powercell", 2, .5),
             Item(RandomItem("nightstick", "bugzapper"), 1, .1, true)
-		}
+        }
     },
     WARLY = {
         loot = {
@@ -242,7 +242,7 @@ local characters = {
             Item(RandomItem("theatercorn_spice_salt", "beefalowings_spice_garlic", "stuffed_peeper_poppers"), 1, .3, true),
             Item(RandomItem("zaspberryparfait_spice_sugar", "snotroast_spice_chili", "viperjam_spice_sugar"), 1, .3, true),
             Item(RandomItem("um_rimeweed_spagett", "um_rimeweed_tequila"), 1, .3, true)
-		}
+        }
 
     },
     WORTOX = {
@@ -258,7 +258,7 @@ local characters = {
             Item("cotl_trinket", 1, .3),
             Item("panflute", 1, .1),
             Item("krampus_sack", 1, .01)
-		}
+        }
     },
     WORMWOOD = {
         loot = {
@@ -274,7 +274,7 @@ local characters = {
             Item(function() return TheWorld.state.iswinter and "um_armor_bramble_rimeweed" or "armor_bramble" end, 1, .5, true),
             Item("trap_bramble", 3, .5),
             Item("lureplantbulb", 1, .2)
-		}
+        }
     },
     WURT = {
         loot = {
@@ -289,7 +289,7 @@ local characters = {
             Item("pondfish", 4, .5),
             Item("tentaclespike", 3, .75, true),
             Item("mermhat", 1, .2, true)
-		}
+        }
     },
     WALTER = {
         loot = {
@@ -303,7 +303,7 @@ local characters = {
             Item(RandomItem("portabletent_item", "bedroll_furry"), 1, .3, true),
             Item(RandomItem("meatrack_hat", "walterhat", "bushhat"), 1, .5, true),
             Item("um_record_walter", 1, .05)
-		}
+        }
     },
     WANDA = {
         loot = {
@@ -316,7 +316,7 @@ local characters = {
             Item("walrus_tusk", 1, .5),
             Item("purplegem", 1, .5),
             Item("oldager_become_younger_front_fx", 1, .5)
-		}
+        }
     },
     WINKY = {
         loot = {
@@ -342,7 +342,7 @@ local characters = {
             Item(RandomItem("cctrinket_names", "trinket_jazzy"), 1, .2),
             Item("corncan", 1, .2),
             Item("um_record_winky", 1, .05)
-		}
+        }
     },
     WATHOM = {
         loot = {
@@ -356,7 +356,7 @@ local characters = {
             Item("thulecite", 1),
             Item("thulecite", 5, .3),
             Item("um_record_wathom", 1, .05)
-		}
+        }
     },
     WIXIE = {
         loot = {
@@ -373,7 +373,7 @@ local characters = {
             Item(RandomItem("moonrocknugget", "moonglass"), 6),
             Item("townportaltalisman", 3, .1),
             Item("um_record_wixie", 1, .05)
-		}
+        }
 
     },
     WES = {
@@ -385,7 +385,7 @@ local characters = {
             Item("balloonhat", 1),
             Item("balloonvest", 1),
             Item("waterballoon", 10, .3)
-		}
+        }
     },
     WAGSTAFF = {
         loot = {
@@ -397,7 +397,7 @@ local characters = {
             Item("moonglass", 6),
             Item("moonglass", 6, .5),
             Item("goggleshat", 1, 1, true)
-		}
+        }
     },
 }
 
@@ -954,9 +954,14 @@ UMWebbedCreatureUtil.AddCharacterCocoon = function(character, loot_pool)
 end
 
 UMWebbedCreatureUtil.AddCompatCharacterCocoon("3484995444", "wieneke", {
-    Item("koalefant_carcass", 1, 1, nil, function(inst)
-        if not inst.SetMeatPct then return end
-        inst:SetMeatPct(.25) -- Not sure if 25% is the right amount to have the second-to-last decay stage, might need to fiddle to get it right!
+    Item("koalefantcorpse", 1, 1, nil, function(inst)
+        if TheWorld.state.iswinter then
+            inst:SetAltBuild("koalefant_winter_build")
+        end
+        if inst.SetMeatPercent then
+            inst:SetMeatPercent(.33)
+            inst.sg:GoToState("corpse_idle")
+        end
     end),
     Item("glommerfuel", 2),
     Item("glommerfuel", 2, .5),

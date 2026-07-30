@@ -1,3 +1,5 @@
+require("webbedcreatureloot")
+
 local function AddChanceLoot(inst, loot, chance, amount)
     for i = 1, amount do
         inst.components.lootdropper:AddChanceLoot(type(loot) == "function" and loot() or loot, chance)

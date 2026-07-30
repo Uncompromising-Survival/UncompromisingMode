@@ -79,7 +79,6 @@ local GAMEMODE_CUSTOM_SETTINGS = 2;
 
 --    [                 Features            ]    --
 
-require("webbedcreatureloot")
 --if GetModConfigData("harder_monsters") then4
 if GetModConfigData("horriblefood") then
     modimport("init/init_horriblefood")
