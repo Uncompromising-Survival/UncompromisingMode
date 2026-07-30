@@ -20,11 +20,11 @@ local function TrySpawnCocoon(x, z, type)
     if not type then
         local is_character = math.random() > .95 --roughly same chance as before.
         if is_character then
-            type = COCOON_CHARACTERS[math.random(#COCOON_CHARACTERS)]
+            type = UMWebbedCreatureUtil.COCOON_CHARACTERS[math.random(#UMWebbedCreatureUtil.COCOON_CHARACTERS)]
         elseif IsIslandWorld() then
-            type = COCOON_CREATURES_SHIPWRECKED[math.random(#COCOON_CREATURES_SHIPWRECKED)]
+            type = UMWebbedCreatureUtil.COCOON_CREATURES_SHIPWRECKED[math.random(#UMWebbedCreatureUtil.COCOON_CREATURES_SHIPWRECKED)]
         else
-            type = COCOON_CREATURES_DEFAULT[math.random(#COCOON_CREATURES_DEFAULT)]
+            type = UMWebbedCreatureUtil.COCOON_CREATURES_DEFAULT[math.random(#UMWebbedCreatureUtil.COCOON_CREATURES_DEFAULT)]
         end
     end
     local xi = x + math.random(-8, 8)
