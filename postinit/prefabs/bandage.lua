@@ -14,7 +14,7 @@ end)
 
 local _acid_OnHealFn
 local function acid_OnHealFn(inst, target, ...)
-    local ret = _acid_OnHealFn(inst, target, ...)
+    local ret =  _acid_OnHealFn and _acid_OnHealFn(inst, target, ...)
     OnUse(inst, target)
     return ret
 end
