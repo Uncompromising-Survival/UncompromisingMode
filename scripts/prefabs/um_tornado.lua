@@ -262,7 +262,7 @@ local function TornadoTask(inst)
             local _x, _y, _z = x + math.random(-150, 150), 0, z + math.random(-150, 150)
 
             if not IsUnderRainDomeAtXZ(_x, _z) then
-				UMCommonFns.SpawnHoundLightning(inst, {pos = {x = _x, z = _z}, delay = 1.25 + math.random() / 2, canttags = HOUND_LIGHNTING_CANT_TAGS})
+                UMCommonFns.SpawnHoundLightning(inst, {pos = {x = _x, z = _z}, delay = 1.25 + math.random() / 2, canttags = HOUND_LIGHNTING_CANT_TAGS})
             end
         end
 
