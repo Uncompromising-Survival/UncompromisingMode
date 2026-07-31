@@ -48,7 +48,7 @@ env.AddPrefabPostInit("frog", function (inst)
     if not TheWorld.ismastersim then
         return
     end
-    
+
     inst:WatchWorldState("isautumn", OnIsAutumn)
     if TheWorld.state.isautumn then
         OnIsAutumn(inst, true)
@@ -61,7 +61,7 @@ env.AddPrefabPostInit("frog", function (inst)
             inst.components.combat:SetRetargetFunction(2, NewRetargetfn)
         end
     end
-    
+
     local eater = inst.components.eater or inst:AddComponent("eater")
     if eater then
         eater:SetDiet({ FOODGROUP.OMNI }, { FOODGROUP.OMNI })
@@ -69,7 +69,7 @@ env.AddPrefabPostInit("frog", function (inst)
         eater:SetCanEatRaw()
         eater.strongstomach = true -- can eat monster meat!
     end
-    
+
     if not inst.components.inventory then
         inst:AddComponent("inventory")
     end
@@ -82,7 +82,6 @@ env.AddPrefabPostInit("frog", function (inst)
 end)
 
 env.AddPrefabPostInit("uncompromising_toad", function (inst)
-    
     inst:AddTag("frogimmunity")
 
     if not TheWorld.ismastersim then
@@ -96,11 +95,11 @@ env.AddPrefabPostInit("uncompromising_toad", function (inst)
         eater:SetCanEatRaw()
         eater.strongstomach = true -- can eat monster meat!
     end
-    
+
     if not inst.components.inventory then
         inst:AddComponent("inventory")
     end
-    
+
 	--[[local um_dynamic_digester = inst.components.um_dynamic_digester or inst:AddComponent("um_dynamic_digester")
     if um_dynamic_digester then
         um_dynamic_digester.digesttime = 5
@@ -109,7 +108,6 @@ env.AddPrefabPostInit("uncompromising_toad", function (inst)
 end)
 
 env.AddPrefabPostInit("lunarfrog", function (inst)
-    
     inst:AddTag("frogimmunity")
 
     if not TheWorld.ismastersim then
@@ -131,11 +129,11 @@ env.AddPrefabPostInit("lunarfrog", function (inst)
         eater:SetCanEatRaw()
         eater.strongstomach = true -- can eat monster meat!
     end
-    
+
     if not inst.components.inventory then
         inst:AddComponent("inventory")
     end
-    
+
 	--[[local um_dynamic_digester = inst.components.um_dynamic_digester or inst:AddComponent("um_dynamic_digester")
     if um_dynamic_digester then
         um_dynamic_digester.digesttime = 5
