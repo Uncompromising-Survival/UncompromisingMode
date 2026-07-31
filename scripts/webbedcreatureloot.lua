@@ -1,4 +1,3 @@
-
 UMWebbedCreatureUtil = {}
 
 ---@param item string|function The loot item prefab, or a function that returns a prefab.
