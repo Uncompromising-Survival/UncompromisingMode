@@ -313,7 +313,8 @@ end
 local function AuraTest(inst, target)
     local attacker = inst.owner and inst.owner:IsValid() and inst.owner or nil
     local leader = inst.ownerleader and inst.ownerleader:IsValid() and inst.ownerleader or nil
-    local cloudowner = attacker and not (attacker.components.health and attacker.components.health:IsDead()) and attacker or leader
+    local health = attacker and attacker.components.health
+    local cloudowner = not (health and health:IsDead()) and attacker or leader
     local tags = inst.NoTags
     if not cloudowner and tags and target:HasAnyTag(tags) then return false end
     return not (target.components.health and target.components.health:IsDead()) and target ~= cloudowner and UMCommonFns.IsNotFriendly(cloudowner, target)
