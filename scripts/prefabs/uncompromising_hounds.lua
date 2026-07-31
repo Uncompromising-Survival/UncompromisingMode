@@ -124,10 +124,11 @@ local SLEEP_NEAR_HOME_DISTANCE = 10
 local SHARE_TARGET_DIST = 30
 local HOME_TELEPORT_DIST = 30
 
-local NO_TAGS = { "FX", "NOCLICK", "DECOR", "INLIMBO" }
-local FREEZABLE_TAGS = { "freezable" }
+local NO_TAGS = {"FX", "NOCLICK", "DECOR", "INLIMBO"}
+local FREEZABLE_TAGS = {"freezable"}
 
-local SINKHOLD_BLOCKER_TAGS = { "hound_lightning" }
+local SINKHOLD_BLOCKER_TAGS = {"hound_lightning"}
+
 local function Zap(inst, posx, posz)
     --local projectile = SpawnPrefab("hound_lightning")
     --projectile.Transform:SetPosition(posx, 0, posz)
@@ -151,10 +152,7 @@ local function Zap(inst, posx, posz)
         or nil
 
     if offset then
-        local lightning = SpawnPrefab("hound_lightning")
-        lightning.owner = inst
-        lightning.NoTags = JoinArrays(lightning.NoTags, {"hound", "houndfriend"})
-        lightning.Transform:SetPosition(x + offset.x, 0, z + offset.z)
+        UMCommonFns.SpawnHoundLightning(inst, {pos = {x = x + offset.x, z = z + offset.z}})
     end
 end
 
@@ -639,7 +637,7 @@ local function ontimerdone(inst, data)
 end
 
 local function DoLightningExplosion(inst)
-    SpawnPrefab("hound_lightning").Transform:SetPosition(inst.Transform:GetWorldPosition())
+    UMCommonFns.SpawnHoundLightning(inst, {pos = inst:GetPosition()})
 end
 
 local function OnLightningAttacked(inst, data)
@@ -658,7 +656,7 @@ end
 
 local function IsAlly(inst, guy)
     -- Prevents lightning from forking from a Lightning Hound's target to other Hounds and friends.
-    return UMCommonFns.IsAlly(inst, guy, { "hound", "houndfriend", "houndmound" })
+    return UMCommonFns.IsAlly(inst, guy, {"hound", "houndfriend", "houndmound"})
 end
 
 local function fnlightning()

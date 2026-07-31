@@ -55,8 +55,8 @@ UMCommonFns.IsAlly = function(inst, guy, tags) -- Used for UMIsAlly on certain c
 end
 
 UMCommonFns.IsNotFriendly = function(attacker, target) -- Is the target an ally or my leader's ally?
-    if not (attacker and attacker:IsValid()) or not target.components.health then return true end
-    local attackercombat = attacker and attacker.components.combat
+    local attackercombat = attacker and attacker:IsValid() and attacker.components.combat
+    if not attackercombat or not target.components.health then return true end
     local leader = attacker and attacker.components.follower and attacker.components.follower:GetLeader()
     local leadercombat = leader and leader.components.combat
     return attackercombat and (attackercombat.target == target or attackercombat:CanTarget(target) and not attackercombat:IsAlly(target)
@@ -109,6 +109,16 @@ end
 
 UMCommonFns.DefaultCanCastOnTarget = function(inst, doer, pos, target, actioncount)
     return not actioncount
+end
+
+UMCommonFns.SpawnHoundLightning = function(inst, data)
+    if not data then return end
+    local lightning = SpawnPrefab("hound_lightning")
+    local pos = data.pos
+    if pos then lightning.Transform:SetPosition(pos.x, 0, pos.z) end
+    lightning.owner = data.owner or inst
+    if data.canttags then lightning.NoTags = JoinArrays(lightning.NoTags, data.canttags) end
+    if data.delay then lightning.Delay = data.delay end
 end
 
 -- Unified megaflare timer reduction used by all seasonal boss spawners

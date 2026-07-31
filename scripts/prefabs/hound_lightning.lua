@@ -9,11 +9,11 @@ local function Sparks(inst)
     local x1 = x + math.random(-2, 2)
     local z1 = z + math.random(-2, 2)
 
-    if math.random() >= 0.6 then
+    if math.random() >= .6 then
         SpawnPrefab("electricchargedfx").Transform:SetPosition(x1, 0, z1)
     end
 
-    SpawnPrefab("sparks").Transform:SetPosition(x1, 0 + 0.25 * math.random(), z1)
+    SpawnPrefab("sparks").Transform:SetPosition(x1, 0 + .25 * math.random(), z1)
 end
 
 local function ChargeItem(inst, item)
@@ -44,9 +44,9 @@ local function Zap(inst)
     end
     
     local radius = 3.5
-    local ents = TheSim:FindEntities(x, y, z, radius, { "_health" }, inst.NoTags)
-    local chargeables = TheSim:FindEntities(x, y, z, radius, { "_inventoryitem", }, inst.NoTags)
-    local lightningrods = TheSim:FindEntities(x, y, z, radius, { "structure", "lightningrod"}, {"INLIMBO"})
+    local ents = TheSim:FindEntities(x, y, z, radius, {"_health"}, inst.NoTags)
+    local chargeables = TheSim:FindEntities(x, y, z, radius, {"_inventoryitem"}, inst.NoTags)
+    local lightningrods = TheSim:FindEntities(x, y, z, radius, {"structure", "lightningrod"}, {"INLIMBO"})
 
 
     -- Items on the ground
@@ -130,7 +130,7 @@ local function fn()
 
     inst.NoTags = JoinArrays(UMCommonFns.GHOSTLIKE_TAGS, {"INLIMBO", "structure", "wall", "walkableplatform", "walkableperipheral"})
 
-    inst.task = inst:DoPeriodicTask(0.05, Sparks)
+    inst.task = inst:DoPeriodicTask(.05, Sparks)
 
     inst:DoTaskInTime(0, function() --modern problems require modern solutions
         -- need this or else when something sets inst.Delay the task will already have started with 1.

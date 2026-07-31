@@ -250,21 +250,19 @@ local function TornadoEnviromentTask(inst)
     end
 end
 
+local HOUND_LIGHNTING_CANT_TAGS = {"companion", "abigail", "bird", "prey"}
+
 local function TornadoTask(inst)
     if inst.startmoving then
         local x, y, z = inst.Transform:GetWorldPosition()
         local destination = TheSim:FindFirstEntityWithTag("um_tornado_destination")
-        local players = TheSim:FindEntities(x, y, z, 300, nil, { "playerghost" }, { "player", "um_windturbine" })
+        local players = TheSim:FindEntities(x, y, z, 300, nil, {"playerghost"}, {"player", "um_windturbine"})
 
         if math.random() > 0.99 and config ~= "minimal" then
             local _x, _y, _z = x + math.random(-150, 150), 0, z + math.random(-150, 150)
 
             if not IsUnderRainDomeAtXZ(_x, _z) then
-                local lightning = SpawnPrefab("hound_lightning")
-
-                lightning.Transform:SetPosition(_x, _y, _z)
-                lightning.NoTags = JoinArrays(lightning.NoTags, { "companion", "abigail", "bird", "prey" })
-                lightning.Delay = 1.25 + math.random() / 2
+				UMCommonFns.SpawnHoundLightning(inst, {pos = {x = _x, z = _z}, delay = 1.25 + math.random() / 2, canttags = HOUND_LIGHNTING_CANT_TAGS})
             end
         end
 
@@ -289,10 +287,7 @@ local function TornadoTask(inst)
                     local rand = math.random()
                     local px, py, pz = v.Transform:GetWorldPosition()
                     if (v.prefab == "wes" and rand > 0.95 or rand > 0.99) then
-                        local lightning_targeted = SpawnPrefab("hound_lightning")
-                        lightning_targeted.Transform:SetPosition(px + math.random(-5, 5), 0, pz + math.random(-5, 5))
-                        lightning_targeted.NoTags = JoinArrays(lightning_targeted.NoTags, { "companion", "abigail", "bird", "prey" })
-                        lightning_targeted.Delay = 1.5
+                        UMCommonFns.SpawnHoundLightning(inst, {pos = {x = px + math.random(-5, 5), z = pz + math.random(-5, 5)}, delay = 1.5, canttags = HOUND_LIGHNTING_CANT_TAGS})
                     end
 
                     if v ~= nil and v:IsValid() and v:HasTag("player") and v.sg ~= nil and not v.sg:HasStateTag("gotgrabbed") and v:GetDistanceSqToInst(inst) < 300 or v.prefab ~= "bullkelp_beachedroot" and v.components.inventoryitem ~= nil and v:GetDistanceSqToInst(inst) < 600 and not v:HasTag("tornado_nosucky") or v.components.oceanfishable ~= nil and not v:HasTag("INLIMBO") then
