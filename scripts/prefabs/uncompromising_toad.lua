@@ -61,6 +61,7 @@ local function DoSporeExplosion(inst)
     if math.random() <= .5 then
         local sporecloud = SpawnPrefab("sporecloud_toad")
         sporecloud.Transform:SetPosition(inst.Transform:GetWorldPosition())
+        sporecloud.owner = inst
     end
 end
 

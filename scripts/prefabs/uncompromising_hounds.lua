@@ -114,7 +114,6 @@ SetSharedLootTable('hound_spore',
     {
         { 'spoiled_food',         1.0 },
         { 'houndstooth',          1.0 },
-        { 'sporecloud_toad',      1.0 },
         { 'shroom_skin_fragment', 0.5 },
 
     })
@@ -654,9 +653,11 @@ local function OnLightningAttacked(inst, data)
     end
 end
 
+local ISALLY_TAGS = {"hound", "houndfriend", "houndmound"}
+
 local function IsAlly(inst, guy)
     -- Prevents lightning from forking from a Lightning Hound's target to other Hounds and friends.
-    return UMCommonFns.IsAlly(inst, guy, {"hound", "houndfriend", "houndmound"})
+    return UMCommonFns.IsAlly(inst, guy, ISALLY_TAGS)
 end
 
 local function fnlightning()
@@ -1154,6 +1155,48 @@ local function fnmagma()
     return inst
 end
 
+local function UpdateSporeCloudOwner(inst)
+    local attacker = inst.owner and inst.owner:IsValid() and inst.owner or nil
+    if not attacker then return end
+    local health = attacker.components.health
+    local follower = attacker.components.follower
+    if not (health and health:IsDead()) and follower then
+        local leader = inst.ownerleader and inst.ownerleader:IsValid() and inst.ownerleader or nil
+        local currentleader = follower:GetLeader()
+        if leader ~= currentleader then
+            inst.ownerleader = currentleader
+        end
+    end
+end
+
+local function SpawnSporeCloud(inst)
+    local sporecloud = SpawnPrefab("sporecloud_toad")
+    sporecloud.Transform:SetPosition(inst.Transform:GetWorldPosition())
+    sporecloud.owner = inst
+    sporecloud.NoTags = ISALLY_TAGS
+    local follower = inst.components.follower
+    local leader = follower and follower:GetLeader()
+    if leader then
+        sporecloud.ownerleader = leader
+        sporecloud.ownertask = sporecloud:DoPeriodicTask(0, UpdateSporeCloudOwner) -- Task for now, look into refining and making this a thing for the other follower projectiles/traps.
+    end
+end
+
+local function SporeCloudAttack(inst, target)
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local ents = TheSim:FindEntities(x, y, z, 2.5, {"_combat"}, {"wall", "hound", "houndfriend", "houndmound"})
+    for i, v in ipairs(ents) do
+        if not (v.components.health and v.components.health:IsDead()) and UMCommonFns.IsNotFriendly(inst, v) then
+            v.components.combat:GetAttacked(inst, 25, nil)
+        end
+    end
+    SpawnSporeCloud(inst)
+end
+
+local function DoSporeExplosion(inst)
+    SpawnSporeCloud(inst)
+end
+
 local function OnHitOther_Spore(inst, data)
     if data.target and data.target:HasTag("player") and not data.target:HasAnyTag("hasplaguemask", "automaton") and TUNING.DSTU.MAXHPHITTERS then
         data.target.components.health:DeltaPenalty(.05)
@@ -1162,11 +1205,13 @@ end
 
 local function fnspore()
     --local inst = fncommon("hound", "hound_spore_ocean", nil, nil, nil, {"sporehound"}, {amphibious = true})
-    local inst = fncommon("hound", "hound_spore", nil, nil, nil, { "sporehound" })
+    local inst = fncommon("hound", "hound_spore", nil, nil, nil, {"sporehound"})
 
     if not TheWorld.ismastersim then
         return inst
     end
+
+    inst.UMIsAlly = IsAlly
 
     --inst:SetBrain(sporebrain)
 
@@ -1180,6 +1225,9 @@ local function fnspore()
     MakeMediumFreezableCharacter(inst, "hound_body")
     MakeMediumBurnableCharacter(inst, "hound_body")
 
+    inst.LaunchProjectile = SporeCloudAttack
+
+    inst:ListenForEvent("death", DoSporeExplosion)
     inst:ListenForEvent("onhitother", OnHitOther_Spore)
 
     return inst

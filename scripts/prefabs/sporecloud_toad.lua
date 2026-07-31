@@ -9,7 +9,7 @@ local prefabs =
     "sporecloud_toad_overlay",
 }
 
-local AURA_EXCLUDE_TAGS = { "epic", "hound", "houndfriend", "bird", "toad", "frog", "toadstool", "playerghost", "ghost", "shadow", "shadowminion", "noauradamage", "INLIMBO", "notarget", "noattack", "flight", "invisible", "toadling", "has_gasmask" }
+local AURA_EXCLUDE_TAGS = {"epic", "bird", "toad", "frog", "toadstool", "ghost", "shadow", "shadowminion", "toadling", "has_gasmask"}
 
 local FADE_FRAMES = 5
 local FADE_INTENSITY = .8
@@ -310,6 +310,15 @@ local function DoAreaSpoil(inst)
     end
 end
 
+local function AuraTest(inst, target)
+    local attacker = inst.owner and inst.owner:IsValid() and inst.owner or nil
+    local leader = inst.ownerleader and inst.ownerleader:IsValid() and inst.ownerleader or nil
+    local cloudowner = attacker and not (attacker.components.health and attacker.components.health:IsDead()) and attacker or leader
+    local tags = inst.NoTags
+    if not cloudowner and tags and target:HasAnyTag(tags) then return false end
+    return not (target.components.health and target.components.health:IsDead()) and target ~= cloudowner and UMCommonFns.IsNotFriendly(cloudowner, target)
+end
+
 local function fn()
     local inst = CreateEntity()
 
@@ -355,22 +364,23 @@ local function fn()
         return inst
     end
 
-    inst:AddComponent("combat")
-    inst.components.combat:SetDefaultDamage(TUNING.TOADSTOOL_SPORECLOUD_DAMAGE)
+    local combat = inst:AddComponent("combat")
+    combat:SetDefaultDamage(TUNING.TOADSTOOL_SPORECLOUD_DAMAGE)
 
-    inst:AddComponent("aura")
-    inst.components.aura.radius = TUNING.TOADSTOOL_SPORECLOUD_RADIUS
-    inst.components.aura.tickperiod = TUNING.TOADSTOOL_SPORECLOUD_TICK
-    inst.components.aura.auraexcludetags = AURA_EXCLUDE_TAGS
-    inst.components.aura:Enable(true)
+    local aura = inst:AddComponent("aura")
+    aura.radius = TUNING.TOADSTOOL_SPORECLOUD_RADIUS
+    aura.tickperiod = TUNING.TOADSTOOL_SPORECLOUD_TICK
+    aura.auratestfn = AuraTest
+    aura.auraexcludetags = JoinArrays(aura.auraexcludetags, AURA_EXCLUDE_TAGS)
+    aura:Enable(true)
 
     inst._spoiltask = inst:DoPeriodicTask(inst.components.aura.tickperiod, DoAreaSpoil, inst.components.aura.tickperiod * .5)
 
     inst.AnimState:PushAnimation("sporecloud_loop", true)
     inst:ListenForEvent("animover", OnAnimOver)
 
-    inst:AddComponent("timer")
-    inst.components.timer:StartTimer("disperse", TUNING.TOADSTOOL_SPORECLOUD_LIFETIME / 2)
+    local timer = inst:AddComponent("timer")
+    timer:StartTimer("disperse", TUNING.TOADSTOOL_SPORECLOUD_LIFETIME / 2)
 
     inst:ListenForEvent("timerdone", OnTimerDone)
 
