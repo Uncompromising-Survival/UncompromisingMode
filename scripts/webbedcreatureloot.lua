@@ -972,22 +972,16 @@ UMWebbedCreatureUtil.AddCompatCharacterCocoon("3484995444", "wieneke", {
 
 UMWebbedCreatureUtil.AddCompatCharacterCocoon("2496686961", "flaire", {
     Item("nightsword"),
-    Item("familiarsword", 1, 1, true),
-    Item("pureaspectgem"),
-    Item("pureaspectgem", 2, .5),
+    Item("flaire_bolsteredsword", 1, 1, true),
+    Item("flaire_cleargem", 2),
+    Item("flaire_cleargem", 1, .5),
     Item("bluegem"),
     Item("redgem"),
+    Item("flaire_manaflask_potent", 2),
+    Item("flaire_manaflask_potent", 1, .5),
     Item("goldnugget", 2),
     Item("goldnugget", 4, .5),
-    Item("spellprint", 1, 1, false, function(inst)
-        if not inst.TryRevealSpell then return end
-        local flaire = FindClosestEntity(inst, 40, true, { "flaire" })
-        if flaire then
-            inst:TryRevealSpell(flaire)
-        else
-            inst:Remove()
-        end
-    end)
+    Item("flaire_spellscroll", 1)
 })
 
 --reign of runts
