@@ -1155,18 +1155,11 @@ local function fnmagma()
     return inst
 end
 
-local function UpdateSporeCloudOwner(inst)
-    local attacker = inst.owner and inst.owner:IsValid() and inst.owner or nil
-    if not attacker then return end
-    local health = attacker.components.health
-    local follower = attacker.components.follower
-    if not (health and health:IsDead()) and follower then
-        local leader = inst.ownerleader and inst.ownerleader:IsValid() and inst.ownerleader or nil
-        local currentleader = follower:GetLeader()
-        if leader ~= currentleader then
-            inst.ownerleader = currentleader
-        end
-    end
+local function OnSporeCloudRemoved(inst)
+    inst:RemoveEventCallback("attacked", inst.OnAttacked, inst.owner)
+    inst:RemoveEventCallback("leaderchanged", inst.OnLeaderChanged, inst.owner)
+    inst:RemoveEventCallback("onremove", inst.OnSporeHoundRemoved)
+    inst:RemoveEventCallback("onremove", inst.OnSporeHoundRemoved, inst.owner)
 end
 
 local function SpawnSporeCloud(inst)
@@ -1176,10 +1169,27 @@ local function SpawnSporeCloud(inst)
     sporecloud.NoTags = ISALLY_TAGS
     local follower = inst.components.follower
     local leader = follower and follower:GetLeader()
-    if leader then
-        sporecloud.ownerleader = leader
-        sporecloud.ownertask = sporecloud:DoPeriodicTask(0, UpdateSporeCloudOwner) -- Task for now, look into refining and making this a thing for the other follower projectiles/traps.
+    if leader then sporecloud.ownerleader = leader end -- Look into refining and making this a thing for the other follower projectiles/traps.
+    sporecloud.OnAttacked = function(_inst, data)
+        if sporecloud.ownerleader == data.attacker then
+            sporecloud.ownerleader = nil
+        end
     end
+    sporecloud.OnLeaderChanged = function(_inst, data)
+        local health = _inst.components.health
+        local follower = _inst.components.follower
+        if not (health and health:IsDead()) and follower then
+            local currentleader = follower:GetLeader()
+            if sporecloud.ownerleader ~= currentleader then
+                sporecloud.ownerleader = currentleader
+            end
+        end
+    end
+    sporecloud.OnSporeHoundRemoved = function(_inst) OnSporeCloudRemoved(sporecloud) end
+    sporecloud:ListenForEvent("attacked", sporecloud.OnAttacked, sporecloud.owner)
+    sporecloud:ListenForEvent("leaderchanged", sporecloud.OnLeaderChanged, sporecloud.owner)
+    sporecloud:ListenForEvent("onremove", sporecloud.OnSporeHoundRemoved)
+    sporecloud:ListenForEvent("onremove", sporecloud.OnSporeHoundRemoved, sporecloud.owner)
 end
 
 local function SporeCloudAttack(inst, target)
