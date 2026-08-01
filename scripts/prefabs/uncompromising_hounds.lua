@@ -1158,8 +1158,8 @@ end
 local function OnSporeCloudRemoved(inst)
     inst:RemoveEventCallback("attacked", inst.OnAttacked, inst.owner)
     inst:RemoveEventCallback("leaderchanged", inst.OnLeaderChanged, inst.owner)
-    inst:RemoveEventCallback("onremove", inst.OnSporeHoundRemoved)
     inst:RemoveEventCallback("onremove", inst.OnSporeHoundRemoved, inst.owner)
+    inst:RemoveEventCallback("onremove", inst.OnSporeHoundRemoved)
 end
 
 local function SpawnSporeCloud(inst)
@@ -1188,8 +1188,8 @@ local function SpawnSporeCloud(inst)
     sporecloud.OnSporeHoundRemoved = function(_inst) OnSporeCloudRemoved(sporecloud) end
     sporecloud:ListenForEvent("attacked", sporecloud.OnAttacked, sporecloud.owner)
     sporecloud:ListenForEvent("leaderchanged", sporecloud.OnLeaderChanged, sporecloud.owner)
-    sporecloud:ListenForEvent("onremove", sporecloud.OnSporeHoundRemoved)
     sporecloud:ListenForEvent("onremove", sporecloud.OnSporeHoundRemoved, sporecloud.owner)
+    sporecloud:ListenForEvent("onremove", sporecloud.OnSporeHoundRemoved)
 end
 
 local function SporeCloudAttack(inst, target)
