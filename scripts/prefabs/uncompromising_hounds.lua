@@ -1177,11 +1177,10 @@ local function SpawnSporeCloud(inst)
     end
     sporecloud.OnLeaderChanged = function(_inst, data)
         local health = _inst.components.health
-        local follower = _inst.components.follower
-        if not (health and health:IsDead()) and follower then
-            local currentleader = follower:GetLeader()
-            if sporecloud.ownerleader ~= currentleader then
-                sporecloud.ownerleader = currentleader
+        if not (health and health:IsDead()) then
+            local newleader = data.new
+            if sporecloud.ownerleader ~= newleader then
+                sporecloud.ownerleader = newleader
             end
         end
     end
