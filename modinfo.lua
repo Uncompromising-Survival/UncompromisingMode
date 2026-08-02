@@ -547,8 +547,7 @@ configuration_options = {
             { description = "Enabled",              data = "enabled" },
             { description = "Enabled (No Respawn)", data = "norespawn", hover = "Traps don't respawn over time." },
             { description = "Disabled",             data = "disabled" } },
-        default =
-        "enabled"
+        default = "enabled"
     },
     BinaryConfig("rice", "Rice", "Rice spawns in swamp ponds.", true),
     BinaryConfig("trapdoorspiders", "Trapdoor Spiders",
@@ -658,8 +657,7 @@ configuration_options = {
             { description = "Default",  data = "default", hover = "Only heal max health loss if BELOW 25%." },
             { description = "Legacy",   data = "legacy",  hover = "Heal max health lost regardless of %." },
             { description = "Disabled", data = false } },
-        default =
-        "default"
+        default = "default"
     },
     {
         name = "sleepingbuff",
