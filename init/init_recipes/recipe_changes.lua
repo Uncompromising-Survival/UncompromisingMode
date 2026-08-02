@@ -106,7 +106,7 @@ if GetModConfigData("wanda_nerf") then
     }
 end
 
-if TUNING.DSTU.GOTOBED ~= false then
+if TUNING.DSTU.GOTOBED then
     AllRecipes["siestahut"].ingredients = {
         Ingredient("silk", 6),
         Ingredient("boards", 4),
@@ -421,7 +421,7 @@ if TUNING.DSTU.SHAVE_MODE then
     AllRecipes["razor"].level = TechTree.Create(TECH.NONE)
 end
 
-if not TUNING.DSTU.DART_YIELD == 1 then
+if TUNING.DSTU.DART_YIELD ~= 1 then
     AllRecipes["blowdart_pipe"].numtogive = TUNING.DSTU.DART_YIELD
     AllRecipes["blowdart_fire"].numtogive = TUNING.DSTU.DART_YIELD
     AllRecipes["blowdart_sleep"].numtogive = TUNING.DSTU.DART_YIELD
