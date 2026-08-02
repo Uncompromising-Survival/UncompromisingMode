@@ -421,10 +421,12 @@ if TUNING.DSTU.SHAVE_MODE then
     AllRecipes["razor"].level = TechTree.Create(TECH.NONE)
 end
 
-AllRecipes["blowdart_pipe"].numtogive = TUNING.DSTU.DART_YIELD
-AllRecipes["blowdart_fire"].numtogive = TUNING.DSTU.DART_YIELD
-AllRecipes["blowdart_sleep"].numtogive = TUNING.DSTU.DART_YIELD
-AllRecipes["blowdart_yellow"].numtogive = TUNING.DSTU.DART_YIELD
+if not TUNING.DSTU.DART_YIELD == 1 then
+    AllRecipes["blowdart_pipe"].numtogive = TUNING.DSTU.DART_YIELD
+    AllRecipes["blowdart_fire"].numtogive = TUNING.DSTU.DART_YIELD
+    AllRecipes["blowdart_sleep"].numtogive = TUNING.DSTU.DART_YIELD
+    AllRecipes["blowdart_yellow"].numtogive = TUNING.DSTU.DART_YIELD
+end
 
 ----BIG WATHOM ANCIENT KINSHIP I SECTION----
 AllRecipes["thulecite"].no_builder_skill = "wathom_allegiance_neutral"
