@@ -197,7 +197,21 @@ local function Retaliate(inst)
     end
 end
 
+local function RemoveFromBrambleTable(inst, target)
+    local bramble = inst and inst:IsValid() and inst.bramble
+    if bramble then
+        for i = #bramble, 1, -1 do
+            local v = bramble[i]
+            if v == target then
+                table.remove(bramble, i)
+                break
+            end
+        end
+    end
+end
+
 local function BarrierRemove(inst)
+    RemoveFromBrambleTable(inst.rimeweed_main, inst)
     if not inst.nospread then
         local x, y, z = inst.Transform:GetWorldPosition()
         local ents = TheSim:FindEntities(x, y, z, 5, { "rimeweed" })
@@ -218,6 +232,7 @@ local function BarrierRemove(inst)
 end
 
 local function BarrierDie(inst)
+    RemoveFromBrambleTable(inst.rimeweed_main, inst)
     --TheNet:Announce("DODEATH")
     RemovePhysicsColliders(inst)
     inst.AnimState:PlayAnimation("bramble_" .. (inst.type or math.random(0, 2)) .. "_shrink", false)
@@ -349,27 +364,26 @@ local function barrierweed()
         return inst
     end
 
+    inst:AddComponent("inspectable")
+
     inst:ListenForEvent("death", function(inst)
         clearobstacle(inst)
     end)
 
     inst.OnRemoveEntity = onremove
 
-
     inst:AddComponent("lootdropper")
     --inst:ListenForEvent("timerdone", TimerDone)
 
-    inst:AddComponent("health")
-    inst.components.health:SetMaxHealth(200)
-    inst.components.health:StartRegen(TUNING.BUNNYMAN_HEALTH_REGEN_AMOUNT, TUNING.BUNNYMAN_HEALTH_REGEN_PERIOD)
+    local health = inst:AddComponent("health")
+    health:SetMaxHealth(200)
+    health:StartRegen(TUNING.BUNNYMAN_HEALTH_REGEN_AMOUNT, TUNING.BUNNYMAN_HEALTH_REGEN_PERIOD)
+
     inst:AddComponent("combat")
-    inst:AddComponent("inspectable")
+
+    inst.AnimState:SetScale(math.random() > .5 and -1 or 1, 1, 1)
+
     local multsize = math.random(40, 42) / 20
-    if math.random() > .5 then
-        inst.AnimState:SetScale(-1, 1, 1)
-    else
-        inst.AnimState:SetScale(1, 1, 1)
-    end
     inst.Transform:SetScale(multsize, multsize, multsize)
     ---------------------
     inst:ListenForEvent("attacked", Retaliate)
@@ -398,7 +412,7 @@ local function OnSaveMain(inst, data)
     if inst.bramble then
         data.bramble = {}
         for i, v in pairs(inst.bramble) do
-            if v:IsValid() and v.prefab then
+            if v:IsValid() then
                 data.bramble[i] = v.GUID
                 table.insert(ents, v.GUID)
             end
@@ -411,33 +425,38 @@ local function OnSaveMain(inst, data)
 end
 
 local function OnLoadMain(inst, data)
-    if data then
-        if data.stage then
-            inst.stage = data.stage
-        end
-    end
+    local stage = data and data.stage
+    if stage then inst.stage = stage end
 end
 
 local function OnLoadPostPassMain(inst, newents, data)
-    if data then
-        if data.bramble and #data.bramble > 0 then
-            inst.bramble = {}
-            for i, v in pairs(data.bramble) do
-                if newents[v] then
-                    inst.bramble[i] = newents[v].entity
-                end
+    local bramble = data and data.bramble
+    if bramble and #bramble > 0 then
+        inst.bramble = {}
+        for i, v in pairs(bramble) do
+            if newents[v] then
+                inst.bramble[i] = newents[v].entity
+                inst.bramble[i].rimeweed_main = inst
             end
         end
     end
 end
 
 local function MainRemove(inst)
-    if inst.fx and inst.fx:IsValid() then
-        inst.fx:Remove()
-        inst.fx = nil
-    end
+    if inst.fx and inst.fx:IsValid() then inst.fx:Remove() end
     if #inst.bramble > 0 and not inst.nospread then
-        for i, v in ipairs(inst.bramble) do
+        --[[for i, v in ipairs(inst.bramble) do
+            if v:IsValid() then
+                if v.components.health and not v.components.health:IsDead() then
+                    v.noloot = true
+                    v.components.health:Kill()
+                else
+                    v:Remove()
+                end
+            end
+        end]]
+        for i = #inst.bramble, 1, -1 do
+            local v = inst.bramble[i]
             if v:IsValid() then
                 if v.components.health and not v.components.health:IsDead() then
                     v.noloot = true
@@ -452,19 +471,7 @@ end
 
 local function MainDie(inst)
     inst:AddTag("dead")
-    if inst.fx then inst.fx:Remove() end
-    if #inst.bramble > 0 and not inst.nospread then
-        for i, v in ipairs(inst.bramble) do
-            if v:IsValid() then
-                if v.components.health and not v.components.health:IsDead() then
-                    v.noloot = true
-                    v.components.health:Kill()
-                else
-                    v:Remove()
-                end
-            end
-        end
-    end
+    MainRemove(inst)
     inst.AnimState:PlayAnimation("flower_" .. ((inst.stage or 1) - 1) .. "_shrink", false)
     if not inst.stage then return end
     if inst.stage >= 1 and not inst.noloot then
@@ -541,6 +548,7 @@ local function TryGrowPoint(inst, x, z)
         local weed = SpawnPrefab("rimeweed_barrier")
         weed.Transform:SetPosition(x, 0, z)
         table.insert(inst.bramble, weed)
+        weed.rimeweed_main = inst
         weed.type = math.random(0, 2)
         weed.AnimState:PlayAnimation("bramble_" .. weed.type .. "_grow", false)
         weed.AnimState:PushAnimation("bramble_" .. weed.type .. "_idle", true)
@@ -676,7 +684,6 @@ local function mainweed()
     if not TheWorld.ismastersim then
         return inst
     end
-
 
     local scale = 1.5
     inst.Transform:SetScale(scale, scale, scale)
