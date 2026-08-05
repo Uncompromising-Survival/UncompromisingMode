@@ -547,9 +547,9 @@ TUNING.DSTU = {
 
     -- Gemology
     GEM_USES = {
-        1 / 150, --tier 1
-        1 / 250, --tier 2
-        1 / 450  --tier 3
+        1 / 200, --tier 1
+        1 / 300, --tier 2
+        1 / 500  --tier 3
     },
 
     REDGEM2_DAMAGE = {
