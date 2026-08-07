@@ -10,7 +10,7 @@ env.AddPrefabPostInit("wurt", function(inst)
 		return
 	end
 
-	inst.components.foodaffinity:AddFoodtypeAffinity(FOODTYPE.UM_HORRIBLE_VEGGIE,   2)
+	--inst.components.foodaffinity:AddFoodtypeAffinity(FOODTYPE.UM_HORRIBLE_VEGGIE, 2)
     inst.components.foodaffinity:AddPrefabAffinity("rice_cooked",   1.33) -- prevents the negative stats, otherwise foodtypeaffinity would have suffice
 
 	local WURT_PATHFINDER_TILES = UpvalueHacker.GetUpvalue(_G.Prefabs.wurt.fn, "master_postinit", "WURT_PATHFINDER_TILES")
