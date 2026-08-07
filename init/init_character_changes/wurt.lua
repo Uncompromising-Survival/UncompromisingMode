@@ -25,8 +25,6 @@ env.AddPrefabPostInit("wurt", function(inst)
         --inst.components.locomotor:SetFasterOnGroundTile(tile, true)
 		table.insert(WURT_PATHFINDER_TILES, tile)
     end
-
-
 end)
 
 local lunar_merms = {
