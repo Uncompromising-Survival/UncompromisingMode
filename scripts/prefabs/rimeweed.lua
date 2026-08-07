@@ -657,7 +657,9 @@ local function OnEntitySleep(inst)
         inst.cooftask = nil
     end
     if inst.fx then
-        inst.fx:Remove()
+        if inst.fx:IsValid() then
+            inst.fx:Remove()
+        end
         inst.fx = nil
     end
 end
