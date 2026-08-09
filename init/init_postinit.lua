@@ -260,7 +260,8 @@ local prefab_post = {
     "onemanband",
     "cursed_monkey_token",
     "slurtle_shellpieces",
-    "fused_shadeling"
+    "fused_shadeling",
+    "eyeturret",
 }
 
 local stategraph_post = {
