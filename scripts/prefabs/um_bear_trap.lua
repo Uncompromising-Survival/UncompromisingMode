@@ -132,10 +132,6 @@ end
 local function OnReset(inst)
     inst.Snapped = false
 
-    inst.Physics:ClearCollisionMask()
-    -- inst:SetPhysicsRadiusOverride(3)
-    inst.Physics:CollidesWith(COLLISION.WORLD)
-
     if inst.components.inventoryitem then
         inst.components.inventoryitem.nobounce = true
     end
@@ -151,7 +147,6 @@ local function SetSprung(inst)
     if inst.components.inventoryitem then
         inst.components.inventoryitem.nobounce = true
     end
-    if not inst:IsInLimbo() then end
     inst.AnimState:PlayAnimation("idle_active")
 end
 
@@ -191,7 +186,6 @@ local function OnHaunt(inst, haunter)
     end
     return false
 end
-
 
 local function BecomeItem(inst)
     local jaw = SpawnPrefab("snappy_jaw")
@@ -240,12 +234,10 @@ local function CommonMine(inst, alignment, reset)
     mine:SetOnSprungFn(SetSprung)
     mine:SetOnDeactivateFn(SetInactive)
     mine:SetTestTimeFn(calculate_mine_test_time)
-    if reset then
-        mine:Reset()
-    end
+    if reset then mine:Reset() end
 end
 
-local function common_fn()
+local function commonfn()
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -277,8 +269,6 @@ local function common_fn()
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then return inst end
-
-
 
     inst.latchedtarget = nil
     inst.Snapped = false
@@ -374,8 +364,17 @@ local function old_fn(build)
     return inst
 end
 
-local function OnTrapLand(inst, target)
-    if FindEntity(inst,DEPLOYSPACING.LESS,nil,{"bear_trap"}) then
+local CANT_HIT_TAGS = {"notraptrigger", "flying", "ghost", "playerghost", "spawnprotection"}
+local CANT_HIT_TAGS_WALRUS = JoinArrays(CANT_HIT_TAGS, {"walrus", "houndmound", "hound", "houndfriend"})
+local CANT_HIT_TAGS_PLAYER = JoinArrays(CANT_HIT_TAGS, {"player"})
+local ONEOF_HIT_TAGS = {"monster", "character", "animal"}
+
+local function FindValidTrappable(target, inst)
+    return target ~= inst and target:IsValid() and not (target.components.health and target.components.health:IsDead())
+end
+
+local function OnTrapLand(inst, attacker, target)
+    if FindEntity(inst, DEPLOYSPACING.LESS, nil,{"bear_trap"}) then
         if inst.traptype then
             inst.trap = SpawnPrefab("um_bear_trap_equippable_"..inst.traptype) 
         end    
@@ -384,6 +383,8 @@ local function OnTrapLand(inst, target)
     end
     if inst.trap then
         inst.trap.Transform:SetPosition(inst.Transform:GetWorldPosition())
+        local foundtarget = target or FindEntity(inst, 1.5, FindValidTrappable, {"_combat"}, CANT_HIT_TAGS_WALRUS, ONEOF_HIT_TAGS)
+        if foundtarget then inst.trap.components.mine:Explode(foundtarget) end
         if inst.components.finiteuses and inst.trap.components.finiteuses then
             inst.components.finiteuses:SetUses(inst.components.finiteuses:GetUses())
         end
@@ -391,48 +392,25 @@ local function OnTrapLand(inst, target)
     inst:Remove()    
 end
 
-local function OnHitTarget(inst, target)
-    local x, y, z = inst.Transform:GetWorldPosition()
-
-    inst.trap = SpawnPrefab("um_bear_trap")
-    inst.trap.Transform:SetPosition(x, 0, z)
-    if target then inst.trap.components.mine:Explode(target) end
-
-    if inst.components.finiteuses and inst.trap.components.finiteuses then
-        inst.components.finiteuses:SetUses(inst.components.finiteuses:GetUses())
-    end
-
-    inst:Remove()
-end
-
-local function oncollide(inst, other)
-    local x, y, z = inst.Transform:GetWorldPosition()
-    if other and not other:HasTag("walrus") and not other:HasTag("hound") and
-        other:IsValid() and other:HasTag("_combat") then
-        OnHitTarget(inst, other)
-    elseif y <= inst:GetPhysicsRadius() + 0.001 then
-        OnTrapLand(inst, other)
-    end
-end
-
-local function onthrown_player(inst)
+local function SetThrownPhysics(inst)
     inst:AddTag("NOCLICK")
-    inst.persists = false
-    inst.AnimState:SetBank("um_bear_trap")
-    inst.AnimState:SetBuild("um_bear_trap")
+    inst:AddTag("projectile")
+
     inst.AnimState:PlayAnimation("spin_loop", true)
 
-    inst.Physics:SetMass(1)
     inst.Physics:SetFriction(10)
     inst.Physics:SetDamping(5)
-    -- inst.Physics:SetCollisionGroup(COLLISION.OBSTACLES)
-    inst.Physics:ClearCollisionMask()
-    inst:SetPhysicsRadiusOverride(3)
-    inst.Physics:CollidesWith(COLLISION.WORLD)
-    -- inst.Physics:CollidesWith(COLLISION.CHARACTERS)
-    inst.Physics:SetCapsule(1.5, 1.5)
+    inst.Physics:SetCollisionGroup(COLLISION.CHARACTERS)
+    inst.Physics:SetCollisionMask(
+        COLLISION.GROUND,
+        COLLISION.OBSTACLES,
+        COLLISION.ITEMS
+    )
+    inst.Physics:SetCapsule(.2, .2)
+end
 
-    inst.Physics:SetCollisionCallback(oncollide)
+local function onthrown(inst)
+    SetThrownPhysics(inst)
 end
 
 local function projectilefn()
@@ -456,7 +434,7 @@ local function projectilefn()
 
     inst:AddComponent("complexprojectile")
     inst.components.complexprojectile:SetOnHit(OnTrapLand)
-    inst.components.complexprojectile:SetOnLaunch(onthrown_player)
+    inst.components.complexprojectile:SetOnLaunch(onthrown)
     inst.components.complexprojectile:SetHorizontalSpeed(60)
     inst.components.complexprojectile:SetLaunchOffset(Vector3(2, 2, 0))
     inst.components.complexprojectile.usehigharc = false
@@ -570,59 +548,22 @@ local function ghost_walrusfn() -- ghost walrus
     return inst
 end
 
-local function OnTrapLand(inst, target)
+local function OnTrapLand_player(inst, attacker, target)
+    MakeInventoryPhysics(inst)
+
     inst:RemoveTag("NOCLICK")
     inst:RemoveTag("projectile")
 
     if inst.components.mine then
-        local x, y, z = inst.Transform:GetWorldPosition()
-
-        MakeInventoryPhysics(inst)
-
         inst.components.mine:Reset()
 
-        inst.Transform:SetPosition(x, y, z)
+        inst.Transform:SetPosition(inst.Transform:GetWorldPosition())
+        local foundtarget = target or FindEntity(inst, 1.5, FindValidTrappable, {"_combat"}, CANT_HIT_TAGS_PLAYER, ONEOF_HIT_TAGS)
+        if foundtarget then inst.components.mine:Explode(foundtarget) end
         -- inst.trap = SpawnPrefab("um_bear_trap")
         -- inst.trap.Transform:SetPosition(x, 0, z)
 
         -- inst:Remove()
-    end
-end
-
-local function OnHitTarget_player(inst, target)
-    inst:RemoveTag("NOCLICK")
-    inst:RemoveTag("projectile")
-
-    if inst.components.mine then
-        local x, y, z = inst.Transform:GetWorldPosition()
-
-        MakeInventoryPhysics(inst)
-
-        inst.components.mine:Reset()
-
-        inst.Transform:SetPosition(x, y, z)
-        -- inst.trap = SpawnPrefab("um_bear_trap")
-        -- inst.trap.Transform:SetPosition(x, 0, z)
-        if target then
-            -- inst.trap.components.mine:Explode(target)
-            inst.components.mine:Explode(target)
-        end
-
-        -- inst:Remove()
-    end
-end
-
-local function oncollide_player(inst, other)
-    local x, y, z = inst.Transform:GetWorldPosition()
-
-    if other and not other:HasTag("player") and
-        not other:HasTag("notraptrigger") and not other:HasTag("player") and
-        not other:HasTag("flying") and not other:HasTag("ghost") and
-        not other:HasTag("playerghost") and not other:HasTag("spawnprotection") and
-        other:IsValid() and other:HasTag("_combat") then
-        OnHitTarget_player(inst, other)
-    elseif y <= inst:GetPhysicsRadius() + 0.001 then
-        OnTrapLand(inst, other)
     end
 end
 
@@ -638,27 +579,7 @@ local function onunequip(inst, owner)
 end
 
 local function onthrown_player(inst)
-    inst:AddTag("NOCLICK")
-    inst:AddTag("projectile")
-
-    inst.persists = false
-
-    inst.AnimState:SetBank("um_bear_trap")
-    -- inst.AnimState:SetBuild("um_bear_trap")
-    inst.AnimState:PlayAnimation("spin_loop", true)
-
-    inst.Physics:SetMass(1)
-    inst.Physics:SetFriction(10)
-    inst.Physics:SetDamping(5)
-    inst.Physics:SetCollisionGroup(COLLISION.OBSTACLES)
-    inst.Physics:ClearCollisionMask()
-    -- inst:SetPhysicsRadiusOverride(3)
-    -- inst.Physics:CollidesWith(COLLISION.WORLD)
-    inst.Physics:CollidesWith(COLLISION.GIANTS)
-    inst.Physics:CollidesWith(COLLISION.CHARACTERS)
-    inst.Physics:SetCapsule(1.5, 1.5)
-
-    inst.Physics:SetCollisionCallback(oncollide_player)
+    SetThrownPhysics(inst)
 end
 
 local function ReticuleTargetFn()
@@ -725,7 +646,7 @@ local function equiptoothfn()
     inst.components.complexprojectile:SetGravity(-35)
     inst.components.complexprojectile:SetLaunchOffset(Vector3(.25, 1, 0))
     inst.components.complexprojectile:SetOnLaunch(onthrown_player)
-    inst.components.complexprojectile:SetOnHit(OnTrapLand)
+    inst.components.complexprojectile:SetOnHit(OnTrapLand_player)
 
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(0)
@@ -812,7 +733,7 @@ local function equipgoldfn()
     inst.components.complexprojectile:SetGravity(-35)
     inst.components.complexprojectile:SetLaunchOffset(Vector3(2, 2, 0))
     inst.components.complexprojectile:SetOnLaunch(onthrown_player)
-    inst.components.complexprojectile:SetOnHit(OnTrapLand)
+    inst.components.complexprojectile:SetOnHit(OnTrapLand_player)
 
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(0)
@@ -845,7 +766,8 @@ local function equipgoldfn()
     return inst
 end
 
-return Prefab("um_bear_trap", common_fn), Prefab("um_bear_trap_old", old_fn),
+return Prefab("um_bear_trap", commonfn),
+    Prefab("um_bear_trap_old", old_fn),
     MakePlacer("um_bear_trap_placer", "trap_teeth", "trap_teeth", "idle"),
     Prefab("um_bear_trap_projectile", projectilefn),
     Prefab("ghost_walrus", ghost_walrusfn),
