@@ -7,8 +7,8 @@ local function AuraFreezeEnemies(inst)
     if inst.components.combat.target and not (inst.components.health and inst.components.health:IsDead()) then
         if inst:GetDistanceSqToPoint(inst.components.combat.target:GetPosition()) < 4 then
             inst:PushEvent("start_aurafreeze")
-        else
-            inst.components.combat:SetRange(TUNING.DEERCLOPS_ATTACK_RANGE * 0.6)
+        --else
+            --inst.components.combat:SetRange(TUNING.DEERCLOPS_ATTACK_RANGE * 0.6)
         end
     else
         inst.components.timer:StartTimer("auratime", 15)
