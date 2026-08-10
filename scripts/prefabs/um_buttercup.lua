@@ -22,7 +22,7 @@ local function ToggleRose(inst, toggle)
         inst:AddTag("thorny")
         inst._isrose:set(true)
         inst:OnIsRoseDirty()
-		inst.rose = true
+        inst.rose = true
     else
         inst:RemoveTag("thorny")
         anim:SetBank("um_buttercup")
@@ -31,7 +31,7 @@ local function ToggleRose(inst, toggle)
         inst:RemoveTag("thorny")
         inst._isrose:set(false)
         inst:OnIsRoseDirty()
-		inst.rose = nil
+        inst.rose = nil
     end
 end
 
