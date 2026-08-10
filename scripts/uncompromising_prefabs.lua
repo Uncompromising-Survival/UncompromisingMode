@@ -561,6 +561,7 @@ local prefabs = {
     "um_ice_sicle",
     "um_fire_projectile",
     "um_buttery_fly",
+    "um_buttercup",
 
     "um_pepperdragon",
     "um_pepperdragon_nest",
