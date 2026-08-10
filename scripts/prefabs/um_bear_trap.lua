@@ -391,23 +391,6 @@ local function OnTrapLand(inst, attacker, target)
     inst:Remove()    
 end
 
-local function SetThrownPhysics(inst)
-    inst:AddTag("NOCLICK")
-    inst:AddTag("projectile")
-
-    inst.AnimState:PlayAnimation("spin_loop", true)
-
-    inst.Physics:SetFriction(10)
-    inst.Physics:SetDamping(5)
-    inst.Physics:SetCollisionGroup(COLLISION.CHARACTERS)
-    inst.Physics:SetCollisionMask(
-        COLLISION.GROUND,
-        COLLISION.OBSTACLES,
-        COLLISION.ITEMS
-    )
-    inst.Physics:SetCapsule(.2, .2)
-end
-
 local function projectilefn()
     local inst = CreateEntity()
 
@@ -583,7 +566,20 @@ local function onunequip(inst, owner)
 end
 
 local function onthrown_player(inst)
-    SetThrownPhysics(inst)
+    inst:AddTag("NOCLICK")
+    inst:AddTag("projectile")
+
+    inst.AnimState:PlayAnimation("spin_loop", true)
+
+    inst.Physics:SetFriction(10)
+    inst.Physics:SetDamping(5)
+    inst.Physics:SetCollisionGroup(COLLISION.CHARACTERS)
+    inst.Physics:SetCollisionMask(
+        COLLISION.GROUND,
+        COLLISION.OBSTACLES,
+        COLLISION.ITEMS
+    )
+    inst.Physics:SetCapsule(.2, .2)
 end
 
 local function ReticuleTargetFn()
