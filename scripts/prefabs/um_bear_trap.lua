@@ -383,7 +383,7 @@ local function OnTrapLand(inst, attacker, target)
     end
     if inst.trap then
         inst.trap.Transform:SetPosition(inst.Transform:GetWorldPosition())
-        local foundtarget = target or FindEntity(inst, 1.5, FindValidTrappable, {"_combat"}, CANT_HIT_TAGS_WALRUS, ONEOF_HIT_TAGS)
+        local foundtarget = target or FindEntity(inst, inst.trap.components.mine.radius, FindValidTrappable, {"_combat"}, CANT_HIT_TAGS_WALRUS, ONEOF_HIT_TAGS)
         if foundtarget then inst.trap.components.mine:Explode(foundtarget) end
         if inst.components.finiteuses and inst.trap.components.finiteuses then
             inst.components.finiteuses:SetUses(inst.components.finiteuses:GetUses())
@@ -556,14 +556,9 @@ local function OnTrapLand_player(inst, attacker, target)
 
     if inst.components.mine then
         inst.components.mine:Reset()
-
         inst.Transform:SetPosition(inst.Transform:GetWorldPosition())
-        local foundtarget = target or FindEntity(inst, 1.5, FindValidTrappable, {"_combat"}, CANT_HIT_TAGS_PLAYER, ONEOF_HIT_TAGS)
+        local foundtarget = target or FindEntity(inst, inst.components.mine.radius, FindValidTrappable, {"_combat"}, CANT_HIT_TAGS_PLAYER, ONEOF_HIT_TAGS)
         if foundtarget then inst.components.mine:Explode(foundtarget) end
-        -- inst.trap = SpawnPrefab("um_bear_trap")
-        -- inst.trap.Transform:SetPosition(x, 0, z)
-
-        -- inst:Remove()
     end
 end
 
