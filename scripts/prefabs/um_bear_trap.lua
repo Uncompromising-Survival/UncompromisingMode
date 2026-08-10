@@ -225,6 +225,13 @@ local function calculate_mine_test_time()
     return TUNING.STARFISH_TRAP_TIMING.BASE + (math.random() * TUNING.STARFISH_TRAP_TIMING.VARIANCE)
 end
 
+local CANT_HIT_TAGS_WALRUS = {"walrus", "houndmound", "hound", "houndfriend"}
+
+local function FindValidTrappable(target, inst)
+    return not (target.components.health and target.components.health:IsDead())
+        and target.components.combat:CanBeAttacked(inst) and not target:HasAnyTag(CANT_HIT_TAGS_WALRUS)
+end
+
 local function CommonMine(inst, alignment, reset)
     local mine = inst:AddComponent("mine")
     mine:SetRadius(TUNING.TRAP_TEETH_RADIUS * 1.3)
@@ -234,6 +241,7 @@ local function CommonMine(inst, alignment, reset)
     mine:SetOnSprungFn(SetSprung)
     mine:SetOnDeactivateFn(SetInactive)
     mine:SetTestTimeFn(calculate_mine_test_time)
+    if alignment == "bear_trap_immune" then mine:SetSearchTestFn(FindValidTrappable) end
     if reset then mine:Reset() end
 end
 
@@ -364,27 +372,18 @@ local function old_fn(build)
     return inst
 end
 
-local CANT_HIT_TAGS = {"notraptrigger", "flying", "ghost", "playerghost", "spawnprotection"}
-local CANT_HIT_TAGS_WALRUS = JoinArrays(CANT_HIT_TAGS, {"walrus", "houndmound", "hound", "houndfriend"})
-local CANT_HIT_TAGS_PLAYER = JoinArrays(CANT_HIT_TAGS, {"player"})
-local ONEOF_HIT_TAGS = {"monster", "character", "animal"}
-
-local function FindValidTrappable(target, inst)
-    return target ~= inst and target:IsValid() and not (target.components.health and target.components.health:IsDead())
-end
-
 local function OnTrapLand(inst, attacker, target)
-    if FindEntity(inst, DEPLOYSPACING.LESS, nil,{"bear_trap"}) then
+    --[[if FindEntity(inst, DEPLOYSPACING.LESS, nil,{"bear_trap"}) then
         if inst.traptype then
-            inst.trap = SpawnPrefab("um_bear_trap_equippable_"..inst.traptype) 
-        end    
-    else
+            inst.trap = SpawnPrefab("um_bear_trap_equippable_"..inst.traptype)
+        end
+    else]]
         inst.trap = SpawnPrefab("um_bear_trap")
-    end
+    --end
     if inst.trap then
         inst.trap.Transform:SetPosition(inst.Transform:GetWorldPosition())
-        local foundtarget = target or FindEntity(inst, inst.trap.components.mine.radius, FindValidTrappable, {"_combat"}, CANT_HIT_TAGS_WALRUS, ONEOF_HIT_TAGS)
-        if foundtarget then inst.trap.components.mine:Explode(foundtarget) end
+        local testtask = inst.trap.components.mine.testtask
+        if testtask then testtask.fn(unpack(testtask.arg)) end
         if inst.components.finiteuses and inst.trap.components.finiteuses then
             inst.components.finiteuses:SetUses(inst.components.finiteuses:GetUses())
         end
@@ -416,17 +415,31 @@ end
 local function projectilefn()
     local inst = CreateEntity()
 
-    inst:AddTag("bear_trap")
-
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
     inst.entity:AddPhysics()
     inst.entity:AddNetwork()
 
+    inst.Physics:SetMass(1)
+    inst.Physics:SetFriction(10)
+    inst.Physics:SetDamping(5)
+    inst.Physics:SetCollisionGroup(COLLISION.CHARACTERS)
+    inst.Physics:SetCollisionMask(
+        COLLISION.GROUND,
+        COLLISION.OBSTACLES,
+        COLLISION.ITEMS
+    )
+    inst.Physics:SetCapsule(.2, .2)
+
+    inst:AddTag("NOCLICK")
+    inst:AddTag("projectile")
+    inst:AddTag("complexprojectile")
+    inst:AddTag("bear_trap")
+
     inst.AnimState:SetBank("um_bear_trap")
     inst.AnimState:SetBuild("um_bear_trap")
-    inst.AnimState:PushAnimation("idle", false)
+    inst.AnimState:PlayAnimation("spin_loop", true)
 
     inst.entity:SetPristine()
 
@@ -434,7 +447,6 @@ local function projectilefn()
 
     inst:AddComponent("complexprojectile")
     inst.components.complexprojectile:SetOnHit(OnTrapLand)
-    inst.components.complexprojectile:SetOnLaunch(onthrown)
     inst.components.complexprojectile:SetHorizontalSpeed(60)
     inst.components.complexprojectile:SetLaunchOffset(Vector3(2, 2, 0))
     inst.components.complexprojectile.usehigharc = false
@@ -554,11 +566,12 @@ local function OnTrapLand_player(inst, attacker, target)
     inst:RemoveTag("NOCLICK")
     inst:RemoveTag("projectile")
 
-    if inst.components.mine then
-        inst.components.mine:Reset()
+    local mine = inst.components.mine
+    if mine then
+        mine:Reset()
         inst.Transform:SetPosition(inst.Transform:GetWorldPosition())
-        local foundtarget = target or FindEntity(inst, inst.components.mine.radius, FindValidTrappable, {"_combat"}, CANT_HIT_TAGS_PLAYER, ONEOF_HIT_TAGS)
-        if foundtarget then inst.components.mine:Explode(foundtarget) end
+        local testtask = mine.testtask
+        if testtask then testtask.fn(unpack(testtask.arg)) end
     end
 end
 
