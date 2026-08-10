@@ -408,10 +408,6 @@ local function SetThrownPhysics(inst)
     inst.Physics:SetCapsule(.2, .2)
 end
 
-local function onthrown(inst)
-    SetThrownPhysics(inst)
-end
-
 local function projectilefn()
     local inst = CreateEntity()
 
