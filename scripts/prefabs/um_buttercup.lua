@@ -36,7 +36,7 @@ local function ToggleRose(inst, toggle)
 end
 
 local function onsave(inst, data)
-    data.rose = inst._isrose:value() or nil
+    data.rose = inst.rose or nil
 end
 
 local function onload(inst, data)
