@@ -24,7 +24,6 @@ local function ToggleRose(inst, toggle)
         inst:OnIsRoseDirty()
         inst.rose = true
     else
-        inst:RemoveTag("thorny")
         anim:SetBank("um_buttercup")
         anim:SetBuild("um_buttercup")
         anim:PlayAnimation("idle")
@@ -127,8 +126,6 @@ local function fn()
 
     inst:AddTag("flower")
     inst:AddTag("cattoy")
-
-    inst.entity:SetPristine()
 
     inst.OnIsRoseDirty = OnIsRoseDirty
 
