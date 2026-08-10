@@ -22,6 +22,7 @@ local function ToggleRose(inst, toggle)
         inst:AddTag("thorny")
         inst._isrose:set(true)
         inst:OnIsRoseDirty()
+		inst.rose = true
     else
         inst:RemoveTag("thorny")
         anim:SetBank("um_buttercup")
@@ -30,6 +31,7 @@ local function ToggleRose(inst, toggle)
         inst:RemoveTag("thorny")
         inst._isrose:set(false)
         inst:OnIsRoseDirty()
+		inst.rose = nil
     end
 end
 
@@ -49,7 +51,7 @@ local function onpickedfn(inst, picker)
             picker.components.sanity:DoDelta(TUNING.SANITY_SMALL)
         end
 
-        if inst._isrose:value() and picker.components.combat
+        if inst.rose and picker.components.combat
             and not (picker.components.inventory and picker.components.inventory:EquipHasTag("bramble_resistant")) and not picker:HasTag("shadowminion") then
             picker.components.combat:GetAttacked(inst, TUNING.ROSE_DAMAGE)
             picker:PushEvent("thorns")
@@ -60,7 +62,7 @@ local function onpickedfn(inst, picker)
 end
 
 local function GetStatus(inst)
-    return inst._isrose:value() and "ROSE" or "FLOWER"
+    return inst.rose and "ROSE" or "FLOWER"
 end
 
 local FINDLIGHT_MUST_TAGS = {"daylight", "lightsource"}
