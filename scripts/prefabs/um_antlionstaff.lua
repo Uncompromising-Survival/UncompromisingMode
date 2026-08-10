@@ -309,8 +309,6 @@ local function staff_fn()
     inst:AddTag("shadowlevel")
     inst:AddTag("donotautopick")
 
-    MakeInventoryFloatable(inst)
-
     local reticule = inst:AddComponent("reticule")
     reticule.targetfn = light_reticuletargetfn
     reticule.mouseenabled = true
@@ -324,6 +322,8 @@ local function staff_fn()
     spellbook:SetFocusRadius(SPELLWHEEL_FOCUS_RADIUS)
 
     inst.um_cancastontarget = UMCommonFns.DefaultCanCastOnTarget
+
+    MakeInventoryFloatable(inst)
 
     inst.entity:SetPristine()
 
