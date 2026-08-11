@@ -331,7 +331,7 @@ local prefabs = {
     --DAMNIT SCRIMBLES
     "uncompromising_harpoon",
     "uncompromising_axepoon",
-    "uncompromising_magharpoon",
+    "um_magnerang",
     "uncompromising_fishingnet",
     "uncompromising_fishingnetvisualizer",
     "um_windturbine",
@@ -645,6 +645,5 @@ local prefabs = {
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then
     table.insert(prefabs, "placeholder_recipe_item")
 end
-
 
 return prefabs

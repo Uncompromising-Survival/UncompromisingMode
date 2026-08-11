@@ -156,7 +156,7 @@ createburrow.mount_valid = false
 -- Rummaging is opening containers.
 -- Any character can open Warly's Portable Crock Pot.
 local _RummageFn = GLOBAL.ACTIONS.RUMMAGE.fn
-GLOBAL.ACTIONS.RUMMAGE.fn = function(act)
+GLOBAL.ACTIONS.RUMMAGE.fn = function(act, ...)
     local target = act.target or act.invobject
     if target == nil then
         return
@@ -174,7 +174,7 @@ GLOBAL.ACTIONS.RUMMAGE.fn = function(act)
             return true
         end
     end
-    return _RummageFn(act)
+    return _RummageFn(act, ...)
 end
 
 local _RummageStrFn = GLOBAL.ACTIONS.RUMMAGE.strfn
@@ -192,7 +192,6 @@ GLOBAL.ACTIONS.RUMMAGE.strfn = function(act, ...)
             end
         end
     end
-
     return str
 end
 
@@ -209,28 +208,30 @@ GLOBAL.ACTIONS.STARTCHANNELING.strfn = function(act, ...)
             return "UM_UNPROJECTION"
         end
     end
-
     return str
 end
 
 local _combinestackfn = GLOBAL.ACTIONS.COMBINESTACK.fn
-GLOBAL.ACTIONS.COMBINESTACK.fn = function(act)
+GLOBAL.ACTIONS.COMBINESTACK.fn = function(act, ...)
     --local target = act.target
     local invobj = act.invobject
-    act.doer:PushEvent("um_combinestack", { item = invobj })
-    return _combinestackfn(act)
+    act.doer:PushEvent("um_combinestack", {item = invobj})
+    return _combinestackfn(act, ...)
 end
 
+local _turnoffstrfn = ACTIONS.TURNOFF.strfn
+ACTIONS.TURNOFF.strfn = function(act, ...)
+    local tar = act.target
+    return tar ~= nil and tar:HasTag("harpoonreel") and "HARPOON" or _turnoffstrfn(act, ...)
+end
 
 local _ChopFn = GLOBAL.ACTIONS.CHOP.fn
-
-GLOBAL.ACTIONS.CHOP.fn = function(act)
+GLOBAL.ACTIONS.CHOP.fn = function(act, ...)
     if act.doer.components.inventory and act.doer.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS) and act.doer.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS).prefab == "um_shadow_axe" then --Shadow Axe Support
         local axe = act.doer.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS)
         axe.WorkEffect(axe, act.doer, act.target)
     end
-
-    return _ChopFn(act)
+    return _ChopFn(act, ...)
 end
 
 local _USESPELLBOOK_strfn = GLOBAL.ACTIONS.USESPELLBOOK.strfn
@@ -267,9 +268,8 @@ end]]
 -- Storing is drag-clicking an item into a container.
 -- Any character can store items into Warly's Portable Crock Pot.
 local _StoreFn = GLOBAL.ACTIONS.STORE.fn
-GLOBAL.ACTIONS.STORE.fn = function(act)
+GLOBAL.ACTIONS.STORE.fn = function(act, ...)
     local target = act.target
-
     if target:HasTag("pocketbackpack") and not target.components.equippable.isequipped and act.target.components.inventoryitem.owner ~= nil then
         return false
     elseif TUNING.DSTU.WARLY_CHANGES ~= 0 and target.prefab == "portablecookpot" and target.components.container ~= nil and act.invobject.components.inventoryitem ~= nil
@@ -288,32 +288,32 @@ GLOBAL.ACTIONS.STORE.fn = function(act)
             return true
         end
     end
-    return _StoreFn(act)
+    return _StoreFn(act, ...)
 end
 
 local _StoreStrFn = GLOBAL.ACTIONS.STORE.strfn
-GLOBAL.ACTIONS.STORE.strfn = function(act)
+GLOBAL.ACTIONS.STORE.strfn = function(act, ...)
     local target = act.target
     if target ~= nil and target.prefab == "um_gemologyforge" then return "GEM_FORGE" end
-    return _StoreStrFn(act)
+    return _StoreStrFn(act, ...)
 end
 
 local _UpgradeStrFn = GLOBAL.ACTIONS.UPGRADE.strfn
 
-GLOBAL.ACTIONS.UPGRADE.strfn = function(act)
+GLOBAL.ACTIONS.UPGRADE.strfn = function(act, ...)
     local target = act.target
     if target ~= nil and target:HasTag(GLOBAL.UPGRADETYPES.SLUDGE_CORK .. "_upgradeable") then return "SLUDGE_CORK" end
     if target ~= nil and target.prefab == "nightmarefuel" then return "SOUL" end
     if target ~= nil and target.prefab == "horrorfuel" then return "SOUL" end
     if target ~= nil and target.prefab == "moon_tree_blossom" then return "SOUL_LUNAR" end
     if target ~= nil and target.prefab == "purebrilliance" then return "SOUL_LUNAR" end
-    return _UpgradeStrFn(act)
+    return _UpgradeStrFn(act, ...)
 end
 
 local _AddFuelFn = GLOBAL.ACTIONS.ADDFUEL.fn
 local _AddWetFuelFn = GLOBAL.ACTIONS.ADDWETFUEL.fn
 
-GLOBAL.ACTIONS.ADDFUEL.fn = function(act)
+GLOBAL.ACTIONS.ADDFUEL.fn = function(act, ...)
     if act.doer.components.inventory and act.invobject.components.finiteuses ~= nil and act.invobject:HasTag("sludge_oil") then
         local fuel = act.invobject
         if fuel then
@@ -324,11 +324,11 @@ GLOBAL.ACTIONS.ADDFUEL.fn = function(act)
             end
         end
     else
-        return _AddFuelFn(act)
+        return _AddFuelFn(act, ...)
     end
 end
 
-GLOBAL.ACTIONS.ADDWETFUEL.fn = function(act) -- I'M GOING TO ***BOMB KLEI*** WHY THE *FUCK* IS WETFUEL IT'S OWN ACTION.
+GLOBAL.ACTIONS.ADDWETFUEL.fn = function(act, ...) -- I'M GOING TO ***BOMB KLEI*** WHY THE *FUCK* IS WETFUEL IT'S OWN ACTION.
     if act.doer.components.inventory and act.invobject.components.finiteuses ~= nil and act.invobject:HasTag("sludge_oil") then
         local fuel = act.invobject
         if fuel then
@@ -339,7 +339,7 @@ GLOBAL.ACTIONS.ADDWETFUEL.fn = function(act) -- I'M GOING TO ***BOMB KLEI*** WHY
             end
         end
     else
-        return _AddWetFuelFn(act)
+        return _AddWetFuelFn(act, ...)
     end
 end
 
@@ -658,11 +658,11 @@ AddSimPostInit(function()
 end)
 
 local _OldHarvest = GLOBAL.ACTIONS.HARVEST.fn
-GLOBAL.ACTIONS.HARVEST.fn = function(act)
+GLOBAL.ACTIONS.HARVEST.fn = function(act, ...)
     if act.target.prefab == "um_cookpot_wagstaff" then
         return act.target.components.stewer_wagstaff:Harvest(act.doer)
     else
-        return _OldHarvest(act)
+        return _OldHarvest(act, ...)
     end
 end
 
