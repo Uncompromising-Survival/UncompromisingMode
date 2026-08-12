@@ -44,20 +44,28 @@ local function onfinished_normal(inst)
     inst.AnimState:PushAnimation("death", false)
 
     inst.SoundEmitter:PlaySound("dontstarve/common/destroy_stone")
-    inst:DoTaskInTime(3, inst.Remove)
+    inst:RemoveEventCallback("death", onfinished_normal)
+    inst:RemoveEventCallback("onremove", onfinished_normal)
 
-    if inst.latchedtarget and inst.latchedtarget:IsValid() then
-        local pos = Vector3(inst.latchedtarget.Transform:GetWorldPosition())
-        if inst.latchedtarget.components.locomotor then
-            inst.latchedtarget.components.locomotor:RemoveExternalSpeedMultiplier(inst.latchedtarget, inst.prefab)
-            if inst.latchedtarget._bear_trap_speedmulttask then
-                inst.latchedtarget._bear_trap_speedmulttask:Cancel()
-                inst.latchedtarget._bear_trap_speedmulttask = nil
-            end
+    if inst.latchedtarget then
+        if inst.OnFinishedOnTarget then
+            inst:RemoveEventCallback("death", inst.OnFinishedOnTarget, inst.latchedtarget)
+            inst:RemoveEventCallback("onremove", inst.OnFinishedOnTarget, inst.latchedtarget)
         end
-        inst.latchedtarget:RemoveChild(inst)
-        inst.Physics:Teleport(pos.x, pos.y, pos.z)
+        if inst.latchedtarget:IsValid() then
+            local pos = Vector3(inst.latchedtarget.Transform:GetWorldPosition())
+            if inst.latchedtarget.components.locomotor then
+                inst.latchedtarget.components.locomotor:RemoveExternalSpeedMultiplier(inst.latchedtarget, inst.prefab)
+                if inst.latchedtarget._bear_trap_speedmulttask then
+                    inst.latchedtarget._bear_trap_speedmulttask:Cancel()
+                    inst.latchedtarget._bear_trap_speedmulttask = nil
+                end
+            end
+            inst.latchedtarget:RemoveChild(inst)
+            inst.Physics:Teleport(pos.x, pos.y, pos.z)
+        end
     end
+    inst:DoTaskInTime(3, inst.Remove)
 end
 
 local function OnExplode(inst, target)
@@ -95,9 +103,9 @@ local function OnExplode(inst, target)
             inst.components.health:Kill()
         else
             local debuffkey = inst.prefab
-
-            inst:ListenForEvent("death", function(player) onfinished_normal(inst) end, target)
-            inst:ListenForEvent("onremoved", function(player) onfinished_normal(inst) end, target)
+            inst.OnFinishedOnTarget = function(_inst) onfinished_normal(inst) end
+            inst:ListenForEvent("death", inst.OnFinishedOnTarget, target)
+            inst:ListenForEvent("onremove", inst.OnFinishedOnTarget, target)
             if target.components.locomotor then
                 target.components.locomotor:SetExternalSpeedMultiplier(target, debuffkey, inst.traptype and 0.35 or 0.2)
                 target._bear_trap_speedmulttask = target:DoTaskInTime(inst.traptype and 30 or 10, function(i)
@@ -106,18 +114,6 @@ local function OnExplode(inst, target)
                     end
                     i._bear_trap_speedmulttask = nil
                 end)
-
-                local function RemoveSpeed(inst)
-                    if inst.components.locomotor then
-                        inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, debuffkey)
-                    end
-                    if inst._bear_trap_speedmulttask then
-                        inst._bear_trap_speedmulttask:Cancel()
-                        inst._bear_trap_speedmulttask = nil
-                    end
-                end
-
-                target:ListenForEvent("onremoved", RemoveSpeed, inst)
             end
             inst:DoTaskInTime(10, function(inst) inst.components.health:Kill() end)
 
@@ -294,6 +290,7 @@ local function commonfn()
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(TUNING.WALRUS_HEALTH)
     inst:ListenForEvent("death", onfinished_normal)
+    inst:ListenForEvent("onremove", onfinished_normal)
 
     inst:AddComponent("combat")
     inst:ListenForEvent("attacked", OnAttacked)
@@ -356,6 +353,7 @@ local function old_fn(build)
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(TUNING.WALRUS_HEALTH)
     inst:ListenForEvent("death", onfinished_normal)
+    inst:ListenForEvent("onremove", onfinished_normal)
 
     inst:AddComponent("combat")
     inst:ListenForEvent("attacked", OnAttacked)
@@ -667,6 +665,7 @@ local function equiptoothfn()
     inst.components.health.canmurder = false
     inst.components.health:SetMaxHealth(TUNING.WALRUS_HEALTH / 2)
     inst:ListenForEvent("death", onfinished_normal)
+    inst:ListenForEvent("onremove", onfinished_normal)
 
     inst:AddComponent("combat")
     inst:ListenForEvent("attacked", OnAttacked)
@@ -754,6 +753,7 @@ local function equipgoldfn()
     inst.components.health.canmurder = false
     inst.components.health:SetMaxHealth(TUNING.WALRUS_HEALTH / 1.5)
     inst:ListenForEvent("death", onfinished_normal)
+    inst:ListenForEvent("onremove", onfinished_normal)
 
     inst:AddComponent("combat")
     inst:ListenForEvent("attacked", OnAttacked)

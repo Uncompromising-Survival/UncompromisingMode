@@ -454,11 +454,9 @@ local states=
         tags = { "busy", "attack" },
 
         onenter = function(inst)
-            inst.stomp_count = 0
             inst.Physics:Stop()
             inst.AnimState:PlayAnimation("stompy")
             inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/lightninggoat/taunt")
-            
             for i = 1, 10 do
                 inst:DoTaskInTime(i / 8, SparkingFX)
             end
@@ -475,41 +473,7 @@ local states=
             end),
             
             TimeEvent(19*FRAMES, function(inst)
-                local dodamageRadius = 5.5
-                inst.components.groundpounder.destructionRings = 1
-                inst.components.groundpounder.platformPushingRings = 1
-                inst.components.groundpounder.numRings = 1
-                
-                local ringfx = SpawnPrefab("firering_fx")
-                ringfx.Transform:SetPosition(inst.Transform:GetWorldPosition())
-                ringfx.Transform:SetScale(0.8, 0.8, 0.8)
-                
-                inst.components.groundpounder.destructionRings = 1
-                inst.components.groundpounder.platformPushingRings = 1
-                inst.components.groundpounder.numRings = 1
-                inst.components.groundpounder:GroundPound()
-                
-                local x, y, z = inst.Transform:GetWorldPosition()
-                local ents = TheSim:FindEntities(x, y, z, dodamageRadius, { "_combat" }, { "playerghost", "lightninggoat", "ghost", "prey", "bird", "shadowcreature" })
-                
-                for i, ent in ipairs(ents) do
-                    if ent.components.health ~= nil and not ent.components.health:IsDead() then
-                        local insulated = (ent:HasTag("electricdamageimmune") or
-                            (ent.components.inventory ~= nil and ent.components.inventory:IsInsulated()))
-                            
-                        local mult = ent:HasTag("player") and not insulated
-                            and TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * (ent.components.moisture ~= nil and ent.components.moisture:GetMoisturePercent() or (ent:GetIsWet() and 1 or 0))
-                            or 1
-                            
-                        ent.components.combat:GetAttacked(inst, (TUNING.LIGHTNING_GOAT_DAMAGE * 1.5) * mult, nil, "electric")
-                            
-                        if ent:HasTag("player") and ent.sg ~= nil and not ent.sg:HasStateTag("nointerrupt") and not insulated and not
-                            (ent.components.health ~= nil and not ent.components.health:IsDead()) then
-                            ent.sg:GoToState("electrocute")
-                        end
-                    end
-                end
-                
+                inst:ElectricStompAttack()
                 inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/lightninggoat/shocked_electric")
             end)
         },
@@ -527,8 +491,8 @@ local states=
         tags = { "busy", "attack" },
 
         onenter = function(inst)
+            if not inst.stomp_count then inst.stomp_count = 0 end
             inst.stomp_count = inst.stomp_count + 1
-                
             inst.Physics:Stop()
             inst.AnimState:PlayAnimation("stompy_loop")
             inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/lightninggoat/shocked_electric")
@@ -537,37 +501,7 @@ local states=
         timeline =
         {
             TimeEvent(4*FRAMES, function(inst)
-                local dodamageRadius = 5.5 + inst.stomp_count
-                
-                local ringfx = SpawnPrefab("firering_fx")
-                ringfx.Transform:SetPosition(inst.Transform:GetWorldPosition())
-                ringfx.Transform:SetScale(0.8 + (inst.stomp_count / 9), 0.8 + (inst.stomp_count / 9), 0.8 + (inst.stomp_count / 9))
-                    
-                inst.components.groundpounder.destructionRings = 1 + inst.stomp_count
-                inst.components.groundpounder.platformPushingRings = 1 + inst.stomp_count
-                inst.components.groundpounder.numRings = 1 + inst.stomp_count
-                inst.components.groundpounder:GroundPound()
-                
-                local x, y, z = inst.Transform:GetWorldPosition()
-                local ents = TheSim:FindEntities(x, y, z, dodamageRadius, { "_combat" }, { "playerghost", "lightninggoat", "ghost", "prey", "bird", "shadowcreature" })
-                
-                for i, ent in ipairs(ents) do
-                    if ent.components.health ~= nil and not ent.components.health:IsDead() then
-                        local insulated = (ent:HasTag("electricdamageimmune") or
-                            (ent.components.inventory ~= nil and ent.components.inventory:IsInsulated()))
-                            
-                        local mult = ent:HasTag("player") and not insulated
-                            and TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * (ent.components.moisture ~= nil and ent.components.moisture:GetMoisturePercent() or (ent:GetIsWet() and 1 or 0))
-                            or 1
-                            
-                        ent.components.combat:GetAttacked(inst, (TUNING.LIGHTNING_GOAT_DAMAGE * 1.5) * mult, nil, "electric")
-                            
-                        if ent:HasTag("player") and ent.sg ~= nil and not ent.sg:HasStateTag("nointerrupt") and not insulated and not
-                            (ent.components.health ~= nil and not ent.components.health:IsDead()) then
-                            ent.sg:GoToState("electrocute")
-                        end
-                    end
-                end
+                inst:ElectricStompAttack()
             end)
         },
 
@@ -575,7 +509,6 @@ local states=
         {
             EventHandler("animover", function(inst)
                 if inst.stomp_count >= 1 then
-                    inst.stomp_count = 0
                     inst.sg:GoToState("stomp_attack_stop")
                 else
                     inst.sg:GoToState("stomp_attack_loop")
@@ -589,7 +522,7 @@ local states=
         tags = { "busy", "attack" },
 
         onenter = function(inst)
-            inst.stomp_count = 0
+            inst.stomp_count = nil
             inst.Physics:Stop()
             inst.AnimState:PlayAnimation("stompy_pst")
         end,

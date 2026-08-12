@@ -78,13 +78,8 @@ local HOUND_LIGHNTING_CANT_TAGS = {"lightninggoat", "bird", "prey"}
 
 local function setcharged(inst, instant)
     local x, y, z = inst.Transform:GetWorldPosition()
-    inst:AddTag("charged")
-    local shocktime = 1
-    
     inst.sg:GoToState("shocked")
-    shocktime = .2
-    
-    inst:DoTaskInTime(shocktime, function(inst)
+    inst:DoTaskInTime(.2, function(inst)
         for i = 1, 8 do
             UMCommonFns.SpawnHoundLightning(inst, {pos = {x = x + math.random(-6, 6), z = z + math.random(-6, 6)}, canttags = HOUND_LIGHNTING_CANT_TAGS})
         end
@@ -92,21 +87,23 @@ local function setcharged(inst, instant)
 end
 
 local function IsChargedGoat(dude)
-    return dude:HasTag("lightninggoat") and (dude:HasTag("charged") or dude:HasTag("alpha_goat"))
+    return dude:HasTag("lightninggoat") and dude:HasAnyTag("charged", "alpha_goat")
 end
 
 local function OnAttacked(inst, data)
     if data ~= nil and data.attacker ~= nil then
         if inst.charged then
             if data.attacker.components.health ~= nil and not data.attacker.components.health:IsDead() and
+                data.stimuli ~= "soul" and
                 (data.weapon == nil or ((data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil) and data.weapon.components.projectile == nil)) and
-                not (data.attacker.components.inventory ~= nil and data.attacker.components.inventory:IsInsulated()) then
-
-                if data.attacker:HasTag("player") and not data.attacker.sg:HasStateTag("dead") then
-                    data.attacker.sg:GoToState("electrocute")
+                not (data.attacker.components.inventory ~= nil and data.attacker.components.inventory:IsInsulated()) and
+                not data.attacker:HasTag("catapult")
+            then
+                local damage_mult = 1
+                if not IsEntityElectricImmune(data.attacker) then
+                    damage_mult = TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * data.attacker:GetWetMultiplier()
                 end
-                
-                data.attacker.components.health:DoDelta(-TUNING.LIGHTNING_GOAT_DAMAGE, nil, inst.prefab, nil, inst)
+                data.attacker.components.combat:GetAttacked(inst, damage_mult * TUNING.LIGHTNING_GOAT_DAMAGE, nil, "electric")
             end
         elseif data.stimuli == "electric" or (data.weapon ~= nil and data.weapon.components.weapon ~= nil and data.weapon.components.weapon.stimuli == "electric") then
             setcharged(inst)
@@ -132,6 +129,34 @@ local function OnLoad(inst, data)
     if data and data.charged and data.chargeleft then
         setcharged(inst, true)
         inst.chargeleft = data.chargeleft
+    end
+end
+
+local ELECTRIC_ATTACK_MUST_TAGS = {"_combat"}
+local ELECTRIC_ATTACK_CANT_TAGS = JoinArrays(UMCommonFns.GHOSTLIKE_TAGS, {"INLIMBO", "structure", "wall", "lightninggoat", "prey", "bird"})
+local function ElectricStompAttack(inst)
+    local stomp_count = inst.stomp_count or 0
+
+    local ringfx = SpawnPrefab("firering_fx")
+    ringfx.Transform:SetPosition(inst.Transform:GetWorldPosition())
+    ringfx.Transform:SetScale(0.8 + (stomp_count / 9), 0.8 + (stomp_count / 9), 0.8 + (stomp_count / 9))
+    
+    local groundpounder = inst.components.groundpounder
+    groundpounder.destructionRings = 1 + stomp_count
+    groundpounder.platformPushingRings = 1 + stomp_count
+    groundpounder.numRings = 1 + stomp_count
+    groundpounder:GroundPound()
+
+    local x, y, z = inst.Transform:GetWorldPosition()
+    for i, ent in ipairs(TheSim:FindEntities(x, y, z, 5.5 + stomp_count, ELECTRIC_ATTACK_MUST_TAGS, ELECTRIC_ATTACK_CANT_TAGS)) do
+        if ent.components.health and not ent.components.health:IsDead() and inst.components.combat:CanTarget(ent)
+            and not (ent.components.inventory and ent.components.inventory:IsInsulated()) and not ent:HasTag("catapult") then
+            local damage_mult = 1
+            if not IsEntityElectricImmune(ent) then
+                damage_mult = TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * ent:GetWetMultiplier()
+            end
+            ent.components.combat:GetAttacked(inst, damage_mult * TUNING.LIGHTNING_GOAT_DAMAGE * 1.5, nil, "electric")
+        end
     end
 end
 
@@ -260,7 +285,9 @@ local function fn()
 
     MakeMediumBurnableCharacter(inst, "lightning_goat_body")
     MakeMediumFreezableCharacter(inst, "lightning_goat_body")
-    
+
+    inst.ElectricStompAttack = ElectricStompAttack
+
     inst.LightningAttack = LightningAttack
     inst:ListenForEvent("spawnedforhunt", onspawnedforhunt)
 

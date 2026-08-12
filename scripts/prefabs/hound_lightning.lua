@@ -44,7 +44,7 @@ local function Zap(inst)
     end
     
     local radius = 3.5
-    local ents = TheSim:FindEntities(x, y, z, radius, {"_health"}, inst.NoTags)
+    local ents = TheSim:FindEntities(x, y, z, radius, {"_combat"}, inst.NoTags)
     local chargeables = TheSim:FindEntities(x, y, z, radius, {"_inventoryitem"}, inst.NoTags)
     local lightningrods = TheSim:FindEntities(x, y, z, radius, {"structure", "lightningrod"}, {"INLIMBO"})
 
@@ -128,7 +128,7 @@ local function fn()
         return inst
     end
 
-    inst.NoTags = JoinArrays(UMCommonFns.GHOSTLIKE_TAGS, {"INLIMBO", "structure", "wall", "walkableplatform", "walkableperipheral"})
+    inst.NoTags = JoinArrays(UMCommonFns.GHOSTLIKE_TAGS, {"INLIMBO", "structure", "wall"})
 
     inst.task = inst:DoPeriodicTask(.05, Sparks)
 
