@@ -185,7 +185,7 @@ local function staff_fn()
     spellcaster.canuseontargets = true
     spellcaster.canuseondead = true
     spellcaster.canuseonpoint = true
-    spellcaster.canuseonpoint_water = true
+    spellcaster.canuseonpoint_water = false
     spellcaster.quickcast = true
 
     local rechargeable = inst:AddComponent("rechargeable")
