@@ -172,6 +172,10 @@ local function onunequip(inst, owner)
     end
 end
 
+local function CanCastFn(inst)
+    return true
+end
+
 local function generalfn(anim, container_widget)
     local inst = CreateEntity()
 
@@ -186,20 +190,19 @@ local function generalfn(anim, container_widget)
     inst:AddTag("donotautopick")
     inst:AddTag("um_gun")
     inst:AddTag("scarytoprey")
-
-    --Sneak these into pristine state for optimization
     inst:AddTag("quickcast")
     inst:AddTag("inventoryitem")
-    MakeInventoryFloatable(inst)
 
     inst.spelltype = "UM_GUNSHOOTY"
 
-    inst.entity:SetPristine()
+    local reticule = inst:AddComponent("reticule")
+    reticule.targetfn = light_reticuletargetfn
+    reticule.ease = true
+    reticule.ispassableatallpoints = true
 
-    inst:AddComponent("reticule")
-    inst.components.reticule.targetfn = light_reticuletargetfn
-    inst.components.reticule.ease = true
-    inst.components.reticule.ispassableatallpoints = true
+    MakeInventoryFloatable(inst)
+
+    inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
         inst.OnEntityReplicated = function(inst)
@@ -214,18 +217,17 @@ local function generalfn(anim, container_widget)
 
     inst:AddComponent("inventoryitem")
 
-    inst:AddComponent("equippable")
-    inst.components.equippable:SetOnEquip(onequip)
-    inst.components.equippable:SetOnUnequip(onunequip)
+    local equippable = inst:AddComponent("equippable")
+    equippable:SetOnEquip(onequip)
+    equippable:SetOnUnequip(onunequip)
 
-
-    inst:AddComponent("spellcaster")
-    inst.components.spellcaster:SetSpellFn(createtarget)
-    inst.components.spellcaster.canuseontargets = true
-    inst.components.spellcaster.canonlyuseonworkable = true
-    inst.components.spellcaster.canonlyuseoncombat = true
-    inst.components.spellcaster.canuseonpoint = true
-    inst.components.spellcaster.canuseonpoint_water = true
+    local spellcaster = inst:AddComponent("spellcaster")
+    spellcaster:SetSpellFn(createtarget)
+    spellcaster:SetCanCastFn(CanCastFn)
+    spellcaster.canuseontargets = true
+    spellcaster.canuseondead = true
+    spellcaster.canuseonpoint = true
+    spellcaster.canuseonpoint_water = true
 
     local container = inst:AddComponent("container")
     container:WidgetSetup(container_widget)
@@ -243,14 +245,14 @@ local function FlameFn(inst)
     inst.AnimState:SetBuild("um_flameburster")
     inst.AnimState:PlayAnimation("idle")
 
-    inst:AddComponent("finiteuses")
+    local finiteuses = inst:AddComponent("finiteuses")
     local uses = 400
-    inst.components.finiteuses:SetMaxUses(uses)
-    inst.components.finiteuses:SetUses(uses)
-    inst.components.finiteuses:SetOnFinished(inst.Remove)
+    finiteuses:SetMaxUses(uses)
+    finiteuses:SetUses(uses)
+    finiteuses:SetOnFinished(inst.Remove)
 
-    inst:AddComponent("preserver")
-    inst.components.preserver:SetPerishRateMultiplier(TUNING.PERISH_MUSHROOM_LIGHT_MULT)
+    local preserver = inst:AddComponent("preserver")
+    preserver:SetPerishRateMultiplier(TUNING.PERISH_MUSHROOM_LIGHT_MULT)
 
     return inst
 end
@@ -263,7 +265,6 @@ local function ScrappyLaserFn(inst)
     inst.AnimState:PlayAnimation("idle")
     return inst
 end
-
 
 return Prefab("um_flamethrower", FlameFn, flamethrowerassets),
     Prefab("um_scrappylaser", ScrappyLaserFn, scrappylaserassets)

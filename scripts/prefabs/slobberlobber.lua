@@ -125,6 +125,10 @@ local function onunequip(inst, owner)
     owner.AnimState:Show("ARM_normal")
 end
 
+local function CanCastFn(inst)
+    return true
+end
+
 local function staff_fn()
     local inst = CreateEntity()
 
@@ -148,14 +152,14 @@ local function staff_fn()
 
     --inst.spelltype = "SCIENCE"
 
-    MakeInventoryFloatable(inst)
-
-    inst:AddComponent("reticule")
-    inst.components.reticule.targetfn = light_reticuletargetfn
-    inst.components.reticule.ease = true
-    inst.components.reticule.ispassableatallpoints = true
+    local reticule = inst:AddComponent("reticule")
+    reticule.targetfn = light_reticuletargetfn
+    reticule.ease = true
+    reticule.ispassableatallpoints = true
 
     inst.um_cancastontarget = UMCommonFns.DefaultCanCastOnTarget
+
+    MakeInventoryFloatable(inst)
 
     inst.entity:SetPristine()
 
@@ -175,17 +179,17 @@ local function staff_fn()
     local shadowlevel = inst:AddComponent("shadowlevel")
     shadowlevel:SetDefaultLevel(TUNING.DSTU.SLOBBERLOBBER_SHADOW_LEVEL)
 
-    inst:AddComponent("spellcaster")
-    inst.components.spellcaster:SetSpellFn(createlight)
-    inst.components.spellcaster.canuseontargets = true
-    inst.components.spellcaster.canonlyuseonworkable = true
-    inst.components.spellcaster.canonlyuseoncombat = true
-    inst.components.spellcaster.canuseonpoint = true
-    inst.components.spellcaster.canuseonpoint_water = false
-    inst.components.spellcaster.quickcast = true
+    local spellcaster = inst:AddComponent("spellcaster")
+    spellcaster:SetSpellFn(createlight)
+    spellcaster:SetCanCastFn(CanCastFn)
+    spellcaster.canuseontargets = true
+    spellcaster.canuseondead = true
+    spellcaster.canuseonpoint = true
+    spellcaster.canuseonpoint_water = true
+    spellcaster.quickcast = true
 
-    inst:AddComponent("rechargeable")
-    inst.components.rechargeable:SetOnChargedFn(OnCharged)
+    local rechargeable = inst:AddComponent("rechargeable")
+    rechargeable:SetOnChargedFn(OnCharged)
 
     MakeHauntableLaunch(inst)
 

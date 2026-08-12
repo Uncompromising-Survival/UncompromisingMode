@@ -288,6 +288,10 @@ local function onload(inst, data)
     end
 end
 
+local function CanCastFn(inst)
+    return true
+end
+
 local function staff_fn()
     local inst = CreateEntity()
 
@@ -356,11 +360,11 @@ local function staff_fn()
 
     local spellcaster = inst:AddComponent("spellcaster")
     spellcaster:SetSpellFn(CastSpell)
+    spellcaster:SetCanCastFn(CanCastFn)
     spellcaster.canuseontargets = true
-    spellcaster.canonlyuseonworkable = true
-    spellcaster.canonlyuseoncombat = true
+    spellcaster.canuseondead = true
     spellcaster.canuseonpoint = true
-    spellcaster.canuseonpoint_water = false
+    spellcaster.canuseonpoint_water = true
     spellcaster.quickcast = true
 
     local rechargeable = inst:AddComponent("rechargeable")

@@ -170,8 +170,8 @@ local function collectbees(inst, target, pos)
     end
 end
 
-local function can_cast_fn(doer, target, pos)
-    return doer:HasTag("vetcurse")
+local function CanCastFn(inst)
+    return true
 end
 
 local function onattack(inst, attacker, target)
@@ -205,8 +205,6 @@ local function fn(anim, name, swap, beetype)
     inst:AddTag("donotautopick")
     --inst.projectiledelay = PROJECTILE_DELAY
 
-    MakeInventoryFloatable(inst, "med", 0.075, { 0.5, 0.4, 0.5 }, true, -7, floater_swap_data)
-
     local reticule = inst:AddComponent("reticule")
     reticule.targetfn = ReticuleTargetFn
     reticule.ease = true
@@ -214,6 +212,8 @@ local function fn(anim, name, swap, beetype)
     reticule.ispassableatallpoints = true
 
     inst.um_cancastontarget = UMCommonFns.DefaultCanCastOnTarget
+
+    MakeInventoryFloatable(inst, "med", 0.075, { 0.5, 0.4, 0.5 }, true, -7, floater_swap_data)
 
     inst.entity:SetPristine()
 
@@ -255,8 +255,9 @@ local function fn(anim, name, swap, beetype)
 
     local spellcaster = inst:AddComponent("spellcaster")
     spellcaster:SetSpellFn(collectbees)
-    spellcaster:SetCanCastFn(can_cast_fn)
+    spellcaster:SetCanCastFn(CanCastFn)
     spellcaster.canuseontargets = true
+    spellcaster.canuseondead = true
     spellcaster.canuseonpoint = true
     spellcaster.canuseonpoint_water = true
 

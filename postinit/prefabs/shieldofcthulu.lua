@@ -119,7 +119,7 @@ local function castspell(inst, target, pos, doer)
     UMCommonFns.StartRechargeableCooldown(inst, {cooldown = TUNING.DSTU.SHIELDOFTERROR_COOLDOWN, tags = {"shieldofterror"}})
 end
 
-local function can_cast_fn(doer, target, pos, inst)
+local function CanCastFn(doer, target, pos, inst)
     return inst.components.rechargeable:IsCharged()
 end
 
@@ -130,14 +130,13 @@ local function ToggleItemVetcurse(inst, toggle)
 
         inst.spelltype = "UM_SHIELD_BASH"
 
-        inst:AddComponent("spellcaster")
-        inst.components.spellcaster:SetSpellFn(castspell)
-        inst.components.spellcaster:SetCanCastFn(can_cast_fn)
-        inst.components.spellcaster.canuseontargets = true
-        inst.components.spellcaster.canuseondead = true
-        inst.components.spellcaster.canuseonpoint = true
-        inst.components.spellcaster.canuseonpoint_water = true
-        inst.components.spellcaster.canusefrominventory = false
+        local spellcaster = inst:AddComponent("spellcaster")
+        spellcaster:SetSpellFn(castspell)
+        spellcaster:SetCanCastFn(CanCastFn)
+        spellcaster.canuseontargets = true
+        spellcaster.canuseondead = true
+        spellcaster.canuseonpoint = true
+        spellcaster.canuseonpoint_water = true
 
         --todo: visual stuff?
     else
