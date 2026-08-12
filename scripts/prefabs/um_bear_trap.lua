@@ -1,6 +1,26 @@
 require "prefabutil"
 
 local function onfinished_normal(inst)
+    inst:RemoveEventCallback("death", onfinished_normal)
+    inst:RemoveEventCallback("onremove", onfinished_normal)
+    if inst.latchedtarget then
+        if inst.OnFinishedOnTarget then
+            inst:RemoveEventCallback("death", inst.OnFinishedOnTarget, inst.latchedtarget)
+            inst:RemoveEventCallback("onremove", inst.OnFinishedOnTarget, inst.latchedtarget)
+        end
+        if inst.latchedtarget:IsValid() then
+            local pos = Vector3(inst.latchedtarget.Transform:GetWorldPosition())
+            if inst.latchedtarget.components.locomotor then
+                inst.latchedtarget.components.locomotor:RemoveExternalSpeedMultiplier(inst.latchedtarget, inst.prefab)
+                if inst.latchedtarget._bear_trap_speedmulttask then
+                    inst.latchedtarget._bear_trap_speedmulttask:Cancel()
+                    inst.latchedtarget._bear_trap_speedmulttask = nil
+                end
+            end
+            inst.latchedtarget:RemoveChild(inst)
+            inst.Physics:Teleport(pos.x, pos.y, pos.z)
+        end
+    end
     if inst.components.finiteuses then
         inst.components.finiteuses:Use(1)
         if inst.components.finiteuses:GetUses() > 0 and inst.traptype then
@@ -44,31 +64,12 @@ local function onfinished_normal(inst)
     inst.AnimState:PushAnimation("death", false)
 
     inst.SoundEmitter:PlaySound("dontstarve/common/destroy_stone")
-    inst:RemoveEventCallback("death", onfinished_normal)
-    inst:RemoveEventCallback("onremove", onfinished_normal)
 
-    if inst.latchedtarget then
-        if inst.OnFinishedOnTarget then
-            inst:RemoveEventCallback("death", inst.OnFinishedOnTarget, inst.latchedtarget)
-            inst:RemoveEventCallback("onremove", inst.OnFinishedOnTarget, inst.latchedtarget)
-        end
-        if inst.latchedtarget:IsValid() then
-            local pos = Vector3(inst.latchedtarget.Transform:GetWorldPosition())
-            if inst.latchedtarget.components.locomotor then
-                inst.latchedtarget.components.locomotor:RemoveExternalSpeedMultiplier(inst.latchedtarget, inst.prefab)
-                if inst.latchedtarget._bear_trap_speedmulttask then
-                    inst.latchedtarget._bear_trap_speedmulttask:Cancel()
-                    inst.latchedtarget._bear_trap_speedmulttask = nil
-                end
-            end
-            inst.latchedtarget:RemoveChild(inst)
-            inst.Physics:Teleport(pos.x, pos.y, pos.z)
-        end
-    end
     inst:DoTaskInTime(3, inst.Remove)
 end
 
 local function OnExplode(inst, target)
+    inst:ListenForEvent("onremove", onfinished_normal)
     if not target or not target:IsValid() then
         onfinished_normal(inst)
     else
@@ -290,7 +291,6 @@ local function commonfn()
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(TUNING.WALRUS_HEALTH)
     inst:ListenForEvent("death", onfinished_normal)
-    inst:ListenForEvent("onremove", onfinished_normal)
 
     inst:AddComponent("combat")
     inst:ListenForEvent("attacked", OnAttacked)
@@ -353,7 +353,6 @@ local function old_fn(build)
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(TUNING.WALRUS_HEALTH)
     inst:ListenForEvent("death", onfinished_normal)
-    inst:ListenForEvent("onremove", onfinished_normal)
 
     inst:AddComponent("combat")
     inst:ListenForEvent("attacked", OnAttacked)
@@ -624,7 +623,7 @@ local function equiptoothfn()
     inst:AddTag("noclaustrophobia")
     inst:AddTag("donotautopick")
 
-    MakeInventoryFloatable(inst, "med", 0.05, 0.65)
+    MakeInventoryFloatable(inst, "med", .05, .65)
 
     inst.entity:SetPristine()
 
@@ -665,7 +664,6 @@ local function equiptoothfn()
     inst.components.health.canmurder = false
     inst.components.health:SetMaxHealth(TUNING.WALRUS_HEALTH / 2)
     inst:ListenForEvent("death", onfinished_normal)
-    inst:ListenForEvent("onremove", onfinished_normal)
 
     inst:AddComponent("combat")
     inst:ListenForEvent("attacked", OnAttacked)
@@ -705,7 +703,7 @@ local function equipgoldfn()
     inst:AddTag("mech")
     inst:AddTag("noclaustrophobia")
     inst:AddTag("donotautopick")
-    MakeInventoryFloatable(inst, "med", 0.05, 0.65)
+    MakeInventoryFloatable(inst, "med", .05, .65)
 
     inst.entity:SetPristine()
 
@@ -730,13 +728,13 @@ local function equipgoldfn()
     inst:AddComponent("complexprojectile")
     inst.components.complexprojectile:SetHorizontalSpeed(15)
     inst.components.complexprojectile:SetGravity(-35)
-    inst.components.complexprojectile:SetLaunchOffset(Vector3(2, 2, 0))
+    inst.components.complexprojectile:SetLaunchOffset(Vector3(.25, 1, 0))
     inst.components.complexprojectile:SetOnLaunch(onthrown_player)
     inst.components.complexprojectile:SetOnHit(OnTrapLand_player)
 
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(0)
-    inst.components.weapon:SetRange(20, 0.5)
+    inst.components.weapon:SetRange(20, .5)
 
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem:SetOnDroppedFn(OnDropped)
@@ -753,7 +751,6 @@ local function equipgoldfn()
     inst.components.health.canmurder = false
     inst.components.health:SetMaxHealth(TUNING.WALRUS_HEALTH / 1.5)
     inst:ListenForEvent("death", onfinished_normal)
-    inst:ListenForEvent("onremove", onfinished_normal)
 
     inst:AddComponent("combat")
     inst:ListenForEvent("attacked", OnAttacked)
