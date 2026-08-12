@@ -15,6 +15,7 @@ local SANDSPIKE_MIN = 17
 local SANDSPIKE_MAX = 20
 local SANDSPIKE_SPREAD_RADIUS = 5
 local SANDSPIKE_RADIUS_BONUS = 1.15
+local SANDSPIKE_DAMAGE_MULT = .5
 
 local SANDCASTLE_COUNT = 7
 local SANDCASTLE_ARC_RADIUS = 6.5
@@ -122,6 +123,7 @@ local function SpawnSandspikes(inst, caster, pos)
             local z = pos.z + math.sin(theta) * radius
             TrySpawnObstacle("sandspike", x, z, caster, function(spike)
                 spike.spikeradius = spike.spikeradius + SANDSPIKE_RADIUS_BONUS
+                spike.components.combat:SetDefaultDamage(spike.components.combat.defaultdamage * SANDSPIKE_DAMAGE_MULT)
             end)
         end)
     end
