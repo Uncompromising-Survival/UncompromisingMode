@@ -266,6 +266,9 @@ end
 if GetModConfigData("trapdoorspiders") then
     AddRecipe2("mutator_trapdoor", { Ingredient("monstermeat", 2), Ingredient("spidergland", 3), Ingredient("cutgrass", 5) }, TECH.SPIDERCRAFT_ONE, { builder_tag = "spiderwhisperer" }, { "CHARACTER" })
     ChangeSortKey("mutator_trapdoor", "mutator_warrior", "CHARACTER", true)
+
+    AddRecipe2("mutator_trapdoor_hooded", { Ingredient("monstermeat", 2), Ingredient("silk", 3), Ingredient("um_moss", 2) }, TECH.SPIDERCRAFT_ONE, { builder_tag = "spiderwhisperer" }, { "CHARACTER" })
+    ChangeSortKey("mutator_trapdoor_hooded", "mutator_trapdoor", "CHARACTER", true)
 end
 
 AddRecipe2("floral_bandage", { Ingredient("bandage", 1), Ingredient("cactus_flower", 2) }, TECH.SCIENCE_TWO, nil, { "RESTORATION" })

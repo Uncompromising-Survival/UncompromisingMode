@@ -103,6 +103,7 @@ local inventoryitems =
     "moon_tear",
     "moonglass_geode",
     "mutator_trapdoor",
+    "mutator_trapdoor_hooded",
     "nervoustick_1",
     "nervoustick_2",
     "nervoustick_3",
