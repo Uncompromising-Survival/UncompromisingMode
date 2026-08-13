@@ -29,7 +29,6 @@ STRINGS.UNCOMP_TOOLTIP = {
     DRAGONFLYCHEST = "- Has even more item slots.",
     WARDROBE = "- Can store a lot of equipment.",
     WINONA_SPOTLIGHT = "- Significantly increased range.\n- Doubled radius.",
-    LIGHTNING_ROD = "- Can charge electrical equipment.",
     BANDAGE = "- Restores a bit of extra health over time.",
     SISTURN = "- Petals inside decay into Mourning Glory.",
     MULTITOOL_AXE_PICKAXE = "- Creates shockwaves when chopping/mining.",
