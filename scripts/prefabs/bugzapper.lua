@@ -154,7 +154,7 @@ local function onattack(inst, attacker, target)
             return
         end
 
-        if (target:HasTag("spider") or target:HasTag("hoodedwidow")) then
+        if target:HasAnyTag("spider", "hoodedwidow") then
             if not target.components.health:IsDead() then
                 target.components.combat:GetAttacked(attacker, 15, nil)
             end
