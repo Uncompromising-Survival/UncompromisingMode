@@ -149,7 +149,7 @@ local function ElectricStompAttack(inst)
 
     local x, y, z = inst.Transform:GetWorldPosition()
     for i, ent in ipairs(TheSim:FindEntities(x, y, z, 5.5 + stomp_count, ELECTRIC_ATTACK_MUST_TAGS, ELECTRIC_ATTACK_CANT_TAGS)) do
-        if ent.components.health and not ent.components.health:IsDead() and inst.components.combat:CanTarget(ent)
+        if not (ent.components.health and ent.components.health:IsDead()) and inst.components.combat:CanTarget(ent)
             and not (ent.components.inventory and ent.components.inventory:IsInsulated()) and not ent:HasTag("catapult") then
             local damage_mult = 1
             if not IsEntityElectricImmune(ent) then
