@@ -15,11 +15,12 @@ local SANDSPIKE_MIN = 17
 local SANDSPIKE_MAX = 20
 local SANDSPIKE_SPREAD_RADIUS = 5
 local SANDSPIKE_RADIUS_BONUS = 1.15
-local SANDSPIKE_DAMAGE_MULT = .4
+local SANDSPIKE_DAMAGE_MULT = .35
 
 local SANDCASTLE_COUNT = 7
 local SANDCASTLE_ARC_RADIUS = 6.5
 local SANDCASTLE_ARC_SWEEP = PI * .65
+local SANDCASTLE_RADIUS = 1
 
 local KILLRISK_TAGS = { "epic" }
 local NOSPAWN_CHECK_RADIUS = 2.5
@@ -28,6 +29,9 @@ local SHIELD_SEARCH_RADIUS = 3
 
 local SAFE_MASK = COLLISION.WORLD
 local SAFE_GROUP = COLLISION.SANITY
+
+local BLOCK_OVERLAP_CHECK_RADIUS = 10
+local OVERLAP_TRIGGER_BUFFER = .3
 
 local function ShouldSkipSpawn(entity)
     return entity.components.health ~= nil
@@ -60,6 +64,21 @@ local function UnshieldEntity(entity)
         return
     end
     entity.components.health:SetInvincible(entity._um_antlionstaff_wasinvincible)
+end
+
+local function WouldLoseCollision(x, z, radius)
+    local nearby = TheSim:FindEntities(x, 0, z, BLOCK_OVERLAP_CHECK_RADIUS)
+    for _, entity in ipairs(nearby) do
+        if entity.Physics ~= nil and entity.components.locomotor ~= nil and not entity:HasTag("groundspike") then
+            local ex, _, ez = entity.Transform:GetWorldPosition()
+            local dx, dz = ex - x, ez - z
+            local mindist = radius + entity:GetPhysicsRadius(0) + OVERLAP_TRIGGER_BUFFER
+            if dx * dx + dz * dz < mindist * mindist then
+                return true
+            end
+        end
+    end
+    return false
 end
 
 local function MakeObstacleSafe(obstacle, caster)
@@ -124,6 +143,10 @@ local function TrySpawnObstacle(prefabname, x, z, caster, onspawned)
         end
     end
 
+    if prefabname == "sandblock" and WouldLoseCollision(x, z, SANDCASTLE_RADIUS) then
+        return
+    end
+
     local obstacle = SpawnPrefab(prefabname)
     obstacle.Transform:SetPosition(x, 0, z)
     MakeObstacleSafe(obstacle, caster)
@@ -169,7 +192,9 @@ local function SpawnSandcastles(inst, caster, pos)
             if not inst:IsValid() then
                 return
             end
-            TrySpawnObstacle("sandblock", x, z, caster)
+            TrySpawnObstacle("sandblock", x, z, caster, function(block)
+                block.spikeradius = SANDCASTLE_RADIUS
+            end)
         end)
     end
 end
@@ -295,16 +320,6 @@ local function onunequip(inst, owner)
     owner:RemoveTag("um_antlionstaff_spellbook_user")
 end
 
-local function onsave(inst, data)
-    data.defensivemode = inst.defensivemode
-end
-
-local function onload(inst, data)
-    if data ~= nil and data.defensivemode ~= nil then
-        inst.defensivemode = data.defensivemode
-    end
-end
-
 local function CanCastFn(inst)
     return true
 end
@@ -394,9 +409,6 @@ local function staff_fn()
     container.canbeopened = false
 
     MakeHauntableLaunch(inst)
-
-    inst.OnSave = onsave
-    inst.OnLoad = onload
 
     return inst
 end
