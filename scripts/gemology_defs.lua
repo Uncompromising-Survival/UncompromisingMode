@@ -640,7 +640,7 @@ AddUMGemDef("purplegem1", {
         onattack = function(item, attacker, target, tier)
             if item.tier ~= 1 and item.components.weapon ~= nil and target and target.components.combat and target:IsValid() then
                 local damage = item.components.weapon:GetDamage(attacker, target)
-                if damage < TUNING.DSTU.PURPLEGEM1_EXTRA_DAMAGE_THRESHOLD and item.prefab ~= "hambat"  then
+                if damage < TUNING.DSTU.PURPLEGEM1_EXTRA_DAMAGE_THRESHOLD and item.prefab ~= "hambat" then
                     damage = damage * tier * TUNING.DSTU.PURPLEGEM1_EXTRA_DAMAGE_MULT
                     local stimuli = item.components.weapon.stimuli and item.components.weapon.stimuli or nil
                     target.components.combat:GetAttacked(attacker, damage, nil, stimuli)
