@@ -491,8 +491,7 @@ local states=
         tags = { "busy", "attack" },
 
         onenter = function(inst)
-            if not inst.stomp_count then inst.stomp_count = 0 end
-            inst.stomp_count = inst.stomp_count + 1
+            inst.stomp_count = (inst.stomp_count or 0) + 1
             inst.Physics:Stop()
             inst.AnimState:PlayAnimation("stompy_loop")
             inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/lightninggoat/shocked_electric")

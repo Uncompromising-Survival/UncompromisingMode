@@ -817,3 +817,82 @@ ENV.AddComponentAction("USEITEM", "blueprinter", function(inst, doer, target, ac
 end)
 
 ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.MAKE_BLUEPRINT, "dolongaction"))
+
+-------------------------------------------------------------------------------------------------------------------
+--- Beefalo bell
+-------------------------------------------------------------------------------------------------------------------
+
+local UM_CALL_BEEF = ENV.AddAction(
+    "UM_CALL_BEEF",
+    STRINGS.ACTIONS.UM_CALL_BEEF,
+    function(act)
+        if act.doer == nil or act.invobject == nil then
+            return false
+        end
+
+        local bell = act.invobject
+
+        local beefalo = bell and bell:GetBeefalo()
+        if not beefalo then
+            return false, "NEEDBEEF"
+        end
+
+        beefalo:AddTag("beefcalled")
+
+        if beefalo.components.combat then
+            beefalo.components.combat:DropTarget()
+        end
+
+        if act.doer.components.talker ~= nil then
+            act.doer.components.talker:Say(GetString(act.doer, "ANNOUNCE_CALL_BEEF"))
+            act.doer.comment_data = nil
+        end
+
+        if beefalo.um_bell_task ~= nil then
+            beefalo.um_bell_task:Cancel()
+        end
+
+        beefalo.um_bell_task = beefalo:DoTaskInTime(5, function(inst)
+            inst:RemoveTag("beefcalled")
+
+            if beefalo.components.combat then
+                beefalo.components.combat:DropTarget()
+            end
+            inst.um_bell_task = nil
+        end)
+
+        return true
+    end
+)
+
+UM_CALL_BEEF.rmb = true
+UM_CALL_BEEF.priority = 10
+
+
+ENV.AddStategraphActionHandler(
+    "wilson",
+    ActionHandler(ENV.ACTIONS.UM_CALL_BEEF, "use_beef_bell")
+)
+
+ENV.AddStategraphActionHandler(
+    "wilson_client",
+    ActionHandler(ENV.ACTIONS.UM_CALL_BEEF, "use_beef_bell")
+)
+
+
+---Sneaking the dummy component here
+ENV.AddPrefabPostInit("beef_bell", function(inst)
+    if not TheWorld.ismastersim then
+        return
+    end
+
+    inst:AddComponent("um_beefcaller")
+end)
+
+ENV.AddComponentAction("INVENTORY", "um_beefcaller", function(inst, doer, actions)
+    if not (doer.components.playercontroller and doer.components.playercontroller:IsControlPressed(ENV.CONTROL_FORCE_ATTACK)) then
+        if inst:HasTag("inuse_targeted") then
+            table.insert(actions, ENV.ACTIONS.UM_CALL_BEEF)
+        end
+    end
+end)

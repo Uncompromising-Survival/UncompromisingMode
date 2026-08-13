@@ -268,6 +268,7 @@ STRINGS.ACTIONS.ACTIVATE.UM_TORNADOTRACKER = "Locate Tornadoes -"
 STRINGS.ACTIONS.CASTAOE.WATHGRITHR_SHIELD_DREADSTONE = STRINGS.ACTIONS.CASTAOE.WATHGRITHR_SHIELD
 STRINGS.ACTIONS.START_CHANNELCAST.MOONFALL = "Start Casting"
 STRINGS.ACTIONS.UM_GUNSHOOTY = "Shoot"
+STRINGS.ACTIONS.UM_CALL_BEEF = "Call Beefalo"
 
 STRINGS.UI.APPLY_GEM = "Forge!"
 STRINGS.UI.HUD.UM_VETSKULL_GENERIC = "Veteran's Curse:\n - Receive more damage when attacked.\n - Hunger drains faster.\n - Health and Sanity from foods is applied *slowly* over time."

@@ -53,6 +53,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     FIRESTAFF = "- Creates controlled fires.",
     LIGHTER = "- Recharges with embers.\n- Doesn't break at 0%.",
     VOIDCLOTH_UMBRELLA = "-No longer repaired by acid rain.",
+    BEEF_BELL = "- Can call a Beefalo, even if its fighting.\n - Hold Force Attack key to enable the break bond action.",
 
     __BREAK = "BREAK HERE",
     --uncomp content
