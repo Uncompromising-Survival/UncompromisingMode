@@ -15,22 +15,30 @@ local SANDSPIKE_MIN = 17
 local SANDSPIKE_MAX = 20
 local SANDSPIKE_SPREAD_RADIUS = 5
 local SANDSPIKE_RADIUS_BONUS = 1.15
-local SANDSPIKE_DAMAGE_MULT = .5
+local SANDSPIKE_DAMAGE_MULT = .4
 
 local SANDCASTLE_COUNT = 7
 local SANDCASTLE_ARC_RADIUS = 6.5
 local SANDCASTLE_ARC_SWEEP = PI * .65
 
-local SHIELD_CANDIDATE_TAGS = { "epic", "player" }
+local KILLRISK_TAGS = { "epic" }
+local NOSPAWN_CHECK_RADIUS = 2.5
+local SHIELD_CANDIDATE_TAGS = { "player" }
+local SHIELD_SEARCH_RADIUS = 3
+
+local SAFE_MASK = COLLISION.WORLD
+local SAFE_GROUP = COLLISION.SANITY
+
+local function ShouldSkipSpawn(entity)
+    return entity.components.health ~= nil
+        and entity.components.combat ~= nil
+        and entity.components.locomotor == nil
+end
 
 local function ShouldShield(entity, caster)
-    if entity.components.health == nil or entity.components.combat == nil then
-        return false
-    end
-    if entity:HasTag("player") then
-        return entity ~= caster
-    end
-    return entity.components.locomotor == nil
+    return entity.components.health ~= nil
+        and entity.components.combat ~= nil
+        and entity ~= caster
 end
 
 local function ShieldEntity(entity)
@@ -55,37 +63,43 @@ local function UnshieldEntity(entity)
 end
 
 local function MakeObstacleSafe(obstacle, caster)
-    local x, _, z = obstacle.Transform:GetWorldPosition()
-    local nearby = TheSim:FindEntities(x, 0, z, 3, nil, nil, SHIELD_CANDIDATE_TAGS)
-    if #nearby == 0 then
-        return
+    if obstacle.animname ~= "block" then
+        local function KeepSafe()
+            obstacle.Physics:SetCollisionMask(SAFE_MASK)
+            obstacle.Physics:SetCollisionGroup(SAFE_GROUP)
+        end
+        KeepSafe()
+        obstacle:ListenForEvent("animover", KeepSafe)
     end
 
+    local x, _, z = obstacle.Transform:GetWorldPosition()
+    local nearby = TheSim:FindEntities(x, 0, z, SHIELD_SEARCH_RADIUS, nil, nil, SHIELD_CANDIDATE_TAGS)
     local shielded = {}
     for _, entity in ipairs(nearby) do
-        if entity:HasTag("epic") then
-            obstacle.Physics:SetCollisionGroup(COLLISION.SMALLOBSTACLES)
-        end
         if ShouldShield(entity, caster) then
             ShieldEntity(entity)
-            table.insert(shielded, entity)
+            shielded[entity] = true
         end
     end
 
-    if #shielded == 0 then
+    if next(shielded) == nil then
         return
     end
 
-    local task
-    task = obstacle:DoPeriodicTask(FRAMES, function()
-        if obstacle:IsValid() and not obstacle.Physics:IsActive() then
-            return
-        end
-        task:Cancel()
-        for _, entity in ipairs(shielded) do
+    local unshieldonce
+    unshieldonce = function()
+        for entity in pairs(shielded) do
             UnshieldEntity(entity)
         end
-    end)
+        shielded = {}
+    end
+
+    local function ondamageimminent()
+        obstacle:RemoveEventCallback("animover", ondamageimminent)
+        obstacle:DoTaskInTime(3 * FRAMES, unshieldonce)
+    end
+    obstacle:ListenForEvent("animover", ondamageimminent)
+    obstacle:ListenForEvent("onremove", unshieldonce)
 end
 
 local function ConsumeAmmo(inst)
@@ -101,6 +115,13 @@ local function TrySpawnObstacle(prefabname, x, z, caster, onspawned)
     local spot = Vector3(x, 0, z)
     if not (ground:IsPassableAtPoint(x, 0, z) and not ground:IsGroundTargetBlocked(spot)) then
         return
+    end
+
+    local nearby = TheSim:FindEntities(x, 0, z, NOSPAWN_CHECK_RADIUS, nil, nil, KILLRISK_TAGS)
+    for _, entity in ipairs(nearby) do
+        if ShouldSkipSpawn(entity) then
+            return
+        end
     end
 
     local obstacle = SpawnPrefab(prefabname)
@@ -132,10 +153,6 @@ end
 local function SpawnSandcastles(inst, caster, pos)
     local cx, _, cz = caster.Transform:GetWorldPosition()
     local dx, dz = pos.x - cx, pos.z - cz
-    local dist = math.sqrt(dx * dx + dz * dz)
-    if dist < 1 then
-        return
-    end
 
     local facing_angle = math.atan2(dz, dx)
     local start_angle = facing_angle - SANDCASTLE_ARC_SWEEP / 2
