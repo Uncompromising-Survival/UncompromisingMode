@@ -889,6 +889,14 @@ ENV.AddPrefabPostInit("beef_bell", function(inst)
     inst:AddComponent("um_beefcaller")
 end)
 
+ENV.AddPrefabPostInit("shadow_beef_bell", function(inst)
+    if not TheWorld.ismastersim then
+        return
+    end
+
+    inst:AddComponent("um_beefcaller")
+end)
+
 ENV.AddComponentAction("INVENTORY", "um_beefcaller", function(inst, doer, actions)
     if not (doer.components.playercontroller and doer.components.playercontroller:IsControlPressed(ENV.CONTROL_FORCE_ATTACK)) then
         if inst:HasTag("inuse_targeted") then
