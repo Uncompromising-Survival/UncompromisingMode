@@ -152,6 +152,17 @@ env.AddPrefabPostInit("yellowamulet", function(inst)
     YellowAmuletPostInit(inst)
 end)
 
+-------Blue
+
+local function BlueAmuletPostInit(inst)
+    inst.components.fueled:InitializeFuelLevel(TUNING.BLUEAMULET_FUEL * 1.5)
+end
+
+env.AddPrefabPostInit("blueamulet", function(inst)
+    if not TheWorld.ismastersim then return end
+    BlueAmuletPostInit(inst)
+end)
+
 -------Orange
 
 local function OrangeAmuletPostInit(inst)
