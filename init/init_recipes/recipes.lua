@@ -451,6 +451,7 @@ AddDeconstructRecipe("um_moonfly_lantern", { Ingredient("moonglass", 3), Ingredi
 AddDeconstructRecipe("crystal_cursed_antler", { Ingredient("boneshard", 4), Ingredient("purebrilliance", 4) })
 AddDeconstructRecipe("um_wingsuit", { Ingredient("malbatross_feather", 6) })
 AddDeconstructRecipe("um_exhumer", { Ingredient("boneshard", 9), Ingredient("fossil_piece", 1), Ingredient("nightmarefuel", 2) })
+AddDeconstructRecipe("um_antlionstaff", { Ingredient("meat", 1), Ingredient("townportaltalisman", 2), Ingredient("rocks", 1) })
 
 ----deconstruct recipes for craftable items
 --AddDeconstructRecipe("steeringwheel_copper", { Ingredient("um_copper_pipe", 3), Ingredient("gears", 1) })
