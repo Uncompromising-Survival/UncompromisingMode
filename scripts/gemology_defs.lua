@@ -495,13 +495,9 @@ AddUMGemDef("palegem1", {
                 and item.components.weapon ~= nil then
                 local damage = item.components.weapon.damage
                 item.volatile_gemology_data.um_gemologypalegem1.weapon_damage = damage
-                if type(damage) == "function" then
-                    item.components.weapon:SetDamage(function(inst, attacker, target)
-                        return damage(inst, attacker, target) + (TUNING.DSTU.PALEGEM1_EXTRA_DAMAGE_PER_TIER * (tier - 1))
-                    end)
-                else
-                    item.components.weapon:SetDamage(damage + (TUNING.DSTU.PALEGEM1_EXTRA_DAMAGE_PER_TIER * (tier - 1)))
-                end
+                item.components.weapon:SetDamage(function(inst, attacker, target)
+                    return FunctionOrValue(damage, inst, attacker, target) + (TUNING.DSTU.PALEGEM1_EXTRA_DAMAGE_PER_TIER * (tier - 1))
+                end)
             end
         end,
         onattack = function(item, attacker, target, tier)
@@ -627,30 +623,43 @@ local function HambatUpdateDamage(inst)
     end
 end
 
-
 AddUMGemDef("purplegem1", {
     color = RGB(180, 166, 213),
     fns = {
         onapply = function(item, tier)
-            if item.prefab == "hambat" and tier ~= 1 then -- hambat needs an exception
-                item.volatile_gemology_data.um_gemologypurplegem1.old_update_damage = item.UpdateDamage
-                item.UpdateDamage = HambatUpdateDamage
+            if tier ~= 1 then
+                if item.prefab == "hambat" then -- hambat needs an exception
+                    item.volatile_gemology_data.um_gemologypurplegem1.old_update_damage = item.UpdateDamage
+                    item.UpdateDamage = HambatUpdateDamage
+                elseif item.components.weapon then
+                    local damage = item.components.weapon.damage
+                    item.volatile_gemology_data.um_gemologypurplegem1.weapon_damage = damage
+                    item.components.weapon:SetDamage(function(inst, attacker, target)
+                        local bonus = 0
+                        if not inst.um_blockgetdamage then
+                            inst.um_blockgetdamage = true
+                            local getdamage = inst.components.weapon:GetDamage(attacker, target)
+                            inst.um_blockgetdamage = nil
+                            if getdamage < TUNING.DSTU.PURPLEGEM1_EXTRA_DAMAGE_THRESHOLD then
+                                bonus = getdamage * tier * TUNING.DSTU.PURPLEGEM1_EXTRA_DAMAGE_MULT
+                            end
+                        end
+                        return FunctionOrValue(damage, inst, attacker, target) + bonus
+                    end)
+                end
             end
         end,
         onattack = function(item, attacker, target, tier)
-            if item.tier ~= 1 and item.components.weapon ~= nil and target and target.components.combat and target:IsValid() then
-                local damage = item.components.weapon:GetDamage(attacker, target)
-                if damage < TUNING.DSTU.PURPLEGEM1_EXTRA_DAMAGE_THRESHOLD and item.prefab ~= "hambat" then
-                    damage = damage * tier * TUNING.DSTU.PURPLEGEM1_EXTRA_DAMAGE_MULT
-                    local stimuli = item.components.weapon.stimuli and item.components.weapon.stimuli or nil
-                    target.components.combat:GetAttacked(attacker, damage, nil, stimuli)
-                    DamageGem("purplegem1", item, GEM_USES[tier])
-                end
+            if tier ~= 1 and item.components.weapon then
+                DamageGem("purplegem1", item, GEM_USES[tier])
             end
         end,
         onremove = function(item, tier)
             if item.volatile_gemology_data.um_gemologypurplegem1.old_update_damage then
                 item.UpdateDamage = item.volatile_gemology_data.um_gemologypurplegem1.old_update_damage
+            end
+            if item.volatile_gemology_data.um_gemologypurplegem1.weapon_damage then
+                item.components.weapon:SetDamage(item.volatile_gemology_data.um_gemologypurplegem1.weapon_damage)
             end
         end
     }
@@ -692,8 +701,6 @@ local function OnDropedIfDeadGiveBack(inst) -- This is the only one that has an 
         inst.volatile_gemology_data.um_gemologypurplegem2.old_ondropfn(inst)
     end
 end
-
-
 
 AddUMGemDef("purplegem2", {
     color = RGB(180, 166, 213),
