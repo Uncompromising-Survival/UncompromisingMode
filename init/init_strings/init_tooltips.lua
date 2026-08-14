@@ -18,6 +18,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     ARMORDRAGONFLY = "- Summons mini Lavae allies when worn.",
     FEATHERHAT = "- Provides safety from territorial Pengulls.",
     YELLOWAMULET = "- No longer breaks when empty.",
+    BLUEAMULET = "- Increased durability.",
     ORANGEAMULET = "- No longer breaks when empty.\n- Will pick certain plants too!",
     PURPLEAMULET = "- Grants bonus Nightmare Fuel from slain Shadows.",
     PIGGYBACK = "- No Passive -10% movement speed while worn.\n- Decreases Player speed by 1% per item held.",
