@@ -107,7 +107,7 @@ local function BoomPieGo(inst, eater)
                 eater:RemoveEventCallback("newstate", BoomPieStopKnockback)
             end)
         end
-        eater:PushEvent("attacked", { damage = 3 })
+        eater:PushEvent("attacked", { damage = 0 })
 
         SpawnPrefab("explode_small").Transform:SetPosition(x, y, z)
         SpawnPrefab("blueberryexplosion").Transform:SetPosition(x, y, z)
