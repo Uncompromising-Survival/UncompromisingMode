@@ -1,10 +1,24 @@
+local EDIBLES =
+{
+    "mosquito",
+    "bee",
+    "killerbee",
+    "um_bee_moon",
+    "butterfly",
+    "um_buttery_fly",
+    "moonbutterfly",
+    "aphid",
+    "fruitfly",
+    "lightflier",
+}
+
 local function IsEdibleToTarget(inst, target)
     return target and target:HasAnyTag("OMNI_eater", "INSECT_eater", "compostingbin_accepts_items")
         and (not target:HasTag("player") or target.prefab == "waxwell" or target.replica.inventory and target.replica.inventory:EquipHasTag("um_insect_eater"))
 end
 
-AddPrefabPostInitAny(function(inst)
-    if inst:HasTag("insect") then
+local function AddEdibles(prefab)
+    AddPrefabPostInit(prefab, function(inst)
         inst.UMIsEdibleToTarget = IsEdibleToTarget
 
         if not GLOBAL.TheWorld.ismastersim then return end
@@ -12,8 +26,12 @@ AddPrefabPostInitAny(function(inst)
         local edible = inst.components.edible or inst:AddComponent("edible")
         edible.sanityvalue = 10
         edible.foodtype = FOODTYPE.INSECT
-    end
-end)
+    end)
+end
+
+for k, v in pairs(EDIBLES) do
+    AddEdibles(v)
+end
 
 AddComponentPostInit("eater", function(self)
     local _PrefersToEat = self.PrefersToEat
