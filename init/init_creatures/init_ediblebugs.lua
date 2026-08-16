@@ -17,7 +17,7 @@ local function IsEdibleToTarget(inst, target)
         and (not target:HasTag("player") or target.prefab == "waxwell" or target.replica.inventory and target.replica.inventory:EquipHasTag("um_insect_eater"))
 end
 
-local function AddEdibles(prefab)
+for _, prefab in pairs(EDIBLES) do
     AddPrefabPostInit(prefab, function(inst)
         inst.UMIsEdibleToTarget = IsEdibleToTarget
 
@@ -27,10 +27,6 @@ local function AddEdibles(prefab)
         edible.sanityvalue = 10
         edible.foodtype = FOODTYPE.INSECT
     end)
-end
-
-for k, v in pairs(EDIBLES) do
-    AddEdibles(v)
 end
 
 AddComponentPostInit("eater", function(self)
