@@ -823,7 +823,6 @@ ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.MAKE_BLUEPRINT, "
 --- Beefalo bell
 -------------------------------------------------------------------------------------------------------------------
 
-
 local UM_CALL_BEEF = Action({ priority = 10, rmb = true })
 UM_CALL_BEEF.id = "UM_CALL_BEEF"
 UM_CALL_BEEF.str = STRINGS.ACTIONS.UM_CALL_BEEF
