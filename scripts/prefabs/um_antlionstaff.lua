@@ -282,13 +282,15 @@ local function CastSpell(staff, target, pos)
 
     ConsumeAmmo(staff)
 
+    local cd = TUNING.DSTU.ANTLIONSTAFF_SPIKE_COOLDOWN
     if staff.defensivemode then
+        cd = TUNING.DSTU.ANTLIONSTAFF_BLOCK_COOLDOWN
         SpawnSandcastles(staff, caster, targetpos)
     else
         SpawnSandspikes(staff, caster, targetpos)
     end
 
-    UMCommonFns.StartRechargeableCooldown(staff, {cooldown = TUNING.DSTU.ANTLIONSTAFF_COOLDOWN, tags = {"um_antlionstaff"}})
+    UMCommonFns.StartRechargeableCooldown(staff, {cooldown = cd, tags = {"um_antlionstaff"}})
 end
 
 local function light_reticuletargetfn()
