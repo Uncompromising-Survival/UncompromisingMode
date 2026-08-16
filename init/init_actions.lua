@@ -798,10 +798,9 @@ local function CanMakeBlueprintWithTarget(builder, target)
     return builder and builder:CanLearn(target.prefab) and builder:KnowsRecipe(target.prefab) and PrefabExists(target.prefab .. "_blueprint")
 end
 
-local MAKE_BLUEPRINT = Action({ mount_valid = false, priority = 10, rmb = false })
+local MAKE_BLUEPRINT = Action({ priority = 10, mount_valid = false })
 MAKE_BLUEPRINT.id = "MAKE_BLUEPRINT"
 MAKE_BLUEPRINT.str = "Sketch Blueprint"
-ENV.AddAction(MAKE_BLUEPRINT)
 MAKE_BLUEPRINT.fn = function(act)
     local target, doer, invobject = act.target, act.doer, act.invobject
     if target and target.prefab and (CanMakeBlueprintWithTarget(doer.components.builder, target) or target.components.teacher) and invobject.components.blueprinter then
@@ -809,6 +808,8 @@ MAKE_BLUEPRINT.fn = function(act)
     end
     return false
 end
+
+ENV.AddAction(MAKE_BLUEPRINT)
 
 ENV.AddComponentAction("USEITEM", "blueprinter", function(inst, doer, target, actions, right)
     if target and target.prefab and (CanMakeBlueprintWithTarget(doer.replica.builder, target) or string.find(target.prefab, "blueprint")) then
@@ -822,17 +823,14 @@ ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.MAKE_BLUEPRINT, "
 --- Beefalo bell
 -------------------------------------------------------------------------------------------------------------------
 
-local UM_CALL_BEEF = ENV.AddAction(
-    "UM_CALL_BEEF",
-    STRINGS.ACTIONS.UM_CALL_BEEF,
-    function(act)
-        if act.doer == nil or act.invobject == nil then
-            return false
-        end
 
-        local bell = act.invobject
-
-        local beefalo = bell and bell:GetBeefalo()
+local UM_CALL_BEEF = Action({ priority = 10, rmb = true })
+UM_CALL_BEEF.id = "UM_CALL_BEEF"
+UM_CALL_BEEF.str = STRINGS.ACTIONS.UM_CALL_BEEF
+UM_CALL_BEEF.fn = function(act)
+    local doer, invobject = act.doer, act.invobject
+    if doer and invobject and invobject.GetBeefalo then
+        local beefalo = invobject:GetBeefalo()
         if not beefalo then
             return false, "NEEDBEEF"
         end
@@ -843,9 +841,9 @@ local UM_CALL_BEEF = ENV.AddAction(
             beefalo.components.combat:DropTarget()
         end
 
-        if act.doer.components.talker ~= nil then
-            act.doer.components.talker:Say(GetString(act.doer, "ANNOUNCE_CALL_BEEF"))
-            act.doer.comment_data = nil
+        if doer.components.talker ~= nil then
+            doer.components.talker:Say(GetString(doer, "ANNOUNCE_CALL_BEEF"))
+            doer.comment_data = nil
         end
 
         if beefalo.um_bell_task ~= nil then
@@ -863,44 +861,27 @@ local UM_CALL_BEEF = ENV.AddAction(
 
         return true
     end
-)
+end
 
-UM_CALL_BEEF.rmb = true
-UM_CALL_BEEF.priority = 10
+ENV.AddAction(UM_CALL_BEEF)
 
+ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.UM_CALL_BEEF, "use_beef_bell"))
+ENV.AddStategraphActionHandler("wilson_client", ActionHandler(ACTIONS.UM_CALL_BEEF, "use_beef_bell"))
 
-ENV.AddStategraphActionHandler(
-    "wilson",
-    ActionHandler(ENV.ACTIONS.UM_CALL_BEEF, "use_beef_bell")
-)
-
-ENV.AddStategraphActionHandler(
-    "wilson_client",
-    ActionHandler(ENV.ACTIONS.UM_CALL_BEEF, "use_beef_bell")
-)
-
-
----Sneaking the dummy component here
-ENV.AddPrefabPostInit("beef_bell", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
-
-    inst:AddComponent("um_beefcaller")
-end)
-
-ENV.AddPrefabPostInit("shadow_beef_bell", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
-
-    inst:AddComponent("um_beefcaller")
-end)
-
-ENV.AddComponentAction("INVENTORY", "um_beefcaller", function(inst, doer, actions)
-    if not (doer.components.playercontroller and doer.components.playercontroller:IsControlPressed(ENV.CONTROL_FORCE_ATTACK)) then
-        if inst:HasTag("inuse_targeted") then
-            table.insert(actions, ENV.ACTIONS.UM_CALL_BEEF)
+ENV.AddSimPostInit(function()
+    local COMPONENT_ACTIONS = UpvalueHacker.GetUpvalue(EntityScript.CollectActions, "COMPONENT_ACTIONS")
+    if COMPONENT_ACTIONS then
+        local INVENTORY = COMPONENT_ACTIONS.INVENTORY
+        if INVENTORY then
+            local _INVENTORY_useabletargeteditem_fn = INVENTORY["useabletargeteditem"]
+            if _INVENTORY_useabletargeteditem_fn then
+                INVENTORY["useabletargeteditem"] = function(inst, doer, actions, right, ...)
+                    if inst:HasAllTags("bell", "useabletargeteditem_inventorydisable", "inuse_targeted") and not (doer.components.playercontroller and doer.components.playercontroller:IsControlPressed(CONTROL_FORCE_ATTACK)) then
+                        table.insert(actions, ACTIONS.UM_CALL_BEEF)
+                    end
+                    return _INVENTORY_useabletargeteditem_fn(inst, doer, actions, right, ...)
+                end
+            end
         end
     end
 end)
