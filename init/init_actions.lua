@@ -830,9 +830,7 @@ UM_CALL_BEEF.fn = function(act)
     local doer, invobject = act.doer, act.invobject
     if doer and invobject and invobject.GetBeefalo then
         local beefalo = invobject:GetBeefalo()
-        if not beefalo then
-            return false, "NEEDBEEF"
-        end
+        if not beefalo then return false end
 
         beefalo:AddTag("beefcalled")
 
