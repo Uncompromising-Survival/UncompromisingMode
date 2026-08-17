@@ -27,10 +27,9 @@ end
 local SPIDER_TAGS = { "spider" }
 local SPIDER_IGNORE_TAGS = { "FX", "NOCLICK", "DECOR", "INLIMBO", "creaturecorpse" }
 local function GetOtherSpiders(inst)
-    tags = tags or SPIDER_TAGS
     local x, y, z = inst.Transform:GetWorldPosition()
 
-    local spiders = TheSim:FindEntities(x, y, z, 15, nil, SPIDER_IGNORE_TAGS, tags)
+    local spiders = TheSim:FindEntities(x, y, z, 15, nil, SPIDER_IGNORE_TAGS, SPIDER_TAGS)
     local valid_spiders = {}
 
     for _, spider in ipairs(spiders) do
