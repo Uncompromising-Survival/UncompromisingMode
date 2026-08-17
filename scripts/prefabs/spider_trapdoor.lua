@@ -257,7 +257,7 @@ local function OnAttacked(inst, data)
     end
 end
 
-local function SetHappyFace(cond) --Trapdoor spiders don't *actually* smile.
+local function SetHappyFace(inst, is_happy) --Trapdoor spiders don't *actually* smile.
     if is_happy then
         inst.AnimState:OverrideSymbol("face", "spider_trapdoor", "happy_face")
     else
