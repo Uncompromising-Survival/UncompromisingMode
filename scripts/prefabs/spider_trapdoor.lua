@@ -259,7 +259,7 @@ end
 
 local function SetHappyFace(inst, is_happy) --Trapdoor spiders don't *actually* smile.
     if is_happy then
-        inst.AnimState:OverrideSymbol("face", "spider_trapdoor", "happy_face")
+        inst.AnimState:OverrideSymbol("face", inst.build, "happy_face")
     else
         inst.AnimState:ClearOverrideSymbol("face")
     end
@@ -540,6 +540,7 @@ local function create_common(build)
     inst.spawn_lunar_mutated_tuning = "MOONSPIDERDEN_ENABLED"
     inst.lunar_mutation_chance = TUNING.SPIDER_WARRIOR_PRERIFT_MUTATION_SPAWN_CHANCE
 
+    inst.build = build
     inst.SetHappyFace = SetHappyFace
 
     return inst
