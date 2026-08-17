@@ -12,7 +12,7 @@ local multiplayer_armor_durability_modifier = 0.7
 local wilson_attack = 34
 local wilson_health = 150
 
-TUNING = GLOBAL.TUNING
+local TUNING = GLOBAL.TUNING
 
 -- [              DSTU Related Overrides                  ]
 

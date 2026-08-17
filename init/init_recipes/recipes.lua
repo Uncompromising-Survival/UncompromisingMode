@@ -85,7 +85,7 @@ AddRecipe2(
 ChangeSortKey("jawed_scythe", "pitchfork", "TOOLS", true)
 ChangeSortKey("jawed_scythe", "spear_wathgrithr_lightning", "WEAPONS", true)
 
-if GetModConfigData("snowstorms") then
+if TUNING.DSTU.SNOWSTORMS then
     AddRecipe2("snowgoggles", { Ingredient("catcoonhat", 1), Ingredient("goggleshat", 1), Ingredient("beefalowool", 2) }, TECH.SCIENCE_TWO, nil, { "WINTER", "CLOTHING" })
     ChangeSortKey("snowgoggles", "catcoonhat", "WINTER", true)
     ChangeSortKey("snowgoggles", "catcoonhat", "CLOTHING", true)
