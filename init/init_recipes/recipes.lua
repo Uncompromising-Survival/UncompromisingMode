@@ -377,7 +377,6 @@ if GetModConfigData("monstersmallmeat") then
     ChangeSortKey("transmute_monstersmallmeat", "transmute_smallmeat", "CHARACTER", true)
 end
 
-
 -- AddRecipe2("cursed_antler", { Ingredient("um_deerclops_soul", 1), Ingredient("boneshard", 6), Ingredient("um_dark_vestiges", 1) }, TECH.VETERANSHRINE_ONE, { nounlock = true }, { "MAGIC" })
 -- --ChangeSortKey("armor_sharksuit_um", "armordragonfly", "MAGIC", true)
 
@@ -545,6 +544,17 @@ ChangeSortKey("um_blowdart_pyre", "blowdart_fire", "WEAPONS", true)
 --ChangeSortKey("codex_mantra", "waxwelljournal", "CHARACTER", true)
 
 if TUNING.DSTU.WAXWELL then
+    local function MakeIndestructible(name)
+        local recipe = AllRecipes[name]
+        if recipe then
+            local no_deconstruction = recipe.no_deconstruction
+            recipe.no_deconstruction = function(inst)
+                return inst:HasTag("um_nodeconstruct") or FunctionOrValue(no_deconstruction, inst)
+            end
+        end
+    end
+    local no_decon_recipes = {"armor_sanity", "nightsword"}
+    for _, recipe in pairs(no_decon_recipes) do MakeIndestructible(recipe) end
     AddCharacterRecipe("um_maxwell_armor_sanity", { Ingredient("nightmarefuel", 3), Ingredient("waxwelljournal", 0) }, TECH.LOST, { builder_tag = "shadowmagic", product = "armor_sanity", image = "armor_sanity.tex", description = "pact_armor_sanity", actionstr = "UM_WAXWELL_SUMMON", hint_msg = "UM_NEEDSORIGINALRECIPE", sg_state = "um_usewaxwelljournal_pre" }, { "MAGIC", "ARMOUR" })
     ChangeSortKey("um_maxwell_armor_sanity", "waxwelljournal", "CHARACTER", true)
     ChangeSortKey("um_maxwell_armor_sanity", "armor_sanity", "ARMOUR", true)
