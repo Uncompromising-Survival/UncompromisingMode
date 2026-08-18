@@ -548,9 +548,7 @@ if TUNING.DSTU.WAXWELL then
         local recipe = AllRecipes[name]
         if recipe then
             local no_deconstruction = recipe.no_deconstruction
-            recipe.no_deconstruction = function(inst)
-                return inst:HasTag("um_nodeconstruct") or FunctionOrValue(no_deconstruction, inst)
-            end
+            recipe.no_deconstruction = function(inst) return inst:HasTag("um_nodeconstruct") or FunctionOrValue(no_deconstruction, inst) end
         end
     end
     local no_decon_recipes = {"armor_sanity", "nightsword"}
