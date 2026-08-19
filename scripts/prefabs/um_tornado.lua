@@ -108,7 +108,6 @@ local function PickItem(item, inst)
         local stacksize = item.components.stackable ~= nil and item.components.stackable:StackSize() or 1
 
         if item.components.health ~= nil then
-            -- NOTES(JBK): Push the events before spawning any giving any loot.
             item:PushEvent("murdered", { victim = item, stackmult = stacksize })
             item:PushEvent("killed", { victim = item, stackmult = stacksize })
 
@@ -136,44 +135,42 @@ local function PickItem(item, inst)
     end
 end
 
+local AURA_EXCLUDE_TAGS = {"noclaustrophobia", "rabbit", "playerghost", "player", "ghost", "shadow", "shadowminion", "noauradamage", "INLIMBO", "notarget", "noattack", "invisible", "trap", "tornado_nosucky"}
 local function TornadoEnviromentTask(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
 
     if config ~= "minimal" then
         -- if GetClosestInstWithTag("player", inst, PLAYER_CAMERA_SEE_DISTANCE * 1.125) ~= nil then -- tornado doesn't sleep. Using alt distance-based check.
         -- PICKABLES
-        local pickables = TheSim:FindEntities(x, y, z, 12, nil, {"prototyper", "INLIMBO", "trap", "flower", "heavy", "tornado_nosucky"}, {"pickable", "HACK_workable"})
-        for k, v in ipairs(pickables) do
+        for k, v in ipairs(TheSim:FindEntities(x, y, z, 12, nil, {"prototyper", "INLIMBO", "trap", "flower", "heavy", "tornado_nosucky"}, {"pickable", "HACK_workable"})) do
             if v.prefab ~= "sculptingtable" then
                 local _x, _y, _z = v.Transform:GetWorldPosition()
                 if v.components.pickable ~= nil and v.components.pickable:CanBePicked() and not IsUnderRainDomeAtXZ(_x, _z) then
                     if not v:IsAsleep() and not config == "reduced" then
-                        v.components.pickable:Pick(TheWorld)
+                        v.components.pickable:Pick(inst.garbagepatch_inventory)
                     else
                         if v:IsAsleep() and config == "reduced" then
                             return
                         end
 
-                        v.components.pickable:Pick(TheWorld)
+                        v.components.pickable:Pick(inst.garbagepatch_inventory)
                     end
                 elseif v.components.hackable and v.components.hackable:CanBeHacked() then
                     if not v:IsAsleep() and not config == "reduced" then
-                        v.components.hackable:Hack(TheWorld, 1)
+                        v.components.hackable:Hack(inst.garbagepatch_inventory, 1)
                     else
                         if v:IsAsleep() and config == "reduced" then
                             return
                         end
 
-                        v.components.hackable:Hack(inst, 1)
+                        v.components.hackable:Hack(inst.garbagepatch_inventory, 1)
                     end
                 end
             end
         end
 
         -- WORKING
-        local workables = TheSim:FindEntities(x, y, z, 6, nil, {"heavy", "irreplaceable", "INLIMBO", "trap", "winter_tree", "farm_plant", "_inventory", "sign", "drawable", "tornado_nosucky", "waxedplant"}, {"DIG_workable", "CHOP_workable"})
-
-        for k, v in ipairs(workables) do
+        for k, v in ipairs(TheSim:FindEntities(x, y, z, 6, nil, {"heavy", "irreplaceable", "INLIMBO", "trap", "winter_tree", "farm_plant", "_inventory", "sign", "drawable", "tornado_nosucky", "waxedplant"}, {"DIG_workable", "CHOP_workable"})) do
             local _x, _y, _z = v.Transform:GetWorldPosition()
 
             if v.components.workable ~= nil and not v.components.pickable and not v.components.hackable and not string.match(v.prefab, "oceantree") and not v.components.spawner and not IsUnderRainDomeAtXZ(_x, _z) then
@@ -217,11 +214,7 @@ local function TornadoEnviromentTask(inst)
     end
 
     -- DAMAGING
-    local AURA_EXCLUDE_TAGS = {"noclaustrophobia", "rabbit", "playerghost", "player", "ghost", "shadow", "shadowminion", "noauradamage", "INLIMBO", "notarget", "noattack", "invisible", "trap", "tornado_nosucky"}
-
-    local targets = TheSim:FindEntities(x, y, z, 4, nil, AURA_EXCLUDE_TAGS, { "_combat", "um_tornado_redirector" })
-
-    for k, v in ipairs(targets) do
+    for k, v in ipairs(TheSim:FindEntities(x, y, z, 4, nil, AURA_EXCLUDE_TAGS, { "_combat", "um_tornado_redirector" })) do
         if v.components.health ~= nil and not v.components.health:IsDead() then
             v.components.combat:GetAttacked(inst, 2.5)
         elseif v:HasTag("um_tornado_redirector") then
@@ -233,8 +226,6 @@ local function TornadoEnviromentTask(inst)
                     if inst.resetdanumber_task ~= nil then
                         inst.resetdanumber_task:Cancel()
                     end
-
-                    inst.resetdanumber_task = nil
 
                     inst.resetdanumber_task = inst:DoTaskInTime(30, function()
                         if inst.resetdanumber_task ~= nil then
