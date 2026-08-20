@@ -77,13 +77,13 @@ local function FeatherEffects(owner, totem)
         end
 
         if insulate_summer then
-        owner.components.temperature.inherentsummerinsulation = owner.components.temperature.inherentsummerinsulation + insulationmod
+            owner.components.temperature.inherentsummerinsulation = owner.components.temperature.inherentsummerinsulation + insulationmod
         end
 
         if not owner.components.timer:TimerExists("um_totem_azure_insulation") then
-            owner.components.timer:StartTimer("um_totem_azure_insulation", 15)
+            owner.components.timer:StartTimer("um_totem_azure_insulation", 60 * feather_robin_winter)
         else
-            owner.components.timer:SetTimeLeft("um_totem_azure_insulation", 15)
+            owner.components.timer:SetTimeLeft("um_totem_azure_insulation", 60 * feather_robin_winter)
         end
     end
 
