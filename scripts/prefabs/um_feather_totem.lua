@@ -81,9 +81,9 @@ local function FeatherEffects(owner, totem)
         end
 
         if not owner.components.timer:TimerExists("um_totem_azure_insulation") then
-            owner.components.timer:StartTimer("um_totem_azure_insulation", 60 * feather_robin_winter)
+            owner.components.timer:StartTimer("um_totem_azure_insulation", 90 * feather_robin_winter)
         else
-            owner.components.timer:SetTimeLeft("um_totem_azure_insulation", 60 * feather_robin_winter)
+            owner.components.timer:SetTimeLeft("um_totem_azure_insulation", 90 * feather_robin_winter)
         end
     end
 
