@@ -219,8 +219,15 @@ GLOBAL.ACTIONS.COMBINESTACK.fn = function(act, ...)
     return _combinestackfn(act, ...)
 end
 
-local _turnoffstrfn = ACTIONS.TURNOFF.strfn
-ACTIONS.TURNOFF.strfn = function(act, ...)
+local ATTACK_fn = GLOBAL.ACTIONS.ATTACK.fn
+GLOBAL.ACTIONS.ATTACK.fn = function(act, ...)
+    local doer = act.doer
+    if doer and doer.um_mockattacker and not act.um_mockattack then act.um_trymockattack = true end
+    return ATTACK_fn(act, ...)
+end
+
+local _turnoffstrfn = GLOBAL.ACTIONS.TURNOFF.strfn
+GLOBAL.ACTIONS.TURNOFF.strfn = function(act, ...)
     local tar = act.target
     return tar ~= nil and tar:HasTag("harpoonreel") and "HARPOON" or _turnoffstrfn(act, ...)
 end
@@ -234,13 +241,13 @@ GLOBAL.ACTIONS.CHOP.fn = function(act, ...)
     return _ChopFn(act, ...)
 end
 
-local _USESPELLBOOK_strfn = GLOBAL.ACTIONS.USESPELLBOOK.strfn
+local USESPELLBOOK_strfn = GLOBAL.ACTIONS.USESPELLBOOK.strfn
 GLOBAL.ACTIONS.USESPELLBOOK.strfn = function(act, ...)
     local invobject = act.invobject
     return invobject and (invobject.prefab == "um_detonator" and "UM_DETONATE"
         or invobject:HasTag("telestaff") and "TELESTAFF"
         or invobject:HasTag("um_antlionstaff") and "UM_ANTLIONSTAFF")
-        or _USESPELLBOOK_strfn(act, ...)
+        or USESPELLBOOK_strfn(act, ...)
 end
 
 --[[local _lookatstrfn = GLOBAL.ACTIONS.LOOKAT.strfn
