@@ -198,10 +198,6 @@ local function Regen(inst, data)
             if not attacker:HasTag("widowsgrasp") or (attacker.components.rider and attacker.components.rider:IsRiding()) then
                 UMCommonFns.Say(attacker, GetString(attacker, "WEBBEDCREATURE"))
             end
-        else
-            if attacker.components.combat and attacker.components.combat.target then
-                attacker.components.combat:DropTarget()
-            end
         end
     end
 end
