@@ -188,18 +188,19 @@ end
 
 local function Regen(inst, data)
     local attacker = data.attacker
-    if attacker then
-        if not attacker:HasTag("player") and attacker.components.combat and attacker.components.combat.target then
-            attacker.components.combat:DropTarget()
-        end
-        if not inst.components.health:IsDead() and attacker:HasTag("player") then
+    if not inst.components.health:IsDead() and attacker and not attacker:HasTag("hoodedwidow") then
+        inst:PlayHitAnimations()
+        if attacker:HasTag("player") then
             local widowweb = FindEntity(inst, 50, function(guy) return guy:HasTag("widowweb") end)
             if widowweb and #NoEpics(inst) == 0 then
                 widowweb:SpawnInvestigators(attacker)
             end
-            inst:PlayHitAnimations()
             if not attacker:HasTag("widowsgrasp") or (attacker.components.rider and attacker.components.rider:IsRiding()) then
                 UMCommonFns.Say(attacker, GetString(attacker, "WEBBEDCREATURE"))
+            end
+        else
+            if attacker.components.combat and attacker.components.combat.target
+                attacker.components.combat:DropTarget()
             end
         end
     end
