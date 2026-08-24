@@ -198,25 +198,16 @@ local function Regen(inst, data)
                 widowweb:SpawnInvestigators(attacker)
             end
             inst:PlayHitAnimations()
-            if attacker:HasTag("player") and not attacker:HasTag("mime") and (not attacker:HasTag("widowsgrasp")
-                    or (attacker.components.rider and attacker.components.rider:IsRiding())) then
-                UMCommonFns.Say(attacker, GetString(attacker.prefab, "WEBBEDCREATURE"))
+            if attacker:HasTag("player") and (not attacker:HasTag("widowsgrasp") or (attacker.components.rider and attacker.components.rider:IsRiding())) then
+                UMCommonFns.Say(attacker, GetString(attacker, "WEBBEDCREATURE"))
             end
         end
     end
 end
 
 local function ShouldRecoil(inst, attacker, weapon, damage)
-    local has_claw = attacker ~= nil and attacker:HasTag("widowsgrasp")
-
-    if not has_claw then
-        if attacker then
-            UMCommonFns.Say(attacker, GetString(inst, "WEBBEDCREATURE"))
-            Regen(inst, { attacker = attacker })
-        end
-    end
-
-    return not has_claw, has_claw and damage or damage ~= nil and 0 or nil
+    local has_claw = attacker and attacker:HasTag("widowsgrasp")
+    return not has_claw, has_claw and damage or nil
 end
 
 local function fn()
@@ -265,6 +256,7 @@ local function fn()
     combat:SetShouldRecoilFn(ShouldRecoil)
 
     inst:ListenForEvent("attacked", Regen)
+    inst:ListenForEvent("blocked", Regen)
     inst:ListenForEvent("death", OnKilled)
 
     inst:AddComponent("lootdropper")

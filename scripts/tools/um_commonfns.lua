@@ -2,7 +2,7 @@ local UMCommonFns = {}
 UMCommonFns.GHOSTLIKE_TAGS = {"ghost", "playerghost", "shadow", "shadowcreature", "nightmarecreature", "shadowminion", "shadowthrall", "shadowchesspiece", "brightmare", "brightmareboss"}
 
 UMCommonFns.Say = function(inst, string)
-    local talker = not inst:HasTag("mime") and inst.components.talker
+    local talker = inst.components.talker
     if talker then talker:Say(string) end
 end
 

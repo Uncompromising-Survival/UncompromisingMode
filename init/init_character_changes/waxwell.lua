@@ -81,7 +81,7 @@ local function ShadowMimicSpellFn(inst, doer)
     if inst.components.fueled:IsEmpty() then
         return false, "NO_FUEL"
     elseif doer.components.health.currenthealth <= TUNING.DSTU.SHADOWWAXWELL_HEALTH_COST then
-        doer.components.talker:Say(GetString(doer.prefab, "ANNOUNCE_NOHEALTH"))
+        doer.components.talker:Say(GetString(prefab, "ANNOUNCE_NOHEALTH"))
     elseif not CheckMaxSanity(doer, "shadowduelist") then
         return false, "NO_MAX_SANITY"
     else

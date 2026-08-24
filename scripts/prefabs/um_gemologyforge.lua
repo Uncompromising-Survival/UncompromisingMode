@@ -62,7 +62,7 @@ local function ForgeGem(inst)
 end
 
 --{ slot = in_slot, item = item, src_pos = src_pos, }
-function ShowItems(inst, data)
+local function ShowItems(inst, data)
     --delay a frame.
     inst:DoTaskInTime(0, function(inst)
         if inst.tool_fx ~= nil then
