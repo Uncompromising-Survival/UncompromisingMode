@@ -199,7 +199,7 @@ local function Regen(inst, data)
                 UMCommonFns.Say(attacker, GetString(attacker, "WEBBEDCREATURE"))
             end
         else
-            if attacker.components.combat and attacker.components.combat.target
+            if attacker.components.combat and attacker.components.combat.target then
                 attacker.components.combat:DropTarget()
             end
         end
