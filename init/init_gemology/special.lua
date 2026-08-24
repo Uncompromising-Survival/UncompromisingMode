@@ -18,7 +18,7 @@ env.AddStategraphPostInit("wilson", function(inst) -- Plan on moving this to the
         _onenter(inst, pushanim, ...)
         local buffaction = inst:GetBufferedAction()
         local neurotic_item_mult = inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS).um_neurotic_mod
-        if not (buffaction and buffaction.mockattack) and not (inst.components.rider and inst.components.rider:IsRiding()) and neurotic_item_mult then
+        if not (buffaction and buffaction.um_mockattack) and not (inst.components.rider and inst.components.rider:IsRiding()) and neurotic_item_mult then
             inst.AnimState:SetDeltaTimeMultiplier(neurotic_item_mult)
             if inst.sg.timeout then inst.sg:SetTimeout(inst.sg.timeout / neurotic_item_mult) end
             -- Incase we want to add other sources of speed buff
