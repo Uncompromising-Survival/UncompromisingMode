@@ -222,7 +222,7 @@ AddRoom("BoilingFields_Sinkhole", {
 })
 
 if KnownModIndex:IsModEnabled("workshop-1467214795") then
-    Layouts["cave_entrance_magmabiome_IA"] = StaticLayout.Get("map/static_layouts/cave_entrance_magmabiome_IA")
+    Layouts["cave_entrance_magmabiome_IA"] = StaticLayout.Get("map/static_layouts/cave_entrance_magmabiome_ia")
     AddRoom("BoilingFields_Sinkhole_IA", {
         colour = { r = 0, g = .9, b = 0, a = .50 },
         value = WORLD_TILES.UM_HOTSPRING_IA,
