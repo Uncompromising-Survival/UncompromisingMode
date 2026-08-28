@@ -468,6 +468,10 @@ local function FloodMoistureRamp(inst)
     end
 end
 
+local function WormBubble(inst)
+    SpawnPrefab("crab_king_bubble"..math.random(1, 3)).Transform:SetPosition(inst.Transform:GetWorldPosition())
+end
+
 local function ToggleFloodCheck(inst, toggle)
     if toggle then
         if not inst.um_floodchecked then
@@ -528,10 +532,6 @@ end
 
 local function FloodContinualCheck(inst)
     ToggleFloodCheck(inst, RobustFloodCheck(inst))
-end
-
-local function WormBubble(inst)
-    SpawnPrefab("crab_king_bubble" .. math.random(1, 3)).Transform:SetPosition(inst.Transform:GetWorldPosition())
 end
 
 env.AddPlayerPostInit(function(inst)
