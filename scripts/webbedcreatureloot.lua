@@ -853,7 +853,7 @@ local sw = {
         loot = {
             Item("monstermeat"),
             Item("venomgland"),
-            Item("venongland", nil, .5)
+            Item("venomgland", nil, .5)
         }
     },
     DOYDOY = {
