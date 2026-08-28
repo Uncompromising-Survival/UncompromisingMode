@@ -196,17 +196,17 @@ local statenames = { "aggressivehop", "hop" }
 env.AddStategraphPostInit("frog", function(inst)
     for iname = 1, #statenames do
         local state = inst.states[statenames[iname]]
-        local _fn = state.timeline[1].fn
-        state.timeline[1].fn = function(inst)
+        local state_timeline1_fn = state.timeline[1].fn
+        state.timeline[1].fn = function(inst, ...)
             inst.components.umripples:OnNoLongerLandedServer()
-            _fn(inst)
+            state_timeline2_fn(inst, ...)
         end
-        local _fn = state.timeline[2].fn
-        state.timeline[2].fn = function(inst)
+        local state_timeline2_fn = state.timeline[2].fn
+        state.timeline[2].fn = function(inst, ...)
             if RobustFloodCheck(inst) then
                 inst.components.umripples:OnLandedServer(true)
             end
-            _fn(inst)
+            state_timeline2_fn(inst, ...)
         end
         state.onexit = function(inst)
             if RobustFloodCheck(inst) and not inst.components.umripples.showing_effect then
@@ -217,65 +217,65 @@ env.AddStategraphPostInit("frog", function(inst)
 end)
 
 env.AddStategraphPostInit("molebat", function(inst)
-    local state = inst.states["walk"]
-    local _fn = state.timeline[2].fn
-    state.timeline[2].fn = function(inst)
+    local walkstate = inst.states["walk"]
+    local walkstate_timeline2_fn = walkstate.timeline[2].fn
+    walkstate.timeline[2].fn = function(inst, ...)
         inst.components.umripples:OnNoLongerLandedServer()
-        _fn(inst)
+        walkstate_timeline2_fn(inst, ...)
     end
-    local _fn = state.timeline[3].fn
-    state.timeline[3].fn = function(inst)
+    local walkstate_timeline3_fn = walkstate.timeline[3].fn
+    walkstate.timeline[3].fn = function(inst, ...)
         if RobustFloodCheck(inst) then
             inst.components.umripples:OnLandedServer(true)
         end
-        _fn(inst)
+        walkstate_timeline3_fn(inst, ...)
     end
-    state.onexit = function(inst)
+    walkstate.onexit = function(inst)
         if RobustFloodCheck(inst) and not inst.components.umripples.showing_effect then
             inst.components.umripples:OnLandedServer(true)
         end
     end
 
-    local state = inst.states["attack"]
-    local _fn = state.timeline[1].fn
-    state.timeline[1].fn = function(inst)
+    local attackstate = inst.states["attack"]
+    local attackstate_timeline1_fn = attackstate.timeline[1].fn
+    attackstate.timeline[1].fn = function(inst, ...)
         inst.components.umripples:OnNoLongerLandedServer()
-        _fn(inst)
+        attackstate_timeline1_fn(inst, ...)
     end
-    local _fn = state.timeline[3].fn
-    state.timeline[3].fn = function(inst)
+    local attackstate_timeline3_fn = attackstate.timeline[3].fn
+    attackstate.timeline[3].fn = function(inst, ...)
         if RobustFloodCheck(inst) then
             inst.components.umripples:OnLandedServer(true)
         end
-        _fn(inst)
+        attackstate_timeline3_fn(inst, ...)
     end
-    state.onexit = function(inst)
+    attackstate.onexit = function(inst)
         if RobustFloodCheck(inst) and not inst.components.umripples.showing_effect then
             inst.components.umripples:OnLandedServer(true)
         end
     end
 
-    local state = inst.states["fall"]
-    local _onenter = state.onenter
-    state.onenter = function(inst, ...)
+    local fallstate = inst.states["fall"]
+    local fallstate_onenter = fallstate.onenter
+    fallstate.onenter = function(inst, ...)
         if RobustFloodCheck(inst) then
             inst.components.umripples:OnNoLongerLandedServer()
             inst:DoTaskInTime(30 * FRAMES, function(inst)
                 inst.components.umripples:OnLandedServer(true)
             end)
         end
-        _onenter(inst, ...)
+        fallstate_onenter(inst, ...)
     end
 end)
 
 env.AddStategraphPostInit("bird", function(inst)
-    local state = inst.states["flyaway"]
-    local _onenter = state.onenter
-    state.onenter = function(inst, ...)
+    local flyawaystate = inst.states["flyaway"]
+    local flyawaystate_onenter = flyawaystate.onenter
+    flyawaystate.onenter = function(inst, ...)
         if inst.components.umripples then
             inst.components.umripples:OnNoLongerLandedServer()
         end
-        _onenter(inst, ...)
+        flyawaystate_onenter(inst, ...)
     end
 end)
 
@@ -295,28 +295,27 @@ local function ToggleWormMoveSymbols(inst, show)
 end
 
 env.AddStategraphPostInit("worm", function(inst)
-    local state = inst.states["attack_pre"]
-    local _onenter = state.onenter
-    state.onenter = function(inst, ...)
+    local attackprestate = inst.states["attack_pre"]
+    local attackprestate_onenter = attackprestate.onenter
+    attackprestate.onenter = function(inst, ...)
         if RobustFloodCheck(inst) then
             inst.components.umripples:OnLandedServer(true)
             inst:Show()
         end
-
-        _onenter(inst, ...)
+        attackprestate_onenter(inst, ...)
     end
 
-    local state = inst.states["attack"]
-    local _onenter = state.onenter
-    state.onenter = function(inst, ...)
+    local attackstate = inst.states["attack"]
+    local attackstate_onenter = attackstate.onenter
+    attackstate.onenter = function(inst, ...)
         if RobustFloodCheck(inst) then
             inst.components.umripples:OnLandedServer(true)
             inst:Show()
             ToggleWormMoveSymbols(inst, false)
         end
-        _onenter(inst, ...)
+        attackstate_onenter(inst, ...)
     end
-    state.onexit = function(inst, ...)
+    attackstate.onexit = function(inst)
         if RobustFloodCheck(inst) then
             inst.components.umripples:OnNoLongerLandedServer()
             inst:Hide()
@@ -327,8 +326,8 @@ end)
 
 -- Flying Creatures
 local _RaiseFlyingCreature = RaiseFlyingCreature
-function RaiseFlyingCreature(inst)
-    _RaiseFlyingCreature(inst)
+function RaiseFlyingCreature(inst, ..)
+    _RaiseFlyingCreature(inst, ...)
     if inst.components.umripples then
         inst.components.umripples.showing_effect = false
         inst.components.umripples:OnNoLongerLandedServer()
@@ -336,8 +335,8 @@ function RaiseFlyingCreature(inst)
 end
 
 local _LandFlyingCreature = LandFlyingCreature
-function LandFlyingCreature(inst)
-    _LandFlyingCreature(inst)
+function LandFlyingCreature(inst, ...)
+    _LandFlyingCreature(inst, ...)
     if inst.components.umripples and RobustFloodCheck(inst) and not inst.components.umripples.showing_effect then
         inst.components.umripples.showing_effect = true
         inst.components.umripples:OnLandedServer(true)
@@ -362,13 +361,13 @@ end)
 
 -- wortox
 env.AddStategraphPostInit("wilson", function(inst)
-    local state = inst.states["portal_jumpout"]
-    local _onexit = state.onexit
-    state.onexit = function(inst, ...)
+    local portaljumpoutstate = inst.states["portal_jumpout"]
+    local portaljumpoutstate_onexit = portaljumpoutstate.onexit
+    portaljumpoutstate.onexit = function(inst, ...)
         if inst.components.locomotor then
             inst.components.locomotor:OnUpdate(0) --AXE call an update... get flooded tiles to work after teleporting
         end
-        _onexit(inst, ...)
+        portaljumpoutstate_onexit(inst, ...)
     end
 end)
 
