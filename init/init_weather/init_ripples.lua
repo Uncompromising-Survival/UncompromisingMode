@@ -326,7 +326,7 @@ end)
 
 -- Flying Creatures
 local _RaiseFlyingCreature = RaiseFlyingCreature
-function RaiseFlyingCreature(inst, ..)
+function RaiseFlyingCreature(inst, ...)
     _RaiseFlyingCreature(inst, ...)
     if inst.components.umripples then
         inst.components.umripples.showing_effect = false
