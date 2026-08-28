@@ -112,7 +112,7 @@ AddRipples("viperworm", 1.4, 1.4, 1.4)
 AddRipples("shockworm", 1.4, 1.4, 1.4)
 AddRipples("carrat", 1.1, 1.1, 1.1, .2)
 AddRipples("mushgnome", .8, .8, .8, .2)
-local pigmanlike_minions = { "pigman", "bunnyman", "merm", "mermguard", "merm_lunar", "mermguard_lunar" }
+local pigmanlike_minions = {"pigman", "bunnyman", "merm", "mermguard", "merm_lunar", "mermguard_lunar"}
 for _, v in ipairs(pigmanlike_minions) do
     AddRipples(v, 1.2, 1.2, 1.2, .2)
 end
@@ -196,7 +196,7 @@ env.AddPrefabPostInit("mole_move_fx", function(inst)
     end)
 end)
 
-local statenames = { "aggressivehop", "hop" }
+local statenames = {"aggressivehop", "hop"}
 env.AddStategraphPostInit("frog", function(inst)
     for iname = 1, #statenames do
         local state = inst.states[statenames[iname]]
