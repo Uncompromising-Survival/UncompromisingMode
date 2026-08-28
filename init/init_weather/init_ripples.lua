@@ -1,8 +1,12 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-local um_flood_speed_immune_no_turfrunner_TAGS = {"swampbro", "playermerm", "woosegoose", "merm"}
+local um_flood_speed_immune_no_turfrunner_TAGS = {"swampbro", "playermerm", "woosegoose"}
 local um_flood_speed_immune_TAGS = ConcatArrays({"turfrunner_279", "turfrunner_280", "turfrunner_281"}, um_flood_speed_immune_no_turfrunner_TAGS)
+
+local function IsSpeedImmune(inst, noturfrunner)
+    return inst:HasAnyTag(noturfrunner and um_flood_speed_immune_no_turfrunner_TAGS or um_flood_speed_immune_TAGS) or inst:HasTag("merm") and not inst:HasTag("mermdisguise")
+end
 
 local function RobustFloodCheck(inst) -- For players, check to see if they're on the edge of a tile, you can walk on the "Void" to avoid the effects of the tile you're standing on, similar to spider webbings
     --IsVisualGroundAtPoint(x,y,z)... not sure how this can help?
@@ -83,22 +87,22 @@ end
 -- AXE TODO convert the many function calls to a table and a loop... would that even be cleaner though? It's already about as complex as a table...? What do you think?
 
 -- Tuned Ripples on Prefabs
-AddRipples("molebathill", 2)
-AddRipples("moonspider_spike", 0.5)
-AddRipples("driftwood_small1", 3)
-AddRipples("driftwood_small2", 3)
+AddRipples("molebathill", 2, 1, 2)
+AddRipples("moonspider_spike", .5, 1, .5)
+AddRipples("driftwood_small1", 3, 1, 3)
+AddRipples("driftwood_small2", 3, 1, 3)
 AddRipples("driftwood_tall", 1.5)
 AddRipples("rock1", 3.5, 1.5, 3.5)
 AddRipples("rock2", 3.5, 1.5, 3.5)
-AddRipples("skeleton", 2.25, 2, 2.25, 0.2)
+AddRipples("skeleton", 2.25, 2, 2.25, .2)
 
 -- Tuned Ripples on Creatures
-AddRipples("hound", 2)
-AddRipples("icehound", 2)
-AddRipples("firehound", 2)
-AddRipples("um_tentacle_moon", 1.5, 1.5, 1.5,0.2)
-AddRipples("um_tentacle_moon_mine", 0.5)
-AddRipples("boulder_crab", 3)
+AddRipples("hound", 2, 1, 2)
+AddRipples("icehound", 2, 1, 2)
+AddRipples("firehound", 2, 1, 2)
+AddRipples("um_tentacle_moon", 1.5, 1.5, 1.5, .2)
+AddRipples("um_tentacle_moon_mine", .5, 1, .5)
+AddRipples("boulder_crab", 3, 1, 3)
 AddRipples("molebat", 1.1, 1.1, 1.1)
 AddRipples("frog", 1.1, 1.1, 1.1)
 AddRipples("uncompromising_toad", 1.1, 1.1, 1.1)
@@ -106,20 +110,20 @@ AddRipples("lunarfrog", 1.1, 1.1, 1.1)
 AddRipples("worm", 1.4, 1.4, 1.4)
 AddRipples("viperworm", 1.4, 1.4, 1.4)
 AddRipples("shockworm", 1.4, 1.4, 1.4)
-AddRipples("carrat", 1.1, 1.1, 1.1, 0.2)
-AddRipples("mushgnome", 0.8, 0.8, 0.8, 0.2)
+AddRipples("carrat", 1.1, 1.1, 1.1, .2)
+AddRipples("mushgnome", .8, .8, .8, .2)
 local pigmanlike_minions = { "pigman", "bunnyman", "merm", "mermguard", "merm_lunar", "mermguard_lunar" }
 for _, v in ipairs(pigmanlike_minions) do
-    AddRipples(v, 1.2, 1.2, 1.2, 0.2)
+    AddRipples(v, 1.2, 1.2, 1.2, .2)
 end
 --
 
 env.AddPlayerPostInit(function(inst)
     if not TheWorld.ismastersim then return end
     local umripples = inst.components.umripples or inst:AddComponent("umripples")
-    umripples.xscale = 0.75
-    umripples.zscale = 0.75
-    umripples.vert_offset = 0.2
+    umripples.xscale = .75
+    umripples.zscale = .75
+    umripples.vert_offset = .2
 end)
 
 --AXE Mobs
@@ -127,27 +131,27 @@ env.AddPrefabPostInitAny(function(inst)
     if not TheWorld.ismastersim then return end
     if inst:HasAnyTag("_health", "animal", "epic", "monster") and not inst:HasAnyTag("shadow", "flying", "gestalt", "ghost") and not inst.prefab == "webbedcreature" then
         local umripples = inst.components.umripples or inst:AddComponent("umripples")
-        umripples.vert_offset = 0.2
+        umripples.vert_offset = .2
     end
     if inst:HasTag("spider") and not inst:HasTag("player") then
         local umripples = inst.components.umripples or inst:AddComponent("umripples")
         umripples.xscale = 2
         umripples.yscale = 1.4
         umripples.zscale = 2
-        umripples.vert_offset = 0.35
+        umripples.vert_offset = .35
     end
     if inst:HasTag("largecreature") and not inst:HasTag("flying") then
         local umripples = inst.components.umripples or inst:AddComponent("umripples")
         umripples.xscale = 3
         umripples.yscale = 3
         umripples.zscale = 3
-        umripples.vert_offset = 0.5
+        umripples.vert_offset = .5
     end
 end)
 
-local statenames = { "bedroll", "knockout" }
-local state_time_ent = { 1.2, 1.2 }
-local state_time_ext = { 1, 1.5 }
+local statenames = {"bedroll", "knockout"}
+local state_time_ent = {1.2, 1.2}
+local state_time_ext = {1, 1.5}
 env.AddStategraphPostInit("wilson", function(inst)
     for iname = 1, #statenames do
         local state = inst.states[statenames[iname]]
@@ -156,7 +160,7 @@ env.AddStategraphPostInit("wilson", function(inst)
         state.onenter = function(inst, ...)
             inst:DoTaskInTime(state_time_ent[iname], function(inst)
                 if RobustFloodCheck(inst) and inst.sg.currentstate.name == statenames[iname] then
-                    inst.components.umripples:ResizeTarget({ 250, 250, 250 })
+                    inst.components.umripples:ResizeTarget({250, 250, 250})
                 end
             end)
             _onenter(inst, ...)
@@ -166,7 +170,7 @@ env.AddStategraphPostInit("wilson", function(inst)
         state.onexit = function(inst, ...)
             inst:DoTaskInTime(state_time_ext[iname], function(inst)
                 if RobustFloodCheck(inst) then
-                    inst.components.umripples:ResizeTarget({ 75, 100, 75 })
+                    inst.components.umripples:ResizeTarget({75, 100, 75})
                 end
             end)
             _onexit(inst, ...)
@@ -175,7 +179,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 end)
 
 -- AXE Add mobs that don't fly but still shouldn't be penalized
-local um_flood_speed_immune = { "frog", "molebat","lunarfrog" }
+local um_flood_speed_immune = {"frog", "molebat", "lunarfrog"}
 
 for i, v in ipairs(um_flood_speed_immune) do
     env.AddPrefabPostInit(v, function(inst)
@@ -403,7 +407,7 @@ local function GetBodyWetnessProtection(inst)
 end
 
 local function AdjustSpeed(inst)
-    if inst:HasAnyTag(um_flood_speed_immune_TAGS) then return end
+    if IsSpeedImmune(inst) then return end
 
     local body = GetBodyItem(inst)
 
@@ -414,14 +418,13 @@ local function AdjustSpeed(inst)
     
     local waterproofness = GetBodyWetnessProtection(inst)
 
-    local mod = 0.5
-
-    if waterproofness >= 0.7 then
-        mod = 0.9
-    elseif waterproofness >= 0.35 then
-        mod = 0.75
+    local mod = .5
+    if waterproofness >= .7 then
+        mod = .9
+    elseif waterproofness >= .35 then
+        mod = .75
     elseif waterproofness > 0 then
-        mod = 0.6
+        mod = .6
     end
     
     if inst.components.rider and inst.components.rider:IsRiding() and mod < 1 then
@@ -457,7 +460,7 @@ local function FloodMoistureRamp(inst)
         local wetness_gain = 3 * (1 - mod)
 
         if inst.components.rider and inst.components.rider:IsRiding() then
-            wetness_gain = wetness_gain * 0.5
+            wetness_gain = wetness_gain * .5
         end
 
         inst.components.moisture:DoDelta(wetness_gain, true)
@@ -465,24 +468,66 @@ local function FloodMoistureRamp(inst)
     end
 end
 
+local function ToggleFloodCheck(inst, toggle)
+    if toggle then
+        if not inst.um_floodchecked then
+            if not IsSpeedImmune(inst) then
+                inst:PushEvent("carefulwalking", {careful = true})
+            end
+            if inst.components.umripples and not (inst:HasTag("worm") or inst.prefab == "mole") then --AXE check if should update ripples
+                inst.components.umripples:OnLandedServer(true)
+            elseif inst.prefab == "mole" or inst:HasTag("worm") then
+                inst:Hide()
+                SpawnPrefab("splash_green").Transform:SetPosition(inst.Transform:GetWorldPosition())
+                inst.um_worm_bubble_task = inst:DoPeriodicTask(.5, WormBubble)
+            end
+            FloodMoistureRamp(inst)
+            inst.um_flood_moisture_ramp = inst:DoPeriodicTask(1, FloodMoistureRamp)
+            inst:ListenForEvent("equip", AdjustSpeed)
+            inst:ListenForEvent("unequip", AdjustSpeed) -- may fire twice, but that shouldn't matter, it's not doing a huge amount of computational work        
+            if not (inst.prefab == "mole" or inst:HasTag("worm")) then
+                AdjustSpeed(inst)
+            end
+            inst.um_floodchecked = true
+        end
+    else
+        if inst.um_floodchecked then
+            if inst.um_flood_moisture_ramp then
+                inst.um_flood_moisture_ramp:Cancel()
+                inst.um_flood_moisture_ramp = nil
+            end
+            if inst.components.umripples and not (inst:HasTag("worm") or inst.prefab == "mole") then --AXE check if should update ripples
+                inst.components.umripples:OnNoLongerLandedServer()
+            elseif inst:HasTag("worm") or inst.prefab == "mole" then
+                inst:Show()
+                if inst.um_worm_bubble_task then
+                    inst.um_worm_bubble_task:Cancel()
+                    inst.um_worm_bubble_task = nil
+                end
+            end
+            inst:RemoveEventCallback("equip", AdjustSpeed)
+            inst:RemoveEventCallback("unequip", AdjustSpeed)
+            if inst.components.locomotor then
+                inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, "um_floodedwater")
+            end
+            if not IsSpeedImmune(inst, true) then --Wurt's Swamp Pathfinder kinda bugs this out so can't use um_flood_speed_immune_TAGS
+                inst:PushEvent("carefulwalking", {careful = false})
+            end
+            inst.um_floodchecked = nil
+        end
+    end
+end
+
 local function RemoveFloodCheck(inst)
-    inst:RemoveEventCallback("equip", AdjustSpeed)
-    inst:RemoveEventCallback("unequip", AdjustSpeed)
-    if inst.components.locomotor then
-        inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, "um_floodedwater")
-    end
-    if inst.components.umripples then --AXE check if should update ripples
-        inst.components.umripples:OnNoLongerLandedServer()
-    end
-    if not inst:HasAnyTag(um_flood_speed_immune_no_turfrunner_TAGS) then --Wurt's Swamp Pathfinder kinda bugs this out so can't use um_flood_speed_immune_TAGS
-        inst:PushEvent("carefulwalking", { careful = false })
+    if inst.um_floodcontinualcheck then
+        inst.um_floodcontinualcheck:Cancel()
+        inst.um_floodcontinualcheck = nil
+        ToggleFloodCheck(inst)
     end
 end
 
 local function FloodContinualCheck(inst)
-    if not RobustFloodCheck(inst) then
-        RemoveFloodCheck(inst)
-    end
+    ToggleFloodCheck(inst, RobustFloodCheck(inst))
 end
 
 local function WormBubble(inst)
@@ -495,54 +540,19 @@ end)
 
 env.AddComponentPostInit("locomotor", function(self)
     local _OnUpdate = self.OnUpdate
-    function self:OnUpdate(dt, arrive_check_only)
+    function self:OnUpdate(dt, arrive_check_only, ...)
         local inst = self.inst
         if not inst:HasAnyTag("flying", "ghost", "playerghost", "shadowcreature", "nightmarecreature", "brightmare_gestalt", "shadowminion", "shadowchesspiece") and not (inst.components.umripples and inst.components.umripples.speed_immune) then
-            if RobustFloodCheck(self.inst) and not inst.um_floodcontinualcheck then
-                if not inst:HasAnyTag(um_flood_speed_immune_TAGS) then
-                    inst:PushEvent("carefulwalking", { careful = true })
-                end
-                FloodMoistureRamp(inst)
-                if inst.components.umripples and not (inst:HasTag("worm") or inst.prefab == "mole") then --AXE check if should update ripples
-                    inst.components.umripples:OnLandedServer(true)
-                elseif inst.prefab == "mole" or inst:HasTag("worm") then
-                    inst:Hide()
-                    SpawnPrefab("splash_green").Transform:SetPosition(inst.Transform:GetWorldPosition())
-                    inst.um_worm_bubble_task = inst:DoPeriodicTask(0.5, WormBubble)
-                end
-
+            local check = RobustFloodCheck(self.inst)
+            if check and not inst.um_floodcontinualcheck then
+                ToggleFloodCheck(inst, true)
                 inst.um_floodcontinualcheck = inst:DoPeriodicTask(FRAMES, FloodContinualCheck)
-                inst.um_flood_moisture_ramp = inst:DoPeriodicTask(1, FloodMoistureRamp)
-                inst:ListenForEvent("equip", AdjustSpeed)
-                inst:ListenForEvent("unequip", AdjustSpeed) -- may fire twice, but that shouldn't matter, it's not doing a huge amount of computational work        
-
-                if not (inst.prefab == "mole" or inst:HasTag("worm")) then
-                    local self = inst.components.locomotor
-                    if not (self._externalspeedmultipliers and self._externalspeedmultipliers[inst] and self._externalspeedmultipliers[inst].multipliers["um_floodedwater"]) then
-                        AdjustSpeed(inst)
-                    end
-                end
-            elseif inst.um_floodcontinualcheck and not RobustFloodCheck(self.inst) then
+            elseif inst.um_floodcontinualcheck and not check then
                 inst.um_floodcontinualcheck:Cancel()
-                inst.um_flood_moisture_ramp:Cancel()
                 inst.um_floodcontinualcheck = nil
-                inst.um_flood_moisture_ramp = nil
-                if inst.components.umripples and not (inst:HasTag("worm") or inst.prefab == "mole") then --AXE check if should update ripples
-                    inst.components.umripples:OnNoLongerLandedServer()
-                elseif inst:HasTag("worm") or inst.prefab == "mole" then
-                    inst:Show()
-                    if inst.um_worm_bubble_task then
-                        inst.um_worm_bubble_task:Cancel()
-                        inst.um_worm_bubble_task = nil
-                    end
-                end
-                self.inst:RemoveEventCallback("equip", AdjustSpeed)
-                self.inst:RemoveEventCallback("unequip", AdjustSpeed)
-                if self._externalspeedmultipliers and self._externalspeedmultipliers[inst] and self._externalspeedmultipliers[inst].multipliers["um_floodedwater"] then
-                    self:RemoveExternalSpeedMultiplier(inst, "um_floodedwater")
-                end
+                ToggleFloodCheck(inst)
             end
         end
-        return _OnUpdate(self, dt, arrive_check_only)
+        return _OnUpdate(self, dt, arrive_check_only, ...)
     end
 end)
