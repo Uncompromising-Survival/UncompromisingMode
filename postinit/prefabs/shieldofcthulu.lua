@@ -11,7 +11,7 @@ local function CommonFunctions(inst, sound, anim)
             if _inst.components.equippable.restrictedtag then
                 _inst.um_equippable_restrictedtag = _inst.components.equippable.restrictedtag
             end
-            _inst.components.equippable.restrictedtag = "brokendown_".._inst.prefab -- This does mean that Mannequins can equip this.
+            _inst.components.equippable.restrictedtag = "brokendown_".._inst.prefab -- This does mean that non-player entities can equip this.
         end
         if _inst.components.inspectable then
             if _inst.components.inspectable.nameoverride then
