@@ -15,6 +15,8 @@ function HeatItems(inst)
             end
         end
     end
+
+    --print("task is running on chest")
 end
 
 env.AddPrefabPostInit("dragonflychest", function(inst)
@@ -22,5 +24,6 @@ env.AddPrefabPostInit("dragonflychest", function(inst)
         return
     end
 
+    -- The periodictask is destroyed along with the entity and dragonflychest doesn't have a burned state so no need to cancel it
     inst.heat_items = inst:DoPeriodicTask(TUNING.DSTU.DFLYCHEST_HEATPERIOD, HeatItems)
 end)
