@@ -29,7 +29,7 @@ local GemEnchantable = Class(function(self, inst)
     self.slots = DEFAULT_SLOTS
     self.hidden_enchants = {}   --WARNING: NOT SAVED
     self.slotless_enchants = {}
-    self.dirty = false
+    self.dirty = true
 
     --this data saves
     if self.inst.persistent_gemology_data == nil then
@@ -57,13 +57,9 @@ local GemEnchantable = Class(function(self, inst)
                     GEM_DEFS[enchant].fns.onupdate(item, tier)
                 end
             end
+            item.components.gem_enchantable.dirty = true
         end
-
-        self.dirty = true
     end)
-
-
-    self.dirty = true
 
     self.inst:ListenForEvent("perishchange", function(inst, data)
         local new_durability = data.percent
