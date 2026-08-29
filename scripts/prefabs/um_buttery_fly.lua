@@ -180,4 +180,4 @@ local function fn()
 end
 
 return Prefab("um_buttery_fly", fn, assets, prefabs),
-    MakePlacer("um_buttery_fly_placer", "flowers", "flowers", "f1")
+    MakePlacer("um_buttery_fly_placer", "um_buttercup", "um_buttercup", "idle")
