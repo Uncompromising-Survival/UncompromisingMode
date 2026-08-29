@@ -7,6 +7,7 @@ local assets =
 
 local prefabs =
 {
+    "butter",
     "um_buttercup",
 }
 
