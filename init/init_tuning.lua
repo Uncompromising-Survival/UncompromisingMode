@@ -668,8 +668,10 @@ TUNING.DSTU = {
         0.4,
         0.2,
         0.1, --min repair value
-    }
+    },
 
+    DFLYCHEST_HEATVALUE = 2,
+    DFLYCHEST_HEATPERIOD = 1,
 }
 
 -- [              DST Related Overrides              ]
