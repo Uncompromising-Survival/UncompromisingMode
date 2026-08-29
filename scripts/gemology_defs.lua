@@ -350,7 +350,7 @@ AddUMGemDef("yellowgem1", {
             end
         end,
         onupdate = function(item, tier)
-            if item ~= nil and item.components.equippable:IsEquipped() then
+            if item.components.equippable and item.components.equippable:IsEquipped() then
                 DamageGem("yellowgem1", item, 1 / TUNING.DSTU.YELLOWGEM1_DURATION[tier])
             end
         end,
@@ -401,7 +401,7 @@ local function ShockChain(inst, attacker, target, ShockAgain, tier)
             local dist = math.sqrt(target:GetDistanceSqToInst(v))
 
             v:DoTaskInTime(dist / TUNING.DSTU.YELLOWGEM2_ATTACK_TIME_FACTOR, function(v)
-                if v:IsValid() and v.components.health ~= nil and not v.components.health:IsDead() and not v:HasTag("arcgrounded") then
+                if inst:IsValid() and inst.components.weapon and attacker:IsValid() and v:IsValid() and v.components.health ~= nil and not v.components.health:IsDead() and not v:HasTag("arcgrounded") then
                     local mult = TUNING.DSTU.YELLOWGEM2_SHOCK_DIST_FACTOR - dist
 
                     mult = math.clamp(mult, TUNING.DSTU.YELLOWGEM2_SHOCK_MULT_RANGES[tier][1], TUNING.DSTU.YELLOWGEM2_SHOCK_MULT_RANGES[tier][2])
