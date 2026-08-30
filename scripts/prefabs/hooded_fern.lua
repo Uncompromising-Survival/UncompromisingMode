@@ -258,7 +258,7 @@ end]]
 
 local function onnear(inst, target)
     if inst.components.pickable and inst.components.pickable:CanBePicked() and not inst.BrushingTest and target and target.components.health ~= nil then
-        if not (WearingThicketResist(target) and PrickAdept(target) and table.contains(TUNING.DSTU.NO_THICKET_APHIDS, target.prefab)) then
+        if not (WearingThicketResist(target) or PrickAdept(target) or table.contains(TUNING.DSTU.NO_THICKET_APHIDS, target.prefab)) then
             --local chance_aphids = GetChanceAphidsWithWorldAge(TheWorld.state.cycles) * .01
             --math.random() > chance_aphids
             if TryLuckRoll(target, TUNING.DSTU.APHID_SPAWN_CHANCE, LuckFormulas.SpawnLeif) and not TheWorld.state.iswinter then
