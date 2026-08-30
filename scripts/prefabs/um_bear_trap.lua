@@ -1,6 +1,6 @@
 require "prefabutil"
 
-local function ToggleSlowDownDebuff(inst, trap, toggle) -- Odd implementation, but 
+local function ToggleSlowDownDebuff(inst, trap, toggle) -- TODO: Rework this into a real debuff maybe?
     if trap.um_ignoredebuffremoval then return end
     local traptype, debuffkey = trap.traptype or "regular", trap.prefab
     local locomotor = inst.components.locomotor
