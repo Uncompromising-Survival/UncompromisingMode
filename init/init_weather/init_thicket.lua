@@ -7,7 +7,8 @@ local function ThicketCheck(inst)
     local x,y,z = inst.Transform:GetWorldPosition()
     local triggers = TheSim:FindEntities(x, y, z, 1.5, nil, nil, {"briar_plants"})
     for i, v in ipairs(triggers) do
-        if v.prefab == "hooded_fern" and inst.components.health and not inst.components.health:IsDead() and not inst:HasAnyTag(cant_thicket) and v.um_thicketnear then
+        if v.prefab == "hooded_fern" and inst.components.health and not inst.components.health:IsDead()
+            and not inst:HasAnyTag(cant_thicket) and v.um_thicketnear then
             v:um_thicketnear(inst)
         end
     end
