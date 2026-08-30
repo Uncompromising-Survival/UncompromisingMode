@@ -54,7 +54,7 @@ local function onregenfn(inst)
 
     if not inst.components.burnable then
         MakeMediumBurnable(inst)
-        inst.components.burnable:SetBurnTime(0.75)
+        inst.components.burnable:SetBurnTime(.75)
         inst.components.burnable:SetOnBurntFn(OnBurnt)
     end
     inst:DoTaskInTime(0, RegisterPathFinding)
@@ -89,24 +89,24 @@ local function GetCropSeeds()
     local weighted_briar_loot = {}
     local all_seeds = { "carrot", "corn", "dragonfruit", "durian", "eggplant", "pomegranate", "pumpkin", "asparagus", "tomato", "potato", "onion", "pepper", "garlic", "watermelon" }
     for i, v in ipairs(all_seeds) do
-        weighted_briar_loot[v] = 0.1
+        weighted_briar_loot[v] = .1
     end
     if TheWorld.state.isspring then
         local spring_seeds = { "carrot", "corn", "dragonfruit", "durian", "eggplant", "pomegranate", "pumpkin", "asparagus", "tomato", "potato", "onion", "garlic", "watermelon" }
         for i, v in ipairs(spring_seeds) do
-            weighted_briar_loot[v] = 0.4
+            weighted_briar_loot[v] = .4
         end
     elseif TheWorld.state.iswinter then
         --nothing
     elseif TheWorld.state.issummer then
         local summer_seeds = { "corn", "dragonfruit", "pomegranate", "tomato", "onion", "pepper", "garlic", "watermelon", "carrot" }
         for i, v in ipairs(summer_seeds) do
-            weighted_briar_loot[v] = 0.4
+            weighted_briar_loot[v] = .4
         end
     else
         local fall_seeds = { "carrot", "corn", "eggplant", "pumpkin", "asparagus", "tomato", "potato", "onion", "pepper", "garlic" }
         for i, v in ipairs(fall_seeds) do
-            weighted_briar_loot[v] = 0.4
+            weighted_briar_loot[v] = .4
         end
     end
     return weighted_random_choice(weighted_briar_loot) .. "_seeds"
@@ -114,20 +114,20 @@ end
 
 local function GenerateLoot(inst, picker)
     local weighted_briar_loot = {}
-    weighted_briar_loot["seeds"] = 0.2
-    weighted_briar_loot["crop_seed"] = 0.2
-    weighted_briar_loot["cutgrass"] = 0.4
-    weighted_briar_loot["twigs"] = 0.15
+    weighted_briar_loot["seeds"] = .2
+    weighted_briar_loot["crop_seed"] = .2
+    weighted_briar_loot["cutgrass"] = .4
+    weighted_briar_loot["twigs"] = .15
 
     if not IsIslandWorld() then
-        weighted_briar_loot["aphid"] = 0.025
+        weighted_briar_loot["aphid"] = .025
     else
-        weighted_briar_loot["snake"] = 0.025
-        weighted_briar_loot["snake_poison"] = 0.025
-        weighted_briar_loot["vine"] = 0.4
+        weighted_briar_loot["snake"] = .025
+        weighted_briar_loot["snake_poison"] = .025
+        weighted_briar_loot["vine"] = .4
     end
-    weighted_briar_loot["spider"] = 0.0125
-    weighted_briar_loot["mound"] = 0.0125
+    weighted_briar_loot["spider"] = .0125
+    weighted_briar_loot["mound"] = .0125
 
     local loot = weighted_random_choice(weighted_briar_loot)
     if loot == "crop_seed" then
@@ -164,7 +164,7 @@ local function onpickedfn(inst, picker)
     inst.SoundEmitter:PlaySound("dontstarve/wilson/pickup_reeds")
     inst.AnimState:PlayAnimation("pick")
     SpawnPrefab("oceantree_leaf_fx_chop").Transform:SetPosition(inst.Transform:GetWorldPosition())
-    if math.random() < 0.2 then
+    if math.random() < .2 then
         if picker == nil then --picker being nil assuming its fire.
             Launch(inst.components.lootdropper:SpawnLootPrefab("ash"), inst, 1.5)
         else
@@ -176,31 +176,23 @@ local function onpickedfn(inst, picker)
     inst:RemoveComponent("burnable")
     if picker and picker.prefab == "aphid" then
         picker.full_belly = true
-        picker:DoTaskInTime(60,function(picker)
-            picker.full_belly = nil
-        end)
+        picker:DoTaskInTime(60, function(picker) picker.full_belly = nil end)
     end
     inst:DoTaskInTime(0, UnregisterPathFinding)
 end
 
-local thicket_equipment = {"um_hat_leafwing", "armor_bramble", "um_armor_bramble_rimeweed", "armor_lunarplant_husk"}
+local thicket_equipment = {["um_hat_leafwing"] = true, ["armor_bramble"] = true, ["um_armor_bramble_rimeweed"] = true, ["armor_lunarplant_husk"] = true}
 local function WearingThicketResist(inst)
-    local head
-    local body
-    if inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD) then
-        head = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD).prefab
+    for _, item in pairs(inst.components.inventory.equipslots) do
+        if thicket_equipment[item.prefab] then return true end
     end
-    if inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) then
-        body = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY).prefab
-    end
-    return (head and table.contains(thicket_equipment, head)) or (body and table.contains(thicket_equipment, body))
 end
 
 local function OutOfTheWoodsYet(target)
     local x,y,z = target.Transform:GetWorldPosition()
-    local bushes = TheSim:FindEntities(x,y,z, 1.75, { "briar_plants" })
+    local bushes = TheSim:FindEntities(x,y,z, 1.75, {"briar_plants"})
     local out_of_woods = true
-    for i,v in ipairs(bushes) do
+    for i, v in ipairs(bushes) do
         if v.components.pickable and v.components.pickable.canbepicked then
             out_of_woods = false
         end    
@@ -232,66 +224,65 @@ local function CheckToSeeIfTargetsMoving(inst)
     end
 end
 
-local function AphidStorm(inst,num,unfortunate_soul)
+local function AphidStorm(inst, num, unfortunate_soul)
     if unfortunate_soul then
-        local thicket = FindEntity(inst,12,function(ent) return
-            ent.prefab == "hooded_fern" and not ent.cant_aphid and inst:GetDistanceSqToInst(ent) > 4^2
+        local thicket = FindEntity(inst, 12, function(ent) return
+            ent.prefab == "hooded_fern" and not ent.cant_aphid and inst:GetDistanceSqToInst(ent) > 4 ^ 2
         end)
         if not thicket then return end
         local aphid = SpawnPrefab("aphid")
         aphid.Transform:SetPosition(thicket.Transform:GetWorldPosition())
         aphid.components.combat:SuggestTarget(unfortunate_soul)
-
         if num > 0 then
             num = num - 1
             if not unfortunate_soul:HasTag("player") then
                 num = num - 1
             end
             thicket.cant_aphid = true
-            thicket:DoTaskInTime(6,function(thicket) thicket.cant_aphid = nil end)
-            inst:DoTaskInTime(0.2,function(inst) AphidStorm(thicket,num,unfortunate_soul) end)
+            thicket:DoTaskInTime(6, function(thicket) thicket.cant_aphid = nil end)
+            inst:DoTaskInTime(.2, function(inst) AphidStorm(thicket, num, unfortunate_soul) end)
         end
     end
 end
 
 local function GetNumAphidsWithWorldAge(age)
-    return math.clamp(math.random(age/10,age/5),4,9) -- min 4, max 9 guaranteed around 90 days in. 25 days where number is always the same (4).
+    return math.clamp(math.random(age / 10, age / 5), 4, 9) -- min 4, max 9 guaranteed around 90 days in. 25 days where number is always the same (4).
 end
 
-local function GetChanceAphidsWithWorldAge(age)
-    return math.clamp(100-(age/6), 85, 95) -- max .95, min .85 achieved 90 days in. 30 days where chance is the same (.95).
-end
+--[[local function GetChanceAphidsWithWorldAge(age)
+    return math.clamp(100 - (age / 6), 85, 95) -- max .95, min .85 achieved 90 days in. 30 days where chance is the same (.95).
+end]]
 
 local function onnear(inst, target)
     if inst.components.pickable and inst.components.pickable:CanBePicked() and not inst.BrushingTest and target and target.components.health ~= nil then
-        if not (WearingThicketResist(target) or PrickAdept(target) or table.contains(TUNING.DSTU.NO_THICKET_APHIDS,target.prefab)) then
-            local chance_aphids = GetChanceAphidsWithWorldAge(TheWorld.state.cycles) * .01
-            if math.random() > chance_aphids and not TheWorld.state.iswinter then
+        if not (WearingThicketResist(target) or PrickAdept(target) or table.contains(TUNING.DSTU.NO_THICKET_APHIDS, target.prefab)) then
+            --local chance_aphids = GetChanceAphidsWithWorldAge(TheWorld.state.cycles) * .01
+            --math.random() > chance_aphids
+            if TryLuckRoll(target, TUNING.DSTU.APHID_SPAWN_CHANCE, LuckFormulas.SpawnLeif) and not TheWorld.state.iswinter then
                 if not IsIslandWorld() then
                     local total_aphids = GetNumAphidsWithWorldAge(TheWorld.state.cycles)
                     if not target.cant_aphid then
-                        AphidStorm(inst,total_aphids,target)
+                        AphidStorm(inst, total_aphids, target)
                         inst.cant_aphid = true
-                        inst:DoTaskInTime(6,function() inst.cant_aphid = nil end)
+                        inst:DoTaskInTime(6, function() inst.cant_aphid = nil end)
                         target.cant_aphid = true
-                        target:DoTaskInTime(6,function() target.cant_aphid = nil end)
+                        target:DoTaskInTime(6, function() target.cant_aphid = nil end)
                     end
                 else
                     SpawnPrefab("snake").Transform:SetPosition(inst.Transform:GetWorldPosition())
                 end
             end
             if not target:HasTag("EPIC")  then
-                target.components.locomotor:SetExternalSpeedMultiplier(target, "thicket", 0.3)
+                target.components.locomotor:SetExternalSpeedMultiplier(target, "thicket", .3)
                 if not target.thicketcheck then
-                    target.thicketcheck = target:DoPeriodicTask(0.1, OutOfTheWoodsYet)
+                    target.thicketcheck = target:DoPeriodicTask(.1, OutOfTheWoodsYet)
                 end
             end
-
         end
         table.insert(inst.playertracking, target)
 
         if #inst.playertracking > 0 and not inst.BrushingTest then
-            inst.BrushingTest = inst:DoPeriodicTask(0.3, CheckToSeeIfTargetsMoving)
+            inst.BrushingTest = inst:DoPeriodicTask(.3, CheckToSeeIfTargetsMoving)
             if #inst.playertracking == 1 then
                 inst.AnimState:PlayAnimation("depress", false)
                 inst.busyanimation = true
@@ -318,7 +309,7 @@ local function grass(name, stage)
         inst:AddTag("thorny")
         inst:AddTag("walrus_trap_spot")
 
-        -- local multcolour = 0.5
+        -- local multcolour = .5
         -- if 0 <= multcolour and multcolour < 1 then
         -- local colour = multcolour + math.random() * (1.0 - multcolour)
         -- inst.AnimState:SetMultColour(colour, colour, colour, 1)
@@ -335,8 +326,6 @@ local function grass(name, stage)
         if not TheWorld.ismastersim then
             return inst
         end
-
-
 
         inst:AddComponent("pickable")
         inst.components.pickable.picksound = "dontstarve/wilson/pickup_reeds"
@@ -359,17 +348,13 @@ local function grass(name, stage)
         --inst.components.playerprox:SetOnPlayerNear(onnear)
         --inst.components.playerprox:SetPlayerAliveMode(inst.components.playerprox.AliveModes.AliveOnly)
 
-
-
         inst.um_thicketnear = onnear
 
         MakeNoGrowInWinter(inst)
         MakeHauntableIgnite(inst)
         MakeMediumBurnable(inst)
-        inst.components.burnable:SetBurnTime(0.75)
+        inst.components.burnable:SetBurnTime(.75)
         inst.components.burnable:SetOnBurntFn(OnBurnt)
-
-
 
         inst.playertracking = {}
 
@@ -388,11 +373,13 @@ local function grass(name, stage)
         end
 
         inst:DoTaskInTime(0, function(inst)
-            if math.random() > 0.5 then
+            if math.random() > .5 then
                 inst.AnimState:SetScale(-1, 1)
             end
         end)
+
         MakeMediumPropagator(inst)
+
         return inst
     end
 

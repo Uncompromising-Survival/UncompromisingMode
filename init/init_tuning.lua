@@ -533,10 +533,11 @@ TUNING.DSTU = {
     RUINSNIGHTMARE_DAMAGE = 75,
     HERMITCRAB_MOONTREEBLOSSOMTEA_SHADOWCREATURE_DAMAGE = 75,
 
-    NO_THICKET_APHIDS = { "tumbleweed", "beefalo", "fruitbat" },   --AXE Add more as needed, most things >should< spawn aphids though.
+    NO_THICKET_APHIDS = {"tumbleweed", "beefalo", "fruitbat"},   --AXE Add more as needed, most things >should< spawn aphids though.
+    APHID_SPAWN_CHANCE = .01,
 
-    RIPPLE_BLACKLIST_PREFABS = { "webbedcreature", "rainometer" }, -- AXE Many cases would like "structure" tag still count for ripples, but many structures are incompatible, so we do a prefab based blacklist as well
-    RIPPLE_BLACKLIST_TAGS = { "projectile", "FX", "balloon" },     -- AXE other cases are universal, projectiles shouldn't really ever have ripples
+    RIPPLE_BLACKLIST_PREFABS = {"webbedcreature", "rainometer"}, -- AXE Many cases would like "structure" tag still count for ripples, but many structures are incompatible, so we do a prefab based blacklist as well
+    RIPPLE_BLACKLIST_TAGS = {"projectile", "FX", "balloon"},     -- AXE other cases are universal, projectiles shouldn't really ever have ripples
 
     -- Rat Poison
     RATPOISON_EAT_DAMAGE = 24,
@@ -616,7 +617,6 @@ TUNING.DSTU = {
         { 0.25, 1.5 },
     },
 
-
     YELLOWGEM2_SHOCK_RANGE = 4,
     YELLOWGEM2_ATTACK_TIME_FACTOR = 5,
     YELLOWGEM2_SHOCK_COOLDOWN = 3,
@@ -634,7 +634,6 @@ TUNING.DSTU = {
         0.7,
         0.4,
     },
-
 
     PURPLEGEM1_EXTRA_DAMAGE_THRESHOLD = 50,
     PURPLEGEM1_EXTRA_DAMAGE_MULT = 0.25,
@@ -669,7 +668,6 @@ TUNING.DSTU = {
         0.2,
         0.1, --min repair value
     }
-
 }
 
 -- [              DST Related Overrides              ]
