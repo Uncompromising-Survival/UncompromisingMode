@@ -101,7 +101,7 @@ local prefabs = {
     "vampirebat",
     "icecreamsanityregenbuff",
     "zaspberryparfait",
-    "uncompromising_foodbuffs",
+    "uncompromising_buffs",
     "shockfx",
     "shockstundebuff",
     "carapacecooler",
