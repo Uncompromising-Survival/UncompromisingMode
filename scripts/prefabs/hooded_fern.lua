@@ -260,8 +260,8 @@ local function onnear(inst, target)
             --math.random() > chance_aphids
             if TryLuckRoll(target, TUNING.DSTU.APHID_SPAWN_CHANCE, LuckFormulas.SpawnLeif) and not TheWorld.state.iswinter then
                 if not IsIslandWorld() then
-                    local total_aphids = GetNumAphidsWithWorldAge(TheWorld.state.cycles)
                     if not target.cant_aphid then
+                        local total_aphids = GetNumAphidsWithWorldAge(TheWorld.state.cycles)
                         AphidStorm(inst, total_aphids, target)
                         inst.cant_aphid = true
                         inst:DoTaskInTime(6, function() inst.cant_aphid = nil end)
