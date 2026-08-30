@@ -262,7 +262,6 @@ local prefab_post = {
     "slurtle_shellpieces",
     "fused_shadeling",
     "eyeturret",
-    "dragonfly_chest",
 }
 
 local stategraph_post = {
