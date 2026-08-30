@@ -12,6 +12,9 @@ local assets =
 local CANOPY_SHADOW_DATA = require("prefabs/giant_tree_canopy")
 
 -----------------------------Canopy and Lightning Handling
+local MIN = TUNING.SHADE_CANOPY_RANGE_SMALL
+local MAX = MIN + TUNING.WATERTREE_PILLAR_CANOPY_BUFFER
+
 local DROP_ITEMS_DIST_MIN = 6
 local DROP_ITEMS_DIST_VARIANCE = 10
 
@@ -20,7 +23,7 @@ local NUM_DROP_SMALL_ITEMS_MAX_LIGHTNING = 5
 
 local DROPPED_ITEMS_SPAWN_HEIGHT = 10
 
-local function RemoveCanopyShadow(inst)
+--[[local function RemoveCanopyShadow(inst)
     if inst.canopy_data ~= nil then
         for _, shadetile_key in ipairs(inst.canopy_data.shadetile_keys) do
             if TheWorld.hooded_forest_shadetiles[shadetile_key] ~= nil then
@@ -39,7 +42,7 @@ local function RemoveCanopyShadow(inst)
             ray:Remove()
         end
     end
-end
+end]]
 
 local lightningprods =
 {
@@ -53,36 +56,13 @@ local lightningprods =
     "oceantree_leaf_fx_fall",
 }
 
-local function removecanopy(inst)
-    if inst.roots then
-        inst.roots:Remove()
-    end
-    if inst._ripples then
-        inst._ripples:Remove()
-    end
-
-    if inst.players ~= nil then
-        for k, v in pairs(inst.players) do
-            if k:IsValid() then
-                if k.canopytrees ~= nil then
-                    k.canopytrees = k.canopytrees - 1
-                    if k.canopytrees <= 0 then
-                        k:PushEvent("onchangecanopyzone", false)
-                    end
-                end
-            end
-        end
-    end
-    inst._hascanopy:set(false)
-end
-
 local function DropLightningItems(inst, items)
     local x, _, z = inst.Transform:GetWorldPosition()
     local num_items = #items
 
     for i, item_prefab in ipairs(items) do
         local dist = DROP_ITEMS_DIST_MIN + DROP_ITEMS_DIST_VARIANCE * math.random()
-        local theta = 2 * PI * math.random()
+        local theta = TWOPI * math.random()
 
         inst:DoTaskInTime(i * 5 * FRAMES, function(inst2)
             local item = SpawnPrefab(item_prefab)
@@ -359,6 +339,20 @@ local function SpawnDebris(inst, chopper, loottable, loc_override, force_shatter
     end
 end
 
+local function OnFar(inst, player)
+    if player.canopytrees then   
+        player.canopytrees = player.canopytrees - 1
+        --player:PushEvent("onchangecanopyzone", player.canopytrees > 0)
+    end
+    inst.players[player] = nil
+end
+
+local function OnNear(inst, player)
+    inst.players[player] = true
+    player.canopytrees = (player.canopytrees or 0) + 1
+    --player:PushEvent("onchangecanopyzone", player.canopytrees > 0)
+end
+
 -----------------------------Workable handling
 local function on_chop(inst, chopper, remaining_chops)
     if not (chopper ~= nil and chopper:HasTag("playerghost")) then
@@ -468,12 +462,12 @@ end
 
 local function PickType(inst)
     --inst.bankType = math.random(1, 2) --RN only have 2 type
-    if math.random() > 0.6 then
+    if math.random() > .6 then
         inst.reverse = true
     end
-    inst.stretchx = math.random(-0.1, 0.1)
-    --inst.stretchy = math.random(-0.1, 0.1)
-    if math.random() > 0.9 then
+    inst.stretchx = math.random(-.1, .1)
+    --inst.stretchy = math.random(-.1, .1)
+    if math.random() > .9 then
         inst.mossy = true
         inst.AnimState:PlayAnimation("idle_moss_full")
         TryAddShaveable(inst)
@@ -515,7 +509,7 @@ local function PickBuild(inst)
             mult = -1
         end
         inst.AnimState:SetScale(mult * (1 + inst.stretchx), 1) -- 1 + inst.stretchy)
-        local colour = 0.5 + math.random() * (1.0 - 0.5)
+        local colour = .5 + math.random() * (1 - .5)
         inst.AnimState:SetMultColour(colour, colour, colour, 1)
         AnimNext(inst)
     else
@@ -617,6 +611,13 @@ end
 
 local function OnRemoveEntity(inst)
     UnregisterPathFinding(inst)
+    for player in pairs(inst.players) do
+        if player:IsValid() then
+            if player.canopytrees then
+                OnFar(inst, player)
+            end
+        end
+    end
     inst._hascanopy:set(false)
 end
 
@@ -666,6 +667,14 @@ local function giant_treefn()
     end
 
     inst:DoTaskInTime(0, PickBuild)
+
+    inst.players = {}
+
+    local playerprox = inst:AddComponent("playerprox")
+    playerprox:SetTargetMode(playerprox.TargetModes.AllPlayers)
+    playerprox:SetDist(MIN, MAX)
+    playerprox:SetOnPlayerFar(OnFar)
+    playerprox:SetOnPlayerNear(OnNear)
 
     local workable = inst:AddComponent("workable")
     workable:SetWorkAction(ACTIONS.CHOP)
