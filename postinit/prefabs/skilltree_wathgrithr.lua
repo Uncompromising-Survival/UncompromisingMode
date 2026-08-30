@@ -129,6 +129,32 @@ local function GetShadowEquippableDapperness(owner, equippable)
     return dapperness
 end
 
+local function LunarTick(inst, dt)
+    --inst.components.rideable.lastridetime = GetTime()
+    --inst:PushEvent("beingridden", dt)
+
+    ------------------------
+
+    --local _rider = inst.components.rideable:GetRider()
+    --local _skilltreeupdater = inst ~= nil and inst.components.skilltreeupdater or nil
+    --if _skilltreeupdater ~= nil and _skilltreeupdater:IsActivated("wathgrithr_allegiance_lunar") and inst.components.singinginspiration ~= nil then
+        inst.components.singinginspiration:OnLunarTick(dt)
+    --end
+end
+
+local function StartLunarTick(inst)
+    if inst.lunarinspirationtask == nil then
+        inst.lunarinspirationtask = inst:DoPeriodicTask(6, LunarTick, 0, 6)
+    end
+end
+
+local function StopLunarTick(inst)
+    if inst.lunarinspirationtask ~= nil then
+        inst.lunarinspirationtask:Cancel()
+        inst.lunarinspirationtask = nil
+    end
+end
+
 --[[
 local function UpdateInspirationBadge(inst)
 
@@ -242,6 +268,8 @@ local ONACTIVATE_FNS = {
             inst.components.battleborn:SetHealthEnabled(false)
             inst.components.battleborn:SetSanityEnabled(false)
         end
+
+        StartLunarTick(inst)
     end,
 }
 
@@ -344,6 +372,8 @@ local ONDEACTIVATE_FNS = {
             inst.components.battleborn:SetHealthEnabled(true)
             inst.components.battleborn:SetSanityEnabled(true)
         end
+
+        StopLunarTick(inst)
     end,
 }
 
