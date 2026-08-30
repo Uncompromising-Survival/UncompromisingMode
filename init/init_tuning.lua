@@ -534,7 +534,7 @@ TUNING.DSTU = {
     HERMITCRAB_MOONTREEBLOSSOMTEA_SHADOWCREATURE_DAMAGE = 75,
 
     NO_THICKET_APHIDS = {"tumbleweed", "beefalo", "fruitbat"},   --AXE Add more as needed, most things >should< spawn aphids though.
-    APHID_SPAWN_CHANCE = .01,
+    APHID_SPAWN_CHANCE = .1,
 
     RIPPLE_BLACKLIST_PREFABS = {"webbedcreature", "rainometer"}, -- AXE Many cases would like "structure" tag still count for ripples, but many structures are incompatible, so we do a prefab based blacklist as well
     RIPPLE_BLACKLIST_TAGS = {"projectile", "FX", "balloon"},     -- AXE other cases are universal, projectiles shouldn't really ever have ripples
