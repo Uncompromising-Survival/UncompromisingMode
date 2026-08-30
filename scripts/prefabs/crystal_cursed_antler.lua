@@ -4,66 +4,13 @@ local assets =
     Asset("ANIM", "anim/swap_crystal_cursed_antler.zip"),
 }
 
-local function charged(inst)
-    local fx = SpawnPrefab("dr_warm_loop_1")
+--[[local function GetAntlerDamage(inst, attacker, target)
+    return TUNING.DSTU.CRYSTAL_CURSED_ANTLER_DAMAGE
+end]]
 
-    local owner = inst.components.inventoryitem.owner
-
-    if inst.components.equippable:IsEquipped() and owner ~= nil then
-        fx.entity:SetParent(owner.entity)
-        fx.entity:AddFollower()
-        fx.Follower:FollowSymbol(owner.GUID, "swap_object", 0, -275, 0)
-        fx.Transform:SetScale(1.33, 1.33, 1.33)
-    else
-        fx.entity:SetParent(inst.entity)
-        fx.Transform:SetPosition(0, 2.35, 0)
-        fx.Transform:SetScale(1.33, 1.33, 1.33)
-    end
-end
-
-local function OnCharged(inst)
-    --local fx = SpawnPrefab("dr_warm_loop_1")
-
-    --local owner = inst.components.inventoryitem.owner
-
-    --if inst.components.equippable:IsEquipped() and owner ~= nil then
-        --fx.entity:SetParent(owner.entity)
-        --fx.entity:AddFollower()
-        --fx.Follower:FollowSymbol(owner.GUID, "swap_object", 0, -275, 0)
-        --fx.Transform:SetScale(1.33, 1.33, 1.33)
-    --else
-        --fx.entity:SetParent(inst.entity)
-        --fx.Transform:SetPosition(0, 2.35, 0)
-        --fx.Transform:SetScale(1.33, 1.33, 1.33)
-    --end
-    inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/charge")
-    inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/taunt_howl", nil, .4)
-end
-
-local function onequip(inst, owner)
-    if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.HANDS) then return end
-    owner.AnimState:OverrideSymbol("swap_object", "swap_crystal_cursed_antler", "swap_crystal_cursed_antler")
-    owner.AnimState:Show("ARM_carry")
-    owner.AnimState:Hide("ARM_normal")
-end
-
-local function onunequip(inst, owner)
-    local skin_build = inst:GetSkinBuild()
-    if skin_build ~= nil then
-        owner:PushEvent("unequipskinneditem", inst:GetSkinName())
-    end
-
-    owner.AnimState:Hide("ARM_carry")
-    owner.AnimState:Show("ARM_normal")
-end
-
-local function onattack(inst, attacker, target)
+local function OnAttack(inst, attacker, target)
     if target and target:IsValid() and attacker and attacker:IsValid() and inst.components.rechargeable:IsCharged() then
-        UMCommonFns.StartRechargeableCooldown(inst, {cooldown = TUNING.DSTU.CURSED_ANTLER_COOLDOWN, tags = {"cursedantler"}})
-
-        if inst.components.planardamage then
-            inst.components.planardamage:SetBaseDamage(17)
-        end
+        UMCommonFns.StartRechargeableCooldown(inst, {cooldown = TUNING.DSTU.CRYSTAL_CURSED_ANTLER_COOLDOWN, tags = {"cursedantler"}})
 
         local x, y, z = target.Transform:GetWorldPosition()
         local ice_circle = SpawnPrefab("antler_ice_circle")
@@ -85,7 +32,7 @@ local function onattack(inst, attacker, target)
             if v ~= inst and v ~= target and v:IsValid() and not v:IsInLimbo() then
                 if v.components.combat and not (v.components.health and v.components.health:IsDead())
                     and attacker.components.combat:CanTarget(v) and not attacker.components.combat:IsAlly(v) then
-                    v.components.combat:GetAttacked(attacker, 34, inst, nil, {planar = 17})
+                    v.components.combat:GetAttacked(attacker, TUNING.DSTU.CRYSTAL_CURSED_ANTLER_AOE_DAMAGE, inst, nil, {planar = TUNING.DSTU.CRYSTAL_CURSED_ANTLER_AOE_PLANAR_DAMAGE})
 
                     if v.components.freezable and not v.components.freezable:IsFrozen() then
                         v.components.freezable:AddColdness(.5)
@@ -97,12 +44,77 @@ local function onattack(inst, attacker, target)
     end
 end
 
-local function GetAntlerDamage(inst, attacker, target)
-    if inst.components.planardamage and inst.components.rechargeable and inst.components.rechargeable:IsCharged() then
-        inst.components.planardamage:SetBaseDamage(116)
-    end
-    return 34
+--[[local function SetPlanarDamage(inst, toggle)
+    local planardamage = inst.components.planardamage
+    if not planardamage then return end
+    planardamage:SetBaseDamage(toggle and TUNING.DSTU.CRYSTAL_CURSED_ANTLER_CHARGED_PLANAR_DAMAGE or TUNING.DSTU.CRYSTAL_CURSED_ANTLER_PLANAR_DAMAGE)
+end]]
+
+local function GetAntlerPlanarDamage(inst)
+    return inst.components.rechargeable and inst.components.rechargeable:IsCharged() and TUNING.DSTU.CRYSTAL_CURSED_ANTLER_CHARGED_PLANAR_DAMAGE or TUNING.DSTU.CRYSTAL_CURSED_ANTLER_PLANAR_DAMAGE
 end
+
+local function OnEquip(inst, owner)
+    if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.HANDS) then return end
+    owner.AnimState:OverrideSymbol("swap_object", "swap_crystal_cursed_antler", "swap_crystal_cursed_antler")
+    owner.AnimState:Show("ARM_carry")
+    owner.AnimState:Hide("ARM_normal")
+end
+
+local function OnUnequip(inst, owner)
+    local skin_build = inst:GetSkinBuild()
+    if skin_build ~= nil then
+        owner:PushEvent("unequipskinneditem", inst:GetSkinName())
+    end
+
+    owner.AnimState:Hide("ARM_carry")
+    owner.AnimState:Show("ARM_normal")
+end
+
+--[[local function charged(inst)
+    local fx = SpawnPrefab("dr_warm_loop_1")
+
+    local owner = inst.components.inventoryitem.owner
+
+    if inst.components.equippable:IsEquipped() and owner ~= nil then
+        fx.entity:SetParent(owner.entity)
+        fx.entity:AddFollower()
+        fx.Follower:FollowSymbol(owner.GUID, "swap_object", 0, -275, 0)
+        fx.Transform:SetScale(1.33, 1.33, 1.33)
+    else
+        fx.entity:SetParent(inst.entity)
+        fx.Transform:SetPosition(0, 2.35, 0)
+        fx.Transform:SetScale(1.33, 1.33, 1.33)
+    end
+end]]
+
+--[[local function OnDischarged(inst)
+    SetPlanarDamage(inst)
+end]]
+
+local function OnCharged(inst)
+    --local fx = SpawnPrefab("dr_warm_loop_1")
+
+    --local owner = inst.components.inventoryitem.owner
+
+    --if inst.components.equippable:IsEquipped() and owner ~= nil then
+        --fx.entity:SetParent(owner.entity)
+        --fx.entity:AddFollower()
+        --fx.Follower:FollowSymbol(owner.GUID, "swap_object", 0, -275, 0)
+        --fx.Transform:SetScale(1.33, 1.33, 1.33)
+    --else
+        --fx.entity:SetParent(inst.entity)
+        --fx.Transform:SetPosition(0, 2.35, 0)
+        --fx.Transform:SetScale(1.33, 1.33, 1.33)
+    --end
+    --SetPlanarDamage(inst, true)
+    inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/charge")
+    inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/taunt_howl", nil, .4)
+end
+
+--[[local function OnLoad(inst, data)
+    if data.rechargeable then SetPlanarDamage(inst) end
+end]]
 
 local function fn()
     local inst = CreateEntity()
@@ -120,9 +132,11 @@ local function fn()
 
     inst:AddTag("cursedantler")
     inst:AddTag("vetcurse_item")
+    inst:AddTag("weapon")
+    inst:AddTag("rechargeable")
     inst:AddTag("donotautopick")
 
-    MakeInventoryFloatable(inst, "med", 0.2, 0.65)
+    MakeInventoryFloatable(inst, "med", .2, .65)
 
     inst.entity:SetPristine()
 
@@ -130,27 +144,30 @@ local function fn()
         return inst
     end
 
+    inst:AddComponent("inventoryitem")
+
     inst:AddComponent("tradable")
     inst:AddComponent("inspectable")
 
-    inst:AddComponent("weapon")
-    inst.components.weapon:SetDamage(GetAntlerDamage)
-    inst.components.weapon:SetOnAttack(onattack)
+    local weapon = inst:AddComponent("weapon")
+    weapon:SetDamage(TUNING.DSTU.CRYSTAL_CURSED_ANTLER_DAMAGE)
+    weapon:SetOnAttack(OnAttack)
 
-    inst:AddComponent("planardamage")
-    inst.components.planardamage:SetBaseDamage(17)
+    local planardamage = inst:AddComponent("planardamage")
+    planardamage.um_getplanardamagefn = GetAntlerPlanarDamage
+    --SetPlanarDamage(inst, true)
 
+    local equippable = inst:AddComponent("equippable")
+    equippable:SetOnEquip(OnEquip)
+    equippable:SetOnUnequip(OnUnequip)
 
-    inst:AddComponent("inventoryitem")
-
-    inst:AddComponent("equippable")
-    inst.components.equippable:SetOnEquip(onequip)
-    inst.components.equippable:SetOnUnequip(onunequip)
-
-    inst:AddComponent("rechargeable")
-    inst.components.rechargeable:SetOnChargedFn(OnCharged)
+    local rechargeable = inst:AddComponent("rechargeable")
+    --rechargeable:SetOnDischargedFn(OnDischarged)
+    rechargeable:SetOnChargedFn(OnCharged)
 
     MakeHauntableLaunch(inst)
+
+    --inst.OnLoad = OnLoad
 
     return inst
 end
@@ -168,7 +185,7 @@ local function OnUpdateIceCircle(inst)
             and not (v.components.health and v.components.health:IsDead())
             and not (castercombat and castercombat:IsAlly(v)) then
             if v.components.locomotor then
-                v.components.locomotor:SetExternalSpeedMultiplier(v, debuffkey, 0.5)
+                v.components.locomotor:SetExternalSpeedMultiplier(v, debuffkey, .5)
                 v.um_ice_circle = v:DoPeriodicTask(1, function(guy)
                     if not FindEntity(guy, 3, function(ent) return ent.prefab == "antler_ice_circle" end) then
                         if guy.components.locomotor then
@@ -197,8 +214,6 @@ local function antler_ice_circle_fn()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
-    inst:AddTag("FX")
-    inst:AddTag("NOCLICK")
 
     inst.AnimState:SetBank("deer_ice_circle")
     inst.AnimState:SetBuild("deer_ice_circle")
@@ -206,15 +221,18 @@ local function antler_ice_circle_fn()
     inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
     inst.AnimState:SetLayer(LAYER_BACKGROUND)
     inst.AnimState:SetSortOrder(3)
-    inst.AnimState:SetScale(1.0, 1.0)
-    inst.persists = false
+    inst.AnimState:SetScale(1, 1)
+
+    inst:AddTag("FX")
+    inst:AddTag("NOCLICK")
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
         return inst
     end
 
-    inst.freezelimit = 0.7
+    inst.freezelimit = .7
 
     inst.Transform:SetRotation(math.random() * 360)
 
@@ -225,6 +243,8 @@ local function antler_ice_circle_fn()
 
     inst:AddComponent("updatelooper")
     inst.components.updatelooper:AddOnUpdateFn(OnUpdateIceCircle)
+
+    inst.persists = false
 
     return inst
 end

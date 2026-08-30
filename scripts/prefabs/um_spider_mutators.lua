@@ -1,7 +1,8 @@
 local prefabs = {}
-local mutator_targets = 
+local mutator_targets =
 {
-    "trapdoor",
+    { name = "trapdoor", anim = "trapdoor", mutation = "spider_trapdoor" },
+    { name = "trapdoor_hooded", anim = "hooded", mutation = "spider_trapdoor_hooded" },
 }
 
 local function MakeMutatorFn(mutator_target)
@@ -15,7 +16,7 @@ local function MakeMutatorFn(mutator_target)
 
     inst.AnimState:SetBank("um_spider_mutators")
     inst.AnimState:SetBuild("um_spider_mutators")
-    inst.AnimState:PlayAnimation(mutator_target)
+    inst.AnimState:PlayAnimation(mutator_target.anim)
 
     MakeInventoryFloatable(inst)
 
@@ -42,7 +43,7 @@ local function MakeMutatorFn(mutator_target)
     inst.components.edible.sanityvalue = -TUNING.SANITY_SMALL
 
     inst:AddComponent("spidermutator")
-    inst.components.spidermutator:SetMutationTarget("spider_" .. mutator_target)
+    inst.components.spidermutator:SetMutationTarget(mutator_target.mutation)
 
     MakeHauntableLaunch(inst)
 
@@ -55,12 +56,12 @@ local function MakeMutatorFn(mutator_target)
 end
 
 for i, mutator_target in ipairs(mutator_targets) do
-    table.insert(prefabs, "spider_" .. mutator_target)
+    table.insert(prefabs, mutator_target.mutation)
 end
 
 local mutator_prefabs = {}
 for i, mutator_target in ipairs(mutator_targets) do
-    table.insert(mutator_prefabs, Prefab("mutator_" .. mutator_target, function() return MakeMutatorFn(mutator_target) end))
+    table.insert(mutator_prefabs, Prefab("mutator_" .. mutator_target.name, function() return MakeMutatorFn(mutator_target) end))
 end
 
 return unpack(mutator_prefabs)

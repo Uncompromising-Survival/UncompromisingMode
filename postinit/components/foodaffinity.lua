@@ -9,6 +9,7 @@ Documentation: KoreanWaffles
 -- Adds Breakfast Skillet, Honey Ham, and Tall Scotch Eggs as Wilson's favorite foods
 -- with bonus sanity values of 10, 20, and 50 respectively.
 AddPrefabPostInit("wilson", function(inst)
+    if not TheWorld.ismastersim then return end
     inst.components.foodaffinity.favorite_foods = {
         ["veggieomlet"] = 10,
         ["honeyham"] = 20,
@@ -24,6 +25,7 @@ end)
 -- An example of how to define an favorite_food_fn function.
 -- Adds all dried food as Walter's favorite foods.
 AddPrefabPostInit("walter", function(inst)
+    if not TheWorld.ismastersim then return end
     inst.components.foodaffinity.favorite_food_fn = function(food)
         -- dried foods don't have any identifying tags
         -- but do have a common naming convention.
@@ -31,8 +33,6 @@ AddPrefabPostInit("walter", function(inst)
     end
 end)
 ]]
-
-if not GLOBAL.TheNet:GetIsServer() then return end
 
 AddComponentPostInit("foodaffinity", function(self)
     self.favorite_foods = {}
@@ -49,140 +49,155 @@ AddComponentPostInit("foodaffinity", function(self)
 end)
 
 AddPrefabPostInit("wilson", function(inst)
+    if not TheWorld.ismastersim then return end
     inst.components.foodaffinity.favorite_foods = {
-	    ["baconeggs"] = 15,
+        ["baconeggs"] = 15,
     }
 end)
 
 AddPrefabPostInit("willow", function(inst)
+    if not TheWorld.ismastersim then return end
     inst.components.foodaffinity.favorite_foods = {
-	    ["hotchili"] = 15,
+        ["hotchili"] = 15,
     }
 end)
 
 AddPrefabPostInit("wolfgang", function(inst)
+    if not TheWorld.ismastersim then return end
     inst.components.foodaffinity.favorite_foods = {
-	    ["potato_cooked"] = 15,
+        ["potato_cooked"] = 15,
     }
 end)
 
 AddPrefabPostInit("wendy", function(inst)
+    if not TheWorld.ismastersim then return end
     inst.components.foodaffinity.favorite_foods = {
-	    ["bananapop"] = 15,
+        ["bananapop"] = 15,
     }
 end)
 
 AddPrefabPostInit("wx78", function(inst)
+    if not TheWorld.ismastersim then return end
     inst.components.foodaffinity.favorite_foods = {
-	    ["butterflymuffin"] = 15,
+        ["butterflymuffin"] = 15,
     }
 end)
 
 AddPrefabPostInit("wickerbottom", function(inst)
+    if not TheWorld.ismastersim then return end
     inst.components.foodaffinity.favorite_foods = {
-	    ["surfnturf"] = 15,
+        ["surfnturf"] = 15,
     }
 end)
 
 AddPrefabPostInit("woodie", function(inst)
+    if not TheWorld.ismastersim then return end
     inst.components.foodaffinity.favorite_foods = {
-	    ["honeynuggets"] = 15,
+        ["honeynuggets"] = 15,
     }
 end)
 
 AddPrefabPostInit("wes", function(inst)
+    if not TheWorld.ismastersim then return end
     inst.components.foodaffinity.favorite_foods = {
-	    ["freshfruitcrepes"] = 15,
+        ["freshfruitcrepes"] = 15,
     }
 end)
 
 AddPrefabPostInit("waxwell", function(inst)
+    if not TheWorld.ismastersim then return end
     inst.components.foodaffinity.favorite_foods = {
-	    ["lobsterdinner"] = 15,
+        ["lobsterdinner"] = 15,
     }
 end)
 
 AddPrefabPostInit("wathgrithr", function(inst)
+    if not TheWorld.ismastersim then return end
     inst.components.foodaffinity.favorite_foods = {
-	    ["turkeydinner"] = 15,
+        ["turkeydinner"] = 15,
     }
 end)
 
 AddPrefabPostInit("webber", function(inst)
+    if not TheWorld.ismastersim then return end
     inst.components.foodaffinity.favorite_foods = {
-	    ["icecream"] = 15,
+        ["icecream"] = 15,
     }
 end)
 
 AddPrefabPostInit("winona", function(inst)
+    if not TheWorld.ismastersim then return end
     inst.components.foodaffinity.favorite_foods = {
-	    ["vegstinger"] = 15,
+        ["vegstinger"] = 15,
     }
 end)
 
 AddPrefabPostInit("wortox", function(inst)
+    if not TheWorld.ismastersim then return end
     inst.components.foodaffinity.favorite_foods = {
-	    ["pomegranate"] = 15,
-		["pomegranate_cooked"] = 15,
-		["devilsfruitcake"] = 15,
+        ["pomegranate"] = 15,
+        ["pomegranate_cooked"] = 15,
+        ["devilsfruitcake"] = 15,
     }
 end)
 
 AddPrefabPostInit("wormwood", function(inst)
+    if not TheWorld.ismastersim then return end
     inst.components.foodaffinity.favorite_foods = {
-	    ["cave_banana_cooked"] = 15,
+        ["cave_banana_cooked"] = 15,
     }
 end)
 
 AddPrefabPostInit("wurt", function(inst)
+    if not TheWorld.ismastersim then return end
     inst.components.foodaffinity.favorite_foods = {
-		["durian"] = 15,
-		["durian_cooked"] = 15,
+        ["durian"] = 15,
+        ["durian_cooked"] = 15,
         ["um_durian_cream_marshcake"] = 15,
     }
 end)
 
 AddPrefabPostInit("walter", function(inst)
+    if not TheWorld.ismastersim then return end
     inst.components.foodaffinity.favorite_foods = {
-	    ["smallmeat_dried"] = 15,
+        ["smallmeat_dried"] = 15,
         ["meat_dried"] = 15,
         ["kelp_dried"] = 15,
-		["trailmix"] = 15,
+        ["trailmix"] = 15,
     }
 end)
 
 AddPrefabPostInit("wanda", function(inst)
+    if not TheWorld.ismastersim then return end
     inst.components.foodaffinity.favorite_foods = {
-	    ["taffy"] = 15,
+        ["taffy"] = 15,
     }
 end)
 
 AddPrefabPostInit("wathom", function(inst)
-    if TUNING.DSTU.BONESTEW == "bone_appetit" then
-        inst.components.foodaffinity.favorite_foods = {
-		    ["um_kebab"] = 15,
-        }
-    else
-        inst.components.foodaffinity.favorite_foods = {
-		    ["bonestew"] = 15,
-        }
-    end
+    if not TheWorld.ismastersim then return end
+    inst.components.foodaffinity.favorite_foods = {
+        [TUNING.DSTU.BONESTEW == "bone_appetit" and "um_kebab" or "bonestew"] = 15,
+    }
 end)
 
 AddPrefabPostInit("winky", function(inst)
+    if not TheWorld.ismastersim then return end
     inst.components.foodaffinity.favorite_foods = {
-		["powcake"] = 0,
+        ["powcake"] = 0,
     }
 end)
 
 AddPrefabPostInit("wixie", function(inst)
+    if not TheWorld.ismastersim then return end
     inst.components.foodaffinity.favorite_foods = {
-	    ["blueberrypancakes"] = 15,
+        ["blueberrypancakes"] = 15,
     }
 end)
 
 AddPrefabPostInit("wonkey", function(inst)
+    if not TheWorld.ismastersim then return end
     inst.components.foodaffinity.favorite_foods = {
-	    ["cave_banana"] = 15,
+        ["cave_banana"] = 15,
     }
 end)

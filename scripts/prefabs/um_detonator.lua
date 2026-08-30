@@ -135,6 +135,11 @@ local function ExplodeSpellFn(inst, doer, pos)
         if v.ModdedExplodeFn then
             v.ModdedExplodeFn(v, inst, doer, pos) -- If there is a modded prefab, let them postinit this function and add their own handling!
         end
+
+        if v.ModdedTargetExplodeFn then
+            local target = FindNearbyTarget(pos)
+            v.ModdedTargetExplodeFn(v, target) -- If there is a modded mine or something that needs a target, let them postinit this function and add their own handling!
+        end
     end
 end
 

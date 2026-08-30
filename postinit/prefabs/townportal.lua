@@ -98,9 +98,9 @@ local function pickup(inst, channeler)
             return
         end
         if v:HasTag("pickable") and v.components.pickable then -- Pickable stuff
-            channeler:AddTag("channelingpicker")
+            channeler:AddTag("um_thornimmune")
             v.components.pickable:Pick(channeler)
-            channeler:RemoveTag("channelingpicker")
+            channeler:RemoveTag("um_thornimmune")
             SpawnPrefab("sand_puff").Transform:SetPosition(v.Transform:GetWorldPosition())
             inst.channeler.components.sanity:DoDelta(-0.25) -- Can't take too much sanity if the purpose is to use in large farms
             return

@@ -947,7 +947,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                     inst.SoundEmitter:PlaySound(inst.hurtsoundoverride or sound_event)
                     --end
 
-                    inst.components.talker:Say(GetString(inst.prefab, "ANNOUNCE_SNEEZE"))
+                    inst.components.talker:Say(GetString(inst, "ANNOUNCE_SNEEZE"))
                 end
             end,
 

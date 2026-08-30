@@ -5,22 +5,9 @@ local assets =
     Asset("ANIM", "anim/swap_blowdart_pipe.zip"),
 }
 
-local _turnoffstring = ACTIONS.TURNOFF.strfn
-
-ACTIONS.TURNOFF.strfn = function(act)
-    local tar = act.target
-    return tar ~= nil and tar:HasTag("harpoonreel") and "HARPOON" or _turnoffstring(act)
-end
-
 local prefabs =
 {
     "impact",
-}
-
-local prefabs_yellow =
-{
-    "impact",
-    "electrichitsparks",
 }
 
 local function onequip(inst, owner)

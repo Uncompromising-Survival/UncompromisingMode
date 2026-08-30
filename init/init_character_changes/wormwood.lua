@@ -415,9 +415,8 @@ local function StartGrowing(inst, giver, product)
 end
 
 local UpvalueHacker = require("tools/upvaluehacker")
-env.AddPrefabPostInit("world", function(inst) -- AXE Assuming Max said this -> Supposedly, this is better since it's called once for each "world" prefab, which usually only spawns once per shard.
-    if not _G.TheWorld.ismastersim then return end
-    UpvalueHacker.SetUpvalue(_G.Prefabs.mushroom_farm.fn, StartGrowing, "onacceptitem", "StartGrowing")
+env.AddSimPostInit(function()
+    UpvalueHacker.SetUpvalue(Prefabs.mushroom_farm.fn, StartGrowing, "onacceptitem", "StartGrowing")
 end)
 
 local TREESTATES =
@@ -682,60 +681,6 @@ env.AddComponentPostInit("farmplantstress", function(self)
         end
         return ret
     end
-end)
-
-local cactii = { "cactus", "oasis_cactus" }
-for i, v in ipairs(cactii) do
-    env.AddPrefabPostInit(v, function(inst)
-        if not TheWorld.ismastersim then
-            return inst
-        end
-        local _onpickedfn = inst.components.pickable.onpickedfn
-
-        local function onpickedfn(inst, picker)
-            if picker.components.skilltreeupdater and picker.components.skilltreeupdater:IsActivated("wormwood_prick_adept") then
-                inst.Physics:SetActive(false)
-                inst.AnimState:PlayAnimation(inst.has_flower and "picked_flower" or "picked")
-                inst.AnimState:PushAnimation("empty", true)
-
-                if picker ~= nil then
-                    if inst.has_flower then
-                        -- You get a cactus flower, yay.
-                        local loot = SpawnPrefab("cactus_flower")
-                        loot.components.inventoryitem:InheritWorldWetnessAtTarget(inst)
-                        if picker.components.inventory ~= nil then
-                            picker.components.inventory:GiveItem(loot, nil, inst:GetPosition())
-                        else
-                            local x, y, z = inst.Transform:GetWorldPosition()
-                            loot.components.inventoryitem:DoDropPhysics(x, y, z, true)
-                        end
-                    end
-                end
-
-                inst.has_flower = false
-            else
-                _onpickedfn(inst, picker)
-            end
-        end
-        inst.components.pickable.onpickedfn = onpickedfn
-    end)
-end
-
-env.AddPrefabPostInit("marsh_bush", function(inst)
-    if not TheWorld.ismastersim then
-        return inst
-    end
-    local _onpickedfn = inst.components.pickable.onpickedfn
-
-    local function onpickedfn(inst, picker)
-        if picker.components.skilltreeupdater and picker.components.skilltreeupdater:IsActivated("wormwood_prick_adept") then
-            inst.AnimState:PlayAnimation("picking")
-            inst.AnimState:PushAnimation("picked", false)
-        else
-            _onpickedfn(inst, picker)
-        end
-    end
-    inst.components.pickable.onpickedfn = onpickedfn
 end)
 
 local function NoHoles(pt)

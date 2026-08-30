@@ -1,3 +1,6 @@
+
+--live: 󰀕 white skull
+--beta: 󰀕 red skull
 name = "󰀕 Uncompromising Mode"
 -- borrowed from IA
 folder_name = folder_name or "workshop-"
@@ -7,7 +10,7 @@ end
 
 --MAJOR.MINOR.FIX
 --INCREASE THIS VERSION
-local _version = "5.11.1"
+local _version = "5.13.4"
 
 description = [[
     󰀔 ["On The Rocks!" v1.6  (Beta ver: v]] .. _version .. [[)]
@@ -30,7 +33,7 @@ author = "󰀈 The Uncomp Dev Team 󰀈"
 version = "On The Rocks! v1.6 Testing v" .. _version
 
 
-forumthread = "/topic/111892-announcement-uncompromising-mode/"
+--forumthread = "/topic/111892-announcement-uncompromising-mode/"
 
 api_version = 10
 
@@ -544,8 +547,7 @@ configuration_options = {
             { description = "Enabled",              data = "enabled" },
             { description = "Enabled (No Respawn)", data = "norespawn", hover = "Traps don't respawn over time." },
             { description = "Disabled",             data = "disabled" } },
-        default =
-        "enabled"
+        default = "enabled"
     },
     BinaryConfig("rice", "Rice", "Rice spawns in swamp ponds.", true),
     BinaryConfig("trapdoorspiders", "Trapdoor Spiders",
@@ -655,8 +657,7 @@ configuration_options = {
             { description = "Default",  data = "default", hover = "Only heal max health loss if BELOW 25%." },
             { description = "Legacy",   data = "legacy",  hover = "Heal max health lost regardless of %." },
             { description = "Disabled", data = false } },
-        default =
-        "default"
+        default = "default"
     },
     {
         name = "sleepingbuff",

@@ -18,6 +18,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     ARMORDRAGONFLY = "- Summons mini Lavae allies when worn.",
     FEATHERHAT = "- Provides safety from territorial Pengulls.",
     YELLOWAMULET = "- No longer breaks when empty.",
+    BLUEAMULET = "- Increased durability.",
     ORANGEAMULET = "- No longer breaks when empty.\n- Will pick certain plants too!",
     PURPLEAMULET = "- Grants bonus Nightmare Fuel from slain Shadows.",
     PIGGYBACK = "- No Passive -10% movement speed while worn.\n- Decreases Player speed by 1% per item held.",
@@ -29,7 +30,6 @@ STRINGS.UNCOMP_TOOLTIP = {
     DRAGONFLYCHEST = "- Has even more item slots.",
     WARDROBE = "- Can store a lot of equipment.",
     WINONA_SPOTLIGHT = "- Significantly increased range.\n- Doubled radius.",
-    LIGHTNING_ROD = "- Can charge electrical equipment.",
     BANDAGE = "- Restores a bit of extra health over time.",
     SISTURN = "- Petals inside decay into Mourning Glory.",
     MULTITOOL_AXE_PICKAXE = "- Creates shockwaves when chopping/mining.",
@@ -53,6 +53,8 @@ STRINGS.UNCOMP_TOOLTIP = {
     FIRESTAFF = "- Creates controlled fires.",
     LIGHTER = "- Recharges with embers.\n- Doesn't break at 0%.",
     VOIDCLOTH_UMBRELLA = "-No longer repaired by acid rain.",
+    BEEF_BELL = "- Can call a Beefalo, even if its fighting.\n - Hold Force Attack key to enable the break bond action.",
+    SHADOW_BEEF_BELL = "- Can call a Beefalo, even if its fighting.\n - Hold Force Attack key to enable the break bond action.",
 
     __BREAK = "BREAK HERE",
     --uncomp content

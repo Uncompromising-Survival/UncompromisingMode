@@ -353,7 +353,6 @@ GLOBAL.ACTIONS.DIRECTCOURIER_MAP.fn = function(act)
     return _OldDirectCourier(act)
 end
 
-GLOBAL.ACTIONS.CAST_NET.mount_valid = false
 GLOBAL.ACTIONS.DRY.mount_valid = true
 GLOBAL.ACTIONS.ACTIVATE.mount_valid = true
 --GLOBAL.ACTIONS.CASTSPELL.distance = 40

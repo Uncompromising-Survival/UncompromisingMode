@@ -62,7 +62,7 @@ local function ForgeGem(inst)
 end
 
 --{ slot = in_slot, item = item, src_pos = src_pos, }
-function ShowItems(inst, data)
+local function ShowItems(inst, data)
     --delay a frame.
     inst:DoTaskInTime(0, function(inst)
         if inst.tool_fx ~= nil then
@@ -89,8 +89,7 @@ function ShowItems(inst, data)
             inst.tool_fx.AnimState:SetBuild(tool.AnimState:GetBuild())
             inst.tool_fx:AddTag("FX")
             inst.tool_fx.entity:SetParent(inst.entity)
-            inst.tool_fx:AddComponent("highlightchild")
-
+            --inst.tool_fx:AddComponent("highlightchild")
 
             local follower = inst.tool_fx.entity:AddFollower()
             follower:FollowSymbol(inst.GUID, "smithed_tool", 0, 40, 0)
@@ -105,7 +104,7 @@ function ShowItems(inst, data)
             inst.gem_fx.AnimState:SetBank(gem.AnimState:GetCurrentBankName())
             inst.gem_fx.AnimState:SetBuild(gem.AnimState:GetBuild())
             inst.gem_fx:AddTag("FX")
-            inst.gem_fx:AddComponent("highlightchild")
+            --inst.gem_fx:AddComponent("highlightchild")
 
             inst.gem_fx.entity:SetParent(inst.entity)
             local follower = inst.gem_fx.entity:AddFollower()

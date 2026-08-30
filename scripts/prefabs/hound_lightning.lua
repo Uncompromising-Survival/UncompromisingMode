@@ -9,11 +9,11 @@ local function Sparks(inst)
     local x1 = x + math.random(-2, 2)
     local z1 = z + math.random(-2, 2)
 
-    if math.random() >= 0.6 then
+    if math.random() >= .6 then
         SpawnPrefab("electricchargedfx").Transform:SetPosition(x1, 0, z1)
     end
 
-    SpawnPrefab("sparks").Transform:SetPosition(x1, 0 + 0.25 * math.random(), z1)
+    SpawnPrefab("sparks").Transform:SetPosition(x1, 0 + .25 * math.random(), z1)
 end
 
 local function ChargeItem(inst, item)
@@ -38,15 +38,15 @@ local function Zap(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
     local projectile = SpawnPrefab("lightning")
     projectile.Transform:SetPosition(x, y + 2, z)
-	
-	for i = 1, 5 do
-		SpawnPrefab("sparks").Transform:SetPosition(x, y + .25 + math.random() * 2, z)
-	end
-	
+    
+    for i = 1, 5 do
+        SpawnPrefab("sparks").Transform:SetPosition(x, y + .25 + math.random() * 2, z)
+    end
+    
     local radius = 3.5
-    local ents = TheSim:FindEntities(x, y, z, radius, { "_health" }, inst.NoTags)
-    local chargeables = TheSim:FindEntities(x, y, z, radius, { "_inventoryitem", }, inst.NoTags)
-    local lightningrods = TheSim:FindEntities(x, y, z, radius, { "structure", "lightningrod"}, {"INLIMBO"})
+    local ents = TheSim:FindEntities(x, y, z, radius, {"_combat"}, inst.NoTags)
+    local chargeables = TheSim:FindEntities(x, y, z, radius, {"_inventoryitem"}, inst.NoTags)
+    local lightningrods = TheSim:FindEntities(x, y, z, radius, {"structure", "lightningrod"}, {"INLIMBO"})
 
 
     -- Items on the ground
@@ -64,46 +64,46 @@ local function Zap(inst)
         end
     end
 
+    local attacker = inst.owner and inst.owner:IsValid() and inst.owner or nil
     -- Entities
     for i, v in ipairs(ents) do
-        if v ~= nil and v.components.health ~= nil and not v.components.health:IsDead() and v.components.combat ~= nil then
-            if not v:HasTag("electricdamageimmune") then
-                --v.components.combat:GetAttacked(inst, 20, nil, "electric")
-                local insulated = (v:HasTag("electricdamageimmune") or
-                    (v.components.inventory ~= nil and v.components.inventory:IsInsulated()))
+        if v and v:IsValid() and not v:IsInLimbo() then
+            if v.components.health and not v.components.health:IsDead() and UMCommonFns.IsNotFriendly(attacker, v) then
+                if not v:HasTag("electricdamageimmune") then
+                    --v.components.combat:GetAttacked(inst, 20, nil, "electric")
+                    local insulated = v:HasTag("electricdamageimmune") or v.components.inventory and v.components.inventory:IsInsulated()
 
-                local mult = not insulated
-                    and TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * (v.components.moisture ~= nil and v.components.moisture:GetMoisturePercent() or (v:GetIsWet() and 1 or 0))
-                    or 1
+                    local mult = not insulated and TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * (v.components.moisture ~= nil and v.components.moisture:GetMoisturePercent()
+                        or (v:GetIsWet() and 1 or 0)) or 1
 
-                local damage = -10 * mult
+                    local damage = -10 * mult
 
-                if v.sg ~= nil and not v.sg:HasStateTag("nointerrupt") and not insulated and v:HasTag("player") then
-                    v.sg:GoToState("electrocute")
+                    if v.sg and not v.sg:HasStateTag("nointerrupt") and not insulated and v:HasTag("player") then
+                        v.sg:GoToState("electrocute")
+                    end
+
+                    v.components.health:DoDelta(damage, nil, inst.prefab, nil, inst)
+                else
+                    if v.components.playerlightningtarget ~= nil then
+                        v.components.playerlightningtarget:DoStrike()
+                    end
+
+                    --if v.sg ~= nil and not v.sg:HasStateTag("nointerrupt") and v.components.health ~= nil and not v.components.health:IsDead() then
+                    --v.sg:GoToState("hit")
+                    --end
                 end
-
-                v.components.health:DoDelta(damage, nil, inst.prefab, nil, inst)
-            else
-                if v.components.playerlightningtarget ~= nil then
-                    v.components.playerlightningtarget:DoStrike()
-                end
-
-                --if v.sg ~= nil and not v.sg:HasStateTag("nointerrupt") and v.components.health ~= nil and not v.components.health:IsDead() then
-                --v.sg:GoToState("hit")
-                --end
             end
 
             -- Get equipment
-            if v.components.inventory ~= nil then
+            if v.components.inventory then
                 -- Get all equip slots (hands, body, head, etc.)
                 for slot, item in pairs(v.components.inventory.equipslots) do
                     if item ~= nil then
-                        ChargeItem(inst,item)
+                        ChargeItem(inst, item)
                     end
                 end
             end
         end
-        
     end
 
     inst:DoTaskInTime(0, function(inst) inst:Remove() end)
@@ -128,9 +128,9 @@ local function fn()
         return inst
     end
 
-    inst.NoTags = {"INLIMBO", "shadow", "structure", "wall", "shadowminion", "playerghost", "shadowchesspiece", "shadowcreature"}
+    inst.NoTags = JoinArrays(UMCommonFns.GHOSTLIKE_TAGS, {"INLIMBO", "structure", "wall"})
 
-    inst.task = inst:DoPeriodicTask(0.05, Sparks)
+    inst.task = inst:DoPeriodicTask(.05, Sparks)
 
     inst:DoTaskInTime(0, function() --modern problems require modern solutions
         -- need this or else when something sets inst.Delay the task will already have started with 1.

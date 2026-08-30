@@ -1,10 +1,8 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-
 -- This postinit exists to support the Walter Veterans Skull Curse -- not anymore, yoink.
 env.AddComponentPostInit("healer", function(self)
-	if not TheWorld.ismastersim then return end
 
 	local _Heal = self.Heal
 	function self:Heal(target, doer, ...)

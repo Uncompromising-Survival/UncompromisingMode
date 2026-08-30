@@ -5,9 +5,8 @@ GLOBAL.setfenv(1, GLOBAL)
 -- scrimbles
 
 env.AddComponentPostInit("inventory", function(self)
-    local _OldIsInsulated = self.IsInsulated
-
-    function self:IsInsulated()
+    local _IsInsulated = self.IsInsulated
+    function self:IsInsulated(...)
         if self.isexternallyinsulated == nil or self.isexternallyinsulated:Get() == nil then
             for k, v in pairs(self.equipslots) do
                 if v and v.components.equippable:IsInsulated() then
@@ -15,13 +14,15 @@ env.AddComponentPostInit("inventory", function(self)
                 end
             end
         else
-            return _OldIsInsulated(self)
+            return _IsInsulated(self, ...)
         end
     end
 
     local _EquipHasTag = self.EquipHasTag
     function self:EquipHasTag(tag, ...)
-        if self.inst.components.skilltreeupdater and self.inst.components.skilltreeupdater:IsActivated("wathom_allegiance_neutral") and tag == "ancient_reader" then return true end
+        local skilltreeupdater = self.inst.components.skilltreeupdater
+        if skilltreeupdater and skilltreeupdater:IsActivated("wathom_allegiance_neutral") and tag == "ancient_reader" then return true end
+        if tag == "bramble_resistant" and (skilltreeupdater and skilltreeupdater:IsActivated("wormwood_prick_adept") or self.inst:HasTag("um_thornimmune")) then return true end
         return _EquipHasTag(self, tag, ...)
     end
 end)
@@ -29,7 +30,12 @@ end)
 env.AddClassPostConstruct("components/inventory_replica", function(self)
     local _EquipHasTag = self.EquipHasTag
     function self:EquipHasTag(tag, ...)
-        if self.inst.components.skilltreeupdater and self.inst.components.skilltreeupdater:IsActivated("wathom_allegiance_neutral") and tag == "ancient_reader" then return true end
+        local skilltreeupdater = self.inst.components.skilltreeupdater
+        if skilltreeupdater and skilltreeupdater:IsActivated("wathom_allegiance_neutral") and tag == "ancient_reader" then return true end
+        if not self.inst.components.inventory and self.classified and tag == "bramble_resistant"
+            and (skilltreeupdater and skilltreeupdater:IsActivated("wormwood_prick_adept") or self.inst:HasTag("um_thornimmune")) then
+            return true
+        end
         return _EquipHasTag(self, tag, ...)
     end
 end)

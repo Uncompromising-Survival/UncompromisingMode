@@ -550,7 +550,6 @@ if env.GetModConfigData("telestaff_rework") then
 end
 
 local function SpikeWaves(inst, target, attacker, angle)
-    local target_index = {}
     local ix, iy, iz = inst.Transform:GetWorldPosition()
     local rad = math.rad(angle)
     local velx = math.cos(rad) * 1.25
@@ -570,10 +569,10 @@ local function SpikeWaves(inst, target, attacker, angle)
                 fx2.Transform:SetScale(.5, .5, .5)
             end
             inst:DoTaskInTime(.6, function()
-                local ents = TheSim:FindEntities(dx, dy, dz, 1.5, { "_health", "_combat" }, { "FX", "NOCLICK", "INLIMBO", "notarget", "player", "playerghost", "companion" })
+                local ents = TheSim:FindEntities(dx, dy, dz, 1.5, {"_health", "_combat"}, {"FX", "NOCLICK", "INLIMBO", "notarget", "player", "playerghost", "companion"})
                 for k, v in ipairs(ents) do
-                    if v ~= inst and attacker.components.combat and attacker.components.combat:CanTarget(v) and not attacker.components.combat:IsAlly(v) then
-                        v.components.combat:GetAttacked(attacker, 0, nil, nil, { planar = 8.75 })
+                    if v ~= inst and attacker:IsValid() and attacker.components.combat and attacker.components.combat:CanTarget(v) and not attacker.components.combat:IsAlly(v) then
+                        v.components.combat:GetAttacked(attacker, 0, nil, nil, {planar = 8.75})
                     end
                 end
             end)
@@ -630,10 +629,10 @@ do
         local ret = _OnAttack and _OnAttack(inst, attacker, target, skipsanity, ...)
         if attacker:HasTag("wathom") and not (attacker.components.rider and attacker.components.rider:IsRiding()) then
             for angle = -20, 20, 4 do
-                SpikeWaves(inst, target, attacker, angle + attacker.Transform:GetRotation())
-                if target and target.components.combat then
-                    target.components.combat:GetAttacked(attacker, 0, nil, nil, { planar = 17 })
+                if target and target:IsValid() and target.components.combat and not (target.components.health and target.components.health:IsDead()) then
+                    target.components.combat:GetAttacked(attacker, 0, nil, nil, {planar = 17})
                 end
+                SpikeWaves(inst, target, attacker, angle + attacker.Transform:GetRotation())
             end
             inst.SoundEmitter:PlaySound("rifts/lunarthrall_bomb/explode")
         end
@@ -671,10 +670,10 @@ do
 
     env.AddPrefabPostInit("staff_lunarplant", function(inst)
         if not TheWorld.ismastersim then return end
-        local forgerepairable = inst.components.forgerepairable
 
         WathomBSStaffStuff(inst)
 
+        local forgerepairable = inst.components.forgerepairable
         if forgerepairable then
             if not _OnRepaired then
                 _OnRepaired = forgerepairable.onrepaired

@@ -18,6 +18,7 @@ env.AddPrefabPostInit("deerclops", function(inst) VetCurseItem(inst, "cursed_ant
 --env.AddPrefabPostInit("mutateddeerclops", function(inst) VetCurseItem(inst, "crystal_cursed_antler") end)
 env.AddPrefabPostInit("crabking", function(inst) VetCurseItem(inst, "crabclaw") end)
 env.AddPrefabPostInit("minotaur", function(inst) VetCurseItem(inst, "gore_horn_hat") end)
+env.AddPrefabPostInit("antlion", function(inst) VetCurseItem(inst, "um_antlionstaff") end)
 for _, dfly in pairs({ "dragonfly", "mock_dragonfly" }) do
     env.AddPrefabPostInit(dfly, function(inst) VetCurseItem(inst, "slobberlobber") end)
 end

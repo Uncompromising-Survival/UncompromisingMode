@@ -1,5 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
+------------------------------------------------------------------------
 
 env.AddComponentPostInit("teacher", function (self)
     local _Teach = self.Teach

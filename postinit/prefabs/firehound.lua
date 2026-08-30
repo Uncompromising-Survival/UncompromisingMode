@@ -13,8 +13,6 @@ end
 local function SetUpFire(inst, degrand, speed, scale, damage)
     local x, y, z = inst.Transform:GetWorldPosition()
     local projectile = SpawnPrefab("um_fire_projectile")
-    projectile.damager = inst
-
     local rot = inst.Transform:GetRotation()
     local dx = 1 * math.sin((rot + 90 + degrand) * DEGREES)
     local dz = 1 * math.cos((rot + 90 + degrand) * DEGREES)
@@ -24,6 +22,7 @@ local function SetUpFire(inst, degrand, speed, scale, damage)
     projectile.speed = speed
     projectile.scale = scale -- scale up sometimes.
     projectile.damage = damage
+    projectile.damager = inst
 end
 
 local function ShootFire(inst) --AXE this one is called by fire hound for its short-range spitfire attack
@@ -36,9 +35,10 @@ local function FirePoof(inst) --AXE Visual support for when the fire hound is br
     local z1 = z + 0.05 * math.random(-10, 10)
     local y1 = 0 + .25 * math.random()
     SpawnPrefab("halloween_firepuff_1").Transform:SetPosition(x1, y1, z1)
-    SpawnPrefab("magmafire").Transform:SetPosition(x1, 0, z1)
+    local magmafire = SpawnPrefab("magmafire")
+    magmafire.Transform:SetPosition(x1, 0, z1)
+    magmafire.damager = inst
 end
-
 
 local function OnHitOtherBurn(inst, data)
     local other = data.target
@@ -55,9 +55,7 @@ local function IsAlly(inst, guy)
 end
 
 env.AddPrefabPostInit("firehound", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
+    if not TheWorld.ismastersim then return end
 
     inst.UMIsAlly = IsAlly
 

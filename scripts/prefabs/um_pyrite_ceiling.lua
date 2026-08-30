@@ -40,12 +40,12 @@ local function DamageSurroundings(inst)
 end
 
 local function ListenForCrash(pyre)
-    pyre.listenfall = pyre:DoPeriodicTask(0.1,function(pyre)
+    pyre.listenfall = pyre:DoPeriodicTask(.1, function(pyre)
         local x,y,z = pyre.Transform:GetWorldPosition()
-        if y < 0.5 then
+        if y < .5 then
             local fx = SpawnPrefab("explosivehit")
             fx.Transform:SetPosition(pyre.Transform:GetWorldPosition())
-            fx.Transform:SetScale(1.25,1.25,1.25)
+            fx.Transform:SetScale(1.25, 1.25, 1.25)
             fx.persists = false
             fx:DoTaskInTime(1, fx.Remove)
             DamageSurroundings(pyre)
@@ -65,24 +65,23 @@ local function DropLoot(inst)
             inst.AnimState:PlayAnimation("shatter_medium",true)
             inst.AnimState:PushAnimation("idle_medium",true)
         end
-    end
-    local x,y,z = inst.Transform:GetWorldPosition()
-    local pyre = SpawnPrefab("um_fyrite")
-    pyre.Transform:SetPosition(x+math.random(-2,2),y+10,z+math.random(-2,2))
-    local fx = SpawnPrefab("explosivehit")
-    fx.Transform:SetPosition(pyre.Transform:GetWorldPosition())
-    fx.Transform:SetScale(1.25,1.25,1.25)
-    fx.persists = false
-    fx:DoTaskInTime(1, fx.Remove)
-    ListenForCrash(pyre)
-    
-    if math.random() > 0.9 then
+        local x, y, z = inst.Transform:GetWorldPosition()
         local pyre = SpawnPrefab("um_fyrite")
-        pyre.Transform:SetPosition(x+math.random(-2,2),y+10,z+math.random(-2,2))
+        pyre.Transform:SetPosition(x + math.random(-2, 2), y + 10, z + math.random(-2, 2))
+        local fx = SpawnPrefab("explosivehit")
+        fx.Transform:SetPosition(pyre.Transform:GetWorldPosition())
+        fx.Transform:SetScale(1.25, 1.25, 1.25)
+        fx.persists = false
+        fx:DoTaskInTime(1, fx.Remove)
         ListenForCrash(pyre)
-    end
-    if inst.components.timer and not inst.components.timer:TimerExists("regrow") then
-        inst.components.timer:StartTimer("regrow",80*8*5)
+        if math.random() > .9 then
+            local pyre = SpawnPrefab("um_fyrite")
+            pyre.Transform:SetPosition(x + math.random(-2, 2), y + 10, z + math.random(-2, 2))
+            ListenForCrash(pyre)
+        end
+        if inst.components.timer and not inst.components.timer:TimerExists("regrow") then
+            inst.components.timer:StartTimer("regrow",80 * 8 * 5)
+        end
     end
 end
 

@@ -4,7 +4,67 @@ local assets =
     Asset("ANIM", "anim/swap_cursed_antler.zip"),
 }
 
-local function charged(inst)
+local function GetAntlerDamage(inst, attacker, target)
+    return inst.components.rechargeable and inst.components.rechargeable:IsCharged() and TUNING.DSTU.CURSED_ANTLER_CHARGED_DAMAGE or TUNING.DSTU.CURSED_ANTLER_DAMAGE
+end
+
+local function OnAttack(inst, attacker, target)
+    if target and target:IsValid() and attacker and attacker:IsValid() and inst.components.rechargeable:IsCharged() then
+        UMCommonFns.StartRechargeableCooldown(inst, {cooldown = TUNING.DSTU.CURSED_ANTLER_COOLDOWN, tags = {"cursedantler"}})
+
+        local x, y, z = target.Transform:GetWorldPosition()
+        for i = 1, 4 do
+            local icefx = SpawnPrefab("icespike_fx_" .. i)
+            icefx.Transform:SetPosition(x + math.random(-1.5, 1.5), 0, z + math.random(-1.5, 1.5))
+        end
+
+        if target.components.freezable and not target.components.freezable:IsFrozen() then
+            target.components.freezable:AddColdness(1)
+            target.components.freezable:SpawnShatterFX()
+        end
+
+        local ents = TheSim:FindEntities(x, y, z, 2.5, nil, {"INLIMBO", "player", "companion", "abigail", "shadowminion"})
+        for i, v in ipairs(ents) do
+            if v ~= inst and v ~= target and v:IsValid() and not v:IsInLimbo() then
+                if v.components.combat and not (v.components.health and v.components.health:IsDead())
+                    and attacker.components.combat:CanTarget(v) and not attacker.components.combat:IsAlly(v) then
+                    v.components.combat:GetAttacked(attacker, TUNING.DSTU.CURSED_ANTLER_AOE_DAMAGE)
+
+                    if v.components.freezable and not v.components.freezable:IsFrozen() then
+                        v.components.freezable:AddColdness(.5)
+                        v.components.freezable:SpawnShatterFX()
+                    end
+                end
+            end
+        end
+    end
+end
+
+local function OnEquip(inst, owner)
+    if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.HANDS) then return end
+    local skin_build = inst:GetSkinBuild()
+    if skin_build ~= nil then
+        owner:PushEvent("equipskinneditem", inst:GetSkinName())
+        owner.AnimState:OverrideItemSkinSymbol("swap_object", "swap_" .. skin_build, "swap_twisted_antler", inst.GUID, "swap_cursed_antler")
+    else
+        owner.AnimState:OverrideSymbol("swap_object", "swap_cursed_antler", "swap_cursed_antler")
+    end
+
+    owner.AnimState:Show("ARM_carry")
+    owner.AnimState:Hide("ARM_normal")
+end
+
+local function OnUnequip(inst, owner)
+    local skin_build = inst:GetSkinBuild()
+    if skin_build ~= nil then
+        owner:PushEvent("unequipskinneditem", inst:GetSkinName())
+    end
+
+    owner.AnimState:Hide("ARM_carry")
+    owner.AnimState:Show("ARM_normal")
+end
+
+--[[local function charged(inst)
     local fx = SpawnPrefab("dr_warm_loop_1")
 
     local owner = inst.components.inventoryitem.owner
@@ -19,7 +79,7 @@ local function charged(inst)
         fx.Transform:SetPosition(0, 2.35, 0)
         fx.Transform:SetScale(1.33, 1.33, 1.33)
     end
-end
+end]]
 
 local function OnCharged(inst)
     --local fx = SpawnPrefab("dr_warm_loop_1")
@@ -40,66 +100,6 @@ local function OnCharged(inst)
     inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/taunt_howl", nil, .4)
 end
 
-local function onequip(inst, owner)
-    if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.HANDS) then return end
-    local skin_build = inst:GetSkinBuild()
-    if skin_build ~= nil then
-        owner:PushEvent("equipskinneditem", inst:GetSkinName())
-        owner.AnimState:OverrideItemSkinSymbol("swap_object", "swap_" .. skin_build, "swap_twisted_antler", inst.GUID, "swap_cursed_antler")
-    else
-        owner.AnimState:OverrideSymbol("swap_object", "swap_cursed_antler", "swap_cursed_antler")
-    end
-
-    owner.AnimState:Show("ARM_carry")
-    owner.AnimState:Hide("ARM_normal")
-end
-
-local function onunequip(inst, owner)
-    local skin_build = inst:GetSkinBuild()
-    if skin_build ~= nil then
-        owner:PushEvent("unequipskinneditem", inst:GetSkinName())
-    end
-
-    owner.AnimState:Hide("ARM_carry")
-    owner.AnimState:Show("ARM_normal")
-end
-
-local function onattack(inst, attacker, target)
-    if target and target:IsValid() and attacker and attacker:IsValid() and inst.components.rechargeable:IsCharged() then
-        UMCommonFns.StartRechargeableCooldown(inst, {cooldown = TUNING.DSTU.CURSED_ANTLER_COOLDOWN, tags = {"cursedantler"}})
-
-        local x, y, z = target.Transform:GetWorldPosition()
-        for i = 1, 4 do
-            local icefx = SpawnPrefab("icespike_fx_" .. i)
-            icefx.Transform:SetPosition(x + math.random(-1.5, 1.5), 0, z + math.random(-1.5, 1.5))
-        end
-
-        if target.components.freezable and not target.components.freezable:IsFrozen() then
-            target.components.freezable:AddColdness(1)
-            target.components.freezable:SpawnShatterFX()
-        end
-
-        local ents = TheSim:FindEntities(x, y, z, 2.5, nil, {"INLIMBO", "player", "companion", "abigail", "shadowminion"})
-        for i, v in ipairs(ents) do
-            if v ~= inst and v ~= target and v:IsValid() and not v:IsInLimbo() then
-                if v.components.combat and not (v.components.health and v.components.health:IsDead())
-                    and attacker.components.combat:CanTarget(v) and not attacker.components.combat:IsAlly(v) then
-                    v.components.combat:GetAttacked(attacker, 34)
-
-                    if v.components.freezable and not v.components.freezable:IsFrozen() then
-                        v.components.freezable:AddColdness(.5)
-                        v.components.freezable:SpawnShatterFX()
-                    end
-                end
-            end
-        end
-    end
-end
-
-local function GetAntlerDamage(inst, attacker, target)
-    return inst.components.rechargeable and inst.components.rechargeable:IsCharged() and 100 or 34
-end
-
 local function fn()
     local inst = CreateEntity()
 
@@ -116,9 +116,12 @@ local function fn()
 
     inst:AddTag("cursedantler")
     inst:AddTag("vetcurse_item")
+    inst:AddTag("weapon")
+    inst:AddTag("shadowlevel")
+    inst:AddTag("rechargeable")
     inst:AddTag("donotautopick")
     
-    MakeInventoryFloatable(inst, "med", 0.2, 0.65)
+    MakeInventoryFloatable(inst, "med", .2, .65)
 
     inst.entity:SetPristine()
 
@@ -126,24 +129,24 @@ local function fn()
         return inst
     end
 
+    inst:AddComponent("inventoryitem")
+
     inst:AddComponent("tradable")
     inst:AddComponent("inspectable")
 
-    inst:AddComponent("weapon")
-    inst.components.weapon:SetDamage(GetAntlerDamage)
-    inst.components.weapon:SetOnAttack(onattack)
+    local weapon = inst:AddComponent("weapon")
+    weapon:SetDamage(GetAntlerDamage)
+    weapon:SetOnAttack(OnAttack)
 
-    inst:AddComponent("inventoryitem")
+    local equippable = inst:AddComponent("equippable")
+    equippable:SetOnEquip(OnEquip)
+    equippable:SetOnUnequip(OnUnequip)
 
-    inst:AddComponent("shadowlevel")
-    inst.components.shadowlevel:SetDefaultLevel(TUNING.DSTU.CURSED_ANTLER_SHADOW_LEVEL)
+    local shadowlevel = inst:AddComponent("shadowlevel")
+    shadowlevel:SetDefaultLevel(TUNING.DSTU.CURSED_ANTLER_SHADOW_LEVEL)
 
-    inst:AddComponent("equippable")
-    inst.components.equippable:SetOnEquip(onequip)
-    inst.components.equippable:SetOnUnequip(onunequip)
-
-    inst:AddComponent("rechargeable")
-    inst.components.rechargeable:SetOnChargedFn(OnCharged)
+    local rechargeable = inst:AddComponent("rechargeable")
+    rechargeable:SetOnChargedFn(OnCharged)
 
     MakeHauntableLaunch(inst)
 

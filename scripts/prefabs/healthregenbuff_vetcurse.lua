@@ -9,7 +9,8 @@ end
 
 local function HealthOnTick(inst, target, data)
     local duration = GetDuration(data and data.duration or 1)
-    if target.components.health and not target.components.health:IsDead() and not target:HasTag("playerghost") then
+    if target:IsValid() and target.components.health
+        and not target.components.health:IsDead() and not target:HasTag("playerghost") then
         local delta = duration or 1
         if data and data.negative_value then
             delta = -duration or -1
@@ -89,7 +90,8 @@ end
 
 local function SanityOnTick(inst, target, data)
     local duration = GetDuration(data and data.duration or 1)
-    if target.components.health and not target.components.health:IsDead() and target.components.sanity and not target:HasTag("playerghost") then
+    if target:IsValid() and target.components.health
+        and not target.components.health:IsDead() and not target:HasTag("playerghost") and target.components.sanity then
         target.components.sanity:DoDelta(duration or 1, nil, inst.prefab)
     else
         inst.components.debuff:Stop()
@@ -165,7 +167,8 @@ end
 
 local function HungerOnTick(inst, target, data)
     local duration = GetDuration(data and data.duration or 1)
-    if target.components.health and not target.components.health:IsDead() and target.components.hunger and not target:HasTag("playerghost") then
+    if target:IsValid() and target.components.health
+        and not target.components.health:IsDead() and not target:HasTag("playerghost") and target.components.hunger then
         target.components.hunger:DoDelta(duration or 1, nil, inst.prefab)
     else
         inst.components.debuff:Stop()
@@ -241,8 +244,8 @@ end
 
 local function HayfeverOnTick(inst, target, data)
     local intensity = data and data.intensity or -1
-    if target.components.health and not target.components.health:IsDead()
-        and target.components.UM_hayfever and target.components.UM_hayfever.enabled and not target:HasTag("playerghost") then
+    if target:IsValid() and target.components.health
+        and not target.components.health:IsDead() and not target:HasTag("playerghost") and target.components.UM_hayfever and target.components.UM_hayfever.enabled then
         target.components.UM_hayfever:DoDelta(intensity)
     else
         inst.components.debuff:Stop()

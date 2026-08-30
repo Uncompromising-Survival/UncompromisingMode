@@ -2,12 +2,10 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 local UpvalueHacker = require("tools/upvaluehacker")
 
-
 if TUNING.DSTU.PK_GUARDS then
     env.AddPrefabPostInit("pigking", function(inst)
-        if not TheWorld.ismastersim then
-            return
-        end
+        if not TheWorld.ismastersim then return end
+
         local function ErectPoleBuild(x, y, z)
             local pole = SpawnPrefab("pigking_pigtorch")
             local collapse = SpawnPrefab("collapse_big")
@@ -78,14 +76,15 @@ if TUNING.DSTU.PK_GUARDS then
 
         inst.components.trader:SetAcceptTest(AcceptTest)
         inst.components.trader.onaccept = OnGetItemFromPlayer
-
-        
     end)
 
     
     -- Make sure everything else has loaded
-    env.AddPrefabPostInit("world", function(inst) 
-        local NEW_BLOCKING_CANT_OBJECTS = {"INLIMBO", "pkpole"}
-        UpvalueHacker.SetUpvalue(Prefabs.pigking.fn, NEW_BLOCKING_CANT_OBJECTS, "AbleToAcceptTest", "CanStartMinigame","IsAreaClearForMinigame","BLOCKING_CANT_OBJECTS")
+    local BLOCKING_CANT_OBJECTS = {"pkpole"}
+    env.AddSimPostInit(function()
+        local _BLOCKING_CANT_OBJECTS = UpvalueHacker.GetUpvalue(Prefabs.pigking.fn, "AbleToAcceptTest", "CanStartMinigame", "IsAreaClearForMinigame", "BLOCKING_CANT_OBJECTS")
+        for i, TAG in pairs(BLOCKING_CANT_OBJECTS) do
+            table.insert(_BLOCKING_CANT_OBJECTS, TAG)
+        end
     end)
 end

@@ -10,7 +10,8 @@ local function OnNewTarget_Remember(inst, data)
                 local strid = math.random(#strtbl)
                 inst.components.talker:Chatter("PIG_REMEMBER_THREAT", strid)
             end
-        else
+        else--elseif not inst:HasTag("werepig") then --Werepigs shouldn't remember what they fought
+            
             table.insert(inst.remembered_threats, data.target.userid)
         end
     end
@@ -148,4 +149,18 @@ env.AddPrefabPostInit("pigking_pigguard", function(inst)
     end
 
     inst:AddTag("pigattacker")
+
+    --[[
+    local _setnormalfn = inst.components.werebeast.onsetnormalfn
+
+    inst.components.werebeast:SetOnNormalFn(function(_inst)
+        print("Deleting remembered threats of king guard")
+        if _inst.remembered_threats then
+            _inst.components.combat:DropTarget()
+            _inst.remembered_threats = {}
+            _inst.components.combat:DropTarget()
+        end
+        _setnormalfn(_inst)
+    end)
+    ]]
 end)

@@ -2,14 +2,9 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 ------------------------Fixing A Vanilla Bug-----------------------------------------
 
-env.AddComponentPostInit("planarentity", function(self, inst)
+env.AddComponentPostInit("planarentity", function(self)
     local _OnResistNonPlanarAttack = self.OnResistNonPlanarAttack
-
-    function self:OnResistNonPlanarAttack(attacker)
-		if attacker ~= nil and attacker:IsValid() then
-			return _OnResistNonPlanarAttack(self, attacker)
-		else
-			return _OnResistNonPlanarAttack(self, nil)
-		end
+    function self:OnResistNonPlanarAttack(attacker, ...)
+        return _OnResistNonPlanarAttack(self, attacker and attacker:IsValid() and attacker or nil)
     end
 end)

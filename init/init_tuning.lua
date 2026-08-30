@@ -12,7 +12,7 @@ local multiplayer_armor_durability_modifier = 0.7
 local wilson_attack = 34
 local wilson_health = 150
 
-TUNING = GLOBAL.TUNING
+local TUNING = GLOBAL.TUNING
 
 -- [              DSTU Related Overrides                  ]
 
@@ -241,7 +241,7 @@ TUNING.DSTU = {
     WX78_MOISTURE_DAMAGE_INCREASE = 3,
     WX78_CONFIG = GetModConfigData("wx78"),
     WX78_BACKUPBODY = GetModConfigData("wx78_backupbody"),
-    WXLESS = false, --GetModConfigData("wxless"),
+    WXLESS = false,          --GetModConfigData("wxless"),
     WXLESSSPEEDBUMP = false, --GetModConfigData("wxlessspeedbump"),
 
     -- Wormwood
@@ -271,6 +271,7 @@ TUNING.DSTU = {
     CURSED_ANTLER_SHADOW_LEVEL = 1,
     BEARGERCLAW_SHADOW_LEVEL = 1,
     SLOBBERLOBBER_SHADOW_LEVEL = 1,
+    ANTLIONSTAFF_SHADOW_LEVEL = 1,
     FEATHER_FROCK_SHADOW_LEVEL = 1,
     KLAUS_AMULET_SHADOW_LEVEL = 1,
     BEEGUN_SHADOW_LEVEL = 1,
@@ -314,8 +315,8 @@ TUNING.DSTU = {
     RAIDRAT_SPAWNRATE = seg_time / 5,
     RAIDRAT_SPAWNRATE_VARIANCE = (seg_time / 5) * 0.5,
     SNIFFER_ITEM = 40,
-    SNIFFER_PLAYER = 120,            
-    
+    SNIFFER_PLAYER = 120,
+
     PIEDPIPER_TOOT_RANGE = 25,
     -- Weather Start Date
     WEATHERHAZARD_START_DATE_AUTUMN = GetModConfigData("weatherhazard_autumn"),
@@ -356,7 +357,7 @@ TUNING.DSTU = {
     TOAD_RAIN_DELAY = { min = 5, max = 10 },
     SUMMER_CAVES_TEMP_MULT = .85,
     WINTER_CAVES_TEMP_MULT = 1.25,
-    
+
     MUSHROOM_CHANGES = GetModConfigData("mushroom_changes"),
     ALL_MUST_BE_GATHERED = false,
     WATERING_TEMPERATURE = GetModConfigData("watering_thermal"),
@@ -369,7 +370,7 @@ TUNING.DSTU = {
     ORANGESTAFF_DISTANCE_1 = 8,
     ORANGESTAFF_DISTANCE_2 = 16,
     KOALEFANT_HEALTH = 2000,
-    KOALEFANT_STOMP_COUNTERATTACK = {MIN = 8, MAX = 12},
+    KOALEFANT_STOMP_COUNTERATTACK = { MIN = 8, MAX = 12 },
     SNAILDRAKEHAT_FIRE_RESIST = 0.75,
 
     ----------------------------------------------------------------------------
@@ -511,49 +512,77 @@ TUNING.DSTU = {
 
     CURSED_ANTLER_COOLDOWN = 5,
     SLOBBERLOBBER_COOLDOWN = 45,
+    ANTLIONSTAFF_SPIKE_COOLDOWN = 5,
+    ANTLIONSTAFF_BLOCK_COOLDOWN = 14,
     CRYSTAL_CURSED_ANTLER_COOLDOWN = 5,
     SHIELDOFTERROR_COOLDOWN = 5,
     CASTSPELL_OVERRIDECONTROL = GLOBAL.CONTROL_FORCE_ATTACK,
+
+    CURSED_ANTLER_DAMAGE = 34,
+    CURSED_ANTLER_CHARGED_DAMAGE = 100,
+    CURSED_ANTLER_AOE_DAMAGE = 34,
+    CRYSTAL_CURSED_ANTLER_DAMAGE = 34,
+    CRYSTAL_CURSED_ANTLER_PLANAR_DAMAGE = 17,
+    CRYSTAL_CURSED_ANTLER_CHARGED_PLANAR_DAMAGE = 116,
+    CRYSTAL_CURSED_ANTLER_AOE_DAMAGE = 34,
+    CRYSTAL_CURSED_ANTLER_AOE_PLANAR_DAMAGE = 17,
+
+    ANTLIONSTAFF_DAMAGE = 34,
 
     -- Shadow Damage tuning
     RUINSNIGHTMARE_DAMAGE = 75,
     HERMITCRAB_MOONTREEBLOSSOMTEA_SHADOWCREATURE_DAMAGE = 75,
 
-    NO_THICKET_APHIDS = {"tumbleweed","beefalo", "fruitbat"}, --AXE Add more as needed, most things >should< spawn aphids though.
+    NO_THICKET_APHIDS = {"beefalo", "fruitbat"},   --AXE Add more as needed, most things >should< spawn aphids though.
+    APHID_SPAWN_CHANCE = .1,
 
     RIPPLE_BLACKLIST_PREFABS = {"webbedcreature", "rainometer"}, -- AXE Many cases would like "structure" tag still count for ripples, but many structures are incompatible, so we do a prefab based blacklist as well
-    RIPPLE_BLACKLIST_TAGS = {"projectile", "FX", "balloon"}, -- AXE other cases are universal, projectiles shouldn't really ever have ripples
+    RIPPLE_BLACKLIST_TAGS = {"projectile", "FX", "balloon"},     -- AXE other cases are universal, projectiles shouldn't really ever have ripples
 
     -- Rat Poison
     RATPOISON_EAT_DAMAGE = 24,
     RATPOISON_EAT_USES = 8,
     RATPOISON_DURATION = 20, --total seconds
-    RATPOISON_TICKRATE = 1, --every x seconds
-    RATPOISON_TICK_DAMAGE = 2, 
-    RATPOISON_RATMULT = 2.5, --damage multiplier against rats 
+    RATPOISON_TICKRATE = 1,  --every x seconds
+    RATPOISON_TICK_DAMAGE = 2,
+    RATPOISON_RATMULT = 2.5, --damage multiplier against rats
 
     -- Gemology
-    GENERIC_GEM_USES  = 1/250, --250 uses.
+    GEM_USES = {
+        1 / 200, --tier 1
+        1 / 300, --tier 2
+        1 / 500  --tier 3
+    },
 
-    REDGEM2_DAMAGE_1 = 8,
-    REDGEM2_DAMAGE_2 = 17,
-    REDGEM2_DAMAGE_3 = 34,
+    REDGEM2_DAMAGE = {
+        8,
+        17,
+        34
+    },
 
     --thats a percent of damage added on top of the normal damage.
-    REDGEM2_BURNING_MULT_1 = 0,
-    REDGEM2_BURNING_MULT_2 = 0.05,
-    REDGEM2_BURNING_MULT_3 = 0.2,
+    REDGEM2_BURNING_MULT = {
+        0,
+        0.05,
+        0.2
+    },
 
     -- it's what the document said.... I guess the damage isn't what we're really looking for, it's being able to eat part of the mob
-    REDGEM1_DEVOUR_MULT_1 = 0,
-    REDGEM1_DEVOUR_MULT_2 = 1/10,
-    REDGEM1_DEVOUR_MULT_3 = 1/5,
+    REDGEM1_DEVOUR_MULT = {
+        0,
+        1 / 10,
+        1 / 5
+    },
+
     REDGEM1_HUNGER_MULT = 0.5,
     REDGEM1_HEALTH_MULT = 0.01,
 
-    GREENGEM1_MELEE_SPEED_1 = 1.1,
-    GREENGEM1_MELEE_SPEED_2 = 1.2,
-    GREENGEM1_MELEE_SPEED_3 = 1.4,
+    GREENGEM1_MELEE_SPEED = {
+        1.1,
+        1.2,
+        1.4,
+    },
+
     GREENGEM1_SHADOW_CLONE_CHANCE_MULT = 0.3, --(tier-1)*this
     GREENGEM1_SHADOW_CLONE_MAX_DIST = 50 ^ 2,
     GREENGEM1_SHADOW_CLONE_FIND_MAX_DIST = 24,
@@ -562,36 +591,59 @@ TUNING.DSTU = {
 
     GREENGEM2_MAX_ENCHANTS = 3,
 
-    YELLOWGEM1_SANITY_1 = TUNING.DAPPERNESS_SMALL / 2,
-    YELLOWGEM1_SANITY_2 = TUNING.DAPPERNESS_SMALL,
-    YELLOWGEM1_SANITY_3 = TUNING.DAPPERNESS_SMALL * 2,
-    YELLOWGEM1_DURATION = TUNING.TOTAL_DAY_TIME * 8,
+    YELLOWGEM1_SANITY = {
+        TUNING.DAPPERNESS_SMALL / 2,
+        TUNING.DAPPERNESS_SMALL,
+        TUNING.DAPPERNESS_SMALL * 2,
+    },
+    YELLOWGEM1_DURATION = {
+        TUNING.TOTAL_DAY_TIME * 8,
+        TUNING.TOTAL_DAY_TIME * 12,
+        TUNING.TOTAL_DAY_TIME * 16,
+    },
 
-    YELLOWGEM2_SHOCK_DAMAGE_1 = 5,
-    YELLOWGEM2_SHOCK_DAMAGE_2 = 10,
-    YELLOWGEM2_SHOCK_DAMAGE_3 = 15,
+    YELLOWGEM2_SHOCK_DAMAGE = {
+        5,
+        10,
+        15,
+    },
+
     YELLOWGEM2_SHOCK_WET_MULT = 1.5,
     YELLOWGEM2_SHOCK_DIST_FACTOR = 2,
-    YELLOWGEM2_MIN_SHOCK_MULT_2 = 0.1,
-    YELLOWGEM2_MAX_SHOCK_MULT_2 = 1.25,
-    YELLOWGEM2_MIN_SHOCK_MULT_3 = 0.25,
-    YELLOWGEM2_MAX_SHOCK_MULT_3 = 1.5,
+
+    YELLOWGEM2_SHOCK_MULT_RANGES = {
+        { 0.0,  0.0 }, --min, max
+        { 0.1,  1.25 },
+        { 0.25, 1.5 },
+    },
+
     YELLOWGEM2_SHOCK_RANGE = 4,
     YELLOWGEM2_ATTACK_TIME_FACTOR = 5,
     YELLOWGEM2_SHOCK_COOLDOWN = 3,
 
     PALEGEM1_EXTRA_DAMAGE_PER_TIER = 17,
 
-    PALEGEM2_USES = 1/400,
-    PALEGEM2_USE_CHANCE_1 = 2, --math.random > this, so never.
-    PALEGEM2_USE_CHANCE_2 = 0.7,
-    PALEGEM2_USE_CHANCE_3 = 0.4,
+    PALEGEM2_USES = {
+        1 / 400,
+        1 / 500,
+        1 / 600,
+    },
+
+    PALEGEM2_USE_CHANCE = {
+        2, --math.random > this, so never.
+        0.7,
+        0.4,
+    },
 
     PURPLEGEM1_EXTRA_DAMAGE_THRESHOLD = 50,
     PURPLEGEM1_EXTRA_DAMAGE_MULT = 0.25,
     PURPLEGEM2_ITEM_GRAB_RANGE = 8,
     PURPLEGEM2_OWNER_RANGE = 10,
-    PURPLEGEM2_USES = 1/4,
+    PURPLEGEM2_USES = {
+        1,
+        1 / 4,
+        1 / 8
+    },
 
     ORANGEGEM1_STRUCTURE_RANGE = 48, --this range is probably not good for performance.
     ORANGEGEM1_BONUS_FACTOR = 150,
@@ -609,6 +661,14 @@ TUNING.DSTU = {
 
     BLUEGEM2_PERISHABLE_MULT = 2,
     BLUEGEM2_NON_PERISHABLE_MULT = 4,
+
+    GEM_REPAIRER_REPAIR_VALUE = {
+        0.6, --first
+        0.4,
+        0.2,
+        0.1, --min repair value
+    }
+
 }
 
 -- [              DST Related Overrides              ]
@@ -619,8 +679,8 @@ if GetModConfigData("beebox_nerf") then
 end
 
 -- Boulderbough
-    TUNING.TREE_ROCK.BURN_TIME = 30
-    TUNING.TREE_ROCK.SAPLING_GROW_TIME = {base=6.5*day_time, random=1*day_time}
+TUNING.TREE_ROCK.BURN_TIME = 30
+TUNING.TREE_ROCK.SAPLING_GROW_TIME = { base = 6.5 * day_time, random = 1 * day_time }
 
 -- Glass Cutter
 if GetModConfigData("celestialitems_revert") then

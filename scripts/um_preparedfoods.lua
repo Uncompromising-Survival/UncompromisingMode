@@ -107,7 +107,7 @@ local function BoomPieGo(inst, eater)
                 eater:RemoveEventCallback("newstate", BoomPieStopKnockback)
             end)
         end
-        eater:PushEvent("attacked", { damage = 3 })
+        eater:PushEvent("attacked", { damage = 0 })
 
         SpawnPrefab("explode_small").Transform:SetPosition(x, y, z)
         SpawnPrefab("blueberryexplosion").Transform:SetPosition(x, y, z)
@@ -853,7 +853,7 @@ for k, v in pairs(um_preparedfoods) do
     v.build = k
     v.bank = k
     v.atlasname = "images/inventoryimages/" .. k .. ".xml"
-    v.cooktime = k.cooktime
+    v.cooktime = v.cooktime or 1
     v.overridebuild = k
     v.cookbook_atlas = "images/cookbook_" .. k .. ".xml"
     v.cookbook_tex = "cookbook_" .. k .. ".tex"

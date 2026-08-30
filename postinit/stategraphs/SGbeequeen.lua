@@ -484,7 +484,7 @@ env.AddStategraphPostInit("beequeen", function(inst)
             timeline =
             {
                 TimeEvent(10 * FRAMES, function(inst)
-                    if (not inst.tiredcount or inst.tiredcount < 0) then
+                    if not inst.tiredcount or inst.tiredcount < 0 then
                         inst.sg:GoToState("tired_pst")
                     else
                         inst.sg:RemoveStateTag("notiredhit")

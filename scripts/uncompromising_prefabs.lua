@@ -101,7 +101,7 @@ local prefabs = {
     "vampirebat",
     "icecreamsanityregenbuff",
     "zaspberryparfait",
-    "uncompromising_foodbuffs",
+    "uncompromising_buffs",
     "shockfx",
     "shockstundebuff",
     "carapacecooler",
@@ -331,7 +331,7 @@ local prefabs = {
     --DAMNIT SCRIMBLES
     "uncompromising_harpoon",
     "uncompromising_axepoon",
-    "uncompromising_magharpoon",
+    "um_magnerang",
     "uncompromising_fishingnet",
     "uncompromising_fishingnetvisualizer",
     "um_windturbine",
@@ -501,6 +501,7 @@ local prefabs = {
     "feather_frock",
     "slobberlobber",
     "beargerclaw",
+    "um_antlionstaff",
     "klaus_amulet",
     "gore_horn_hat",
     "crabclaw",
@@ -560,6 +561,7 @@ local prefabs = {
     "um_ice_sicle",
     "um_fire_projectile",
     "um_buttery_fly",
+    "um_buttercup",
 
     "um_pepperdragon",
     "um_pepperdragon_nest",
@@ -636,12 +638,12 @@ local prefabs = {
     "gemology_book",
     "magma_tile",
     "um_blueprinting_kit",
-    "minerstatue"
+    "minerstatue",
+    "um_gem_repair_kit"
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then
     table.insert(prefabs, "placeholder_recipe_item")
 end
-
 
 return prefabs

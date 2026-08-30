@@ -24,7 +24,6 @@ local splashfxlist =
 
 local AURA_EXCLUDE_TAGS = { "shadow", "shadowminion", "INLIMBO", "notarget", "noattack", "flight"}
 
-
 local function SpawnHecklerGooTrail(inst,despawn_on_day)
     local x,y,z = inst.Transform:GetWorldPosition()
     local ents = TheSim:FindEntities(x,0,z,2)
@@ -72,9 +71,9 @@ end
 local function doprojectilehit(inst, other)
     DoSplatFx(inst)
     local caster = inst._caster ~= nil and inst._caster:IsValid() and inst._caster or nil
-    local x,y,z = inst.Transform:GetWorldPosition()
+    local x, y, z = inst.Transform:GetWorldPosition()
     local others = TheSim:FindEntities(x, y, z, 1.5, {"_combat", "_health", "player"}, {"INLIMBO", "shadow", "minotaur"}) --I messed around with the funni goo, its range is actually a bit small, so I bumped it up a tad.
-    for i,other in ipairs(others) do
+    for i, other in ipairs(others) do
         if other and other ~= caster and not other.components.health:IsDead() then
             local inkable, sanity = other.components.inkable, other.components.sanity
             if inst.prefab == "shadow_goo" and not other:HasTag("shadowdominance") then
@@ -99,9 +98,8 @@ end
 
 local function TestProjectileLand(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    if y <= inst:GetPhysicsRadius() + 0.05 then
+    if y <= inst:GetPhysicsRadius() + .05 then
         doprojectilehit(inst)
-        inst:Remove()
     end
 end
 
@@ -248,15 +246,13 @@ local function guardiansplat()
 end
 
 
-local function FadeAway(inst,fast)
+local function FadeAway(inst, fast)
     inst.fading = true
     inst.AnimState:PlayAnimation("idle", false)
     if fast then
         inst.AnimState:SetDeltaTimeMultiplier(10) -- not the right function call...
     end
-    inst:ListenForEvent("animover",function(inst)
-        inst:Remove() 
-    end)
+    inst:ListenForEvent("animover", inst.Remove)
 end
 
 local function RainedOnParade(inst)
@@ -377,7 +373,7 @@ local function fngoo()
 
     end]]
 
-    inst:ListenForEvent("timerdone",TryRemove)
+    inst:ListenForEvent("timerdone", TryRemove)
 
     inst:ListenForEvent("entitysleep", EntitySleep)
     inst:ListenForEvent("entitywake", EntityWake)

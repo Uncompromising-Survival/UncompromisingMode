@@ -1,4 +1,4 @@
-require "webbedcreatureloot"
+require("webbedcreatureloot")
 
 local function AddChanceLoot(inst, loot, chance, amount)
     for i = 1, amount do
@@ -6,7 +6,7 @@ local function AddChanceLoot(inst, loot, chance, amount)
     end
 end
 
-function SpawnDurabilityLoot(inst, loot, amount, chance)
+local function SpawnDurabilityLoot(inst, loot, amount, chance)
     for i = 1, amount do
         if chance >= 1 or math.random() < chance then
             local item = inst.components.lootdropper:SpawnLootPrefab(type(loot) == "function" and loot() or loot, inst:GetPosition())
@@ -26,9 +26,9 @@ function SpawnDurabilityLoot(inst, loot, amount, chance)
     end
 end
 
-function LootFn(inst, loot, fn)
+local function LootFn(cocoon, loot, fn)
     if fn then
-        fn(inst.components.lootdropper:SpawnLootPrefab(type(loot) == "function" and loot() or loot, inst:GetPosition()), inst)
+        fn(cocoon.components.lootdropper:SpawnLootPrefab(type(loot) == "function" and loot() or loot, cocoon:GetPosition()), cocoon)
     end
 end
 
@@ -81,21 +81,20 @@ local function SetCocoonSize(inst, size)
     SetStage(inst, stage)
 end
 
-
 ---sets the data of the cocoonn.
 ---@param inst any The instance of the cocooon
 local function SetUpCocoon(inst)
     if not inst.cocoon_creature then
         local is_character = math.random() > .95 --roughly same chance as before.
         if is_character then
-            inst.cocoon_creature = COCOON_CHARACTERS[math.random(#COCOON_CHARACTERS)]
-            inst.cocoon_data = COCOON_DEFS.CHARACTER[inst.cocoon_creature]
+            inst.cocoon_creature = UMWebbedCreatureUtil.COCOON_CHARACTERS[math.random(#UMWebbedCreatureUtil.COCOON_CHARACTERS)]
+            inst.cocoon_data = UMWebbedCreatureUtil.COCOON_DEFS.CHARACTER[inst.cocoon_creature]
         elseif IsIslandWorld() then
-            inst.cocoon_creature = COCOON_CREATURES_SHIPWRECKED[math.random(#COCOON_CREATURES_SHIPWRECKED)]
-            inst.cocoon_data = COCOON_DEFS.SHIPWRECKED[inst.cocoon_creature]
+            inst.cocoon_creature = UMWebbedCreatureUtil.COCOON_CREATURES_SHIPWRECKED[math.random(#UMWebbedCreatureUtil.COCOON_CREATURES_SHIPWRECKED)]
+            inst.cocoon_data = UMWebbedCreatureUtil.COCOON_DEFS.SHIPWRECKED[inst.cocoon_creature]
         else
-            inst.cocoon_creature = COCOON_CREATURES_DEFAULT[math.random(#COCOON_CREATURES_DEFAULT)]
-            inst.cocoon_data = COCOON_DEFS.DEFAULT[inst.cocoon_creature]
+            inst.cocoon_creature = UMWebbedCreatureUtil.COCOON_CREATURES_DEFAULT[math.random(#UMWebbedCreatureUtil.COCOON_CREATURES_DEFAULT)]
+            inst.cocoon_data = UMWebbedCreatureUtil.COCOON_DEFS.DEFAULT[inst.cocoon_creature]
         end
     end
     if not (inst.cocoon_data and inst.cocoon_creature) then
@@ -113,9 +112,19 @@ local function OnKilled(inst)
     inst.SoundEmitter:PlaySound("dontstarve/creatures/spider/spiderLair_destroy")
 
     --creature
-    if not table.contains(COCOON_CHARACTERS, inst.cocoon_creature) then
+    if not table.contains(UMWebbedCreatureUtil.COCOON_CHARACTERS, inst.cocoon_creature) then
+        if inst.cocoon_creature == "KOALEFANT_SUMMER" and TheWorld.state.iswinter then
+            inst.cocoon_creature = "KOALEFANT_WINTER"
+        elseif inst.cocoon_creature == "SLURTLE" and math.random() > .5 then
+            inst.cocoon_creature = "SNURTLE"
+        elseif inst.cocoon_creature == "SNAILDRAKE_MAGMA" and math.random() > .5 then
+            inst.cocoon_creature = "SNAILDRAKE_SLIME"
+        end
         local deadcreature = SpawnPrefab(inst.cocoon_creature)
         deadcreature.Transform:SetPosition(x, y, z)
+        if deadcreature.components.scaler then
+            deadcreature.components.scaler:SetScale(TUNING.ROCKY_MAX_SCALE)
+        end
         deadcreature:DoTaskInTime(0, function()
             if deadcreature.brain then deadcreature.brain:Stop() end
             deadcreature.components.health:Kill()
@@ -161,8 +170,8 @@ local function onload(inst, data)
         --This here could be better
         --ideally we should be saving which type of cocoon as well instead of searching across the different defs.
         --in case there's the same creature with different loot; but it works for now so, too bad! - Atobá.
-        inst.cocoon_data = COCOON_DEFS.DEFAULT[inst.cocoon_creature] or COCOON_DEFS.SHIPWRECKED[inst.cocoon_creature]
-            or COCOON_DEFS.CHARACTER[inst.cocoon_creature]
+        inst.cocoon_data = UMWebbedCreatureUtil.COCOON_DEFS.DEFAULT[inst.cocoon_creature] or UMWebbedCreatureUtil.COCOON_DEFS.SHIPWRECKED[inst.cocoon_creature]
+            or UMWebbedCreatureUtil.COCOON_DEFS.CHARACTER[inst.cocoon_creature]
     end
 end
 
@@ -179,35 +188,23 @@ end
 
 local function Regen(inst, data)
     local attacker = data.attacker
-    if attacker then
-        if not attacker:HasTag("player") and attacker.components.combat and attacker.components.combat.target then
-            attacker.components.combat:DropTarget()
-        end
-        if not inst.components.health:IsDead() and not attacker:HasTag("hoodedwidow") then
+    if not inst.components.health:IsDead() and attacker and not attacker:HasTag("hoodedwidow") then
+        inst:PlayHitAnimations()
+        if attacker:HasTag("player") then
             local widowweb = FindEntity(inst, 50, function(guy) return guy:HasTag("widowweb") end)
-            if widowweb and attacker:HasTag("player") and #NoEpics(inst) == 0 then
+            if widowweb and #NoEpics(inst) == 0 then
                 widowweb:SpawnInvestigators(attacker)
             end
-            inst:PlayHitAnimations()
-            if attacker:HasTag("player") and not attacker:HasTag("mime") and (not attacker:HasTag("widowsgrasp")
-                    or (attacker.components.rider and attacker.components.rider:IsRiding())) then
-                UMCommonFns.Say(attacker, GetString(attacker.prefab, "WEBBEDCREATURE"))
+            if not attacker:HasTag("widowsgrasp") or (attacker.components.rider and attacker.components.rider:IsRiding()) then
+                UMCommonFns.Say(attacker, GetString(attacker, "WEBBEDCREATURE"))
             end
         end
     end
 end
 
 local function ShouldRecoil(inst, attacker, weapon, damage)
-    local has_claw = attacker ~= nil and attacker:HasTag("widowsgrasp")
-
-    if not has_claw then
-        if attacker then
-            UMCommonFns.Say(attacker, GetString(inst, "WEBBEDCREATURE"))
-            Regen(inst, { attacker = attacker })
-        end
-    end
-
-    return not has_claw, has_claw and damage or damage ~= nil and 0 or nil
+    local has_claw = attacker and attacker:HasTag("widowsgrasp")
+    return not has_claw, has_claw and damage or nil
 end
 
 local function fn()
@@ -230,10 +227,13 @@ local function fn()
     --inst:AddTag("structure")
     --inst:AddTag("noauradamage")
     --inst:AddTag("notarget")
+    inst:AddTag("noclaustrophobia")
     inst:AddTag("antlion_sinkhole_blocker")
     inst:AddTag("queensstuff")
     inst:AddTag("ignorewalkableplatforms")
     inst:AddTag("ignorewalkableplatformdrowning")
+
+    MakeSnowCoveredPristine(inst)
 
     inst.entity:SetPristine()
 
@@ -249,10 +249,11 @@ local function fn()
     health:StartRegen(300, .1)
     --health.invincible = true
 
-    inst:AddComponent("combat")
-    inst.components.combat:SetShouldRecoilFn(ShouldRecoil)
+    local combat = inst:AddComponent("combat")
+    combat:SetShouldRecoilFn(ShouldRecoil)
 
     inst:ListenForEvent("attacked", Regen)
+    inst:ListenForEvent("blocked", Regen)
     inst:ListenForEvent("death", OnKilled)
 
     inst:AddComponent("lootdropper")
@@ -285,7 +286,7 @@ end
 
 local function decorload(inst, data)
     if data and data.category then
-        inst.category = data.category
+        inst.category = type(data.category) ~= "string" and tostring(data.category) or data.category
         inst.AnimState:PlayAnimation(inst.category)
     end
 end

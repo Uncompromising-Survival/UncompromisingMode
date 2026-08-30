@@ -1,12 +1,17 @@
 local require = GLOBAL.require
 
-require "um_pocketdimensioncontainers"
+--live: 󰀕 white skull
+--beta: 󰀕 red skull
+GLOBAL.rawset(GLOBAL, "UNCOMPROMISING_MODE", string.find(GLOBAL.KnownModIndex:GetModFancyName(modname), "󰀕") ~= nil and "LIVE" or "BETA")
+
+require("um_pocketdimensioncontainers")
 
 GLOBAL.UPDATE_CHECK = GLOBAL.CurrentRelease.GreaterOrEqualTo("R42_HEATED_VAULT") -- REMEMBER TO ALWAYS UPDATE THIS WITH NEW BETAS.
 
 GLOBAL.UMCommonFns = require("tools/um_commonfns")
 GLOBAL.MAX_GEM_TIER = 3
-GLOBAL.MIN_GEM_TIER = 0
+GLOBAL.MIN_GEM_TIER = 0 --ONLY USED FOR DATA. ACTUAL ENCHANT RANGE IS 1 TO 3. USE THE VARIABLE BELOW FOR THAT.
+GLOBAL.MIN_GEM_ENCHANT_TIER = 1
 
 GLOBAL.UM_DEV = GetModConfigData("devmode")
 if GLOBAL.UM_DEV then
@@ -23,7 +28,7 @@ ReloadPreloadAssets()
 -- Start the game mode
 SignFiles = require("uncompromising_writeables")
 
-local vanilla = require "screens/redux/scrapbookdata"
+--[[local vanilla = require "screens/redux/scrapbookdata"
 local uncomp = require "screens/redux/scrapbookdata_changes"
 
 local valid_data = {
@@ -60,7 +65,7 @@ local valid_data = {
     "picakble",
     "insulator",
     "insulator_type"
-}
+}]]
 
 AddPrefabPostInit("world", function(inst)
     -- this broke and we lost access to data generation :((((((
@@ -153,13 +158,21 @@ local function WathomMusicToggle(level)
 end
 
 -- wathomcustomvoice/wathomvoiceevent
-local function DoAdrenalineUpStinger(sound)
+--[[local function DoAdrenalineUpStinger(sound)
     if type(sound) == "string" then
         GLOBAL.TheFrontEnd:GetSound():PlaySound("wathomcustomvoice/wathomvoiceevent/" .. sound)
     else
         GLOBAL.TheFrontEnd:GetSound():PlaySound("dontstarve_DLC001/characters/wathgrithr/inspiration_down")
     end
+end]]
+
+local function SetAntStaffMode(player, staff, mode)
+    if staff and checkentity(staff) and staff:IsValid() and staff.um_setspellmode then
+        staff:um_setspellmode(mode)
+    end
 end
+
+AddModRPCHandler("UncompromisingSurvival", "SetAntStaffMode", SetAntStaffMode)
 
 local function GetTargetFocus(player, telebase, telestaff) telestaff.target_focus = telebase end
 
@@ -205,7 +218,7 @@ AddModRPCHandler("UncompromisingSurvival", "PianoPuzzleComplete2", PianoPuzzleCo
 AddModRPCHandler("UncompromisingSurvival", "PianoPuzzleComplete3", PianoPuzzleComplete3)
 
 AddClientModRPCHandler("UncompromisingSurvival", "WathomMusicToggle", WathomMusicToggle)
-AddClientModRPCHandler("UncompromisingSurvival", "WathomAdrenalineStinger", DoAdrenalineUpStinger)
+--AddClientModRPCHandler("UncompromisingSurvival", "WathomAdrenalineStinger", DoAdrenalineUpStinger)
 
 local function ToggleLagCompOn(self)
     if --[[not GLOBAL.IsDefaultScreen() or]] GLOBAL.ThePlayer == nil or GLOBAL.ThePlayer.hadcompenabled ~= nil then
@@ -325,32 +338,6 @@ AddClientModRPCHandler("UncompromisingSurvival", "OnTerraform", function(data)
     end
 end)
 
--- WIXIE RELATED RPC'S
-
-local function HandlerFunction(player, mouseposx, mouseposy, mouseposz)
-    if GLOBAL.TheWorld.ismastersim then
-        if mouseposx ~= nil then
-            player.wixiepointx = mouseposx
-        end
-
-        if mouseposy ~= nil then
-            player.wixiepointy = mouseposy
-        end
-
-        if mouseposz ~= nil then
-            player.wixiepointz = mouseposz
-        end
-    else
-        local wixieposition = GLOBAL.TheInput:GetWorldPosition()
-
-        player.wixiepointx = wixieposition.x
-        player.wixiepointy = wixieposition.y
-        player.wixiepointz = wixieposition.z
-    end
-end
-
-AddModRPCHandler("WixieTheDelinquent", "GetTheInput", HandlerFunction)
-
 local function TornadoHandlingFunction(player, mouseposx, mouseposy, mouseposz)
     if GLOBAL.TheWorld.ismastersim then
         if mouseposx ~= nil then
@@ -375,31 +362,33 @@ end
 
 AddModRPCHandler("AllMouseGags", "GetTheInput", TornadoHandlingFunction)
 
-local function ClaustrophobiaPanic(player, inst)
-    if not (inst.components.health and inst.components.health:IsDead()) and not inst.sg:HasStateTag("wixiepanic") then
-        inst.sg:GoToState("claustrophobic")
-    end
-end
-
-AddModRPCHandler("WixieTheDelinquent", "ClaustrophobiaPanic", ClaustrophobiaPanic)
-
-local function ClaustrophobiaEquipMult(claustrophobiamodifier)
-    if GLOBAL.ThePlayer then
-        GLOBAL.ThePlayer.claustrophobiamodifier = type(claustrophobiamodifier) == "string" and GLOBAL.tonumber(claustrophobiamodifier) or claustrophobiamodifier
-    end
-end
-
-AddClientModRPCHandler("WixieTheDelinquent", "ClaustrophobiaEquipMult", ClaustrophobiaEquipMult)
-
-local function ClaustrophobiaHidden(claustrophobiahidden)
-    if GLOBAL.ThePlayer then
-        GLOBAL.ThePlayer.claustrophobiahidden = claustrophobiahidden
-    end
-end
-
-AddClientModRPCHandler("WixieTheDelinquent", "ClaustrophobiaHidden", ClaustrophobiaHidden)
-
 if GetModConfigData("wixie_walter") then
+    -- WIXIE RELATED RPC'S
+
+    local function HandlerFunction(player, mouseposx, mouseposy, mouseposz)
+        if GLOBAL.TheWorld.ismastersim then
+            if mouseposx ~= nil then
+                player.wixiepointx = mouseposx
+            end
+
+            if mouseposy ~= nil then
+                player.wixiepointy = mouseposy
+            end
+
+            if mouseposz ~= nil then
+                player.wixiepointz = mouseposz
+            end
+        else
+            local wixieposition = GLOBAL.TheInput:GetWorldPosition()
+
+            player.wixiepointx = wixieposition.x
+            player.wixiepointy = wixieposition.y
+            player.wixiepointz = wixieposition.z
+        end
+    end
+
+    AddModRPCHandler("WixieTheDelinquent", "GetTheInput", HandlerFunction)
+
     AddModCharacter("wixie", "FEMALE")
 
     GLOBAL.TUNING.WIXIE_HEALTH = 130
@@ -444,7 +433,6 @@ end
         -- end
     -- end
 -- end
-
 
 --[[
 AddShardModRPCHandler("UncompromisingSurvival", "AcidMushroomsUpdate", function(shard_id, data)

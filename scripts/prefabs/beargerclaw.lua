@@ -60,31 +60,31 @@ local function LaunchSpit(caster, pos)
             caster.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/bearger/attack")
         end
     
-		if not biggy then
-			for i = 1, 4 do 
-				local targetpos = Vector3(pos.x, pos.y, pos.z)
+        if not biggy then
+            for i = 1, 4 do 
+                local targetpos = Vector3(pos.x, pos.y, pos.z)
 
-				local projectile = SpawnPrefab("beargerclaw_boulder")
-				projectile.coolingtime = 8
-				projectile.Transform:SetPosition(x, y, z)
-				projectile.clawer = caster
+                local projectile = SpawnPrefab("beargerclaw_boulder")
+                projectile.coolingtime = 8
+                projectile.Transform:SetPosition(x, y, z)
+                projectile.clawer = caster
         
-				targetpos.x = targetpos.x + math.random(-2, 2)
-				targetpos.z = targetpos.z + math.random(-2, 2)
+                targetpos.x = targetpos.x + math.random(-2, 2)
+                targetpos.z = targetpos.z + math.random(-2, 2)
         
-				local dx = targetpos.x - x
-				local dz = targetpos.z - z
+                local dx = targetpos.x - x
+                local dz = targetpos.z - z
         
-				local rangesq = dx * dx + dz * dz
-				local maxrange = TUNING.FIRE_DETECTOR_RANGE
+                local rangesq = dx * dx + dz * dz
+                local maxrange = TUNING.FIRE_DETECTOR_RANGE
         
-				local speed = easing.linear(rangesq, maxrange, 5, maxrange * maxrange)
-				projectile.components.complexprojectile:SetHorizontalSpeed(speed * 1.1)
-				projectile.components.complexprojectile:SetGravity(-35)
-				projectile.components.complexprojectile:Launch(targetpos, caster, caster)
-				projectile.components.complexprojectile:SetLaunchOffset(Vector3(1.5, 1.5, 0))
-			end
-		end
+                local speed = easing.linear(rangesq, maxrange, 5, maxrange * maxrange)
+                projectile.components.complexprojectile:SetHorizontalSpeed(speed * 1.1)
+                projectile.components.complexprojectile:SetGravity(-35)
+                projectile.components.complexprojectile:Launch(targetpos, caster, caster)
+                projectile.components.complexprojectile:SetLaunchOffset(Vector3(1.5, 1.5, 0))
+            end
+        end
         
         if biggy then
             for i, v in pairs(ents) do
@@ -145,8 +145,11 @@ end
 local function onunequip(inst, owner)
     owner.AnimState:Hide("ARM_carry")
     owner.AnimState:Show("ARM_normal")
-    
     --inst:RemoveEventCallback("working", Working, owner)
+end
+
+local function CanCastFn(inst)
+    return true
 end
 
 local function staff_fn()
@@ -164,23 +167,26 @@ local function staff_fn()
     inst.AnimState:PlayAnimation("idle")
 
     inst:AddTag("nopunch")
-    inst:AddTag("donotautopick")
-    
-    --Sneak these into pristine state for optimization
     inst:AddTag("beargerclaw")
+    inst:AddTag("allow_action_on_impassable")
     inst:AddTag("quickcast")
     inst:AddTag("vetcurse_item")
-    inst:AddTag("inventoryitem")
-    MakeInventoryFloatable(inst)
+    inst:AddTag("tool")
+    inst:AddTag("shadowlevel")
+    inst:AddTag("donotautopick")
 
     inst.spelltype = "UM_BEARGERCLAW"
+    
+    local reticule = inst:AddComponent("reticule")
+    reticule.targetfn = light_reticuletargetfn
+    reticule.ease = true
+    reticule.ispassableatallpoints = true
+
+    inst.um_cancastontarget = UMCommonFns.DefaultCanCastOnTarget
+
+    MakeInventoryFloatable(inst)
 
     inst.entity:SetPristine()
-    
-    inst:AddComponent("reticule")
-    inst.components.reticule.targetfn = light_reticuletargetfn
-    inst.components.reticule.ease = true
-    inst.components.reticule.ispassableatallpoints = true
 
     if not TheWorld.ismastersim then
         return inst
@@ -191,25 +197,25 @@ local function staff_fn()
 
     inst:AddComponent("inventoryitem")
 
-    inst:AddComponent("equippable")
-    inst.components.equippable:SetOnEquip(onequip)
-    inst.components.equippable:SetOnUnequip(onunequip)
+    local equippable = inst:AddComponent("equippable")
+    equippable:SetOnEquip(onequip)
+    equippable:SetOnUnequip(onunequip)
 
-    inst:AddComponent("shadowlevel")
-    inst.components.shadowlevel:SetDefaultLevel(TUNING.DSTU.BEARGERCLAW_SHADOW_LEVEL)
+    local shadowlevel = inst:AddComponent("shadowlevel")
+    shadowlevel:SetDefaultLevel(TUNING.DSTU.BEARGERCLAW_SHADOW_LEVEL)
 
-    inst:AddComponent("tool")
-    inst.components.tool:SetAction(ACTIONS.DIG)
+    local tool = inst:AddComponent("tool")
+    tool:SetAction(ACTIONS.DIG)
     
     inst:AddInherentAction(ACTIONS.DIG)
     
-    inst:AddComponent("spellcaster")
-    inst.components.spellcaster:SetSpellFn(createlight)
-    inst.components.spellcaster.canuseontargets = true
-    inst.components.spellcaster.canonlyuseonworkable = true
-    inst.components.spellcaster.canonlyuseoncombat = true
-    inst.components.spellcaster.canuseonpoint = true
-    inst.components.spellcaster.canuseonpoint_water = true
+    local spellcaster = inst:AddComponent("spellcaster")
+    spellcaster:SetSpellFn(createlight)
+    spellcaster:SetCanCastFn(CanCastFn)
+    spellcaster.canuseontargets = true
+    spellcaster.canuseondead = true
+    spellcaster.canuseonpoint = true
+    spellcaster.canuseonpoint_water = true
 
     MakeHauntableLaunch(inst)
 

@@ -56,13 +56,13 @@ local function LaunchTrap(inst, target)
         --targetpos.x = targetpos.x + math.random(-1,1)
         --targetpos.z = targetpos.z + math.random(-1,1)
         
-        local function shrink(inst, time, startsize, endsize)
+        --[[local function shrink(inst, time, startsize, endsize)
             inst.AnimState:SetMultColour(1,1,1,.9)
             inst.Transform:SetScale(startsize, startsize, startsize)
             inst.components.colourtweener:StartTween({1,1,1,1}, time)
             inst.components.sizetweener:StartTween(.5, time, inst.Remove)
             --inst.SoundEmitter:PlaySound("dontstarve_DLC002/common/bomb_fall")
-        end
+        end]]
 
         --[[local shadow = SpawnPrefab("warningshadow")
         shadow.Transform:SetPosition(a, b, c)
@@ -75,10 +75,7 @@ local function LaunchTrap(inst, target)
         shadow:shrink(((speed + 4) / 15), 1.75, 0.5)]]
         
         projectile.Transform:SetPosition(x, y, z)
-        projectile.Physics:ClearCollisionMask()
         projectile.components.complexprojectile:SetGravity(-50)
-        projectile.Physics:CollidesWith(COLLISION.WORLD)
-        projectile.Physics:CollidesWith(COLLISION.OBSTACLES)
         projectile.components.complexprojectile.usehigharc = true --true?
         projectile.components.complexprojectile:SetHorizontalSpeed(speed + 5)
         projectile.components.complexprojectile:Launch(targetpos, inst, inst)

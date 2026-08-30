@@ -18,19 +18,13 @@ regarding characters' favorite foods.
 DoFoodEffects in postinit/components/eater was modified to check for favorite foods.
 ]]
 
-if not GLOBAL.TheNet:GetIsServer() then return end
-
 AddComponentPostInit("edible", function(self)
-    local _GetHealth = self.GetHealth
-    local _GetHunger = self.GetHunger
-    local _GetSanity = self.GetSanity
-
     --- NEW FUNCTION
     --- Determines if this food is a character's favorite food.
     --- @eater: The character eating this food.
     function self:IsFavoriteFood(eater)
-        if eater and eater.components.foodaffinity then
-            local foodaffinity = eater.components.foodaffinity
+        local foodaffinity = eater and eater.components.foodaffinity
+        if foodaffinity then
             local prefab = foodaffinity:GetFoodBasePrefab(self.inst)
             local prefab_affinity = foodaffinity:HasPrefabAffinity(self.inst)
             local favorite_foods = foodaffinity.favorite_foods
@@ -40,14 +34,26 @@ AddComponentPostInit("edible", function(self)
         return false
     end
 
+    -- Prevent favorite foods from reducing health.
+    local _GetHealth = self.GetHealth
+    function self:GetHealth(eater, ...)
+        local healthvalue = _GetHealth(self, eater, ...) or 0
+        if self:IsFavoriteFood(eater) then
+            -- favorite foods will not incur health penalties
+            healthvalue = math.max(0, healthvalue)
+        end
+        return healthvalue
+    end
+
     -- Reverse the bonus hunger granted by favorite foods.
-    self.GetHunger = function(self, eater)
-        local hungervalue = _GetHunger(self, eater)
+    local _GetHunger = self.GetHunger
+    function self:GetHunger(eater, ...)
+        local hungervalue = _GetHunger(self, eater, ...)
         local multiplier = 1
 
         --temp fix we should probably seee *why* eater is being nil.
-        if eater ~= nil and eater.components.foodaffinity ~= nil then
-            local foodaffinity = eater.components.foodaffinity
+        local foodaffinity = eater and eater.components.foodaffinity
+        if foodaffinity then
             local found_affinities = {}
 
             if foodaffinity.prefab_affinities[self.inst.prefab] ~= nil then
@@ -72,36 +78,25 @@ AddComponentPostInit("edible", function(self)
         return hungervalue * multiplier
     end
 
-    -- Prevent favorite foods from reducing health.
-    self.GetHealth = function(self, eater)
-        local healthvalue = _GetHealth(self, eater) or 0
-        if self:IsFavoriteFood(eater) then
-            -- favorite foods will not incur health penalties
-            healthvalue = math.max(0, healthvalue)
-        end
-        return healthvalue
-    end
-
-    function self:GetSanity(eater, ...)                       --scuffed af but I don't really know how to integrate that with the next GetSanity lmao
-        if eater ~= nil and eater:HasTag("ratwhisperer") then --if winky
-            return self.sanityvalue                           --return the normal sanity val with no multipliers
-        else
-            return _GetSanity(self, eater, ...)               -- return the vanilla behaviour otherwise
-        end
-    end
-
     -- Calculations for favorite food sanity.
     local _GetSanity = self.GetSanity
-    self.GetSanity = function(self, eater)
-        local sanityvalue = _GetSanity(self, eater) or 0
+    function self:GetSanity(eater, ...)
+        local ignoresspoilage_temp
+        local eatercomp = eater and eater:HasTag("ratwhisperer") and eater.components.eater -- Winky doesn't care about spoilage regarding sanity.
+        if eatercomp then
+            ignoresspoilage_temp = eatercomp.ignoresspoilage
+            eatercomp.ignoresspoilage = true
+        end
+        local sanityvalue = _GetSanity(self, eater, ...) or 0
+        if ignoresspoilage_temp ~= nil then eatercomp.ignoresspoilage = ignoresspoilage_temp end
         local addend = 0
         if self:IsFavoriteFood(eater) then
             -- favorite foods will not incur sanity penalties
             sanityvalue = math.max(0, sanityvalue)
             local prefab = eater.components.foodaffinity:GetFoodBasePrefab(self.inst)
             local favorite_foods = eater.components.foodaffinity.favorite_foods
-            local healthvalue = self.GetHealth(self, eater) or 0
-            local hungervalue = self.GetHunger(self, eater) or 0
+            local healthvalue = self:GetHealth(eater) or 0
+            local hungervalue = self:GetHunger(eater) or 0
             addend = favorite_foods and favorite_foods[prefab] or math.max(5, healthvalue / 4, hungervalue / 5, sanityvalue / 3)
         end
         return sanityvalue + addend

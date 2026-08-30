@@ -82,8 +82,7 @@ local function GrassGekkoFunctions(inst)
     inst.restoredatafromtrap = RestoreGekkoFromTrap
 end
 
-env.AddPrefabPostInit("world", function(inst) -- Supposedly, this is better since it's called once for each "world" prefab, which usually only spawns once per shard.
-    if not TheWorld.ismastersim then return end
+env.AddSimPostInit(function()
     local _ontimerdone = UpvalueHacker.GetUpvalue(Prefabs.grassgekko.fn, "ontimerdone")
     if _ontimerdone then
         local function ontimerdone(inst, data, ...)

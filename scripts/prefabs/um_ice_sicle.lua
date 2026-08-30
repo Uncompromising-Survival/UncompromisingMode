@@ -1,8 +1,8 @@
 local assets =
 {
     Asset("ANIM", "anim/um_ice_sicle.zip"), -- Klei's convention is scythe_type in anim, but type_scythe in code. (Referencing voidcloth_scythe)
-	-- Asset("IMAGE", "images/inventoryimages/um_ice_sicle.tex"),
-	-- Asset("ATLAS", "images/inventoryimages/um_ice_sicle.xml"),
+    -- Asset("IMAGE", "images/inventoryimages/um_ice_sicle.tex"),
+    -- Asset("ATLAS", "images/inventoryimages/um_ice_sicle.xml"),
 
 }
 
@@ -33,18 +33,18 @@ end
 --------------------------------------------------------------------------
 
 local function SetFxOwner(inst, owner)
-	if inst._fxowner ~= nil and inst._fxowner.components.colouradder ~= nil then
-		inst._fxowner.components.colouradder:DetachChild(inst.fx)
-	end
-	inst._fxowner = owner
+    if inst._fxowner ~= nil and inst._fxowner.components.colouradder ~= nil then
+        inst._fxowner.components.colouradder:DetachChild(inst.fx)
+    end
+    inst._fxowner = owner
     if owner ~= nil then
         inst.fx.entity:SetParent(owner.entity)
         inst.fx.Follower:FollowSymbol(owner.GUID, "swap_object", nil, nil, nil, true, nil, 2)
         inst.fx.components.highlightchild:SetOwner(owner)
         inst.fx:ToggleEquipped(true)
-		if owner.components.colouradder ~= nil then
-			owner.components.colouradder:AttachChild(inst.fx)
-		end
+        if owner.components.colouradder ~= nil then
+            owner.components.colouradder:AttachChild(inst.fx)
+        end
     else
         inst.fx.entity:SetParent(inst.entity)
         --For floating
@@ -55,7 +55,7 @@ local function SetFxOwner(inst, owner)
 end
 
 local function PushIdleLoop(inst)
-	inst.AnimState:PushAnimation("idle")
+    inst.AnimState:PushAnimation("idle")
 end
 
 local function OnStopFloating(inst)
@@ -66,7 +66,7 @@ end
 local function OnEquip(inst, owner)
     local skin_build = inst:GetSkinBuild()
 
-	owner.AnimState:OverrideSymbol("swap_object", "um_ice_sicle", "swap_scythe")
+    owner.AnimState:OverrideSymbol("swap_object", "um_ice_sicle", "swap_scythe")
 
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
@@ -105,8 +105,8 @@ local function HarvestPickable(inst, ent, doer)
    if ent.prefab == "hooded_fern" and inst.components.finiteuses ~= nil then
         inst.components.finiteuses:Use(0.1)
     end
-	if doer.components.temperature:GetCurrent() >= 4 and not TheWorld.state.iswinter then
-		doer.components.temperature:DoDelta(-3)
+    if doer.components.temperature:GetCurrent() >= 4 and not TheWorld.state.iswinter then
+        doer.components.temperature:DoDelta(-3)
     end
 end
 
@@ -115,7 +115,7 @@ local function OnScythed(inst, data)
         local icefx = SpawnPrefab("deer_ice_flakes")
         icefx.AnimState:PlayAnimation("idle")
         local x, y, z = data.doer.Transform:GetWorldPosition()
-	    icefx:DoTaskInTime(0, icefx.KillFX)
+        icefx:DoTaskInTime(0, icefx.KillFX)
         icefx.Transform:SetPosition(x, y, z)
         icefx.Transform:SetScale(0.6, 0.7, 0.7)
     end
@@ -138,7 +138,7 @@ local function DoScythe(inst, target, doer)
         if doer.components.temperature:GetCurrent() >= 4 and not TheWorld.state.iswinter then
             local icefx = SpawnPrefab("deer_ice_flakes")
             icefx.AnimState:PlayAnimation("idle")
-		    icefx:DoTaskInTime(0, icefx.KillFX) --is this supposed to be 0??
+            icefx:DoTaskInTime(0, icefx.KillFX) --is this supposed to be 0??
             icefx.Transform:SetPosition(x, y, z)
             icefx.Transform:SetScale(0.6, 0.7, 0.7)
         end
@@ -151,7 +151,7 @@ local function DoScythe(inst, target, doer)
                 if inst:IsEntityInFront(ent, doer_rotation, doer_pos) then
                     inst:HarvestPickable(ent, doer)
                     if doer.components.temperature:GetCurrent() >= 4 and not TheWorld.state.iswinter then
-					    doer.components.temperature:DoDelta(-3)
+                        doer.components.temperature:DoDelta(-3)
                     end
                 end
             end
@@ -179,34 +179,35 @@ local function onattack_blue(inst, attacker, target, skipsanity)
         end
     end
 
-	--V2C: valid check in case any of the previous callbacks or events removed the target
-	if target.components.freezable ~= nil and target:IsValid() then
+    --V2C: valid check in case any of the previous callbacks or events removed the target
+    if target.components.freezable ~= nil and target:IsValid() then
         target.components.freezable:AddColdness(1)
         target.components.freezable:SpawnShatterFX()
     end
 
-    if attacker.components.temperature:GetCurrent() >= 4 and not TheWorld.state.iswinter then
+    if attacker.components.temperature ~= nil and attacker.components.temperature:GetCurrent() >= 4 and not TheWorld.state.iswinter then
         attacker.components.temperature:DoDelta(-3)
     end
+
     OnScythed(inst, {doer = attacker})
 end
 
 local function SetupComponents(inst)
-	inst:AddComponent("equippable")
-	inst.components.equippable:SetOnEquip(OnEquip)
-	inst.components.equippable:SetOnUnequip(OnUnequip)
+    inst:AddComponent("equippable")
+    inst.components.equippable:SetOnEquip(OnEquip)
+    inst.components.equippable:SetOnUnequip(OnUnequip)
 
-	inst:AddComponent("weapon")
-	inst.components.weapon:SetDamage(TUNING.SPEAR_DAMAGE*1.3)--44.2
-	inst.components.weapon:SetOnAttack(onattack_blue)
+    inst:AddComponent("weapon")
+    inst.components.weapon:SetDamage(TUNING.SPEAR_DAMAGE*1.3)--44.2
+    inst.components.weapon:SetOnAttack(onattack_blue)
 
-	inst:AddComponent("tool")
-	inst.components.tool:SetAction(ACTIONS.SCYTHE)
+    inst:AddComponent("tool")
+    inst.components.tool:SetAction(ACTIONS.SCYTHE)
 end
 
 local function DisableComponents(inst)
-	inst:RemoveComponent("equippable")
-	inst:RemoveComponent("weapon")
+    inst:RemoveComponent("equippable")
+    inst:RemoveComponent("weapon")
     inst:RemoveComponent("tool")
 end
 
@@ -214,34 +215,34 @@ local FLOAT_SCALE_BROKEN = { 0.8, 0.4, 0.8 }
 local FLOAT_SCALE = { 1.2, 0.4, 1.2 }
 
 local function OnIsBrokenDirty(inst)
-	if inst.isbroken:value() then
-		inst.components.floater:SetSize("med")
-		inst.components.floater:SetVerticalOffset(0.25)
-		inst.components.floater:SetScale(FLOAT_SCALE_BROKEN)
-	else
-		inst.components.floater:SetSize("med")
-		inst.components.floater:SetVerticalOffset(0)
-		inst.components.floater:SetScale(FLOAT_SCALE)
-	end
+    if inst.isbroken:value() then
+        inst.components.floater:SetSize("med")
+        inst.components.floater:SetVerticalOffset(0.25)
+        inst.components.floater:SetScale(FLOAT_SCALE_BROKEN)
+    else
+        inst.components.floater:SetSize("med")
+        inst.components.floater:SetVerticalOffset(0)
+        inst.components.floater:SetScale(FLOAT_SCALE)
+    end
 end
 
 local SWAP_DATA_BROKEN = { sym_build = "um_ice_sicle", sym_name = "scythe_base_broken_float", bank = "scythe_voidcloth", anim = "broken" }
 local SWAP_DATA = { sym_build = "um_ice_sicle", sym_name = "swap_scythe", bank = "scythe_voidcloth" }
 
 local function SetIsBroken(inst, isbroken)
-	if isbroken then
-		inst.components.floater:SetBankSwapOnFloat(true, -10, SWAP_DATA_BROKEN)
-		if inst.fx ~= nil then
-			inst.fx:Hide()
-		end
-	else
-		inst.components.floater:SetBankSwapOnFloat(true, -20, SWAP_DATA)
-		if inst.fx ~= nil then
-			inst.fx:Show()
-		end
-	end
-	inst.isbroken:set(isbroken)
-	OnIsBrokenDirty(inst)
+    if isbroken then
+        inst.components.floater:SetBankSwapOnFloat(true, -10, SWAP_DATA_BROKEN)
+        if inst.fx ~= nil then
+            inst.fx:Hide()
+        end
+    else
+        inst.components.floater:SetBankSwapOnFloat(true, -20, SWAP_DATA)
+        if inst.fx ~= nil then
+            inst.fx:Show()
+        end
+    end
+    inst.isbroken:set(isbroken)
+    OnIsBrokenDirty(inst)
 end
 
 local function ScytheFn()
@@ -266,7 +267,7 @@ local function ScytheFn()
     --weapon (from weapon component) added to pristine state for optimization
     inst:AddTag("weapon")
 
-	inst:AddComponent("floater")
+    inst:AddComponent("floater")
 
     --Dedicated server does not need to spawn the local sound fx
     if not TheNet:IsDedicated() then
@@ -284,7 +285,7 @@ local function ScytheFn()
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
-		--inst:ListenForEvent("isbrokendirty", OnIsBrokenDirty)
+        --inst:ListenForEvent("isbrokendirty", OnIsBrokenDirty)
 
         return inst
     end
@@ -300,15 +301,15 @@ local function ScytheFn()
 
     inst:AddComponent("inspectable")
     inst:AddComponent("inventoryitem")
-	--inst.components.inventoryitem.atlasname = "images/inventoryimages/um_ice_sicle.xml"
+    --inst.components.inventoryitem.atlasname = "images/inventoryimages/um_ice_sicle.xml"
 
     local finiteuses = inst:AddComponent("finiteuses")
     finiteuses:SetMaxUses(50*TUNING.GOLDENTOOLFACTOR)
     finiteuses:SetUses(50*TUNING.GOLDENTOOLFACTOR)
     finiteuses:SetConsumption(ACTIONS.SCYTHE, 0.5)
     finiteuses:SetConsumption(ACTIONS.ATTACK, 1)
-	finiteuses:SetOnFinished(inst.Remove)
-	SetupComponents(inst)
+    finiteuses:SetOnFinished(inst.Remove)
+    SetupComponents(inst)
 
     MakeHauntableLaunch(inst)
 
@@ -426,6 +427,5 @@ local function FollowSymbolFxFn()
     return inst
 end
 
-
 return Prefab("um_ice_sicle", ScytheFn, assets), --Rename prefab to "um_ice_scythe"
-Prefab("um_ice_sicle_fx", FollowSymbolFxFn)
+    Prefab("um_ice_sicle_fx", FollowSymbolFxFn)

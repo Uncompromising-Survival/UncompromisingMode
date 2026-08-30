@@ -20,7 +20,7 @@ ShadeRenderer:SetShadeTranslationSpeed(ShadeTypes.HoodedForestCanopy, TUNING.DST
 ShadeRenderer:SetShadeTexture(ShadeTypes.HoodedForestCanopy, resolvefilepath("images/giant_tree.tex"))
 
 function SpawnHoodedforestCanopy(x, z)
-    return ShadeRenderer:SpawnShade(ShadeTypes.HoodedForestCanopy, x, z, math.random() * 360, TUNING.DSTU.HOODEDFOREST_CANOPY_SCALE*GetRandomWithVariance(1, 0.25))
+    return ShadeRenderer:SpawnShade(ShadeTypes.HoodedForestCanopy, x, z, math.random() * 360, TUNING.DSTU.HOODEDFOREST_CANOPY_SCALE * GetRandomWithVariance(1, .25))
 end
 
 function DespawnHoodedforestCanopy(id)

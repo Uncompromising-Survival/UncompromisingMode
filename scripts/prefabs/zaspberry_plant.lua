@@ -16,22 +16,22 @@ local function onpickedfn(inst)
     inst.AnimState:PlayAnimation("picking")
     inst.AnimState:PushAnimation("picked")
     inst.Light:Enable(false)
-	if inst.vipertask then
-		inst.vipertask:Cancel()
-		inst.vipertask = nil
-	end
+    if inst.vipertask then
+        inst.vipertask:Cancel()
+        inst.vipertask = nil
+    end
 end
 
 local function onsave(inst,data)
-	if inst.from_waterhole then
-		data.from_waterhole = inst.from_waterhole
-	end
+    if inst.from_waterhole then
+        data.from_waterhole = inst.from_waterhole
+    end
 end
 
 local function onload(inst,data)
-	if data and data.from_waterhole then
-		inst.from_waterhole = data.from_waterhole
-	end
+    if data and data.from_waterhole then
+        inst.from_waterhole = data.from_waterhole
+    end
 end
 
 local function fn()
@@ -49,7 +49,7 @@ local function fn()
     inst.Transform:SetTwoFaced()
 
     inst:AddTag("plant")
-	inst:AddTag("shockwormplant")
+    inst:AddTag("shockwormplant")
 
     inst.AnimState:SetBank("shockworm")
     inst.AnimState:SetBuild("shockworm")
@@ -63,25 +63,20 @@ local function fn()
 
     inst.Light:Enable(true)
 
-
-    inst:AddComponent("umripples")
-    inst.components.umripples.xscale = 0.5
-    inst.components.umripples.yscale = 0.5
-    inst.components.umripples.zscale = 0.5
-
     inst.entity:SetPristine()
-	
-	
-	
-
-	--inst.components.um_ripples.horiz_offset = 0.1
-	--inst.components.um_ripples.should_parent_effect = true	
 
     if not TheWorld.ismastersim then
         return inst
     end
 
     inst.Transform:SetRotation(math.random()*360)
+
+    inst:AddComponent("umripples")
+    inst.components.umripples.xscale = 0.5
+    inst.components.umripples.yscale = 0.5
+    inst.components.umripples.zscale = 0.5
+    --inst.components.um_ripples.horiz_offset = 0.1
+    --inst.components.um_ripples.should_parent_effect = true
 
     inst:AddComponent("pickable")
     inst.components.pickable.picksound = "dontstarve/wilson/pickup_reeds"
@@ -94,17 +89,15 @@ local function fn()
     inst:AddComponent("lootdropper")
 
     inst:AddComponent("inspectable")
-	
-
-	
-	inst.OnSave = onsave
-	inst.OnLoad = onload	
+    
+    inst.OnSave = onsave
+    inst.OnLoad = onload    
     ---------------------
-	inst:WatchWorldState("iswinter",function(inst,iswinter) 
-		if iswinter and inst.from_waterhole then 
-			inst:Remove() 
-		end 
-	end)
+    inst:WatchWorldState("iswinter",function(inst,iswinter) 
+        if iswinter and inst.from_waterhole then 
+            inst:Remove() 
+        end 
+    end)
     MakeSmallPropagator(inst)
     MakeHauntableIgnite(inst)
     ---------------------

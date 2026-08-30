@@ -64,25 +64,22 @@ local function onfar(inst, target)
 end
 
 local function ToggleCurse(inst, doer)
-    if doer.components.debuffable then
-        if not doer.vetcurse then
-            local sounds = {"common/teleportato/teleportato_maxwelllaugh", "sanity/creature2/taunt"}
-            for _, sound in pairs(sounds) do
-                doer.SoundEmitter:PlaySound("dontstarve/"..sound)
-            end
-            --doer.components.debuffable:AddDebuff("buff_vetcurse", "buff_vetcurse")
-            if doer.UMToggleVetCurse then doer:UMToggleVetCurse(true) end
-            doer:PushEvent("foodbuffattached", {buff = "ANNOUNCE_ATTACH_BUFF_VETCURSE", 1})
-            local x, y, z = inst.Transform:GetWorldPosition()
-            local fxlist = {"statue_transition_2", "statue_transition"}
-            for _, fx in pairs(fxlist) do
-                local fx = _G.Prefabs[fx] and SpawnPrefab(fx)
-                if fx then
-                    fx.Transform:SetPosition(x, y, z)
-                    fx.Transform:SetScale(1.2, 1.2, 1.2)
-                    if TUNING.DSTU.DATES.APRIL_FOOLS then
-                        SpawnPrefab("balloonparty_confetti_cloud").Transform:SetPosition(inst.Transform:GetWorldPosition())
-                    end
+    if not doer.vetcurse then
+        local sounds = {"common/teleportato/teleportato_maxwelllaugh", "sanity/creature2/taunt"}
+        for _, sound in pairs(sounds) do
+            doer.SoundEmitter:PlaySound("dontstarve/"..sound)
+        end
+        if doer.UMToggleVetCurse then doer:UMToggleVetCurse(true) end
+        doer:PushEvent("foodbuffattached", {buff = "ANNOUNCE_ATTACH_BUFF_VETCURSE", 1})
+        local x, y, z = inst.Transform:GetWorldPosition()
+        local fxlist = {"statue_transition_2", "statue_transition"}
+        for _, fx in pairs(fxlist) do
+            local fx = SpawnPrefab(fx)
+            if fx then
+                fx.Transform:SetPosition(x, y, z)
+                fx.Transform:SetScale(1.2, 1.2, 1.2)
+                if TUNING.DSTU.DATES.APRIL_FOOLS then
+                    SpawnPrefab("balloonparty_confetti_cloud").Transform:SetPosition(x, y, z)
                 end
             end
         end

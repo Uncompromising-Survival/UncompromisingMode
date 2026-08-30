@@ -5,19 +5,20 @@ local assets =
 }
 
 local function ShouldMockAttack(buffaction, owner, weapon, target)
-    return (not buffaction or not buffaction.mockattack) and not (owner.components.rider and owner.components.rider:IsRiding())
-        and owner.sg.currentstate.name ~= "attack_recoil" and (not weapon or weapon.components.weapon and not (weapon.components.projectile or weapon:HasTag("rangedweapon")))
+    return buffaction and not buffaction.um_mockattack and buffaction.um_trymockattack and not (owner.components.rider and owner.components.rider:IsRiding())
+        and owner.sg.currentstate.name ~= "attack_recoil" and (not weapon or weapon.components.weapon and not (weapon.components.complexprojectile and not weapon.components.complexprojectile.ismeleeweapon
+        or weapon.components.projectile or weapon:HasTag("rangedweapon")))
 end
 
 local function DoubleSlap(owner, data)
     local target, weapon = data and data.target, data and data.weapon
     local buffaction = owner:GetBufferedAction()
-    if buffaction and buffaction.mockattack and owner.sg:HasStateTag("busy") then owner.sg:RemoveStateTag("busy") end
+    if buffaction and buffaction.um_mockattack and not (owner.sg.currentstate and owner.sg.currentstate.tags["busy"]) and owner.sg:HasStateTag("busy") then owner.sg:RemoveStateTag("busy") end
     if ShouldMockAttack(buffaction, owner, weapon, target) then
         owner:DoTaskInTime(0, function() -- Target can change during this task.
             local act = BufferedAction(owner, target, ACTIONS.ATTACK)
             if act and target and target:IsValid() and not (target.components.health and target.components.health:IsDead()) then
-                act.mockattack = true
+                act.um_mockattack = true
                 if owner.sg:HasStateTag("attack") then owner.sg:RemoveStateTag("attack") end
                 owner.components.combat:ResetCooldown()
                 owner:PushBufferedAction(act)
@@ -31,7 +32,7 @@ local function AddRemoveDebuff(owner)
     local combat = owner.components.combat
     if not combat then return end
     local buffaction = owner:GetBufferedAction()
-    if buffaction and buffaction.mockattack then
+    if buffaction and buffaction.um_mockattack then
         combat.externaldamagemultipliers:SetModifier(owner, TUNING.DSTU.KLAUS_AMULET_SECOND_HIT_DAMAGE_MULT, "um_mockattack")
     elseif combat.externaldamagemultipliers:CalculateModifierFromSource(owner, "um_mockattack") < 1 then
         combat.externaldamagemultipliers:RemoveModifier(owner, "um_mockattack")
@@ -41,12 +42,14 @@ end
 local function onequip_blue(inst, owner)
     if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.NECK or EQUIPSLOTS.BODY) then return end
     owner.AnimState:OverrideSymbol("swap_body", "torso_amulets_klaus", "redamulet")
+    owner.um_mockattacker = true
     owner:ListenForEvent("onattackother", DoubleSlap)
     owner:ListenForEvent("newstate", AddRemoveDebuff)
 end
 
 local function onunequip_blue(inst, owner)
     owner.AnimState:ClearOverrideSymbol("swap_body")
+    owner.um_mockattacker = nil
     owner:RemoveEventCallback("onattackother", DoubleSlap)
     owner:RemoveEventCallback("newstate", AddRemoveDebuff)
     local combat = owner.components.combat
@@ -68,13 +71,14 @@ local function fn()
     anim:SetBuild("amulet_klaus")
     anim:PlayAnimation("klausamulet")
 
+    inst:AddTag("vetcurse_item")
+    inst:AddTag("hide_percentage")
+    inst:AddTag("shadowlevel")
+    inst:AddTag("donotautopick")
+
     inst.foleysound = "dontstarve/movement/foley/jewlery"
 
     MakeInventoryFloatable(inst, "med", nil, .6)
-
-    inst:AddTag("vetcurse_item")
-    inst:AddTag("donotautopick")
-    inst:AddTag("hide_percentage")
     
     inst.entity:SetPristine()
 

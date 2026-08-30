@@ -4,7 +4,6 @@ local assets =
     Asset("ANIM", "anim/um_fox_den.zip"),	
 }
 
-
 local brain = require("brains/fern_foxbrain")
 
 SetSharedLootTable('fern_fox',
@@ -69,27 +68,25 @@ local function fn()
     inst.entity:AddDynamicShadow()
     inst.entity:AddNetwork()
 
+    MakeCharacterPhysics(inst, 100, .5)
+
     inst.DynamicShadow:SetSize(1.75, .75)
 
     inst.Transform:SetSixFaced()
 
-    MakeCharacterPhysics(inst, 100, .5)
-
     inst.AnimState:SetBank("fern_fox")
     inst.AnimState:SetBuild("fern_fox")
-    inst.AnimState:PlayAnimation("idle", true)
-
-    ------------------------------------------
+    inst.AnimState:PlayAnimation("idle_loop", true)
 
     inst:AddTag("animal")
 	inst:AddTag("plantkin")
     inst:AddTag("smallcreature")
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
         return inst
     end
-
 
     inst:AddComponent("timer")
     inst:AddComponent("knownlocations")
@@ -157,7 +154,6 @@ local function dig_up(inst)
 	inst:Remove()
 end
 
-
 local function fnden()
     local inst = CreateEntity()
 
@@ -197,7 +193,6 @@ local function fnden()
     inst.components.workable:SetWorkAction(ACTIONS.DIG)
     inst.components.workable:SetOnFinishCallback(dig_up)
     inst.components.workable:SetWorkLeft(1)
-	
 
     MakeMediumBurnable(inst)
     AddToRegrowthManager(inst)
@@ -211,7 +206,6 @@ local function fnden()
 
     MakeHauntableIgnite(inst)
 
-	
     return inst
 end
 

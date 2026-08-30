@@ -1,7 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-function DamageInfiniteItemGem(enchant, item, value)
+function DamageGem(enchant, item, value)
     if --[[not item.components.finiteuses
         and not item.components.fueled
         and not item.components.armor
@@ -18,7 +18,7 @@ env.AddStategraphPostInit("wilson", function(inst) -- Plan on moving this to the
         _onenter(inst, pushanim, ...)
         local buffaction = inst:GetBufferedAction()
         local neurotic_item_mult = inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS).um_neurotic_mod
-        if not (buffaction and buffaction.mockattack) and not (inst.components.rider and inst.components.rider:IsRiding()) and neurotic_item_mult then
+        if not (buffaction and buffaction.um_mockattack) and not (inst.components.rider and inst.components.rider:IsRiding()) and neurotic_item_mult then
             inst.AnimState:SetDeltaTimeMultiplier(neurotic_item_mult)
             if inst.sg.timeout then inst.sg:SetTimeout(inst.sg.timeout / neurotic_item_mult) end
             -- Incase we want to add other sources of speed buff
@@ -211,7 +211,7 @@ env.AddComponentPostInit("combat", function(self)
                 inst:DoTaskInTime(0, function(inst)
                     inst:AddDebuff("buff_furious" .. furious, "buff_furious" .. furious)
                 end)
-                DamageInfiniteItemGem("purplegem1", tool, 0.005)
+                DamageGem("purplegem1", tool, TUNING.DSTU.GEM_USES[furious])
             end
         end
         if self.inst:HasTag("agony_gas") then
@@ -238,7 +238,7 @@ env.AddComponentPostInit("container", function(self)
     local _GiveItem = self.GiveItem
     function self:GiveItem(item, slot, src_pos, drop_on_fail)
         local ret = _GiveItem(self, item, slot, src_pos, drop_on_fail)
-    
+
         if item.components.gem_enchantable ~= nil and item.components.gem_enchantable:HasEnchantment("um_gemologybluegem2") and not self:IsHolding(item) then
             self.inst:DoTaskInTime(0, function()
                 self:GiveItem(item, slot, src_pos, drop_on_fail)

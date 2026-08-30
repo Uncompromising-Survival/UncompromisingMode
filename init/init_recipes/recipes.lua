@@ -85,7 +85,7 @@ AddRecipe2(
 ChangeSortKey("jawed_scythe", "pitchfork", "TOOLS", true)
 ChangeSortKey("jawed_scythe", "spear_wathgrithr_lightning", "WEAPONS", true)
 
-if GetModConfigData("snowstorms") then
+if TUNING.DSTU.SNOWSTORMS then
     AddRecipe2("snowgoggles", { Ingredient("catcoonhat", 1), Ingredient("goggleshat", 1), Ingredient("beefalowool", 2) }, TECH.SCIENCE_TWO, nil, { "WINTER", "CLOTHING" })
     ChangeSortKey("snowgoggles", "catcoonhat", "WINTER", true)
     ChangeSortKey("snowgoggles", "catcoonhat", "CLOTHING", true)
@@ -266,6 +266,9 @@ end
 if GetModConfigData("trapdoorspiders") then
     AddRecipe2("mutator_trapdoor", { Ingredient("monstermeat", 2), Ingredient("spidergland", 3), Ingredient("cutgrass", 5) }, TECH.SPIDERCRAFT_ONE, { builder_tag = "spiderwhisperer" }, { "CHARACTER" })
     ChangeSortKey("mutator_trapdoor", "mutator_warrior", "CHARACTER", true)
+
+    AddRecipe2("mutator_trapdoor_hooded", { Ingredient("monstermeat", 2), Ingredient("silk", 3), Ingredient("um_moss", 2) }, TECH.SPIDERCRAFT_ONE, { builder_tag = "spiderwhisperer" }, { "CHARACTER" })
+    ChangeSortKey("mutator_trapdoor_hooded", "mutator_trapdoor", "CHARACTER", true)
 end
 
 AddRecipe2("floral_bandage", { Ingredient("bandage", 1), Ingredient("cactus_flower", 2) }, TECH.SCIENCE_TWO, nil, { "RESTORATION" })
@@ -374,7 +377,6 @@ if GetModConfigData("monstersmallmeat") then
     ChangeSortKey("transmute_monstersmallmeat", "transmute_smallmeat", "CHARACTER", true)
 end
 
-
 -- AddRecipe2("cursed_antler", { Ingredient("um_deerclops_soul", 1), Ingredient("boneshard", 6), Ingredient("um_dark_vestiges", 1) }, TECH.VETERANSHRINE_ONE, { nounlock = true }, { "MAGIC" })
 -- --ChangeSortKey("armor_sharksuit_um", "armordragonfly", "MAGIC", true)
 
@@ -448,6 +450,7 @@ AddDeconstructRecipe("um_moonfly_lantern", { Ingredient("moonglass", 3), Ingredi
 AddDeconstructRecipe("crystal_cursed_antler", { Ingredient("boneshard", 4), Ingredient("purebrilliance", 4) })
 AddDeconstructRecipe("um_wingsuit", { Ingredient("malbatross_feather", 6) })
 AddDeconstructRecipe("um_exhumer", { Ingredient("boneshard", 9), Ingredient("fossil_piece", 1), Ingredient("nightmarefuel", 2) })
+AddDeconstructRecipe("um_antlionstaff", { Ingredient("meat", 1), Ingredient("townportaltalisman", 2), Ingredient("rocks", 1) })
 
 ----deconstruct recipes for craftable items
 --AddDeconstructRecipe("steeringwheel_copper", { Ingredient("um_copper_pipe", 3), Ingredient("gears", 1) })
@@ -541,11 +544,20 @@ ChangeSortKey("um_blowdart_pyre", "blowdart_fire", "WEAPONS", true)
 --ChangeSortKey("codex_mantra", "waxwelljournal", "CHARACTER", true)
 
 if TUNING.DSTU.WAXWELL then
-    AddCharacterRecipe("um_maxwell_armor_sanity", { Ingredient("nightmarefuel", 3), Ingredient("waxwelljournal", 0) }, TECH.LOST, { builder_tag = "shadowmagic", product = "armor_sanity", image = "armor_sanity.tex", description = "pact_armor_sanity", actionstr = "UM_WAXWELL_SUMMON", sg_state = "um_usewaxwelljournal_pre" }, { "MAGIC", "ARMOUR" })
+    local function MakeIndestructible(name)
+        local recipe = AllRecipes[name]
+        if recipe then
+            local no_deconstruction = recipe.no_deconstruction
+            recipe.no_deconstruction = function(inst) return inst:HasTag("um_nodeconstruct") or FunctionOrValue(no_deconstruction, inst) end
+        end
+    end
+    local no_decon_recipes = {"armor_sanity", "nightsword"}
+    for _, recipe in pairs(no_decon_recipes) do MakeIndestructible(recipe) end
+    AddCharacterRecipe("um_maxwell_armor_sanity", {Ingredient("nightmarefuel", 5), Ingredient("waxwelljournal", 0)}, TECH.LOST, {builder_tag = "shadowmagic", product = "armor_sanity", image = "armor_sanity.tex", description = "pact_armor_sanity", actionstr = "UM_WAXWELL_SUMMON", hint_msg = "UM_NEEDSORIGINALRECIPE", sg_state = "um_usewaxwelljournal_pre"}, {"MAGIC", "ARMOUR"})
     ChangeSortKey("um_maxwell_armor_sanity", "waxwelljournal", "CHARACTER", true)
     ChangeSortKey("um_maxwell_armor_sanity", "armor_sanity", "ARMOUR", true)
     ChangeSortKey("um_maxwell_armor_sanity", "nightsword", "MAGIC", true)
-    AddCharacterRecipe("um_maxwell_nightsword", { Ingredient("nightmarefuel", 3), Ingredient("waxwelljournal", 0) }, TECH.LOST, { builder_tag = "shadowmagic", product = "nightsword", image = "nightsword.tex", description = "pact_sword_sanity", actionstr = "UM_WAXWELL_SUMMON", sg_state = "um_usewaxwelljournal_pre" }, { "MAGIC", "WEAPONS" })
+    AddCharacterRecipe("um_maxwell_nightsword", {Ingredient("nightmarefuel", 5), Ingredient("waxwelljournal", 0)}, TECH.LOST, {builder_tag = "shadowmagic", product = "nightsword", image = "nightsword.tex", description = "pact_sword_sanity", actionstr = "UM_WAXWELL_SUMMON", hint_msg = "UM_NEEDSORIGINALRECIPE", sg_state = "um_usewaxwelljournal_pre"}, {"MAGIC", "WEAPONS"})
     ChangeSortKey("um_maxwell_nightsword", "um_maxwell_armor_sanity", "CHARACTER", true)
     ChangeSortKey("um_maxwell_nightsword", "nightsword", "WEAPONS", true)
     ChangeSortKey("um_maxwell_nightsword", "um_maxwell_armor_sanity", "MAGIC", true)
@@ -642,7 +654,7 @@ ChangeSortKey("oar_monkey", "oar_driftwood", "SEAFARING", true)
 AddRecipe2("woby_treat_small", { Ingredient("monstersmallmeat_dried", 2) }, TECH.NONE, { product = "woby_treat", builder_skill = "walter_camp_wobytreat", no_deconstruction = true }, { "CHARACTER" })
 ChangeSortKey("woby_treat_small", "woby_treat", "CHARACTER", true)
 
-AddRecipe2("um_feather_totem", { Ingredient("boards", 2), Ingredient("um_moss", 4), Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 15) }, TECH.MAGIC_TWO, { image = "screecher_trinket.tex" }, { "RESTORATION", "MAGIC" })
+AddRecipe2("um_feather_totem", { Ingredient("boards", 3), Ingredient("um_moss", 4), Ingredient("woodpecker", 1) }, TECH.MAGIC_TWO, {}, { "RESTORATION", "MAGIC" })
 ChangeSortKey("um_feather_totem", "reviver", "RESTORATION", true)
 ChangeSortKey("um_feather_totem", "resurrectionstatue", "MAGIC", false)
 

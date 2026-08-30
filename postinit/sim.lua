@@ -143,7 +143,9 @@ function FindPickupableItem(owner, radius, furthestfirst, positionoverride, igno
             local ispickable = v:HasTag("pickable") and not (v.components.pickable and v.components.pickable:IsStuck())
             if UM_FindPickupableItem_filter(v, ba, owner, radius, furthestfirst, positionoverride, ignorethese, onlytheseprefabs, true, ispickable, worker, PickUpFilter, inventoryoverride) then
                 if v and ispickable and v.components.pickable then
+                    owner:AddTag("um_thornimmune")
                     v.components.pickable:Pick(owner)
+                    owner:RemoveTag("um_thornimmune")
                     SpawnPrefab("sand_puff").Transform:SetPosition(v.Transform:GetWorldPosition())
                     owner.um_orangeamulet.components.finiteuses:Use(1)
                     if owner.components.sanity then owner.components.sanity:DoDelta(-.25) end
@@ -157,12 +159,24 @@ function FindPickupableItem(owner, radius, furthestfirst, positionoverride, igno
     return _FindPickupableItem(owner, radius, furthestfirst, positionoverride, ignorethese, onlytheseprefabs, allowpickables, worker, extra_filter, inventoryoverride, ...)
 end
 
-local _CanEntitySeeInStorm = CanEntitySeeInStorm
-
 local function um_CanEntitySeeInStorm(inst)
-    return inst ~= nil and inst:IsValid() and inst.um_canseeinstorm ~= nil and inst.um_canseeinstorm:value()
+    return inst and inst:IsValid() and inst.um_canseeinstorm and inst.um_canseeinstorm:value()
 end
 
+local _CanEntitySeeInStorm = CanEntitySeeInStorm
 function CanEntitySeeInStorm(inst, ...)
     return _CanEntitySeeInStorm(inst, ...) or um_CanEntitySeeInStorm(inst)
+end
+
+_G.UMSimTempOverride = {}
+local TheSimMetaTable = getmetatable(TheSim).__index
+local _FindEntities = TheSim.FindEntities
+function TheSimMetaTable.FindEntities(self, x, y, z, radius, musttags, canttags, oneoftags, ...)
+    local ret = _FindEntities(self, x, y, z, radius, musttags, canttags, oneoftags, ...)
+    local data = UMSimTempOverride.data
+    if data then
+        UMSimTempOverride.data = nil
+        ret = data.fn(ret, data.inst)
+    end
+    return ret
 end

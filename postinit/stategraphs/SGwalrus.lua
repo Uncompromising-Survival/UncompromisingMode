@@ -106,7 +106,7 @@ env.AddStategraphPostInit("walrus", function(inst)
                         inst:ForceFacePoint(target.Transform:GetWorldPosition())
                     end
                     
-                    inst.LaunchTrap(inst, inst.components.combat.target)
+                    inst:LaunchTrap(inst.components.combat.target)
                 end),
             },
 

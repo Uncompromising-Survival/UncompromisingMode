@@ -20,11 +20,11 @@ local function TrySpawnCocoon(x, z, type)
     if not type then
         local is_character = math.random() > .95 --roughly same chance as before.
         if is_character then
-            type = COCOON_CHARACTERS[math.random(#COCOON_CHARACTERS)]
+            type = UMWebbedCreatureUtil.COCOON_CHARACTERS[math.random(#UMWebbedCreatureUtil.COCOON_CHARACTERS)]
         elseif IsIslandWorld() then
-            type = COCOON_CREATURES_SHIPWRECKED[math.random(#COCOON_CREATURES_SHIPWRECKED)]
+            type = UMWebbedCreatureUtil.COCOON_CREATURES_SHIPWRECKED[math.random(#UMWebbedCreatureUtil.COCOON_CREATURES_SHIPWRECKED)]
         else
-            type = COCOON_CREATURES_DEFAULT[math.random(#COCOON_CREATURES_DEFAULT)]
+            type = UMWebbedCreatureUtil.COCOON_CREATURES_DEFAULT[math.random(#UMWebbedCreatureUtil.COCOON_CREATURES_DEFAULT)]
         end
     end
     local xi = x + math.random(-8, 8)
@@ -36,7 +36,7 @@ local function TrySpawnCocoon(x, z, type)
         cocoon.Transform:SetPosition(xi, 0, zi)
         if type ~= nil then -- if cocoon nil, remove
             cocoon.cocoon_creature = type
-            cocoon.cocoon_data = COCOON_DEFS.DEFAULT[type]
+            cocoon.cocoon_data = UMWebbedCreatureUtil.COCOON_DEFS.DEFAULT[type]
 		else
 			cocoon:Remove()
         end
@@ -83,8 +83,7 @@ local function SpawnDecor(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
     for j = 1, math.random(3, 4) do
         for i = 1, cap do
-            local type = i
-            TrySpawnDecor(x, z, type)
+            TrySpawnDecor(x, z, tostring(i))
         end
     end
 end

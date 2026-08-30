@@ -136,7 +136,7 @@ env.AddStategraphPostInit("krampus", function(inst)
                                 end
                             end
                             
-                            if inst.components.thief ~= nil then
+                            if inst.components.thief then
                                 for i = 1, 3 do
                                     inst.components.thief:StealItem(v)
                                 end

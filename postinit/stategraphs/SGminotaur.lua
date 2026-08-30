@@ -76,71 +76,86 @@ env.AddStategraphPostInit("minotaur", function(inst)
         end
     end
 
-    local _OldAttackedEvent = inst.events["attacked"].fn
-    inst.events["attacked"].fn = function(inst, data)
-        if inst:HasTag("forcefield") then
-            shield_fxanim(inst)
-        else
-            _OldAttackedEvent(inst, data)
-        end
-    end
-
-    local _OldOnEnter = inst.states["run_start"].onenter 
-    inst.states["run_start"].onenter = function(inst)
-        if inst.forceleap and inst.components.combat and inst.components.combat.target then
-            inst.sg:GoToState("leap_attack_pre", inst.components.combat.target)
-        else
-            _OldOnEnter(inst)
-        end
-    end
-
-    ------------------------------------------------------------
-    inst.states["stun_pst"].onexit = function(inst)
-        inst:DoTaskInTime(0,function(inst) 
-            if inst.forcebelch and inst.components.health and not inst.components.health:IsDead() then
-                inst.sg:GoToState("belch") 
-            end
-        end)
-    end
-
-    local _OldOnExit = inst.states["leap_attack_pst"].onexit    --Both of these calls are to make AG belch if it can and is getting up from being stunned
-    
-    inst.states["leap_attack_pst"].onexit = function(inst)
-        inst:DoTaskInTime(0,function(inst) 
-            if inst.forcebelch and inst.components.health and not inst.components.health:IsDead() then
-                inst.sg:GoToState("belch") 
-            end
-        end)
-        if _OldOnExit then
-            _OldOnExit(inst)
-        end
-    end
-    ------------------------------------------------------------
-
-
-    inst.states["leap_attack"].events["animover"].fn = function(inst) --Less intrusive than redoing the whole leap_attack state
-        inst.forceleap = false
-        ----------------------------------------------- Break any organ shields.
-        local x,y,z = inst.Transform:GetWorldPosition()
-        if inst.components.combat and inst.components.combat.target and ((inst.combo < math.random(2, 3) and (inst.components.health:GetPercent() > 0.3 and inst.components.health:GetPercent() < 0.6)) or (inst.combo < math.random(4, 5) and inst.components.health:GetPercent() < 0.3)) then
-            inst.sg:GoToState("leap_attack_pre_quick", inst.components.combat.target) -- Leap attack combo depends on how much health the AG has
-            inst.SoundEmitter:PlaySound("ancientguardian_rework/minotaur2/groundpound") -- it won't combo if it doesn't have low enough health and
-            inst.combo = inst.combo + 1 -- the lower it gets, the longer the combo can possibly go.
-        else
-            inst.components.groundpounder.numRings = 2
-            inst.combo = 0
-            UMCommonFns.RestartTimer(inst, {name = "forceleapattack", time = 30 + math.random(0, 15)}) -- Secondary means to force the leap if the player is never in position for it to happen naturally.
-            if inst.jumpland(inst) then
-                inst.sg:GoToState("leap_attack_pst")
-                inst.SoundEmitter:PlaySound("ancientguardian_rework/minotaur2/groundpound")
-            elseif inst.components.health and inst.components.health:GetPercent() < 0.6 then
-                inst.sg:GoToState("stun", {land_stun = true})
-                return
+    local attackedeventhandler = inst.events["attacked"]
+    if attackedeventhandler then
+        local attackedeventhandler_fn = attackedeventhandler.fn
+        attackedeventhandler.fn = function(inst, data, ...)
+            if inst:HasTag("forcefield") then
+                shield_fxanim(inst)
             else
-                inst.sg:GoToState("leap_attack_pst")
-                return
+                attackedeventhandler_fn(inst, data, ...)
             end
         end
+    end
+
+    local runstartstate = inst.states["run_start"]
+    if runstartstate then
+        local runstartstate_onenter = runstartstate.onenter
+        runstartstate.onenter = function(inst, ...)
+            local target = inst.components.combat.target
+            if inst.forceleap and target then
+                inst.sg:GoToState("leap_attack_pre", target)
+                return
+            end
+            return runstartstate_onenter(inst, ...)
+        end
+    end
+
+    ------------------------------------------------------------
+    local stunpststate = inst.states["stun_pst"]
+    if stunpststate then
+        local stunpststate_events_animover = stunpststate.events["animover"]
+        if stunpststate_events_animover then
+            local stunpststate_events_animover_fn = stunpststate_events_animover.fn
+            stunpststate_events_animover.fn = function(inst, ...)
+                if inst.forcebelch then
+                    inst.sg:GoToState("belch")
+                    return
+                end
+                return stunpststate_events_animover_fn(inst, ...)
+            end
+        end
+    end
+
+    local leapattackpststate = inst.states["leap_attack_pst"]
+    if leapattackpststate then
+        local leapattackpststate_events_animover = leapattackpststate.events["animover"]
+        if leapattackpststate_events_animover then
+            local leapattackpststate_events_animover_fn = leapattackpststate_events_animover.fn
+            leapattackpststate_events_animover.fn = function(inst, ...)
+                if inst.forcebelch then --Both of these calls are to make AG belch if it can and is getting up from being stunned
+                    inst.sg:GoToState("belch")
+                    return
+                end
+                return leapattackpststate_events_animover_fn(inst, ...)
+            end
+        end
+    end
+    ------------------------------------------------------------
+    local leapattackstate = inst.states["leap_attack"]
+    if leapattackstate then
+        leapattackstate.events["animover"] = EventHandler("animover", function(inst) --Less intrusive than redoing the whole leap_attack state
+            inst.forceleap = false
+            ----------------------------------------------- Break any organ shields.
+            local x,y,z = inst.Transform:GetWorldPosition()
+            if inst.components.combat and inst.components.combat.target and ((inst.combo < math.random(2, 3) and (inst.components.health:GetPercent() > 0.3 and inst.components.health:GetPercent() < 0.6)) or (inst.combo < math.random(4, 5) and inst.components.health:GetPercent() < 0.3)) then
+                inst.sg:GoToState("leap_attack_pre_quick", inst.components.combat.target) -- Leap attack combo depends on how much health the AG has
+                inst.SoundEmitter:PlaySound("ancientguardian_rework/minotaur2/groundpound") -- it won't combo if it doesn't have low enough health and
+                inst.combo = inst.combo + 1 -- the lower it gets, the longer the combo can possibly go.
+            else
+                inst.components.groundpounder.numRings = 2
+                inst.combo = 0
+                UMCommonFns.RestartTimer(inst, {name = "forceleapattack", time = 30 + math.random(0, 15)}) -- Secondary means to force the leap if the player is never in position for it to happen naturally.
+                if inst.jumpland(inst) then
+                    inst.sg:GoToState("leap_attack_pst")
+                    inst.SoundEmitter:PlaySound("ancientguardian_rework/minotaur2/groundpound")
+                elseif inst.components.health and inst.components.health:GetPercent() < 0.6 then
+                    inst.sg:GoToState("stun", {land_stun = true})
+                else
+                    inst.sg:GoToState("leap_attack_pst")
+                end
+            end
+        end)
     end
 
     local states =

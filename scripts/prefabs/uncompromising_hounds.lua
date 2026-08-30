@@ -114,7 +114,6 @@ SetSharedLootTable('hound_spore',
     {
         { 'spoiled_food',         1.0 },
         { 'houndstooth',          1.0 },
-        { 'sporecloud_toad',      1.0 },
         { 'shroom_skin_fragment', 0.5 },
 
     })
@@ -124,11 +123,12 @@ local SLEEP_NEAR_HOME_DISTANCE = 10
 local SHARE_TARGET_DIST = 30
 local HOME_TELEPORT_DIST = 30
 
-local NO_TAGS = { "FX", "NOCLICK", "DECOR", "INLIMBO" }
-local FREEZABLE_TAGS = { "freezable" }
+local NO_TAGS = {"FX", "NOCLICK", "DECOR", "INLIMBO"}
+local FREEZABLE_TAGS = {"freezable"}
 
-local SINKHOLD_BLOCKER_TAGS = { "hound_lightning" }
-local function Zap(posx, posz)
+local SINKHOLD_BLOCKER_TAGS = {"hound_lightning"}
+
+local function Zap(inst, posx, posz)
     --local projectile = SpawnPrefab("hound_lightning")
     --projectile.Transform:SetPosition(posx, 0, posz)
 
@@ -144,28 +144,22 @@ local function Zap(posx, posz)
     end
 
     local offset = Vector3(0, 0, 0)
-    offset =
-        IsValidSinkholePosition(offset) and offset or
-        FindValidPositionByFan(math.random() * 2 * PI, TUNING.ANTLION_SINKHOLE.RADIUS * 1.8 + math.random(), 9,
-            IsValidSinkholePosition) or
-        FindValidPositionByFan(math.random() * 2 * PI, TUNING.ANTLION_SINKHOLE.RADIUS * 2.9 + math.random(), 17,
-            IsValidSinkholePosition) or
-        FindValidPositionByFan(math.random() * 2 * PI, TUNING.ANTLION_SINKHOLE.RADIUS * 3.9 + math.random(), 17,
-            IsValidSinkholePosition) or
-        nil
+    offset = IsValidSinkholePosition(offset) and offset
+        or FindValidPositionByFan(math.random() * 2 * PI, TUNING.ANTLION_SINKHOLE.RADIUS * 1.8 + math.random(), 9, IsValidSinkholePosition)
+        or FindValidPositionByFan(math.random() * 2 * PI, TUNING.ANTLION_SINKHOLE.RADIUS * 2.9 + math.random(), 17, IsValidSinkholePosition)
+        or FindValidPositionByFan(math.random() * 2 * PI, TUNING.ANTLION_SINKHOLE.RADIUS * 3.9 + math.random(), 17, IsValidSinkholePosition)
+        or nil
 
-    if offset ~= nil then
-        local sinkhole = SpawnPrefab("hound_lightning")
-        sinkhole.NoTags = { "INLIMBO", "shadow", "hound", "houndfriend" }
-        sinkhole.Transform:SetPosition(x + offset.x, 0, z + offset.z)
+    if offset then
+        UMCommonFns.SpawnHoundLightning(inst, {pos = {x = x + offset.x, z = z + offset.z}})
     end
 end
 
 local function LaunchProjectile(inst, targetpos)
     local x, y, z = targetpos.Transform:GetWorldPosition()
-    inst:DoTaskInTime(0, function(inst) Zap(x, z) end)
-    inst:DoTaskInTime(0.4, function(inst) Zap(x, z) end)
-    inst:DoTaskInTime(0.8, function(inst) Zap(x, z) end)
+    for i = 0, 2 do
+        inst:DoTaskInTime(i * .4, function(inst) Zap(inst, x, z) end)
+    end
 end
 
 local function Charging(inst)
@@ -642,7 +636,7 @@ local function ontimerdone(inst, data)
 end
 
 local function DoLightningExplosion(inst)
-    SpawnPrefab("hound_lightning").Transform:SetPosition(inst.Transform:GetWorldPosition())
+    UMCommonFns.SpawnHoundLightning(inst, {pos = inst:GetPosition()})
 end
 
 local function OnLightningAttacked(inst, data)
@@ -659,9 +653,11 @@ local function OnLightningAttacked(inst, data)
     end
 end
 
+local ISALLY_TAGS = {"hound", "houndfriend", "houndmound"}
+
 local function IsAlly(inst, guy)
     -- Prevents lightning from forking from a Lightning Hound's target to other Hounds and friends.
-    return UMCommonFns.IsAlly(inst, guy, { "hound", "houndfriend", "houndmound" })
+    return UMCommonFns.IsAlly(inst, guy, ISALLY_TAGS)
 end
 
 local function fnlightning()
@@ -671,11 +667,12 @@ local function fnlightning()
         return inst
     end
 
+    inst.UMIsAlly = IsAlly
+
     inst.sg.mem.noelectrocute = true
 
     inst:AddComponent("electricattacks")
     inst.components.electricattacks:AddSource(inst)
-    inst.UMIsAlly = IsAlly
 
     MakeMediumFreezableCharacter(inst, "hound_body")
 
@@ -731,7 +728,6 @@ local function GlacialProjectile(inst, target)
             end
 
             local spike = SpawnPrefab("glacialhound_icespike")
-
             spike.owner = inst
             spike.Transform:SetRotation(rad)
             spike.Transform:SetPosition(x1, y, z1)
@@ -860,7 +856,6 @@ local function fnglacial()
 
     inst.components.combat:SetDefaultDamage(TUNING.HOUND_DAMAGE * 2)
     inst.components.health:SetMaxHealth(TUNING.WARGLET_HEALTH * 1.25)
-
 
     inst.task = nil
 
@@ -1006,27 +1001,18 @@ end
 
 local function MagmaCharging(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-
     local x1 = x + math.random(-2, 2)
     local z1 = z + math.random(-2, 2)
     local y1 = 0 + .25 * math.random()
-
     local chance = math.random()
-
-    if chance >= .66 then
-        SpawnPrefab("halloween_firepuff_1").Transform:SetPosition(x1, y1, z1)
-        SpawnPrefab("magmafire").Transform:SetPosition(x1, 0, z1)
-    elseif chance >= .33 and chance < .66 then
-        SpawnPrefab("halloween_firepuff_2").Transform:SetPosition(x1, y1, z1)
-        SpawnPrefab("magmafire").Transform:SetPosition(x1, 0, z1)
-    else
-        SpawnPrefab("halloween_firepuff_3").Transform:SetPosition(x1, y1, z1)
-        SpawnPrefab("magmafire").Transform:SetPosition(x1, 0, z1)
-    end
+    SpawnPrefab(chance >= .66 and "halloween_firepuff_1" or chance >= .33 and chance < .66 and "halloween_firepuff_2" or "halloween_firepuff_3").Transform:SetPosition(x1, y1, z1)
+    local magmafire = SpawnPrefab("magmafire")
+    magmafire.Transform:SetPosition(x1, 0, z1)
+    magmafire.damager = inst
 end
 
 local function CancelMagmaCharge(inst)
-    if inst.task ~= nil then
+    if inst.task then
         inst.task:Cancel()
         inst.task = nil
     end
@@ -1080,8 +1066,6 @@ end
 local function SetUpFire(inst, degrand, speed, scale, damage)
     local x, y, z = inst.Transform:GetWorldPosition()
     local projectile = SpawnPrefab("um_fire_projectile")
-    projectile.damager = inst
-
     local rot = inst.Transform:GetRotation()
     local dx = 1 * math.sin((rot + 90 + degrand) * DEGREES)
     local dz = 1 * math.cos((rot + 90 + degrand) * DEGREES)
@@ -1091,6 +1075,7 @@ local function SetUpFire(inst, degrand, speed, scale, damage)
     projectile.speed = speed
     projectile.scale = scale -- scale up sometimes.
     projectile.damage = damage
+    projectile.damager = inst
 end
 
 local function ShootFireMagmaHound(inst, total_flame) --AXE obviously called by magmahound to perform its continuous fire breath attack
@@ -1108,7 +1093,9 @@ local function FirePoof(inst) --AXE Visual support for when the fire hound is br
     local z1 = z + 0.05 * math.random(-10, 10)
     local y1 = 0 + .25 * math.random()
     SpawnPrefab("halloween_firepuff_1").Transform:SetPosition(x1, y1, z1)
-    SpawnPrefab("magmafire").Transform:SetPosition(x1, 0, z1)
+    local magmafire = SpawnPrefab("magmafire")
+    magmafire.Transform:SetPosition(x1, 0, z1)
+    magmafire.damager = inst
 end
 
 local function OnHitOtherBurn(inst, data)
@@ -1129,10 +1116,6 @@ local function fnmagma()
     end
 
     inst.UMIsAlly = IsAlly
-
-    if inst.components.combat then
-        inst:ListenForEvent("onhitother", OnHitOtherBurn)
-    end
 
     inst.ShootFire = ShootFireMagmaHound
 
@@ -1162,6 +1145,7 @@ local function fnmagma()
 
     inst:ListenForEvent("attacked", OnMagmaAttacked)
     inst:ListenForEvent("death", DoMagmaExplosion)
+    inst:ListenForEvent("onhitother", OnHitOtherBurn)
 
     inst.foogley = 0
 
@@ -1171,7 +1155,58 @@ local function fnmagma()
     return inst
 end
 
-local function OnAttackOther_Spore(inst, data)
+local function OnSporeCloudRemoved(inst)
+    inst:RemoveEventCallback("attacked", inst.OnAttacked, inst.owner)
+    inst:RemoveEventCallback("leaderchanged", inst.OnLeaderChanged, inst.owner)
+    inst:RemoveEventCallback("onremove", inst.OnSporeHoundRemoved, inst.owner)
+    inst:RemoveEventCallback("onremove", inst.OnSporeHoundRemoved)
+end
+
+local function SpawnSporeCloud(inst)
+    local sporecloud = SpawnPrefab("sporecloud_toad")
+    sporecloud.Transform:SetPosition(inst.Transform:GetWorldPosition())
+    sporecloud.owner = inst
+    sporecloud.NoTags = ISALLY_TAGS
+    local follower = inst.components.follower
+    local leader = follower and follower:GetLeader()
+    if leader then sporecloud.ownerleader = leader end -- Look into refining and making this a thing for the other follower projectiles/traps.
+    sporecloud.OnAttacked = function(_inst, data)
+        if sporecloud.ownerleader == data.attacker then
+            sporecloud.ownerleader = nil
+        end
+    end
+    sporecloud.OnLeaderChanged = function(_inst, data)
+        local health = _inst.components.health
+        if not (health and health:IsDead()) then
+            local newleader = data.new
+            if sporecloud.ownerleader ~= newleader then
+                sporecloud.ownerleader = newleader
+            end
+        end
+    end
+    sporecloud.OnSporeHoundRemoved = function(_inst) OnSporeCloudRemoved(sporecloud) end
+    sporecloud:ListenForEvent("attacked", sporecloud.OnAttacked, sporecloud.owner)
+    sporecloud:ListenForEvent("leaderchanged", sporecloud.OnLeaderChanged, sporecloud.owner)
+    sporecloud:ListenForEvent("onremove", sporecloud.OnSporeHoundRemoved, sporecloud.owner)
+    sporecloud:ListenForEvent("onremove", sporecloud.OnSporeHoundRemoved)
+end
+
+local function SporeCloudAttack(inst, target)
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local ents = TheSim:FindEntities(x, y, z, 2.5, {"_combat"}, {"wall", "hound", "houndfriend", "houndmound"})
+    for i, v in ipairs(ents) do
+        if not (v.components.health and v.components.health:IsDead()) and UMCommonFns.IsNotFriendly(inst, v) then
+            v.components.combat:GetAttacked(inst, 25, nil)
+        end
+    end
+    SpawnSporeCloud(inst)
+end
+
+local function DoSporeExplosion(inst)
+    SpawnSporeCloud(inst)
+end
+
+local function OnHitOther_Spore(inst, data)
     if data.target and data.target:HasTag("player") and not data.target:HasAnyTag("hasplaguemask", "automaton") and TUNING.DSTU.MAXHPHITTERS then
         data.target.components.health:DeltaPenalty(.05)
     end
@@ -1179,11 +1214,13 @@ end
 
 local function fnspore()
     --local inst = fncommon("hound", "hound_spore_ocean", nil, nil, nil, {"sporehound"}, {amphibious = true})
-    local inst = fncommon("hound", "hound_spore", nil, nil, nil, { "sporehound" })
+    local inst = fncommon("hound", "hound_spore", nil, nil, nil, {"sporehound"})
 
     if not TheWorld.ismastersim then
         return inst
     end
+
+    inst.UMIsAlly = IsAlly
 
     --inst:SetBrain(sporebrain)
 
@@ -1197,7 +1234,10 @@ local function fnspore()
     MakeMediumFreezableCharacter(inst, "hound_body")
     MakeMediumBurnableCharacter(inst, "hound_body")
 
-    inst:ListenForEvent("onattackother", OnAttackOther_Spore)
+    inst.LaunchProjectile = SporeCloudAttack
+
+    inst:ListenForEvent("death", DoSporeExplosion)
+    inst:ListenForEvent("onhitother", OnHitOther_Spore)
 
     return inst
 end

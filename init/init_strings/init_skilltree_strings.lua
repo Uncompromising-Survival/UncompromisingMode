@@ -172,7 +172,7 @@ STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_HELMET_2_DESC = "Battle Helms ar
 STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_HELMET_5_DESC = "Fighting will repair the Commander's Helm no matter your health.\nThis effect ignores your lifeasteal multipliers."
 STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SHIELD_1_DESC = "Learn to craft the Battle Rönd.\nBlocking attacks will consume durability by 10% of the damage taken."
 STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SHIELD_2_TITLE = "Dread Rönd"
-STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SHIELD_2_DESC = "Learn to craft the Dread Rönd: a planar weapon that restores durability over time at the cost of your sanity."
+STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SHIELD_2_DESC = "Learn to craft the Dread Rönd: a post-rifts weapon that restores durability over time at the cost of your sanity."
 STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SHIELD_3_DESC = "Blocking adds the absorbed damage to the next attack, up to 100."
 
 STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_1_DESC = "Beefalos will be domesticated 15% faster and ridden 30% longer."

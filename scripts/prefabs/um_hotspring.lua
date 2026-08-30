@@ -159,7 +159,6 @@ local function OnStopBeingOccupiedBy(inst, ent)
             ent:RemoveTag("fuelfarming")
         end
 
-
         if next(inst.bathingpoolents) == nil then
             if inst.bathingpooltask then
                 inst.bathingpooltask:Cancel()
@@ -169,7 +168,6 @@ local function OnStopBeingOccupiedBy(inst, ent)
         end
     end
 end
-
 
 local function OnTimerDone(inst)
     inst.Light:Enable(false)
@@ -298,7 +296,7 @@ local function fn()
     anim:SetSortOrder(3)
     anim:SetLayer(LAYER_BACKGROUND)
 
-    minimap:SetIcon("pond_cave.png")
+    minimap:SetIcon("um_hotspring.tex")
 
     light:Enable(false)
     light:SetRadius(TUNING.HOTSPRING_GLOW.RADIUS)

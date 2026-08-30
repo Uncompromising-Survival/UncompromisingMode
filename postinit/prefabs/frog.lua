@@ -10,15 +10,28 @@ SetSharedLootTable('frog',
 {
 })
 ]]
+
+local function DoSporeExplosion(inst)
+    if math.random() <= .5 then
+        local sporecloud = SpawnPrefab("sporecloud_toad")
+        sporecloud.Transform:SetPosition(inst.Transform:GetWorldPosition())
+        sporecloud.owner = inst
+    end
+end
+
 local function OnIsAutumn(inst, isautumn)
     if isautumn and TheWorld.state.cycles >= TUNING.DSTU.WEATHERHAZARD_START_DATE_AUTUMN and TUNING.DSTU.TOADS then
-        inst.components.lootdropper:SetChanceLootTable('uncompromising_toad')
-        inst.AnimState:SetBuild("frog_yellow_build")
-        inst:SetPrefabNameOverride("uncompromising_toad")
+        if not inst.um_toad then
+            inst.AnimState:SetBuild("frog_yellow_build")
+            inst:SetPrefabNameOverride("uncompromising_toad")
+            inst:ListenForEvent("death", DoSporeExplosion)
+            inst.um_toad = true
+        end
     else
-        inst.components.lootdropper:SetChanceLootTable('frog')
         inst.AnimState:SetBuild("frog")
         inst:SetPrefabNameOverride("frog")
+        inst:RemoveEventCallback("death", DoSporeExplosion)
+        inst.um_toad = nil
     end
 end
 
@@ -45,13 +58,12 @@ end
 env.AddPrefabPostInit("frog", function (inst)
     inst:AddTag("frogimmunity")
 
-    if not TheWorld.ismastersim then
-        return
-    end
-    
-    inst:WatchWorldState("isautumn", OnIsAutumn)
+    if not TheWorld.ismastersim then return end
+
+    inst.TurnIntoToad = OnIsAutumn
+    inst:WatchWorldState("isautumn", inst.TurnIntoToad)
     if TheWorld.state.isautumn then
-        OnIsAutumn(inst, true)
+        inst:TurnIntoToad(true)
     end
 
     if inst.components.combat ~= nil then
@@ -61,7 +73,7 @@ env.AddPrefabPostInit("frog", function (inst)
             inst.components.combat:SetRetargetFunction(2, NewRetargetfn)
         end
     end
-    
+
     local eater = inst.components.eater or inst:AddComponent("eater")
     if eater then
         eater:SetDiet({ FOODGROUP.OMNI }, { FOODGROUP.OMNI })
@@ -69,12 +81,12 @@ env.AddPrefabPostInit("frog", function (inst)
         eater:SetCanEatRaw()
         eater.strongstomach = true -- can eat monster meat!
     end
-    
+
     if not inst.components.inventory then
         inst:AddComponent("inventory")
     end
 
-	--[[local um_dynamic_digester = inst.components.um_dynamic_digester or inst:AddComponent("um_dynamic_digester")
+    --[[local um_dynamic_digester = inst.components.um_dynamic_digester or inst:AddComponent("um_dynamic_digester")
     if um_dynamic_digester then
         um_dynamic_digester.digesttime = 5
         um_dynamic_digester.digest_per = 20
@@ -82,12 +94,9 @@ env.AddPrefabPostInit("frog", function (inst)
 end)
 
 env.AddPrefabPostInit("uncompromising_toad", function (inst)
-    
     inst:AddTag("frogimmunity")
 
-    if not TheWorld.ismastersim then
-        return
-    end
+    if not TheWorld.ismastersim then return end
 
     local eater = inst.components.eater or inst:AddComponent("eater")
     if eater then
@@ -96,12 +105,12 @@ env.AddPrefabPostInit("uncompromising_toad", function (inst)
         eater:SetCanEatRaw()
         eater.strongstomach = true -- can eat monster meat!
     end
-    
+
     if not inst.components.inventory then
         inst:AddComponent("inventory")
     end
-    
-	--[[local um_dynamic_digester = inst.components.um_dynamic_digester or inst:AddComponent("um_dynamic_digester")
+
+    --[[local um_dynamic_digester = inst.components.um_dynamic_digester or inst:AddComponent("um_dynamic_digester")
     if um_dynamic_digester then
         um_dynamic_digester.digesttime = 5
         um_dynamic_digester.digest_per = 20
@@ -109,12 +118,9 @@ env.AddPrefabPostInit("uncompromising_toad", function (inst)
 end)
 
 env.AddPrefabPostInit("lunarfrog", function (inst)
-    
     inst:AddTag("frogimmunity")
 
-    if not TheWorld.ismastersim then
-        return
-    end
+    if not TheWorld.ismastersim then return end
 
     if inst.components.combat ~= nil then
         if inst.components.combat.targetfn ~= nil then
@@ -131,12 +137,12 @@ env.AddPrefabPostInit("lunarfrog", function (inst)
         eater:SetCanEatRaw()
         eater.strongstomach = true -- can eat monster meat!
     end
-    
+
     if not inst.components.inventory then
         inst:AddComponent("inventory")
     end
-    
-	--[[local um_dynamic_digester = inst.components.um_dynamic_digester or inst:AddComponent("um_dynamic_digester")
+
+    --[[local um_dynamic_digester = inst.components.um_dynamic_digester or inst:AddComponent("um_dynamic_digester")
     if um_dynamic_digester then
         um_dynamic_digester.digesttime = 5
         um_dynamic_digester.digest_per = 20

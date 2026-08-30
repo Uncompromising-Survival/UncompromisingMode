@@ -247,7 +247,6 @@ for y = 0, 2 do
     table.insert(modparams.puffvest_big.widget.slotpos, Vector3(-162 + 75, -75 * y + 75, 0))
 end
 
-
 modparams.silksack =
 {
     widget =
@@ -280,13 +279,13 @@ modparams.silksack =
     openlimit = 1,
 
 }
+
 for y = 0, 3 do
     table.insert(modparams.silksack.widget.slotpos, Vector3(-162, -75 * y + 170, 0))
     table.insert(modparams.silksack.widget.slotpos, Vector3(-162 + 75, -75 * y + 170, 0))
 end
 
 table.insert(modparams.silksack.widget.slotpos, Vector3(-162 + 37.5, -60 * 4.5 + 135, 0))
-
 
 --function modparams.silksack.itemtestfn(container, item, slot)
 --return (item.prefab == "silk" and (slot == 9) or (slot ~= 9) and item.prefab ~= "silk")
@@ -482,7 +481,6 @@ modparams.um_flamethrower =
     type = "hand_inv",
 }
 
-
 modparams.frigginbirdpail =
 {
     widget =
@@ -534,9 +532,9 @@ modparams.um_feather_totem =
     {
         slotpos =
         {
-            Vector3(-(64 + 12), 0, 0),
-            Vector3(0, 0, 0),
-            Vector3(64 + 12, 0, 0),
+            Vector3(15+(-(64 + 12)), 0, 0),
+            Vector3(15, 0, 0),
+            Vector3(15+(64 + 12), 0, 0), 
         },
         slotbg =
         {
@@ -544,9 +542,9 @@ modparams.um_feather_totem =
             { image = "feather_slot.tex", atlas = "images/feather_slot.xml" },
             { image = "feather_slot.tex", atlas = "images/feather_slot.xml" },
         },
-        animbank = "ui_beard_3x1",
-        animbuild = "ui_beard_3x1",
-        pos = Vector3(0, 220, 0),
+        animbank = "ui_um_feather_totem",
+        animbuild = "ui_um_feather_totem",
+        pos = Vector3(0, 130, 0),
         side_align_tip = 160,
     },
     type = "chest",
@@ -920,7 +918,7 @@ if TUNING.DSTU.WARLY_CHANGES == 1 then
 end
 
 -- Polar Bearger Bin dried jerky change
-vanilla_beargerfur_sack_itemtestfn = containers.params.beargerfur_sack.itemtestfn
+local vanilla_beargerfur_sack_itemtestfn = containers.params.beargerfur_sack.itemtestfn
 containers.params.beargerfur_sack.itemtestfn = function(container, item, slot)
     -- Klei's containers.lua [[ beargerfur_sack ]]
     if vanilla_beargerfur_sack_itemtestfn and vanilla_beargerfur_sack_itemtestfn(container, item, slot) then
@@ -947,10 +945,7 @@ containers.params.beargerfur_sack.itemtestfn = function(container, item, slot)
     end
 end
 
-
 containers.params.silken_bundle = GLOBAL.deepcopy(containers.params.beargerfur_sack)
-
-
 
 containers.params.um_gemologyforge =
 {
@@ -980,7 +975,6 @@ containers.params.um_gemologyforge =
     usespecificslotsforitems = true,
     type = "cooker",
 }
-
 
 function containers.params.um_gemologyforge.itemtestfn(container, item, slot)
     return ((slot == 1 and (item.components.gem_enchantable ~= nil or item.replica.gem_enchantable ~= nil)) or
@@ -1015,6 +1009,32 @@ if TUNING.DSTU.ICEBOX_TWEAKS then
 
         return oldicebox(container, item, slot, ...)
     end
+end
+
+containers.params.um_antlionstaff =
+{
+    widget =
+    {
+        slotpos =
+        {
+            Vector3(0, 2, 0),
+        },
+        slotbg =
+        {
+            { image = "townportaltalisman_slot.tex", atlas = "images/townportaltalisman_slot.xml" },
+        },
+        animbank = "ui_antlionhat_1x1",
+        animbuild = "ui_antlionhat_1x1",
+        pos = Vector3(0, 40, 0),
+        side_align_tip = 160,
+    },
+    usespecificslotsforitems = true,
+    type = "hand_inv",
+    excludefromcrafting = true,
+}
+
+function containers.params.um_antlionstaff.itemtestfn(inst, item, slot)
+    return item.prefab == "townportaltalisman"
 end
 
 local function addItemSlotNetvarsInContainer(inst)

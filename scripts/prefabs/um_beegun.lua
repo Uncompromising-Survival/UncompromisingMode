@@ -170,12 +170,8 @@ local function collectbees(inst, target, pos)
     end
 end
 
-local function can_cast_fn(doer, target, pos)
-    if doer:HasTag("vetcurse") then
-        return true
-    else
-        return false
-    end
+local function CanCastFn(inst)
+    return true
 end
 
 local function onattack(inst, attacker, target)
@@ -204,19 +200,20 @@ local function fn(anim, name, swap, beetype)
     inst:AddTag("beegun")
     inst:AddTag("allow_action_on_impassable")
     inst:AddTag("vetcurse_item")
-
-    --weapon (from weapon component) added to pristine state for optimization
     inst:AddTag("weapon")
+    inst:AddTag("shadowlevel")
     inst:AddTag("donotautopick")
     --inst.projectiledelay = PROJECTILE_DELAY
-
-    MakeInventoryFloatable(inst, "med", 0.075, { 0.5, 0.4, 0.5 }, true, -7, floater_swap_data)
 
     local reticule = inst:AddComponent("reticule")
     reticule.targetfn = ReticuleTargetFn
     reticule.ease = true
     reticule.mouseenabled = true
     reticule.ispassableatallpoints = true
+
+    inst.um_cancastontarget = UMCommonFns.DefaultCanCastOnTarget
+
+    MakeInventoryFloatable(inst, "med", 0.075, { 0.5, 0.4, 0.5 }, true, -7, floater_swap_data)
 
     inst.entity:SetPristine()
 
@@ -226,9 +223,6 @@ local function fn(anim, name, swap, beetype)
         end
         return inst
     end
-
-    local shadowlevel = inst:AddComponent("shadowlevel")
-    shadowlevel:SetDefaultLevel(TUNING.DSTU.BEEGUN_SHADOW_LEVEL)
 
     inst.beetype = beetype
     inst.swap = swap
@@ -241,6 +235,9 @@ local function fn(anim, name, swap, beetype)
     local equippable = inst:AddComponent("equippable")
     equippable:SetOnEquip(OnEquip)
     equippable:SetOnUnequip(OnUnequip)
+
+    local shadowlevel = inst:AddComponent("shadowlevel")
+    shadowlevel:SetDefaultLevel(TUNING.DSTU.BEEGUN_SHADOW_LEVEL)
 
     local weapon = inst:AddComponent("weapon")
     weapon:SetDamage(0)
@@ -258,10 +255,9 @@ local function fn(anim, name, swap, beetype)
 
     local spellcaster = inst:AddComponent("spellcaster")
     spellcaster:SetSpellFn(collectbees)
-    spellcaster:SetCanCastFn(can_cast_fn)
+    spellcaster:SetCanCastFn(CanCastFn)
     spellcaster.canuseontargets = true
-    spellcaster.canonlyuseonworkable = true
-    spellcaster.canonlyuseoncombat = true
+    spellcaster.canuseondead = true
     spellcaster.canuseonpoint = true
     spellcaster.canuseonpoint_water = true
 

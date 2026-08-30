@@ -1,4 +1,4 @@
-![Uncompromising Logo](~Tertiary/Logo%20Boxes/Uncomp%20Text.png)
+<img width="400" height="400" alt="SmOb_Logo_Anim-(White)" src="https://github.com/user-attachments/assets/da91f1f6-e7ff-4055-b2d1-857b97fda936" />
 
 # Uncompromising Mode
 
