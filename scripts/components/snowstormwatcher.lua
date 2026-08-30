@@ -1,26 +1,23 @@
 local SnowStormWatcher = Class(function(self, inst)
-        self.inst = inst
+	self.inst = inst
 
-        self.snowstormspeedmult = .75
-        self.delay = nil
-        self.task = nil
-        self.storming = false
-        --inst:ListenForEvent("weathertick", function(src, data) self:ToggleSnowstorms() end, TheWorld)
-        --inst:ListenForEvent("forcestopsnowstorm", function(src, data) self:ToggleSnowstorms() end, TheWorld)
-        self.inst:ListenForEvent("seasontick", function(src, data)
-            self:ToggleSnowstorms()
-        end, TheWorld)
-        self.inst:StartUpdatingComponent(self)
-    end,
-    nil,
-    {
-        --snowstormlevel = onsnowstormlevel,
-    })
+	self.snowstormspeedmult = .75
+	self.delay = nil
+	self.task = nil
+	self.storming = false
+	--inst:ListenForEvent("weathertick", function(src, data) self:ToggleSnowstorms() end, TheWorld)
+	--inst:ListenForEvent("forcestopsnowstorm", function(src, data) self:ToggleSnowstorms() end, TheWorld)
+	self.inst:ListenForEvent("seasontick", function(src, data)
+		self:ToggleSnowstorms()
+	end, TheWorld)
+	self.inst:StartUpdatingComponent(self)
+end--[[,
+nil,
+{
+	snowstormlevel = onsnowstormlevel,
+}]])
 
-local INVALID_TILES = table.invert(
-    {
-        GROUND.SCALE
-    })
+local INVALID_TILES = table.invert({GROUND.SCALE})
 
 function SnowStormWatcher:ToggleSnowstorms(active, src, data)
     if TheWorld.state.iswinter then
@@ -85,7 +82,7 @@ function SnowStormWatcher:UpdateSnowstormWalkSpeed(src, data)
     --self.inst:PushEvent("checksnowvision")
 end
 
-function TrySpawning(v)
+function SnowStormWatcher:TrySpawning(v)
     local x1, y1, z1 = v.Transform:GetWorldPosition()
     local nearbyplayers2 = {}
 
@@ -95,11 +92,11 @@ function TrySpawning(v)
         end
     end
 
-    local playervalue2 = #nearbyplayers2 * 0.1
+    local playervalue2 = #nearbyplayers2 * .1
 
     if TheWorld.state.iswinter and (TheWorld.net and TheWorld.net:HasTag("snowstormstartnet") or TheWorld:HasTag("snowstormstart")) and
         TheWorld.Map:IsPassableAtPoint(x1, y1, z1, false, true) then --and self.snowstormstart then
-        if math.random() <= 0.25 - playervalue2 then
+        if math.random() <= .25 - playervalue2 then
             --local spawn_pt = GetSpawnPoint(origin_pt, PLAYER_CHECK_DISTANCE + 5)
 
             local ents5 = TheSim:FindEntities(x1, y1, z1, 3, nil, nil, { "snowpileradius" })
@@ -109,7 +106,7 @@ function TrySpawning(v)
             if #ents5 < 1 and #ents6 < 1 and #ents7 < 1 and not INVALID_TILES[TheWorld.Map:GetTileAtPoint(x1, 0, z1)] then
                 if #TheSim:FindEntities(x1, y1, z1, 5, { "snowpileblocker" }) == 0 then --Using this specifically for salt here, we can combine it with others if wanted
                     local snowpilespawn = SpawnPrefab("snowpile")
-                    snowpilespawn.Transform:SetPosition(x1, 0.05, z1)
+                    snowpilespawn.Transform:SetPosition(x1, .05, z1)
                 end
             end
         end
@@ -131,10 +128,10 @@ local function SnowpileChance(inst, self)
     local ents4 = TheSim:FindEntities(x, y, z, 32, nil, { "snowpiledin", "hive", "snowpileblocker" }, { "structure" })
     local chancer = math.random()
 
-    local playervalue1 = #nearbyplayers1 * 0.025
+    local playervalue1 = #nearbyplayers1 * .025
 
     if TheWorld.state.iswinter and (TheWorld.net and TheWorld.net:HasTag("snowstormstartnet") or TheWorld:HasTag("snowstormstart")) and not IsUnderRainDomeAtXZ(x, z) then --and self.snowstormstart then
-        if chancer < 0.40 - playervalue1 then
+        if chancer < .40 - playervalue1 then
             local xrandom = math.random(-20, 20)
             local zrandom = math.random(-20, 20)
             local ents7 = TheSim:FindEntities(x + xrandom, y, z + zrandom, 6, nil, nil, { "snowpileradius" })
@@ -144,20 +141,17 @@ local function SnowpileChance(inst, self)
                 not INVALID_TILES[TheWorld.Map:GetTileAtPoint(x + xrandom, 0, z + zrandom)] then
                 if #TheSim:FindEntities(x + xrandom, 0, z + zrandom, 5, { "snowpileblocker" }) == 0 then
                     local snowpilespawn = SpawnPrefab("snowpile")
-                    snowpilespawn.Transform:SetPosition(x + xrandom, 0.05, z + zrandom)
+                    snowpilespawn.Transform:SetPosition(x + xrandom, .05, z + zrandom)
                 end
             end
         else
             for i, v in ipairs(ents4) do
-                TrySpawning(v)
+                self:TrySpawning(v)
             end
         end
     end
 
-    if self.task then
-        self.task:Cancel()
-        self.task = nil
-    end
+    self.task = nil
 end
 
 TUNING.SNOW_CHANCE_TIME = 15
@@ -165,8 +159,7 @@ TUNING.SNOW_CHANCE_VARIANCE = 15
 
 function SnowStormWatcher:StartSnowPileTask()
     if not self.task then
-        self.task = self.inst:DoTaskInTime(TUNING.SNOW_CHANCE_TIME + math.random() * TUNING.SNOW_CHANCE_VARIANCE,
-            SnowpileChance, self) --, self)
+        self.task = self.inst:DoTaskInTime(TUNING.SNOW_CHANCE_TIME + math.random() * TUNING.SNOW_CHANCE_VARIANCE, SnowpileChance, self) --, self)
     end
 end
 
