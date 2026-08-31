@@ -15,22 +15,9 @@ local function CraftCancellingBlockout(self, fnname)
     end
 end]]
 
-local function BlockPlacingWhileProjected(self)
-    local _OldMakeRecipe = self.MakeRecipe
-    function self:MakeRecipe(recipe, pt, rot, skin, onsuccess)
-        if recipe and recipe.placer ~= nil and self.inst:HasTag("um_astral_projected") then
-            if self.inst.components.talker ~= nil then
-                self.inst.components.talker:Say(GetActionFailString(self.inst, "GENERIC"))
-            end
-            return false
-        end
-        return _OldMakeRecipe(self, recipe, pt, rot, skin, onsuccess)
-    end
-end
-
-local old_ischaringred = IsCharacterIngredient
-IsCharacterIngredient = function(ingredienttype)
-	return ingredienttype == CHARACTER_INGREDIENT.HUNGER or old_ischaringred(ingredienttype)
+local _IsCharacterIngredient = IsCharacterIngredient
+IsCharacterIngredient = function(ingredienttype, ...)
+	return ingredienttype == CHARACTER_INGREDIENT.HUNGER or _IsCharacterIngredient(ingredienttype, ...)
 end
 
 CHARACTER_INGREDIENT.HUNGER = "decrease_hunger"
@@ -43,25 +30,33 @@ env.AddComponentPostInit("builder", function(self)
         end
     end
 
-    BlockPlacingWhileProjected(self)
+    local _MakeRecipe = self.MakeRecipe
+    function self:MakeRecipe(recipe, pt, rot, skin, onsuccess, ...)
+        if recipe and recipe.placer and self.inst:HasTag("um_astral_projected") then
+            if self.inst.components.talker then
+                self.inst.components.talker:Say(GetActionFailString(self.inst, "GENERIC"))
+            end
+            return false
+        end
+        return _MakeRecipe(self, recipe, pt, rot, skin, onsuccess, ...)
+    end
 
     -- The code below up until the AddClassPostConstruct("components/builder_replica") is all from the character mod "The Sniper (DST)"
     -- I had no idea how to do this on my own so all credits goes to Daniel. -Carlos
-    local old_haschar = self.HasCharacterIngredient
-	function self:HasCharacterIngredient(ingredient)
+    local _HasCharacterIngredient = self.HasCharacterIngredient
+	function self:HasCharacterIngredient(ingredient, ...)
 		if ingredient.type == CHARACTER_INGREDIENT.HUNGER then
 			if self.inst.components.hunger then
 				local current = math.ceil(self.inst.components.hunger.current)
 				return current >= ingredient.amount, current
 			end
-		else
-			return old_haschar(self, ingredient)
-		end
+        end
+		return _HasCharacterIngredient(self, ingredient, ...)
 	end
 
-	local old_remove = self.RemoveIngredients
+	local _RemoveIngredients = self.RemoveIngredients
 	function self:RemoveIngredients(ingredients, recname, discounted, ...)
-		old_remove(self, ingredients, recname, discounted, ...)
+		_RemoveIngredients(self, ingredients, recname, discounted, ...)
 
 		local recipe = AllRecipes[recname]
 		if recipe then
@@ -76,7 +71,7 @@ end)
 
 env.AddClassPostConstruct("components/builder_replica", function(self)
 	local old_haschar = self.HasCharacterIngredient
-	function self:HasCharacterIngredient(ingredient)
+	function self:HasCharacterIngredient(ingredient, ...)
 		if ingredient.type == CHARACTER_INGREDIENT.HUNGER then
 			if self.inst.components.builder then
 				return self.inst.components.builder:HasCharacterIngredient(ingredient)
@@ -87,9 +82,7 @@ env.AddClassPostConstruct("components/builder_replica", function(self)
 					return current >= ingredient.amount, current
 				end
 			end
-		else
-			return old_haschar(self, ingredient)
-		end
-		return false, 0
+        end
+        return _HasCharacterIngredient(self, ingredient, ...)
 	end
 end)
