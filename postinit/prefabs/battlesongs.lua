@@ -286,12 +286,7 @@ TUNING.DSTU.BATTLESONG_FIRE_INSULATION = 120
 local function battlesong_fireresistance_onapply(inst, target)
     if IsNearLunarMelodist(target) then
         if target.components.temperature ~= nil then
-            target.components.temperature:SetInsulationModifier(
-                SEASONS.SUMMER,
-                inst,
-                TUNING.DSTU.BATTLESONG_FIRE_INSULATION,
-                "battlesong_fireres"
-            )
+            target.components.temperature:SetInsulationModifier(SEASONS.SUMMER, inst, TUNING.DSTU.BATTLESONG_FIRE_INSULATION, "battlesong_fireres")
         end
     end
 
@@ -301,11 +296,7 @@ local function battlesong_fireresistance_onapply(inst, target)
 end
 
 local function battlesong_fireresistance_ondetach(inst, target)
-    target.components.temperature:RemoveInsulationModifier(
-        SEASONS.SUMMER,
-        inst,
-        "battlesong_fireres"
-    )
+    target.components.temperature:RemoveInsulationModifier(SEASONS.SUMMER, inst, "battlesong_fireres")
     if target.components.health ~= nil then
         target.components.health.externalfiredamagemultipliers:RemoveModifier(inst)
     end

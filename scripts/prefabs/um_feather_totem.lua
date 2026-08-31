@@ -19,20 +19,12 @@ local function OnTimerDone(owner, data)
         --print(insulationmod.." result of timer done azure")
         if insulate_winter then
             --owner.components.temperature.inherentinsulation = owner.components.temperature.inherentinsulation - insulationmod
-            owner.components.temperature:RemoveInsulationModifier(
-                SEASONS.WINTER,
-                owner,
-                "um_totem_azure_insulation"
-            )
+            owner.components.temperature:RemoveInsulationModifier(SEASONS.WINTER, owner, "um_totem_azure_insulation")
         end
 
         if insulate_summer then
             --owner.components.temperature.inherentsummerinsulation = owner.components.temperature.inherentsummerinsulation - insulationmod
-            owner.components.temperature:RemoveInsulationModifier(
-                SEASONS.SUMMER,
-                owner,
-                "um_totem_azure_insulation"
-            )
+            owner.components.temperature:RemoveInsulationModifier(SEASONS.SUMMER, owner, "um_totem_azure_insulation")
         end
     elseif data.name == "um_totem_malbatross_nowet" then
         if owner.components.moistureimmunity then
@@ -80,22 +72,12 @@ local function FeatherEffects(owner, totem)
 
         if insulate_winter then
             --owner.components.temperature.inherentinsulation = owner.components.temperature.inherentinsulation + insulationmod
-            owner.components.temperature:SetInsulationModifier(
-                SEASONS.WINTER,
-                owner,
-                insulationmod,
-                "um_totem_azure_insulation"
-            )
+            owner.components.temperature:SetInsulationModifier(SEASONS.WINTER, owner, insulationmod, "um_totem_azure_insulation")
         end
 
         if insulate_summer then
             --owner.components.temperature.inherentsummerinsulation = owner.components.temperature.inherentsummerinsulation + insulationmod
-            owner.components.temperature:SetInsulationModifier(
-                SEASONS.SUMMER,
-                owner,
-                insulationmod,
-                "um_totem_azure_insulation"
-            )
+            owner.components.temperature:SetInsulationModifier(SEASONS.SUMMER, owner, insulationmod, "um_totem_azure_insulation")
         end
 
         UMCommonFns.RestartTimer(owner, {name = "um_totem_azure_insulation", time = 90 * feather_robin_winter})
