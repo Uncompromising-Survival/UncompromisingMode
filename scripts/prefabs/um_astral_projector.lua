@@ -11,13 +11,17 @@ local prefabs =
 {
     "collapse_small",
     "globalmapicon",
+    "alterguardian_lasertrail",
+    "um_astral_leash_warning",
 }
 
--- how long the screen stays dark when a player is force-returned
 local FORCE_RETURN_FADE = 1
-local ASTRAL_GROGGINESS_NORMAL = 0.5   --  grogginess on normal return
-local ASTRAL_GROGGINESS_FORCED = 0.9  --  grogginess on forced return (like moose charge)
+local ASTRAL_GROGGINESS_NORMAL = 0.5
+local ASTRAL_GROGGINESS_FORCED = 0.9
 local ASTRAL_TELEPORT_TIMEOUT = 1
+local ASTRAL_CIRCLE_DISTSQ = 530
+local ASTRAL_RING_ANGLEDIFF = PI / 60
+local ASTRAL_RING_SPAWNS_PER_TICK = 4
 
 -- finds the closest receptionator to a given projector
 local function FindNearestTarget(inst)
@@ -99,6 +103,19 @@ local function StopSoundLoop(inst)
     end
 end
 
+-- stops and removes the persistent ring-burst FX around a receptionator, if any
+local function StopLeashRing(target)
+    if target.um_astral_leash_ring ~= nil then
+        if target.um_astral_leash_ring:IsValid() then
+            if target.um_astral_leash_ring.spawn_task ~= nil then
+                target.um_astral_leash_ring.spawn_task:Cancel()
+            end
+            target.um_astral_leash_ring:Remove()
+        end
+        target.um_astral_leash_ring = nil
+    end
+end
+
 -- hard stop both structures, skipping the pst animation (used when hammering)
 local function StopPairPortals(projector, target)
     if projector ~= nil and projector:IsValid() then
@@ -110,6 +127,7 @@ local function StopPairPortals(projector, target)
         StopSoundLoop(target)
         target.AnimState:PlayAnimation("idle", true)
         target.components.teleporter:Target(nil)
+        StopLeashRing(target)
     end
 end
 
@@ -130,6 +148,68 @@ local function StopPairAnimations(projector, target)
         target.AnimState:PushAnimation("idle", true)
         target.components.teleporter:Target(nil)
         target.pending_teleports = 0
+        StopLeashRing(target)
+    end
+end
+
+local function LeashRingGeneratePoints(inst)
+    local ix, _, iz = inst.Transform:GetWorldPosition()
+    local radius = math.sqrt(ASTRAL_CIRCLE_DISTSQ)
+
+    local angle = 0
+    while angle < TWOPI do
+        local x = ix + radius * math.cos(angle)
+        local z = iz + radius * math.sin(angle)
+        table.insert(inst._points, { x, z })
+        angle = angle + ASTRAL_RING_ANGLEDIFF
+    end
+
+    shuffleArray(inst._points)
+end
+
+local function LeashRingSpawnFx(inst)
+    for i = 1, ASTRAL_RING_SPAWNS_PER_TICK do
+        if #inst._points <= 0 then
+            LeashRingGeneratePoints(inst)
+        end
+
+        local next_point = table.remove(inst._points)
+        local x, z = next_point[1], next_point[2]
+
+        local fx = SpawnPrefab("alterguardian_lasertrail")
+        fx.Transform:SetPosition(x, 0, z)
+    end
+end
+
+local function LeashRingFn()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddNetwork()
+
+    inst:AddTag("NOCLICK")
+    inst:AddTag("FX")
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst.persists = false
+    inst._points = {}
+
+    inst.spawn_task = inst:DoPeriodicTask(3 * FRAMES, LeashRingSpawnFx)
+
+    return inst
+end
+
+-- spawns the persistent ring-burst FX around a receptionator, if not already running
+local function SpawnLeashRing(inst)
+    if inst.um_astral_leash_ring == nil then
+        inst.um_astral_leash_ring = SpawnPrefab("um_astral_leash_warning")
+        local x, y, z = inst.Transform:GetWorldPosition()
+        inst.um_astral_leash_ring.Transform:SetPosition(x, y, z)
     end
 end
 
@@ -143,6 +223,12 @@ end
 local function OnRemove(structure, channeler, flagname)
     if channeler[flagname] then
         channeler[flagname] = nil
+        if channeler.components.health ~= nil then
+            channeler.components.health:SetInvincible(false)
+        end
+        if channeler.components.playercontroller ~= nil then
+            channeler.components.playercontroller:Enable(true)
+        end
         if structure:IsValid() then
             structure:ReleaseTeleporterTarget()
         end
@@ -299,6 +385,11 @@ local function OnStartChanneling(inst, channeler)
 
     channeler.um_astral_outbound_pending = true
 
+    channeler.components.health:SetInvincible(true)
+    if channeler.components.playercontroller ~= nil then
+        channeler.components.playercontroller:Enable(false)
+    end
+
     inst.components.teleporter:Target(target)
     inst.pending_teleports = (inst.pending_teleports or 0) + 1
     inst:DoTaskInTime(ASTRAL_TELEPORT_TIMEOUT, OnRemove, channeler, "um_astral_outbound_pending")
@@ -351,7 +442,7 @@ local function OnStartTeleporting(inst, doer)
     end
 
     if target ~= nil and target:IsValid() then
-        target.SpawnPool(target)
+        target.SpawnLeashRing(target)
     end
 
     if doer.um_astral_projected_returntask ~= nil then
@@ -420,7 +511,7 @@ local function OnStartTeleporting(inst, doer)
             if tgt ~= nil and tgt:IsValid() then
                 -- auto-return if the player wanders too far from the receptionator
                 local dist_to_exit = doer:GetDistanceSqToInst(tgt)
-                if dist_to_exit >= 530 and not doer.um_astral_returning then
+                if dist_to_exit >= ASTRAL_CIRCLE_DISTSQ and not doer.um_astral_returning then
                     tgt.OnStartChanneling_Target(tgt, doer)
                 end
             else
@@ -600,6 +691,11 @@ local function OnStartChanneling_Target(inst, channeler)
     inst.active_home = home
     channeler.um_astral_returning = true
 
+    channeler.components.health:SetInvincible(true)
+    if channeler.components.playercontroller ~= nil then
+        channeler.components.playercontroller:Enable(false)
+    end
+
     inst.components.teleporter:Target(home)
     inst.pending_teleports = (inst.pending_teleports or 0) + 1
     inst:DoTaskInTime(ASTRAL_TELEPORT_TIMEOUT, OnRemove, channeler, "um_astral_returning")
@@ -640,16 +736,6 @@ local function OnExitingTeleporter_Target(inst, obj)
     end
 end
 
--- spawns the whirlpool fx at the receptionator when a player arrives
-local function SpawnPool(inst)
-    if inst.astralpool == nil then
-        inst.astralpool = SpawnPrefab("um_astral_pool")
-        local x, y, z = inst.Transform:GetWorldPosition()
-        inst.astralpool.Transform:SetPosition(x, y, z)
-        inst.astralpool.owner = inst
-    end
-end
-
 -- fires when the return teleport activates on the receptionator side
 local function OnStartTeleporting_Target(inst, doer)
     local home = inst.active_home
@@ -659,6 +745,7 @@ local function OnStartTeleporting_Target(inst, doer)
     inst.AnimState:PlayAnimation("active_pst")
     inst.AnimState:PushAnimation("idle", true)
     StopSoundLoop(inst)
+    StopLeashRing(inst)
 
     if home ~= nil and home:IsValid() then
         home.AnimState:PlayAnimation("active_pst")
@@ -776,8 +863,8 @@ local function TargetFn()
     inst:ListenForEvent("doneteleporting", OnExitingTeleporter_Target)
 
     inst.OnStartChanneling_Target = OnStartChanneling_Target
-    inst.SpawnPool                = SpawnPool
     inst.ReleaseTeleporterTarget  = ReleaseTeleporterTarget
+    inst.SpawnLeashRing           = SpawnLeashRing
 
     inst:AddComponent("inspectable")
     inst.components.inspectable.getstatus = GetStatus
@@ -789,90 +876,9 @@ local function TargetFn()
     return inst
 end
 
--- checks if there are any projected players nearby, kills the pool if not
-local function CheckPoolExpiry(inst)
-    local x, y, z = inst.Transform:GetWorldPosition()
-    local projectors = TheSim:FindEntities(x, y, z, 23, { "um_astral_projected" })
-    if projectors ~= nil and #projectors == 0 then
-        if not inst.components.timer:TimerExists("kill_whirlpool") then
-            inst.components.timer:StartTimer("kill_whirlpool", 1)
-        end
-    end
-end
-
--- starts the periodic check for nearby projected players, which will eventually kill the pool fx if nobody's around to see it
-local function StartChecks(inst)
-    if inst.pool_expiry_task == nil then
-        inst.pool_expiry_task = inst:DoPeriodicTask(.5, CheckPoolExpiry)
-    end
-end
-
--- checks if the entity is completely valid before starting the sound loop
-local function Init(inst)
-    inst.SoundEmitter:PlaySound("UCSounds/um_whirlpool/um_whirlpool_loop", "whirlpool")
-end
-
-local function PoolCanMouseThrough()
-    return true, true
-end
-
--- pool fadeout
-local function RemoveWhirlpool(inst)
-    inst.SoundEmitter:KillSound("whirlpool")
-    if inst.owner ~= nil then
-        inst.owner.astralpool = nil
-    end
-    inst:Remove()
-end
-
--- fx for the visual pool
-local function PoolFn()
-    local inst = CreateEntity()
-
-    inst.entity:AddTransform()
-    inst.entity:AddAnimState()
-    inst.entity:AddSoundEmitter()
-    inst.entity:AddNetwork()
-
-    -- start transparent, tween to a soft blue, less eye strain
-    inst.AnimState:SetMultColour(0.5, 0.7, 1, 0)
-
-    inst:AddTag("NOCLICK")
-    inst:AddTag("FX")
-
-    inst.AnimState:SetBank("um_whirlpool")
-    inst.AnimState:SetBuild("um_astralpool")
-    inst.AnimState:PlayAnimation("spin2", true)
-    inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
-    inst.AnimState:SetSortOrder(3)
-    inst.AnimState:SetLayer(LAYER_BACKGROUND)
-    inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
-
-    inst.Transform:SetScale(3, 3, 3)
-
-    inst.CanMouseThrough = PoolCanMouseThrough
-
-    inst.entity:SetPristine()
-
-    if not TheWorld.ismastersim then
-        return inst
-    end
-
-    inst:AddComponent("colourtweener")
-    -- fade in over 3 seconds, then start the proximity check task
-    inst.components.colourtweener:StartTween({ 0.5, 0.7, 1, 0.6 }, 3, StartChecks)
-
-    inst:AddComponent("timer")
-    inst:ListenForEvent("timerdone", RemoveWhirlpool)
-
-    inst:DoTaskInTime(0, Init)
-
-    return inst
-end
-
 return
     Prefab("um_astral_projector", fn, assets, prefabs),
     MakePlacer("um_astral_projector_placer", "um_archives_projectinator", "um_archives_projectinator", "idle"),
     Prefab("um_astral_projector_target", TargetFn, assets, prefabs),
     MakePlacer("um_astral_projector_target_placer", "um_archives_receptionator", "um_archives_receptionator", "idle"),
-    Prefab("um_astral_pool", PoolFn, assets, prefabs)
+    Prefab("um_astral_leash_warning", LeashRingFn, nil, { "alterguardian_lasertrail" })

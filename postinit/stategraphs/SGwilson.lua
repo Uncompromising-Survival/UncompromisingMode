@@ -2484,12 +2484,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst.sg.statemem.teleportarrivestate = "exitastralportal_pre"
 
                 inst.AnimState:PlayAnimation("townportal_enter_pre")
-
-                local astpool = SpawnPrefab("um_astral_pool")
-                astpool.Transform:SetScale(1, 1, 1)
-                astpool.Transform:SetPosition(inst.Transform:GetWorldPosition())
-                astpool.components.colourtweener:StartTween({ 1, 1, 1, 1 }, .5)
-                astpool.components.timer:StartTimer("kill_whirlpool", 5)
             end,
 
             timeline =
