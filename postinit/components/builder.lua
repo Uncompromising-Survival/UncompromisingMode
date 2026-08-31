@@ -15,6 +15,19 @@ local function CraftCancellingBlockout(self, fnname)
     end
 end]]
 
+local function BlockPlacingWhileProjected(self)
+    local _OldMakeRecipe = self.MakeRecipe
+    function self:MakeRecipe(recipe, pt, rot, skin, onsuccess)
+        if recipe and recipe.placer ~= nil and self.inst:HasTag("um_astral_projected") then
+            if self.inst.components.talker ~= nil then
+                self.inst.components.talker:Say(GetActionFailString(self.inst, "GENERIC"))
+            end
+            return false
+        end
+        return _OldMakeRecipe(self, recipe, pt, rot, skin, onsuccess)
+    end
+end
+
 local old_ischaringred = IsCharacterIngredient
 IsCharacterIngredient = function(ingredienttype)
 	return ingredienttype == CHARACTER_INGREDIENT.HUNGER or old_ischaringred(ingredienttype)
@@ -30,9 +43,7 @@ env.AddComponentPostInit("builder", function(self)
         end
     end
 
-    --[[for _, fnname in pairs(BLOCKCRAFTING_FNNAMES) do
-        CraftCancellingBlockout(self, fnname)
-    end]]
+    BlockPlacingWhileProjected(self)
 
     -- The code below up until the AddClassPostConstruct("components/builder_replica") is all from the character mod "The Sniper (DST)"
     -- I had no idea how to do this on my own so all credits goes to Daniel. -Carlos

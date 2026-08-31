@@ -471,6 +471,14 @@ GLOBAL.ACTIONS.TELEPORT.fn = function(act)
     return _OldTeleportFn(act)
 end
 
+local _OldSwapBodiesMapFn = GLOBAL.ACTIONS.SWAPBODIES_MAP.fn
+GLOBAL.ACTIONS.SWAPBODIES_MAP.fn = function(act)
+    if act.doer ~= nil and act.doer:HasTag("um_astral_projected") then
+        return false
+    end
+    return _OldSwapBodiesMapFn(act)
+end
+
 GLOBAL.plaguemask_init_fn = function(inst, build_name) GLOBAL.basic_init_fn(inst, build_name, "hat_plaguemask") end
 
 GLOBAL.plaguemask_clear_fn = function(inst) GLOBAL.basic_clear_fn(inst, "hat_plaguemask") end
