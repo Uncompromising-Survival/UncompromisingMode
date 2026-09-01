@@ -70,7 +70,7 @@ env.AddComponentPostInit("builder", function(self)
 end)
 
 env.AddClassPostConstruct("components/builder_replica", function(self)
-	local old_haschar = self.HasCharacterIngredient
+	local _HasCharacterIngredient = self.HasCharacterIngredient
 	function self:HasCharacterIngredient(ingredient, ...)
 		if ingredient.type == CHARACTER_INGREDIENT.HUNGER then
 			if self.inst.components.builder then
