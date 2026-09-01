@@ -9,7 +9,7 @@ if _OnAttacked then
         local weapon = data.weapon
         local gem_enchantable = weapon and weapon.components.gem_enchantable
         if gem_enchantable and gem_enchantable:GetEnchantmentTier("um_gemologybluegem1") then
-            inst.um_onfreezedata = {attacker = data.attacker, weapon = weapon}
+            inst.um_onfreezedata = {weapon = weapon, attacker = data.attacker}
         end
         local ret = _OnAttacked(inst, data, ...)
         if inst.um_onfreezedata then inst.um_onfreezedata = nil end
@@ -22,7 +22,7 @@ local _Unfreeze = Freezable.Unfreeze
 function Freezable:Unfreeze(...)
     local um_onfreezedata = self.inst.um_onfreezedata
     if um_onfreezedata then
-        local attacker, weapon = um_onfreezedata.attacker, um_onfreezedata.weapon
+        local weapon, attacker = um_onfreezedata.weapon, um_onfreezedata.attacker
         if weapon and weapon:IsValid() and attacker and attacker:IsValid() then
             weapon:PushEvent("um_brokefrozentarget", {attacker = attacker, target = self.inst})
         end
