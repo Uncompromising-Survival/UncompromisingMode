@@ -12,7 +12,7 @@ if _OnAttacked then
             inst.um_onfreezedata = {attacker = data.attacker, weapon = weapon}
         end
         local ret = _OnAttacked(inst, data, ...)
-        inst.um_onfreezedata = nil
+        if inst.um_onfreezedata then inst.um_onfreezedata = nil end
         return ret
     end
     UpvalueHacker.SetUpvalue(Freezable._ctor, OnAttacked, "OnAttacked")
