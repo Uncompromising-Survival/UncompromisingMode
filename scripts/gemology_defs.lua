@@ -106,7 +106,7 @@ AddUMGemDef("redgem1", {
     color = RGB(233, 153, 153),
     fns = {
         onattack = function(inst, attacker, target, tier)
-            if tier ~= 1 and target:HasOneOfTags(devour_tags) and math.random() > 0.75 then -- arbitrarily said "a chance", I have no idea how common this should be
+            if tier ~= 1 and target:HasAnyTag(devour_tags) and math.random() > 0.75 then -- arbitrarily said "a chance", I have no idea how common this should be
                 local mult = TUNING.DSTU.REDGEM1_DEVOUR_MULT[tier]
                 attacker.components.combat:DoAttack(target, inst, nil, nil, mult, 0)        -- gotta use a bit more durability...
                 mult = inst.components.weapon:GetDamage(attacker, target) * mult
