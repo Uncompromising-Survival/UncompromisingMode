@@ -20,7 +20,7 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 -- Tunings we change related to the rework. Moved here to keep everything consolidated!
-TUNING.WEREMOOSE_ABSORPTION = .85 --.8
+TUNING.WEREMOOSE_ABSORPTION = .8
 TUNING.SHIELDOFTERROR_DAMAGE = 59.5
 TUNING.ARMORMARBLE_SLOW = .8
 
@@ -74,6 +74,7 @@ local function RemapAbsorption(self, absorb)
             end
         end
     end
+    --if not (self.tags and next(self.tags)) and absorb > .6 and absorb <= .95 then absorb = math.max(absorb - .15, .6) end
     return absorb
 end
 
