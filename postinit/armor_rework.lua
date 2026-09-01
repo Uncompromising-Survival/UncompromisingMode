@@ -46,11 +46,11 @@ ARMOR_ABSORPTION_OVERRIDES = {
     ["armordragonfly"] = .7,
 
     -- Island Adventures
-    ["armorlimestone"] = .7, --was .75 here.
+    ["armorlimestone"] = .75,
     ["armorobsidian"] = .7,
     ["armorseashell"] = .7,
     ["armorcactus"] = .7,
-    ["oxhat"] = .75,
+    ["oxhat"] = .75
 }
 
 -- Lower bounds are exclusive while upper bounds are inclusive. For example, a Log Suit with a
@@ -74,7 +74,6 @@ local function RemapAbsorption(self, absorb)
             end
         end
     end
-    --if not (self.tags and next(self.tags)) and absorb > .6 and absorb <= .95 then absorb = math.max(absorb - .1, .6) end
     return absorb
 end
 
