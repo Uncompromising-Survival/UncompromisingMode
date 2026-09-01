@@ -241,10 +241,6 @@ if GetModConfigData("food_stats") then
     modimport("init/init_food/init_food_stats")
 end
 
-if GetModConfigData("armorrework") then
-    modimport("postinit/armor_rework")
-end
-
 modimport("init/init_weather/init_ripples")
 modimport("init/init_weather/init_thicket")
 modimport("init/init_insightcompat")

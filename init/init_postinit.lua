@@ -615,4 +615,8 @@ for _, v in pairs(class_post) do
     modimport("postinit/" .. v)
 end
 
+if TUNING.DSTU.ARMORREWORK then
+    modimport("postinit/armor_rework")
+end
+
 modimport("scripts/um_fxlist")
