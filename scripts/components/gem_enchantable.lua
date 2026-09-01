@@ -157,8 +157,6 @@ function GemEnchantable:AddEnchantment(enchant, tier, slotless, fix_tier)
         GEM_DEFS[enchant].fns.onapply(self.inst, tier)
     end
 
-
-
     if slotless then
         self.slotless_enchants[enchant] = true
     else

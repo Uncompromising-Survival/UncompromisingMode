@@ -15,6 +15,7 @@ local component_post = {
     "hounded",
     "sleeper",
     "fueled",
+    "freezable",
     --"perishable",
     --"carnivalevent",
     "lootdropper",
@@ -459,9 +460,9 @@ end
 if GetModConfigData("firehound") then
     table.insert(prefab_post, "firehound")
 end
-	
+
 if GetModConfigData("icehound") then
-    table.insert(prefab_post, "icehound")	
+    table.insert(prefab_post, "icehound")
 end
 
 if TUNING.DSTU.HARDER_SPIDERQUEEN then
