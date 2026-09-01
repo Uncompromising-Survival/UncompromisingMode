@@ -846,7 +846,7 @@ AddUMGemDef("orangegem2", {
 -----------------------------------------------------------------------------------
 ---Blue1
 
-local function GiveIceShieldIfFrozen(inst, data) -- TODO: Improve this stuff showhow.
+local function GiveIceShieldIfFrozen(inst, data) -- TODO: Improve this stuff somehow.
     local target = data.target
     local freezable = target and target.components.freezable
     local gem_enchantable = inst.components.gem_enchantable
