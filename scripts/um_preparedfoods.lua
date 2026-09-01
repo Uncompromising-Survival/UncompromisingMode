@@ -148,11 +148,7 @@ local um_preparedfoods =
         floater = { "med", nil, .6 },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_BEEFALOWINGS,
         oneatenfn = function(inst, eater)
-            if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
-                not (eater.components.health ~= nil and eater.components.health:IsDead()) and
-                not eater:HasTag("playerghost") then
-                eater.components.debuffable:AddDebuff("buff_knockbackimmune", "buff_knockbackimmune")
-            end
+            eater:AddDebuff("buff_knockbackimmune", "buff_knockbackimmune")
         end,
         card_def = { ingredients = { { "horn", 1 }, { "batwing", 2 }, { "carrot", 1 } } },
     },
@@ -195,12 +191,7 @@ local um_preparedfoods =
             if eater.components.hayfever and eater.components.hayfever.enabled then
                 eater.components.hayfever:SetNextSneezeTime(1920) --Should be four days
             end
-
-            if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
-                not (eater.components.health ~= nil and eater.components.health:IsDead()) and
-                not eater:HasTag("playerghost") then
-                eater.components.debuffable:AddDebuff("buff_californiaking", "buff_californiaking")
-            end
+            eater:AddDebuff("buff_californiaking", "buff_californiaking")
         end,
         card_def = { ingredients = { { "barnacle", 1 }, { "wobster_sheller_land", 1 }, { "pepper", 1 }, { "ice", 1 } } },
     },
@@ -323,11 +314,7 @@ local um_preparedfoods =
         floater = { "med", nil, .65 },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_SNOTROAST,
         oneatenfn = function(inst, eater)
-            if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
-                not (eater.components.health ~= nil and eater.components.health:IsDead()) and
-                not eater:HasTag("playerghost") then
-                eater.components.debuffable:AddDebuff("buff_largehungerslow", "buff_largehungerslow")
-            end
+            eater:AddDebuff("buff_largehungerslow", "buff_largehungerslow")
         end,
         idlename = "idle_ground",
         card_def = { ingredients = { { "onion", 1 }, { "potato", 1 }, { "carrot", 1 }, { "trunk_summer", 1 } } },
@@ -494,44 +481,40 @@ local um_preparedfoods =
         floater = { "med", nil, .65 },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_THEATERCORN,
         oneatenfn = function(inst, eater)
-            if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
-                not (eater.components.health ~= nil and eater.components.health:IsDead()) and
-                not eater:HasTag("playerghost") then
-                local x, y, z = eater.Transform:GetWorldPosition()
-                local combatents = TheSim:FindEntities(x, y, z, 20, { "_combat" })
-                local count = 0
-                for i, v in ipairs(combatents) do
-                    if v.components.combat ~= nil and v.components.combat.target ~= nil then
-                        count = count + 1
-                        if v:HasTag("epic") then
-                            count = count + 5
-                        end
+            local x, y, z = eater.Transform:GetWorldPosition()
+            local combatents = TheSim:FindEntities(x, y, z, 20, { "_combat" })
+            local count = 0
+            for i, v in ipairs(combatents) do
+                if v.components.combat ~= nil and v.components.combat.target ~= nil then
+                    count = count + 1
+                    if v:HasTag("epic") then
+                        count = count + 5
                     end
                 end
-
-                if count > 0 and count <= 5 then
-                    eater.tempamusetier = 1
-                end
-
-                if count > 5 and count <= 10 then
-                    eater.tempamusetier = 2
-                end
-
-                if count > 10 and count <= 15 then
-                    eater.tempamusetier = 3
-                end
-
-                if count > 15 then
-                    eater.tempamusetier = 4
-                end
-
-                eater.components.debuffable:AddDebuff("buff_amusementcorn", "buff_amusementcorn")
-                eater:DoTaskInTime(1, function(eater)
-                    if eater.tempamusetier ~= nil then
-                        eater.tempamusetier = nil
-                    end
-                end)
             end
+
+            if count > 0 and count <= 5 then
+                eater.tempamusetier = 1
+            end
+
+            if count > 5 and count <= 10 then
+                eater.tempamusetier = 2
+            end
+
+            if count > 10 and count <= 15 then
+                eater.tempamusetier = 3
+            end
+
+            if count > 15 then
+                eater.tempamusetier = 4
+            end
+
+            eater:AddDebuff("buff_amusementcorn", "buff_amusementcorn")
+            eater:DoTaskInTime(1, function(eater)
+                if eater.tempamusetier ~= nil then
+                    eater.tempamusetier = nil
+                end
+            end)
         end,
         idlename = "ground",
         card_def = { ingredients = { { "corn", 2 }, { "butter", 1 } } },
@@ -665,11 +648,7 @@ local um_preparedfoods =
         floater = { nil, .1, .6 },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_ZASPBERRYPARFAIT,
         oneatenfn = function(inst, eater)
-            if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
-                not (eater.components.health ~= nil and eater.components.health:IsDead()) and
-                not eater:HasTag("playerghost") then
-                eater.components.debuffable:AddDebuff("buff_electricretaliation", "buff_electricretaliation")
-            end
+            eater:AddDebuff("buff_electricretaliation", "buff_electricretaliation")
         end,
         tags = { "honeyed" },
         card_def = { ingredients = { { "zaspberry", 1 }, { "honey", 1 }, { "bird_egg", 1 } } },
@@ -732,14 +711,9 @@ local um_preparedfoods =
         card_def = { ingredients = { { "um_rimeweed_itemflower", 1 }, { "ice", 1 } } },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_RIMEWEED_TEQUILA,
         oneatenfn = function(inst, eater)
-            if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
-                not (eater.components.health ~= nil and eater.components.health:IsDead()) and
-                not eater:HasTag("playerghost") then
-                local iceShield = SpawnPrefab("um_ice_shield")
-                iceShield:Init(eater, "swap_body", .25)
-
-                eater.components.debuffable:AddDebuff("um_rimeweed_tequila_buff", "um_rimeweed_tequila_buff")
-            end
+            local iceShield = SpawnPrefab("um_ice_shield")
+            iceShield:Init(eater, "swap_body", .25)
+            eater:AddDebuff("um_rimeweed_tequila_buff", "um_rimeweed_tequila_buff")
         end,
         warly_only = true,
 
