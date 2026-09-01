@@ -621,7 +621,7 @@ local prefabs = {
 
     "um_magmacave_umss",
     "glacialhound_icespike",
-    "iceshield",
+    "um_ice_shield",
     "um_feather_totem",
     "um_magnifier",
     "um_gemology_pouch",
