@@ -31,7 +31,6 @@ local function ShouldRecoilIceShield(inst, attacker, weapon, damage)
     return shouldrecoil, (ShouldWeaponPierce(inst, weapon, attacker) or not inst:HasTag("ice_shielded")) and damage and damage * fumarolemult or damage and (damage / 2) * fumarolemult or nil
 end
 
-
 local function Init(inst, parent, fx_symbol, tier)
     if parent.ice_shield then
         parent.ice_shield:Remove()
