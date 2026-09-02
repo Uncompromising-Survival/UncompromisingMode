@@ -2,7 +2,7 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 --Putting UM prefabs here just for organization's sake so we know all of them.
-local pierces_ice_shield = {
+local pierces_iceshield = {
     "torch",
     "firestaff",
     "blowdart_fire",
@@ -17,9 +17,9 @@ local pierces_ice_shield = {
 local TOOLTIP = STRINGS.UNCOMP_TOOLTIP
 
 
-for k, v in ipairs(pierces_ice_shield) do
+for k, v in ipairs(pierces_iceshield) do
     env.AddPrefabPostInit(v, function(inst)
-        inst:AddTag("pierces_ice_shield")
+        inst:AddTag("um_pierces_iceshield")
     end)
 
 
