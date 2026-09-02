@@ -90,7 +90,6 @@ local ASTRAL_RING_SPAWNS_PER_TICK = 4
 local ASTRAL_RETURN_OFFSET = 3
 
 -- lookup + query helpers
-
 -- finds the closest receptionator to a given projector
 local function FindNearestTarget(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
@@ -133,7 +132,6 @@ local function CountProjectedPlayers(home, target)
 end
 
 -- player state helpers (erosion + sound loop)
-
 -- clears erosion from the player and from the minions stored at projection start
 local function ClearProjectionErosion(player)
     if player.AnimState ~= nil then
@@ -175,7 +173,6 @@ local function StopSoundLoop(inst)
 end
 
 -- leash ring fx: the persistent boundary-warning ring around an active receptionator
-
 -- stops and removes the persistent ring-burst fx around a receptionator, if any
 local function StopLeashRing(target)
     if target.um_astral_leash_ring ~= nil then
@@ -251,7 +248,6 @@ local function SpawnLeashRing(inst)
 end
 
 -- arrival pool fx: the ground-decal glow that appears once a player is visible at the receptionator
-
 local function StartPool(inst)
     if inst.um_astral_pool == nil then
         inst.um_astral_pool = SpawnPrefab("um_astral_arrival_pool")
@@ -323,7 +319,6 @@ local function ArrivalPoolFn()
 end
 
 -- pair lifecycle: stopping both structures together
-
 -- hard stop both structures, skipping the pst animation (used when hammering)
 local function StopPairPortals(projector, target)
     if projector ~= nil and projector:IsValid() and CountProjectedPlayers(projector, nil) == 0 then
@@ -363,7 +358,6 @@ local function StopPairAnimations(projector, target)
 end
 
 -- teleporter target refcounting + self-heal
-
 local function ReleaseTeleporterTarget(inst)
     inst.pending_teleports = math.max(0, (inst.pending_teleports or 1) - 1)
     if inst.pending_teleports == 0 and not inst.components.teleporter:IsBusy() then
@@ -388,7 +382,6 @@ local function OnRemove(structure, channeler, flagname)
 end
 
 -- player projection cleanup
-
 -- strips all projection state from a player and stops structure animations if nobody else is projected.
 -- called on disconnect, shard change, hammering, or any abnormal exit, bc youu never know...
 local function CleanupPlayerProjection(player)
@@ -444,7 +437,6 @@ local function CleanupPlayerProjection(player)
 end
 
 -- forced-return helpers: used by anything that isn't a normal channeled return
-
 local function OnReturn(dest_x, dest_y, dest_z)
     local angle = math.random() * TWOPI
     return dest_x + math.cos(angle) * ASTRAL_RETURN_OFFSET, dest_y, dest_z + math.sin(angle) * ASTRAL_RETURN_OFFSET
@@ -547,7 +539,6 @@ local function RestorePendingChannelers(projector)
 end
 
 -- projectinator: channel / teleport / hammer handlers
-
 -- starts when a player starts channeling the projector, plays the activation animation, then sets up the projection state and sends the player through
 local function OnStartChanneling(inst, channeler)
     if channeler.um_astral_outbound_pending then return end
@@ -772,7 +763,6 @@ local function OnHit(inst)
 end
 
 -- shared behavior used by both structures' constructors
-
 local function OnBuilt(inst)
     inst.SoundEmitter:PlaySound("dontstarve/common/together/town_portal/craft")
     inst.AnimState:PlayAnimation("place")
@@ -862,7 +852,6 @@ local function Fn()
 end
 
 -- receptionator: channel / teleport / hammer handlers
-
 -- func for when a projected player channels the receptionator to return.
 -- animation plays unconditionally, teleport only proceeds if this is the correct receptionator
 local function OnStartChanneling_Target(inst, channeler)
