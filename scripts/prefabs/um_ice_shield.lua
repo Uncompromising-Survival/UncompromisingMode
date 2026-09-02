@@ -22,7 +22,7 @@ local function ShouldWeaponPierce(inst, attacker, weapon, damage)
 end
 
 local function ShouldRecoilIceShield(inst, attacker, weapon, damage)
-	local shouldpierce = ShouldWeaponPierce(inst, attacker, weapon, damage)
+    local shouldpierce = ShouldWeaponPierce(inst, attacker, weapon, damage)
     local shouldrecoil = inst:HasTag("ice_shielded") and not shouldpierce
     if shouldrecoil and attacker and attacker.components.talker and attacker:HasTag("player") then
         attacker.components.talker:Say(GetString(attacker, "ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD"))
