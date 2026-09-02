@@ -13,9 +13,10 @@ local function OnHealthDelta(inst, oldpercent, newpercent, overtime, cause, affl
 end
 
 local function ShouldWeaponPierce(inst, weapon, attacker)
-    return attacker and attacker:HasTag("pierces_ice_shield")
+    return attacker and (attacker.UMShouldPierceIceShield and attacker:UMShouldPierceIceShield(inst, weapon) or attacker:HasTag("um_pierces_iceshield"))
         or weapon and (weapon.components.gem_enchantable and weapon.components.gem_enchantable:HasEnchantment("um_gemologyredgem2")
-            or weapon:HasTag("pierces_ice_shield") or weapon.components.obsidiantool
+            or weapon.UMShouldPierceIceShield and weapon:UMShouldPierceIceShield(inst, attacker)
+            or weapon:HasTag("um_pierces_iceshield") or weapon.components.obsidiantool
             or weapon.components.fumaroletool and weapon.components.fumaroletool:GetTempRange() > 2
             or weapon.components.weapon and (weapon.components.weapon.stimuli == "fire" or weapon.components.weapon:GetDamage(attacker, inst) == 0))
 end
