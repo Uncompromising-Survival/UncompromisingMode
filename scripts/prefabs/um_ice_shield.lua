@@ -22,15 +22,14 @@ local function ShouldWeaponPierce(inst, attacker, weapon, damage)
 end
 
 local function ShouldRecoilIceShield(inst, attacker, weapon, damage)
-    local shouldpierce = ShouldWeaponPierce(inst, attacker, weapon, damage)
-    local shouldrecoil = inst:HasTag("ice_shielded") and not shouldpierce
+    local shouldrecoil = inst:HasTag("ice_shielded") and not ShouldWeaponPierce(inst, attacker, weapon, damage)
     if shouldrecoil and attacker and attacker.components.talker and attacker:HasTag("player") then
         attacker.components.talker:Say(GetString(attacker, "ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD"))
     end
 
     local fumarolemult = weapon and weapon.components.fumaroletool and weapon.components.fumaroletool:GetTempRange() or 1
 
-    return shouldrecoil, (shouldpierce or not inst:HasTag("ice_shielded")) and damage and damage * fumarolemult or damage and (damage / 2) * fumarolemult or nil
+    return shouldrecoil, not shouldrecoil and damage and damage * fumarolemult or damage and (damage / 2) * fumarolemult or nil
 end
 
 local function Init(inst, parent, fx_symbol, tier)
