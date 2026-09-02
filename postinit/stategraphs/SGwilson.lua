@@ -873,7 +873,6 @@ env.AddStategraphPostInit("wilson", function(inst)
             },
         },
 
-
         State {
             name = "curse_controlled",
             tags = { "busy", "pausepredict", "nomorph", "nodangle" },
@@ -933,7 +932,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                 if inst.components.playercontroller ~= nil then
                     inst.components.playercontroller:RemotePausePrediction(stun_frames <= 7 and stun_frames or nil)
                 end
-
 
                 if inst.prefab ~= "wes" then
                     inst.SoundEmitter:PlaySound("UCSounds/Sneeze/sneeze")
@@ -1084,7 +1082,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end),
             },
         },
-
 
         State {
             name = "rne_player_grabbed",
@@ -1274,8 +1271,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                 ForceStopHeavyLifting(inst)
                 inst.components.locomotor:Stop()
                 inst:ClearBufferedAction()
-
-
 
                 inst.AnimState:PlayAnimation("idle_sanity_pre", false)
                 inst.AnimState:PushAnimation("idle_sanity_loop", true)
@@ -2141,7 +2136,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst.sg:GoToState("wingsuit_pst")
             end,
 
-
             timeline =
             {
                 TimeEvent(.9, function(inst)
@@ -2665,6 +2659,52 @@ env.AddStategraphPostInit("wilson", function(inst)
             end,
         },
 
+        State{
+            name = "forceexitastralportal",
+            tags = { "doing", "busy", "nopredict", "nomorph", "nodangle" },
+
+            onenter = function(inst, data)
+                inst:ClearBufferedAction()
+
+                ToggleOffPhysics(inst)
+                inst.Physics:Stop()
+                inst.components.locomotor:Stop()
+
+                inst.sg.statemem.data = data
+
+                inst.components.health:SetInvincible(true)
+                if inst.components.playercontroller ~= nil then
+                    inst.components.playercontroller:Enable(false)
+                end
+                inst.DynamicShadow:Enable(false)
+                inst:Hide()
+                inst:ScreenFade(false, data.fadetime)
+
+                inst.sg:SetTimeout(data.fadetime)
+            end,
+
+            ontimeout = function(inst)
+                local data = inst.sg.statemem.data
+                if data.onreturn ~= nil then
+                    data.onreturn(inst)
+                end
+                inst:ScreenFade(true, 1)
+                inst.sg:GoToState("idle")
+            end,
+
+            onexit = function(inst)
+                if inst.sg.statemem.isphysicstoggle then
+                    ToggleOnPhysics(inst)
+                end
+
+                inst.components.health:SetInvincible(false)
+                if inst.components.playercontroller ~= nil then
+                    inst.components.playercontroller:Enable(true)
+                end
+                inst.DynamicShadow:Enable(true)
+                inst:Show()
+            end,
+        },
 
         -- Bluecap
         State {
@@ -3350,7 +3390,6 @@ env.AddStategraphPostInit("wilson", function(inst)
 
                 inst.dyn_anim_mod = mod
 
-
                 inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
             end,
 
@@ -3548,13 +3587,11 @@ env.AddStategraphPostInit("wilson", function(inst)
 
                 inst.dyn_anim_mod = mod
 
-
                 inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
             end,
 
             timeline =
             {
-
 
                 -- 0.7
                 TimeEvent(15 * FRAMES * 0.7, function(inst)
@@ -3683,8 +3720,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                     mod = 0.4
                 end
 
-
-
                 inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
 
                 inst.components.locomotor:Stop()
@@ -3727,7 +3762,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end
 
                 inst.dyn_anim_mod = mod
-
 
                 inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
 
@@ -3797,7 +3831,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                     end
                 end),
 
-
             },
 
             onexit = function(inst)
@@ -3837,7 +3870,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end
 
                 inst.dyn_anim_mod = mod
-
 
                 inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
             end,
@@ -4160,7 +4192,6 @@ env.AddStategraphPostInit("wilson", function(inst)
 
                 inst.dyn_anim_mod = mod
 
-
                 inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
             end,
 
@@ -4215,7 +4246,6 @@ env.AddStategraphPostInit("wilson", function(inst)
 
         },
 
-
         State {
             name = "bluecap_row",
             tags = { "rowing", "doing" },
@@ -4242,7 +4272,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end
 
                 inst.dyn_anim_mod = mod
-
 
                 inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
 
@@ -4442,7 +4471,6 @@ env.AddStategraphPostInit("wilson", function(inst)
 
                 inst.dyn_anim_mod = mod
 
-
                 inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
                 local feed = foodinfo and foodinfo.feed
                 if feed ~= nil then
@@ -4600,7 +4628,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end
 
                 inst.dyn_anim_mod = mod
-
 
                 inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
 
@@ -4795,7 +4822,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst.AnimState:SetDeltaTimeMultiplier(1)
             end,
         },
-
 
         State {
             name = "detonator_remotecast_pre",
@@ -5059,7 +5085,6 @@ env.AddStategraphPostInit("wilson", function(inst)
         },
 
     }
-
 
     for k, v in pairs(events) do
         assert(v:is_a(EventHandler), "Non-event added in mod events table!")
