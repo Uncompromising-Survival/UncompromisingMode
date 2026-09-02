@@ -48,6 +48,28 @@ ReturnAllPlayersAtTarget), while hammering a projector returns everyone who came
 (matched by home, ReturnAllProjectedPlayers) - not the same players when a receptionator
 is shared by more than one projector
 
+*someone mid-channel-windup (committed but not yet actually projected, um_astral_projected
+still false) isnt caught by either of those, since they dont have um_astral_home/target yet -
+they're tracked separately via um_astral_outbound_home/target and restored by
+RestorePendingChannelers / RestorePendingChannelersToTarget if their projector or their
+destination receptionator gets destroyed mid-windup
+
+MINIONS (um_astral_minions)
+Followers get grabbed once, at OnStartTeleporting, via
+doer.components.leader:GetFollowersByTag("_health") **that is what gets the
+matching erosion/hologram look and what "counts" as having come along on the trpi
+Anything tamed after that point was never part of the projection and is left behind
+
+*on a NORMAL trip (either direction) the minions dont need any teleport code from us -
+vanilla's own Teleporter:Activate already moves a doers followers alongside them for free
+Our own handling here is purely cosmetic (erosion waggy filter on/off)
+
+*on a FORCED return though, ForceReturnPlayer does a raw Physics:Teleport on the player only,
+bypassing Activate entirely - so without extra handling the minions would get their erosion
+cleared (ClearProjectionErosion) but never actually move, stranding them wherever the
+projection got interrupted. ForceReturnPlayer grabs um_astral_minions before
+CleanupPlayerProjection clears it, then teleports each one alongside the player via OnReturn.
+
 COSMETIC FX
 1. Ring: a persistent ring of alterguardian_lasertrail shows marking the allowed
 boundary around an active receptionator (Start/StopLeashRing, um_astral_leash_warning)
@@ -369,6 +391,7 @@ local function OnRemove(structure, channeler, flagname)
     if channeler[flagname] then
         channeler[flagname] = nil
         channeler.um_astral_outbound_home = nil
+        channeler.um_astral_outbound_target = nil
         if channeler.components.health ~= nil then
             channeler.components.health:SetInvincible(false)
         end
@@ -398,6 +421,7 @@ local function CleanupPlayerProjection(player)
     player.um_astral_returning = nil
     player.um_astral_outbound_pending = nil
     player.um_astral_outbound_home = nil
+    player.um_astral_outbound_target = nil
 
     if player.components.sanity ~= nil then
         player.components.sanity.externalmodifiers:RemoveModifier("um_astral_projector")
@@ -444,6 +468,7 @@ end
 
 -- teleports a player back to their projectors position without going through the normal return flow
 local function ForceReturnPlayer(player, dest_x, dest_y, dest_z)
+    local minions = player.um_astral_minions
     CleanupPlayerProjection(player)
 
     local px, py, pz = player.Transform:GetWorldPosition()
@@ -475,6 +500,14 @@ local function ForceReturnPlayer(player, dest_x, dest_y, dest_z)
 
         if dest_x ~= nil and pl.Physics ~= nil then
             pl.Physics:Teleport(OnReturn(dest_x, dest_y, dest_z))
+
+            if minions ~= nil then
+                for _, minion in ipairs(minions) do
+                    if minion:IsValid() and minion.Physics ~= nil then
+                        minion.Physics:Teleport(OnReturn(dest_x, dest_y, dest_z))
+                    end
+                end
+            end
         end
 
         pl.SoundEmitter:PlaySound("rifts6/vault_portal/teleport_arrive_FX")
@@ -538,6 +571,15 @@ local function RestorePendingChannelers(projector)
     end
 end
 
+-- same as above, but for when the receptionator someones mid channeling toward gets destroyed instead of their projector
+local function RestorePendingChannelersToTarget(target)
+    for _, player in ipairs(AllPlayers) do
+        if player.um_astral_outbound_pending and player.um_astral_outbound_target == target then
+            OnRemove(player.um_astral_outbound_home, player, "um_astral_outbound_pending")
+        end
+    end
+end
+
 -- projectinator: channel / teleport / hammer handlers
 -- starts when a player starts channeling the projector, plays the activation animation, then sets up the projection state and sends the player through
 local function OnStartChanneling(inst, channeler)
@@ -563,6 +605,7 @@ local function OnStartChanneling(inst, channeler)
 
     channeler.um_astral_outbound_pending = true
     channeler.um_astral_outbound_home = inst
+    channeler.um_astral_outbound_target = target
 
     channeler.components.health:SetInvincible(true)
     if channeler.components.playercontroller ~= nil then
@@ -607,6 +650,7 @@ local function OnStartTeleporting(inst, doer)
     doer.um_astral_target    = target
     doer.um_astral_outbound_pending = nil
     doer.um_astral_outbound_home = nil
+    doer.um_astral_outbound_target = nil
 
     if doer.components.sanity ~= nil then
         doer.components.sanity.externalmodifiers:SetModifier(
@@ -981,6 +1025,7 @@ end
 local function OnHammeredTarget(inst)
     local home = FindNearestProjector(inst)
     ReturnAllPlayersAtTarget(inst)
+    RestorePendingChannelersToTarget(inst)
     StopPairPortals(home, inst)
     local fx = SpawnPrefab("collapse_small")
     inst.components.lootdropper:DropLoot()
@@ -1053,6 +1098,9 @@ local function TargetFn()
     inst.OnStartChanneling_Target = OnStartChanneling_Target
     inst.ReleaseTeleporterTarget  = ReleaseTeleporterTarget
     inst.SpawnLeashRing           = SpawnLeashRing
+
+    inst.OnEntityWake  = OnEntityWake
+    inst.OnEntitySleep = OnEntitySleep
 
     inst:AddComponent("inspectable")
     inst.components.inspectable.getstatus = GetStatus
