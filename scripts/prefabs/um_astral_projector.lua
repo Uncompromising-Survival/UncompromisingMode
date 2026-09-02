@@ -32,14 +32,21 @@ belongs to that receptionator, then sends them back the same way, through
 "enterastralportal_nofx"
 2. On arrival back at the projector (OnExitingTeleporter / OnStartTeleporting_Target),
 all the projection state/tags/listeners get cleared and both structures play their
-"pst" animation and power down - but only once nobody else is still using that
-specific pair (CountProjectedPlayers is scoped per pair, not global)
+"pst" animation and power down *but each structure only powers down once nobody
+else is using IT specifically (CountProjectedPlayers scoped per structure - home-only
+for the projector half, target-only for the receptionator half - not per pair, since
+more than one projector can share the same nearest receptionator and vice versa)
 
 FORCED RETURNS (ForceReturnPlayer / OnReturn)
 Hammering either structure, dying while projected, or losing the receptionator entirely
 all skip the normal teleporter flow and hand the player straight to ForceReturnPlayer,
 which fades them out, drops them near the projector via OnReturn (which is a small random-angle
 offset, so they don't land exactly on top of it because it looks ugly), and fades them back in
+
+*hammering a receptionator returns everyone actually standing AT it (matched by target,
+ReturnAllPlayersAtTarget), while hammering a projector returns everyone who came FROM it
+(matched by home, ReturnAllProjectedPlayers) - not the same players when a receptionator
+is shared by more than one projector
 
 COSMETIC FX
 1. Ring: a persistent ring of alterguardian_lasertrail shows marking the allowed
@@ -931,51 +938,53 @@ local function OnStartTeleporting_Target(inst, doer)
 
     inst.pending_teleports = math.max(0, (inst.pending_teleports or 1) - 1)
 
-    inst.AnimState:PlayAnimation("active_pst")
-    inst.AnimState:PushAnimation("idle", true)
-    StopSoundLoop(inst)
-    StopLeashRing(inst)
-    StopPool(inst)
+    if doer:HasTag("player") then
+        -- clear erosion from player and their boplets
+        ClearProjectionErosion(doer)
 
-    if home ~= nil and home:IsValid() then
+        doer:RemoveTag("um_astral_projected")
+        doer.um_astral_projected = false
+        doer.um_astral_home      = nil
+        doer.um_astral_target    = nil
+        doer.um_astral_returning = nil
+
+        if doer.components.sanity ~= nil then
+            doer.components.sanity.externalmodifiers:RemoveModifier("um_astral_projector")
+        end
+
+        if doer.components.talker ~= nil then
+            doer.components.talker:ShutUp()
+        end
+
+        if doer.um_astral_projected_returntask ~= nil then
+            doer.um_astral_projected_returntask:Cancel()
+        end
+        doer.um_astral_projected_returntask = nil
+
+        if doer.um_astral_deactivated_fn ~= nil then
+            doer:RemoveEventCallback("playerdeactivated", doer.um_astral_deactivated_fn)
+            doer:RemoveEventCallback("onremove", doer.um_astral_deactivated_fn)
+            doer.um_astral_deactivated_fn = nil
+        end
+
+        if doer.um_astral_death_fn ~= nil then
+            doer:RemoveEventCallback("death", doer.um_astral_death_fn)
+            doer.um_astral_death_fn = nil
+        end
+    end
+
+    if CountProjectedPlayers(nil, inst) == 0 then
+        inst.AnimState:PlayAnimation("active_pst")
+        inst.AnimState:PushAnimation("idle", true)
+        StopSoundLoop(inst)
+        StopLeashRing(inst)
+        StopPool(inst)
+    end
+
+    if home ~= nil and home:IsValid() and CountProjectedPlayers(home, nil) == 0 then
         home.AnimState:PlayAnimation("active_pst")
         home.AnimState:PushAnimation("idle", true)
         StopSoundLoop(home)
-    end
-
-    if not doer:HasTag("player") then return end
-
-    -- clear erosion from player and their boplets
-    ClearProjectionErosion(doer)
-
-    doer:RemoveTag("um_astral_projected")
-    doer.um_astral_projected = false
-    doer.um_astral_home      = nil
-    doer.um_astral_target    = nil
-    doer.um_astral_returning = nil
-
-    if doer.components.sanity ~= nil then
-        doer.components.sanity.externalmodifiers:RemoveModifier("um_astral_projector")
-    end
-
-    if doer.components.talker ~= nil then
-        doer.components.talker:ShutUp()
-    end
-
-    if doer.um_astral_projected_returntask ~= nil then
-        doer.um_astral_projected_returntask:Cancel()
-    end
-    doer.um_astral_projected_returntask = nil
-
-    if doer.um_astral_deactivated_fn ~= nil then
-        doer:RemoveEventCallback("playerdeactivated", doer.um_astral_deactivated_fn)
-        doer:RemoveEventCallback("onremove", doer.um_astral_deactivated_fn)
-        doer.um_astral_deactivated_fn = nil
-    end
-
-    if doer.um_astral_death_fn ~= nil then
-        doer:RemoveEventCallback("death", doer.um_astral_death_fn)
-        doer.um_astral_death_fn = nil
     end
 end
 
