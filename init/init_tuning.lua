@@ -178,6 +178,16 @@ TUNING.DSTU = {
     MONSTER_MCTUSK_HOUND_NUMBER = 5,
     -- Hounds
     MONSTER_HOUNDS_PER_WAVE_INCREASE = 1.5, -- Controlled by player settings
+
+    MAGMA_HOUND_FIRE_DAMAGE = 1,
+    MAGMA_HOUND_DAMAGE = TUNING.HOUND_DAMAGE * 2,
+    MAGMA_HOUND_HEALTH = TUNING.WARGLET_HEALTH * 1.25,
+
+    GLACIAL_HOUND_DAMAGE = TUNING.HOUND_DAMAGE * 2,
+    GLACIAL_HOUND_HEALTH = TUNING.WARGLET_HEALTH * 1.25,
+    GLACIAL_HOUND_SPIKE_DAMAGE = 30,
+
+    HOUND_LIGHTNING_DAMAGE = 10, --Also used for tornado
     -- Spawn New Bosses
     --GOOSE_SETTING = GetModConfigData("goose_setting"),
     SPAWNWILTINGFLY = GetModConfigData("wiltfly"),
@@ -314,8 +324,8 @@ TUNING.DSTU = {
     RAIDRAT_BUFFED_WALKSPEED = 6,
     RAIDRAT_SPAWNRATE = seg_time / 5,
     RAIDRAT_SPAWNRATE_VARIANCE = (seg_time / 5) * 0.5,
-    SNIFFER_ITEM = 40,
-    SNIFFER_PLAYER = 120,
+    SNIFFER_ITEM_RANGE = 40,
+    SNIFFER_PLAYER_RANGE = 120,
 
     PIEDPIPER_TOOT_RANGE = 25,
     -- Weather Start Date
@@ -533,10 +543,11 @@ TUNING.DSTU = {
     RUINSNIGHTMARE_DAMAGE = 75,
     HERMITCRAB_MOONTREEBLOSSOMTEA_SHADOWCREATURE_DAMAGE = 75,
 
-    NO_THICKET_APHIDS = { "tumbleweed", "beefalo", "fruitbat" },   --AXE Add more as needed, most things >should< spawn aphids though.
+    NO_THICKET_APHIDS = {"beefalo", "fruitbat"},   --AXE Add more as needed, most things >should< spawn aphids though.
+    APHID_SPAWN_CHANCE = .1,
 
-    RIPPLE_BLACKLIST_PREFABS = { "webbedcreature", "rainometer" }, -- AXE Many cases would like "structure" tag still count for ripples, but many structures are incompatible, so we do a prefab based blacklist as well
-    RIPPLE_BLACKLIST_TAGS = { "projectile", "FX", "balloon" },     -- AXE other cases are universal, projectiles shouldn't really ever have ripples
+    RIPPLE_BLACKLIST_PREFABS = {"webbedcreature", "rainometer"}, -- AXE Many cases would like "structure" tag still count for ripples, but many structures are incompatible, so we do a prefab based blacklist as well
+    RIPPLE_BLACKLIST_TAGS = {"projectile", "FX", "balloon"},     -- AXE other cases are universal, projectiles shouldn't really ever have ripples
 
     -- Rat Poison
     RATPOISON_EAT_DAMAGE = 24,
@@ -616,7 +627,6 @@ TUNING.DSTU = {
         { 0.25, 1.5 },
     },
 
-
     YELLOWGEM2_SHOCK_RANGE = 4,
     YELLOWGEM2_ATTACK_TIME_FACTOR = 5,
     YELLOWGEM2_SHOCK_COOLDOWN = 3,
@@ -634,7 +644,6 @@ TUNING.DSTU = {
         0.7,
         0.4,
     },
-
 
     PURPLEGEM1_EXTRA_DAMAGE_THRESHOLD = 50,
     PURPLEGEM1_EXTRA_DAMAGE_MULT = 0.25,
@@ -692,12 +701,6 @@ end
 --TUNING.WEREMOOSE_DAMAGE = wilson_attack * 1.5
 --TUNING.SKILLS.WOODIE.MOOSE_SMASH_DAMAGE = wilson_attack * 3
 --end
-
-if GetModConfigData("armorrework") then
-    TUNING.WEREMOOSE_ABSORPTION = 0.8
-    TUNING.SHIELDOFTERROR_DAMAGE = 59.5
-    TUNING.ARMORMARBLE_SLOW = 0.8
-end
 
 TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WATHOM = {}
 TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WINKY = {}

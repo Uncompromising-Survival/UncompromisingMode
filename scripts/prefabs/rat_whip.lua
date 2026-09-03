@@ -21,13 +21,12 @@ local function HungerScalingCheck(attacker)
         local value = math.max(attacker.components.hunger:GetPercent(), .25)
         return 3 * value, value
     end
-    return 0, 0
 end
 
 local function WhipDamageCheck(inst, attacker, target)
-    local HungerScaling = HungerScalingCheck(attacker)
-    local BonusDamage = (34 / 3) * HungerScaling
-    return 34 + BonusDamage
+    local hunger = HungerScalingCheck(attacker) or 0
+    local bonusdamage = (34 / 3) * hunger
+    return 34 + bonusdamage
 end
 
 local function onattack(inst, attacker, target)
@@ -41,15 +40,8 @@ local function onattack(inst, attacker, target)
 
         --impact sounds normally play through comabt component on the target
         --whip has additional impact sounds logic, which we'll just add here
-
-        if attacker and attacker.components.hunger then
-            local value = attacker.components.hunger:GetPercent()
-            local hunger = 3
-
-            if value < .25 then value = .25 end
-
-            local scalingvalue = hunger * value
-
+        local scalingvalue, value = HungerScalingCheck(attacker)
+        if scalingvalue then
             snap.Transform:SetScale(scalingvalue / 1.25, scalingvalue / 1.25, scalingvalue / 1.25)
 
             if target.SoundEmitter then target.SoundEmitter:PlaySound("dontstarve/common/whip_small") end

@@ -1720,7 +1720,7 @@ local function Sniffertime(owner, sniffer)
     end
 
     local x, y, z = sniffer.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM, {"_inventoryitem"}, NOTAGS)
+    local ents = TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM_RANGE, {"_inventoryitem"}, NOTAGS)
 
     for i, v in ipairs(ents) do
         if v:IsValid() and v.components.inventoryitem ~= nil then
@@ -1731,7 +1731,7 @@ local function Sniffertime(owner, sniffer)
         end
     end
 
-    for i, v in ipairs(TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM, nil, {"FX", "NOCLICK"})) do
+    for i, v in ipairs(TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM_RANGE, nil, {"FX", "NOCLICK"})) do
         local container = v:IsValid() and (v.components.container_proxy and v or v.container and v.container.components.container_proxy and v.container)
         if container then
             DDVisual(owner, container, v.container and v or nil)
@@ -1742,14 +1742,14 @@ end
 local function TimeForACheckUp(inst, dev)
     local x, y, z = inst.Transform:GetWorldPosition()
     
-    local players = TheSim:FindEntities(x, y, z, TUNING.DSTU.SNIFFER_PLAYER, {"player"}, {"playerghost"})
+    local players = TheSim:FindEntities(x, y, z, TUNING.DSTU.SNIFFER_PLAYER_RANGE, {"player"}, {"playerghost"})
     for a, b in ipairs(players) do
-        if b:IsValid() and b:IsNear(inst, TUNING.DSTU.SNIFFER_PLAYER) then
+        if b:IsValid() and b:IsNear(inst, TUNING.DSTU.SNIFFER_PLAYER_RANGE) then
             Sniffertime(b, inst)
         end
     end
 
-    local ents = TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM, {"_inventoryitem"}, NOTAGS)
+    local ents = TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM_RANGE, {"_inventoryitem"}, NOTAGS)
     --[[print("THE RAT SNIFFS")
     print("                o")
     print("    =========B  *sniff* *sniff*")
@@ -1782,7 +1782,7 @@ local function TimeForACheckUp(inst, dev)
     end
 
     local DiferentDD = {}
-    for i, v in ipairs(TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM, nil, {"FX", "NOCLICK"})) do
+    for i, v in ipairs(TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM_RANGE, nil, {"FX", "NOCLICK"})) do
         if (inst.ratscore + inst.foodscore + inst.burrowbonus) < 300 then
             local container = v:IsValid() and IsProperContainer(v) and (v.components.container_proxy and v or v.container and v.container.components.container_proxy and v.container)
             if container then

@@ -102,7 +102,7 @@ local function BeargerFunctions(inst)
     if inst.components.groundpounder then
         local _groundpoundFn = inst.components.groundpounder.groundpoundFn
         local function OnGroundPound(inst, ...)
-            local target = inst.components.combat.target
+            local target = inst.sg.statemem.um_poundtarget
             if target then
                 local target_index = {}
                 local found_targets = {}

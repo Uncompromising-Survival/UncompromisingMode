@@ -18,11 +18,13 @@ local function OnTimerDone(owner, data)
     elseif data.name == "um_totem_azure_insulation" then
         --print(insulationmod.." result of timer done azure")
         if insulate_winter then
-            owner.components.temperature.inherentinsulation = owner.components.temperature.inherentinsulation - insulationmod
+            --owner.components.temperature.inherentinsulation = owner.components.temperature.inherentinsulation - insulationmod
+            owner.components.temperature:RemoveInsulationModifier(SEASONS.WINTER, owner, "um_totem_azure_insulation")
         end
 
         if insulate_summer then
-            owner.components.temperature.inherentsummerinsulation = owner.components.temperature.inherentsummerinsulation - insulationmod
+            --owner.components.temperature.inherentsummerinsulation = owner.components.temperature.inherentsummerinsulation - insulationmod
+            owner.components.temperature:RemoveInsulationModifier(SEASONS.SUMMER, owner, "um_totem_azure_insulation")
         end
     elseif data.name == "um_totem_malbatross_nowet" then
         if owner.components.moistureimmunity then
@@ -37,12 +39,12 @@ local function FeatherEffects(owner, totem)
     local feathertotal = #totem.components.container:FindItems(function(item) return item:HasTag("wingsuit_feather") end)
     if feathertotal == 0 then return 0 end
 
-    local feather_robin = #totem.components.container:FindItems(function(item) return item.prefab == "feather_robin" end)
-    local feather_crow = #totem.components.container:FindItems(function(item) return item.prefab == "feather_crow" end)
-    local feather_robin_winter = #totem.components.container:FindItems(function(item) return item.prefab == "feather_robin_winter" end)
-    local feather_canary = #totem.components.container:FindItems(function(item) return item.prefab == "feather_canary" end)
-    local goose_feather = #totem.components.container:FindItems(function(item) return item.prefab == "goose_feather" end)
-    local malbatross_feather = #totem.components.container:FindItems(function(item) return item.prefab == "malbatross_feather" end)
+    local feather_robin         = #totem.components.container:FindItems(function(item) return item.prefab == "feather_robin"        end)
+    local feather_crow          = #totem.components.container:FindItems(function(item) return item.prefab == "feather_crow"         end)
+    local feather_robin_winter  = #totem.components.container:FindItems(function(item) return item.prefab == "feather_robin_winter" end)
+    local feather_canary        = #totem.components.container:FindItems(function(item) return item.prefab == "feather_canary"       end)
+    local goose_feather         = #totem.components.container:FindItems(function(item) return item.prefab == "goose_feather"        end)
+    local malbatross_feather    = #totem.components.container:FindItems(function(item) return item.prefab == "malbatross_feather"   end)
     --local cherryforest_feather1 = #totem.components.container:FindItems(function(item) return item.prefab == "???" end)
     --local cherryforest_feather2 = #totem.components.container:FindItems(function(item) return item.prefab == "???" end)
     --local feather_robin = #totem.components.container:FindItems(function(item) return item.prefab == "feather_robin" end)
@@ -69,11 +71,13 @@ local function FeatherEffects(owner, totem)
         insulate_winter = TheWorld.state.season ~= "summer" -- Summer insultation will not allow the player to heat up in winter
 
         if insulate_winter then
-            owner.components.temperature.inherentinsulation = owner.components.temperature.inherentinsulation + insulationmod
+            --owner.components.temperature.inherentinsulation = owner.components.temperature.inherentinsulation + insulationmod
+            owner.components.temperature:SetInsulationModifier(SEASONS.WINTER, owner, insulationmod, "um_totem_azure_insulation")
         end
 
         if insulate_summer then
-            owner.components.temperature.inherentsummerinsulation = owner.components.temperature.inherentsummerinsulation + insulationmod
+            --owner.components.temperature.inherentsummerinsulation = owner.components.temperature.inherentsummerinsulation + insulationmod
+            owner.components.temperature:SetInsulationModifier(SEASONS.SUMMER, owner, insulationmod, "um_totem_azure_insulation")
         end
 
         UMCommonFns.RestartTimer(owner, {name = "um_totem_azure_insulation", time = 90 * feather_robin_winter})

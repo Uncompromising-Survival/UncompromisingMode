@@ -106,7 +106,7 @@ AddUMGemDef("redgem1", {
     color = RGB(233, 153, 153),
     fns = {
         onattack = function(inst, attacker, target, tier)
-            if tier ~= 1 and target:HasOneOfTags(devour_tags) and math.random() > 0.75 then -- arbitrarily said "a chance", I have no idea how common this should be
+            if tier ~= 1 and target:HasAnyTag(devour_tags) and math.random() > 0.75 then -- arbitrarily said "a chance", I have no idea how common this should be
                 local mult = TUNING.DSTU.REDGEM1_DEVOUR_MULT[tier]
                 attacker.components.combat:DoAttack(target, inst, nil, nil, mult, 0)        -- gotta use a bit more durability...
                 mult = inst.components.weapon:GetDamage(attacker, target) * mult
@@ -846,6 +846,17 @@ AddUMGemDef("orangegem2", {
 -----------------------------------------------------------------------------------
 ---Blue1
 
+local function GiveIceShieldIfFrozen(inst, data) -- TODO: Improve this stuff somehow.
+    local target = data.target
+    local freezable = target and target.components.freezable
+    local gem_enchantable = inst.components.gem_enchantable
+    local tier = gem_enchantable and gem_enchantable:GetEnchantmentTier("um_gemologybluegem1")
+    if freezable and freezable:IsFrozen() and tier and tier ~= 1 then
+        local ice_shield = SpawnPrefab("um_ice_shield")
+        ice_shield:Init(data.attacker, "swap_body", TUNING.DSTU.BLUEGEM1_ICE_SHIELD_TIER_BASE + (tier * TUNING.DSTU.BLUEGEM1_ICE_SHIELD_TIER_PER_TIER))
+    end
+end
+
 AddUMGemDef("bluegem1", {
     color = RGB(163, 194, 244),
     fns = {
@@ -859,6 +870,7 @@ AddUMGemDef("bluegem1", {
             end
             item.components.insulator:SetSummer()
             item.components.insulator:SetInsulation(TUNING.DSTU.BLUEGEM1_INSULATION_PER_TIER * tier) -- A bit too easy...
+            item:ListenForEvent("um_brokefrozentarget", GiveIceShieldIfFrozen)
         end,
         onremove = function(item, tier)
             if item.volatile_gemology_data.um_gemologybluegem1.added_insulator then
@@ -867,15 +879,12 @@ AddUMGemDef("bluegem1", {
                 item.components.insulator.type = item.volatile_gemology_data.um_gemologybluegem1.old_type
                 item.components.insulator.insulation = item.volatile_gemology_data.um_gemologybluegem1.old_insulation
             end
+            item:RemoveEventCallback("um_brokefrozentarget", GiveIceShieldIfFrozen)
         end,
         onattack = function(item, attacker, target, tier)
             if target.components.freezable then
                 target.components.freezable:AddColdness(TUNING.DSTU.BLUEGEM1_COLDNESS_PER_TIER * tier)
                 target.components.freezable:SpawnShatterFX()
-                if target.components.freezable:IsFrozen() and tier ~= 1 then
-                    local ice_shield = SpawnPrefab("um_ice_shield")
-                    ice_shield:Init(attacker, "swap_body", TUNING.DSTU.BLUEGEM1_ICE_SHIELD_TIER_BASE + (tier * TUNING.DSTU.BLUEGEM1_ICE_SHIELD_TIER_PER_TIER))
-                end
                 DamageGem("bluegem1", item, GEM_USES[tier])
             end
         end

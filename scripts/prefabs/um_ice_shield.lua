@@ -12,25 +12,25 @@ local function OnHealthDelta(inst, oldpercent, newpercent, overtime, cause, affl
     end
 end
 
-local function ShouldWeaponPierce(inst, weapon, attacker)
-    return attacker and attacker:HasTag("pierces_ice_shield")
+local function ShouldWeaponPierce(inst, attacker, weapon, damage)
+    return attacker and (attacker.UMShouldPierceIceShield and attacker:UMShouldPierceIceShield(inst, weapon, damage) or attacker:HasTag("um_pierces_iceshield"))
         or weapon and (weapon.components.gem_enchantable and weapon.components.gem_enchantable:HasEnchantment("um_gemologyredgem2")
-            or weapon:HasTag("pierces_ice_shield") or weapon.components.obsidiantool
+            or weapon.UMShouldPierceIceShield and weapon:UMShouldPierceIceShield(inst, attacker, damage)
+            or weapon:HasTag("um_pierces_iceshield") or weapon.components.obsidiantool
             or weapon.components.fumaroletool and weapon.components.fumaroletool:GetTempRange() > 2
             or weapon.components.weapon and (weapon.components.weapon.stimuli == "fire" or weapon.components.weapon:GetDamage(attacker, inst) == 0))
 end
 
 local function ShouldRecoilIceShield(inst, attacker, weapon, damage)
-    local shouldrecoil = inst:HasTag("ice_shielded") and not ShouldWeaponPierce(inst, weapon, attacker)
+    local shouldrecoil = inst:HasTag("ice_shielded") and not ShouldWeaponPierce(inst, attacker, weapon, damage)
     if shouldrecoil and attacker and attacker.components.talker and attacker:HasTag("player") then
         attacker.components.talker:Say(GetString(attacker, "ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD"))
     end
 
     local fumarolemult = weapon and weapon.components.fumaroletool and weapon.components.fumaroletool:GetTempRange() or 1
 
-    return shouldrecoil, (ShouldWeaponPierce(inst, weapon, attacker) or not inst:HasTag("ice_shielded")) and damage and damage * fumarolemult or damage and (damage / 2) * fumarolemult or nil
+    return shouldrecoil, not shouldrecoil and damage and damage * fumarolemult or damage and (damage / 2) * fumarolemult or nil
 end
-
 
 local function Init(inst, parent, fx_symbol, tier)
     if parent.ice_shield then

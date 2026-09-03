@@ -19,12 +19,17 @@ add their own armors and protection values.
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
+-- Tunings we change related to the rework. Moved here to keep everything consolidated!
+TUNING.WEREMOOSE_ABSORPTION = .8
+TUNING.SHIELDOFTERROR_DAMAGE = 59.5
+TUNING.ARMORMARBLE_SLOW = .8
+
 --if not TheNet:GetIsServer() then return end
 
 -- Exceptions can be made for specific armors to change their absorption values directly instead of
 -- using the armor_mappings table.
 ARMOR_ABSORPTION_OVERRIDES = {
-    ["beehat"] = .7,
+    --["beehat"] = .7,
     ["armorruins"] = .8,
     ["shieldofterror"] = .75,
     ["cookiecutterhat"] = .7,
@@ -38,13 +43,14 @@ ARMOR_ABSORPTION_OVERRIDES = {
     ["armor_lunarplant_husk"] = .7,
     ["um_armor_bramble_rimeweed"] = .7,
     ["eyemaskhat"] = .7,
+    ["armordragonfly"] = .7,
 
     -- Island Adventures
     ["armorlimestone"] = .75,
     ["armorobsidian"] = .7,
     ["armorseashell"] = .7,
     ["armorcactus"] = .7,
-    ["oxhat"] = .75,
+    ["oxhat"] = .75
 }
 
 -- Lower bounds are exclusive while upper bounds are inclusive. For example, a Log Suit with a
@@ -61,20 +67,23 @@ local function RemapAbsorption(self, absorb)
     if not self.inst.prefab or absorb == self.umabsorbremap then return absorb end
     local absorb_override = ARMOR_ABSORPTION_OVERRIDES[self.inst.prefab]
     if absorb_override then return absorb_override end
-    for _, mapping in ipairs(armor_mappings) do
-        if absorb > mapping.min_val and absorb <= mapping.max_val then
-            return mapping.new_absorb
+    if not (self.tags and next(self.tags)) then
+        for _, mapping in ipairs(armor_mappings) do
+            if absorb > mapping.min_val and absorb <= mapping.max_val then
+                return mapping.new_absorb
+            end
         end
     end
+    --if not (self.tags and next(self.tags)) and absorb > .6 and absorb <= .95 then absorb = math.max(absorb - .15, .6) end
     return absorb
 end
 
 env.AddPrefabPostInitAny(function(inst)
     local armor = inst.components.armor
     if armor then
-		armor:SetAbsorption(armor.absorb_percent)
-		armor.umabsorbremap = armor.absorb_percent
-	end
+        armor:SetAbsorption(armor.absorb_percent)
+        armor.umabsorbremap = armor.absorb_percent
+    end
 end)
 
 env.AddComponentPostInit("armor", function(self)
@@ -93,7 +102,7 @@ env.AddComponentPostInit("armor", function(self)
         return _InitIndestructible(self, RemapAbsorption(self, absorb_percent), ...)
     end
 
-    function self:UMOverrideAbsorption(absorb_percent)
-        return _SetAbsorption(self, absorb_percent)
+    function self:UMOverrideAbsorption(absorb_percent, ...)
+        return _SetAbsorption(self, absorb_percent, ...)
     end
 end)

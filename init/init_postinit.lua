@@ -15,6 +15,7 @@ local component_post = {
     "hounded",
     "sleeper",
     "fueled",
+    "freezable",
     --"perishable",
     --"carnivalevent",
     "lootdropper",
@@ -459,9 +460,9 @@ end
 if GetModConfigData("firehound") then
     table.insert(prefab_post, "firehound")
 end
-	
+
 if GetModConfigData("icehound") then
-    table.insert(prefab_post, "icehound")	
+    table.insert(prefab_post, "icehound")
 end
 
 if TUNING.DSTU.HARDER_SPIDERQUEEN then
@@ -613,6 +614,10 @@ end
 for _, v in pairs(class_post) do
     -- These contain a path already, e.g. v= "widgets/inventorybar"
     modimport("postinit/" .. v)
+end
+
+if TUNING.DSTU.ARMORREWORK then
+    modimport("postinit/armor_rework")
 end
 
 modimport("scripts/um_fxlist")

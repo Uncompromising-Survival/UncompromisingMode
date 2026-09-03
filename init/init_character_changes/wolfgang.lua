@@ -346,7 +346,7 @@ local function ToughWorker(inst)
     end
 end
 
-local function GetDowningDamgeTunings(inst)
+local function GetDrowningDamageTunings(inst)
     return TUNING.DROWNING_DAMAGE[inst:HasTag("merm") and "WURT" or "DEFAULT"]
 end
 
@@ -538,7 +538,7 @@ env.AddPrefabPostInit("wolfgang", function(inst)
     inst:ListenForEvent("itemget", OnPickup)
 
     if inst.components.drownable ~= nil then
-        inst.components.drownable:SetCustomTuningsFn(GetDowningDamgeTunings)
+        inst.components.drownable:SetCustomTuningsFn(GetDrowningDamageTunings)
         inst.components.drownable.shoulddropitemsfn = ShouldDropItems
         inst.components.drownable.fallback_rescuefn = IARescue
     end

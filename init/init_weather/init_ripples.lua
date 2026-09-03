@@ -203,7 +203,7 @@ env.AddStategraphPostInit("frog", function(inst)
         local state_timeline1_fn = state.timeline[1].fn
         state.timeline[1].fn = function(inst, ...)
             inst.components.umripples:OnNoLongerLandedServer()
-            state_timeline2_fn(inst, ...)
+            state_timeline1_fn(inst, ...)
         end
         local state_timeline2_fn = state.timeline[2].fn
         state.timeline[2].fn = function(inst, ...)

@@ -151,6 +151,9 @@ local function battlesong_durability_ondetach(inst, target)
     end
 end
 
+--------------------------------------------------------------------------
+-- BATTLESONG HEALTHGAIN
+--------------------------------------------------------------------------
 local function TryStartHealthRegen(inst, target) 
     --print("Applying battlesong healthgain")
     --print("Is near lunar melodist: " ..tostring(IsNearLunarMelodist(target)))
@@ -207,6 +210,9 @@ local function battlesong_healthgain_ondetach(inst, target)
     end
 end
 
+--------------------------------------------------------------------------
+-- BATTLESONG SANITYGAIN
+--------------------------------------------------------------------------
 local function TryStartSanityRegen(inst, target) 
     if IsNearLunarMelodist(target) and inst.battlesong_sanitygain_task == nil then
             inst.battlesong_sanitygain_task = inst:DoPeriodicTask(TUNING.DSTU.BATTLESONG_LUNAR_REGEN_PERIOD, function()
@@ -272,6 +278,33 @@ local function battlesong_sanityaura_ondetach(inst, target)
     end
 end
 
+--------------------------------------------------------------------------
+-- BATTLESONG FIRERESISTANCE
+--------------------------------------------------------------------------
+TUNING.DSTU.BATTLESONG_FIRE_INSULATION = 120
+
+local function battlesong_fireresistance_onapply(inst, target)
+    if IsNearLunarMelodist(target) then
+        if target.components.temperature ~= nil then
+            target.components.temperature:SetInsulationModifier(SEASONS.SUMMER, inst, TUNING.DSTU.BATTLESONG_FIRE_INSULATION, "battlesong_fireres")
+        end
+    end
+
+    if target.components.health ~= nil then
+        target.components.health.externalfiredamagemultipliers:SetModifier(inst, TUNING.BATTLESONG_FIRE_RESIST_MOD)
+    end
+end
+
+local function battlesong_fireresistance_ondetach(inst, target)
+    target.components.temperature:RemoveInsulationModifier(SEASONS.SUMMER, inst, "battlesong_fireres")
+    if target.components.health ~= nil then
+        target.components.health.externalfiredamagemultipliers:RemoveModifier(inst)
+    end
+end
+
+--------------------------------------------------------------------------
+-- BATTLESONG LUNARALIGNED
+--------------------------------------------------------------------------
 local function battlesong_lunaraligned_onapply(inst, target)
     local defense = TUNING.BATTLESONG_LUNARALIGNED_LUNAR_RESIST
     local attack = TUNING.BATTLESONG_LUNARALIGNED_VS_SHADOW_BONUS
@@ -289,6 +322,9 @@ local function battlesong_lunaraligned_onapply(inst, target)
     end
 end
 
+--------------------------------------------------------------------------
+-- BATTLESONG SHADOWALIGNED
+--------------------------------------------------------------------------
 local function battlesong_shadowaligned_onapply(inst, target)
     local defense = TUNING.BATTLESONG_SHADOWALIGNED_SHADOW_RESIST
     local attack = TUNING.BATTLESONG_SHADOWALIGNED_VS_LUNAR_BONUS
@@ -347,12 +383,22 @@ env.AddPrefabPostInit("battlesong_sanityaura", function(inst)
     inst.songdata.ONDETACH = battlesong_sanityaura_ondetach
 end)
 
+env.AddPrefabPostInit("battlesong_fireresistance", function(inst)
+    if not TheWorld.ismastersim then
+        return
+    end
+
+    inst.songdata.ONAPPLY = battlesong_fireresistance_onapply
+    inst.songdata.ONDETACH = battlesong_fireresistance_ondetach
+end)
+
 env.AddPrefabPostInit("battlesong_lunaraligned", function(inst)
 	if not TheWorld.ismastersim then
 		return
 	end
 
     inst.songdata.ONAPPLY = battlesong_lunaraligned_onapply
+    -- vanilla function handles removing the buff
 end)
 
 env.AddPrefabPostInit("battlesong_shadowaligned", function(inst)
@@ -361,6 +407,7 @@ env.AddPrefabPostInit("battlesong_shadowaligned", function(inst)
 	end
 
     inst.songdata.ONAPPLY = battlesong_shadowaligned_onapply
+    -- vanilla function handles removing the buff
 end)
 
 
