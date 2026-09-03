@@ -91,12 +91,9 @@ end
 
 local function DoDamage(inst, OnIgnite)
     local isblock = inst.animname == "block"
-
     inst.task = inst:DoTaskInTime(GetRandomMinMax(unpack(TUNING.SANDSPIKE.LIFETIME[string.upper(inst.animname)])), DoBreak)
     inst:RemoveTag("notarget")
-    if isblock then
-        inst.Physics:SetActive(true)
-    end
+    if isblock then inst.Physics:SetActive(true) end
     inst:AddComponent("inspectable")
     inst.components.health:SetInvincible(false)
     inst.components.combat:SetOnHit(OnHit)
@@ -110,6 +107,7 @@ local function DoDamage(inst, OnIgnite)
     inst.components.burnable:SetOnExtinguishFn(nil)
     inst.components.burnable:SetOnBurntFn(nil)
 
+    local caster = inst.caster and inst.caster:IsValid() and inst.caster or nil
     local x, y, z = inst.Transform:GetWorldPosition()
     local ents = TheSim:FindEntities(x, 0, z, inst.spikeradius + DAMAGE_RADIUS_PADDING, nil, NON_COLLAPSIBLE_TAGS, COLLAPSIBLE_TAGS)
     for i, v in ipairs(ents) do
@@ -135,12 +133,9 @@ local function DoDamage(inst, OnIgnite)
                 v.components.pickable:Pick(inst)
             elseif v.components.combat ~= nil
                 and v.components.health ~= nil
-                and not v.components.health:IsDead() then
-                if not isblock
-                    and (not v:HasTag("player") or v == inst.caster)
-                    and inst.components.combat:IsValidTarget(v) then
-                    inst.components.combat:DoAttack(v)
-                end
+                and not v.components.health:IsDead()
+                and not isblock and (UMCommonFns.IsNotFriendly(caster, v) or v == caster) then
+                inst.components.combat:DoAttack(v)
             end
         end
     end
