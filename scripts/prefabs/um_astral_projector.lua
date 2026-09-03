@@ -20,7 +20,7 @@ local prefabs =
 local FORCE_RETURN_FADE = 1
 local ASTRAL_GROGGINESS_NORMAL = 0.5
 local ASTRAL_GROGGINESS_FORCED = 0.9
-local ASTRAL_TELEPORT_TIMEOUT = 1
+local ASTRAL_TELEPORT_TIMEOUT = 2
 local ASTRAL_CIRCLE_DISTSQ = 530
 local ASTRAL_RING_ANGLEDIFF = PI / 60
 local ASTRAL_RING_SPAWNS_PER_TICK = 4
@@ -28,7 +28,7 @@ local ASTRAL_RETURN_OFFSET = 3
 
 -- lookup + query helpers
 -- finds the closest receptionator to a given projector
-local function FindNearestTarget(inst)
+local function FindNearestReceptor(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
     -- 10000 radius might be overkill??? idk
     local ents = TheSim:FindEntities(x, y, z, 10000, {"um_astral_projector_target"})
@@ -266,12 +266,14 @@ end
 -- pair lifecycle, stopping both structures together
 -- hard stop both structures, skipping the pst animation (used when hammering)
 local function StopPairPortals(projector, target)
-    if projector ~= nil and projector:IsValid() and CountProjectedPlayers(projector, nil) == 0 then
+    if projector ~= nil and projector:IsValid() and CountProjectedPlayers(projector, nil) == 0
+        and (projector.pending_teleports or 0) == 0 then
         StopSoundLoop(projector)
         projector.AnimState:PlayAnimation("idle", true)
         projector.components.teleporter:Target(nil)
     end
-    if target ~= nil and target:IsValid() and CountProjectedPlayers(nil, target) == 0 then
+    if target ~= nil and target:IsValid() and CountProjectedPlayers(nil, target) == 0
+        and (target.pending_teleports or 0) == 0 then
         StopSoundLoop(target)
         target.AnimState:PlayAnimation("idle", true)
         target.components.teleporter:Target(nil)
@@ -282,7 +284,8 @@ end
 
 -- graceful stop, plays the deactivation animation on both structures
 local function StopPairAnimations(projector, target)
-    if projector ~= nil and projector:IsValid() and CountProjectedPlayers(projector, nil) == 0 then
+    if projector ~= nil and projector:IsValid() and CountProjectedPlayers(projector, nil) == 0
+        and (projector.pending_teleports or 0) == 0 then
         StopSoundLoop(projector)
         projector.SoundEmitter:PlaySound("rifts6/vault_portal/turn_off")
         projector.AnimState:PlayAnimation("active_pst")
@@ -290,7 +293,8 @@ local function StopPairAnimations(projector, target)
         projector.components.teleporter:Target(nil)
         projector.pending_teleports = 0
     end
-    if target ~= nil and target:IsValid() and CountProjectedPlayers(nil, target) == 0 then
+    if target ~= nil and target:IsValid() and CountProjectedPlayers(nil, target) == 0
+        and (target.pending_teleports or 0) == 0 then
         StopSoundLoop(target)
         target.SoundEmitter:PlaySound("rifts6/vault_portal/turn_off")
         target.AnimState:PlayAnimation("active_pst")
@@ -311,10 +315,14 @@ local function ReleaseTeleporterTarget(inst)
     end
 end
 
--- scheduled on OnStartChanneling and OnStartChanneling_Target, guards the channeling wind up
+-- scheduled on OnStartChannelingProjector and OnStartChannelingReceptor, guards the channeling wind up
 local function OnRemove(structure, channeler, flagname)
     if channeler[flagname] then
         channeler[flagname] = nil
+        local outtarget = channeler.um_astral_outbound_target
+        if outtarget ~= nil and outtarget:IsValid() then
+            outtarget.pending_teleports = math.max(0, (outtarget.pending_teleports or 1) - 1)
+        end
         channeler.um_astral_outbound_home = nil
         channeler.um_astral_outbound_target = nil
         if channeler.components.health ~= nil then
@@ -375,7 +383,7 @@ local function CleanupPlayerProjection(player)
     if home ~= nil and home:IsValid() then
         home:DoTaskInTime(0, function(h)
             if h ~= nil and h:IsValid() then
-                local tgt = (target ~= nil and target:IsValid()) and target or FindNearestTarget(h)
+                local tgt = (target ~= nil and target:IsValid()) and target or nil
                 StopPairAnimations(h, tgt)
                 if tgt ~= nil and tgt.active_home ~= nil and CountProjectedPlayers(nil, tgt) == 0 then
                     tgt.active_home = nil
@@ -473,7 +481,7 @@ local function ForceReturnPlayer(player, dest_x, dest_y, dest_z)
 end
 
 -- force returns all players that were projected through a specific projector
-local function ReturnAllProjectedPlayers(projector)
+local function ReturnAllPlayersFromProjector(projector)
     local sx, sy, sz
     if projector ~= nil and projector:IsValid() then
         sx, sy, sz = projector.Transform:GetWorldPosition()
@@ -486,7 +494,7 @@ local function ReturnAllProjectedPlayers(projector)
 end
 
 -- force returns all players currently at a specific receptionator, regardless of which projector each one came from
-local function ReturnAllPlayersAtTarget(target)
+local function ReturnAllPlayersAtReceptor(target)
     for _, player in ipairs(AllPlayers) do
         if player.um_astral_projected and player.um_astral_target == target then
             local home = player.um_astral_home
@@ -499,8 +507,8 @@ local function ReturnAllPlayersAtTarget(target)
     end
 end
 
--- restores anyone still mid channeling on a projector thats about to be destroyed, since they are not yet tagged and ReturnAllProjectedPlayers wont catch them
-local function RestorePendingChannelers(projector)
+-- restores anyone still mid channeling on a projector thats about to be destroyed, since they are not yet tagged and ReturnAllPlayersFromProjector wont catch them
+local function RestorePendingChannelersAtProjector(projector)
     for _, player in ipairs(AllPlayers) do
         if player.um_astral_outbound_pending and player.um_astral_outbound_home == projector then
             OnRemove(projector, player, "um_astral_outbound_pending")
@@ -509,7 +517,7 @@ local function RestorePendingChannelers(projector)
 end
 
 -- same as above, but for when the receptionator someones mid channeling toward gets destroyed instead of their projector
-local function RestorePendingChannelersToTarget(target)
+local function RestorePendingChannelersAtReceptor(target)
     for _, player in ipairs(AllPlayers) do
         if player.um_astral_outbound_pending and player.um_astral_outbound_target == target then
             OnRemove(player.um_astral_outbound_home, player, "um_astral_outbound_pending")
@@ -519,10 +527,10 @@ end
 
 -- projectinator stuff below
 -- starts when a player starts channeling the projector, plays the activation animation, then sets up the projection state and sends the player through
-local function OnStartChanneling(inst, channeler)
+local function OnStartChannelingProjector(inst, channeler)
     if channeler.um_astral_outbound_pending then return end
 
-    local target = FindNearestTarget(inst)
+    local target = FindNearestReceptor(inst)
 
     -- always play animation regardless of whether projection proceeds
     if not inst.AnimState:IsCurrentAnimation("active_loop") then
@@ -551,27 +559,31 @@ local function OnStartChanneling(inst, channeler)
 
     inst.components.teleporter:Target(target)
     inst.pending_teleports = (inst.pending_teleports or 0) + 1
+    target.pending_teleports = (target.pending_teleports or 0) + 1
     inst:DoTaskInTime(ASTRAL_TELEPORT_TIMEOUT, OnRemove, channeler, "um_astral_outbound_pending")
 
     channeler.sg:GoToState("enterastralportal", { teleporter = inst })
 end
 
 -- triggers when the player stops channeling before the teleport completes
-local function OnStopChanneling(inst, aborted)
+local function OnStopChannelingProjector(inst, aborted)
     if inst.components.teleporter.targetTeleporter ~= nil then return end
-    StopPairAnimations(inst, FindNearestTarget(inst))
+    StopPairAnimations(inst, FindNearestReceptor(inst))
 end
 
 -- triggers  when the teleporter activates and the player is actually in transit.
 -- sets up the return task and disconnect handler
-local function OnStartTeleporting(inst, doer)
-    inst.SoundEmitter:PlaySound("rifts6/vault_portal/teleport_fx")
-
+local function OnStartTeleportingProjector(inst, doer)
     inst.pending_teleports = math.max(0, (inst.pending_teleports or 1) - 1)
+
+    local outtarget = doer.um_astral_outbound_target
+    if outtarget ~= nil and outtarget:IsValid() then
+        outtarget.pending_teleports = math.max(0, (outtarget.pending_teleports or 1) - 1)
+    end
 
     if not doer:HasTag("player") then return end
 
-    local target = FindNearestTarget(inst)
+    local target = FindNearestReceptor(inst)
 
     -- followers now so ClearProjectionErosion works even after death clears the leader component
     local minions = doer.components.leader and doer.components.leader:GetFollowersByTag("_health") or {}
@@ -655,14 +667,12 @@ local function OnStartTeleporting(inst, doer)
         end
 
         -- player is dead: death handler already called ForceReturnPlayer, dont pile on
-        if doer.components.health ~= nil and doer.components.health:IsDead() then
-            return
-        end
+        if doer.components.health ~= nil and doer.components.health:IsDead() then return end
 
         -- recover target reference if it was destroyed and a new one exists
         local tgt = doer.um_astral_target
         if tgt ~= nil and not tgt:IsValid() then
-            tgt = doer.um_astral_home and doer.um_astral_home:IsValid() and FindNearestTarget(doer.um_astral_home) or nil
+            tgt = doer.um_astral_home and doer.um_astral_home:IsValid() and FindNearestReceptor(doer.um_astral_home) or nil
             doer.um_astral_target = tgt
         end
 
@@ -671,7 +681,8 @@ local function OnStartTeleporting(inst, doer)
                 -- auto return if the player wanders too far from the receptionator
                 local dist_to_exit = doer:GetDistanceSqToInst(tgt)
                 if dist_to_exit >= ASTRAL_CIRCLE_DISTSQ and not doer.um_astral_returning then
-                    tgt.OnStartChanneling_Target(tgt, doer)
+                    local hx, hy, hz = home.Transform:GetWorldPosition()
+                    ForceReturnPlayer(doer, hx, hy, hz)
                 end
             else
                 -- no receptionator exists, force return to projector, it used to kill you btw, looking at you Scrimbles
@@ -697,14 +708,13 @@ local function OnStartTeleporting(inst, doer)
 end
 
 -- for when the player finishes teleporting through the projector side
-local function OnExitingTeleporter(inst, obj)
+local function OnExitingTeleporterProjector(inst, obj)
     inst.SoundEmitter:PlaySound("rifts6/vault_portal/teleport_arrive_FX")
     if obj ~= nil and obj:HasTag("player") then
         if obj.Physics ~= nil then
             local ix, iy, iz = inst.Transform:GetWorldPosition()
             obj.Physics:Teleport(OnReturn(ix, iy, iz))
         end
-        obj:DoTaskInTime(1, obj.PushEvent, "townportalteleport")
         --  grogginess on arrival at receptionator, only if alive
         if obj.components.grogginess ~= nil
             and obj.components.health ~= nil
@@ -712,21 +722,20 @@ local function OnExitingTeleporter(inst, obj)
             obj.components.grogginess:SetPercent(ASTRAL_GROGGINESS_NORMAL)
         end
     end
-    -- save the receptionator reference before clearing the teleporter (FindNearestTarget after clear is unreliable in multi pair setups)
-    local tgt = (obj ~= nil and obj.um_astral_target ~= nil and obj.um_astral_target:IsValid()) and obj.um_astral_target or FindNearestTarget(inst)
+    -- save the receptionator reference before clearing the teleporter (FindNearestReceptor after clear is unreliable in multi pair setups)
+    local tgt = (obj ~= nil and obj.um_astral_target ~= nil and obj.um_astral_target:IsValid()) and obj.um_astral_target
+        or inst.components.teleporter.targetTeleporter
     inst.components.teleporter:Target(nil)
-    inst.pending_teleports = 0
     if tgt ~= nil and tgt:IsValid() then
         tgt.components.teleporter:Target(nil)
-        tgt.pending_teleports = 0
     end
 end
 
 -- projector is hammered, force return all linked players then destroy
-local function OnHammered(inst)
-    local target = FindNearestTarget(inst)
-    ReturnAllProjectedPlayers(inst)
-    RestorePendingChannelers(inst)
+local function OnHammeredProjector(inst)
+    local target = FindNearestReceptor(inst)
+    ReturnAllPlayersFromProjector(inst)
+    RestorePendingChannelersAtProjector(inst)
     StopPairPortals(inst, target)
     local fx = SpawnPrefab("collapse_small")
     inst.components.lootdropper:DropLoot()
@@ -736,7 +745,7 @@ local function OnHammered(inst)
 end
 
 -- hammer hit callback, defaults to active_loop, if it was already active
-local function OnHit(inst)
+local function OnHitProjector(inst)
     local was_active = inst.AnimState:IsCurrentAnimation("active_loop")
     inst.AnimState:PlayAnimation("hammer")
     if was_active then
@@ -766,7 +775,7 @@ local function init(inst)
 end
 
 -- projectinator constructor
-local function Fn()
+local function ProjectorFn()
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -805,20 +814,21 @@ local function Fn()
     inst:AddComponent("workable")
     inst.components.workable:SetWorkAction(ACTIONS.HAMMER)
     inst.components.workable:SetWorkLeft(4)
-    inst.components.workable:SetOnFinishCallback(OnHammered)
-    inst.components.workable:SetOnWorkCallback(OnHit)
+    inst.components.workable:SetOnFinishCallback(OnHammeredProjector)
+    inst.components.workable:SetOnWorkCallback(OnHitProjector)
 
     inst:AddComponent("channelable")
-    inst.components.channelable:SetChannelingFn(OnStartChanneling, OnStopChanneling)
+    inst.components.channelable:SetChannelingFn(OnStartChannelingProjector, OnStopChannelingProjector)
 
     inst:AddComponent("teleporter")
-    inst.components.teleporter.onActivate       = OnStartTeleporting
+    inst.components.teleporter.onActivate       = OnStartTeleportingProjector
     inst.components.teleporter.offset           = 0
     inst.components.teleporter.saveenabled      = false
-    inst.components.teleporter.travelcameratime = 1.5
-    inst.components.teleporter.travelarrivetime = 1.5
+    inst.components.teleporter.stopcamerafades  = true
+    inst.components.teleporter.travelcameratime = 0
+    inst.components.teleporter.travelarrivetime = 0
 
-    inst:ListenForEvent("doneteleporting", OnExitingTeleporter)
+    inst:ListenForEvent("doneteleporting", OnExitingTeleporterProjector)
 
     inst:AddComponent("inspectable")
     inst.components.inspectable.getstatus = GetStatus
@@ -838,10 +848,8 @@ end
 -- receoptionator stuff below
 -- func for when a projected player channels the receptionator to return.
 -- animation plays unconditionally, teleport only proceeds if this is the correct receptionator
-local function OnStartChanneling_Target(inst, channeler)
-    if channeler.um_astral_returning then
-        return
-    end
+local function OnStartChannelingReceptor(inst, channeler)
+    if channeler.um_astral_returning then return end
 
     local home = channeler.um_astral_home
 
@@ -869,11 +877,11 @@ local function OnStartChanneling_Target(inst, channeler)
     inst.pending_teleports = (inst.pending_teleports or 0) + 1
     inst:DoTaskInTime(ASTRAL_TELEPORT_TIMEOUT, OnRemove, channeler, "um_astral_returning")
 
-    channeler.sg:GoToState("enterastralportal_nofx", { teleporter = inst })
+    channeler.sg:GoToState("enterastralportal", { teleporter = inst })
 end
 
 -- when the player stops channeling the receptionator before completing the return
-local function OnStopChanneling_Target(inst, aborted)
+local function OnStopChannelingReceptor(inst, aborted)
     if inst.components.teleporter.targetTeleporter ~= nil then return end
     StopPairAnimations(inst.active_home, inst)
     if CountProjectedPlayers(nil, inst) == 0 then
@@ -882,9 +890,9 @@ local function OnStopChanneling_Target(inst, aborted)
 end
 
 -- player finishes teleporting back through the receptionator
-local function OnExitingTeleporter_Target(inst, obj)
+local function OnExitingTeleporterReceptor(inst, obj)
+    inst.SoundEmitter:PlaySound("rifts6/vault_portal/teleport_arrive_FX")
     if obj ~= nil and obj:HasTag("player") then
-        obj:DoTaskInTime(1, obj.PushEvent, "townportalteleport")
         -- apply grogginess on normal return, only if alive
         if obj.components.grogginess ~= nil
             and obj.components.health ~= nil
@@ -895,18 +903,15 @@ local function OnExitingTeleporter_Target(inst, obj)
         inst:DoTaskInTime(32 * FRAMES, StartPool)
     end
     inst.components.teleporter:Target(nil)
-    inst.pending_teleports = 0
     local home = inst.active_home
     inst.active_home = nil
     if home ~= nil and home:IsValid() then
         home.components.teleporter:Target(nil)
-        home.pending_teleports = 0
     end
-    StopPairAnimations(home, inst)
 end
 
 -- fires when the return teleport activates on the receptionator side
-local function OnStartTeleporting_Target(inst, doer)
+local function OnStartTeleportingReceptor(inst, doer)
     local home = inst.active_home
 
     inst.pending_teleports = math.max(0, (inst.pending_teleports or 1) - 1)
@@ -946,7 +951,8 @@ local function OnStartTeleporting_Target(inst, doer)
         end
     end
 
-    if CountProjectedPlayers(nil, inst) == 0 then
+    if CountProjectedPlayers(nil, inst) == 0 and (inst.pending_teleports or 0) == 0 then
+        inst.active_home = nil
         inst.AnimState:PlayAnimation("active_pst")
         inst.AnimState:PushAnimation("idle", true)
         StopSoundLoop(inst)
@@ -954,7 +960,8 @@ local function OnStartTeleporting_Target(inst, doer)
         StopPool(inst)
     end
 
-    if home ~= nil and home:IsValid() and CountProjectedPlayers(home, nil) == 0 then
+    if home ~= nil and home:IsValid() and CountProjectedPlayers(home, nil) == 0
+        and (home.pending_teleports or 0) == 0 then
         home.AnimState:PlayAnimation("active_pst")
         home.AnimState:PushAnimation("idle", true)
         StopSoundLoop(home)
@@ -962,10 +969,10 @@ local function OnStartTeleporting_Target(inst, doer)
 end
 
 -- receptionator hammered, find its linked projector, force return players, then destroy
-local function OnHammeredTarget(inst)
+local function OnHammeredReceptor(inst)
     local home = FindNearestProjector(inst)
-    ReturnAllPlayersAtTarget(inst)
-    RestorePendingChannelersToTarget(inst)
+    ReturnAllPlayersAtReceptor(inst)
+    RestorePendingChannelersAtReceptor(inst)
     StopPairPortals(home, inst)
     local fx = SpawnPrefab("collapse_small")
     inst.components.lootdropper:DropLoot()
@@ -975,7 +982,7 @@ local function OnHammeredTarget(inst)
 end
 
 -- hammer hit callback
-local function OnHitTarget(inst)
+local function OnHitReceptor(inst)
     local was_active = inst.AnimState:IsCurrentAnimation("active_loop")
     inst.AnimState:PlayAnimation("hammer")
     if was_active then
@@ -984,7 +991,7 @@ local function OnHitTarget(inst)
 end
 
 -- receptionator constructor
-local function TargetFn()
+local function ReceptorFn()
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -1019,25 +1026,25 @@ local function TargetFn()
     inst:AddComponent("workable")
     inst.components.workable:SetWorkAction(ACTIONS.HAMMER)
     inst.components.workable:SetWorkLeft(4)
-    inst.components.workable:SetOnFinishCallback(OnHammeredTarget)
-    inst.components.workable:SetOnWorkCallback(OnHitTarget)
+    inst.components.workable:SetOnFinishCallback(OnHammeredReceptor)
+    inst.components.workable:SetOnWorkCallback(OnHitReceptor)
 
     inst:AddComponent("channelable")
-    inst.components.channelable:SetChannelingFn(OnStartChanneling_Target, OnStopChanneling_Target)
+    inst.components.channelable:SetChannelingFn(OnStartChannelingReceptor, OnStopChannelingReceptor)
     --inst.components.channelable:SetEnabled(false)
 
     inst:AddComponent("teleporter")
-    inst.components.teleporter.onActivate       = OnStartTeleporting_Target
+    inst.components.teleporter.onActivate       = OnStartTeleportingReceptor
     inst.components.teleporter.offset           = 0
     inst.components.teleporter.saveenabled      = false
-    inst.components.teleporter.travelcameratime = 2.9
-    inst.components.teleporter.travelarrivetime = 2.8
+    inst.components.teleporter.stopcamerafades  = true
+    inst.components.teleporter.travelcameratime = 0
+    inst.components.teleporter.travelarrivetime = 0
 
-    inst:ListenForEvent("doneteleporting", OnExitingTeleporter_Target)
+    inst:ListenForEvent("doneteleporting", OnExitingTeleporterReceptor)
 
-    inst.OnStartChanneling_Target = OnStartChanneling_Target
-    inst.ReleaseTeleporterTarget  = ReleaseTeleporterTarget
-    inst.SpawnLeashRing           = SpawnLeashRing
+    inst.ReleaseTeleporterTarget = ReleaseTeleporterTarget
+    inst.SpawnLeashRing          = SpawnLeashRing
 
     inst.OnEntityWake  = OnEntityWake
     inst.OnEntitySleep = OnEntitySleep
@@ -1053,9 +1060,9 @@ local function TargetFn()
 end
 
 return
-    Prefab("um_astral_projector", Fn, assets, prefabs),
+    Prefab("um_astral_projector", ProjectorFn, assets, prefabs),
     MakePlacer("um_astral_projector_placer", "um_archives_projectinator", "um_archives_projectinator", "idle"),
-    Prefab("um_astral_projector_target", TargetFn, assets, prefabs),
+    Prefab("um_astral_projector_target", ReceptorFn, assets, prefabs),
     MakePlacer("um_astral_projector_target_placer", "um_archives_receptionator", "um_archives_receptionator", "idle"),
     Prefab("um_astral_leash_warning", LeashRingFn, nil, { "alterguardian_lasertrail" }),
     Prefab("um_astral_arrival_pool", ArrivalPoolFn, assets)

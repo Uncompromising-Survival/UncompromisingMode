@@ -2477,96 +2477,47 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst.sg.statemem.target = data.teleporter
                 inst.sg.statemem.teleportarrivestate = "exitastralportal_pre"
 
-                inst.AnimState:PlayAnimation("townportal_enter_pre")
+                local puff = SpawnPrefab("halloween_firepuff_cold_" .. math.random(3))
+                puff.Transform:SetPosition(inst.Transform:GetWorldPosition())
+                inst.SoundEmitter:PlaySound("rifts6/vault_portal/teleport_fx")
+
+                inst.sg.statemem.isteleporting = true
+                inst.components.health:SetInvincible(true)
+                if inst.components.playercontroller ~= nil then
+                    inst.components.playercontroller:Enable(false)
+                end
+                inst.DynamicShadow:Enable(false)
+                inst:Hide()
+                inst:ScreenFade(false, 30 * FRAMES)
             end,
 
             timeline =
             {
-                TimeEvent(8 * FRAMES, function(inst)
-                    local puff = SpawnPrefab("halloween_firepuff_cold_" .. math.random(3))
-                    puff.Transform:SetPosition(inst.Transform:GetWorldPosition())
-                    inst.sg.statemem.isteleporting = true
-                    inst.components.health:SetInvincible(true)
-                    if inst.components.playercontroller ~= nil then
-                        inst.components.playercontroller:Enable(false)
-                    end
-                    inst.DynamicShadow:Enable(false)
-                end),
-                TimeEvent(18 * FRAMES, function(inst)
-                    inst:Hide()
-                end),
-                TimeEvent(26 * FRAMES, function(inst)
+                TimeEvent(30 * FRAMES, function(inst)
                     if inst.sg.statemem.target ~= nil and
                         inst.sg.statemem.target.components.teleporter ~= nil and
                         inst.sg.statemem.target.components.teleporter:Activate(inst) then
+                        inst.sg.statemem.activated = true
                         inst:Hide()
+                        inst.sg:SetTimeout(1)
                     else
                         inst.sg:GoToState("exitastralportal")
                     end
                 end),
             },
 
+            ontimeout = function(inst)
+                inst:ScreenFade(true, 1)
+                inst.sg:GoToState("idle")
+            end,
+
             onexit = function(inst)
                 if inst.sg.statemem.isphysicstoggle then
                     ToggleOnPhysics(inst)
                 end
 
-                if inst.sg.statemem.isteleporting then
-                    inst.components.health:SetInvincible(false)
-                    if inst.components.playercontroller ~= nil then
-                        inst.components.playercontroller:Enable(true)
-                    end
-                    inst:Show()
-                    inst.DynamicShadow:Enable(true)
-                end
-            end,
-        },
-
-        State {
-            name = "enterastralportal_nofx",
-            tags = { "doing", "busy", "nopredict", "nomorph", "nodangle" },
-
-            onenter = function(inst, data)
-                ToggleOffPhysics(inst)
-                inst.Physics:Stop()
-                inst.components.locomotor:Stop()
-
-                inst.sg.statemem.target = data.teleporter
-                inst.sg.statemem.teleportarrivestate = "exitastralportal_pre"
-
-                inst.AnimState:PlayAnimation("townportal_enter_pre")
-            end,
-
-            timeline =
-            {
-                TimeEvent(8 * FRAMES, function(inst)
-                    local puff = SpawnPrefab("halloween_firepuff_cold_" .. math.random(3))
-                    puff.Transform:SetPosition(inst.Transform:GetWorldPosition())
-
-                    inst.sg.statemem.isteleporting = true
-                    inst.components.health:SetInvincible(true)
-                    if inst.components.playercontroller ~= nil then
-                        inst.components.playercontroller:Enable(false)
-                    end
-                    inst.DynamicShadow:Enable(false)
-                end),
-                TimeEvent(18 * FRAMES, function(inst)
-                    inst:Hide()
-                end),
-                TimeEvent(26 * FRAMES, function(inst)
-                    if inst.sg.statemem.target ~= nil and
-                        inst.sg.statemem.target.components.teleporter ~= nil and
-                        inst.sg.statemem.target.components.teleporter:Activate(inst) then
-                        inst:Hide()
-                    else
-                        inst.sg:GoToState("exitastralportal")
-                    end
-                end),
-            },
-
-            onexit = function(inst)
-                if inst.sg.statemem.isphysicstoggle then
-                    ToggleOnPhysics(inst)
+                if not inst.sg.statemem.activated then
+                    inst:ScreenFade(true, 1)
                 end
 
                 if inst.sg.statemem.isteleporting then
@@ -2595,11 +2546,15 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end
                 inst.DynamicShadow:Enable(false)
 
-                inst.sg:SetTimeout(32 * FRAMES)
+                inst._failed_doneteleporting = nil
+                inst:SnapCamera()
+                inst:ScreenFade(true, 1)
+
+                inst.sg:SetTimeout(0)
             end,
 
             ontimeout = function(inst)
-                inst.sg:GoToState("exitastralportal")
+                inst.sg:GoToState("idle")
             end,
 
             onexit = function(inst)
@@ -2689,12 +2644,21 @@ env.AddStategraphPostInit("wilson", function(inst)
                     data.onreturn(inst)
                 end
                 inst:ScreenFade(true, 1)
+                inst.sg.statemem.not_interrupted = true
                 inst.sg:GoToState("idle")
             end,
 
             onexit = function(inst)
                 if inst.sg.statemem.isphysicstoggle then
                     ToggleOnPhysics(inst)
+                end
+
+                if not inst.sg.statemem.not_interrupted then
+                    local data = inst.sg.statemem.data
+                    if data ~= nil and data.onreturn ~= nil then
+                        data.onreturn(inst)
+                    end
+                    inst:ScreenFade(true, 1)
                 end
 
                 inst.components.health:SetInvincible(false)
