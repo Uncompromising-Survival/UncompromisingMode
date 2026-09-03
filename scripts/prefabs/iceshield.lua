@@ -104,9 +104,7 @@ local function Init(inst, parent, fx_symbol, tier)
         parent.ice_shield_maxhealth:set(math.floor(inst.components.health.maxhealth))
     end
 
-    if parent.components.temperature and UPDATE_CHECK then
-        parent.components.temperature:SetInsulationModifier(SEASONS.SUMMER, inst, TUNING.INSULATION_SMALL)
-    end
+    parent.components.temperature:SetInsulationModifier(SEASONS.SUMMER, inst, TUNING.INSULATION_SMALL)
 end
 
 local function fn()
@@ -171,7 +169,7 @@ local function fn()
                 inst._parent.components.health.redirect = inst.um_redirect_old
             end
 
-            if inst._parent.components.temperature and UPDATE_CHECK then
+            if inst._parent.components.temperature then
                 inst._parent.components.temperature:RemoveInsulationModifier(SEASONS.SUMMER, inst)
             end
 
