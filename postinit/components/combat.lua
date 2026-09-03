@@ -93,6 +93,39 @@ env.AddComponentPostInit("combat", function(self)
         return unpack(ret)
     end
 
+    function self:UMSetAreaDamage(range, excludetags, coneangle, circleradius, areahitconecheck, areahitcheck)
+        self.um_areahit = range ~= nil or nil
+        self.um_areahitrange = range
+        self.um_areahitexcludetags = excludetags
+        self.um_areahitconeangle = coneangle
+        self.um_areahitcircleradius = circleradius
+        self.um_areahitconecheck = areahitconecheck
+        self.um_areahitcheck = areahitcheck
+    end
+
+    local AREAATTACK_MUST_TAGS = {"_combat"}
+    local AREA_EXCLUDE_TAGS = {"INLIMBO", "notarget", "noattack", "flight", "invisible"}
+    local _DoAttack = self.DoAttack
+    function self:DoAttack(targ, weapon, projectile, stimuli, instancemult, instrangeoverride, instpos, ...)
+        if self.um_areahit and not self.um_ignoreareahit then
+            self.ignorehitrange = true
+            self.um_ignoreareahit = true
+            local range = self.um_areahitrange
+            local x, y, z = self.inst.Transform:GetWorldPosition()
+            for i, ent in ipairs(TheSim:FindEntities(x, y, z, range + .5, AREAATTACK_MUST_TAGS, self.um_areahitexcludetags and JoinArrays(self.um_areahitexcludetags, AREA_EXCLUDE_TAGS) or AREA_EXCLUDE_TAGS)) do
+                if ent ~= self.inst and self:CanTarget(ent)
+                    and (self.um_areahitconecheck and not self.um_areahitconecheck(ent, self.inst) or self.inst:IsEntityInFrontConeSlice(ent, self.um_areahitconeangle or 160, range + ent:GetPhysicsRadius(0), self.um_areahitcircleradius and self.um_areahitcircleradius + ent:GetPhysicsRadius(0) or nil))
+                    and (not self.um_areahitcheck or self.um_areahitcheck(ent, self.inst)) then
+                    self:DoAttack(ent, weapon, projectile, stimuli, instancemult, instrangeoverride, instpos, ...)
+                end
+            end
+            self.um_ignoreareahit = nil
+            self.ignorehitrange = nil
+            return
+        end
+        return _DoAttack(self, targ, weapon, projectile, stimuli, instancemult, instrangeoverride, instpos, ...)
+    end
+
     --[[ Vanilla SetLastTarget accesses self.inst.components.combat, but if the entity was already removed (e.g. a dead bunnyman whose losetargetcallback fires late idk how but ive had this happen more than once), that field is nil and causes a crash, guarding it here since we can't patch vanilla directly]]--
     local _SetLastTarget = self.SetLastTarget
     function self:SetLastTarget(target)
