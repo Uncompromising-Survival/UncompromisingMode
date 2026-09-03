@@ -854,8 +854,8 @@ local function fnglacial()
     inst:ListenForEvent("timerdone", ontimerdone)
     inst.Transform:SetScale(1.3, 1.3, 1.3)
 
-    inst.components.combat:SetDefaultDamage(TUNING.HOUND_DAMAGE * 2)
-    inst.components.health:SetMaxHealth(TUNING.WARGLET_HEALTH * 1.25)
+    inst.components.combat:SetDefaultDamage(TUNING.DSTU.GLACIAL_HOUND_DAMAGE)
+    inst.components.health:SetMaxHealth(TUNING.DSTU.GLACIAL_HOUND_HEALTH)
 
     inst.task = nil
 
@@ -1081,7 +1081,10 @@ end
 local function ShootFireMagmaHound(inst, total_flame) --AXE obviously called by magmahound to perform its continuous fire breath attack
     for i = 1, total_flame do
         inst:DoTaskInTime(0 + math.random(1, 15) * FRAMES, function(inst)
-            SetUpFire(inst, 5, 20, 0.8 + math.random(0, 10) / 100, 2)
+            local degrand = 5
+            local speed = 20
+            local scale = 0.8 + math.random(0, 10) / 100
+            SetUpFire(inst, 5, speed, scale, TUNING.DSTU.MAGMA_HOUND_FIRE_DAMAGE)
             PoofNearby(inst)
         end)
     end
@@ -1130,8 +1133,8 @@ local function fnmagma()
 
     inst.task = nil
 
-    inst.components.combat:SetDefaultDamage(TUNING.HOUND_DAMAGE * 2)
-    inst.components.health:SetMaxHealth(TUNING.WARGLET_HEALTH * 1.25)
+    inst.components.combat:SetDefaultDamage(TUNING.DSTU.MAGMA_HOUND_DAMAGE)
+    inst.components.health:SetMaxHealth(TUNING.DSTU.MAGMA_HOUND_HEALTH)
 
     inst.components.combat:SetRange(10, 3)
 

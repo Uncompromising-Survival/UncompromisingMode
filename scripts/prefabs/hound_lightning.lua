@@ -76,7 +76,7 @@ local function Zap(inst)
                     local mult = not insulated and TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * (v.components.moisture ~= nil and v.components.moisture:GetMoisturePercent()
                         or (v:GetIsWet() and 1 or 0)) or 1
 
-                    local damage = -10 * mult
+                    local damage = -(TUNING.DSTU.HOUND_LIGHTNING_DAMAGE * mult)
 
                     if v.sg and not v.sg:HasStateTag("nointerrupt") and not insulated and v:HasTag("player") then
                         v.sg:GoToState("electrocute")
