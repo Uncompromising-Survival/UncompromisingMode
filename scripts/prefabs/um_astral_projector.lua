@@ -344,7 +344,7 @@ local function CleanupPlayerProjection(player)
     if not player.um_astral_projected then return end
 
     -- save references before clearing them
-    local home   = player.um_astral_home
+    local home = player.um_astral_home
     local target = player.um_astral_target
 
     player:RemoveTag("um_astral_projected")
