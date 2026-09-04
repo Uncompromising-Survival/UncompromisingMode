@@ -346,6 +346,7 @@ local function CleanupPlayerProjection(player)
     -- save references before clearing them
     local home   = player.um_astral_home
     local target = player.um_astral_target
+    local pending_retunr = player.um_astral_returning
 
     player:RemoveTag("um_astral_projected")
     player.um_astral_projected = false
@@ -355,6 +356,10 @@ local function CleanupPlayerProjection(player)
     player.um_astral_outbound_pending = nil
     player.um_astral_outbound_home = nil
     player.um_astral_outbound_target = nil
+
+    if pending_retunr and target ~= nil and target:IsValid() then
+        target.pending_teleports = math.max(0, (target.pending_teleports or 1) - 1)
+    end
 
     if player.components.sanity ~= nil then
         player.components.sanity.externalmodifiers:RemoveModifier("um_astral_projector")
@@ -974,6 +979,8 @@ local function OnHammeredReceptor(inst)
     ReturnAllPlayersAtReceptor(inst)
     RestorePendingChannelersAtReceptor(inst)
     StopPairPortals(home, inst)
+    StopLeashRing(inst)
+    StopPool(inst, true)
     local fx = SpawnPrefab("collapse_small")
     inst.components.lootdropper:DropLoot()
     fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
