@@ -344,9 +344,9 @@ local function CleanupPlayerProjection(player)
     if not player.um_astral_projected then return end
 
     -- save references before clearing them
-    local home = player.um_astral_home
+    local home   = player.um_astral_home
     local target = player.um_astral_target
-    local pending_return = player.um_astral_returning
+    local pending_retunr = player.um_astral_returning
 
     player:RemoveTag("um_astral_projected")
     player.um_astral_projected = false
@@ -357,7 +357,7 @@ local function CleanupPlayerProjection(player)
     player.um_astral_outbound_home = nil
     player.um_astral_outbound_target = nil
 
-    if pending_return and target ~= nil and target:IsValid() then
+    if pending_retunr and target ~= nil and target:IsValid() then
         target.pending_teleports = math.max(0, (target.pending_teleports or 1) - 1)
     end
 
