@@ -308,6 +308,7 @@ local function fn()
     inst.Transform:SetScale(1.2, 1.2, 1.2)
 
     inst:AddTag("shadowcreature")
+    inst:AddTag("gestaltnoloot")
     inst:AddTag("monster")
     inst:AddTag("hostile")
     inst:AddTag("shadow")
