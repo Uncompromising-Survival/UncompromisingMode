@@ -315,6 +315,7 @@ local function fn()
     inst:AddTag("shadow_aligned")
     --inst:AddTag("epic")
     inst:AddTag("notraptrigger")
+    inst:AddTag("shadowsubmissive")
 
     inst.AnimState:SetBank("creepingfear")
     inst.AnimState:SetBuild("creepingfear")
