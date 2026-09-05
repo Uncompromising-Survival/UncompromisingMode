@@ -95,7 +95,6 @@ local function Init(inst, parent, fx_symbol, tier)
     parent.shield_fx.entity:AddFollower()
     parent.shield_fx.Follower:FollowSymbol(parent.GUID, fx_symbol, 0, 0, 0)
 
-
     parent.shield_fx2 = SpawnPrefab("um_ice_shield_fx")
     parent.shield_fx2.entity:SetParent(parent.entity) --don't need followsymbol here.
 
@@ -104,7 +103,9 @@ local function Init(inst, parent, fx_symbol, tier)
         parent.ice_shield_maxhealth:set(math.floor(inst.components.health.maxhealth))
     end
 
-    parent.components.temperature:SetInsulationModifier(SEASONS.SUMMER, inst, TUNING.INSULATION_SMALL)
+    if parent.components.temperature then
+        parent.components.temperature:SetInsulationModifier(SEASONS.SUMMER, inst, TUNING.INSULATION_SMALL)
+    end
 end
 
 local function fn()
