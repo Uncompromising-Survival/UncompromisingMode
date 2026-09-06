@@ -3,9 +3,7 @@ GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------	
 
 env.AddPrefabPostInit("warly", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
+    if not TheWorld.ismastersim then return end
     --[[
 if TUNING.DSTU.WARLY_BUTCHER then
 	--local function onbutchered(target, data)
@@ -114,5 +112,8 @@ env.AddPrefabPostInit("spicepack", function(inst)
         inst.components.container.skipclosesnd = true
         inst.components.container.skipopensnd = true
         inst.components.container.droponopen = true
+
+        if inst.components.burnable then inst:RemoveComponent("burnable") end
+        if inst.components.propagator then inst:RemoveComponent("propagator") end
     end
 end)
