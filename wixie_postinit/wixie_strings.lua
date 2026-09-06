@@ -190,7 +190,7 @@ DESCRIBE.SKELETONMEAT =
 "I've read enough horror stories to know this is a BAD idea."
 DESCRIBE.CHIMP = DESCRIBE.MONKEY
 DESCRIBE.SWILSON = ""
-DESCRIBE.VAMPIREBAT = "I vaaant you to gooo avaaay!"
+DESCRIBE.UM_VAMPIREBAT = "I vaaant you to gooo avaaay!"
 DESCRIBE.LUREPLAGUE_RAT = "Gah! What the heck is that?!"
 
 -- Swampyness

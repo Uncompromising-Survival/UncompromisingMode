@@ -43,7 +43,7 @@ local function onnear(inst, target)
     --more and more come out the closer you get to the nest?
     if inst.components.childspawner ~= nil and not TheWorld.state.isday then
         inst.components.childspawner:ReleaseAllChildren(target, "bat")
-		--inst.components.childspawner:ReleaseAllChildren(target, "vampirebat")
+		--inst.components.childspawner:ReleaseAllChildren(target, "um_vampirebat")
     end
 end
 
@@ -80,7 +80,7 @@ env.AddPrefabPostInit("cave_entrance_open", function(inst)
 		end
 		--inst.components.childspawner:SetMaxChildren(6*TUNING.DSTU.MONSTER_BAT_CAVE_NR_INCREASE)
 		if TUNING.DSTU.ADULTBATILISKS then
-			inst.components.childspawner.rarechild = "vampirebat"
+			inst.components.childspawner.rarechild = "um_vampirebat"
 		end
 		
 		--[[inst:AddComponent("playerprox")

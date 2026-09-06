@@ -121,7 +121,7 @@ AddPrefabPostInit("wes", function(inst)
     inst.UMToggleUniqueVetCurse = ToggleUniqueVetCurse
 end)
 
-for _, bat in pairs({"bat", "vampirebat"}) do
+for _, bat in pairs({"bat", "um_vampirebat"}) do
     AddPrefabPostInit(bat, function(inst)
         if not GLOBAL.TheWorld.ismastersim then
             return inst

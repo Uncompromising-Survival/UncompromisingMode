@@ -98,7 +98,7 @@ local prefabs = {
     "magmarocks",
 
 
-    "vampirebat",
+    "um_vampirebat",
     "icecreamsanityregenbuff",
     "zaspberryparfait",
     "uncompromising_buffs",

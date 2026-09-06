@@ -2,7 +2,7 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 local infestables = {
     "bat",
-    "vampirebat",
+    "um_vampirebat",
     "bunnyman",
     "pigman",
     "slurtle",

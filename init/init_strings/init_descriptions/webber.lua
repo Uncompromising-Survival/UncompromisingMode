@@ -148,7 +148,7 @@ DESCRIBE.SALTPACK = "We kinda want to play in the snow, though."
 DESCRIBE.SKELETONMEAT = "I haven't seen my own skin in... forever!"
 DESCRIBE.CHIMP = DESCRIBE.MONKEY
 DESCRIBE.SWILSON = "No, stop! It's us, Wilson!"
-DESCRIBE.VAMPIREBAT = "Nice monster!"
+DESCRIBE.UM_VAMPIREBAT = "Nice monster!"
 DESCRIBE.CRITTERLAB_REAL = DESCRIBE.CRITTERLAB
 DESCRIBE.CRITTERLAB_REAL_BROKEN =
 "Moon rocks would make a great new home for some little critters!"

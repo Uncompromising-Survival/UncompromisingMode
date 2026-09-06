@@ -152,7 +152,7 @@ DESCRIBE.SALTPACK =
 DESCRIBE.SKELETONMEAT = "Flesh for flesh..."
 DESCRIBE.CHIMP = DESCRIBE.MONKEY
 DESCRIBE.SWILSON = "An executioner steps out from the dark."
-DESCRIBE.VAMPIREBAT = "It has managed to scape death for longer than its peers."
+DESCRIBE.UM_VAMPIREBAT = "It has managed to scape death for longer than its peers."
 DESCRIBE.CRITTERLAB_REAL = DESCRIBE.CRITTERLAB
 DESCRIBE.CRITTERLAB_REAL_BROKEN =
 "I could use some moon rocks to make some new friends."

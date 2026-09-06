@@ -136,7 +136,7 @@ DESCRIBE.SALTPACK = "Taste funny"
 DESCRIBE.SKELETONMEAT = "Mmmm, chewy"
 DESCRIBE.CHIMP = DESCRIBE.MONKEY
 DESCRIBE.SWILSON = "What happen, friend?"
-DESCRIBE.VAMPIREBAT = "Flying claws"
+DESCRIBE.UM_VAMPIREBAT = "Flying claws"
 
 -- Swampyness
 DESCRIBE.RICEPLANT = "Water friend!"

@@ -151,7 +151,7 @@ DESCRIBE.SALTPACK = "I should've thought of this sooner!"
 DESCRIBE.SKELETONMEAT = "This is a terrible idea."
 DESCRIBE.CHIMP = DESCRIBE.MONKEY
 DESCRIBE.SWILSON = "Woah! That axe is real!"
-DESCRIBE.VAMPIREBAT = "It might be older, but it looks as angry as the others!"
+DESCRIBE.UM_VAMPIREBAT = "It might be older, but it looks as angry as the others!"
 
 -- Swampyness
 DESCRIBE.RICEPLANT = "I need to build something to reach it."

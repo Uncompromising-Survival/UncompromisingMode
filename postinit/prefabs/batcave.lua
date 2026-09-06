@@ -32,7 +32,7 @@ env.AddPrefabPostInit("batcave", function(inst)
 	end
 	
 	if inst.components.childspawner and TUNING.DSTU.ADULTBATILISKS then
-		inst.components.childspawner.childname = "vampirebat"
+		inst.components.childspawner.childname = "um_vampirebat"
 	elseif inst.components.childspawner then
 		inst.components.childspawner.childname = "bat"
 	end
