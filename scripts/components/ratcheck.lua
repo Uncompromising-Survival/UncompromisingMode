@@ -93,9 +93,6 @@ return Class(function(self, inst)
 		end
 	end
 
-	local function MakeRatBurrow(inst)
-		local x, y, z = inst.Transform:GetWorldPosition()
-
 		local function IsValidRatBurrowPosition(x, z)
 			if #TheSim:FindEntities(x, 0, z, (TUNING.ANTLION_SINKHOLE.RADIUS * 2), nil, nil, {"antlion_sinkhole_blocker", "structure", "giant_tree"}) > 0 then
 				return false
@@ -106,15 +103,16 @@ return Class(function(self, inst)
 
 			for dx = -1, 1 do
 				for dz = -1, 1 do
-					if not
-						TheWorld.Map:IsPassableAtPoint(x + dx * TUNING.ANTLION_SINKHOLE.RADIUS, 0, z + dz * TUNING.ANTLION_SINKHOLE.RADIUS
-							, false, true) then
+					if not TheWorld.Map:IsPassableAtPoint(x + dx * TUNING.ANTLION_SINKHOLE.RADIUS, 0, z + dz * TUNING.ANTLION_SINKHOLE.RADIUS, false, true) then
 						return false
 					end
 				end
 			end
 			return true
 		end
+
+	local function MakeRatBurrow(inst)
+		local x, y, z = inst.Transform:GetWorldPosition()
 
 		for i = 1, 8 do
 			inst.x1, inst.z1 = x + math.random(-200, 200), z + math.random(-200, 200)
@@ -137,7 +135,6 @@ return Class(function(self, inst)
 						ratburrow.components.herd:AddMember(piper)
 					end
 				end
-
 				break
 			end
 		end
@@ -222,7 +219,6 @@ return Class(function(self, inst)
 	end
 
 	local function ActiveRaid(src, data)
-
 		if data.doer == nil and data.container ~= nil then
 			data.doer = data.container:GetNearestPlayer(true)
 		end
@@ -246,7 +242,6 @@ return Class(function(self, inst)
 					StartRaid(data.container, data.doer)
 					TheWorld:PushEvent("ratcooldown", inst)
 				else
-
 					if #ents <= 20 then
 						--print("CAN'T SPAWN RATS! There aren't enough items around!")
 					else
@@ -259,7 +254,6 @@ return Class(function(self, inst)
 							end
 						end
 					end
-
 
 					if data.container.components.container:IsEmpty() then
 						--print("CAN'T SPAWN RATS! This container is empty!")
@@ -274,7 +268,6 @@ return Class(function(self, inst)
 					end
 				end
 			end
-
 		end
 	end
 
