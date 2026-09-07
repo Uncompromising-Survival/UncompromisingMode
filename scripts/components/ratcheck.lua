@@ -191,11 +191,7 @@ return Class(function(self, inst)
 
 		--if ratburrow ~= nil then
 
-		if ratwarning == nil then
-			ratwarning = 0
-		else
-			ratwarning = ratwarning + 1
-		end
+		ratwarning = (ratwarning or 0) + 1
 		if ratwarning == 1 then
 			inst:DoTaskInTime(0, SoundRaid)
 		end
