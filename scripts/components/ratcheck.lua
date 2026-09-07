@@ -150,7 +150,7 @@ return Class(function(self, inst)
 				--TheWorld:PushEvent("ratcooldown", inst)
 				--TheWorld.components.ratcheck:StartTimer()
 		end
-end
+	end
 
 	local function SpawnRaid(inst)
 		local x, y, z = inst.Transform:GetWorldPosition()
