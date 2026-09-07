@@ -117,9 +117,7 @@ local function collectbees(inst, target, pos)
     local targetpos = pos or target and target:GetPosition()
     if ownerpos then
         for i, v in pairs(TheSim:FindEntities(targetpos.x, 0, targetpos.z, 8, {"_inventoryitem", "bee"}, {"INLIMBO", "mutant"})) do
-            if i + currentstacks > 20 then
-                break
-            end
+            if i + currentstacks > 20 then break end
 
             if v:IsValid() and not (v.components.health and v.components.health:IsDead())
                 and inst.components.container then
