@@ -155,7 +155,7 @@ return Class(function(self, inst)
 	local function SpawnRaid(inst)
 		local x, y, z = inst.Transform:GetWorldPosition()
 		local players = FindPlayersInRange(x, y, z, 50)
-		if players ~= nil then
+		if next(players) then
 			for i, v in ipairs(players) do
 				_SpawnRaid(x, y, z)
 			end
