@@ -146,9 +146,9 @@ return Class(function(self, inst)
 		local z2 = z + math.random(-10, 10)
 		if TheWorld.Map:IsPassableAtPoint(x2, 0, z2) then
 			raid.Transform:SetPosition(x + math.random(-10, 10), y, z + math.random(-10, 10))
-				--TheWorld:DoTaskInTime(9600 + math.random(4800), CooldownRaid)
-				--TheWorld:PushEvent("ratcooldown", inst)
-				--TheWorld.components.ratcheck:StartTimer()
+			--TheWorld:DoTaskInTime(9600 + math.random(4800), CooldownRaid)
+			--TheWorld:PushEvent("ratcooldown", inst)
+			--TheWorld.components.ratcheck:StartTimer()
 		end
 	end
 
