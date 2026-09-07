@@ -140,31 +140,27 @@ return Class(function(self, inst)
 		end
 	end
 
+	local function _SpawnRaid(x, y, z)
+		local raid = SpawnPrefab("uncompromising_ratherd")
+		local x2 = x + math.random(-10, 10)
+		local z2 = z + math.random(-10, 10)
+		if TheWorld.Map:IsPassableAtPoint(x2, 0, z2) then
+			raid.Transform:SetPosition(x + math.random(-10, 10), y, z + math.random(-10, 10))
+				--TheWorld:DoTaskInTime(9600 + math.random(4800), CooldownRaid)
+				--TheWorld:PushEvent("ratcooldown", inst)
+				--TheWorld.components.ratcheck:StartTimer()
+		end
+end
+
 	local function SpawnRaid(inst)
 		local x, y, z = inst.Transform:GetWorldPosition()
 		local players = FindPlayersInRange(x, y, z, 50)
 		if players ~= nil then
 			for i, v in ipairs(players) do
-				local raid = SpawnPrefab("uncompromising_ratherd")
-				local x2 = x + math.random(-10, 10)
-				local z2 = z + math.random(-10, 10)
-				if TheWorld.Map:IsPassableAtPoint(x2, 0, z2) then
-					raid.Transform:SetPosition(x + math.random(-10, 10), y, z + math.random(-10, 10))
-					--TheWorld:DoTaskInTime(9600 + math.random(4800), CooldownRaid)
-					--TheWorld:PushEvent("ratcooldown", inst)
-					--TheWorld.components.ratcheck:StartTimer()
-				end
+				_SpawnRaid(x, y, z)
 			end
 		else
-			local raid = SpawnPrefab("uncompromising_ratherd")
-			local x2 = x + math.random(-10, 10)
-			local z2 = z + math.random(-10, 10)
-			if TheWorld.Map:IsPassableAtPoint(x2, 0, z2) then
-				raid.Transform:SetPosition(x + math.random(-10, 10), y, z + math.random(-10, 10))
-				--TheWorld:DoTaskInTime(9600 + math.random(4800), CooldownRaid)
-				--TheWorld:PushEvent("ratcooldown", inst)
-				--TheWorld.components.ratcheck:StartTimer()
-			end
+			_SpawnRaid(x, y, z)
 		end
 	end
 
