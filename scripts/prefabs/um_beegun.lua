@@ -121,16 +121,14 @@ local function collectbees(inst, target, pos)
                 break
             end
 
-            if v and v:IsValid() and not (v.components.health and v.components.health:IsDead()) then
-                if inst.components.container then
-                    local beeball = SpawnPrefab("um_" .. v.prefab .. "_ball")
-                    beeball.Transform:SetPosition(v.Transform:GetWorldPosition())
-                    beeball.components.complexprojectile:Launch(ownerpos, owner, owner)
-                    beeball.beegun = inst
-
-                    v:Remove()
-                    --inst.components.container:GiveItem(v)
-                end
+            if v:IsValid() and not (v.components.health and v.components.health:IsDead())
+                and inst.components.container then
+                local beeball = SpawnPrefab("um_"..v.prefab.."_ball")
+                beeball.Transform:SetPosition(v.Transform:GetWorldPosition())
+                beeball.components.complexprojectile:Launch(ownerpos, owner, owner)
+                beeball.beegun = inst
+                v:Remove()
+                --inst.components.container:GiveItem(v)
             end
         end
     end
