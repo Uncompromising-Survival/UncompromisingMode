@@ -18,15 +18,11 @@ env.AddPrefabPostInitAny(function(inst)
     inst:DoTaskInTime(0, function(inst) -- Maybe delaying this by a frame does something.
         if inst.components.burnable and inst:HasAnyTag("plant", "tree") and not inst:HasTag("PyreNettle") then
             local _OnIgnite = inst.components.burnable.onignite
-
-            inst.components.burnable.onignite = function(inst, source, doer, ...)
+            inst.components.burnable.onignite = function(_inst, source, doer, ...)
                 if TheWorld.state.issummer then
-                    inst.smog_task = inst:DoTaskInTime(math.random(5, 15) / 10, DoSmog)
+                    _inst.smog_task = _inst:DoTaskInTime(math.random(5, 15) / 10, DoSmog)
                 end
-
-                if _OnIgnite then
-                    _OnIgnite(inst, source, doer, ...)
-                end
+                if _OnIgnite then _OnIgnite(_inst, source, doer, ...) end
             end
         end
     end)

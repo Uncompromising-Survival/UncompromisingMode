@@ -295,9 +295,8 @@ local function fn()
                 local velx = math.cos(rad)  --* 4.5
                 local velz = -math.sin(rad) --* 4.5
 
-                local dx, dy, dz = x + (((FRAMES) * velx)), y,
-                    z + (((FRAMES) * velz))
-                inst.Transform:SetPosition(dx, dy, dz)
+                local dx, dz = x + FRAMES * velx, z + FRAMES * velz
+                inst.Transform:SetPosition(dx, y, dz)
             end
         end)
     end
@@ -305,19 +304,17 @@ local function fn()
     inst.hurttask = inst:DoPeriodicTask(5 + math.random(5), function(inst)
         local x, y, z = inst.Transform:GetWorldPosition()
         for k, v in ipairs(TheSim:FindEntities(x, y, z, 8, nil, {"INLIMBO", "playerghost", "has_gasmask", "pyromaniac", "smogimmune", "minifansuppressor", "scp049", "wragonfly"}, {"player", "insect"})) do
-            if v.components.health ~= nil and not v.components.health.disable_penalty and not v.components.health.invincible and math.random() > 0.25 then
-                if v.components.oldager ~= nil or v.components.health.penalty >= TUNING.MAXIMUM_HEALTH_PENALTY - .05 or not TUNING.HEALTH_PENALTY_ENABLED then
+            if v.components.health and not inst.components.health:IsDead() and not v.components.health:IsInvincible() and math.random() > .25 then
+                local isplayer = v:HasTag("player")
+                if not isplayer or v.components.health.disable_penalty or v.components.health.penalty >= TUNING.MAXIMUM_HEALTH_PENALTY - .05 then
                     v.components.health:DoDelta(-1, false, "smog")
-                elseif v:HasTag("player") then
-                    v.components.health:DeltaPenalty(0.025)
+                else
+                    v.components.health:DeltaPenalty(.025)
                 end
-
-                if v.sg ~= nil and v:HasTag("player") then
+                if isplayer then
                     v:PushEvent("um_smog_cough", {talk = true})
-                end
-
-                if v:HasTag("insect") then
-                    if v.components.hauntable ~= nil and v.components.hauntable.panicable then
+                else
+                    if v.components.hauntable and v.components.hauntable.panicable then
                         v.components.hauntable:Panic(5 + math.random(5))
                     end
                 end
