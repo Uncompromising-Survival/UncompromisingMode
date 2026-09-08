@@ -905,9 +905,9 @@ end
 local function BurrowKilled(inst)
     --[[if inst.components.periodicspawner ~= nil then
         inst.components.periodicspawner:Stop()
-    end
+    end]]
 
-    inst:Remove()]]
+    inst:Remove()
 end
 
 local function BurrowAnim(inst)
