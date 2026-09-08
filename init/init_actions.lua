@@ -140,7 +140,7 @@ ratorder.distance = 10
 local createburrow = AddAction("CREATE_BURROW", GLOBAL.STRINGS.ACTIONS.CREATE_BURROW, function(act)
     local act_pos = act:GetActionPoint()
     if act.doer.components.hunger.current > 15 and not GLOBAL.TheWorld.Map:GetPlatformAtPoint(act_pos.x, act_pos.z) then
-        local burrow = GLOBAL.SpawnPrefab("uncompromising_winkyburrow")
+        local burrow = GLOBAL.SpawnPrefab("um_winkyburrow")
         burrow.Transform:SetPosition(act_pos.x, 0, act_pos.z)
         act.doer.components.hunger:DoDelta(-15)
 

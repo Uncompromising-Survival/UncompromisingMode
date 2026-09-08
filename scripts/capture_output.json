@@ -67,7 +67,7 @@
 
     ymca_burnt = { --ymcaymca
 		name = "ymca_burnt", rotate = true, tile_centered = true, 
-		content = {	{x = -0.90835571289063, z = -0.28433227539063, prefab = "meatrack", ocean = false, burnt = true},	{x = 1.6869659423828, z = -0.4246826171875, prefab = "researchlab3", ocean = false, burnt = true},	{x = -4, z = 0, prefab = "scarecrow", ocean = false, burnt = true},	{x = 4.6382751464844, z = -0.28469848632813, prefab = "tent", ocean = false, burnt = true, uses = 15},	{x = -7.5, z = -3.5, prefab = "homesign", ocean = false},	{x = -2.64892578125, z = -11.304138183594, prefab = "uncompromising_ratsniffer", ocean = false},},
+		content = {	{x = -0.90835571289063, z = -0.28433227539063, prefab = "meatrack", ocean = false, burnt = true},	{x = 1.6869659423828, z = -0.4246826171875, prefab = "researchlab3", ocean = false, burnt = true},	{x = -4, z = 0, prefab = "scarecrow", ocean = false, burnt = true},	{x = 4.6382751464844, z = -0.28469848632813, prefab = "tent", ocean = false, burnt = true, uses = 15},	{x = -7.5, z = -3.5, prefab = "homesign", ocean = false},	{x = -2.64892578125, z = -11.304138183594, prefab = "um_ratsniffer", ocean = false},},
 	},
 
     mosaic_oasis = { 

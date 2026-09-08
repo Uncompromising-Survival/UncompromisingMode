@@ -1,8 +1,26 @@
-local assets = {Asset("ANIM", "anim/uncompromising_rat.zip"), Asset("ANIM", "anim/uncompromising_caverat.zip"), Asset("ANIM", "anim/carrat_basic.zip"), Asset("ANIM", "anim/uncompromising_rat_water.zip"), Asset("ANIM", "anim/uncompromising_rat_burrow.zip"), Asset("ANIM", "anim/uncompromising_junkrat.zip"), Asset("ANIM", "anim/ratdroppings.zip")}
+local assets = {
+    Asset("ANIM", "anim/uncompromising_rat.zip"),
+    Asset("ANIM", "anim/uncompromising_caverat.zip"),
+    Asset("ANIM", "anim/carrat_basic.zip"),
+    Asset("ANIM", "anim/uncompromising_rat_water.zip"),
+    Asset("ANIM", "anim/uncompromising_rat_burrow.zip"),
+    Asset("ANIM", "anim/uncompromising_junkrat.zip"),
+    Asset("ANIM", "anim/ratdroppings.zip")
+}
 
 local prefabs = {}
 
-local carratsounds = {idle = "turnoftides/creatures/together/carrat/idle", hit = "turnoftides/creatures/together/carrat/hit", sleep = "turnoftides/creatures/together/carrat/sleep", death = "turnoftides/creatures/together/carrat/death", emerge = "turnoftides/creatures/together/carrat/emerge", submerge = "turnoftides/creatures/together/carrat/submerge", eat = "turnoftides/creatures/together/carrat/eat", stunned = "turnoftides/creatures/together/carrat/stunned"}
+local carratsounds = {
+    idle = "turnoftides/creatures/together/carrat/idle",
+    hit = "turnoftides/creatures/together/carrat/hit",
+    sleep = "turnoftides/creatures/together/carrat/sleep",
+    death = "turnoftides/creatures/together/carrat/death",
+    emerge = "turnoftides/creatures/together/carrat/emerge",
+    submerge = "turnoftides/creatures/together/carrat/submerge",
+    eat = "turnoftides/creatures/together/carrat/eat",
+    stunned = "turnoftides/creatures/together/carrat/stunned"
+}
+
 --[[
 SetSharedLootTable("raidrat",
 {
@@ -1076,7 +1094,7 @@ local function OnInitHerd(inst)
                 for n = 1, (i + 1) do
                     local x, y, z = inst.Transform:GetWorldPosition()
                     local angle = math.random() * 8 * PI
-                    local rat = SpawnPrefab("uncompromising_rat")
+                    local rat = SpawnPrefab("um_rat")
                     rat.Transform:SetPosition(x + math.cos(angle), 0, z + math.sin(angle))
                     inst.components.herd:AddMember(rat)
                 end
@@ -1084,7 +1102,7 @@ local function OnInitHerd(inst)
                 if i > 1 then
                     local x, y, z = inst.Transform:GetWorldPosition()
                     local angle = math.random() * 8 * PI
-                    local packrat = SpawnPrefab("uncompromising_packrat")
+                    local packrat = SpawnPrefab("um_packrat")
                     packrat.Transform:SetPosition(x + math.cos(angle), 0, z + math.sin(angle))
                     inst.components.herd:AddMember(packrat)
                 end
@@ -1138,15 +1156,15 @@ local function MakeScoutBurrow(inst)
         inst.x1, inst.z1 = x + math.random(-200, 200), z + math.random(-200, 200)
 
         if IsValidRatBurrowPosition(inst.x1, inst.z1) then
-            local ratcrew = SpawnPrefab("uncompromising_rat")
+            local ratcrew = SpawnPrefab("um_rat")
             ratcrew.Transform:SetPosition(x, 0, z)
             ratcrew:AddTag("ratscout")
 
-            local ratcrew2 = SpawnPrefab("uncompromising_rat")
+            local ratcrew2 = SpawnPrefab("um_rat")
             ratcrew2.Transform:SetPosition(x, 0, z)
             ratcrew2:AddTag("ratscout")
 
-            local ratcrew3 = SpawnPrefab("uncompromising_rat")
+            local ratcrew3 = SpawnPrefab("um_rat")
             ratcrew3.Transform:SetPosition(x, 0, z)
             ratcrew3:AddTag("ratscout")
 
@@ -1196,7 +1214,7 @@ local function fn_herd()
     inst:AddTag("NOBLOCK")
     inst:AddTag("NOCLICK")
 
-    inst.MiniMapEntity:SetIcon("uncompromising_ratburrow.tex")
+    inst.MiniMapEntity:SetIcon("um_ratburrow.tex")
 
     inst.entity:SetPristine()
 
@@ -1219,7 +1237,7 @@ local function fn_herd()
 
     inst:AddComponent("periodicspawner")
     inst.components.periodicspawner:SetRandomTimes(10, 13)
-    inst.components.periodicspawner:SetPrefab("uncompromising_rat")
+    inst.components.periodicspawner:SetPrefab("um_rat")
     inst.components.periodicspawner:SetOnSpawnFn(OnSpawned)
     inst.components.periodicspawner:SetDensityInRange(30, 8)
     -- inst.components.periodicspawner.spawnoffscreen = true
@@ -1260,7 +1278,7 @@ local function fn_burrow()
     inst:AddTag("herd")
     inst:AddTag("trader")
 
-    inst.MiniMapEntity:SetIcon("uncompromising_ratburrow.tex")
+    inst.MiniMapEntity:SetIcon("um_ratburrow.tex")
 
     inst.entity:SetPristine()
 
@@ -1284,7 +1302,7 @@ local function fn_burrow()
 
     inst:AddComponent("periodicspawner")
     inst.components.periodicspawner:SetRandomTimes(10, 13)
-    inst.components.periodicspawner:SetPrefab("uncompromising_rat")
+    inst.components.periodicspawner:SetPrefab("um_rat")
     inst.components.periodicspawner:SetOnSpawnFn(OnSpawned)
     inst.components.periodicspawner:SetDensityInRange(30, 8)
     inst.components.periodicspawner:Start()
@@ -1323,7 +1341,7 @@ local function WinkyInteract(inst, doer)
                 doer.components.hunger:DoDelta(-20)
                 inst.ratcount = inst.ratcount + 1
 
-                local newrat = SpawnPrefab("uncompromising_rat")
+                local newrat = SpawnPrefab("um_rat")
 
                 newrat.Transform:SetPosition(inst.Transform:GetWorldPosition())
                 doer.components.leader:AddFollower(newrat)
@@ -1355,7 +1373,7 @@ local function WinkyHomeInteract(inst, doer)
         if doer:HasTag("ratwhisperer") and doer.components.hunger and doer.components.hunger.current >= 15 then
             doer.components.hunger:DoDelta(-15)
 
-            local newrat = SpawnPrefab("uncompromising_rat")
+            local newrat = SpawnPrefab("um_rat")
 
             newrat.Transform:SetPosition(inst.Transform:GetWorldPosition())
             doer.components.leader:AddFollower(newrat)
@@ -1435,7 +1453,7 @@ local function fn_winkyburrow()
     inst:AddTag("irreplaceable")
     inst:AddTag("winky_burrow")
 
-    inst.MiniMapEntity:SetIcon("uncompromising_ratburrow.tex")
+    inst.MiniMapEntity:SetIcon("um_ratburrow.tex")
 
     inst.Transform:SetScale(.8, .8, .8)
 
@@ -1503,7 +1521,7 @@ local function fn_winkyhomeburrow()
     inst:AddTag("chest")
     inst:AddTag("winky_burrow")
 
-    inst.MiniMapEntity:SetIcon("uncompromising_winkyhomeburrow.tex")
+    inst.MiniMapEntity:SetIcon("um_winkyhomeburrow.tex")
 
     inst:AddComponent("container_proxy")
 
@@ -1553,7 +1571,7 @@ local function SlumberParty(inst)
 
         local ents = #TheSim:FindEntities(x, y, z, 8, { "ratscout" })
         if ents and ents > 0 then
-            local burrow = SpawnPrefab("uncompromising_ratburrow")
+            local burrow = SpawnPrefab("um_ratburrow")
             burrow.Transform:SetPosition(x, 0, z)
             burrow.AnimState:PlayAnimation("spawn")
 
@@ -1631,7 +1649,7 @@ local function SnifferFoodScoreCalculations(inst, container, v)
     inst.foodscore = inst.foodscore + (delta > 0 and ((delta * preparedmult) * stackmult) or delta)
 end
 
-local NO_CONTAINER_PREFABS = {"lureplant", "catcoon", "uncompromising_winkyburrow", "uncompromising_winkyhomeburrow"}
+local NO_CONTAINER_PREFABS = {"lureplant", "catcoon", "um_winkyburrow", "um_winkyhomeburrow"}
 local function IsProperContainer(owner)
     return not owner or owner and not (table.contains(NO_CONTAINER_PREFABS, owner.prefab) or owner:HasAnyTag("lamp", "yots_post", "krampus_middleman", "pocketdimension_container", "buried"))
 end
@@ -1821,7 +1839,7 @@ local function TimeForACheckUp(inst, dev)
         --[[
             for c = 1, (inst.ratwarning) do
                 inst:DoTaskInTime((c/4), function(inst)
-                    local warning = SpawnPrefab("uncompromising_ratwarning")
+                    local warning = SpawnPrefab("um_ratwarning")
                     warning.Transform:SetPosition(inst.Transform:GetWorldPosition())
                     --warning.entity:SetParent(b)
                     --b.SoundEmitter:PlaySound("UCSounds/ratsniffer/warning")
@@ -1842,7 +1860,7 @@ local function TimeForACheckUp(inst, dev)
 
             for c = 1, inst.ratwarning do
                 inst:DoTaskInTime(c / 5, function(inst)
-                    local warning = SpawnPrefab("uncompromising_ratwarning")
+                    local warning = SpawnPrefab("um_ratwarning")
                     warning.Transform:SetPosition(inst.Transform:GetWorldPosition())
                 end)
             end
@@ -2051,7 +2069,7 @@ local function FindClosestPart(owner)
 
                                 local dx, dy, dz = x + ((i / 2) * velx), 0, z + ((i / 2) * velz)
 
-                                local fx1 = SpawnPrefab("ratring_fx")
+                                local fx1 = SpawnPrefab("um_ratring_fx")
                                 fx1.Transform:SetPosition(dx, dy, dz)
                                 fx1.Transform:SetScale(.6 - delay, .6 - delay, .6 - delay)
                                 fx1.SoundEmitter:PlaySound("UCSounds/ratsniffer/burrowping", nil, 1 - delay)
@@ -2074,7 +2092,7 @@ local function CheckTargetPiece(inst)
     local owner = inst.components.inventoryitem.owner
     if owner then
         FindClosestPart(owner)
-        inst.fx = SpawnPrefab("ratring_fx")
+        inst.fx = SpawnPrefab("um_ratring_fx")
         inst.fx.entity:AddFollower()
         inst.fx.Follower:FollowSymbol(owner.GUID, "swap_hat", 0, 0, 0)
         inst.fx.Transform:SetScale(.5, .5, .5)
@@ -2232,20 +2250,20 @@ local function ratringfn()
     return inst
 end
 
-return Prefab("uncompromising_rat", fn, assets, prefabs),
-    Prefab("uncompromising_junkrat", junkfn),
-    Prefab("uncompromising_packrat", packfn, assets, prefabs),
-    Prefab("uncompromising_ratherd", fn_herd, assets, prefabs),
-    Prefab("uncompromising_ratburrow", fn_burrow, assets, prefabs),
-    Prefab("uncompromising_winkyburrow", fn_winkyburrow, assets, prefabs),
-    MakePlacer("uncompromising_winkyburrow_placer", "uncompromising_rat_burrow", "uncompromising_rat_burrow", "idle"),
-    Prefab("uncompromising_winkyhomeburrow", fn_winkyhomeburrow, assets, prefabs),
-    MakePlacer("uncompromising_winkyhomeburrow_placer", "uncompromising_rat_burrow", "uncompromising_rat_burrow", "idle"),
-    Prefab("uncompromising_scoutburrow", fn_scoutburrow, assets, prefabs),
-    Prefab("uncompromising_ratsniffer", fn_sniffer, assets, prefabs),
-    Prefab("ratdroppings", fn_droppings, assets),
-    Prefab("uncompromising_ratwarning", fn_warning),
-    Prefab("ratmask_icon", ratmask_iconfn, iconassets),
+return Prefab("um_rat", fn, assets, prefabs),
+    Prefab("um_junkrat", junkfn),
+    Prefab("um_packrat", packfn, assets, prefabs),
+    Prefab("um_ratherd", fn_herd, assets, prefabs),
+    Prefab("um_ratburrow", fn_burrow, assets, prefabs),
+    Prefab("um_winkyburrow", fn_winkyburrow, assets, prefabs),
+    MakePlacer("um_winkyburrow_placer", "uncompromising_rat_burrow", "uncompromising_rat_burrow", "idle"),
+    Prefab("um_winkyhomeburrow", fn_winkyhomeburrow, assets, prefabs),
+    MakePlacer("um_winkyhomeburrow_placer", "uncompromising_rat_burrow", "uncompromising_rat_burrow", "idle"),
+    Prefab("um_scoutburrow", fn_scoutburrow, assets, prefabs),
+    Prefab("um_ratsniffer", fn_sniffer, assets, prefabs),
+    Prefab("um_ratdroppings", fn_droppings, assets),
+    Prefab("um_ratwarning", fn_warning),
+    Prefab("um_ratmask_icon", ratmask_iconfn, iconassets),
     Prefab("ratmask_stinklines", ratmask_stinkfn),
     Prefab("hat_ratmask", ratfn),
-    Prefab("ratring_fx", ratringfn)
+    Prefab("um_ratring_fx", ratringfn)

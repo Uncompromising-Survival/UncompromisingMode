@@ -562,7 +562,7 @@ local function OnInitHerd(inst)
 		for i = 1, steps do
 			local x, y, z = inst.Transform:GetWorldPosition()
 			local angle = math.random() * 8 * PI
-			local rat = SpawnPrefab("uncompromising_rat")
+			local rat = SpawnPrefab("um_rat")
 			rat.Transform:SetPosition(x + math.cos(angle), 0, z + math.sin(angle))
 			inst.components.herd:AddMember(rat)
 		end
@@ -685,7 +685,7 @@ local function fn_burrow()
 
 	inst:AddComponent("periodicspawner")
 	inst.components.periodicspawner:SetRandomTimes(5, 7)
-	inst.components.periodicspawner:SetPrefab("uncompromising_rat")
+	inst.components.periodicspawner:SetPrefab("um_rat")
 	inst.components.periodicspawner:SetOnSpawnFn(OnSpawned)
 	inst.components.periodicspawner:SetDensityInRange(30, 8)
 	inst.components.periodicspawner:Start()

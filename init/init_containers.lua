@@ -678,8 +678,8 @@ end
 
 modparams.skullchest = GLOBAL.deepcopy(containers.params.shadowchester)
 modparams.skullchest.itemtestfn = NoIreplaceables
-modparams.uncompromising_winkyburrow_master = GLOBAL.deepcopy(containers.params.shadowchester)
-modparams.uncompromising_winkyburrow_master.itemtestfn = NoIreplaceables
+modparams.um_winkyburrow_master = GLOBAL.deepcopy(containers.params.shadowchester)
+modparams.um_winkyburrow_master.itemtestfn = NoIreplaceables
 modparams.um_devcapture = GLOBAL.deepcopy(containers.params.shadowchester)
 modparams.um_devcapture.itemtestfn = NoIreplaceables
 modparams.um_sacred_chest = GLOBAL.deepcopy(containers.params.sacred_chest)

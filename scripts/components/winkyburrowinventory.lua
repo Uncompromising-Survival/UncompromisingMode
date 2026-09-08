@@ -58,7 +58,7 @@ end
 
 function WinkyBurrowInventory:SpawnTrunk()
 	if not self.trunk then
-		self.trunk = SpawnPrefab("uncompromising_winkyburrow_master")
+		self.trunk = SpawnPrefab("um_winkyburrow_master")
 	end
 	
     self.trunk.entity:AddTag("NOBLOCK")

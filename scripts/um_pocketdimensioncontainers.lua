@@ -9,9 +9,9 @@ local UM_POCKETDIMS = {
     },
     { --but this one doesn't??
         name = "winky",
-        prefab = "uncompromising_winkyburrow_master",
+        prefab = "um_winkyburrow_master",
         ui = "anim/ui_portal_shadow_3x4.zip",
-        widgetname = "uncompromising_winkyburrow_master",
+        widgetname = "um_winkyburrow_master",
     },
 }
 

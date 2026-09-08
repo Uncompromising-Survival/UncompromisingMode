@@ -51,7 +51,7 @@ ModuleDefs.AddCreatureScanDataDefinition("hoodedwidow", "maxhealth2", 6)
 ModuleDefs.AddCreatureScanDataDefinition("pied_rat", "music", 6)
 ModuleDefs.AddCreatureScanDataDefinition("boulder_crab", "shielding", 3)
 ModuleDefs.AddCreatureScanDataDefinition("aphid", "maxhunger1", 2)
---ModuleDefs.AddCreatureScanDataDefinition("uncompromising_rat", "maxhunger1", 2) -- With how skittish they are, it'll annoy you and the Winky player
+--ModuleDefs.AddCreatureScanDataDefinition("um_rat", "maxhunger1", 2) -- With how skittish they are, it'll annoy you and the Winky player
 ModuleDefs.AddCreatureScanDataDefinition("uncompromising_packrat", "stacksize", 4)
 ModuleDefs.AddCreatureScanDataDefinition("um_pawn", "screech", 6)
 ModuleDefs.AddCreatureScanDataDefinition("um_pawn_nightmare", "screech", 10)

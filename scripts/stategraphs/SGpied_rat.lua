@@ -46,7 +46,7 @@ local function SpawnRat(inst)
 	for i = 1, num do
 		local x, y, z = inst.Transform:GetWorldPosition()
 			
-		local rat = SpawnPrefab("uncompromising_rat")
+		local rat = SpawnPrefab("um_rat")
 		rat.Transform:SetPosition(x + math.random(-10, 10), y, z + math.random(-10, 10))
 		rat.components.follower:SetLeader(inst)
 	end
@@ -58,7 +58,7 @@ local function GatherFollowers(inst)
 	local ents = TheSim:FindEntities(x, y, z, TUNING.DSTU.PIEDPIPER_TOOT_RANGE, { "raidrat", "hostile" })
     
 	for i, v in ipairs(ents) do
-        if v.prefab == "uncompromising_rat" and v.components.follower ~= nil then
+        if v.prefab == "um_rat" and v.components.follower ~= nil then
 			v.components.follower:SetLeader(inst)
 			
 			if v.components.combat.target ~= nil and v.components.combat.target == inst then
@@ -77,7 +77,7 @@ local function DoBuff(inst, number)
 	local ents = TheSim:FindEntities(x, y, z, TUNING.DSTU.PIEDPIPER_TOOT_RANGE, { "raidrat" })
 	
 	for i, v in ipairs(ents) do
-        if v.prefab == "uncompromising_rat" and v.note == nil then
+        if v.prefab == "um_rat" and v.note == nil then
 			v:PiedPiperBuff(8)
 			
 			if v.components.combat.target ~= nil and v.components.combat.target == inst then

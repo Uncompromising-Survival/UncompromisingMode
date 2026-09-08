@@ -120,7 +120,7 @@ return Class(function(self, inst)
 			if IsValidRatBurrowPosition(inst.x1, inst.z1) then
 				TheFocalPoint.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/reaction")
 
-				local ratburrow = SpawnPrefab("uncompromising_ratburrow")
+				local ratburrow = SpawnPrefab("um_ratburrow")
 				ratburrow.Transform:SetPosition(inst.x1, 0, inst.z1)
 
 				local x, y, z = inst.Transform:GetWorldPosition()
@@ -141,7 +141,7 @@ return Class(function(self, inst)
 	end
 
 	local function _SpawnRaid(x, y, z)
-		local raid = SpawnPrefab("uncompromising_ratherd")
+		local raid = SpawnPrefab("um_ratherd")
 		local x2 = x + math.random(-10, 10)
 		local z2 = z + math.random(-10, 10)
 		if TheWorld.Map:IsPassableAtPoint(x2, 0, z2) then
@@ -242,7 +242,7 @@ return Class(function(self, inst)
 							if ratchecker ~= nil then
 								ratchecker.Transform:SetPosition(x, 0, z)
 							else
-								SpawnPrefab("uncompromising_ratsniffer").Transform:SetPosition(x, 0, z)
+								SpawnPrefab("um_ratsniffer").Transform:SetPosition(x, 0, z)
 							end
 						end
 					end

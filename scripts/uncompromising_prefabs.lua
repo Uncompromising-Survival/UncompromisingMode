@@ -18,7 +18,7 @@ local prefabs = {
     "sporecloud_toad",
     "deerclops_ground_fx",
     "root_spike",
-    "uncompromising_rat",
+    "um_rat",
     "ratpoison",
     "ratpoison_debuff",
     --"ratpoisonbottle",

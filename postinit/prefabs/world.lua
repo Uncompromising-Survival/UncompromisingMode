@@ -55,7 +55,7 @@ env.AddPrefabPostInit("world", function(inst)
         for k, v in pairs(Ents) do
             if v.prefab == "skullchest" then
                 count_skull = count_skull + 1
-            elseif v.prefab == "uncompromising_winkyburrow_master" then
+            elseif v.prefab == "um_winkyburrow_master" then
                 count_winky = count_winky + 1
             end
         end
@@ -116,9 +116,9 @@ env.AddPrefabPostInit("world", function(inst)
             end
         end
         if count_winky == 0 then
-            SpawnPrefab("uncompromising_winkyburrow_master") --Add a uncompromising_winkyburrow_master entity if there's none
+            SpawnPrefab("um_winkyburrow_master") --Add a um_winkyburrow_master entity if there's none
             for k, v in pairs(Ents) do
-                if v.prefab == "uncompromising_winkyburrow" or v.prefab == "uncompromising_winkyhomeburrow" then
+                if v.prefab == "um_winkyburrow" or v.prefab == "um_winkyhomeburrow" then
                     v:OnLoadPostPass(v) --reattach for any pre-existing ones
                 end
             end

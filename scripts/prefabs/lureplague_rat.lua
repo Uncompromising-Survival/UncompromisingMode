@@ -21,7 +21,7 @@ local carratsounds =
 	stunned = "turnoftides/creatures/together/carrat/stunned",
 }
 
---Credits to ADM for basecode from uncompromising_rat
+--Credits to ADM for basecode from um_rat
 --Credits to Rose and Leonardo Coxington for base art of rat.
 
 local brain = require "brains/lureplague_ratbrain"

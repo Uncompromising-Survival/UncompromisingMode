@@ -30,7 +30,7 @@ end
 
 local function HearHorn(inst, musician, instrument)
     if musician.components.leader ~= nil and
-        inst.prefab == "uncompromising_rat" then
+        inst.prefab == "um_rat" then
         if inst.components.combat ~= nil and inst.components.combat:HasTarget() then
             inst.components.combat:GiveUp()
         end
