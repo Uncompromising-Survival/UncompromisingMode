@@ -1216,14 +1216,13 @@ local function CreateBurrow(tags, loottable, init)
     herd.updatepos = false
 
     inst:AddComponent("timer")
-    --inst.components.timer:StartTimer("scoutingparty", 1920 + math.random(480))
     inst:ListenForEvent("timerdone", OnTimerDone)
 
     local periodicspawner = inst:AddComponent("periodicspawner")
     periodicspawner:SetRandomTimes(10, 13)
     periodicspawner:SetPrefab("um_rat")
     periodicspawner:SetOnSpawnFn(OnSpawned)
-    periodicspawner:SetDensityInRange(30, 8) -- inst.components.periodicspawner:Start()
+    periodicspawner:SetDensityInRange(30, 8)
     --periodicspawner.spawnoffscreen = true
 
     local inventory = inst:AddComponent("inventory")
@@ -1280,6 +1279,8 @@ local function fn_burrow()
     local inst = CreateBurrow({"ratburrow", "NOBLOCK", "NOCLICK"}, "ratburrow_small", true)
 
     if not TheWorld.ismastersim then return inst end
+
+    inst.components.timer:StartTimer("scoutingparty", 1920 + math.random(480))
 
     inst.components.periodicspawner:Start()
 
