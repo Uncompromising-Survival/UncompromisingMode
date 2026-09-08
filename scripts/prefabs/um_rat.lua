@@ -1752,15 +1752,12 @@ end
 
 local function TimeForACheckUp(inst, dev)
     local x, y, z = inst.Transform:GetWorldPosition()
-    
-    local players = TheSim:FindEntities(x, y, z, TUNING.DSTU.SNIFFER_PLAYER_RANGE, {"player"}, {"playerghost"})
-    for a, b in ipairs(players) do
+    for a, b in ipairs(TheSim:FindEntities(x, y, z, TUNING.DSTU.SNIFFER_PLAYER_RANGE, {"player"}, {"playerghost"})) do
         if b:IsValid() and b:IsNear(inst, TUNING.DSTU.SNIFFER_PLAYER_RANGE) then
             Sniffertime(b, inst)
         end
     end
 
-    local ents = TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM_RANGE, {"_inventoryitem"}, NOTAGS)
     --[[print("THE RAT SNIFFS")
     print("                o")
     print("    =========B  *sniff* *sniff*")
@@ -1774,23 +1771,22 @@ local function TimeForACheckUp(inst, dev)
     inst.ratburrows = TheWorld.components.ratcheck and TheWorld.components.ratcheck:GetBurrows() or 0
     inst.burrowbonus = 15 * inst.ratburrows
 
-    if ents then
-        for i, v in ipairs(ents) do
-            if (inst.ratscore + inst.foodscore + inst.burrowbonus) < 300 then
-                local container = v.components.inventoryitem:GetGrandOwner() or v.components.inventoryitem.owner
-                if IsProperContainer(container) then
-                    if container then
-                        SnifferFoodScoreCalculations(inst, true, v)
-                    else
-                        SnifferFoodScoreCalculations(inst, false, v)
-                        --if TUNING.DSTU.ITEMCHECK and v:HasAnyTag("_equippable", "tool", "gem") then
-                            --inst.itemscore = inst.itemscore + 30 -- Oooh, wants wants! We steal!
-                        --end
-                    end
-                end
-            end
-        end
-    end
+	for i, v in ipairs(TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM_RANGE, {"_inventoryitem"}, NOTAGS)) do
+		if (inst.ratscore + inst.foodscore + inst.burrowbonus) < 300 then
+			local container = v.components.inventoryitem:GetGrandOwner() or v.components.inventoryitem.owner
+			if IsProperContainer(container) then
+				--[[if container then
+					SnifferFoodScoreCalculations(inst, true, v)
+				else
+					SnifferFoodScoreCalculations(inst, false, v)
+					if TUNING.DSTU.ITEMCHECK and v:HasAnyTag("_equippable", "tool", "gem") then
+						inst.itemscore = inst.itemscore + 30 -- Oooh, wants wants! We steal!
+					end
+				end]]
+				SnifferFoodScoreCalculations(inst, container, v)
+			end
+		end
+	end
 
     local DiferentDD = {}
     for i, v in ipairs(TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM_RANGE, nil, {"FX", "NOCLICK"})) do
