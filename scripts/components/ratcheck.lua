@@ -187,7 +187,7 @@ return Class(function(self, inst)
 		local x, y, z = inst.Transform:GetWorldPosition()
 		local players = FindPlayersInRange(x, y, z, 50)
 
-		local ratburrow = TheSim:FindFirstEntityWithTag("ratburrow")
+		--local ratburrow = TheSim:FindFirstEntityWithTag("ratburrow")
 
 		--if ratburrow ~= nil then
 
@@ -247,17 +247,17 @@ return Class(function(self, inst)
 						end
 					end
 
-					if data.container.components.container:IsEmpty() then
-						--print("CAN'T SPAWN RATS! This container is empty!")
+					--[[if data.container.components.container:IsEmpty() then
+						print("CAN'T SPAWN RATS! This container is empty!")
 					end
 
 					if not IsEligible(data.doer) then
-						--print("CAN'T SPAWN RATS! Player is in a 'safe' zone!")
+						print("CAN'T SPAWN RATS! Player is in a 'safe' zone!")
 					end
 
 					if (_raided ~= nil and _raided) then
-						--print("CAN'T SPAWN RATS! They are on break!")
-					end
+						print("CAN'T SPAWN RATS! They are on break!")
+					end]]
 				end
 			end
 		end

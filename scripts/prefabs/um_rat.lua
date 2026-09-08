@@ -1198,7 +1198,7 @@ local function OnTimerDone(inst, data)
     end
 end
 
-local function fn_herd()
+local function fn_herd() -- This Rat Burrow is the used one.
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
