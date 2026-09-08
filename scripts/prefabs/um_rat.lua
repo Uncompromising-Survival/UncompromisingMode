@@ -1638,8 +1638,8 @@ local function SnifferFoodScoreCalculations(inst, container, v)
     local stackmult = v.components.stackable and v.components.stackable:StackSize() or 1
     local preparedmult = v:HasTag("preparedfood") and 2 or 1
     local spoiledfood = v:HasTag("spoiled") or v:HasTag("spoiledfood")
-    local delta = not container and (v:HasTag("stale") and 20 or spoiledfood) and 30)
-        or (v:HasTag("stale") and 5 or spoiledfood) and 10) or 0
+    local delta = not container and (v:HasTag("stale") and 20 or spoiledfood and 30)
+        or (v:HasTag("stale") and 5 or spoiledfood and 10) or 0
     inst.foodscore = inst.foodscore + (delta > 0 and ((delta * preparedmult) * stackmult) or delta)
 end
 
