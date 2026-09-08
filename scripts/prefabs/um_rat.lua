@@ -939,19 +939,19 @@ local function BurrowAnim(inst)
     inst:DoTaskInTime(3 + math.random(), BurrowAnim)
 end
 
+local function IsValidRatBurrowPosition(x, z)
+    if #TheSim:FindEntities(x, 0, z, TUNING.ANTLION_SINKHOLE.RADIUS * 2, nil, nil, { "antlion_sinkhole_blocker", "structure", "giant_tree" }) > 0 then return false end
+
+    if #TheSim:FindEntities(x, 0, z, 60, { "player", "playerghost" }) > 0 then return false end
+
+    if #TheSim:FindEntities(x, 0, z, 60, { "ratburrow" }) > 0 then return false end
+
+    for dx = -1, 1 do for dz = -1, 1 do if not TheWorld.Map:IsPassableAtPoint(x + dx * TUNING.ANTLION_SINKHOLE.RADIUS, 0, z + dz * TUNING.ANTLION_SINKHOLE.RADIUS, false, true) then return false end end end
+    return true
+end
+
 local function MakeRatBurrow(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-
-    local function IsValidRatBurrowPosition(x, z)
-        if #TheSim:FindEntities(x, 0, z, TUNING.ANTLION_SINKHOLE.RADIUS * 2, nil, nil, { "antlion_sinkhole_blocker", "structure", "giant_tree" }) > 0 then return false end
-
-        if #TheSim:FindEntities(x, 0, z, 60, { "player", "playerghost" }) > 0 then return false end
-
-        if #TheSim:FindEntities(x, 0, z, 60, { "ratburrow" }) > 0 then return false end
-
-        for dx = -1, 1 do for dz = -1, 1 do if not TheWorld.Map:IsPassableAtPoint(x + dx * TUNING.ANTLION_SINKHOLE.RADIUS, 0, z + dz * TUNING.ANTLION_SINKHOLE.RADIUS, false, true) then return false end end end
-        return true
-    end
 
     for i = 1, 8 do
         inst.x1, inst.z1 = x + math.random(-250, 250), z + math.random(-250, 250)
@@ -1034,10 +1034,12 @@ local function OnRefuseItem(inst, giver, item)
     inst.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/submerge")
 end
 
-local function EndRaid(inst)
-    local x, y, z = inst.Transform:GetWorldPosition()
-    local players = FindPlayersInRange(x, y, z, 50)
-    for i, v in ipairs(players) do v.components.talker:Say(GetString(v, "ANNOUNCE_RATRAID_OVER")) end
+local function EndRaid(inst, announce)
+	if announce then
+		local x, y, z = inst.Transform:GetWorldPosition()
+		local players = FindPlayersInRange(x, y, z, 50)
+		for i, v in ipairs(players) do v.components.talker:Say(GetString(v, "ANNOUNCE_RATRAID_OVER")) end
+	end
 
     if inst.raiding then MakeRatBurrow(inst) end
 
@@ -1056,11 +1058,9 @@ local function EndRaid(inst)
     inst.components.workable:SetWorkable(true)
 
     inst.components.periodicspawner:Start()
-    inst.components.herd:SetOnEmptyFn(BurrowKilled)
-    inst.components.herd.updatepos = false
     inst.components.herd.updateposincombat = false
 
-    -- inst.entity:SetCanSleep(false)
+    --inst.entity:SetCanSleep(false)
 
     inst.raiding = false
 
@@ -1092,7 +1092,7 @@ local function OnInitHerd(inst)
             end)
         end
         inst.components.herd:SetUpdateRange(20)
-        inst:DoTaskInTime(45, EndRaid)
+        inst:DoTaskInTime(45, EndRaid, true)
         inst:AddTag("raiding")
     end
 end
@@ -1110,15 +1110,7 @@ local function onload_burrow(inst, data)
         if data.ratguard ~= nil then inst.ratguard = data.ratguard end
     end
 
-    if not inst.raiding then
-        inst.AnimState:PushAnimation("idle", true)
-
-        inst.components.herd:SetOnEmptyFn(BurrowKilled)
-        inst.components.herd.updatepos = false
-        inst.components.herd.updateposincombat = false
-
-        inst:DoTaskInTime(0, EndRaid)
-    end
+    if not inst.raiding then EndRaid(inst) end
 end
 
 local function MakeScoutBurrow(inst)
@@ -1208,8 +1200,8 @@ local function CreateBurrow(tags, loottable, init)
     inst:AddComponent("inspectable")
 
     local herd = inst:AddComponent("herd")
-	herd:SetMemberTag("raidrat")
-	herd:SetMaxSize(8)
+    herd:SetMemberTag("raidrat")
+    herd:SetMaxSize(8)
     herd:SetGatherRange(40)
     herd:SetOnEmptyFn(BurrowKilled)
     herd.nomerging = true
@@ -1261,7 +1253,6 @@ local function fn_herd() -- This Rat Burrow is used in raids.
     inst.ratguard = true
 
     local herd = inst.components.herd
-    herd.updatepos = false
     herd.updateposincombat = true
 
     inst.components.workable:SetWorkable(false)
@@ -1280,7 +1271,7 @@ local function fn_burrow()
 
     if not TheWorld.ismastersim then return inst end
 
-    inst.components.timer:StartTimer("scoutingparty", 1920 + math.random(480))
+    if not inst.components.timer:TimerExists("scoutingparty") then inst.components.timer:StartTimer("scoutingparty", 1920 + math.random(480)) end
 
     inst.components.periodicspawner:Start()
 
