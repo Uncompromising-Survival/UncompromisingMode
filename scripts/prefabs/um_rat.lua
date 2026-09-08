@@ -1208,11 +1208,11 @@ local function CreateBurrow(tags, loottable, init)
     inst:AddComponent("inspectable")
 
     local herd = inst:AddComponent("herd")
+	herd:SetMemberTag("raidrat")
+	herd:SetMaxSize(8)
     herd:SetGatherRange(40)
-    herd:SetUpdateRange(nil)
-    herd.maxsize = 8
-    herd.nomerging = true
     herd:SetOnEmptyFn(BurrowKilled)
+    herd.nomerging = true
     herd.updatepos = false
 
     inst:AddComponent("timer")
