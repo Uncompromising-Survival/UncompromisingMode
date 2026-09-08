@@ -36,15 +36,14 @@ local function PushRatRaidContainer(inst)
     local container = inst.components.container
     if container then
         local _OnClose = container.onclosefn
-        local function onclose_raid(inst, doer, ...)
+        container.onclosefn = function(_inst, doer, ...)
             --Rat Raid
-            if not inst:HasTag("burnt") and doer and doer:HasTag("player") then
-                --inst:DoTaskInTime(0, ActiveRaid, doer)
-                TheWorld:PushEvent("activeraid", {container = inst, doer = doer, amount = 1})
+            if not _inst:HasTag("burnt") and doer and doer:HasTag("player") then
+                --_inst:DoTaskInTime(0, ActiveRaid, doer)
+                TheWorld:PushEvent("activeraid", {container = _inst, doer = doer, amount = 1})
             end
-            return _OnClose(inst, doer, ...)
+            return _OnClose(_inst, doer, ...)
         end
-        container.onclosefn = onclose_raid
     end
 end
 
@@ -52,13 +51,12 @@ local function PushRatRaidStewer(inst)
     local stewer = inst.components.stewer
     if stewer then
         local _OnHarvest = stewer.onharvest
-        local function onharvest_raid(inst, ...)
-            if not inst:HasTag("burnt") then
-                TheWorld:PushEvent("activeraid", {container = inst, amount = 1})
+        stewer.onharvest = function(_inst, ...)
+            if not _inst:HasTag("burnt") then
+                TheWorld:PushEvent("activeraid", {container = _inst, amount = 1})
             end
-            return _OnHarvest(inst, ...)
+            return _OnHarvest(_inst, ...)
         end
-        stewer.onharvest = onharvest_raid
     end
 end
 
