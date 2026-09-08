@@ -1256,7 +1256,7 @@ local function fn_herd() -- This Rat Burrow is used in raids.
 end
 
 local function fn_burrow()
-    local inst = CreateBurrow({"ratburrow", "NOBLOCK", "NOCLICK"}, "ratburrow_small", true)
+    local inst = CreateBurrow({"ratburrow"}, "ratburrow_small", true)
 
     if not TheWorld.ismastersim then return inst end
 
