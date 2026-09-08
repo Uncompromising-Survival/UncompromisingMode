@@ -1053,7 +1053,7 @@ local function EndRaid(inst, announce)
     inst:RemoveTag("raiding")
     inst:AddTag("ratburrow")
 
-    if not inst.components.timer:TimerExists("scoutingparty") then inst.components.timer:StartTimer("scoutingparty", 1920 + math.random(480)) end
+    UMCommonFns.RestartTimer(inst, {name = "scoutingparty", time = 1920 + math.random(480), keepexisting = true})
 
     inst.components.workable:SetWorkable(true)
 
@@ -1142,7 +1142,7 @@ local function MakeScoutBurrow(inst)
         end
 
         if i >= 8 then
-            inst.components.timer:StartTimer("scoutingparty", 1920 + math.random(480))
+		    UMCommonFns.RestartTimer(inst, {name = "scoutingparty", time = 1920 + math.random(480), keepexisting = true})
         end
     end
 end
@@ -1154,7 +1154,7 @@ local function OnTimerDone(inst, data)
         --print(TheWorld.components.ratcheck ~= nil and TheWorld.components.ratcheck:GetBurrows())
 
         if TheWorld.components.ratcheck ~= nil and TheWorld.components.ratcheck:GetBurrows() >= 10 then
-            inst.components.timer:StartTimer("scoutingparty", 1920 + math.random(480))
+		    UMCommonFns.RestartTimer(inst, {name = "scoutingparty", time = 1920 + math.random(480), keepexisting = true})
             return
         end
 
@@ -1260,7 +1260,7 @@ local function fn_burrow()
 
     if not TheWorld.ismastersim then return inst end
 
-    if not inst.components.timer:TimerExists("scoutingparty") then inst.components.timer:StartTimer("scoutingparty", 1920 + math.random(480)) end
+    UMCommonFns.RestartTimer(inst, {name = "scoutingparty", time = 1920 + math.random(480), keepexisting = true})
 
     inst.components.periodicspawner:Start()
 
