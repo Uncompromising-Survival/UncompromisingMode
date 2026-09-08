@@ -1181,7 +1181,7 @@ local function OnTimerDone(inst, data)
     end
 end
 
-local function fn_herd() -- This Rat Burrow is used in raids.
+local function CreateBurrow(tags, loottable, init)
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -1192,11 +1192,12 @@ local function fn_herd() -- This Rat Burrow is used in raids.
 
     inst.AnimState:SetBank("uncompromising_rat_burrow")
     inst.AnimState:SetBuild("uncompromising_rat_burrow")
+    if init then inst.AnimState:PlayAnimation("idle", true) end
 
     inst:AddTag("herd")
     inst:AddTag("trader")
-    inst:AddTag("NOBLOCK")
-    inst:AddTag("NOCLICK")
+    
+    if tags then for _, tag in pairs(tags) do inst:AddTag(tag) end end
 
     inst.MiniMapEntity:SetIcon("um_ratburrow.tex")
 
@@ -1206,42 +1207,36 @@ local function fn_herd() -- This Rat Burrow is used in raids.
 
     inst:AddComponent("inspectable")
 
-    inst:AddComponent("thief")
-
-    inst.ratguard = true
-
     local herd = inst:AddComponent("herd")
     herd:SetGatherRange(40)
     herd:SetUpdateRange(nil)
-    herd:SetOnEmptyFn(inst.Remove)
     herd.maxsize = 8
     herd.nomerging = true
-    herd.updateposincombat = true
+    herd:SetOnEmptyFn(BurrowKilled)
+    herd.updatepos = false
 
     inst:AddComponent("timer")
+    --inst.components.timer:StartTimer("scoutingparty", 1920 + math.random(480))
     inst:ListenForEvent("timerdone", OnTimerDone)
 
     local periodicspawner = inst:AddComponent("periodicspawner")
     periodicspawner:SetRandomTimes(10, 13)
     periodicspawner:SetPrefab("um_rat")
     periodicspawner:SetOnSpawnFn(OnSpawned)
-    periodicspawner:SetDensityInRange(30, 8)
+    periodicspawner:SetDensityInRange(30, 8) -- inst.components.periodicspawner:Start()
     --periodicspawner.spawnoffscreen = true
-
-    inst:AddComponent("combat")
 
     local inventory = inst:AddComponent("inventory")
     inventory.maxslots = 100
 
     local lootdropper = inst:AddComponent("lootdropper")
-    lootdropper:SetChanceLootTable('ratburrow')
+    lootdropper:SetChanceLootTable(loottable or "ratburrow")
 
-	local workable = inst:AddComponent("workable")
+    local workable = inst:AddComponent("workable")
     workable:SetOnFinishCallback(onfinishcallback)
     workable:SetOnWorkCallback(onworked)
     workable:SetWorkAction(ACTIONS.DIG)
     workable:SetWorkLeft(3)
-    workable:SetWorkable(false)
 
     local trader = inst:AddComponent("trader")
     trader:SetAbleToAcceptTest(AbleToAcceptTest)
@@ -1249,86 +1244,44 @@ local function fn_herd() -- This Rat Burrow is used in raids.
     trader.onaccept = OnGetItemFromPlayer
     trader.onrefuse = OnRefuseItem
 
+    inst:DoTaskInTime(1, BurrowAnim)
+
+    if init then
+        inst:DoTaskInTime(0, OnInit)
+        inst:ListenForEvent("onremove", OnRemoved)
+    end
+
+    return inst
+end
+
+local function fn_herd() -- This Rat Burrow is used in raids.
+    local inst = CreateBurrow({"NOBLOCK", "NOCLICK"})
+
+    if not TheWorld.ismastersim then return inst end
+
+    inst.ratguard = true
+
+    local herd = inst.components.herd
+    herd.updatepos = false
+    herd.updateposincombat = true
+
+    inst.components.workable:SetWorkable(false)
+
     inst.OnSave = onsave_burrow
     inst.OnPreLoad = onpreload_burrow
     inst.OnLoad = onload_burrow
 
     inst:DoTaskInTime(0, OnInitHerd)
 
-    inst:DoTaskInTime(1, BurrowAnim)
-
     return inst
 end
 
 local function fn_burrow()
-    local inst = CreateEntity()
-
-    inst.entity:AddTransform()
-    inst.entity:AddAnimState()
-    inst.entity:AddSoundEmitter()
-    inst.entity:AddMiniMapEntity()
-    inst.entity:AddNetwork()
-
-    inst.AnimState:SetBank("uncompromising_rat_burrow")
-    inst.AnimState:SetBuild("uncompromising_rat_burrow")
-    inst.AnimState:PushAnimation("idle", true)
-
-    inst:AddTag("ratburrow")
-    inst:AddTag("herd")
-    inst:AddTag("trader")
-
-    inst.MiniMapEntity:SetIcon("um_ratburrow.tex")
-
-    inst.entity:SetPristine()
+    local inst = CreateBurrow({"ratburrow", "NOBLOCK", "NOCLICK"}, "ratburrow_small", true)
 
     if not TheWorld.ismastersim then return inst end
 
-    inst:AddComponent("thief")
-
-    inst:AddComponent("herd")
-    inst.components.herd:SetGatherRange(40)
-    inst.components.herd:SetUpdateRange(nil)
-    inst.components.herd.maxsize = 8
-    inst.components.herd.nomerging = true
-    inst.components.herd.updateposincombat = true
-    inst.components.herd:SetOnEmptyFn(BurrowKilled)
-    inst.components.herd.updatepos = false
-    inst.components.herd.updateposincombat = false
-
-    inst:AddComponent("timer")
-    inst.components.timer:StartTimer("scoutingparty", 1920 + math.random(480))
-    inst:ListenForEvent("timerdone", OnTimerDone)
-
-    inst:AddComponent("periodicspawner")
-    inst.components.periodicspawner:SetRandomTimes(10, 13)
-    inst.components.periodicspawner:SetPrefab("um_rat")
-    inst.components.periodicspawner:SetOnSpawnFn(OnSpawned)
-    inst.components.periodicspawner:SetDensityInRange(30, 8)
     inst.components.periodicspawner:Start()
-    -- inst.components.periodicspawner.spawnoffscreen = true
-
-    inst:AddComponent("combat")
-    inst:AddComponent("inventory")
-    inst:AddComponent("lootdropper")
-    inst.components.lootdropper:SetChanceLootTable('ratburrow_small')
-    inst:AddComponent("inspectable")
-
-    inst:AddComponent("workable")
-    inst.components.workable:SetOnFinishCallback(onfinishcallback)
-    inst.components.workable:SetOnWorkCallback(onworked)
-    inst.components.workable:SetWorkAction(ACTIONS.DIG)
-    inst.components.workable:SetWorkLeft(3)
-
-    inst:AddComponent("trader")
-    inst.components.trader:SetAbleToAcceptTest(AbleToAcceptTest)
-    inst.components.trader:SetAcceptTest(AcceptTest)
-    inst.components.trader.onaccept = OnGetItemFromPlayer
-    inst.components.trader.onrefuse = OnRefuseItem
-
-    inst:DoTaskInTime(1, BurrowAnim)
-
-    inst:DoTaskInTime(0, OnInit)
-    inst:ListenForEvent("onremove", OnRemoved)
 
     return inst
 end
@@ -1611,22 +1564,21 @@ local function fn_scoutburrow()
     inst.AnimState:PushAnimation("idle_pile", true)
 
     inst:AddTag("herd")
+
     inst.entity:SetCanSleep(false)
 
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then return inst end
 
-    inst:AddComponent("herd")
-    inst.components.herd:SetGatherRange(40)
-    inst.components.herd:SetUpdateRange(nil)
-    inst.components.herd:SetOnEmptyFn(inst.Remove)
-    inst.components.herd:SetRemoveMemberFn(CheckIfEmpty)
-    inst.components.herd.maxsize = 8
-    inst.components.herd.nomerging = true
-    inst.components.herd.updateposincombat = true
-    inst.components.herd.updatepos = false
-    inst.components.herd.updateposincombat = false
+    local herd = inst:AddComponent("herd")
+    herd:SetGatherRange(40)
+    herd:SetUpdateRange(nil)
+    herd:SetOnEmptyFn(inst.Remove)
+    herd:SetRemoveMemberFn(CheckIfEmpty)
+    herd.maxsize = 8
+    herd.nomerging = true
+    herd.updatepos = false
 
     inst:DoPeriodicTask(5, SlumberParty) -- !!!
 
@@ -1770,22 +1722,22 @@ local function TimeForACheckUp(inst, dev)
     inst.ratburrows = TheWorld.components.ratcheck and TheWorld.components.ratcheck:GetBurrows() or 0
     inst.burrowbonus = 15 * inst.ratburrows
 
-	for i, v in ipairs(TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM_RANGE, {"_inventoryitem"}, NOTAGS)) do
-		if (inst.ratscore + inst.foodscore + inst.burrowbonus) < 300 then
-			local container = v.components.inventoryitem:GetGrandOwner() or v.components.inventoryitem.owner
-			if IsProperContainer(container) then
-				--[[if container then
-					SnifferFoodScoreCalculations(inst, true, v)
-				else
-					SnifferFoodScoreCalculations(inst, false, v)
-					if TUNING.DSTU.ITEMCHECK and v:HasAnyTag("_equippable", "tool", "gem") then
-						inst.itemscore = inst.itemscore + 30 -- Oooh, wants wants! We steal!
-					end
-				end]]
-				SnifferFoodScoreCalculations(inst, container, v)
-			end
-		end
-	end
+    for i, v in ipairs(TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM_RANGE, {"_inventoryitem"}, NOTAGS)) do
+        if (inst.ratscore + inst.foodscore + inst.burrowbonus) < 300 then
+            local container = v.components.inventoryitem:GetGrandOwner() or v.components.inventoryitem.owner
+            if IsProperContainer(container) then
+                --[[if container then
+                    SnifferFoodScoreCalculations(inst, true, v)
+                else
+                    SnifferFoodScoreCalculations(inst, false, v)
+                    if TUNING.DSTU.ITEMCHECK and v:HasAnyTag("_equippable", "tool", "gem") then
+                        inst.itemscore = inst.itemscore + 30 -- Oooh, wants wants! We steal!
+                    end
+                end]]
+                SnifferFoodScoreCalculations(inst, container, v)
+            end
+        end
+    end
 
     local DiferentDD = {}
     for i, v in ipairs(TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM_RANGE, nil, {"FX", "NOCLICK"})) do
