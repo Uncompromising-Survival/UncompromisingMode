@@ -1051,31 +1051,14 @@ local function EndRaid(inst)
     inst:RemoveTag("raiding")
     inst:AddTag("ratburrow")
 
-    if inst.components.workable == nil then inst:AddComponent("workable") end
-
-    if inst.components.inspectable == nil then inst:AddComponent("inspectable") end
-
     if not inst.components.timer:TimerExists("scoutingparty") then inst.components.timer:StartTimer("scoutingparty", 1920 + math.random(480)) end
 
-    if inst.components.workable ~= nil then
-        inst.components.workable:SetOnFinishCallback(onfinishcallback)
-        inst.components.workable:SetOnWorkCallback(onworked)
-        inst.components.workable:SetWorkAction(ACTIONS.DIG)
-        inst.components.workable:SetWorkLeft(3)
-    end
+    inst.components.workable:SetWorkable(true)
 
     inst.components.periodicspawner:Start()
     inst.components.herd:SetOnEmptyFn(BurrowKilled)
     inst.components.herd.updatepos = false
     inst.components.herd.updateposincombat = false
-
-    inst:AddTag("trader")
-
-    inst:AddComponent("trader")
-    inst.components.trader:SetAbleToAcceptTest(AbleToAcceptTest)
-    inst.components.trader:SetAcceptTest(AcceptTest)
-    inst.components.trader.onaccept = OnGetItemFromPlayer
-    inst.components.trader.onrefuse = OnRefuseItem
 
     -- inst.entity:SetCanSleep(false)
 
@@ -1211,6 +1194,7 @@ local function fn_herd() -- This Rat Burrow is the used one.
     inst.AnimState:SetBuild("uncompromising_rat_burrow")
 
     inst:AddTag("herd")
+    inst:AddTag("trader")
     inst:AddTag("NOBLOCK")
     inst:AddTag("NOCLICK")
 
@@ -1220,35 +1204,50 @@ local function fn_herd() -- This Rat Burrow is the used one.
 
     if not TheWorld.ismastersim then return inst end
 
+    inst:AddComponent("inspectable")
+
     inst:AddComponent("thief")
 
     inst.ratguard = true
 
-    inst:AddComponent("herd")
-    inst.components.herd:SetGatherRange(40)
-    inst.components.herd:SetUpdateRange(nil)
-    inst.components.herd:SetOnEmptyFn(inst.Remove)
-    inst.components.herd.maxsize = 8
-    inst.components.herd.nomerging = true
-    inst.components.herd.updateposincombat = true
+    local herd = inst:AddComponent("herd")
+    herd:SetGatherRange(40)
+    herd:SetUpdateRange(nil)
+    herd:SetOnEmptyFn(inst.Remove)
+    herd.maxsize = 8
+    herd.nomerging = true
+    herd.updateposincombat = true
 
     inst:AddComponent("timer")
     inst:ListenForEvent("timerdone", OnTimerDone)
 
-    inst:AddComponent("periodicspawner")
-    inst.components.periodicspawner:SetRandomTimes(10, 13)
-    inst.components.periodicspawner:SetPrefab("um_rat")
-    inst.components.periodicspawner:SetOnSpawnFn(OnSpawned)
-    inst.components.periodicspawner:SetDensityInRange(30, 8)
-    -- inst.components.periodicspawner.spawnoffscreen = true
+    local periodicspawner = inst:AddComponent("periodicspawner")
+    periodicspawner:SetRandomTimes(10, 13)
+    periodicspawner:SetPrefab("um_rat")
+    periodicspawner:SetOnSpawnFn(OnSpawned)
+    periodicspawner:SetDensityInRange(30, 8)
+    --periodicspawner.spawnoffscreen = true
 
     inst:AddComponent("combat")
 
-    inst:AddComponent("inventory")
-    inst.components.inventory.maxslots = 100
+    local inventory = inst:AddComponent("inventory")
+    inventory.maxslots = 100
 
-    inst:AddComponent("lootdropper")
-    inst.components.lootdropper:SetChanceLootTable('ratburrow')
+    local lootdropper = inst:AddComponent("lootdropper")
+    lootdropper:SetChanceLootTable('ratburrow')
+
+	local workable = inst:AddComponent("workable")
+    workable:SetOnFinishCallback(onfinishcallback)
+    workable:SetOnWorkCallback(onworked)
+    workable:SetWorkAction(ACTIONS.DIG)
+    workable:SetWorkLeft(3)
+    workable:SetWorkable(false)
+
+    local trader = inst:AddComponent("trader")
+    trader:SetAbleToAcceptTest(AbleToAcceptTest)
+    trader:SetAcceptTest(AcceptTest)
+    trader.onaccept = OnGetItemFromPlayer
+    trader.onrefuse = OnRefuseItem
 
     inst.OnSave = onsave_burrow
     inst.OnPreLoad = onpreload_burrow
