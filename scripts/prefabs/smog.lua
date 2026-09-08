@@ -304,7 +304,7 @@ local function fn()
     inst.hurttask = inst:DoPeriodicTask(5 + math.random(5), function(inst)
         local x, y, z = inst.Transform:GetWorldPosition()
         for k, v in ipairs(TheSim:FindEntities(x, y, z, 8, nil, {"INLIMBO", "playerghost", "has_gasmask", "pyromaniac", "smogimmune", "minifansuppressor", "scp049", "wragonfly"}, {"player", "insect"})) do
-            if v.components.health and not inst.components.health:IsDead() and not v.components.health:IsInvincible() and math.random() > .25 then
+            if v.components.health and not v.components.health:IsDead() and not v.components.health:IsInvincible() and math.random() > .25 then
                 local isplayer = v:HasTag("player")
                 if not isplayer or v.components.health.disable_penalty or v.components.health.penalty >= TUNING.MAXIMUM_HEALTH_PENALTY - .05 then
                     v.components.health:DoDelta(-1, false, "smog")
