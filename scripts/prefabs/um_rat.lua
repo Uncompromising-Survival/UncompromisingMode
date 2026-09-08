@@ -1634,18 +1634,12 @@ local function fn_scoutburrow()
     return inst
 end
 
-local function IsAVersionOfRot(v)
-    local rotprefabs = {"spoiled_food", "rottenegg", "spoiled_fish", "spoiled_fish_small"}
-    for _, rotprefab in pairs(rotprefabs) do
-        if v.prefab == rotprefab then return true end
-    end
-end
-
 local function SnifferFoodScoreCalculations(inst, container, v)
     local stackmult = v.components.stackable and v.components.stackable:StackSize() or 1
     local preparedmult = v:HasTag("preparedfood") and 2 or 1
-    local delta = not container and (v:HasTag("stale") and 20 or (v:HasTag("spoiled") or IsAVersionOfRot(v)) and 30)
-        or (v:HasTag("stale") and 5 or (v:HasTag("spoiled") or IsAVersionOfRot(v)) and 10) or 0
+    local spoiledfood = v:HasTag("spoiled") or v:HasTag("spoiledfood")
+    local delta = not container and (v:HasTag("stale") and 20 or spoiledfood) and 30)
+        or (v:HasTag("stale") and 5 or spoiledfood) and 10) or 0
     inst.foodscore = inst.foodscore + (delta > 0 and ((delta * preparedmult) * stackmult) or delta)
 end
 
@@ -1655,11 +1649,11 @@ local function IsProperContainer(owner)
 end
 
 local function TrySpawnIcon(v, owner, intensity)
-    local nearbyicon = FindEntity(v, 2, nil, {"ratmask_stinklines"})
+    local nearbyicon = FindEntity(v, 2, nil, {"um_ratmask_stinklines"})
     if nearbyicon then
         nearbyicon:Resize(intensity)
     else
-        local icon = SpawnPrefab("ratmask_stinklines")
+        local icon = SpawnPrefab("um_ratmask_stinklines")
         local x, y, z = v.Transform:GetWorldPosition()
         icon.Network:SetClassifiedTarget(owner)
         icon.Transform:SetPosition(x, y, z)
@@ -1673,7 +1667,7 @@ end
 
 local function GetIntensity(item, in_container)
     return not in_container and (item:HasTag("stale") and .75 or item:HasTag("spoiled") and .8)
-        or (item:HasTag("stale") and .5 or item:HasTag("spoiled") and .75) or IsAVersionOfRot(item) and 1
+        or (item:HasTag("stale") and .5 or item:HasTag("spoiled") and .75) or item:HasTag("spoiledfood") and 1
 end
 
 local function DDVisual(owner, proxy, visual)
@@ -1725,8 +1719,7 @@ local function DDScore(inst, proxy, scanned_masters)
 end
 
 local function FoodScoreCalculations(container, v, owner)
-    local intensity = not container and (v:HasTag("stale") and .75 or v:HasTag("spoiled") and .8)
-        or (v:HasTag("stale") and .5 or v:HasTag("spoiled") and .75) or IsAVersionOfRot(v) and 1
+    local intensity = GetIntensity(v, container)
     if not intensity then return end
     TrySpawnIcon(v, owner, intensity)
 end
@@ -2021,7 +2014,7 @@ local function ratmask_stinkfn()
 
     inst:AddTag("FX")
     inst:AddTag("NOCLICK")
-    inst:AddTag("ratmask_stinklines")
+    inst:AddTag("um_ratmask_stinklines")
 
     inst.entity:SetPristine()
 
@@ -2264,6 +2257,6 @@ return Prefab("um_rat", fn, assets, prefabs),
     Prefab("um_ratdroppings", fn_droppings, assets),
     Prefab("um_ratwarning", fn_warning),
     Prefab("um_ratmask_icon", ratmask_iconfn, iconassets),
-    Prefab("ratmask_stinklines", ratmask_stinkfn),
+    Prefab("um_ratmask_stinklines", ratmask_stinkfn),
     Prefab("hat_ratmask", ratfn),
     Prefab("um_ratring_fx", ratringfn)
