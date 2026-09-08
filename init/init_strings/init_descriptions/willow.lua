@@ -36,12 +36,12 @@ DESCRIBE.CALIFORNIAKING = "It would be better if it were on fire."
 -- CaliforniaKing
 
 ANNOUNCE.ANNOUNCE_RNEFOG = "H-hello?"
-DESCRIBE.UNCOMPROMISING_RAT = "Stay away from Bernie!"
-DESCRIBE.UNCOMPROMISING_RATHERD = "Eugh. Can we just smash it shut?"
-DESCRIBE.UNCOMPROMISING_RATBURROW = "Eugh. Can we just smash it shut?"
-DESCRIBE.UNCOMPROMISING_WINKYBURROW =
+DESCRIBE.UM_RAT = "Stay away from Bernie!"
+DESCRIBE.UM_RATHERD = "Eugh. Can we just smash it shut?"
+DESCRIBE.UM_RATBURROW = "Eugh. Can we just smash it shut?"
+DESCRIBE.UM_WINKYBURROW =
 "I'm not sticking my hand in there, I'll probably get bit by a rat!"
-DESCRIBE.UNCOMPROMISING_WINKYHOMEBURROW =
+DESCRIBE.UM_WINKYHOMEBURROW =
 "It smells! But I can take whatever I want from it."
 
 DESCRIBE.WINKY = {

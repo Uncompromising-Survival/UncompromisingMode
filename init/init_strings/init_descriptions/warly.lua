@@ -38,12 +38,12 @@ ANNOUNCE.ANNOUNCE_DETACH_BUFF_CALIFORNIAKING =
 DESCRIBE.CALIFORNIAKING = "I don't want to touch this thing again...."
 -- CaliforniaKing
 
-DESCRIBE.UNCOMPROMISING_RAT =
+DESCRIBE.UM_RAT =
 "Don't let the filthy little pestes near my kitchen!"
-DESCRIBE.UNCOMPROMISING_RATHERD = "A trouble trou!"
-DESCRIBE.UNCOMPROMISING_RATBURROW = "A trouble trou!"
-DESCRIBE.UNCOMPROMISING_WINKYBURROW = "That better not cause any trouble."
-DESCRIBE.UNCOMPROMISING_WINKYHOMEBURROW =
+DESCRIBE.UM_RATHERD = "A trouble trou!"
+DESCRIBE.UM_RATBURROW = "A trouble trou!"
+DESCRIBE.UM_WINKYBURROW = "That better not cause any trouble."
+DESCRIBE.UM_WINKYHOMEBURROW =
 "I'm not trusting any ingredients that come from there!"
 
 DESCRIBE.WINKY = {

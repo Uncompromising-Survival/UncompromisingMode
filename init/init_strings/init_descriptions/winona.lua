@@ -39,13 +39,13 @@ DESCRIBE.CALIFORNIAKING = "What on earth is that?"
 -- CaliforniaKing
 
 ANNOUNCE.ANNOUNCE_RNEFOG = "The fog's rollin' in. What are you up to, Charlie?"
-DESCRIBE.UNCOMPROMISING_RAT =
+DESCRIBE.UM_RAT =
 "That's one part of home I was hoping NOT to see again."
-DESCRIBE.UNCOMPROMISING_RATHERD = "Seems you've been ratted out!"
-DESCRIBE.UNCOMPROMISING_RATBURROW = "Seems you've been ratted out!"
-DESCRIBE.UNCOMPROMISING_WINKYBURROW =
+DESCRIBE.UM_RATHERD = "Seems you've been ratted out!"
+DESCRIBE.UM_RATBURROW = "Seems you've been ratted out!"
+DESCRIBE.UM_WINKYBURROW =
 "It wasn't made with structural integrity in mind."
-DESCRIBE.UNCOMPROMISING_WINKYHOMEBURROW =
+DESCRIBE.UM_WINKYHOMEBURROW =
 "Just keep the goods flowing,and there'll be no issues."
 
 DESCRIBE.WINKY = {

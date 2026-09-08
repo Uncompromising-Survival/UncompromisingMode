@@ -114,10 +114,10 @@ RECIPE_DESC.UM_SCRAPPER = "Reduce anything to their base components."
 RECIPE_DESC.PLAUNT_MANNY = "She rubs her knees when she knows something bad's going to happen."
 
 --Winky
-RECIPE_DESC.UNCOMPROMISING_WINKYBURROW = "A den of annoying little hairballs."
-RECIPE_DESC.UNCOMPROMISING_WINKYHOMEBURROW = "Leads back to home."
---[[RECIPE_DESC.UNCOMPROMISING_WINKYBURROW = "A network of interconnected burrows."
-RECIPE_DESC.UNCOMPROMISING_WINKYHOMEBURROW = "Hole, sweet hole." --Don't let Canis read this]]
+RECIPE_DESC.UM_WINKYBURROW = "A den of annoying little hairballs."
+RECIPE_DESC.UM_WINKYHOMEBURROW = "Leads back to home."
+--[[RECIPE_DESC.UM_WINKYBURROW = "A network of interconnected burrows."
+RECIPE_DESC.UM_WINKYHOMEBURROW = "Hole, sweet hole." --Don't let Canis read this]]
 
 --Wixie
 RECIPE_DESC.MEATRACK_HAT = "The jerkiest of hats."

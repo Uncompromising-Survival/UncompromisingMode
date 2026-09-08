@@ -38,11 +38,11 @@ DESCRIBE.CALIFORNIAKING = "That better not be what I think it is."
 -- CaliforniaKing
 
 ANNOUNCE.ANNOUNCE_RNEFOG = "I'm not sure aboot this..."
-DESCRIBE.UNCOMPROMISING_RAT = "More vermin come to steal my kit!"
-DESCRIBE.UNCOMPROMISING_RATHERD = "That's where the varmints are shackin' up!"
-DESCRIBE.UNCOMPROMISING_RATBURROW = "That's where the varmints are shackin' up!"
-DESCRIBE.UNCOMPROMISING_WINKYBURROW = "This one looks like it's gonna collapse."
-DESCRIBE.UNCOMPROMISING_WINKYHOMEBURROW =
+DESCRIBE.UM_RAT = "More vermin come to steal my kit!"
+DESCRIBE.UM_RATHERD = "That's where the varmints are shackin' up!"
+DESCRIBE.UM_RATBURROW = "That's where the varmints are shackin' up!"
+DESCRIBE.UM_WINKYBURROW = "This one looks like it's gonna collapse."
+DESCRIBE.UM_WINKYHOMEBURROW =
 "It's the big rats home, nice of them to help out, eh?"
 
 DESCRIBE.WINKY = {

@@ -36,13 +36,13 @@ DESCRIBE.CALIFORNIAKING = "I will defeat drink!"
 -- CaliforniaKing
 
 ANNOUNCE.ANNOUNCE_RNEFOG = "S-STOP STARING AT WOLFGANG!!"
-DESCRIBE.UNCOMPROMISING_RAT = "Is greedy little hair puff!"
-DESCRIBE.UNCOMPROMISING_RATHERD = "Beady eye hole make Wolfgang uncomfortable."
-DESCRIBE.UNCOMPROMISING_RATBURROW =
+DESCRIBE.UM_RAT = "Is greedy little hair puff!"
+DESCRIBE.UM_RATHERD = "Beady eye hole make Wolfgang uncomfortable."
+DESCRIBE.UM_RATBURROW =
 "Beady eye hole make Wolfgang uncomfortable."
-DESCRIBE.UNCOMPROMISING_WINKYBURROW =
+DESCRIBE.UM_WINKYBURROW =
 "Wolfgang is not sure if he can trust this rat..."
-DESCRIBE.UNCOMPROMISING_WINKYHOMEBURROW =
+DESCRIBE.UM_WINKYHOMEBURROW =
 "Very, smelly rat hole. But there are goodies inside?"
 
 DESCRIBE.WINKY = {

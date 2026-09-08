@@ -33,11 +33,11 @@ DESCRIBE.CALIFORNIAKING = "What foul amalgam is this?"
 -- CaliforniaKing
 
 ANNOUNCE.ANNOUNCE_RNEFOG = "It's not just Charlie out there, is it?"
-DESCRIBE.UNCOMPROMISING_RAT = "Filthy vermin!"
-DESCRIBE.UNCOMPROMISING_RATHERD = "I don't recall granting you vermin permission to settle in my world."
-DESCRIBE.UNCOMPROMISING_RATBURROW = "I don't recall granting you vermin permission to settle in my world."
-DESCRIBE.UNCOMPROMISING_WINKYBURROW = "I hope that wont be causing any issues."
-DESCRIBE.UNCOMPROMISING_WINKYHOMEBURROW = "Filthy and full of junk"
+DESCRIBE.UM_RAT = "Filthy vermin!"
+DESCRIBE.UM_RATHERD = "I don't recall granting you vermin permission to settle in my world."
+DESCRIBE.UM_RATBURROW = "I don't recall granting you vermin permission to settle in my world."
+DESCRIBE.UM_WINKYBURROW = "I hope that wont be causing any issues."
+DESCRIBE.UM_WINKYHOMEBURROW = "Filthy and full of junk"
 
 DESCRIBE.WINKY = {
     GENERIC = "I didn't bring %s here, and I certainly didn't make her!",

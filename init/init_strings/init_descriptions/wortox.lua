@@ -37,11 +37,11 @@ DESCRIBE.CALIFORNIAKING = "Hyuyu, I should spike a mortal's food with this."
 -- CaliforniaKing
 
 ANNOUNCE.ANNOUNCE_RNEFOG = "Do you feel it loom? Our impending doom?"
-DESCRIBE.UNCOMPROMISING_RAT = "You can't prank a prankster!"
-DESCRIBE.UNCOMPROMISING_RATHERD = "A portal to the vermin dimension."
-DESCRIBE.UNCOMPROMISING_RATBURROW = "I should prank them back. Maybe I'll toss in a snake."
-DESCRIBE.UNCOMPROMISING_WINKYBURROW = "Looking at the burrow makes my brow furrow."
-DESCRIBE.UNCOMPROMISING_WINKYHOMEBURROW =
+DESCRIBE.UM_RAT = "You can't prank a prankster!"
+DESCRIBE.UM_RATHERD = "A portal to the vermin dimension."
+DESCRIBE.UM_RATBURROW = "I should prank them back. Maybe I'll toss in a snake."
+DESCRIBE.UM_WINKYBURROW = "Looking at the burrow makes my brow furrow."
+DESCRIBE.UM_WINKYHOMEBURROW =
 "It's not a dwelling most compelling."
 
 DESCRIBE.WINKY = {

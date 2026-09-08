@@ -37,11 +37,11 @@ ANNOUNCE.ANNOUNCE_DETACH_BUFF_CALIFORNIAKING =
 DESCRIBE.CALIFORNIAKING = "There's no timeline where I'd find this appealing."
 -- CaliforniaKing
 
-DESCRIBE.UNCOMPROMISING_RAT = "Shoo! Get away from here!"
-DESCRIBE.UNCOMPROMISING_RATHERD = "How did they find the time to repopulate so fast?"
-DESCRIBE.UNCOMPROMISING_RATBURROW = "Is this where you kept my clocks?"
-DESCRIBE.UNCOMPROMISING_WINKYBURROW = "It wasn't made to last."
-DESCRIBE.UNCOMPROMISING_WINKYHOMEBURROW =
+DESCRIBE.UM_RAT = "Shoo! Get away from here!"
+DESCRIBE.UM_RATHERD = "How did they find the time to repopulate so fast?"
+DESCRIBE.UM_RATBURROW = "Is this where you kept my clocks?"
+DESCRIBE.UM_WINKYBURROW = "It wasn't made to last."
+DESCRIBE.UM_WINKYHOMEBURROW =
 "At least this one is helping. Although I'd rather not risk it."
 
 DESCRIBE.WINKY = {

@@ -47,12 +47,12 @@ DESCRIBE.CCTRINKET_FREDDO = "The name \"Freddo\" is etched onto it."
 DESCRIBE.CCTRINKET_NAMES = "Someone probably needs this."
 
 -- Content Creators
-DESCRIBE.UNCOMPROMISING_RAT = "They're rataliating!"
-DESCRIBE.UNCOMPROMISING_RATHERD = "It must lead to their labo-rat-ory."
-DESCRIBE.UNCOMPROMISING_RATBURROW = "It must lead to their labo-rat-ory."
-DESCRIBE.UNCOMPROMISING_WINKYBURROW =
+DESCRIBE.UM_RAT = "They're rataliating!"
+DESCRIBE.UM_RATHERD = "It must lead to their labo-rat-ory."
+DESCRIBE.UM_RATBURROW = "It must lead to their labo-rat-ory."
+DESCRIBE.UM_WINKYBURROW =
 "She keeps leaving these around, I hope no rats come out..."
-DESCRIBE.UNCOMPROMISING_WINKYHOMEBURROW =
+DESCRIBE.UM_WINKYHOMEBURROW =
 "I think that's supposed to be that rat things home. Maybe I should look inside?"
 
 DESCRIBE.WINKY = {

@@ -71,14 +71,14 @@ DESCRIBE.CALIFORNIAKING = "I don't think I'm old enough to drink this."
 -- CaliforniaKing
 
 ANNOUNCE.ANNOUNCE_RNEFOG = "Whose out there? Show yourself!"
-DESCRIBE.UNCOMPROMISING_RAT = "Begone, you mangey thing!"
-DESCRIBE.UNCOMPROMISING_RATHERD =
+DESCRIBE.UM_RAT = "Begone, you mangey thing!"
+DESCRIBE.UM_RATHERD =
 "Even if we fill it in, they will find another way."
-DESCRIBE.UNCOMPROMISING_RATBURROW =
+DESCRIBE.UM_RATBURROW =
 "Even if we fill it in, they will find another way."
-DESCRIBE.UNCOMPROMISING_WINKYBURROW =
+DESCRIBE.UM_WINKYBURROW =
 "What treasures lie within? We may never know..."
-DESCRIBE.UNCOMPROMISING_WINKYHOMEBURROW =
+DESCRIBE.UM_WINKYHOMEBURROW =
 "Not sure I want anything from a hole like that."
 
 DESCRIBE.WINKY = {

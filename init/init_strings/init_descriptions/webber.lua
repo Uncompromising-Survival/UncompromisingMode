@@ -37,12 +37,12 @@ DESCRIBE.CALIFORNIAKING = "Surely we've eaten worse."
 -- CaliforniaKing
 
 ANNOUNCE.ANNOUNCE_RNEFOG = "W-what's that sound? We're scared!"
-DESCRIBE.UNCOMPROMISING_RAT = "Nice fur!"
-DESCRIBE.UNCOMPROMISING_RATHERD = "It's looking at us! Hey there little guy!"
-DESCRIBE.UNCOMPROMISING_RATBURROW = "It's looking at us! Hey there little guy!"
-DESCRIBE.UNCOMPROMISING_WINKYBURROW =
+DESCRIBE.UM_RAT = "Nice fur!"
+DESCRIBE.UM_RATHERD = "It's looking at us! Hey there little guy!"
+DESCRIBE.UM_RATBURROW = "It's looking at us! Hey there little guy!"
+DESCRIBE.UM_WINKYBURROW =
 "It's one of her treasure troves, she's a helpful rat."
-DESCRIBE.UNCOMPROMISING_WINKYHOMEBURROW =
+DESCRIBE.UM_WINKYHOMEBURROW =
 "She puts so many things in there! I hope she doesn't mind if we peek."
 
 DESCRIBE.WINKY = {

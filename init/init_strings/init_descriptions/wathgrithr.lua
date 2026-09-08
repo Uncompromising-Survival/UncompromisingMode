@@ -37,12 +37,12 @@ DESCRIBE.CALIFORNIAKING = "A challenge in a glass?"
 DESCRIBE.FLORAL_BANDAGE = "The flowers and honey bring vitality to the broken!"
 
 ANNOUNCE.ANNOUNCE_RNEFOG = "A warrior needs to stay alert!"
-DESCRIBE.UNCOMPROMISING_RAT = "And thus cometh a plague upon both our houses!"
-DESCRIBE.UNCOMPROMISING_RATHERD = "Den of the little beasts!"
-DESCRIBE.UNCOMPROMISING_RATBURROW = "Den of the little beasts!"
-DESCRIBE.UNCOMPROMISING_WINKYBURROW =
+DESCRIBE.UM_RAT = "And thus cometh a plague upon both our houses!"
+DESCRIBE.UM_RATHERD = "Den of the little beasts!"
+DESCRIBE.UM_RATBURROW = "Den of the little beasts!"
+DESCRIBE.UM_WINKYBURROW =
 "Goods travel with the speed of Ratatoskr."
-DESCRIBE.UNCOMPROMISING_WINKYHOMEBURROW =
+DESCRIBE.UM_WINKYHOMEBURROW =
 "Lair of the beast, and the treasure that lie within."
 
 DESCRIBE.WINKY = {

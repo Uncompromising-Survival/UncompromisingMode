@@ -45,11 +45,11 @@ DESCRIBE.CCTRINKET_DON = "Detailed history, previous scribe. \"Don.\""
 DESCRIBE.CCTRINKET_JAZZY = "Engravings. \"J a z z y\"?"
 DESCRIBE.CCTRINKET_FREDDO = "Engravings. \"F r e d d o\"?"
 -- Content Creators
-DESCRIBE.UNCOMPROMISING_RAT = "Instigator, problems. Rather dead."
-DESCRIBE.UNCOMPROMISING_RATHERD = "Trail, rodents. Nearby."
-DESCRIBE.UNCOMPROMISING_RATBURROW = "Belongings, stolen."
-DESCRIBE.UNCOMPROMISING_WINKYBURROW = "Tunnel, rodent ally."
-DESCRIBE.UNCOMPROMISING_WINKYHOMEBURROW = "Territory, sentient rat."
+DESCRIBE.UM_RAT = "Instigator, problems. Rather dead."
+DESCRIBE.UM_RATHERD = "Trail, rodents. Nearby."
+DESCRIBE.UM_RATBURROW = "Belongings, stolen."
+DESCRIBE.UM_WINKYBURROW = "Tunnel, rodent ally."
+DESCRIBE.UM_WINKYHOMEBURROW = "Territory, sentient rat."
 
 DESCRIBE.WINKY = {
     GENERIC = "%s, sentient rodent. Evolution improbable.",

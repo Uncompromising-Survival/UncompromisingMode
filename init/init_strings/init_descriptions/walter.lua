@@ -52,15 +52,15 @@ DESCRIBE.CALIFORNIAKING = "I'd dare Wortox to finish the whole thing!"
 DESCRIBE.FLORAL_BANDAGE = "This stuff's potent!"
 
 ANNOUNCE.ANNOUNCE_RNEFOG = "ooOOOOoo, it's getting VERY spooky now!"
-DESCRIBE.UNCOMPROMISING_RAT =
+DESCRIBE.UM_RAT =
 "I'd share, but they seem more interested in just TAKING our stuff."
-DESCRIBE.UNCOMPROMISING_RATHERD =
+DESCRIBE.UM_RATHERD =
 "A Pine Tree Pioneer never enters a rat den head first!"
-DESCRIBE.UNCOMPROMISING_RATBURROW =
+DESCRIBE.UM_RATBURROW =
 "A Pine Tree Pioneer never enters a rat den head first!"
-DESCRIBE.UNCOMPROMISING_WINKYBURROW =
+DESCRIBE.UM_WINKYBURROW =
 "Wow! She can dig holes just as good as Woby!"
-DESCRIBE.UNCOMPROMISING_WINKYHOMEBURROW =
+DESCRIBE.UM_WINKYHOMEBURROW =
 "She puts everything in there, I hope she doesn't mind sharing."
 
 DESCRIBE.WINKY = {

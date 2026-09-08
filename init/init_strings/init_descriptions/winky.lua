@@ -52,12 +52,12 @@ DESCRIBE.CCTRINKET_JAZZY = "Looks pretty jazzy."
 DESCRIBE.CCTRINKET_FREDDO = "There are stupid scratches etched into it."
 -- Content Creators
 
-DESCRIBE.UNCOMPROMISING_RAT = "Hello, family."
-DESCRIBE.UNCOMPROMISING_RATHERD = "We're all connected."
-DESCRIBE.UNCOMPROMISING_RATBURROW = "We're all connected."
-DESCRIBE.UNCOMPROMISING_WINKYBURROW =
+DESCRIBE.UM_RAT = "Hello, family."
+DESCRIBE.UM_RATHERD = "We're all connected."
+DESCRIBE.UM_RATBURROW = "We're all connected."
+DESCRIBE.UM_WINKYBURROW =
 "There are many tunnels that lead to home."
-DESCRIBE.UNCOMPROMISING_WINKYHOMEBURROW = "My beautiful home!"
+DESCRIBE.UM_WINKYHOMEBURROW = "My beautiful home!"
 
 DESCRIBE.WINKY = {
     GENERIC = "Do I know you?",

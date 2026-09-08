@@ -37,12 +37,12 @@ DESCRIBE.CALIFORNIAKING = "What do I have left to lose?"
 -- CaliforniaKing
 
 ANNOUNCE.ANNOUNCE_RNEFOG = "Death peers at me from the darkness."
-DESCRIBE.UNCOMPROMISING_RAT =
+DESCRIBE.UM_RAT =
 "Wreched daemons wrought to topple the pillars of vanity."
-DESCRIBE.UNCOMPROMISING_RATHERD = "But one mouth of a den of thieves."
-DESCRIBE.UNCOMPROMISING_RATBURROW = "But one mouth of a den of thieves."
-DESCRIBE.UNCOMPROMISING_WINKYBURROW = "It leads everywhere, and nowhere."
-DESCRIBE.UNCOMPROMISING_WINKYHOMEBURROW = "A wretched vile home."
+DESCRIBE.UM_RATHERD = "But one mouth of a den of thieves."
+DESCRIBE.UM_RATBURROW = "But one mouth of a den of thieves."
+DESCRIBE.UM_WINKYBURROW = "It leads everywhere, and nowhere."
+DESCRIBE.UM_WINKYHOMEBURROW = "A wretched vile home."
 
 DESCRIBE.WINKY = {
     GENERIC = "Live life while you can, %s.",

@@ -36,11 +36,11 @@ DESCRIBE.CALIFORNIAKING = "Glurgh... this is bad drink!"
 -- CaliforniaKing
 
 ANNOUNCE.ANNOUNCE_RNEFOG = "Stop looking!!"
-DESCRIBE.UNCOMPROMISING_RAT = "It look like Spiderfolk, but it squeaking..?"
-DESCRIBE.UNCOMPROMISING_RATHERD = "Little eyes in hole! Hello!"
-DESCRIBE.UNCOMPROMISING_RATBURROW = "Little eyes in hole! Hello!"
-DESCRIBE.UNCOMPROMISING_WINKYBURROW = "Why you burying things in here..?"
-DESCRIBE.UNCOMPROMISING_WINKYHOMEBURROW =
+DESCRIBE.UM_RAT = "It look like Spiderfolk, but it squeaking..?"
+DESCRIBE.UM_RATHERD = "Little eyes in hole! Hello!"
+DESCRIBE.UM_RATBURROW = "Little eyes in hole! Hello!"
+DESCRIBE.UM_WINKYBURROW = "Why you burying things in here..?"
+DESCRIBE.UM_WINKYHOMEBURROW =
 "Oh. This where stuff ends up? How it get here?"
 
 DESCRIBE.WINKY = {

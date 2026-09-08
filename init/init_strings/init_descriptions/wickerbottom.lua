@@ -122,14 +122,14 @@ DESCRIBE.CALIFORNIAKING = "Would be useful if I were suffering from allergies."
 -- CaliforniaKing
 
 ANNOUNCE.ANNOUNCE_RNEFOG = "This fog makes it hard to view my surroundings."
-DESCRIBE.UNCOMPROMISING_RAT =
+DESCRIBE.UM_RAT =
 "Rodentia kleptomanis, and quite the large specimen!"
-DESCRIBE.UNCOMPROMISING_RATHERD =
+DESCRIBE.UM_RATHERD =
 "One entrance to a no doubt vast tunnel system!"
-DESCRIBE.UNCOMPROMISING_RATBURROW =
+DESCRIBE.UM_RATBURROW =
 "One entrance to a no doubt vast tunnel system!"
-DESCRIBE.UNCOMPROMISING_WINKYBURROW = "Another entrance, albeit temporary."
-DESCRIBE.UNCOMPROMISING_WINKYHOMEBURROW =
+DESCRIBE.UM_WINKYBURROW = "Another entrance, albeit temporary."
+DESCRIBE.UM_WINKYHOMEBURROW =
 "Well, at least this one appears to be providing us instead."
 
 DESCRIBE.WINKY = {

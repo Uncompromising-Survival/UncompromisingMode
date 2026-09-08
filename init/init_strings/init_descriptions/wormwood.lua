@@ -33,11 +33,11 @@ DESCRIBE.CALIFORNIAKING = "Smelly drink"
 -- CaliforniaKing
 
 ANNOUNCE.ANNOUNCE_RNEFOG = "Being watched"
-DESCRIBE.UNCOMPROMISING_RAT = "Hairy stuff stealer"
-DESCRIBE.UNCOMPROMISING_RATHERD = "Squeaker hole"
-DESCRIBE.UNCOMPROMISING_RATBURROW = "Squeaker hole"
-DESCRIBE.UNCOMPROMISING_WINKYBURROW = "Large Squeakers hole"
-DESCRIBE.UNCOMPROMISING_WINKYHOMEBURROW = "Large Squeaker hole full of things"
+DESCRIBE.UM_RAT = "Hairy stuff stealer"
+DESCRIBE.UM_RATHERD = "Squeaker hole"
+DESCRIBE.UM_RATBURROW = "Squeaker hole"
+DESCRIBE.UM_WINKYBURROW = "Large Squeakers hole"
+DESCRIBE.UM_WINKYHOMEBURROW = "Large Squeaker hole full of things"
 
 DESCRIBE.WINKY = {
     GENERIC = "Hello large squeaker!",
