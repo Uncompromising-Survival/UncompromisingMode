@@ -1168,7 +1168,7 @@ local function MakeScoutBurrow(inst)
             ratcrew3.Transform:SetPosition(x, 0, z)
             ratcrew3:AddTag("ratscout")
 
-            local burrow = SpawnPrefab("uncompromising_scoutburrow")
+            local burrow = SpawnPrefab("um_scoutburrow")
             burrow.Transform:SetPosition(inst.x1, 0, inst.z1)
             burrow.components.herd:AddMember(ratcrew)
             burrow.components.herd:AddMember(ratcrew2)

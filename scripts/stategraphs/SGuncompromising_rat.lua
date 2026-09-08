@@ -57,7 +57,7 @@ local states =
         end,
 
         ontimeout= function(inst)
-            local scoutratvalue = inst.prefab == "uncompromising_scoutrat" and 120 or 0
+            local scoutratvalue = inst.prefab == "um_scoutrat" and 120 or 0
         
             if (inst.components.inventory:NumItems() ~= 0 or inst.prefab == "um_packrat" or inst.components.health:GetPercent() < 1) and inst.components.herdmember and inst.components.herdmember:GetHerd() and inst.components.herdmember:GetHerd():HasTag("ratburrow") and ((inst.sg.mem.emerge_time or 0) + (TUNING.CARRAT.EMERGED_TIME_LIMIT + scoutratvalue) / 2.5) < GetTime() then
                 inst.sg:GoToState("submerge")
