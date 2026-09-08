@@ -2045,8 +2045,8 @@ end
 local function FindClosestPart(owner)
     local ix, iy, iz = owner.Transform:GetWorldPosition()
 
-    local burrows = TheSim:FindEntities(ix, iy, iz, 2000, { "ratburrow" })
-    if burrows then
+    local burrows = TheSim:FindEntities(ix, iy, iz, 2000, {"ratburrow"})
+    if next(burrows) and #burrows > 0 then
         for i, v in ipairs(burrows) do
             if owner.SoundEmitter then
                 owner:DoTaskInTime(i, function(owner)
@@ -2072,7 +2072,7 @@ local function FindClosestPart(owner)
                 end)
             end
         end
-    elseif not burrows or burrows <= 0 then
+    else
         inst.components.talker:Say(GetString(owner, "ANNOUNCE_NORATBURROWS"))
     end
 end
