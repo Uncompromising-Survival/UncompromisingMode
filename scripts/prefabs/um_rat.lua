@@ -1107,6 +1107,8 @@ local function EndRaid(inst, announce)
     inst:RemoveTag("raiding")
     inst:AddTag("ratburrow")
 
+    inst.AnimState:OverrideMultColour()
+
     local herd = inst.components.herd
     herd.updateposincombat = false
     herd:SetUpdateRange(nil)
@@ -1151,6 +1153,8 @@ local function BecomeRaidBurrow(inst, dospawns, announce)
         inst:AddTag("NOBLOCK")
         inst:AddTag("raiding")
         inst:RemoveTag("ratburrow")
+
+        inst.AnimState:OverrideMultColour(1, 1, 1, 0)
 
         local herd = inst.components.herd
         herd.updateposincombat = true
