@@ -346,7 +346,7 @@ ANNOUNCE.ANNOUNCE_RATSNIFFER_BURROWS = {
 
 DESCRIBE.PIED_RAT = "He's leading all those dang varmints!"
 DESCRIBE.PIED_PIPER_FLUTE = "Those varmints will have to listen to me!"
-DESCRIBE.UNCOMPROMISING_PACKRAT = "Darn varmints!"
+DESCRIBE.UM_PACKRAT = "Darn varmints!"
 
 ANNOUNCE.ANNOUNCE_PORTABLEBOAT_SINK =
 "I'm going to lose my gear if I don't get to shore!"

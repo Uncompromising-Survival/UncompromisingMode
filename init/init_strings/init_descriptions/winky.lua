@@ -404,7 +404,7 @@ ANNOUNCE.ANNOUNCE_RATSNIFFER_BURROWS = {
 
 DESCRIBE.PIED_RAT = "Give me that, you're playing it wrong."
 DESCRIBE.PIED_PIPER_FLUTE = "I love to play songs!"
-DESCRIBE.UNCOMPROMISING_PACKRAT = "I taught them to wear that."
+DESCRIBE.UM_PACKRAT = "I taught them to wear that."
 
 ANNOUNCE.ANNOUNCE_PORTABLEBOAT_SINK = "No! I do not want to get my fur wet!"
 

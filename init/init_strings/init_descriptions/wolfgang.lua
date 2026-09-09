@@ -343,7 +343,7 @@ ANNOUNCE.ANNOUNCE_RATSNIFFER_BURROWS = {
 
 DESCRIBE.PIED_RAT = "Aaaah! Biggest rat!"
 DESCRIBE.PIED_PIPER_FLUTE = "At least rat is dead."
-DESCRIBE.UNCOMPROMISING_PACKRAT = "Little rat has backpack!"
+DESCRIBE.UM_PACKRAT = "Little rat has backpack!"
 
 ANNOUNCE.ANNOUNCE_PORTABLEBOAT_SINK = "Floaty boat is sinking!"
 

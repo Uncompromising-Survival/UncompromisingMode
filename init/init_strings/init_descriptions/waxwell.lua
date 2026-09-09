@@ -331,7 +331,7 @@ ANNOUNCE.ANNOUNCE_RATSNIFFER_BURROWS = {
 
 DESCRIBE.PIED_RAT = "That poor suit, ruined!"
 DESCRIBE.PIED_PIPER_FLUTE = "I am NOT touching that, let alone putting it on my mouth."
-DESCRIBE.UNCOMPROMISING_PACKRAT = "Think you're clever, do you?"
+DESCRIBE.UM_PACKRAT = "Think you're clever, do you?"
 
 ANNOUNCE.ANNOUNCE_PORTABLEBOAT_SINK = "If I drown, I'm leaving you behind."
 

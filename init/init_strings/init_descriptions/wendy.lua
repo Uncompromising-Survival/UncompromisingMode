@@ -344,7 +344,7 @@ ANNOUNCE.ANNOUNCE_RATSNIFFER_BURROWS = {
 
 DESCRIBE.PIED_RAT = "What a horrible sound."
 DESCRIBE.PIED_PIPER_FLUTE = "Filled with the spit of that beast."
-DESCRIBE.UNCOMPROMISING_PACKRAT =
+DESCRIBE.UM_PACKRAT =
 "Your pack will not help you carry the burden of the world."
 
 ANNOUNCE.ANNOUNCE_PORTABLEBOAT_SINK = "This raft is about to leave me to drown."

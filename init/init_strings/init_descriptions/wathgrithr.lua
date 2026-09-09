@@ -333,7 +333,7 @@ ANNOUNCE.ANNOUNCE_RATSNIFFER_BURROWS = {
 
 DESCRIBE.PIED_RAT = "I will fell you, commander!"
 DESCRIBE.PIED_PIPER_FLUTE = "The songs I could play!"
-DESCRIBE.UNCOMPROMISING_PACKRAT = "Coward, stop running off!"
+DESCRIBE.UM_PACKRAT = "Coward, stop running off!"
 
 ANNOUNCE.ANNOUNCE_PORTABLEBOAT_SINK =
 "We live together or drown together, my faithful vessel!"

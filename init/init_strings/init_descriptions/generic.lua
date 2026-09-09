@@ -434,7 +434,7 @@ ANNOUNCE.ANNOUNCE_RATSNIFFER_BURROWS = {
 }
 DESCRIBE.PIED_RAT = "He must be leading the vermin!"
 DESCRIBE.PIED_PIPER_FLUTE = "Maybe I could lead some of the rats myself?"
-DESCRIBE.UNCOMPROMISING_PACKRAT = "Hey! It's carrying off all of our valuables!"
+DESCRIBE.UM_PACKRAT = "Hey! It's carrying off all of our valuables!"
 
 ANNOUNCE.ANNOUNCE_PORTABLEBOAT_SINK = "I can't retrieve this raft if I drown!"
 

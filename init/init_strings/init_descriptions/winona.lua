@@ -358,7 +358,7 @@ ANNOUNCE.ANNOUNCE_RATSNIFFER_BURROWS = {
 
 DESCRIBE.PIED_RAT = "Must be the boss of those rats."
 DESCRIBE.PIED_PIPER_FLUTE = "I never was the best leader."
-DESCRIBE.UNCOMPROMISING_PACKRAT = "I think we've found ourselves a target."
+DESCRIBE.UM_PACKRAT = "I think we've found ourselves a target."
 
 ANNOUNCE.ANNOUNCE_PORTABLEBOAT_SINK =
 "This thing is about to pack up and leave me sinking!"

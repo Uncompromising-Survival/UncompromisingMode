@@ -363,7 +363,7 @@ ANNOUNCE.ANNOUNCE_RATSNIFFER_BURROWS = {
 
 DESCRIBE.PIED_RAT = "Magic source, compulsion. Priority!"
 DESCRIBE.PIED_PIPER_FLUTE = "Accessory, compulsion."
-DESCRIBE.UNCOMPROMISING_PACKRAT = "Belongings, located!"
+DESCRIBE.UM_PACKRAT = "Belongings, located!"
 
 ANNOUNCE.ANNOUNCE_PORTABLEBOAT_SINK = "Value minimal! Escape!"
 

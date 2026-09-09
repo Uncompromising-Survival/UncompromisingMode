@@ -337,7 +337,7 @@ ANNOUNCE.ANNOUNCE_RATSNIFFER_BURROWS = {
 
 DESCRIBE.PIED_RAT = "Hyuyu, do you take requests?"
 DESCRIBE.PIED_PIPER_FLUTE = "I'll play a song, and the rats will play along."
-DESCRIBE.UNCOMPROMISING_PACKRAT = "Ooh, this one came prepared!"
+DESCRIBE.UM_PACKRAT = "Ooh, this one came prepared!"
 
 ANNOUNCE.ANNOUNCE_PORTABLEBOAT_SINK = "I'd best hop out and onto land!"
 

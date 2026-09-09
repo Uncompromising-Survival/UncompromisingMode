@@ -316,7 +316,7 @@ ANNOUNCE.ANNOUNCE_RATSNIFFER_BURROWS = { LEVEL_1 = "Stuff stealers out there" }
 
 DESCRIBE.PIED_RAT = "Really big Squeaker"
 DESCRIBE.PIED_PIPER_FLUTE = "Toot toot toot!"
-DESCRIBE.UNCOMPROMISING_PACKRAT = "Squeaker carries more"
+DESCRIBE.UM_PACKRAT = "Squeaker carries more"
 
 ANNOUNCE.ANNOUNCE_PORTABLEBOAT_SINK = "Oh, floaty sinking!"
 

@@ -352,7 +352,7 @@ ANNOUNCE.ANNOUNCE_RATSNIFFER_BURROWS = {
 
 DESCRIBE.PIED_RAT = "Bleh! He reeks!"
 DESCRIBE.PIED_PIPER_FLUTE = "I'm holding this over the fire first."
-DESCRIBE.UNCOMPROMISING_PACKRAT = "Keep Bernie out of that backpack!"
+DESCRIBE.UM_PACKRAT = "Keep Bernie out of that backpack!"
 
 ANNOUNCE.ANNOUNCE_PORTABLEBOAT_SINK = "My life raft is about to be a dead raft!"
 

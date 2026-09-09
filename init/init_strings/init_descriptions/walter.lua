@@ -368,7 +368,7 @@ ANNOUNCE.ANNOUNCE_RATSNIFFER_BURROWS = {
 
 DESCRIBE.PIED_RAT = "Keep it down, you might hurt Woby's ears!"
 DESCRIBE.PIED_PIPER_FLUTE = "Woby doesn't want me to play it."
-DESCRIBE.UNCOMPROMISING_PACKRAT = "Whoa, he could be a great Pinetree Pioneer!"
+DESCRIBE.UM_PACKRAT = "Whoa, he could be a great Pinetree Pioneer!"
 
 ANNOUNCE.ANNOUNCE_PORTABLEBOAT_SINK =
 "I'd better find some solid ground before this thing pops!"

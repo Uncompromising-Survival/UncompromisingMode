@@ -340,7 +340,7 @@ ANNOUNCE.ANNOUNCE_RATSNIFFER_BURROWS = {
 
 DESCRIBE.PIED_RAT = "What he playing?!"
 DESCRIBE.PIED_PIPER_FLUTE = "Maybe squeakies join Mermfolk kingdom with this?"
-DESCRIBE.UNCOMPROMISING_PACKRAT = "He stealing everything!!"
+DESCRIBE.UM_PACKRAT = "He stealing everything!!"
 
 ANNOUNCE.ANNOUNCE_PORTABLEBOAT_SINK = "We go for swim now?"
 

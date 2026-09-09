@@ -17,7 +17,7 @@ NAMES.DREADEYE     = "Dread Eye"
 
 NAMES.UM_RAT = "Rat"          -- Maybe change the name with a pun with Robber or Raider, any idea ?
 NAMES.UNCOMPROMISING_CAVERAT = "Cave Rat" -- The aggressive cousin
-NAMES.UNCOMPROMISING_PACKRAT = "Pack Rat" -- The hoarding cousin
+NAMES.UM_PACKRAT = "Pack Rat" -- The hoarding cousin
 NAMES.UM_RATHERD = "Rat Burrow"
 NAMES.UM_RATBURROW = "Rat Burrow"
 NAMES.UM_WINKYBURROW = "Winky's Burrow"

@@ -358,7 +358,7 @@ ANNOUNCE.ANNOUNCE_RATSNIFFER_BURROWS = {
 
 DESCRIBE.PIED_RAT = "If it wasn't a rat behind that tune, it might be worth my time to sit and listen."
 DESCRIBE.PIED_PIPER_FLUTE = "I fear where that flute has been."
-DESCRIBE.UNCOMPROMISING_PACKRAT = "My bits and baubles! I still need those!"
+DESCRIBE.UM_PACKRAT = "My bits and baubles! I still need those!"
 
 ACTIONFAIL.CHARGE_FROM = {
     NOT_ENOUGH_CHARGE = "It's pointless to sit here and wait.",

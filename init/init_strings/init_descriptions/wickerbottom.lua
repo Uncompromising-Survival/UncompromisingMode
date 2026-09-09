@@ -458,7 +458,7 @@ ANNOUNCE.ANNOUNCE_RATSNIFFER_BURROWS = {
 
 DESCRIBE.PIED_RAT = "Drenched in filth."
 DESCRIBE.PIED_PIPER_FLUTE = "Filled with horrid diseases, I'm sure."
-DESCRIBE.UNCOMPROMISING_PACKRAT =
+DESCRIBE.UM_PACKRAT =
 "Have they gained intelligence, or did they steal it?"
 
 ANNOUNCE.ANNOUNCE_PORTABLEBOAT_SINK =
