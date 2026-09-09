@@ -5,11 +5,11 @@ local assets =
 
 local easing = require("easing")
 
-local AURA_EXCLUDE_TAGS = { "playerghost", "companion", "ghost", "shadow", "shadowminion", "noauradamage",
-    "INLIMBO", "notarget", "noattack", "flight", "flying", "dragonfly", "lavae", "invisible", "rabbit", "bird" }
+local AURA_EXCLUDE_TAGS = {"playerghost", "companion", "ghost", "shadow", "shadowminion", "noauradamage",
+    "INLIMBO", "notarget", "noattack", "flight", "flying", "dragonfly", "lavae", "invisible"}
 
-local AURA_EXCLUDE_TAGS_DRAGONFLY = { "playerghost", "ghost", "shadow", "shadowminion", "noauradamage", "INLIMBO",
-    "notarget", "noattack", "flight", "flying", "dragonfly", "lavae", "invisible", "rabbit", "bird" }
+local AURA_EXCLUDE_TAGS_DRAGONFLY = {"playerghost", "ghost", "shadow", "shadowminion", "noauradamage", "INLIMBO",
+    "notarget", "noattack", "flight", "flying", "dragonfly", "lavae", "invisible"}
 
 local function OnLoad(inst, data)
     inst:Remove()
@@ -52,7 +52,7 @@ end
 local function TrySlowdown(inst, target)
     local debuffkey = inst.prefab
 
-    if (not target:HasTag("player") or target == inst.lobber) and target.components.locomotor ~= nil then
+    if target.components.locomotor then
         if target._lavavomit_speedmulttask ~= nil then
             target._lavavomit_speedmulttask:Cancel()
         end
@@ -66,8 +66,8 @@ local function TrySlowdown(inst, target)
         target.components.locomotor:SetExternalSpeedMultiplier(target, debuffkey, 0.5)
     end
 
-    if (not target:HasTag("player") or target == inst.lobber) and (inst.prefab ~= "um_lavaspit_slobber" and inst.components.propagator ~= nil or inst.prefab == "um_lavaspit_slobber") and target.components.combat ~= nil and target.components.health ~= nil and
-        not target:HasTag("dragonfly") and not target:HasTag("lavae") and target.components.burnable ~= nil then
+    if (inst.prefab ~= "um_lavaspit_slobber" and inst.components.propagator ~= nil or inst.prefab == "um_lavaspit_slobber")
+        and target.components.combat ~= nil and target.components.health ~= nil and target.components.burnable ~= nil then
         target.components.health:DoFireDamage(20, inst.lobber, true)
         if target.components.freezable ~= nil then
             if target.components.freezable:IsFrozen() then
