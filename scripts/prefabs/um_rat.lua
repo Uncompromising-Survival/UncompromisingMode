@@ -62,13 +62,13 @@ SetSharedLootTable("packrat",
 local brain = require "brains/uncompromising_ratbrain"
 local junkbrain = require "brains/uncompromising_junkratbrain"
 
+local function OnRemoved(inst)
+    TheWorld:PushEvent("DenRemoved")
+end
+
 local function OnInit(inst)
     TheWorld:PushEvent("DenSpawned")
     inst:ListenForEvent("onremove", OnRemoved)
-end
-
-local function OnRemoved(inst)
-    TheWorld:PushEvent("DenRemoved")
 end
 
 local function on_cooked_fn(inst, cooker, chef)
@@ -917,9 +917,11 @@ local function onfinishcallback(inst)
 end
 
 local function onworked(inst, worker, workleft)
-    inst.components.thief:StealItem(inst)
-    inst.components.thief:StealItem(inst)
-    inst.components.thief:StealItem(inst)
+	local inventory = inst.components.inventory
+	for i = 1, 3 do
+        local item = inventory:FindItem(function() return true end)
+        if item then inventory:DropItem(item, false, true) end
+	end
     inst.components.lootdropper:SpawnLootPrefab("rocks", inst:GetPosition())
     inst.AnimState:PlayAnimation("dig")
     inst.AnimState:PushAnimation("idle")
