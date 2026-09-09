@@ -950,7 +950,7 @@ local function BurrowKilled(inst)
         inst.components.periodicspawner:Stop()
     end]]
 
-    inst:Remove()
+    if inst.raiding then inst:Remove() end
 end
 
 local function BurrowAnim(inst)
