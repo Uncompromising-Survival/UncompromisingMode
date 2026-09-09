@@ -25,22 +25,59 @@ local carratsounds = {
 SetSharedLootTable("raidrat",
 {
 })]]
-SetSharedLootTable("ratburrow", {{"redgem", .10}, {"bluegem", .10}, {"goldnugget", 1}, {"goldnugget", .25}, {"goldnugget", .10}, {"boneshard", 1}, {"boneshard", .25}, {"boneshard", .10}})
+SetSharedLootTable("ratburrow",
+{
+    {"redgem", .10},
+    {"bluegem", .10},
+    {"goldnugget", 1},
+    {"goldnugget", .25},
+    {"goldnugget", .10},
+    {"boneshard", 1},
+    {"boneshard", .25},
+    {"boneshard", .10}
+})
 
-SetSharedLootTable("ratburrow_small", {{"redgem", .10}, {"bluegem", .10}, {"goldnugget", 1}, {"goldnugget", .25}, {"boneshard", 1}, {"boneshard", .25}})
+SetSharedLootTable("ratburrow_small",
+{
+    {"redgem", .10},
+    {"bluegem", .10},
+    {"goldnugget", 1},
+    {"goldnugget", .25},
+    {"boneshard", 1},
+    {"boneshard", .25}
+})
 
-SetSharedLootTable("packrat", {{"redgem", .10}, {"bluegem", .10}, {"goldnugget", 1}, {"goldnugget", .25}, {"goldnugget", .10}, {"boneshard", 1}, {"boneshard", .25}, {"boneshard", .10}})
+SetSharedLootTable("packrat",
+{
+    {"redgem", .10},
+    {"bluegem", .10},
+    {"goldnugget", 1},
+    {"goldnugget", .25},
+    {"goldnugget", .10},
+    {"boneshard", 1},
+    {"boneshard", .25},
+    {"boneshard", .10}
+})
 
 local brain = require "brains/uncompromising_ratbrain"
 local junkbrain = require "brains/uncompromising_junkratbrain"
 
-local function OnInit(inst) TheWorld:PushEvent("DenSpawned") end
+local function OnInit(inst)
+    TheWorld:PushEvent("DenSpawned")
+    inst:ListenForEvent("onremove", OnRemoved)
+end
 
-local function OnRemoved(inst) TheWorld:PushEvent("DenRemoved") end
+local function OnRemoved(inst)
+    TheWorld:PushEvent("DenRemoved")
+end
 
-local function on_cooked_fn(inst, cooker, chef) inst.SoundEmitter:PlaySound(inst.sounds.hit) end
+local function on_cooked_fn(inst, cooker, chef)
+    inst.SoundEmitter:PlaySound(inst.sounds.hit)
+end
 
-local function on_dropped(inst) inst.sg:GoToState("stunned") end
+local function on_dropped(inst)
+    inst.sg:GoToState("stunned")
+end
 
 local function on_burnt(inst)
     inst.components.lootdropper:DropLoot()
@@ -48,7 +85,9 @@ local function on_burnt(inst)
 end
 
 local function OnHitOther(inst, data)
-    if data.target ~= nil and data.target:HasTag("player") and not data.target:HasAnyTag("hasplaguemask", "ratfriend", "automaton", "ratwhisperer") and TUNING.DSTU.MAXHPHITTERS then data.target.components.health:DeltaPenalty(.01) end
+    if data.target and data.target:HasTag("player") and not data.target:HasAnyTag("hasplaguemask", "ratfriend", "automaton", "ratwhisperer") and TUNING.DSTU.MAXHPHITTERS then
+        data.target.components.health:DeltaPenalty(.01)
+    end
 
     --[[if data.target ~= nil and data.target:HasTag("player") and inst.components.thief ~= nil then
         inst.components.thief:StealItem(data.target)
@@ -70,7 +109,9 @@ local function OnAttacked(inst, data)
     inst.components.combat:ShareTarget(data.attacker, 30, function(dude) return dude:HasTag("raidrat") and not dude.components.health:IsDead() and not dude:HasTag("packrat") end, 10)
 end
 
-local function OnDeath(inst) if inst._item and inst._item:IsValid() then inst._item:Remove() end end
+local function OnDeath(inst)
+    if inst._item and inst._item:IsValid() then inst._item:Remove() end
+end
 
 local function OnPickup(inst, data)
     if inst._item and inst._item:IsValid() then inst._item:Remove() end
@@ -979,9 +1020,13 @@ end
 
 -- GetClosestInstWithTag(tag, inst, radius or 1000)
 
-local function AbleToAcceptTest(inst, item, giver) return true end
+local function AbleToAcceptTest(inst, item, giver)
+    return true
+end
 
-local function AcceptTest(inst, item, giver) return item.components and item.components.edible end
+local function AcceptTest(inst, item, giver)
+    return item.components and item.components.edible
+end
 
 local function OnGetItemFromPlayer(inst, giver, item)
     if item.components.edible:GetHunger() >= 75 then
@@ -1035,11 +1080,11 @@ local function OnRefuseItem(inst, giver, item)
 end
 
 local function EndRaid(inst, announce)
-	if announce then
-		local x, y, z = inst.Transform:GetWorldPosition()
-		local players = FindPlayersInRange(x, y, z, 50)
-		for i, v in ipairs(players) do v.components.talker:Say(GetString(v, "ANNOUNCE_RATRAID_OVER")) end
-	end
+    if announce then
+        local x, y, z = inst.Transform:GetWorldPosition()
+        local players = FindPlayersInRange(x, y, z, 50)
+        for i, v in ipairs(players) do v.components.talker:Say(GetString(v, "ANNOUNCE_RATRAID_OVER")) end
+    end
 
     if inst.raiding then MakeRatBurrow(inst) end
 
@@ -1053,64 +1098,81 @@ local function EndRaid(inst, announce)
     inst:RemoveTag("raiding")
     inst:AddTag("ratburrow")
 
-    UMCommonFns.RestartTimer(inst, {name = "scoutingparty", time = 1920 + math.random(480), keepexisting = true})
-
-    inst.components.workable:SetWorkable(true)
+    local herd = inst.components.herd
+    herd.updateposincombat = false
+    herd:SetUpdateRange(nil)
 
     inst.components.periodicspawner:Start()
-    inst.components.herd.updateposincombat = false
+
+    inst.components.lootdropper:SetChanceLootTable("ratburrow_small")
+
+    inst.components.workable:SetWorkable(true)
 
     --inst.entity:SetCanSleep(false)
 
     inst.raiding = false
-
-    inst:DoTaskInTime(0, OnInit)
-    inst:ListenForEvent("onremove", OnRemoved)
 end
 
-local function OnInitHerd(inst)
-    if inst.raiding == nil then inst.raiding = true end
-
+local function BecomeRaidBurrow(inst, dospawns, announce)
+    if not inst.raiding then inst.raiding = true end
     if inst.raiding then
-        for i = 1, 3 do
-            inst:DoTaskInTime((i - 1) * 15, function(inst)
-                for n = 1, (i + 1) do
-                    local x, y, z = inst.Transform:GetWorldPosition()
-                    local angle = math.random() * 8 * PI
-                    local rat = SpawnPrefab("um_rat")
-                    rat.Transform:SetPosition(x + math.cos(angle), 0, z + math.sin(angle))
-                    inst.components.herd:AddMember(rat)
-                end
+        if dospawns then
+            for i = 1, 3 do
+                inst:DoTaskInTime((i - 1) * 15, function(inst)
+                    for n = 1, (i + 1) do
+                        local x, y, z = inst.Transform:GetWorldPosition()
+                        local angle = math.random() * 8 * PI
+                        local rat = SpawnPrefab("um_rat")
+                        rat.Transform:SetPosition(x + math.cos(angle), 0, z + math.sin(angle))
+                        inst.components.herd:AddMember(rat)
+                    end
 
-                if i > 1 then
-                    local x, y, z = inst.Transform:GetWorldPosition()
-                    local angle = math.random() * 8 * PI
-                    local packrat = SpawnPrefab("um_packrat")
-                    packrat.Transform:SetPosition(x + math.cos(angle), 0, z + math.sin(angle))
-                    inst.components.herd:AddMember(packrat)
-                end
-            end)
+                    if i > 1 then
+                        local x, y, z = inst.Transform:GetWorldPosition()
+                        local angle = math.random() * 8 * PI
+                        local packrat = SpawnPrefab("um_packrat")
+                        packrat.Transform:SetPosition(x + math.cos(angle), 0, z + math.sin(angle))
+                        inst.components.herd:AddMember(packrat)
+                    end
+                end)
+            end
         end
-        inst.components.herd:SetUpdateRange(20)
-        inst:DoTaskInTime(45, EndRaid, true)
+
+        inst:AddTag("NOCLICK")
+        inst:AddTag("NOBLOCK")
         inst:AddTag("raiding")
+        inst:RemoveTag("ratburrow")
+
+        local herd = inst.components.herd
+        herd.updateposincombat = true
+        herd:SetUpdateRange(20)
+
+        inst.components.periodicspawner:Stop()
+
+        inst.components.lootdropper:SetChanceLootTable("ratburrow")
+
+        inst.components.workable:SetWorkable(false)
+
+        inst:DoTaskInTime(45, EndRaid, announce)
     end
 end
 
 local function onsave_burrow(inst, data)
-    if inst.raiding ~= nil then data.raiding = inst.raiding end
-    if inst.ratguard ~= nil then data.ratguard = inst.ratguard end
+    if inst.raiding then data.raiding = inst.raiding end
+    --if inst.ratguard then data.ratguard = inst.ratguard end
 end
 
-local function onpreload_burrow(inst, data) if data ~= nil then if data.raiding ~= nil then inst.raiding = data.raiding end end end
+--[[local function onpreload_burrow(inst, data)
+    if data and data.raiding then inst.raiding = data.raiding end
+end]]
 
 local function onload_burrow(inst, data)
-    if data ~= nil then
-        if data.raiding ~= nil then inst.raiding = data.raiding end
-        if data.ratguard ~= nil then inst.ratguard = data.ratguard end
+    if data then
+        if data.raiding then inst.raiding = data.raiding end
+        --if data.ratguard then inst.ratguard = data.ratguard end
     end
 
-    if not inst.raiding then EndRaid(inst) end
+    if inst.raiding then inst:BecomeRaidBurrow() end
 end
 
 local function MakeScoutBurrow(inst)
@@ -1142,7 +1204,7 @@ local function MakeScoutBurrow(inst)
         end
 
         if i >= 8 then
-		    UMCommonFns.RestartTimer(inst, {name = "scoutingparty", time = 1920 + math.random(480), keepexisting = true})
+            UMCommonFns.RestartTimer(inst, {name = "scoutingparty", time = 1920 + math.random(480), keepexisting = true})
         end
     end
 end
@@ -1153,8 +1215,8 @@ local function OnTimerDone(inst, data)
 
         --print(TheWorld.components.ratcheck ~= nil and TheWorld.components.ratcheck:GetBurrows())
 
-        if TheWorld.components.ratcheck ~= nil and TheWorld.components.ratcheck:GetBurrows() >= 10 then
-		    UMCommonFns.RestartTimer(inst, {name = "scoutingparty", time = 1920 + math.random(480), keepexisting = true})
+        if inst.raiding or TheWorld.components.ratcheck and TheWorld.components.ratcheck:GetBurrows() >= 10 then
+            UMCommonFns.RestartTimer(inst, {name = "scoutingparty", time = 1920 + math.random(480), keepexisting = true})
             return
         end
 
@@ -1162,7 +1224,7 @@ local function OnTimerDone(inst, data)
     end
 end
 
-local function CreateBurrow(tags, loottable, init)
+local function CreateBurrow(tags, loottable)
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -1173,8 +1235,9 @@ local function CreateBurrow(tags, loottable, init)
 
     inst.AnimState:SetBank("uncompromising_rat_burrow")
     inst.AnimState:SetBuild("uncompromising_rat_burrow")
-    if init then inst.AnimState:PlayAnimation("idle", true) end
+    inst.AnimState:PlayAnimation("idle", true)
 
+    inst:AddTag("ratburrow")
     inst:AddTag("herd")
     inst:AddTag("trader")
     
@@ -1185,6 +1248,8 @@ local function CreateBurrow(tags, loottable, init)
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then return inst end
+
+    --inst.ratguard = true
 
     inst:AddComponent("inspectable")
 
@@ -1197,6 +1262,7 @@ local function CreateBurrow(tags, loottable, init)
     herd.updatepos = false
 
     inst:AddComponent("timer")
+    UMCommonFns.RestartTimer(inst, {name = "scoutingparty", time = 1920 + math.random(480), keepexisting = true})
     inst:ListenForEvent("timerdone", OnTimerDone)
 
     local periodicspawner = inst:AddComponent("periodicspawner")
@@ -1204,6 +1270,7 @@ local function CreateBurrow(tags, loottable, init)
     periodicspawner:SetPrefab("um_rat")
     periodicspawner:SetOnSpawnFn(OnSpawned)
     periodicspawner:SetDensityInRange(30, 8)
+    periodicspawner:Start()
     --periodicspawner.spawnoffscreen = true
 
     local inventory = inst:AddComponent("inventory")
@@ -1224,17 +1291,20 @@ local function CreateBurrow(tags, loottable, init)
     trader.onaccept = OnGetItemFromPlayer
     trader.onrefuse = OnRefuseItem
 
+    inst.OnSave = onsave_burrow
+    --inst.OnPreLoad = onpreload_burrow
+    inst.OnLoad = onload_burrow
+
     inst:DoTaskInTime(1, BurrowAnim)
 
-    if init then
-        inst:DoTaskInTime(0, OnInit)
-        inst:ListenForEvent("onremove", OnRemoved)
-    end
+    inst:DoTaskInTime(0, OnInit)
+
+    inst.BecomeRaidBurrow = BecomeRaidBurrow
 
     return inst
 end
 
-local function fn_herd() -- This Rat Burrow is used in raids.
+--[[local function fn_herd() -- This Rat Burrow is used in raids.
     local inst = CreateBurrow({"NOBLOCK", "NOCLICK"})
 
     if not TheWorld.ismastersim then return inst end
@@ -1253,16 +1323,12 @@ local function fn_herd() -- This Rat Burrow is used in raids.
     inst:DoTaskInTime(0, OnInitHerd)
 
     return inst
-end
+end]]
 
 local function fn_burrow()
-    local inst = CreateBurrow({"ratburrow"}, "ratburrow_small", true)
+    local inst = CreateBurrow({"ratburrow"}, "ratburrow_small")
 
     if not TheWorld.ismastersim then return inst end
-
-    UMCommonFns.RestartTimer(inst, {name = "scoutingparty", time = 1920 + math.random(480), keepexisting = true})
-
-    inst.components.periodicspawner:Start()
 
     return inst
 end
@@ -2174,7 +2240,7 @@ end
 return Prefab("um_rat", fn, assets, prefabs),
     Prefab("um_junkrat", junkfn),
     Prefab("um_packrat", packfn, assets, prefabs),
-    Prefab("um_ratherd", fn_herd, assets, prefabs),
+    --Prefab("um_ratherd", fn_herd, assets, prefabs),
     Prefab("um_ratburrow", fn_burrow, assets, prefabs),
     Prefab("um_winkyburrow", fn_winkyburrow, assets, prefabs),
     MakePlacer("um_winkyburrow_placer", "uncompromising_rat_burrow", "uncompromising_rat_burrow", "idle"),

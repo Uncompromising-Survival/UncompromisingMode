@@ -141,7 +141,8 @@ return Class(function(self, inst)
 	end
 
 	local function _SpawnRaid(x, y, z)
-		local raid = SpawnPrefab("um_ratherd")
+		local raid = SpawnPrefab("um_ratburrow")
+		raid:BecomeRaidBurrow(true, true)
 		local x2 = x + math.random(-10, 10)
 		local z2 = z + math.random(-10, 10)
 		if TheWorld.Map:IsPassableAtPoint(x2, 0, z2) then
