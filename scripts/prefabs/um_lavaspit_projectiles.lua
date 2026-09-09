@@ -30,7 +30,6 @@ local function DoAreaEffectMeltSnowPiles(inst)
     end
 end
 
-
 local function GetStatus(inst, viewer)
     return inst.cooled and "COOL" or "HOT"
 end
@@ -594,7 +593,6 @@ local function DoAreaEffectSlime(inst)
         end
     end
 end
-
 
 local function magma_projectile_fn()
     local inst = projectilefn()
