@@ -917,15 +917,22 @@ local function onfinishcallback(inst)
 end
 
 local function onworked(inst, worker, workleft)
-	local inventory = inst.components.inventory
-	for i = 1, 3 do
+    local inventory = inst.components.inventory
+    for i = 1, 3 do
         local item = inventory:FindItem(function() return true end)
         if item then inventory:DropItem(item, false, true) end
-	end
+    end
     inst.components.lootdropper:SpawnLootPrefab("rocks", inst:GetPosition())
     inst.AnimState:PlayAnimation("dig")
     inst.AnimState:PushAnimation("idle")
-    for rats, _ in pairs(inst.components.herd.members) do inst.components.combat:ShareTarget(worker, 30, function(dude) return dude:HasTag("raidrat") and not dude.components.health:IsDead() and not dude:HasTag("packrat") end, 10) end
+    local rats = 0
+    for rat in pairs(inst.components.herd.members) do
+        if not (rat.components.health and rat.components.health:IsDead()) and rat:IsNear(inst, 30) and rat:HasTag("raidrat")
+            and not rat:HasTag("packrat") and rat.components.combat and rat.components.combat:SuggestTarget(worker) then
+            rats = rats + 1
+            if rats >= 10 then break end
+        end
+    end
 end
 
 local function OnSpawned(inst, newent)
