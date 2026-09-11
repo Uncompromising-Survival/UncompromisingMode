@@ -8,11 +8,7 @@ SetSharedLootTable( 'um_nurse_spider',
 })
 
 local function SpiderHealerFunctions(inst)
-    local health, lootdropper = inst.components.health, inst.components.lootdropper
-    
-    if health then
-        health:SetMaxHealth(225)
-    end
+    local lootdropper = inst.components.lootdropper
 
     if lootdropper then
         lootdropper:AddRandomLoot("monstermeat", 1)

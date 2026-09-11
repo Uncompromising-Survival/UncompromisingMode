@@ -139,13 +139,12 @@ local function SpiderQueenFunctions(inst)
     local health = inst.components.health
     if health then
         local _deltamodifierfn = health.deltamodifierfn
-        local function HealthFromSpiderHealer(inst, amount, overtime, cause, ...)
-            if cause ~= "spider_healer" and cause ~= "spider_healer_item" then
-                return _deltamodifierfn and _deltamodifierfn(inst, amount, overtime, cause, ...) or amount
+        health.deltamodifierfn = function(_inst, amount, overtime, cause, ...)
+            if amount >= 0 or cause ~= "spider_healer" and cause ~= "spider_healer_item" then
+                return _deltamodifierfn and _deltamodifierfn(_inst, amount, overtime, cause, ...) or amount
             end
             return amount / 3
         end
-        health.deltamodifierfn = HealthFromSpiderHealer
     end
 
     if TUNING.DSTU.MOON_TRANSFORMATIONS then
