@@ -399,7 +399,7 @@ local function CreateRat(data)
 
     inst.AnimState:SetBank("carrat")
     inst.AnimState:SetBuild(data.build or "uncompromising_rat")
-    inst.AnimState:PlayAnimation(data.anim, "planted")
+    inst.AnimState:PlayAnimation(data.anim or "planted")
 
     inst:AddTag("raidrat")
     inst:AddTag("animal")
