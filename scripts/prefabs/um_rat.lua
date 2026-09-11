@@ -410,7 +410,8 @@ local function CreateRat(data)
     inst:AddTag("catfood")
     inst:AddTag("cookable")
 
-    if data.tags then for _, tag in pairs(tags) do inst:AddTag(tag) end end
+    local tags = data.tags
+    if tags then for _, tag in pairs(tags) do inst:AddTag(tag) end end
 
     -- inst.entity:SetCanSleep(false)
     inst.entity:SetPristine()
@@ -1255,7 +1256,7 @@ local function OnTimerDone(inst, data)
     end
 end
 
-local function CreateBurrow(tags, loottable)
+local function CreateBurrow(data)
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -1271,7 +1272,8 @@ local function CreateBurrow(tags, loottable)
     inst:AddTag("ratburrow")
     inst:AddTag("herd")
     inst:AddTag("trader")
-    
+
+    local tags = data.tags
     if tags then for _, tag in pairs(tags) do inst:AddTag(tag) end end
 
     inst.MiniMapEntity:SetIcon("um_ratburrow.tex")
@@ -1308,7 +1310,7 @@ local function CreateBurrow(tags, loottable)
     inventory.maxslots = 100
 
     local lootdropper = inst:AddComponent("lootdropper")
-    lootdropper:SetChanceLootTable(loottable or "ratburrow")
+    lootdropper:SetChanceLootTable(data.loottable or "ratburrow")
 
     local workable = inst:AddComponent("workable")
     workable:SetOnFinishCallback(onfinishcallback)
@@ -1357,7 +1359,7 @@ end
 end]]
 
 local function fn_burrow()
-    local inst = CreateBurrow({"ratburrow"}, "ratburrow_small")
+    local inst = CreateBurrow({tags = {"ratburrow"}, loottable = "ratburrow_small"})
 
     if not TheWorld.ismastersim then return inst end
 
