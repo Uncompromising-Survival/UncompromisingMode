@@ -472,10 +472,8 @@ end
 
 local PLANT_DEFS = require("prefabs/farm_plant_defs").PLANT_DEFS
 
-env.AddPrefabPostInit("world", function(inst)
-    if not _G.TheWorld.ismastersim then return end
-
-    local _DoAOEeffect = UpvalueHacker.GetUpvalue(_G.Prefabs.wormwood.fn, "master_postinit", "UpdateBloomStage", "EnableFullBloom", "DoAOEeffect")
+env.AddSimPostInit(function()
+    local _DoAOEeffect = UpvalueHacker.GetUpvalue(Prefabs.wormwood.fn, "master_postinit", "UpdateBloomStage", "EnableFullBloom", "DoAOEeffect")
     local function DoAOEeffect(inst, enable)
         _DoAOEeffect(inst, enable)
         local skilltreeupdater = inst.components.skilltreeupdater
@@ -483,9 +481,9 @@ env.AddPrefabPostInit("world", function(inst)
             DoSympatheticBlooming(inst)
         end
     end
-    UpvalueHacker.SetUpvalue(_G.Prefabs.wormwood.fn, DoAOEeffect, "master_postinit", "UpdateBloomStage", "EnableFullBloom", "DoAOEeffect")
+    UpvalueHacker.SetUpvalue(Prefabs.wormwood.fn, DoAOEeffect, "master_postinit", "UpdateBloomStage", "EnableFullBloom", "DoAOEeffect")
 
-    local _EnableFullBloom = UpvalueHacker.GetUpvalue(_G.Prefabs.wormwood.fn, "master_postinit", "UpdateBloomStage", "EnableFullBloom")
+    local _EnableFullBloom = UpvalueHacker.GetUpvalue(Prefabs.wormwood.fn, "master_postinit", "UpdateBloomStage", "EnableFullBloom")
     local function EnableFullBloom(inst, enable)
         if enable then
             if not inst.fullbloom then
@@ -500,7 +498,7 @@ env.AddPrefabPostInit("world", function(inst)
         end
         _EnableFullBloom(inst, enable)
     end
-    UpvalueHacker.SetUpvalue(_G.Prefabs.wormwood.fn, EnableFullBloom, "master_postinit", "UpdateBloomStage", "EnableFullBloom")
+    UpvalueHacker.SetUpvalue(Prefabs.wormwood.fn, EnableFullBloom, "master_postinit", "UpdateBloomStage", "EnableFullBloom")
 
     for k, v in pairs(PLANT_DEFS) do
         env.AddPrefabPostInit(v.prefab, function(inst)
@@ -508,7 +506,7 @@ env.AddPrefabPostInit("world", function(inst)
         end)
     end
 
-    local _OnBlocked = UpvalueHacker.GetUpvalue(_G.Prefabs.armor_bramble.fn, "OnBlocked")
+    local _OnBlocked = UpvalueHacker.GetUpvalue(Prefabs.armor_bramble.fn, "OnBlocked")
     local function OnBlocked(owner, data, inst)
         _OnBlocked(owner, data, inst)
         if data ~= nil and not data.redirected then
@@ -524,9 +522,9 @@ env.AddPrefabPostInit("world", function(inst)
             end
         end
     end
-    UpvalueHacker.SetUpvalue(_G.Prefabs.armor_bramble.fn, OnBlocked, "OnBlocked")
+    UpvalueHacker.SetUpvalue(Prefabs.armor_bramble.fn, OnBlocked, "OnBlocked")
 
-    local _OnHuskBlocked = UpvalueHacker.GetUpvalue(_G.Prefabs.armor_lunarplant_husk.fn, "husk_master_postinit", "OnHuskBlocked")
+    local _OnHuskBlocked = UpvalueHacker.GetUpvalue(Prefabs.armor_lunarplant_husk.fn, "husk_master_postinit", "OnHuskBlocked")
     local function OnHuskBlocked(owner, data, inst)
         _OnHuskBlocked(owner, data, inst)
 
@@ -559,8 +557,7 @@ env.AddPrefabPostInit("world", function(inst)
             attacker:AddDebuff("wormwood_vined_debuff", "wormwood_vined_debuff")
         end
     end
-
-    UpvalueHacker.SetUpvalue(_G.Prefabs.armor_lunarplant_husk.fn, OnHuskBlocked, "husk_master_postinit", "OnHuskBlocked")
+    UpvalueHacker.SetUpvalue(Prefabs.armor_lunarplant_husk.fn, OnHuskBlocked, "husk_master_postinit", "OnHuskBlocked")
 
     local function DoThornsTrap(inst, pos)
         local thorns = SpawnPrefab("bramblefx_trap")
@@ -571,8 +568,7 @@ env.AddPrefabPostInit("world", function(inst)
             thorns.Transform:SetScale(2, 2, 2)
         end
     end
-
-    UpvalueHacker.SetUpvalue(_G.Prefabs.trap_bramble.fn, DoThornsTrap, "OnExplode", "DoThorns")
+    UpvalueHacker.SetUpvalue(Prefabs.trap_bramble.fn, DoThornsTrap, "OnExplode", "DoThorns")
 end)
 
 local function on_planted(inst, data)

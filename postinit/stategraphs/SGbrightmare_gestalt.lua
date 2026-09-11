@@ -21,22 +21,20 @@ end
 env.AddStategraphPostInit("gestalt", function(inst)
     local attackstate = inst.states["attack"]
     local _DoSpecialAttack = attackstate and UpvalueHacker.GetUpvalue(attackstate.onupdate, "DoSpecialAttack")
-    if _DoSpecialAttack then
-        local function DoSpecialAttack(inst, target, ...)
-            if target.components.hunger then -- additional hunger lost per hit
-                target.components.hunger:DoDelta(-12.5)
-            end
-            if HasSkill(target,"wathom_allegiance_shadow") and target.components.health then
-                target.components.health:DeltaPenalty(1/6)
-            end
-            local ret = _DoSpecialAttack(inst, target, ...)
-            target:DoTaskInTime(2, function(target)
-                if target.components.grogginess and target.components.grogginess:IsKnockedOut() and not target.gestalt_hungry_sleep then
-                    target.gestalt_hungry_sleep = target:DoPeriodicTask(2, GestaltHungrySleep)
-                end
-            end)
-            return ret
+    local function DoSpecialAttack(inst, target, ...)
+        if target.components.hunger then -- additional hunger lost per hit
+            target.components.hunger:DoDelta(-12.5)
         end
-        UpvalueHacker.SetUpvalue(attackstate.onupdate, DoSpecialAttack, "DoSpecialAttack")
+        if HasSkill(target,"wathom_allegiance_shadow") and target.components.health then
+            target.components.health:DeltaPenalty(1/6)
+        end
+        local ret = _DoSpecialAttack(inst, target, ...)
+        target:DoTaskInTime(2, function(target)
+            if target.components.grogginess and target.components.grogginess:IsKnockedOut() and not target.gestalt_hungry_sleep then
+                target.gestalt_hungry_sleep = target:DoPeriodicTask(2, GestaltHungrySleep)
+            end
+        end)
+        return ret
     end
+    UpvalueHacker.SetUpvalue(attackstate.onupdate, DoSpecialAttack, "DoSpecialAttack")
 end)

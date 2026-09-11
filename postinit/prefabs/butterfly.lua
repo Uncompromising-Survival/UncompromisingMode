@@ -182,5 +182,5 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
 
     local UpvalueHacker = require("tools/upvaluehacker")
     local ButterflySpawner = require("components/butterflyspawner")
-    UpvalueHacker.SetUpvalue(ButterflySpawner.OnPostInit, GetSpawnPoint, "ToggleUpdate", "ScheduleSpawn", "SpawnButterflyForPlayer", "GetSpawnPoint") end
+    UpvalueHacker.SetUpvalue(ButterflySpawner.OnPostInit, GetSpawnPoint, "ToggleUpdate", "ScheduleSpawn", "SpawnButterflyForPlayer", "GetSpawnPoint")
 end

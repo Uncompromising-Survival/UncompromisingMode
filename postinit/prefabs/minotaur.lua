@@ -168,14 +168,12 @@ end
 
 env.AddSimPostInit(function()
     local _OnAttacked = UpvalueHacker.GetUpvalue(Prefabs.minotaur.fn, "OnAttacked")
-    if _OnAttacked then
-        local function OnAttacked(inst, data, ...)
-            if not inst.sg:HasStateTag("newbuild") then
-                return _OnAttacked(inst, data, ...)
-            end
+    local function OnAttacked(inst, data, ...)
+        if not inst.sg:HasStateTag("newbuild") then
+            return _OnAttacked(inst, data, ...)
         end
-        UpvalueHacker.SetUpvalue(Prefabs.minotaur.fn, OnAttacked, "OnAttacked")
     end
+    UpvalueHacker.SetUpvalue(Prefabs.minotaur.fn, OnAttacked, "OnAttacked")
 end)
 
 env.AddPrefabPostInit("minotaur", function(inst)
