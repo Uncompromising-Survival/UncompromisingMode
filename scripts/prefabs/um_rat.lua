@@ -361,17 +361,17 @@ local function onnear(inst, target)
 end
 
 local function OnEnterWater(inst)
-	inst.AnimState:SetBuild("uncompromising_rat_water")
-	inst.landspeed = inst.components.locomotor.runspeed
-	inst.components.locomotor.runspeed = TUNING.HOUND_SWIM_SPEED
-	inst.hop_distance = inst.components.locomotor.hop_distance
-	inst.components.locomotor.hop_distance = 4
+    inst.AnimState:SetBuild("uncompromising_rat_water")
+    inst.landspeed = inst.components.locomotor.runspeed
+    inst.components.locomotor.runspeed = TUNING.HOUND_SWIM_SPEED
+    inst.hop_distance = inst.components.locomotor.hop_distance
+    inst.components.locomotor.hop_distance = 4
 end
 
 local function OnExitWater(inst)
-	inst.AnimState:SetBuild("uncompromising_rat")
-	if inst.landspeed then inst.components.locomotor.runspeed = inst.landspeed end
-	if inst.hop_distance then inst.components.locomotor.hop_distance = inst.hop_distance end
+    inst.AnimState:SetBuild("uncompromising_rat")
+    if inst.landspeed then inst.components.locomotor.runspeed = inst.landspeed end
+    if inst.hop_distance then inst.components.locomotor.hop_distance = inst.hop_distance end
 end
 
 local function OnEntitySleep(inst)
@@ -382,7 +382,7 @@ local function OnEntitySleep(inst)
     end
 end
 
-local function CreateRat()
+local function CreateRat(data)
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -398,20 +398,19 @@ local function CreateRat()
     inst.Transform:SetSixFaced()
 
     inst.AnimState:SetBank("carrat")
-    inst.AnimState:SetBuild("uncompromising_rat")
-    inst.AnimState:PlayAnimation("planted")
+    inst.AnimState:SetBuild(data.build or "uncompromising_rat")
+    inst.AnimState:PlayAnimation(data.anim, "planted")
 
     inst:AddTag("raidrat")
     inst:AddTag("animal")
-    inst:AddTag("hostile")
     inst:AddTag("herdmember")
     inst:AddTag("smallcreature")
     inst:AddTag("canbetrapped")
     inst:AddTag("cattoy")
     inst:AddTag("catfood")
     inst:AddTag("cookable")
-    inst:AddTag("NOBLOCK")
-    -- mainly for winky, too lazy to make it for only allied rats.
+
+    if data.tags then for _, tag in pairs(tags) do inst:AddTag(tag) end end
 
     -- inst.entity:SetCanSleep(false)
     inst.entity:SetPristine()
@@ -455,7 +454,7 @@ local function CreateRat()
 
     local eater = inst:AddComponent("eater")
     eater:SetDiet({FOODTYPE.MEAT, FOODTYPE.VEGGIE, FOODTYPE.RAW}, {FOODTYPE.MEAT, FOODTYPE.VEGGIE, FOODTYPE.RAW})
-    -- inst.components.eater:SetCanEatHorrible()
+    --eater:SetCanEatHorrible()
     eater:SetStrongStomach(true) -- can eat monster meat!
 
     local workmultiplier = inst:AddComponent("workmultiplier")
@@ -525,11 +524,11 @@ local function CreateRat()
     inst:ListenForEvent("attacked", OnAttacked)
     inst:ListenForEvent("death", OnDeath)
     inst:ListenForEvent("onpickupitem", OnPickup)
-    -- inst:ListenForEvent("trapped", Trapped)
+    --inst:ListenForEvent("trapped", Trapped)
 
     MakeHauntablePanic(inst)
 
-    -- MakeFeedableSmallLivestock(inst, TUNING.CARRAT.PERISH_TIME, nil, on_dropped)
+    --MakeFeedableSmallLivestock(inst, TUNING.CARRAT.PERISH_TIME, nil, on_dropped)
 
     MakeSmallBurnableCharacter(inst, "carrat_body")
     MakeSmallFreezableCharacter(inst, "carrat_body")
@@ -545,7 +544,7 @@ local function CreateRat()
 end
 
 local function fn()
-	return CreateRat()
+    return CreateRat({tags = {"hostile", "NOBLOCK"}}) -- mainly for winky, too lazy to make it for only allied rats.
 end
 
 local function junkretargetfn(inst)
@@ -574,7 +573,9 @@ local function junkretargetfn(inst)
     end
 end
 
-local function KeepTarget(inst, target) return inst:IsNear(target, TUNING.HOUND_FOLLOWER_TARGET_KEEP) end
+local function KeepTarget(inst, target)
+    return inst:IsNear(target, TUNING.HOUND_FOLLOWER_TARGET_KEEP)
+end
 
 local function SetHarassPlayer(inst, player)
     if inst.harassplayer ~= player then
@@ -595,7 +596,7 @@ local function SetHarassPlayer(inst, player)
 end
 
 local function _ForgetTarget(inst)
-	inst.components.combat:SetTarget(nil)
+    inst.components.combat:SetTarget(nil)
 end
 
 local function OnJunkAttacked(inst, data)
@@ -641,6 +642,14 @@ local function FindTargetOfInterest(inst)
     end
 end
 
+--[[local function junkfn()
+    local inst = CreateRat({build = "uncompromising_junkrat", anim = "idle"})
+
+    if not TheWorld.ismastersim then return inst end
+
+    return inst
+end]]
+
 local function junkfn()
     local inst = CreateEntity()
 
@@ -673,9 +682,6 @@ local function junkfn()
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then return inst end
-
-    inst:AddComponent("drownable")
-    inst.components.drownable.enabled = false
 
     inst.sounds = carratsounds
 
@@ -762,6 +768,11 @@ local function junkfn()
     inst.shouldhide = false
     return inst
 end
+
+--[[local function packfn()
+    local inst = CreateRat("uncompromising_packrat")
+    return inst
+end]]
 
 local function packfn()
     local inst = CreateEntity()
