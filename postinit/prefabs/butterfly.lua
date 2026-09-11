@@ -158,7 +158,7 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
 
     local FLOWER_TAGS = {"flower"}
     local BUTTERFLY_TAGS = {"butterfly"}
-    
+
     local function GetSpawnPoint(player)
         local rad = 25
         local mindistance = 36
