@@ -19,11 +19,8 @@ for i, TAG in pairs(TOWORK_CANT_TAGS) do
 end
 
 if TUNING.DSTU.WAXWELL then
-    local _IsLeaderInCombat = UpvalueHacker.GetUpvalue(ShadowWaxwellBrain.OnStart, "IsLeaderInCombat")
-    if _IsLeaderInCombat then
-        local function IsLeaderInCombat() return false end
-        UpvalueHacker.SetUpvalue(ShadowWaxwellBrain.OnStart, IsLeaderInCombat, "IsLeaderInCombat")
-    end
+    local function IsLeaderInCombat() return false end
+    UpvalueHacker.SetUpvalue(ShadowWaxwellBrain.OnStart, IsLeaderInCombat, "IsLeaderInCombat")
 
     local _ShouldAvoidExplosive = UpvalueHacker.GetUpvalue(ShadowWaxwellBrain.OnStart, "ShouldAvoidExplosive")
     local _ShouldRunAway = UpvalueHacker.GetUpvalue(ShadowWaxwellBrain.OnStart, "ShouldRunAway")

@@ -1406,19 +1406,17 @@ end)
 local UpvalueHacker = require("tools/upvaluehacker")
 AddSimPostInit(function()
     local _tryproc = UpvalueHacker.GetUpvalue(_G.Prefabs.ruinshat.fn, "tryproc")
-    if _tryproc then
-        local _ruinshat_proc = UpvalueHacker.GetUpvalue(_tryproc, "ruinshat_proc")
-        local function tryproc(inst, owner, data, ...)
-            if HasSkill(owner, "ancient_kinship_2") then
-                if inst._task == nil and (data and not data.redirected) or not data and math.random() < .7 then
-                    _ruinshat_proc(inst, owner)
-                end
-                return
+    local _ruinshat_proc = UpvalueHacker.GetUpvalue(_tryproc, "ruinshat_proc")
+    local function tryproc(inst, owner, data, ...)
+        if HasSkill(owner, "ancient_kinship_2") then
+            if inst._task == nil and (data and not data.redirected) or not data and math.random() < .7 then
+                _ruinshat_proc(inst, owner)
             end
-            return _tryproc(inst, owner, data, ...)
+            return
         end
-        UpvalueHacker.SetUpvalue(_G.Prefabs.ruinshat.fn, tryproc, "tryproc")
+        return _tryproc(inst, owner, data, ...)
     end
+    UpvalueHacker.SetUpvalue(_G.Prefabs.ruinshat.fn, tryproc, "tryproc")
 end)
 
 AddPrefabPostInit("ruinshat", function(inst)

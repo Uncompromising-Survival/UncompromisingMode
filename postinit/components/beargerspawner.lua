@@ -11,10 +11,9 @@ env.AddComponentPostInit("beargerspawner", function(self)
 	local function CanSpawnBearger()
 		return _CanSpawnBearger() or um_overridespawn == true
 	end
-	UpvalueHacker.SetUpvalue(self.OnUpdate,CanSpawnBearger,"CanSpawnBearger")
+	UpvalueHacker.SetUpvalue(self.OnUpdate,CanSpawnBearger, "CanSpawnBearger")
 
 	local _SpawnBearger = UpvalueHacker.GetUpvalue(self.OnUpdate,"SpawnBearger")
-
 	local function SpawnBearger()
 		um_overridespawn = false
 		if _CanSpawnBearger() then
@@ -24,21 +23,19 @@ env.AddComponentPostInit("beargerspawner", function(self)
 	UpvalueHacker.SetUpvalue(self.OnUpdate, SpawnBearger, "SpawnBearger")
 
 	local _OnSave = self.OnSave
-	local _OnLoad = self.OnLoad
-
-	function self:OnSave()
-		local data, ents = _OnSave(self)
+	function self:OnSave(...)
+		local data, ents = _OnSave(self, ...)
 		data.um_overridespawn = um_overridespawn
 		return data, ents
 	end
 
-	function self:OnLoad(data)
-		_OnLoad(self,data)
+	local _OnLoad = self.OnLoad
+	function self:OnLoad(data, ...)
+		_OnLoad(self, data, ...)
 		um_overridespawn = data.um_overridespawn
 	end
 
 	local GetActiveHasslerCount = UpvalueHacker.GetUpvalue(self.GetDebugString, "GetActiveHasslerCount")
-
 	local function OnMegaFlare(src, data)
 		if data.sourcept and TheWorld.Map:IsVisualGroundAtPoint(data.sourcept.x, data.sourcept.y, data.sourcept.z) and TheWorld.state.isautumn then
 			local _worldsettingstimer = TheWorld.components.worldsettingstimer
@@ -66,7 +63,5 @@ env.AddComponentPostInit("beargerspawner", function(self)
 			end
 		end
 	end
-
-
 	self.inst:ListenForEvent("megaflare_detonated", OnMegaFlare, TheWorld)
 end)
