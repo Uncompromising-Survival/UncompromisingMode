@@ -138,11 +138,11 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
         if inst.spawned_butterfly then inst.spawned_butterfly = nil end
     end
     
-    local flower_types = {"flower", "flower_evil"}
+    local flower_types = {"flower", "flower_evil", "um_buttercup"}
     for i,v in ipairs(flower_types) do
         env.AddPrefabPostInit(v, function(inst)
             if not TheWorld.ismastersim then return end
-            inst:WatchWorldState("isday",ReEnableButterfly)
+            inst:WatchWorldState("isday", ReEnableButterfly)
         end)
     end
     
