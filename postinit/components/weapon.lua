@@ -22,6 +22,27 @@ env.AddComponentPostInit("weapon", function(self)
         return _OnAttack(self, attacker, target, projectile, ...)
     end
 
+    --[[local _GetDamage = self.GetDamage
+    function self:GetDamage(attacker, target, ...) -- Unused/untested right now, purpose is to apply enchants that change damage always without having to worry about the damage function changing.
+        local _damage
+        if self.inst.components.gem_enchantable then
+            for enchant, tier in pairs(self.inst.components.gem_enchantable.enchants) do
+                if GEM_DEFS[enchant].fns.adjustdamage then
+                    if not _damage then _damage = self.damage end
+                    local _damagechanged = self.damage
+                    self.damage = function(inst, attacker, target, ...)
+                        local ret = _damagechanged(inst, attacker target, ...)
+                        ret = GEM_DEFS[enchant].fns.adjustdamage(ret, inst, attacker, target, tier)
+                        return ret
+                    end
+                end
+            end
+        end
+        local ret = {_GetDamage(self, attacker, target, ...)}
+        if _damage then self.damage = _damage end
+    	return unpack(ret)
+    end]]
+
     local _CanRangedAttack = self.CanRangedAttack
     function self:CanRangedAttack(...)
         local owner = self.inst.components.inventoryitem and self.inst.components.inventoryitem:GetGrandOwner()
