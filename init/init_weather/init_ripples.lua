@@ -202,18 +202,20 @@ env.AddStategraphPostInit("frog", function(inst)
         local state = inst.states[statenames[iname]]
         local state_timeline1_fn = state.timeline[1].fn
         state.timeline[1].fn = function(inst, ...)
-            inst.components.umripples:OnNoLongerLandedServer()
+            if inst.components.umripples then
+                inst.components.umripples:OnNoLongerLandedServer()
+            end
             state_timeline1_fn(inst, ...)
         end
         local state_timeline2_fn = state.timeline[2].fn
         state.timeline[2].fn = function(inst, ...)
-            if RobustFloodCheck(inst) then
+            if inst.components.umripples and RobustFloodCheck(inst) then
                 inst.components.umripples:OnLandedServer(true)
             end
             state_timeline2_fn(inst, ...)
         end
         state.onexit = function(inst)
-            if RobustFloodCheck(inst) and not inst.components.umripples.showing_effect then
+            if inst.components.umripples and RobustFloodCheck(inst) and not inst.components.umripples.showing_effect then
                 inst.components.umripples:OnLandedServer(true)
             end
         end
@@ -224,18 +226,20 @@ env.AddStategraphPostInit("molebat", function(inst)
     local walkstate = inst.states["walk"]
     local walkstate_timeline2_fn = walkstate.timeline[2].fn
     walkstate.timeline[2].fn = function(inst, ...)
-        inst.components.umripples:OnNoLongerLandedServer()
+        if inst.components.umripples then
+            inst.components.umripples:OnNoLongerLandedServer()
+        end
         walkstate_timeline2_fn(inst, ...)
     end
     local walkstate_timeline3_fn = walkstate.timeline[3].fn
     walkstate.timeline[3].fn = function(inst, ...)
-        if RobustFloodCheck(inst) then
+        if inst.components.umripples and RobustFloodCheck(inst) then
             inst.components.umripples:OnLandedServer(true)
         end
         walkstate_timeline3_fn(inst, ...)
     end
     walkstate.onexit = function(inst)
-        if RobustFloodCheck(inst) and not inst.components.umripples.showing_effect then
+        if inst.components.umripples and RobustFloodCheck(inst) and not inst.components.umripples.showing_effect then
             inst.components.umripples:OnLandedServer(true)
         end
     end
@@ -243,18 +247,20 @@ env.AddStategraphPostInit("molebat", function(inst)
     local attackstate = inst.states["attack"]
     local attackstate_timeline1_fn = attackstate.timeline[1].fn
     attackstate.timeline[1].fn = function(inst, ...)
-        inst.components.umripples:OnNoLongerLandedServer()
+        if inst.components.umripples then
+            inst.components.umripples:OnNoLongerLandedServer()
+        end
         attackstate_timeline1_fn(inst, ...)
     end
     local attackstate_timeline3_fn = attackstate.timeline[3].fn
     attackstate.timeline[3].fn = function(inst, ...)
-        if RobustFloodCheck(inst) then
+        if inst.components.umripples and RobustFloodCheck(inst) then
             inst.components.umripples:OnLandedServer(true)
         end
         attackstate_timeline3_fn(inst, ...)
     end
     attackstate.onexit = function(inst)
-        if RobustFloodCheck(inst) and not inst.components.umripples.showing_effect then
+        if inst.components.umripples and RobustFloodCheck(inst) and not inst.components.umripples.showing_effect then
             inst.components.umripples:OnLandedServer(true)
         end
     end
@@ -262,7 +268,7 @@ env.AddStategraphPostInit("molebat", function(inst)
     local fallstate = inst.states["fall"]
     local fallstate_onenter = fallstate.onenter
     fallstate.onenter = function(inst, ...)
-        if RobustFloodCheck(inst) then
+        if inst.components.umripples and RobustFloodCheck(inst) then
             inst.components.umripples:OnNoLongerLandedServer()
             inst:DoTaskInTime(30 * FRAMES, function(inst)
                 inst.components.umripples:OnLandedServer(true)
@@ -302,7 +308,7 @@ env.AddStategraphPostInit("worm", function(inst)
     local attackprestate = inst.states["attack_pre"]
     local attackprestate_onenter = attackprestate.onenter
     attackprestate.onenter = function(inst, ...)
-        if RobustFloodCheck(inst) then
+        if inst.components.umripples and RobustFloodCheck(inst) then
             inst.components.umripples:OnLandedServer(true)
             inst:Show()
         end
@@ -312,7 +318,7 @@ env.AddStategraphPostInit("worm", function(inst)
     local attackstate = inst.states["attack"]
     local attackstate_onenter = attackstate.onenter
     attackstate.onenter = function(inst, ...)
-        if RobustFloodCheck(inst) then
+        if inst.components.umripples and RobustFloodCheck(inst) then
             inst.components.umripples:OnLandedServer(true)
             inst:Show()
             ToggleWormMoveSymbols(inst, false)
@@ -320,7 +326,7 @@ env.AddStategraphPostInit("worm", function(inst)
         attackstate_onenter(inst, ...)
     end
     attackstate.onexit = function(inst)
-        if RobustFloodCheck(inst) then
+        if inst.components.umripples and RobustFloodCheck(inst) then
             inst.components.umripples:OnNoLongerLandedServer()
             inst:Hide()
             ToggleWormMoveSymbols(inst, true)
