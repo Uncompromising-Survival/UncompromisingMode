@@ -137,7 +137,7 @@ local function GetAttackedPostInit(self, fn)
 end
 
 env.AddComponentPostInit("combat", function(self)
- GetAttackedPostInit(self, UPDATE_CHECK and "GetAttacked_Internal" or "GetAttacked")
+	GetAttackedPostInit(self, UPDATE_CHECK and "GetAttacked_Internal" or "GetAttacked")
 
 	local _OnSave = self.OnSave
 	function self:OnSave(...)
