@@ -104,9 +104,10 @@ env.AddStategraphPostInit("spider", function(inst)
         end
     end
 
-    local _OldAttackedEvent = inst.events["attacked"] and inst.events["attacked"].fn
-    if _OldAttackedEvent then
-        inst.events["attacked"].fn = function(inst, data, ...)
+    local attackedeventhandler = inst.events["doattack"]
+    if attackedeventhandler then
+        local attackedeventhandler_fn = attackedeventhandler.fn
+        attackedeventhandler.fn = function(inst, data, ...)
             if not (inst.components.health and inst.components.health:IsDead()) then
                 if CommonHandlers.TryElectrocuteOnAttacked(inst, data) then
                     return
@@ -120,7 +121,7 @@ env.AddStategraphPostInit("spider", function(inst)
                     return
                 end
             end
-            return _OldAttackedEvent(inst, data, ...)
+            return attackedeventhandler_fn(inst, data, ...)
         end
     end
 
