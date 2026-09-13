@@ -133,6 +133,7 @@ local function GetAttackedPostInit(self, fn)
 
 			return ret
 		end
+	end
 end
 
 env.AddComponentPostInit("combat", function(self)
