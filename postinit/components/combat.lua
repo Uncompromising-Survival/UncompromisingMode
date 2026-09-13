@@ -7,9 +7,9 @@ local function HasSkill(inst, name)
     return inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated(name)
 end
 
-env.AddComponentPostInit("combat", function(self)
-    local _GetAttacked = self.GetAttacked
-    function self:GetAttacked(attacker, damage, weapon, stimuli, spdamage, ...)
+local function GetAttackedPostInit(self, fn)
+	local _GetAttackedOrInternal = self[fn]
+	self[fn] = function(self, attacker, damage, weapon, stimuli, spdamage, ...)
         if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" and self.inst.UMSlipAway and self.inst:UMSlipAway({attacker = attacker, weapon = weapon, stimuli = stimuli}, true) then
             if attacker and weapon and weapon:IsValid() then
                 attacker:PushEvent("um_attacker_attacked_pst", {weapon = weapon})
@@ -86,12 +86,16 @@ env.AddComponentPostInit("combat", function(self)
         elseif self.inst:HasTag("ratwhisperer") and attacker and attacker.prefab == "catcoon" and self.inst.components.health then
             self.inst.components.health:DoDelta(-10, false, attacker.prefab)
         end
-        local ret = {_GetAttacked(self, attacker, damage, weapon, stimuli, spdamage, ...)}
+        local ret = {_GetAttackedOrInternal(self, attacker, damage, weapon, stimuli, spdamage, ...)}
         if attacker and attacker:IsValid() and weapon and weapon:IsValid() then
             attacker:PushEvent("um_attacker_attacked_pst", {weapon = weapon})
         end
         return unpack(ret)
-    end
+	end
+end
+
+env.AddComponentPostInit("combat", function(self)
+    GetAttackedPostInit(self, UPDATE_CHECK and "GetAttacked_Internal" or "GetAttacked")
 
     function self:UMSetAreaDamage(range, excludetags, coneangle, circleradius, areahitconecheck, areahitcheck)
         self.um_areahit = range ~= nil or nil
