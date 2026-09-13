@@ -1,4 +1,4 @@
-local UpvalueHacker = GLOBAL.require("tools/um_upvaluehacker")
+local UMUpvalueHacker = GLOBAL.require("tools/um_upvaluehacker")
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
@@ -9,8 +9,8 @@ env.AddPrefabPostInit("mushgnome_spawner", function(inst)
 	end
 	
 	local TEST_FREQUENCY = 1
-	UpvalueHacker.SetUpvalue(Prefabs.mushgnome_spawner.fn, TEST_FREQUENCY, "on_entity_wake", "StartTesting", "TEST_FREQUENCY")
-	UpvalueHacker.SetUpvalue(Prefabs.mushgnome_spawner.fn, TEST_FREQUENCY, "StartTesting", "TEST_FREQUENCY")
+	UMUpvalueHacker.SetUpvalue(Prefabs.mushgnome_spawner.fn, TEST_FREQUENCY, "on_entity_wake", "StartTesting", "TEST_FREQUENCY")
+	UMUpvalueHacker.SetUpvalue(Prefabs.mushgnome_spawner.fn, TEST_FREQUENCY, "StartTesting", "TEST_FREQUENCY")
 
 
 	--return inst

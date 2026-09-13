@@ -414,9 +414,9 @@ local function StartGrowing(inst, giver, product)
     end
 end
 
-local UpvalueHacker = require("tools/um_upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 env.AddSimPostInit(function()
-    UpvalueHacker.SetUpvalue(Prefabs.mushroom_farm.fn, StartGrowing, "onacceptitem", "StartGrowing")
+    UMUpvalueHacker.SetUpvalue(Prefabs.mushroom_farm.fn, StartGrowing, "onacceptitem", "StartGrowing")
 end)
 
 local TREESTATES =
@@ -473,7 +473,7 @@ end
 local PLANT_DEFS = require("prefabs/farm_plant_defs").PLANT_DEFS
 
 env.AddSimPostInit(function()
-    local _DoAOEeffect = UpvalueHacker.GetUpvalue(Prefabs.wormwood.fn, "master_postinit", "UpdateBloomStage", "EnableFullBloom", "DoAOEeffect")
+    local _DoAOEeffect = UMUpvalueHacker.GetUpvalue(Prefabs.wormwood.fn, "master_postinit", "UpdateBloomStage", "EnableFullBloom", "DoAOEeffect")
     local function DoAOEeffect(inst, enable)
         _DoAOEeffect(inst, enable)
         local skilltreeupdater = inst.components.skilltreeupdater
@@ -481,9 +481,9 @@ env.AddSimPostInit(function()
             DoSympatheticBlooming(inst)
         end
     end
-    UpvalueHacker.SetUpvalue(Prefabs.wormwood.fn, DoAOEeffect, "master_postinit", "UpdateBloomStage", "EnableFullBloom", "DoAOEeffect")
+    UMUpvalueHacker.SetUpvalue(Prefabs.wormwood.fn, DoAOEeffect, "master_postinit", "UpdateBloomStage", "EnableFullBloom", "DoAOEeffect")
 
-    local _EnableFullBloom = UpvalueHacker.GetUpvalue(Prefabs.wormwood.fn, "master_postinit", "UpdateBloomStage", "EnableFullBloom")
+    local _EnableFullBloom = UMUpvalueHacker.GetUpvalue(Prefabs.wormwood.fn, "master_postinit", "UpdateBloomStage", "EnableFullBloom")
     local function EnableFullBloom(inst, enable)
         if enable then
             if not inst.fullbloom then
@@ -498,7 +498,7 @@ env.AddSimPostInit(function()
         end
         _EnableFullBloom(inst, enable)
     end
-    UpvalueHacker.SetUpvalue(Prefabs.wormwood.fn, EnableFullBloom, "master_postinit", "UpdateBloomStage", "EnableFullBloom")
+    UMUpvalueHacker.SetUpvalue(Prefabs.wormwood.fn, EnableFullBloom, "master_postinit", "UpdateBloomStage", "EnableFullBloom")
 
     for k, v in pairs(PLANT_DEFS) do
         env.AddPrefabPostInit(v.prefab, function(inst)
@@ -506,7 +506,7 @@ env.AddSimPostInit(function()
         end)
     end
 
-    local _OnBlocked = UpvalueHacker.GetUpvalue(Prefabs.armor_bramble.fn, "OnBlocked")
+    local _OnBlocked = UMUpvalueHacker.GetUpvalue(Prefabs.armor_bramble.fn, "OnBlocked")
     local function OnBlocked(owner, data, inst)
         _OnBlocked(owner, data, inst)
         if data ~= nil and not data.redirected then
@@ -522,9 +522,9 @@ env.AddSimPostInit(function()
             end
         end
     end
-    UpvalueHacker.SetUpvalue(Prefabs.armor_bramble.fn, OnBlocked, "OnBlocked")
+    UMUpvalueHacker.SetUpvalue(Prefabs.armor_bramble.fn, OnBlocked, "OnBlocked")
 
-    local _OnHuskBlocked = UpvalueHacker.GetUpvalue(Prefabs.armor_lunarplant_husk.fn, "husk_master_postinit", "OnHuskBlocked")
+    local _OnHuskBlocked = UMUpvalueHacker.GetUpvalue(Prefabs.armor_lunarplant_husk.fn, "husk_master_postinit", "OnHuskBlocked")
     local function OnHuskBlocked(owner, data, inst)
         _OnHuskBlocked(owner, data, inst)
 
@@ -557,7 +557,7 @@ env.AddSimPostInit(function()
             attacker:AddDebuff("wormwood_vined_debuff", "wormwood_vined_debuff")
         end
     end
-    UpvalueHacker.SetUpvalue(Prefabs.armor_lunarplant_husk.fn, OnHuskBlocked, "husk_master_postinit", "OnHuskBlocked")
+    UMUpvalueHacker.SetUpvalue(Prefabs.armor_lunarplant_husk.fn, OnHuskBlocked, "husk_master_postinit", "OnHuskBlocked")
 
     local function DoThornsTrap(inst, pos)
         local thorns = SpawnPrefab("bramblefx_trap")
@@ -568,7 +568,7 @@ env.AddSimPostInit(function()
             thorns.Transform:SetScale(2, 2, 2)
         end
     end
-    UpvalueHacker.SetUpvalue(Prefabs.trap_bramble.fn, DoThornsTrap, "OnExplode", "DoThorns")
+    UMUpvalueHacker.SetUpvalue(Prefabs.trap_bramble.fn, DoThornsTrap, "OnExplode", "DoThorns")
 end)
 
 local function on_planted(inst, data)

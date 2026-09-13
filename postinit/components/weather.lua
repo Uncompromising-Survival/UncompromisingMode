@@ -1,8 +1,8 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
-local UpvalueHacker = require("tools/um_upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 env.AddComponentPostInit("weather", function(self)
-    local _CalculatePrecipitationRate = UpvalueHacker.GetUpvalue(self.OnUpdate, "CalculatePrecipitationRate")
+    local _CalculatePrecipitationRate = UMUpvalueHacker.GetUpvalue(self.OnUpdate, "CalculatePrecipitationRate")
 
     local _OnUpdate = self.OnUpdate
     local _rainfx

@@ -1,4 +1,4 @@
-local UpvalueHacker = require("tools/um_upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 
 local function AddEnemyDebuffFx(fx, target)
     target:DoTaskInTime(math.random()*0.25, function()
@@ -276,7 +276,7 @@ end
 AddAction(wixie_slingshot)
 
 AddSimPostInit(function()
-    local COMPONENT_ACTIONS = UpvalueHacker.GetUpvalue(GLOBAL.EntityScript.CollectActions, "COMPONENT_ACTIONS")
+    local COMPONENT_ACTIONS = UMUpvalueHacker.GetUpvalue(GLOBAL.EntityScript.CollectActions, "COMPONENT_ACTIONS")
     if COMPONENT_ACTIONS then
         local POINT, EQUIPPED = COMPONENT_ACTIONS.POINT, COMPONENT_ACTIONS.EQUIPPED
         if POINT then

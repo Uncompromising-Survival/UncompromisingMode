@@ -1,4 +1,4 @@
-local UpvalueHacker = require("tools/um_upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 -- Update for PAWN
 AddAction("LAVASPIT", "LAVASPIT", function(act)
     if act.doer and act.target and act.doer.prefab == "dragonfly" then
@@ -648,7 +648,7 @@ end
 AddAction(um_gunshooty)
 
 AddSimPostInit(function()
-    local COMPONENT_ACTIONS = UpvalueHacker.GetUpvalue(GLOBAL.EntityScript.CollectActions, "COMPONENT_ACTIONS")
+    local COMPONENT_ACTIONS = UMUpvalueHacker.GetUpvalue(GLOBAL.EntityScript.CollectActions, "COMPONENT_ACTIONS")
     if COMPONENT_ACTIONS then
         local POINT, EQUIPPED = COMPONENT_ACTIONS.POINT, COMPONENT_ACTIONS.EQUIPPED
         if POINT then
@@ -905,7 +905,7 @@ ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.UM_CALL_BEEF, "us
 ENV.AddStategraphActionHandler("wilson_client", ActionHandler(ACTIONS.UM_CALL_BEEF, "use_beef_bell"))
 
 ENV.AddSimPostInit(function()
-    local COMPONENT_ACTIONS = UpvalueHacker.GetUpvalue(EntityScript.CollectActions, "COMPONENT_ACTIONS")
+    local COMPONENT_ACTIONS = UMUpvalueHacker.GetUpvalue(EntityScript.CollectActions, "COMPONENT_ACTIONS")
     if COMPONENT_ACTIONS then
         local INVENTORY = COMPONENT_ACTIONS.INVENTORY
         if INVENTORY then

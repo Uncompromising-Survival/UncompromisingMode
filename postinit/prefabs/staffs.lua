@@ -1,6 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
-local UpvalueHacker = require("tools/um_upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 -----------------------------------------------------------------
 
 env.AddPrefabPostInit("icestaff", function(inst)

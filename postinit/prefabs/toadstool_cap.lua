@@ -1,7 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-local UpvalueHacker = require("tools/um_upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 
 local function ongrowsproutsdone(inst, data)
     if data.name == "growsprouts" and inst.components.workable and TheWorld.state.isautumn and TheWorld.state.cycles > TUNING.SEASON_LENGTH_FRIENDLY_VERYLONG then
@@ -19,13 +19,13 @@ env.AddPrefabPostInit("toadstool_cap", function(inst)
     end
 
     local _onspawntoad, _ongrown, _fn_i, scope_fn
-    _onspawntoad, _fn_i, scope_fn = UpvalueHacker.GetUpvalue(inst.OnLoad, "setstate", "onspawntoad")
+    _onspawntoad, _fn_i, scope_fn = UMUpvalueHacker.GetUpvalue(inst.OnLoad, "setstate", "onspawntoad")
     debug.setupvalue(scope_fn, _fn_i, function(...)
         local ret = {_onspawntoad(...)}
         inst.components.timer:StopTimer("growsprouts")
         return unpack(ret)
     end)
-    _ongrown, _fn_i, scope_fn = UpvalueHacker.GetUpvalue(inst.OnLoad, "setstate", "ongrown")
+    _ongrown, _fn_i, scope_fn = UMUpvalueHacker.GetUpvalue(inst.OnLoad, "setstate", "ongrown")
     debug.setupvalue(scope_fn, _fn_i, function(...)
         inst.components.timer:StartTimer("growsprouts", 1920)
         return _ongrown(...)

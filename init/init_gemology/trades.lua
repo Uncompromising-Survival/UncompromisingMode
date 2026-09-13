@@ -238,9 +238,9 @@ for i, snaildrake in ipairs(snaildrakes) do
 end
 
 -- AXE Thank Max for this code! It grabs the "StealFood" action regardless of whatever location it may be in.
-local UpvalueHacker = require("tools/um_upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 local SlurtleBrain = require("brains/slurtlebrain")
-local _StealFoodAction = UpvalueHacker.GetUpvalue(SlurtleBrain.OnStart, "StealFoodAction")
+local _StealFoodAction = UMUpvalueHacker.GetUpvalue(SlurtleBrain.OnStart, "StealFoodAction")
 local function FindStealNode(self)
     for id, node in pairs(self.bt.root.children) do
         if node.getactionfn and node.getactionfn == _StealFoodAction then

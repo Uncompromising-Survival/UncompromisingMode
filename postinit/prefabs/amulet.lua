@@ -1,6 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
-local UpvalueHacker = require("tools/um_upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 -----------------------------------------------------------------
 
 -----------------------------------------------------------------
@@ -245,7 +245,7 @@ local function OrangeAmuletPostInit(inst)
     end
 
     local function ontakefuel_orange(inst)
-        local SERVER_PlayFuelSound = UpvalueHacker.GetUpvalue(_G.Prefabs.orangeamulet.fn, "SERVER_PlayFuelSound")
+        local SERVER_PlayFuelSound = UMUpvalueHacker.GetUpvalue(_G.Prefabs.orangeamulet.fn, "SERVER_PlayFuelSound")
         if SERVER_PlayFuelSound then
             SERVER_PlayFuelSound(inst)
         end

@@ -1,14 +1,14 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
-local UpvalueHacker = require("tools/um_upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 local ShadowWaxwellBrain = require("brains/shadowwaxwellbrain")
 
 local DIG_TAGS = {"snowpile_basic", "snowpile"}
 local TOWORK_CANT_TAGS = {"sludgestack"}
 
-local _DIG_TAGS = UpvalueHacker.GetUpvalue(ShadowWaxwellBrain.OnStart, "DIG_TAGS")
-local _TOWORK_CANT_TAGS = UpvalueHacker.GetUpvalue(ShadowWaxwellBrain.OnStart, "FindEntityToWorkAction", "TOWORK_CANT_TAGS")
+local _DIG_TAGS = UMUpvalueHacker.GetUpvalue(ShadowWaxwellBrain.OnStart, "DIG_TAGS")
+local _TOWORK_CANT_TAGS = UMUpvalueHacker.GetUpvalue(ShadowWaxwellBrain.OnStart, "FindEntityToWorkAction", "TOWORK_CANT_TAGS")
 
 for i, TAG in pairs(DIG_TAGS) do
     table.insert(_DIG_TAGS, TAG)
@@ -20,10 +20,10 @@ end
 
 if TUNING.DSTU.WAXWELL then
     local function IsLeaderInCombat() return false end
-    UpvalueHacker.SetUpvalue(ShadowWaxwellBrain.OnStart, IsLeaderInCombat, "IsLeaderInCombat")
+    UMUpvalueHacker.SetUpvalue(ShadowWaxwellBrain.OnStart, IsLeaderInCombat, "IsLeaderInCombat")
 
-    local _ShouldAvoidExplosive = UpvalueHacker.GetUpvalue(ShadowWaxwellBrain.OnStart, "ShouldAvoidExplosive")
-    local _ShouldRunAway = UpvalueHacker.GetUpvalue(ShadowWaxwellBrain.OnStart, "ShouldRunAway")
+    local _ShouldAvoidExplosive = UMUpvalueHacker.GetUpvalue(ShadowWaxwellBrain.OnStart, "ShouldAvoidExplosive")
+    local _ShouldRunAway = UMUpvalueHacker.GetUpvalue(ShadowWaxwellBrain.OnStart, "ShouldRunAway")
 
     local function RemoveNode(self, brainnode)
         if not brainnode then return end

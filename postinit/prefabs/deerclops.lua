@@ -1,4 +1,4 @@
-local UpvalueHacker = GLOBAL.require("tools/um_upvaluehacker")
+local UMUpvalueHacker = GLOBAL.require("tools/um_upvaluehacker")
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
@@ -139,7 +139,7 @@ local function DeerclopsClientFunctions(inst)
 end
 
 local function DeerclopsFunctions(inst)
-    local _OnHitOther = UpvalueHacker.GetUpvalue(Prefabs.deerclops.fn, "OnHitOther")
+    local _OnHitOther = UMUpvalueHacker.GetUpvalue(Prefabs.deerclops.fn, "OnHitOther")
     local function OnHitOther(inst, data)
         if inst.sg:HasStateTag("heavyhit") then
             local other = data.target
