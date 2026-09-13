@@ -2,9 +2,9 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 
-local UpvalueHacker = require("tools/um_upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 env.AddSimPostInit(function()
-    local _SetUpChanceLoot = UpvalueHacker.GetUpvalue(Prefabs.cave_vent_mite.fn, "SetShield", "SetUpChanceLoot")
+    local _SetUpChanceLoot = UMUpvalueHacker.GetUpvalue(Prefabs.cave_vent_mite.fn, "SetShield", "SetUpChanceLoot")
     local function SetUpChanceLoot(inst, ...)
         local ret = _SetUpChanceLoot(inst, ...)
         --print("is geode?", inst.isGeode)
@@ -14,7 +14,7 @@ env.AddSimPostInit(function()
         end
         return ret
     end
-    UpvalueHacker.SetUpvalue(Prefabs.cave_vent_mite.fn, SetUpChanceLoot, "SetShield", "SetUpChanceLoot")
+    UMUpvalueHacker.SetUpvalue(Prefabs.cave_vent_mite.fn, SetUpChanceLoot, "SetShield", "SetUpChanceLoot")
 end)
 
 local function BecomeGemMite(inst)

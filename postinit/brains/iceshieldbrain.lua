@@ -1,10 +1,10 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
-local UpvalueHacker = require("tools/um_upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 local BrainCommon = require("brains/braincommon")
 
-local _ShouldTriggerPanic = UpvalueHacker.GetUpvalue(BrainCommon.PanicTrigger, "ShouldTriggerPanic")
+local _ShouldTriggerPanic = UMUpvalueHacker.GetUpvalue(BrainCommon.PanicTrigger, "ShouldTriggerPanic")
 local function ShouldTriggerPanic(inst, ...)
     local takingfiredamage
     local health = inst.components.health
@@ -17,4 +17,4 @@ local function ShouldTriggerPanic(inst, ...)
     return ret
 end
 
-UpvalueHacker.SetUpvalue(BrainCommon.PanicTrigger, ShouldTriggerPanic, "ShouldTriggerPanic")
+UMUpvalueHacker.SetUpvalue(BrainCommon.PanicTrigger, ShouldTriggerPanic, "ShouldTriggerPanic")

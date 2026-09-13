@@ -1,16 +1,16 @@
-local UpvalueHacker = require("tools/um_upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 local _HitRecoverDelay = CommonHandlers.HitRecoveryDelay
 CommonHandlers.HitRecoveryDelay = function(inst, delay, max_hitreacts, skip_cooldown_fn, ...)
     if inst.um_forcestundebuff then return false end
     return _HitRecoverDelay(inst, delay, max_hitreacts, skip_cooldown_fn, ...)
 end
 
-local _hit_recovery_delay = UpvalueHacker.GetUpvalue(CommonHandlers.OnAttacked, "onattacked", "hit_recovery_delay")
+local _hit_recovery_delay = UMUpvalueHacker.GetUpvalue(CommonHandlers.OnAttacked, "onattacked", "hit_recovery_delay")
 local function hit_recovery_delay(inst, delay, max_hitreacts, skip_cooldown_fn, ...)
     if inst.um_forcestundebuff then return false end
     return _hit_recovery_delay(inst, delay, max_hitreacts, skip_cooldown_fn, ...)
 end
-UpvalueHacker.SetUpvalue(CommonHandlers.OnAttacked, hit_recovery_delay, "onattacked", "hit_recovery_delay")
+UMUpvalueHacker.SetUpvalue(CommonHandlers.OnAttacked, hit_recovery_delay, "onattacked", "hit_recovery_delay")
 
 local removetaglist = {"busy", "hit", "attack", "nointerrupt", "nohit", "jumping", "notiredhit"}
 local function OhCrap(inst, target, attacker)

@@ -2,7 +2,7 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 -----------------------------------------------------------------
-local UpvalueHacker = require("tools/um_upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 local PlayerController = require("components/playercontroller")
 
 --[[env.AddComponentPostInit("playercontroller", function(self) --By Summerrr, I didn't do anything lool -C
@@ -92,7 +92,7 @@ local function OnUnequip(inst, data)
     end
 end]]
 
-local _OnEquip = UpvalueHacker.GetUpvalue(PlayerController.Activate, "OnEquip")
+local _OnEquip = UMUpvalueHacker.GetUpvalue(PlayerController.Activate, "OnEquip")
 local function OnEquip(inst, data, ...)
     if data.eslot == EQUIPSLOTS.HANDS then
         local self = inst.components.playercontroller
@@ -105,9 +105,9 @@ local function OnEquip(inst, data, ...)
     end
     return _OnEquip(inst, data, ...)
 end
-UpvalueHacker.SetUpvalue(PlayerController.Activate, OnEquip, "OnEquip")
+UMUpvalueHacker.SetUpvalue(PlayerController.Activate, OnEquip, "OnEquip")
 
-local _OnUnequip = UpvalueHacker.GetUpvalue(PlayerController.Activate, "OnUnequip")
+local _OnUnequip = UMUpvalueHacker.GetUpvalue(PlayerController.Activate, "OnUnequip")
 local function OnUnequip(inst, data, ...)
     if data.eslot == EQUIPSLOTS.HANDS then
         local self = inst.components.playercontroller
@@ -119,4 +119,4 @@ local function OnUnequip(inst, data, ...)
     end
     return _OnUnequip(inst, data, ...)
 end
-UpvalueHacker.SetUpvalue(PlayerController.Activate, OnUnequip, "OnUnequip")
+UMUpvalueHacker.SetUpvalue(PlayerController.Activate, OnUnequip, "OnUnequip")

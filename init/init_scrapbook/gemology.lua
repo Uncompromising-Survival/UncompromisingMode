@@ -4,7 +4,7 @@ GLOBAL.setfenv(1, GLOBAL)
 local GEM_DEFS = require("gemology_defs").GEM_DEFS
 local scrapbook_prefabs = require("scrapbook_prefabs")
 local dataset = require("screens/redux/scrapbookdata")
-local UpvalueHacker = require("tools/um_upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 local SPECIALINFO = STRINGS.SCRAPBOOK.SPECIALINFO
 require("um_gemology_geode_defs")
 require("simutil")

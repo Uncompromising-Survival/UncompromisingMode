@@ -1,6 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
-local UpvalueHacker = require("tools/um_upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 -----------------------------------------------------------------
 local function CLIENT_PlayGrowTailSound(inst)
     local parent = inst.entity:GetParent()
@@ -83,14 +83,14 @@ local function GrassGekkoFunctions(inst)
 end
 
 env.AddSimPostInit(function()
-    local _ontimerdone = UpvalueHacker.GetUpvalue(Prefabs.grassgekko.fn, "ontimerdone")
+    local _ontimerdone = UMUpvalueHacker.GetUpvalue(Prefabs.grassgekko.fn, "ontimerdone")
     local function ontimerdone(inst, data, ...)
         if data.name == "growTail" and inst:IsInLimbo() then
             PlayGrowTailSound(inst)
         end
         return _ontimerdone(inst, data, ...)
     end
-    UpvalueHacker.SetUpvalue(Prefabs.grassgekko.fn, ontimerdone, "ontimerdone")
+    UMUpvalueHacker.SetUpvalue(Prefabs.grassgekko.fn, ontimerdone, "ontimerdone")
 end)
 
 env.AddPrefabPostInit("grassgekko", function(inst)

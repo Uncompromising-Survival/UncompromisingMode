@@ -1,7 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-local UpvalueHacker = require("tools/um_upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 
 env.AddPrefabPostInit("terrarium", function(inst)
 
@@ -11,11 +11,11 @@ env.AddPrefabPostInit("terrarium", function(inst)
 
     inst:AddTag("terrarium")
 
-    local _SpawnEyeOfTerror = UpvalueHacker.GetUpvalue(Prefabs.terrarium.fn, "TimerDone", "SpawnEyeOfTerror")
-    local is_crimson = UpvalueHacker.GetUpvalue(_SpawnEyeOfTerror, "is_crimson")
-    local SPAWN_OFFSET = UpvalueHacker.GetUpvalue(_SpawnEyeOfTerror, "SPAWN_OFFSET")
-    local spawn_eye_prefab = UpvalueHacker.GetUpvalue(_SpawnEyeOfTerror, "spawn_eye_prefab")
-    local hookup_eye_listeners = UpvalueHacker.GetUpvalue(_SpawnEyeOfTerror, "hookup_eye_listeners")
+    local _SpawnEyeOfTerror = UMUpvalueHacker.GetUpvalue(Prefabs.terrarium.fn, "TimerDone", "SpawnEyeOfTerror")
+    local is_crimson = UMUpvalueHacker.GetUpvalue(_SpawnEyeOfTerror, "is_crimson")
+    local SPAWN_OFFSET = UMUpvalueHacker.GetUpvalue(_SpawnEyeOfTerror, "SPAWN_OFFSET")
+    local spawn_eye_prefab = UMUpvalueHacker.GetUpvalue(_SpawnEyeOfTerror, "spawn_eye_prefab")
+    local hookup_eye_listeners = UMUpvalueHacker.GetUpvalue(_SpawnEyeOfTerror, "hookup_eye_listeners")
 
     local function SpawnEyeOfTerror(inst)
         if AllPlayers ~= nil and #AllPlayers > 0 then
@@ -59,5 +59,5 @@ env.AddPrefabPostInit("terrarium", function(inst)
         end
     end
 
-    UpvalueHacker.SetUpvalue(Prefabs.terrarium.fn, SpawnEyeOfTerror, "TimerDone", "SpawnEyeOfTerror")
+    UMUpvalueHacker.SetUpvalue(Prefabs.terrarium.fn, SpawnEyeOfTerror, "TimerDone", "SpawnEyeOfTerror")
 end)

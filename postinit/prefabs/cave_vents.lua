@@ -2,10 +2,10 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 
-local UpvalueHacker = require("tools/um_upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 env.AddSimPostInit(function()
-    local SpewMiasma = UpvalueHacker.GetUpvalue(Prefabs.cave_vent_rock.fn, "OnTimerDone", "SpewMiasma")
-    local _SpewHotSteam = UpvalueHacker.GetUpvalue(Prefabs.cave_vent_rock.fn, "OnTimerDone", "SpewHotSteam")
+    local SpewMiasma = UMUpvalueHacker.GetUpvalue(Prefabs.cave_vent_rock.fn, "OnTimerDone", "SpewMiasma")
+    local _SpewHotSteam = UMUpvalueHacker.GetUpvalue(Prefabs.cave_vent_rock.fn, "OnTimerDone", "SpewHotSteam")
     local function SpewHotSteam(inst, ...) -- Triggers both codes
         _SpewHotSteam(inst, ...)
         -- Cancel existing timer before calling SpewMiasma to avoid duplicates
@@ -13,7 +13,7 @@ env.AddSimPostInit(function()
         UMCommonFns.RestartTimer(inst, {name = "spew_miasma"})
         SpewMiasma(inst)
     end
-    UpvalueHacker.SetUpvalue(Prefabs.cave_vent_rock.fn, SpewHotSteam, "OnTimerDone","SpewHotSteam")
+    UMUpvalueHacker.SetUpvalue(Prefabs.cave_vent_rock.fn, SpewHotSteam, "OnTimerDone","SpewHotSteam")
 end)
 
 

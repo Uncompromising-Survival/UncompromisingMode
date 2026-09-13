@@ -3,7 +3,7 @@ GLOBAL.setfenv(1, GLOBAL)
 
 
 -- This code is WIP (will finish it out in a while, isn't called)
--- local UpvalueHacker = require("tools/um_upvaluehacker")
+-- local UMUpvalueHacker = require("tools/um_upvaluehacker")
 
 
 local function SpawnHiveTraps(center)

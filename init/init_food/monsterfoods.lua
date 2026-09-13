@@ -1,7 +1,7 @@
 --local variables
 local SpawnPrefab = GLOBAL.SpawnPrefab
 local TUNING = GLOBAL.TUNING
-local UpvalueHacker = GLOBAL.require("tools/um_upvaluehacker")
+local UMUpvalueHacker = GLOBAL.require("tools/um_upvaluehacker")
 
 --------------------------------------------------
 
@@ -27,9 +27,9 @@ if GetModConfigData("monstersmallmeat") then
     end
 
     AddPrefabPostInit("rabbit", function(inst)
-        local _rabbitloot = UpvalueHacker.GetUpvalue(GLOBAL.Prefabs.rabbit.fn, "LootSetupFunction", "SetRabbitLoot",
+        local _rabbitloot = UMUpvalueHacker.GetUpvalue(GLOBAL.Prefabs.rabbit.fn, "LootSetupFunction", "SetRabbitLoot",
         "rabbitloot")
-        local _IsCrazyGuy = UpvalueHacker.GetUpvalue(GLOBAL.Prefabs.rabbit.fn, "LootSetupFunction", "IsCrazyGuy")
+        local _IsCrazyGuy = UMUpvalueHacker.GetUpvalue(GLOBAL.Prefabs.rabbit.fn, "LootSetupFunction", "IsCrazyGuy")
 
         local function SetBeardlingLoot(lootdropper)
             if lootdropper.loot == _rabbitloot and not lootdropper.inst._fixedloot then
@@ -45,8 +45,8 @@ if GetModConfigData("monstersmallmeat") then
             return _IsCrazyGuy(chef) and "cookedmonstersmallmeat" or "cookedsmallmeat"
         end
 
-        UpvalueHacker.SetUpvalue(GLOBAL.Prefabs.rabbit.fn, SetBeardlingLoot, "LootSetupFunction", "SetBeardlingLoot")
-        UpvalueHacker.SetUpvalue(GLOBAL.Prefabs.rabbit.fn, GetCookProductFn, "GetCookProductFn")
+        UMUpvalueHacker.SetUpvalue(GLOBAL.Prefabs.rabbit.fn, SetBeardlingLoot, "LootSetupFunction", "SetBeardlingLoot")
+        UMUpvalueHacker.SetUpvalue(GLOBAL.Prefabs.rabbit.fn, GetCookProductFn, "GetCookProductFn")
     end)
 
     --------------------------------------------------

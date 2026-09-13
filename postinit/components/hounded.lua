@@ -2,25 +2,25 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 
-local UpvalueHacker = require("tools/um_upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 
 env.AddComponentPostInit("hounded", function(self)
-    local _spawndata = UpvalueHacker.GetUpvalue(self.SetSpawnData, "_spawndata")
+    local _spawndata = UMUpvalueHacker.GetUpvalue(self.SetSpawnData, "_spawndata")
     function self:GetSpawnData() return _spawndata end
 
-    local _spawnwintervariant = UpvalueHacker.GetUpvalue(self.SetWinterVariant, "_spawnwintervariant")
-    local _spawnsummervariant = UpvalueHacker.GetUpvalue(self.SetSummerVariant, "_spawnsummervariant")
+    local _spawnwintervariant = UMUpvalueHacker.GetUpvalue(self.SetWinterVariant, "_spawnwintervariant")
+    local _spawnsummervariant = UMUpvalueHacker.GetUpvalue(self.SetSummerVariant, "_spawnsummervariant")
 
-    local SummonSpawn = UpvalueHacker.GetUpvalue(self.SummonSpawn, "SummonSpawn")
-    local _GetSpawnPrefab = UpvalueHacker.GetUpvalue(SummonSpawn, "GetSpawnPrefab")
-    local GetSpecialSpawnChance = UpvalueHacker.GetUpvalue(_GetSpawnPrefab, "GetSpecialSpawnChance")
-    local GetSpawnPoint = UpvalueHacker.GetUpvalue(self.SummonSpawn, "SummonSpawn", "GetSpawnPoint")
-    local _OldGetSpawnPrefab = UpvalueHacker.GetUpvalue(_GetSpawnPrefab, "OldGetSpawnPrefab")
+    local SummonSpawn = UMUpvalueHacker.GetUpvalue(self.SummonSpawn, "SummonSpawn")
+    local _GetSpawnPrefab = UMUpvalueHacker.GetUpvalue(SummonSpawn, "GetSpawnPrefab")
+    local GetSpecialSpawnChance = UMUpvalueHacker.GetUpvalue(_GetSpawnPrefab, "GetSpecialSpawnChance")
+    local GetSpawnPoint = UMUpvalueHacker.GetUpvalue(self.SummonSpawn, "SummonSpawn", "GetSpawnPoint")
+    local _OldGetSpawnPrefab = UMUpvalueHacker.GetUpvalue(_GetSpawnPrefab, "OldGetSpawnPrefab")
 
     --Winterlands compat.
     if _OldGetSpawnPrefab or not GetSpawnPoint then
-        GetSpecialSpawnChance = UpvalueHacker.GetUpvalue(_OldGetSpawnPrefab, "GetSpecialSpawnChance")
-        GetSpawnPoint = UpvalueHacker.GetUpvalue(SummonSpawn, "OldSummonSpawn", "GetSpawnPoint")
+        GetSpecialSpawnChance = UMUpvalueHacker.GetUpvalue(_OldGetSpawnPrefab, "GetSpecialSpawnChance")
+        GetSpawnPoint = UMUpvalueHacker.GetUpvalue(SummonSpawn, "OldSummonSpawn", "GetSpawnPoint")
     end
 
     local function GetSpawnPrefab(upgrade)
@@ -90,7 +90,7 @@ env.AddComponentPostInit("hounded", function(self)
 
 
     if not (TheWorld:HasTag("island") or TheWorld:HasTag("volcano")) then
-        UpvalueHacker.SetUpvalue(self.SummonSpawn, SummonSpawn, "SummonSpawn")
+        UMUpvalueHacker.SetUpvalue(self.SummonSpawn, SummonSpawn, "SummonSpawn")
     end
 end)
 

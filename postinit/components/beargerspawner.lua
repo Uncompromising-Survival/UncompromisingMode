@@ -2,25 +2,25 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 local BEARGER_TIMERNAME = "bearger_timetospawn"
-local UpvalueHacker = require("tools/um_upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 
 env.AddComponentPostInit("beargerspawner", function(self)
 	local um_overridespawn = false
 
-	local _CanSpawnBearger = UpvalueHacker.GetUpvalue(self.OnUpdate,"CanSpawnBearger")
+	local _CanSpawnBearger = UMUpvalueHacker.GetUpvalue(self.OnUpdate,"CanSpawnBearger")
 	local function CanSpawnBearger()
 		return _CanSpawnBearger() or um_overridespawn == true
 	end
-	UpvalueHacker.SetUpvalue(self.OnUpdate,CanSpawnBearger, "CanSpawnBearger")
+	UMUpvalueHacker.SetUpvalue(self.OnUpdate,CanSpawnBearger, "CanSpawnBearger")
 
-	local _SpawnBearger = UpvalueHacker.GetUpvalue(self.OnUpdate,"SpawnBearger")
+	local _SpawnBearger = UMUpvalueHacker.GetUpvalue(self.OnUpdate,"SpawnBearger")
 	local function SpawnBearger()
 		um_overridespawn = false
 		if _CanSpawnBearger() then
 			_SpawnBearger()
 		end
 	end
-	UpvalueHacker.SetUpvalue(self.OnUpdate, SpawnBearger, "SpawnBearger")
+	UMUpvalueHacker.SetUpvalue(self.OnUpdate, SpawnBearger, "SpawnBearger")
 
 	local _OnSave = self.OnSave
 	function self:OnSave(...)
@@ -35,7 +35,7 @@ env.AddComponentPostInit("beargerspawner", function(self)
 		um_overridespawn = data.um_overridespawn
 	end
 
-	local GetActiveHasslerCount = UpvalueHacker.GetUpvalue(self.GetDebugString, "GetActiveHasslerCount")
+	local GetActiveHasslerCount = UMUpvalueHacker.GetUpvalue(self.GetDebugString, "GetActiveHasslerCount")
 	local function OnMegaFlare(src, data)
 		if data.sourcept and TheWorld.Map:IsVisualGroundAtPoint(data.sourcept.x, data.sourcept.y, data.sourcept.z) and TheWorld.state.isautumn then
 			local _worldsettingstimer = TheWorld.components.worldsettingstimer
@@ -43,8 +43,8 @@ env.AddComponentPostInit("beargerspawner", function(self)
 			if GetActiveHasslerCount() > 0 then
 				TheWorld:PushEvent("megaflare_guardmet", {sourcept = data.sourcept})
 			else
-				local numSpawned = UpvalueHacker.GetUpvalue(self.OnPostInit,"OnBeargerTimerDone","ReleaseHassler","_numSpawned") or 0
-				UpvalueHacker.SetUpvalue(self.OnPostInit, numSpawned + 1,"OnBeargerTimerDone", "ReleaseHassler","_numToSpawn")
+				local numSpawned = UMUpvalueHacker.GetUpvalue(self.OnPostInit,"OnBeargerTimerDone","ReleaseHassler","_numSpawned") or 0
+				UMUpvalueHacker.SetUpvalue(self.OnPostInit, numSpawned + 1,"OnBeargerTimerDone", "ReleaseHassler","_numToSpawn")
 				local currentTime = _worldsettingstimer:GetTimeLeft(BEARGER_TIMERNAME)
 				if currentTime ~= nil and currentTime <= 480 then
 					TheWorld:PushEvent("megaflare_guardmet", {sourcept = data.sourcept})

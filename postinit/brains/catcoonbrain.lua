@@ -22,10 +22,10 @@ local function PlayAction_Inventory(inst)
     return target and BufferedAction(inst, target, ACTIONS.PICKUP) or nil
 end
 
-local UpvalueHacker = require("tools/um_upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 local CatcoonBrain = require("brains/catcoonbrain")
 
-local _PlayAction = UpvalueHacker.GetUpvalue(CatcoonBrain.OnStart, "PlayAction")
+local _PlayAction = UMUpvalueHacker.GetUpvalue(CatcoonBrain.OnStart, "PlayAction")
 
 local function FindActionNode(self)
     for id, node in pairs(self.bt.root.children) do

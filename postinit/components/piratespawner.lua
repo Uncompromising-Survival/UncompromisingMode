@@ -10,10 +10,10 @@ env.AddComponentPostInit("piratespawner", function(self)
 		end
 	end
 
-	local UpvalueHacker = require("tools/um_upvaluehacker")
+	local UMUpvalueHacker = require("tools/um_upvaluehacker")
 
-	--local lootlist = UpvalueHacker.GetUpvalue(self.GetCurrentStash, "generateloot", "lootlist")
-	local _generateloot = UpvalueHacker.GetUpvalue(self.GetCurrentStash, "generateloot")
+	--local lootlist = UMUpvalueHacker.GetUpvalue(self.GetCurrentStash, "generateloot", "lootlist")
+	local _generateloot = UMUpvalueHacker.GetUpvalue(self.GetCurrentStash, "generateloot")
 
 	local function generateloot(stash, ...)
 		if math.random() < 0.5 then
@@ -23,7 +23,7 @@ env.AddComponentPostInit("piratespawner", function(self)
 		_generateloot(stash, ...)
 	end
 
-	UpvalueHacker.SetUpvalue(self.GetCurrentStash, generateloot, "generateloot")
+	UMUpvalueHacker.SetUpvalue(self.GetCurrentStash, generateloot, "generateloot")
 
 	local _SpawnPiratesForPlayer = self.SpawnPiratesForPlayer
 

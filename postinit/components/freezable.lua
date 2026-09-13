@@ -1,9 +1,9 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
-local UpvalueHacker = require("tools/um_upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 local Freezable = require("components/freezable")
-local _OnAttacked = UpvalueHacker.GetUpvalue(Freezable._ctor, "OnAttacked")
+local _OnAttacked = UMUpvalueHacker.GetUpvalue(Freezable._ctor, "OnAttacked")
 local function OnAttacked(inst, data, ...)
     local weapon = data.weapon
     local gem_enchantable = weapon and weapon.components.gem_enchantable
@@ -14,7 +14,7 @@ local function OnAttacked(inst, data, ...)
     if inst.um_onfreezedata then inst.um_onfreezedata = nil end
     return ret
 end
-UpvalueHacker.SetUpvalue(Freezable._ctor, OnAttacked, "OnAttacked")
+UMUpvalueHacker.SetUpvalue(Freezable._ctor, OnAttacked, "OnAttacked")
 
 local _Unfreeze = Freezable.Unfreeze
 function Freezable:Unfreeze(...)

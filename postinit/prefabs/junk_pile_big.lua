@@ -1,6 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
-local UpvalueHacker = require("tools/um_upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 -----------------------------------------------------------------
 
 local function MakeCooker(inst)
@@ -58,5 +58,5 @@ end)
         --"chestupgrade_stacksize",
         --"fence_electric_item",
     --}
-    --UpvalueHacker.SetUpvalue(Prefabs.wagstaff_machinery.fn, NEW_WAGPUNK_ITEMS, "lootsetfn", "WAGPUNK_ITEMS")
+    --UMUpvalueHacker.SetUpvalue(Prefabs.wagstaff_machinery.fn, NEW_WAGPUNK_ITEMS, "lootsetfn", "WAGPUNK_ITEMS")
 --end)

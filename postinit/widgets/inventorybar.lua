@@ -14,12 +14,12 @@ backpack layouts.
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-local UpvalueHacker = require("tools/um_upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 local ImageButton = require("widgets/imagebutton")
 local ItemTile = require("widgets/itemtile")
 
 env.AddClassPostConstruct("widgets/inventorybar", function(self, owner)
-    local _RebuildLayout = UpvalueHacker.GetUpvalue(self.Rebuild, "RebuildLayout")
+    local _RebuildLayout = UMUpvalueHacker.GetUpvalue(self.Rebuild, "RebuildLayout")
 
     if not _RebuildLayout then return end
         
@@ -52,9 +52,9 @@ env.AddClassPostConstruct("widgets/inventorybar", function(self, owner)
 
     -- Make sure to initially update the backpack's button when it is equipped, dropped, or its UI
     -- is refreshed.
-    local _BackpackGet = UpvalueHacker.GetUpvalue(self.Rebuild, "RebuildLayout", "BackpackGet")
-    local _BackpackLose = UpvalueHacker.GetUpvalue(self.Rebuild, "RebuildLayout", "BackpackLose")
-    local _BackpackRefresh = UpvalueHacker.GetUpvalue(self.Rebuild, "RebuildLayout", "BackpackRefresh")
+    local _BackpackGet = UMUpvalueHacker.GetUpvalue(self.Rebuild, "RebuildLayout", "BackpackGet")
+    local _BackpackLose = UMUpvalueHacker.GetUpvalue(self.Rebuild, "RebuildLayout", "BackpackLose")
+    local _BackpackRefresh = UMUpvalueHacker.GetUpvalue(self.Rebuild, "RebuildLayout", "BackpackRefresh")
 
     local function BackpackGet(inst, data)
         local owner = ThePlayer
@@ -91,13 +91,13 @@ env.AddClassPostConstruct("widgets/inventorybar", function(self, owner)
         return _BackpackRefresh(inst)
     end
 
-    UpvalueHacker.SetUpvalue(self.Rebuild, BackpackGet, "RebuildLayout", "BackpackGet")
-    UpvalueHacker.SetUpvalue(self.Rebuild, BackpackLose, "RebuildLayout", "BackpackLose")
-    UpvalueHacker.SetUpvalue(self.Rebuild, BackpackRefresh, "RebuildLayout", "BackpackRefresh")
+    UMUpvalueHacker.SetUpvalue(self.Rebuild, BackpackGet, "RebuildLayout", "BackpackGet")
+    UMUpvalueHacker.SetUpvalue(self.Rebuild, BackpackLose, "RebuildLayout", "BackpackLose")
+    UMUpvalueHacker.SetUpvalue(self.Rebuild, BackpackRefresh, "RebuildLayout", "BackpackRefresh")
 
     -- RebuildLayout refeshes the visual components of the backpack. This includes creating all the
     -- inventory icons, positioning them, and in the case of the Silken Sack, creating the button.
-    local _RebuildLayout = UpvalueHacker.GetUpvalue(self.Rebuild, "RebuildLayout")
+    local _RebuildLayout = UMUpvalueHacker.GetUpvalue(self.Rebuild, "RebuildLayout")
 
     local function RebuildLayout(self, inventory, overflow, do_integrated_backpack, do_self_inspect)
         -- Call _RebuildLayout first to make sure widget elements are properly defined before we
@@ -181,5 +181,5 @@ env.AddClassPostConstruct("widgets/inventorybar", function(self, owner)
         end
     end
 
-    UpvalueHacker.SetUpvalue(self.Rebuild, RebuildLayout, "RebuildLayout")
+    UMUpvalueHacker.SetUpvalue(self.Rebuild, RebuildLayout, "RebuildLayout")
 end)
