@@ -1,6 +1,6 @@
 -- From Rezecib's Rebalance: https://github.com/rezecib/Rezecib-s-Rebalance/blob/master/scripts/tools/upvaluehacker.lua
 
-local UMUpvalueHacker = {}
+local UpvalueHacker = {}
 local function GetUpvalueHelper(fn, name)
 	local i = 1
 	while debug.getupvalue(fn, i) and debug.getupvalue(fn, i) ~= name do
@@ -10,7 +10,7 @@ local function GetUpvalueHelper(fn, name)
 	return value, i
 end
 
-function UMUpvalueHacker.GetUpvalue(fn, ...)
+function UpvalueHacker.GetUpvalue(fn, ...)
 	local prv, i, prv_var = nil, nil, "(the starting point)"
 	for j, var in ipairs({ ... }) do
 		assert(type(fn) == "function", "We were looking for " .. var .. ", but the value before it, "
@@ -23,7 +23,7 @@ function UMUpvalueHacker.GetUpvalue(fn, ...)
 	return fn, i, prv
 end
 
-function UMUpvalueHacker.TryGetUpvalue(fn, ...)
+function UpvalueHacker.TryGetUpvalue(fn, ...)
 	local prv, i, prv_var = nil, nil, "(the starting point)"
 	for j, var in ipairs({ ... }) do
 		if type(fn) ~= "function" then
@@ -39,14 +39,14 @@ function UMUpvalueHacker.TryGetUpvalue(fn, ...)
 	return fn, i, prv
 end
 
---[[function UMUpvalueHacker.SetUpvalue(start_fn, new_fn, ...)
-	local _fn, _fn_i, scope_fn = UMUpvalueHacker.GetUpvalue(start_fn, ...)
+--[[function UpvalueHacker.SetUpvalue(start_fn, new_fn, ...)
+	local _fn, _fn_i, scope_fn = UpvalueHacker.GetUpvalue(start_fn, ...)
 	debug.setupvalue(scope_fn, _fn_i, new_fn)
 end]]
 
-function UMUpvalueHacker.SetUpvalue(start_fn, new_fn, ...)
-	local _fn, _fn_i, scope_fn = UMUpvalueHacker.TryGetUpvalue(start_fn, ...)
+function UpvalueHacker.SetUpvalue(start_fn, new_fn, ...)
+	local _fn, _fn_i, scope_fn = UpvalueHacker.TryGetUpvalue(start_fn, ...)
 	if _fn then debug.setupvalue(scope_fn, _fn_i, new_fn) end
 end
 
-return UMUpvalueHacker
+return UpvalueHacker
