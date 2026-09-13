@@ -25,7 +25,7 @@ local function OnPlayerFar(inst)
     if inst.task ~= nil then
         inst.task:Cancel()
     end
-    
+
     inst.task = nil
 end
 
