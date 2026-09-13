@@ -104,7 +104,7 @@ env.AddStategraphPostInit("spider", function(inst)
         end
     end
 
-    local attackedeventhandler = inst.events["doattack"]
+    local attackedeventhandler = inst.events["attacked"]
     if attackedeventhandler then
         local attackedeventhandler_fn = attackedeventhandler.fn
         attackedeventhandler.fn = function(inst, data, ...)
