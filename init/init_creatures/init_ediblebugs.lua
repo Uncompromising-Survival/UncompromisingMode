@@ -44,7 +44,7 @@ local function IsAnActiveItemAndMounted(inst, doer)
     return mount and (isactiveitem or (not right and doer.components.playercontroller.isclientcontrollerattached)) and mount
 end
 
-local UpvalueHacker = require("tools/upvaluehacker")
+local UpvalueHacker = require("tools/um_upvaluehacker")
 AddSimPostInit(function()
     local COMPONENT_ACTIONS = UpvalueHacker.GetUpvalue(GLOBAL.EntityScript.CollectActions, "COMPONENT_ACTIONS")
     if COMPONENT_ACTIONS then

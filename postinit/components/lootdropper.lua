@@ -1,5 +1,5 @@
 local env = env
---local UpvalueHacker = GLOBAL.require("tools/upvaluehacker")
+--local UpvalueHacker = GLOBAL.require("tools/um_upvaluehacker")
 
 GLOBAL.setfenv(1, GLOBAL)
 ------------------------Fire spread is less efficient in winter-----------------------------------------

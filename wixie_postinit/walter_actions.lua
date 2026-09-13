@@ -1,4 +1,4 @@
-local UpvalueHacker = require("tools/upvaluehacker")
+local UpvalueHacker = require("tools/um_upvaluehacker")
 
 local function AddEnemyDebuffFx(fx, target)
     target:DoTaskInTime(math.random()*0.25, function()

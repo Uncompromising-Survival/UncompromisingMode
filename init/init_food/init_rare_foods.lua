@@ -43,7 +43,7 @@ end)]]
 -- Butterflies appearance rate depends on nr of players
 -----------------------------------------------------------------
 -- TODO complicated
---[[local UpvalueHacker = GLOBAL.require("tools/upvaluehacker")
+--[[local UpvalueHacker = GLOBAL.require("tools/um_upvaluehacker")
 AddClassPostConstruct("components/butterflyspawner", function(self)
     local _activeplayers = UpvalueHacker.GetUpvalue(self, "ScheduleSpawn", "_activeplayers")
     local _scheduledtasks = UpvalueHacker.GetUpvalue(self, "ScheduleSpawn", "_scheduledtasks")

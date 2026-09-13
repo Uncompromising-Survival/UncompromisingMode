@@ -2,7 +2,7 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 local BEARGER_TIMERNAME = "bearger_timetospawn"
-local UpvalueHacker = require("tools/upvaluehacker")
+local UpvalueHacker = require("tools/um_upvaluehacker")
 
 env.AddComponentPostInit("beargerspawner", function(self)
 	local um_overridespawn = false

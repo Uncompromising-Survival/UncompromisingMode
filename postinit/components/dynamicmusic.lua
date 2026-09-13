@@ -1,6 +1,6 @@
 
 
-local UpvalueHacker = GLOBAL.require("tools/upvaluehacker")
+local UpvalueHacker = GLOBAL.require("tools/um_upvaluehacker")
 local debug = GLOBAL.debug
 local select = GLOBAL.select
 

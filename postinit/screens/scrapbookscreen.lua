@@ -7,7 +7,7 @@ local Text = require "widgets/text"
 local Image = require "widgets/image"
 local Widget = require "widgets/widget"
 local UIAnim = require "widgets/uianim"
-local UpvalueHacker = require "tools/upvaluehacker"
+local UpvalueHacker = require "tools/um_upvaluehacker"
 local dataset = require("screens/redux/scrapbookdata")
 local TEMPLATES = require "widgets/redux/templates"
 

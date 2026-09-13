@@ -1,6 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
-local UpvalueHacker = require("tools/upvaluehacker")
+local UpvalueHacker = require("tools/um_upvaluehacker")
 
 local function GestaltHungrySleep(target)
     if target.components.grogginess and target.components.grogginess:IsKnockedOut() and target.components.hunger then

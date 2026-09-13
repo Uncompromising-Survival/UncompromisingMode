@@ -1403,7 +1403,7 @@ AddPrefabPostInit("cutlichen", function(inst)
     inst.components.edible.secondaryfoodtype = GLOBAL.FOODTYPE.LICHEN
 end)
 
-local UpvalueHacker = require("tools/upvaluehacker")
+local UpvalueHacker = require("tools/um_upvaluehacker")
 AddSimPostInit(function()
     local _tryproc = UpvalueHacker.GetUpvalue(_G.Prefabs.ruinshat.fn, "tryproc")
     local _ruinshat_proc = UpvalueHacker.GetUpvalue(_tryproc, "ruinshat_proc")

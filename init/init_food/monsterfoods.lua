@@ -1,7 +1,7 @@
 --local variables
 local SpawnPrefab = GLOBAL.SpawnPrefab
 local TUNING = GLOBAL.TUNING
-local UpvalueHacker = GLOBAL.require("tools/upvaluehacker")
+local UpvalueHacker = GLOBAL.require("tools/um_upvaluehacker")
 
 --------------------------------------------------
 

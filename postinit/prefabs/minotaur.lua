@@ -4,7 +4,7 @@ GLOBAL.setfenv(1, GLOBAL)
 
 -- Behold the mind of the sleep-deprived college student! (Don't push me till we know that klei doesn't change AG and mess this up, though I did make sure to do everything as compat friendly as possible, more than any other piece of work I've done before, for sure.)
 local easing = require("easing")
-local UpvalueHacker = require("tools/upvaluehacker")
+local UpvalueHacker = require("tools/um_upvaluehacker")
 
 local function Health_And_Combat_Check(inst, percent)
     if inst.components.combat and inst.components.combat.target and inst.components.health and not inst.components.health:IsDead() and (percent == nil or (percent and inst.components.health:GetPercent() < percent)) then

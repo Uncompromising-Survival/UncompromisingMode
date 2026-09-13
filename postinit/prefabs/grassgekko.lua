@@ -1,6 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
-local UpvalueHacker = require("tools/upvaluehacker")
+local UpvalueHacker = require("tools/um_upvaluehacker")
 -----------------------------------------------------------------
 local function CLIENT_PlayGrowTailSound(inst)
     local parent = inst.entity:GetParent()

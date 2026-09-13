@@ -2,7 +2,7 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 
-local UpvalueHacker = require("tools/upvaluehacker")
+local UpvalueHacker = require("tools/um_upvaluehacker")
 
 env.AddComponentPostInit("hounded", function(self)
     local _spawndata = UpvalueHacker.GetUpvalue(self.SetSpawnData, "_spawndata")

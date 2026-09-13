@@ -2,7 +2,7 @@ local require = GLOBAL.require
 
 
 local SignGenerator = GLOBAL.require "signgenerator"
-local UpvalueHacker = GLOBAL.require("tools/upvaluehacker")
+local UpvalueHacker = GLOBAL.require("tools/um_upvaluehacker")
 local writeables = GLOBAL.require("writeables")
 
 local kinds = UpvalueHacker.GetUpvalue(writeables.makescreen, "kinds")
