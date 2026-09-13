@@ -1,5 +1,4 @@
 -- From Rezecib's Rebalance: https://github.com/rezecib/Rezecib-s-Rebalance/blob/master/scripts/tools/upvaluehacker.lua
-
 local UpvalueHacker = {}
 local function GetUpvalueHelper(fn, name)
 	local i = 1
