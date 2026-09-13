@@ -117,26 +117,26 @@ function EntityScript:PushEventImmediate(event, data, ...)
 	return back
 end
 
-env.AddComponentPostInit("combat", function(self)
-	local _GetAttacked = self.GetAttacked
-
-	function self:GetAttacked(attacker, damage, weapon, stimuli, ...)
+local function GetAttackedPostInit(self, fn)
+	local _GetAttackedOrInternal = self[fn]
+	self[fn] = function(self, attacker, damage, weapon, stimuli, ...)
 		if stimuli == "electric" and not PlayerCheck(self.inst) then
 			if DontElectrocute(self.inst) then
-				return _GetAttacked(self, attacker, damage, weapon, nil, ...)
+				return _GetAttackedOrInternal(self, attacker, damage, weapon, nil, ...)
 			end
 
-			local back = _GetAttacked(self, attacker, damage, weapon, stimuli, ...)
+			local ret = _GetAttackedOrInternal(self, attacker, damage, weapon, stimuli, ...)
 
 			if self.inst ~= nil and self.inst:IsValid() then
 				ApplyDelayedElectricImmunity(self.inst)
 			end
 
-			return back
+			return ret
 		end
+end
 
-		return _GetAttacked(self, attacker, damage, weapon, stimuli, ...)
-	end
+env.AddComponentPostInit("combat", function(self)
+ GetAttackedPostInit(self, UPDATE_CHECK and "GetAttacked_Internal" or "GetAttacked")
 
 	local _OnSave = self.OnSave
 	function self:OnSave(...)
