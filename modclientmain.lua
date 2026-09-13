@@ -1,16 +1,16 @@
 PrefabFiles = {
-	"winky_none",
-	"wathom_none",
-	"wixie_none"
+    "winky_none",
+    "wathom_none",
+    "wixie_none"
 }
 
 Assets = {
-	Asset("ANIM", "anim/winky.zip"),
-	Asset("ANIM", "anim/ghost_winky_build.zip"),
---	Asset("ANIM", "anim/wathom.zip"),
---	Asset("ANIM", "anim/ghost_wathom_build.zip"),    -- Commented out because the standalone mod doesn't load these and works fine.
+    Asset("ANIM", "anim/winky.zip"),
+    Asset("ANIM", "anim/ghost_winky_build.zip"),
+--Asset("ANIM", "anim/wathom.zip"),
+--Asset("ANIM", "anim/ghost_wathom_build.zip"),    -- Commented out because the standalone mod doesn't load these and works fine.
 
-	Asset( "IMAGE", "bigportraits/winky.tex" ),
+    Asset( "IMAGE", "bigportraits/winky.tex" ),
     Asset( "ATLAS", "bigportraits/winky.xml" ),
     Asset( "IMAGE", "bigportraits/wathom.tex" ),
     Asset( "ATLAS", "bigportraits/wathom.xml" ),
@@ -27,14 +27,14 @@ Assets = {
 
     Asset( "IMAGE", "images/names_gold_winky.tex" ),
     Asset( "ATLAS", "images/names_gold_winky.xml" ),
-	Asset( "IMAGE", "images/names_gold_wathom.tex" ),
+    Asset( "IMAGE", "images/names_gold_wathom.tex" ),
     Asset( "ATLAS", "images/names_gold_wathom.xml" ),
 
 
-	Asset("ANIM", "anim/wixie.zip"),
-	Asset("ANIM", "anim/ghost_wixie_build.zip"),
+    Asset("ANIM", "anim/wixie.zip"),
+    Asset("ANIM", "anim/ghost_wixie_build.zip"),
 
-	Asset( "IMAGE", "bigportraits/wixie.tex" ),
+    Asset( "IMAGE", "bigportraits/wixie.tex" ),
     Asset( "ATLAS", "bigportraits/wixie.xml" ),
 
     Asset( "IMAGE", "bigportraits/wixie_none_oval.tex" ),

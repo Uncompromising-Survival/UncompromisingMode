@@ -1,7 +1,7 @@
 local ENV = env
 GLOBAL.setfenv(1, GLOBAL)
 
---	Play funny sound on activation ~
+-- Play funny sound on activation ~
 -- Credit to ADM
 
 local ServerCreationScreen = TheFrontEnd:GetActiveScreen()

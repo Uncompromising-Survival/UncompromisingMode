@@ -14,96 +14,96 @@ local EQUIPSLOTS = _G.EQUIPSLOTS
 
 local BATTERY =
 {
-	["potato"] =
-	{
-		power = TUNING.MED_FUEL / 3,
-	},
-	["feather_canary"] =
-	{
-		power = TUNING.MED_FUEL / 1.5,
-	},
-	["transistor"] =
-	{
-		power = TUNING.MED_FUEL,
-	},
-	["trinket_6"] =
-	{
-		power = TUNING.MED_FUEL,
-	},
-	["lightninggoathorn"] =
-	{
-		power = TUNING.LARGE_FUEL,
-	},
-	["goatmilk"] =
-	{
-		power = TUNING.LARGE_FUEL,
-	},
-	["zaspberry"] =
-	{
-		power = TUNING.LARGE_FUEL,
-	},
+    ["potato"] =
+    {
+        power = TUNING.MED_FUEL / 3,
+    },
+    ["feather_canary"] =
+    {
+        power = TUNING.MED_FUEL / 1.5,
+    },
+    ["transistor"] =
+    {
+        power = TUNING.MED_FUEL,
+    },
+    ["trinket_6"] =
+    {
+        power = TUNING.MED_FUEL,
+    },
+    ["lightninggoathorn"] =
+    {
+        power = TUNING.LARGE_FUEL,
+    },
+    ["goatmilk"] =
+    {
+        power = TUNING.LARGE_FUEL,
+    },
+    ["zaspberry"] =
+    {
+        power = TUNING.LARGE_FUEL,
+    },
 }
 
 if GLOBAL.TUNING.DSTU.ELECTRICALMISHAP == 2 then
-	for k, v in pairs(BATTERY) do
-		AddPrefabPostInit(k, function(inst)
-			if inst.components.fuel == nil then
-				inst:AddComponent("fuel")
-			end
+    for k, v in pairs(BATTERY) do
+        AddPrefabPostInit(k, function(inst)
+            if inst.components.fuel == nil then
+                inst:AddComponent("fuel")
+            end
 
-			if inst.components.fuel ~= nil then
-				inst.components.fuel.fuelvalue = v.power
-				inst.components.fuel.fueltype = GLOBAL.FUELTYPE.BATTERYPOWER
-			end
-		end)
-	end
+            if inst.components.fuel ~= nil then
+                inst.components.fuel.fuelvalue = v.power
+                inst.components.fuel.fueltype = GLOBAL.FUELTYPE.BATTERYPOWER
+            end
+        end)
+    end
 end
 
 local SALT =
 {
-	["saltrock"] =
-	{
-		power = TUNING.MED_FUEL * 2,
-	},
+    ["saltrock"] =
+    {
+        power = TUNING.MED_FUEL * 2,
+    },
 }
 
 for k, v in pairs(SALT) do
-	AddPrefabPostInit(k, function(inst)
-		if inst.components.fuel == nil then
-			inst:AddComponent("fuel")
-		end
+    AddPrefabPostInit(k, function(inst)
+        if inst.components.fuel == nil then
+            inst:AddComponent("fuel")
+        end
 
-		if inst.components.fuel ~= nil then
-			inst.components.fuel.fuelvalue = v.power
-			inst.components.fuel.fueltype = GLOBAL.FUELTYPE.SALT
-		end
-	end)
+        if inst.components.fuel ~= nil then
+            inst.components.fuel.fuelvalue = v.power
+            inst.components.fuel.fueltype = GLOBAL.FUELTYPE.SALT
+        end
+    end)
 end
 
 local WOOL =
 {
-	["steelwool"] =
-	{
-		power = TUNING.MED_FUEL * 2,
-	},
+    ["steelwool"] =
+    {
+        power = TUNING.MED_FUEL * 2,
+    },
 }
 
 for k, v in pairs(WOOL) do
-	AddPrefabPostInit(k, function(inst)
-		if inst.components.fuel == nil then
-			inst:AddComponent("fuel")
-		end
+    AddPrefabPostInit(k, function(inst)
+        if inst.components.fuel == nil then
+            inst:AddComponent("fuel")
+        end
 
-		if inst.components.fuel ~= nil then
-			inst.components.fuel.fuelvalue = v.power
-			inst.components.fuel.fueltype = GLOBAL.FUELTYPE.WOOL
-		end
-	end)
+        if inst.components.fuel ~= nil then
+            inst.components.fuel.fuelvalue = v.power
+            inst.components.fuel.fueltype = GLOBAL.FUELTYPE.WOOL
+        end
+    end)
 end
 
 --I'm blaming Zark for this not uploading properly ::::::ASDFAFSDFASDAZCQWECQWEFCCQWEFQWFCQ --Scrimbles
 
----------	                           -----------
+---------                              -----------
 
 -----------------------------------------
 ------
@@ -116,21 +116,21 @@ end
 
 local EYE =
 {
-	["milkywhites"] =
-	{
-		power = TUNING.MED_FUEL * 13,
-	},
+    ["milkywhites"] =
+    {
+        power = TUNING.MED_FUEL * 13,
+    },
 }
 
 for k, v in pairs(EYE) do
-	AddPrefabPostInit(k, function(inst)
-		if inst.components.fuel == nil then
-			inst:AddComponent("fuel")
-		end
+    AddPrefabPostInit(k, function(inst)
+        if inst.components.fuel == nil then
+            inst:AddComponent("fuel")
+        end
 
-		if inst.components.fuel ~= nil then
-			inst.components.fuel.fuelvalue = v.power
-			inst.components.fuel.fueltype = GLOBAL.FUELTYPE.EYE
-		end
-	end)
+        if inst.components.fuel ~= nil then
+            inst.components.fuel.fuelvalue = v.power
+            inst.components.fuel.fueltype = GLOBAL.FUELTYPE.EYE
+        end
+    end)
 end

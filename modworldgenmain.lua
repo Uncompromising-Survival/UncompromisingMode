@@ -35,7 +35,7 @@ if GetModConfigData("worldgenmastertoggle") then
         "gemology",
     }
 
-    -- Import Adjustments and Additions to Tasks	
+    -- Import Adjustments and Additions to Tasks
     for i, task in ipairs(tasks_forest) do
         modimport("scripts/map/tasks/forest/" .. task)
     end
