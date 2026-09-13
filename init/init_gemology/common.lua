@@ -3,7 +3,7 @@ GLOBAL.setfenv(1, GLOBAL)
 
 local DEFS = require("gemology_defs")
 local GEM_DEFS = DEFS.GEM_DEFS
-local UpvalueHacker = require("tools/upvaluehacker")
+local UpvalueHacker = require("tools/um_upvaluehacker")
 local UIAnim = require "widgets/uianim"
 
 --------------------------------------------------------------------------

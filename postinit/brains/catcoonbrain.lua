@@ -22,7 +22,7 @@ local function PlayAction_Inventory(inst)
     return target and BufferedAction(inst, target, ACTIONS.PICKUP) or nil
 end
 
-local UpvalueHacker = require("tools/upvaluehacker")
+local UpvalueHacker = require("tools/um_upvaluehacker")
 local CatcoonBrain = require("brains/catcoonbrain")
 
 local _PlayAction = UpvalueHacker.GetUpvalue(CatcoonBrain.OnStart, "PlayAction")

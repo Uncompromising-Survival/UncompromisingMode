@@ -2,7 +2,7 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 
-local UpvalueHacker = require("tools/upvaluehacker")
+local UpvalueHacker = require("tools/um_upvaluehacker")
 env.AddSimPostInit(function()
     local SpewMiasma = UpvalueHacker.GetUpvalue(Prefabs.cave_vent_rock.fn, "OnTimerDone", "SpewMiasma")
     local _SpewHotSteam = UpvalueHacker.GetUpvalue(Prefabs.cave_vent_rock.fn, "OnTimerDone", "SpewHotSteam")

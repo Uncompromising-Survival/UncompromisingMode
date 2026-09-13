@@ -414,7 +414,7 @@ local function StartGrowing(inst, giver, product)
     end
 end
 
-local UpvalueHacker = require("tools/upvaluehacker")
+local UpvalueHacker = require("tools/um_upvaluehacker")
 env.AddSimPostInit(function()
     UpvalueHacker.SetUpvalue(Prefabs.mushroom_farm.fn, StartGrowing, "onacceptitem", "StartGrowing")
 end)

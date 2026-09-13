@@ -1,7 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-local UpvalueHacker = require("tools/upvaluehacker")
+local UpvalueHacker = require("tools/um_upvaluehacker")
 
 local function ongrowsproutsdone(inst, data)
     if data.name == "growsprouts" and inst.components.workable and TheWorld.state.isautumn and TheWorld.state.cycles > TUNING.SEASON_LENGTH_FRIENDLY_VERYLONG then

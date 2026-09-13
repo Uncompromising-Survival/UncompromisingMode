@@ -1,4 +1,4 @@
-local UpvalueHacker = GLOBAL.require("tools/upvaluehacker")
+local UpvalueHacker = GLOBAL.require("tools/um_upvaluehacker")
 local PigBrain = require("brains/pigbrain")
 --PIGS SHOULDNT BE EATING BUGS OUT OF THE SKY--
 

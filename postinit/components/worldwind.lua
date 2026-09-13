@@ -1,6 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
-local UpvalueHacker = require("tools/upvaluehacker")
+local UpvalueHacker = require("tools/um_upvaluehacker")
 
 env.AddComponentPostInit("worldwind", function(self)
     local MIN_TIME_TO_WIND_CHANGE = 480

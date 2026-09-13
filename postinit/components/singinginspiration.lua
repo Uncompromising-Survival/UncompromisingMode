@@ -1,7 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
---local UpvalueHacker = require("tools/upvaluehacker")
+--local UpvalueHacker = require("tools/um_upvaluehacker")
 
 
 env.AddComponentPostInit("singinginspiration", function(self)

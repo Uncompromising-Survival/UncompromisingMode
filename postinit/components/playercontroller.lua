@@ -2,7 +2,7 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 -----------------------------------------------------------------
-local UpvalueHacker = require("tools/upvaluehacker")
+local UpvalueHacker = require("tools/um_upvaluehacker")
 local PlayerController = require("components/playercontroller")
 
 --[[env.AddComponentPostInit("playercontroller", function(self) --By Summerrr, I didn't do anything lool -C

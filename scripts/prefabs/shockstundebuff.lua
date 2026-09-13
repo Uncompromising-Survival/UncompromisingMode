@@ -1,4 +1,4 @@
-local UpvalueHacker = require("tools/upvaluehacker")
+local UpvalueHacker = require("tools/um_upvaluehacker")
 local _HitRecoverDelay = CommonHandlers.HitRecoveryDelay
 CommonHandlers.HitRecoveryDelay = function(inst, delay, max_hitreacts, skip_cooldown_fn, ...)
     if inst.um_forcestundebuff then return false end

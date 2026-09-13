@@ -2,7 +2,7 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 local SignGenerator = require"signgenerator"
-local UpvalueHacker = require("tools/upvaluehacker")
+local UpvalueHacker = require("tools/um_upvaluehacker")
 local writeables = require("writeables")
 
 local kinds = UpvalueHacker.GetUpvalue(writeables.makescreen, "kinds")

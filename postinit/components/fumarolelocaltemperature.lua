@@ -4,7 +4,7 @@
 -- a side-effect. Instead, modifying GetTile to also include Magma Caves is a better option.
 if not GLOBAL.TheNet:GetIsServer() then return end
 
-local UpvalueHacker = require("tools/upvaluehacker")
+local UpvalueHacker = require("tools/um_upvaluehacker")
 
 AddComponentPostInit("fumarolelocaltemperature", function(self)
 	-- Extremely unlikely that someone will also need this too. Postiniting the function will also make the tile call happen twice, let's just

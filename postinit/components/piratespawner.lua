@@ -10,7 +10,7 @@ env.AddComponentPostInit("piratespawner", function(self)
 		end
 	end
 
-	local UpvalueHacker = require("tools/upvaluehacker")
+	local UpvalueHacker = require("tools/um_upvaluehacker")
 
 	--local lootlist = UpvalueHacker.GetUpvalue(self.GetCurrentStash, "generateloot", "lootlist")
 	local _generateloot = UpvalueHacker.GetUpvalue(self.GetCurrentStash, "generateloot")

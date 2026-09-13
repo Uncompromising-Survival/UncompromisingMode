@@ -14,7 +14,7 @@ backpack layouts.
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-local UpvalueHacker = require("tools/upvaluehacker")
+local UpvalueHacker = require("tools/um_upvaluehacker")
 local ImageButton = require("widgets/imagebutton")
 local ItemTile = require("widgets/itemtile")
 

@@ -1,7 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
-local UpvalueHacker = require("tools/upvaluehacker")
+local UpvalueHacker = require("tools/um_upvaluehacker")
 local Freezable = require("components/freezable")
 local _OnAttacked = UpvalueHacker.GetUpvalue(Freezable._ctor, "OnAttacked")
 local function OnAttacked(inst, data, ...)

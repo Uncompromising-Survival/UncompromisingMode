@@ -11,7 +11,7 @@ local function OnCooldown(inst)
     inst._cdtask = nil
 end
 
-local UpvalueHacker = require("tools/upvaluehacker")
+local UpvalueHacker = require("tools/um_upvaluehacker")
 
 local function ActionHungerDrain(inst, data)
     if inst.components.rider ~= nil and inst.components.rider:IsRiding() then
@@ -280,7 +280,7 @@ end)
 --[[
 
 local GEMSLOTS = 3
-local UpvalueHacker = GLOBAL.require("tools/upvaluehacker")
+local UpvalueHacker = GLOBAL.require("tools/um_upvaluehacker")
 
 AddPrefabPostInit("world", function(inst)
     --Get the old functions using upvalue hacker

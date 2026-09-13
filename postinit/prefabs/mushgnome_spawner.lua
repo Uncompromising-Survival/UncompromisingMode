@@ -1,4 +1,4 @@
-local UpvalueHacker = GLOBAL.require("tools/upvaluehacker")
+local UpvalueHacker = GLOBAL.require("tools/um_upvaluehacker")
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
