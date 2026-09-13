@@ -274,7 +274,7 @@ end
     end
 end]]
 
-local function FindTarget(inst, radius)
+--[[local function FindTarget(inst, radius)
     return FindEntity(
         inst,
         SpringCombatMod(radius),
@@ -287,10 +287,9 @@ local function FindTarget(inst, radius)
         {"spiderwhisperer", "spiderdisguise", "INLIMBO"}
     )
 end
---[[
 local function WarriorRetarget(inst)
     return FindTarget(inst, TUNING.SPIDER_WARRIOR_TARGET_DIST)
-end--]]
+end]]
 
 env.AddPrefabPostInit("spider", function(inst)
     inst:AddTag("spider_regular")
