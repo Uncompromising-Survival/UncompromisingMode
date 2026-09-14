@@ -81,8 +81,8 @@ for k, v in pairs(COLLAPSIBLE_WORK_ACTIONS) do
     table.insert(COLLAPSIBLE_TAGS, k.."_workable")
 end
 local NON_COLLAPSIBLE_TAGS = { "antlion", "groundspike", "flying", "shadow", "ghost", "playerghost", "FX", "NOCLICK", "DECOR", "INLIMBO" }
-local TOSSITEM_MUST_TAGS = { "_inventoryitem" }
-local TOSSITEM_CANT_TAGS = { "locomotor", "INLIMBO" }
+--local TOSSITEM_MUST_TAGS = { "_inventoryitem" }
+--local TOSSITEM_CANT_TAGS = { "locomotor", "INLIMBO" }
 
 local function DoBreak(inst)
     inst.task = nil
