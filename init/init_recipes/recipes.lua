@@ -125,7 +125,7 @@ if TUNING.DSTU.SNOWSTORMS then
     ChangeSortKey("um_ice_sicle", "jawed_scythe", "WEAPONS", true)
     ChangeSortKey("um_ice_sicle", "batbat", "MAGIC", true)
 
-    AddRecipe2("ice", { Ingredient("snowball_item", 4) }, TECH.SCIENCE_ONE, nil, { "REFINE", "COOKING" })
+    AddRecipe2("ice", { Ingredient("snowball_item", 4) }, TECH.NONE, nil, { "REFINE", "COOKING" })
     ChangeSortKey("ice", "beeswax", "REFINE", true)
 end
 

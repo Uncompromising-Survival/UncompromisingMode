@@ -414,7 +414,10 @@ env.AddStategraphPostInit("beequeen", function(inst)
 
             timeline =
             {
-                TimeEvent(9 * FRAMES, StopFlapping),
+                TimeEvent(9 * FRAMES, function(inst)
+                    StopFlapping(inst)
+                    LandFlyingCreature(inst)
+                end),
             },
 
             events =
@@ -425,6 +428,7 @@ env.AddStategraphPostInit("beequeen", function(inst)
             onexit = function(inst)
                 inst.components.timer:ResumeTimer("spawnguards_cd")
                 RestoreFlapping(inst)
+                RaiseFlyingCreature(inst)
             end
         },
 
@@ -434,6 +438,7 @@ env.AddStategraphPostInit("beequeen", function(inst)
 
             onenter = function(inst)
                 StopFlapping(inst)
+                LandFlyingCreature(inst)
                 inst.components.timer:PauseTimer("spawnguards_cd")
                 inst.components.locomotor:StopMoving()
                 inst.AnimState:PlayAnimation("tired_loop", true)
@@ -448,6 +453,7 @@ env.AddStategraphPostInit("beequeen", function(inst)
 
             onexit = function(inst)
                 RestoreFlapping(inst)
+                RaiseFlyingCreature(inst)
             end,
         },
 
@@ -457,6 +463,8 @@ env.AddStategraphPostInit("beequeen", function(inst)
 
             onenter = function(inst)
                 inst.AnimState:PlayAnimation("tired_pst")
+                StopFlapping(inst)
+                LandFlyingCreature(inst)
             end,
 
             events =
@@ -466,6 +474,7 @@ env.AddStategraphPostInit("beequeen", function(inst)
 
             onexit = function(inst)
                 RestoreFlapping(inst)
+                RaiseFlyingCreature(inst)
             end,
         },
 
@@ -475,6 +484,7 @@ env.AddStategraphPostInit("beequeen", function(inst)
 
             onenter = function(inst)
                 StopFlapping(inst)
+                LandFlyingCreature(inst)
                 inst.components.locomotor:StopMoving()
                 inst.AnimState:PlayAnimation("tired_hit")
                 inst.SoundEmitter:PlaySound("dontstarve/creatures/together/bee_queen/hit")
@@ -503,6 +513,7 @@ env.AddStategraphPostInit("beequeen", function(inst)
 
             onexit = function(inst)
                 RestoreFlapping(inst)
+                RaiseFlyingCreature(inst)
             end,
         },
 

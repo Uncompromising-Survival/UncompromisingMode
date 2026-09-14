@@ -51,7 +51,7 @@ local function ChangeToObstacle(inst)
     inst.Physics:Teleport(x, 0, z)
 end
 
-local function SpikeLaunch(inst, launcher, basespeed, startheight, startradius)
+--[[local function SpikeLaunch(inst, launcher, basespeed, startheight, startradius)
     local x0, y0, z0 = launcher.Transform:GetWorldPosition()
     local x1, y1, z1 = inst.Transform:GetWorldPosition()
     local dx, dz = x1 - x0, z1 - z0
@@ -67,7 +67,7 @@ local function SpikeLaunch(inst, launcher, basespeed, startheight, startradius)
     local speed = basespeed + math.random()
     TryTeleportToLaunchPos(inst, x0 + startradius * cosa, startheight, z0 + startradius * sina)
     inst.Physics:SetVel(cosa * speed, speed * 5 + math.random() * 2, sina * speed)
-end
+end]]--
 
 local COLLAPSIBLE_WORK_ACTIONS =
 {
@@ -81,8 +81,8 @@ for k, v in pairs(COLLAPSIBLE_WORK_ACTIONS) do
     table.insert(COLLAPSIBLE_TAGS, k.."_workable")
 end
 local NON_COLLAPSIBLE_TAGS = { "antlion", "groundspike", "flying", "shadow", "ghost", "playerghost", "FX", "NOCLICK", "DECOR", "INLIMBO" }
-local TOSSITEM_MUST_TAGS = { "_inventoryitem" }
-local TOSSITEM_CANT_TAGS = { "locomotor", "INLIMBO" }
+--local TOSSITEM_MUST_TAGS = { "_inventoryitem" }
+--local TOSSITEM_CANT_TAGS = { "locomotor", "INLIMBO" }
 
 local function DoBreak(inst)
     inst.task = nil
@@ -140,7 +140,7 @@ local function DoDamage(inst, OnIgnite)
         end
     end
 
-    local totoss = TheSim:FindEntities(x, 0, z, inst.spikeradius + DAMAGE_RADIUS_PADDING, TOSSITEM_MUST_TAGS, TOSSITEM_CANT_TAGS)
+    --[[local totoss = TheSim:FindEntities(x, 0, z, inst.spikeradius + DAMAGE_RADIUS_PADDING, TOSSITEM_MUST_TAGS, TOSSITEM_CANT_TAGS)
     for i, v in ipairs(totoss) do
         DeactivateInventoryItemBeforeLaunch(v)
         if not v.components.inventoryitem.nobounce and v.Physics ~= nil and v.Physics:IsActive() then
@@ -150,7 +150,7 @@ local function DoDamage(inst, OnIgnite)
                 SpikeLaunch(v, inst, .8 + inst.spikeradius, inst.spikeradius * .4, inst.spikeradius + v:GetPhysicsRadius(0))
             end
         end
-    end
+    end]]--
 end
 
 local function ChangeToGlass(inst)
