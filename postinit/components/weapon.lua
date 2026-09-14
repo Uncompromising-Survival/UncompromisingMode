@@ -30,9 +30,9 @@ env.AddComponentPostInit("weapon", function(self)
                 if GEM_DEFS[enchant].fns.adjustdamage then
                     if not _damage then _damage = self.damage end
                     local _damagechanged = self.damage
-                    self.damage = function(inst, attacker, target, ...)
-                        local ret = _damagechanged(inst, attacker target, ...)
-                        ret = GEM_DEFS[enchant].fns.adjustdamage(ret, inst, attacker, target, tier)
+                    self.damage = function(inst, _attacker, _target, ...)
+                        local ret = FunctionOrValue(_damagechanged, inst, _attacker, _target, ...)
+                        ret = GEM_DEFS[enchant].fns.adjustdamage(ret, inst, _attacker, _target, tier)
                         return ret
                     end
                 end
