@@ -171,7 +171,7 @@ end
 _G.UMSimTempOverride = {}
 local TheSimMetaTable = getmetatable(TheSim).__index
 local _FindEntities = TheSim.FindEntities
-function TheSimMetaTable.FindEntities(self, x, y, z, radius, musttags, canttags, oneoftags, ...)
+function TheSimMetaTable:FindEntities(x, y, z, radius, musttags, canttags, oneoftags, ...)
     local ret = _FindEntities(self, x, y, z, radius, musttags, canttags, oneoftags, ...)
     local data = UMSimTempOverride.data
     if data then
