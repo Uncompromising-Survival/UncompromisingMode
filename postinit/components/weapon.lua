@@ -32,7 +32,7 @@ env.AddComponentPostInit("weapon", function(self)
                     local _damagechanged = self.damage
                     self.damage = function(inst, _attacker, _target, ...)
                         local ret = FunctionOrValue(_damagechanged, inst, _attacker, _target, ...)
-                        ret = GEM_DEFS[enchant].fns.adjustdamage(ret, inst, _attacker, _target, tier)
+                        ret = GEM_DEFS[enchant].fns.onadjustdamage(ret, inst, _attacker, _target, tier)
                         return ret
                     end
                 end
