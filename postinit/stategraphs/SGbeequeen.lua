@@ -6,7 +6,7 @@ local STOMP_CANT_TAGS = {"INLIMBO", "notarget", "invisible", "noattack", "flight
 
 local function DoStomp(inst)
     inst.components.combat.ignorehitrange = true
-    inst.components.combat.externaldamagemultipliers:SetModifier(inst, math.max(200 / TUNING.BEEQUEEN_DAMAGE, 1), "um_beequeen_stomp")
+    inst.components.combat.externaldamagemultipliers:SetModifier(inst, TUNING.DSTU.BEEQUEEN_STOMP_DAMAGE_MULT, "um_beequeen_stomp")
     local x, y, z = inst.Transform:GetWorldPosition()
     for i, ent in ipairs(TheSim:FindEntities(x, y, z, TUNING.BEEQUEEN_HIT_RANGE + .5, STOMP_MUST_TAGS, STOMP_CANT_TAGS)) do
         if ent:IsValid() and not ent.components.health:IsDead() and inst.components.combat:CanTarget(ent) then
