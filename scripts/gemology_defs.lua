@@ -1,6 +1,4 @@
---[[
-Note(Atobá):
-The key is the prefab name of the gem.
+--[[Note(Atobá): The key is the prefab name of the gem.
 
 The values are:
 {
@@ -14,19 +12,19 @@ The values are:
         onequip= function(item, owner, tier) -- function that runs when you equip the item with the gem
         onunequip = function(item, owner, tier) -- function that runs when you unequip the item with the gem
     }
-    color = RGB(r,g,b) --color for the text/durability border in the UI
+    color = RGB(r,g,b) -- color for the text/durability border in the UI
     -- for mineral logbook
-    desc = { --For scrapbook and insight.
+    desc = { -- For scrapbook and insight.
         [1] = "Description for tier 1 gem"
         [2] = "Description for tier 2 gem"
         ...and so forth
     }
-    createprefab = boolean --whether the item prefab is automatically created.
-    build = "string" --build name - even if you don't generate the prefab, you need this for scrapbook/mineral logbook.
-    bank = "string" --bank name
-    anim = "string" --anim name   -- defaults to "idle"
-    img = "string.tex" --texture name --for scrapbook only.
-    atlas = "string.xml" --atlas name
+    createprefab = boolean -- whether the item prefab is automatically created.
+    build = "string" -- build name - even if you don't generate the prefab, you need this for scrapbook/mineral logbook.
+    bank = "string" -- bank name
+    anim = "string" -- anim name   -- defaults to "idle"
+    img = "string.tex" -- texture name -- for scrapbook only.
+    atlas = "string.xml" -- atlas name
     postfn = function(inst) -- function that runs when the prefab is created on the common side on post-init.
 }
 
@@ -38,8 +36,7 @@ item.volatile_gemology_data[gem_name].bar = {thing = 1}
 
 persistent is actually saved and loaded, volatile is not.
 
-This is so we can save some gem-specific data so it can probably revert when removed.
-]]
+This is so we can save some gem-specific data so it can probably revert when removed.]]
 
 local GEM_DEFS = {}
 local GEM_LOOKUP = {}
