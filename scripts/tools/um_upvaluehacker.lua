@@ -23,7 +23,7 @@ function UpvalueHacker.GetUpvalue(fn, ...)
 end
 
 function UpvalueHacker.TryGetUpvalue(fn, ...)
-    local prv, prv_var = nil, nil, "(the starting point)"
+    local prv_var = "(the starting point)"
 	local args = {...}
     for j, var in ipairs(args) do
         if type(fn) ~= "function" then
@@ -32,7 +32,6 @@ function UpvalueHacker.TryGetUpvalue(fn, ...)
                 .."). Here's the full chain: "..table.concat({"(the starting point)", ...}, ", "))
             return nil
         end
-        prv = fn
         prv_var = var
         fn = GetUpvalueHelper(fn, var)
     end
