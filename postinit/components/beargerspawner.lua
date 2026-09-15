@@ -7,20 +7,24 @@ local UMUpvalueHacker = require("tools/um_upvaluehacker")
 env.AddComponentPostInit("beargerspawner", function(self)
 	local um_overridespawn = false
 
-	local _CanSpawnBearger = UMUpvalueHacker.GetUpvalue(self.OnUpdate,"CanSpawnBearger")
-	local function CanSpawnBearger()
-		return _CanSpawnBearger() or um_overridespawn == true
+	local _CanSpawnBearger = UMUpvalueHacker.TryGetUpvalue(self.OnUpdate,"CanSpawnBearger")
+	if _CanSpawnBearger then
+		local function CanSpawnBearger()
+			return _CanSpawnBearger() or um_overridespawn == true
+		end
+		UMUpvalueHacker.SetUpvalue(self.OnUpdate,CanSpawnBearger, "CanSpawnBearger")
 	end
-	UMUpvalueHacker.SetUpvalue(self.OnUpdate,CanSpawnBearger, "CanSpawnBearger")
 
 	local _SpawnBearger = UMUpvalueHacker.GetUpvalue(self.OnUpdate,"SpawnBearger")
-	local function SpawnBearger()
-		um_overridespawn = false
-		if _CanSpawnBearger() then
-			_SpawnBearger()
+	if _SpawnBearger then
+		local function SpawnBearger()
+			um_overridespawn = false
+			if _CanSpawnBearger() then
+				_SpawnBearger()
+			end
 		end
+		UMUpvalueHacker.SetUpvalue(self.OnUpdate, SpawnBearger, "SpawnBearger")
 	end
-	UMUpvalueHacker.SetUpvalue(self.OnUpdate, SpawnBearger, "SpawnBearger")
 
 	local _OnSave = self.OnSave
 	function self:OnSave(...)

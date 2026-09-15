@@ -486,13 +486,11 @@ local function DoOceanFishing(inst, x, z)
 end
 
 if env.GetModConfigData("winonafishing") then
-    env.AddPrefabPostInit("winona_catapult_projectile", function(inst)
-        if not TheWorld.ismastersim then return end
-
-        UMUpvalueHacker.SetUpvalue(inst.components.complexprojectile.onhitfn, DoOceanFishing, "DoOceanFishing")
-    end)
+    env.AddSimPostInit(function()
+        local _DoOceanFishing = UMUpvalueHacker.TryGetUpvalue(Prefabs.winona_catapult_projectile.fn, "OnHit", "DoOceanFishing")
+        if _DoOceanFishing then UMUpvalueHacker.SetUpvalue(Prefabs.winona_catapult_projectile.fn, DoOceanFishing, "OnHit", "DoOceanFishing") end
+    end
 end
-
 
 env.AddPrefabPostInit("winona_recipescanner", function(inst)
     inst:AddTag("gemologyscanner")

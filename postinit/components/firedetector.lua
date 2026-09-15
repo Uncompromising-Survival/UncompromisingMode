@@ -22,9 +22,10 @@ for _, tag in pairs(TAGS) do
     table.insert(_NONEMERGENCYTAGS, tag)
 end
 
-local _CheckTargetScore = UMUpvalueHacker.GetUpvalue(FireDetector.Activate, "LookForFiresAndFirestarters", "CheckTargetScore")
-local function CheckTargetScore(target, ...)
-    return target and target:HasTag("um_washable_goo") and 8 or _CheckTargetScore(target, ...)
+local _CheckTargetScore = UMUpvalueHacker.TryGetUpvalue(FireDetector.Activate, "LookForFiresAndFirestarters", "CheckTargetScore")
+if _CheckTargetScore then
+    local function CheckTargetScore(target, ...)
+        return target and target:HasTag("um_washable_goo") and 8 or _CheckTargetScore(target, ...)
+    end
+    UMUpvalueHacker.SetUpvalue(FireDetector.Activate, CheckTargetScore, "LookForFiresAndFirestarters", "CheckTargetScore")
 end
-
-UMUpvalueHacker.SetUpvalue(FireDetector.Activate, CheckTargetScore, "LookForFiresAndFirestarters", "CheckTargetScore")

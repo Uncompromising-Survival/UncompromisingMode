@@ -92,31 +92,35 @@ local function OnUnequip(inst, data)
     end
 end]]
 
-local _OnEquip = UMUpvalueHacker.GetUpvalue(PlayerController.Activate, "OnEquip")
-local function OnEquip(inst, data, ...)
-    if data.eslot == EQUIPSLOTS.HANDS then
-        local self = inst.components.playercontroller
-        if self.reticule and self.reticule.inst:HasTag("um_killreticuleonequipchange") then
-            --Make sure the wheel doesnt leave IsEnabled() reporting false for whatever is getting equipped, which would hide its fresh reticule
-            if inst.HUD and inst.HUD:IsSpellWheelOpen() then inst.HUD:CloseSpellWheel() end
-            self.reticule:DestroyReticule()
-            self.reticule = nil
+local _OnEquip = UMUpvalueHacker.TryGetUpvalue(PlayerController.Activate, "OnEquip")
+if _OnEquip then
+    local function OnEquip(inst, data, ...)
+        if data.eslot == EQUIPSLOTS.HANDS then
+            local self = inst.components.playercontroller
+            if self.reticule and self.reticule.inst:HasTag("um_killreticuleonequipchange") then
+                --Make sure the wheel doesnt leave IsEnabled() reporting false for whatever is getting equipped, which would hide its fresh reticule
+                if inst.HUD and inst.HUD:IsSpellWheelOpen() then inst.HUD:CloseSpellWheel() end
+                self.reticule:DestroyReticule()
+                self.reticule = nil
+            end
         end
+        return _OnEquip(inst, data, ...)
     end
-    return _OnEquip(inst, data, ...)
+    UMUpvalueHacker.SetUpvalue(PlayerController.Activate, OnEquip, "OnEquip")
 end
-UMUpvalueHacker.SetUpvalue(PlayerController.Activate, OnEquip, "OnEquip")
 
-local _OnUnequip = UMUpvalueHacker.GetUpvalue(PlayerController.Activate, "OnUnequip")
-local function OnUnequip(inst, data, ...)
-    if data.eslot == EQUIPSLOTS.HANDS then
-        local self = inst.components.playercontroller
-        if self.reticule and self.reticule.inst:HasTag("um_killreticuleonequipchange") then
-            if inst.HUD and inst.HUD:IsSpellWheelOpen() then inst.HUD:CloseSpellWheel() end
-            self.reticule:DestroyReticule()
-            self.reticule = nil
+local _OnUnequip = UMUpvalueHacker.TryGetUpvalue(PlayerController.Activate, "OnUnequip")
+if _OnUnequip then
+    local function OnUnequip(inst, data, ...)
+        if data.eslot == EQUIPSLOTS.HANDS then
+            local self = inst.components.playercontroller
+            if self.reticule and self.reticule.inst:HasTag("um_killreticuleonequipchange") then
+                if inst.HUD and inst.HUD:IsSpellWheelOpen() then inst.HUD:CloseSpellWheel() end
+                self.reticule:DestroyReticule()
+                self.reticule = nil
+            end
         end
+        return _OnUnequip(inst, data, ...)
     end
-    return _OnUnequip(inst, data, ...)
+    UMUpvalueHacker.SetUpvalue(PlayerController.Activate, OnUnequip, "OnUnequip")
 end
-UMUpvalueHacker.SetUpvalue(PlayerController.Activate, OnUnequip, "OnUnequip")

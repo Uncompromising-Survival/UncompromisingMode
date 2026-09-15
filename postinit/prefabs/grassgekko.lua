@@ -84,13 +84,15 @@ end
 
 env.AddSimPostInit(function()
     local _ontimerdone = UMUpvalueHacker.GetUpvalue(Prefabs.grassgekko.fn, "ontimerdone")
-    local function ontimerdone(inst, data, ...)
-        if data.name == "growTail" and inst:IsInLimbo() then
-            PlayGrowTailSound(inst)
+    if _ontimerdone then
+        local function ontimerdone(inst, data, ...)
+            if data.name == "growTail" and inst:IsInLimbo() then
+                PlayGrowTailSound(inst)
+            end
+            return _ontimerdone(inst, data, ...)
         end
-        return _ontimerdone(inst, data, ...)
+        UMUpvalueHacker.SetUpvalue(Prefabs.grassgekko.fn, ontimerdone, "ontimerdone")
     end
-    UMUpvalueHacker.SetUpvalue(Prefabs.grassgekko.fn, ontimerdone, "ontimerdone")
 end)
 
 env.AddPrefabPostInit("grassgekko", function(inst)

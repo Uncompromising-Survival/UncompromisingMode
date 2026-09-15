@@ -51,6 +51,5 @@ env.AddComponentPostInit("wildfires", function(self)
     end
 
     UMUpvalueHacker.SetUpvalue(_ms_startwildfireforplayerfn, ShouldActivateWildfires, "ShouldActivateWildfires")
-    UMUpvalueHacker.SetUpvalue(_ms_startwildfireforplayerfn, CheckValidWildfireStarter, "LightFireForPlayer",
-        "CheckValidWildfireStarter")
+    UMUpvalueHacker.SetUpvalue(_ms_startwildfireforplayerfn, CheckValidWildfireStarter, "LightFireForPlayer", "CheckValidWildfireStarter")
 end)
