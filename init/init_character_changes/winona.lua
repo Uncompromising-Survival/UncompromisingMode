@@ -489,7 +489,7 @@ if env.GetModConfigData("winonafishing") then
     env.AddSimPostInit(function()
         local _DoOceanFishing = UMUpvalueHacker.TryGetUpvalue(Prefabs.winona_catapult_projectile.fn, "OnHit", "DoOceanFishing")
         if _DoOceanFishing then UMUpvalueHacker.SetUpvalue(Prefabs.winona_catapult_projectile.fn, DoOceanFishing, "OnHit", "DoOceanFishing") end
-    end
+    end)
 end
 
 env.AddPrefabPostInit("winona_recipescanner", function(inst)
