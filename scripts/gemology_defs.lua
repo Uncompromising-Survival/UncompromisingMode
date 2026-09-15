@@ -487,7 +487,7 @@ AddUMGemDef("palegem1", {
             -- stuff is handled elsewhere
             -- see init/init_gemology/special.lua
         end,]]
-        onadjustdamage = function(damage, inst, attacker, target, tier)
+        onadjustdamage = function(damage, item, attacker, target, tier)
             if tier ~= 1 and AllRecipes and (not AllRecipes[item.prefab] or AllRecipes[item.prefab] and (AllRecipes[item.prefab].is_deconstruction_recipe)) then
                 return damage + (TUNING.DSTU.PALEGEM1_EXTRA_DAMAGE_PER_TIER * (tier - 1))
             end
@@ -622,7 +622,7 @@ AddUMGemDef("purplegem1", {
                 end
             end
         end,
-        onadjustdamage = function(damage, inst, attacker, target, tier)
+        onadjustdamage = function(damage, item, attacker, target, tier)
             if tier ~= 1 and item.prefab ~= "hambat" then
                 local bonus = 0
                 return damage + (damage < TUNING.DSTU.PURPLEGEM1_EXTRA_DAMAGE_THRESHOLD and damage * tier * TUNING.DSTU.PURPLEGEM1_EXTRA_DAMAGE_MULT or 0)
