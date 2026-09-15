@@ -11,10 +11,10 @@ end
 
 function UpvalueHacker.GetUpvalue(fn, ...)
     local prv, i, prv_var = nil, nil, "(the starting point)"
-    for j, var in ipairs({ ... }) do
-        assert(type(fn) == "function", "We were looking for " .. var .. ", but the value before it, "
-            .. prv_var .. ", wasn't a function (it was a " .. type(fn)
-            .. "). Here's the full chain: " .. table.concat({ "(the starting point)", ... }, ", "))
+    for j, var in ipairs({...}) do
+        assert(type(fn) == "function", "We were looking for "..var..", but the value before it, "
+            ..prv_var..", wasn't a function (it was a "..type(fn)
+            .."). Here's the full chain: "..table.concat({"(the starting point)", ...}, ", "))
         prv = fn
         prv_var = var
         fn, i = GetUpvalueHelper(fn, var)
@@ -24,11 +24,11 @@ end
 
 function UpvalueHacker.TryGetUpvalue(fn, ...)
     local prv, i, prv_var = nil, nil, "(the starting point)"
-    for j, var in ipairs({ ... }) do
+    for j, var in ipairs({...}) do
         if type(fn) ~= "function" then
-            print("We were looking for " .. var .. ", but the value before it, "
-                .. prv_var .. ", wasn't a function (it was a " .. type(fn)
-                .. "). Here's the full chain: " .. table.concat({ "(the starting point)", ... }, ", "))
+            print("We were looking for "..var..", but the value before it, "
+                ..prv_var..", wasn't a function (it was a "..type(fn)
+                .."). Here's the full chain: "..table.concat({"(the starting point)", ...}, ", "))
             return nil
         end
         prv = fn
