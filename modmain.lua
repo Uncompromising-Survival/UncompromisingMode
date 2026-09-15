@@ -198,24 +198,15 @@ end
 
 AddClientModRPCHandler("UncompromisingSurvival", "UpdateAllFocuses", UpdateAllFocuses)
 
-local function PianoPuzzleComplete1()
-    local piano = TheSim:FindFirstEntityWithTag("wixie_piano")
-    piano:PushEvent("pianopuzzlecomplete_1")
+for i = 1, 3 do
+    AddModRPCHandler("UncompromisingSurvival", "PianoPuzzleComplete"..i, function(player)
+        local piano = not player.um_piano_cooldown and TheSim:FindFirstEntityWithTag("wixie_piano")
+        if piano and player:IsNear(piano, 6) then
+            piano:PushEvent("pianopuzzlecomplete_"..i)
+            player.um_piano_cooldown = player:DoTaskInTime(1, function(inst) inst.um_piano_cooldown = nil end)
+        end
+    end)
 end
-
-local function PianoPuzzleComplete2()
-    local piano = TheSim:FindFirstEntityWithTag("wixie_piano")
-    piano:PushEvent("pianopuzzlecomplete_2")
-end
-
-local function PianoPuzzleComplete3()
-    local piano = TheSim:FindFirstEntityWithTag("wixie_piano")
-    piano:PushEvent("pianopuzzlecomplete_3")
-end
-
-AddModRPCHandler("UncompromisingSurvival", "PianoPuzzleComplete1", PianoPuzzleComplete1)
-AddModRPCHandler("UncompromisingSurvival", "PianoPuzzleComplete2", PianoPuzzleComplete2)
-AddModRPCHandler("UncompromisingSurvival", "PianoPuzzleComplete3", PianoPuzzleComplete3)
 
 AddClientModRPCHandler("UncompromisingSurvival", "WathomMusicToggle", WathomMusicToggle)
 --AddClientModRPCHandler("UncompromisingSurvival", "WathomAdrenalineStinger", DoAdrenalineUpStinger)
