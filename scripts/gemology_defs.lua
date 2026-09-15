@@ -5,8 +5,9 @@ The key is the prefab name of the gem.
 The values are:
 {
     fns = {
-        onattack = function(item, owner, target, tier) --function that runs when you hit an enemy
-        onupdate = function(item, tier) --function that runs every second
+        onattack = function(item, owner, target, tier) -- function that runs when you hit an enemy
+        onadjustdamage = function(item, damage, owner, target, tier) -- function that runs when the weapon component's GetDamage method on the item is called
+        onupdate = function(item, tier) -- function that runs every second
         onapply = function(item, tier) -- function that runs when you apply the gem to an item - also runs on load!
         onremove = function(item, tier) -- function that runs when you remove the gem from an item
         onwork = function(item, owner, target, tier) -- function that runs when you chop/mine/dig/etc
@@ -31,7 +32,7 @@ The values are:
 
 Additional note:
 
-Every gemologyable item has two fields called volatile_gemology_data and persistent_gemology_data, with holds any relevant data for gems. For example:
+Every gemologyable item has two fields called volatile_gemology_data and persistent_gemology_data, which holds any relevant data for gems. For example:
 item.persistent_gemology_data[gem_name].foo = true
 item.volatile_gemology_data[gem_name].bar = {thing = 1}
 
@@ -39,7 +40,6 @@ persistent is actually saved and loaded, volatile is not.
 
 This is so we can save some gem-specific data so it can probably revert when removed.
 ]]
-
 
 local GEM_DEFS = {}
 local GEM_LOOKUP = {}
@@ -487,7 +487,7 @@ AddUMGemDef("palegem1", {
             -- stuff is handled elsewhere
             -- see init/init_gemology/special.lua
         end,]]
-        onadjustdamage = function(damage, item, attacker, target, tier)
+        onadjustdamage = function(item, damage, attacker, target, tier)
             if tier ~= 1 and AllRecipes and (not AllRecipes[item.prefab] or AllRecipes[item.prefab] and (AllRecipes[item.prefab].is_deconstruction_recipe)) then
                 return damage + (TUNING.DSTU.PALEGEM1_EXTRA_DAMAGE_PER_TIER * (tier - 1))
             end
@@ -622,7 +622,7 @@ AddUMGemDef("purplegem1", {
                 end
             end
         end,
-        onadjustdamage = function(damage, item, attacker, target, tier)
+        onadjustdamage = function(item, damage, attacker, target, tier)
             if tier ~= 1 and item.prefab ~= "hambat" then
                 return damage + (damage < TUNING.DSTU.PURPLEGEM1_EXTRA_DAMAGE_THRESHOLD and damage * tier * TUNING.DSTU.PURPLEGEM1_EXTRA_DAMAGE_MULT or 0)
             end
