@@ -483,30 +483,18 @@ AddUMGemDef("yellowgem2", {
 AddUMGemDef("palegem1", {
     color = RGB(220, 220, 220),
     fns = {
-        onapply = function(item, tier)
+        --[[onapply = function(item, tier)
             -- stuff is handled elsewhere
             -- see init/init_gemology/special.lua
-
-            if tier ~= 1
-                and AllRecipes ~= nil
-                and (AllRecipes[item.prefab] == nil
-                    or AllRecipes[item.prefab] ~= nil
-                    and (AllRecipes[item.prefab].is_deconstruction_recipe))
-                and item.components.weapon ~= nil then
-                local damage = item.components.weapon.damage
-                item.volatile_gemology_data.um_gemologypalegem1.weapon_damage = damage
-                item.components.weapon:SetDamage(function(inst, attacker, target)
-                    return FunctionOrValue(damage, inst, attacker, target) + (TUNING.DSTU.PALEGEM1_EXTRA_DAMAGE_PER_TIER * (tier - 1))
-                end)
+        end,]]
+        onadjustdamage = function(damage, inst, attacker, target, tier)
+            if tier ~= 1 and AllRecipes and (not AllRecipes[item.prefab] or AllRecipes[item.prefab] and (AllRecipes[item.prefab].is_deconstruction_recipe)) then
+                return damage + (TUNING.DSTU.PALEGEM1_EXTRA_DAMAGE_PER_TIER * (tier - 1))
             end
+            return damage
         end,
         onattack = function(item, attacker, target, tier)
             DamageGem("palegem1", item, GEM_USES[tier])
-        end,
-        onremove = function(item, tier)
-            if item.volatile_gemology_data.um_gemologypalegem1 and item.volatile_gemology_data.um_gemologypalegem1.weapon_damage then
-                item.components.weapon:SetDamage(item.volatile_gemology_data.um_gemologypalegem1.weapon_damage)
-            end
         end
     }
 })
@@ -631,23 +619,15 @@ AddUMGemDef("purplegem1", {
                 if item.prefab == "hambat" then -- hambat needs an exception
                     item.volatile_gemology_data.um_gemologypurplegem1.old_update_damage = item.UpdateDamage
                     item.UpdateDamage = HambatUpdateDamage
-                elseif item.components.weapon then
-                    local damage = item.components.weapon.damage
-                    item.volatile_gemology_data.um_gemologypurplegem1.weapon_damage = damage
-                    item.components.weapon:SetDamage(function(inst, attacker, target)
-                        local bonus = 0
-                        if not inst.um_blockgetdamage then
-                            inst.um_blockgetdamage = true
-                            local getdamage = inst.components.weapon:GetDamage(attacker, target)
-                            inst.um_blockgetdamage = nil
-                            if getdamage < TUNING.DSTU.PURPLEGEM1_EXTRA_DAMAGE_THRESHOLD then
-                                bonus = getdamage * tier * TUNING.DSTU.PURPLEGEM1_EXTRA_DAMAGE_MULT
-                            end
-                        end
-                        return FunctionOrValue(damage, inst, attacker, target) + bonus
-                    end)
                 end
             end
+        end,
+        onadjustdamage = function(damage, inst, attacker, target, tier)
+            if tier ~= 1 and item.prefab ~= "hambat" then
+                local bonus = 0
+                return damage + (damage < TUNING.DSTU.PURPLEGEM1_EXTRA_DAMAGE_THRESHOLD and damage * tier * TUNING.DSTU.PURPLEGEM1_EXTRA_DAMAGE_MULT or 0)
+            end
+            return damage
         end,
         onattack = function(item, attacker, target, tier)
             if tier ~= 1 and item.components.weapon then
@@ -657,9 +637,6 @@ AddUMGemDef("purplegem1", {
         onremove = function(item, tier)
             if item.volatile_gemology_data.um_gemologypurplegem1.old_update_damage then
                 item.UpdateDamage = item.volatile_gemology_data.um_gemologypurplegem1.old_update_damage
-            end
-            if item.volatile_gemology_data.um_gemologypurplegem1.weapon_damage then
-                item.components.weapon:SetDamage(item.volatile_gemology_data.um_gemologypurplegem1.weapon_damage)
             end
         end
     }
