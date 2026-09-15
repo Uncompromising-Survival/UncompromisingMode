@@ -177,7 +177,7 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
             chosen_flower = flowers[math.random(1, #flowers)]
             chosen_flower.spawned_butterfly = true
         end
-        return chosen_flower ~= nil and chosen_flower or nil
+        return chosen_flower or nil
     end
 
     local UMUpvalueHacker = require("tools/um_upvaluehacker")
