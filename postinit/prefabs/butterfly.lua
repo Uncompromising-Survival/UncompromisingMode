@@ -185,7 +185,7 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
     local __ctor = ButterflySpawner._ctor
     function ButterflySpawner:_ctor(inst, ...)
         local ret = __ctor(self, inst, ...)
-        local _GetSpawnPoint = UMUpvalueHacker.TryGetUpvalue(self.OnPostInit, "ToggleUpdate", "ScheduleSpawn", "SpawnButterflyForPlayer", "GetSpawnPoint")
-        if _GetSpawnPoint then UMUpvalueHacker.SetUpvalue(ButterflySpawner.OnPostInit, GetSpawnPoint, "ToggleUpdate", "ScheduleSpawn", "SpawnButterflyForPlayer", "GetSpawnPoint") end
+        --local _GetSpawnPoint = UMUpvalueHacker.TryGetUpvalue(self.OnPostInit, "ToggleUpdate", "ScheduleSpawn", "SpawnButterflyForPlayer", "GetSpawnPoint")
+        --if _GetSpawnPoint then UMUpvalueHacker.SetUpvalue(ButterflySpawner.OnPostInit, GetSpawnPoint, "ToggleUpdate", "ScheduleSpawn", "SpawnButterflyForPlayer", "GetSpawnPoint") end
     end
 end
