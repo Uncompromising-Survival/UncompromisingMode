@@ -43,7 +43,6 @@ ARMOR_ABSORPTION_OVERRIDES = {
     ["armor_lunarplant_husk"] = .7,
     ["um_armor_bramble_rimeweed"] = .7,
     ["eyemaskhat"] = .7,
-    ["armordragonfly"] = .65,
 
     -- Island Adventures
     ["armorlimestone"] = .75,

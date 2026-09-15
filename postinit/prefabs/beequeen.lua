@@ -697,7 +697,6 @@ local function BeeQueenPost(inst)
 
     inst.hasWall = HasWall
 
-
     inst.StartHoney = function(inst) end
 
     inst:DoPeriodicTask(10, function(inst)
