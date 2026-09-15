@@ -683,8 +683,8 @@ AddSimPostInit(function()
                 EQUIPPED["spellcaster"] = function(inst, doer, target, actions, right, ...)
                     if inst:HasTag("um_gun") then
                         if right and (inst:HasTag("castontargets") or (target:HasTag("locomotor") and (inst:HasTag("castonlocomotors")
-                                    or (inst:HasTag("castonlocomotorspvp") and (target == doer or GLOBAL.TheNet:GetPVPEnabled() or not (target:HasTag("player") and doer:HasTag("player"))))))
-                                or (inst:HasTag("castoncombat") and doer.replica.combat and doer.replica.combat:CanTarget(target))) then
+                            or (inst:HasTag("castonlocomotorspvp") and (target == doer or GLOBAL.TheNet:GetPVPEnabled() or not (target:HasTag("player") and doer:HasTag("player"))))))
+                            or (inst:HasTag("castoncombat") and doer.replica.combat and doer.replica.combat:CanTarget(target))) then
                             table.insert(actions, GLOBAL.ACTIONS.UM_GUNSHOOTY)
                         end
                         return

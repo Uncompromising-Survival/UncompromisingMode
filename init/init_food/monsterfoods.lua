@@ -27,26 +27,29 @@ if GetModConfigData("monstersmallmeat") then
     end
 
     AddPrefabPostInit("rabbit", function(inst)
-        local _rabbitloot = UMUpvalueHacker.GetUpvalue(GLOBAL.Prefabs.rabbit.fn, "LootSetupFunction", "SetRabbitLoot",
-        "rabbitloot")
-        local _IsCrazyGuy = UMUpvalueHacker.GetUpvalue(GLOBAL.Prefabs.rabbit.fn, "LootSetupFunction", "IsCrazyGuy")
-
-        local function SetBeardlingLoot(lootdropper)
-            if lootdropper.loot == _rabbitloot and not lootdropper.inst._fixedloot then
-                lootdropper:SetLoot(nil)
-                lootdropper:AddRandomLoot("beardhair", .5)
-                lootdropper:AddRandomLoot("monstersmallmeat", 1)
-                lootdropper:AddRandomLoot("nightmarefuel", 1)
-                lootdropper.numrandomloot = 1
+        local _rabbitloot = UMUpvalueHacker.TryGetUpvalue(GLOBAL.Prefabs.rabbit.fn, "LootSetupFunction", "SetRabbitLoot", "rabbitloot")
+        local _SetBeardlingLoot = UMUpvalueHacker.TryGetUpvalue(GLOBAL.Prefabs.rabbit.fn, "LootSetupFunction", "SetBeardlingLoot")
+        if _rabbitloot and _SetBeardlingLoot then
+            local function SetBeardlingLoot(lootdropper)
+                if lootdropper.loot == _rabbitloot and not lootdropper.inst._fixedloot then
+                    lootdropper:SetLoot(nil)
+                    lootdropper:AddRandomLoot("beardhair", .5)
+                    lootdropper:AddRandomLoot("monstersmallmeat", 1)
+                    lootdropper:AddRandomLoot("nightmarefuel", 1)
+                    lootdropper.numrandomloot = 1
+                end
             end
+            UMUpvalueHacker.SetUpvalue(GLOBAL.Prefabs.rabbit.fn, SetBeardlingLoot, "LootSetupFunction", "SetBeardlingLoot")
         end
 
-        local function GetCookProductFn(inst, cooker, chef)
-            return _IsCrazyGuy(chef) and "cookedmonstersmallmeat" or "cookedsmallmeat"
+        local _IsCrazyGuy = UMUpvalueHacker.TryGetUpvalue(GLOBAL.Prefabs.rabbit.fn, "LootSetupFunction", "IsCrazyGuy")
+        local _GetCookProductFn = UMUpvalueHacker.TryGetUpvalue(GLOBAL.Prefabs.rabbit.fn, "GetCookProductFn")
+        if _IsCrazyGuy and _GetCookProductFn then
+            local function GetCookProductFn(inst, cooker, chef)
+                return _IsCrazyGuy(chef) and "cookedmonstersmallmeat" or "cookedsmallmeat"
+            end
+            UMUpvalueHacker.SetUpvalue(GLOBAL.Prefabs.rabbit.fn, GetCookProductFn, "GetCookProductFn")
         end
-
-        UMUpvalueHacker.SetUpvalue(GLOBAL.Prefabs.rabbit.fn, SetBeardlingLoot, "LootSetupFunction", "SetBeardlingLoot")
-        UMUpvalueHacker.SetUpvalue(GLOBAL.Prefabs.rabbit.fn, GetCookProductFn, "GetCookProductFn")
     end)
 
     --------------------------------------------------

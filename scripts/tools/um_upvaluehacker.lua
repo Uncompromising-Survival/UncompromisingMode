@@ -23,29 +23,25 @@ function UpvalueHacker.GetUpvalue(fn, ...)
 end
 
 function UpvalueHacker.TryGetUpvalue(fn, ...)
-    local prv, i, prv_var = nil, nil, "(the starting point)"
-    for j, var in ipairs({...}) do
+    local prv_var = "(the starting point)"
+	local args = {...}
+    for j, var in ipairs(args) do
         if type(fn) ~= "function" then
             print("We were looking for "..var..", but the value before it, "
                 ..prv_var..", wasn't a function (it was a "..type(fn)
                 .."). Here's the full chain: "..table.concat({"(the starting point)", ...}, ", "))
             return nil
         end
-        prv = fn
         prv_var = var
-        fn, i = GetUpvalueHelper(fn, var)
+        fn = GetUpvalueHelper(fn, var)
     end
-    return fn, i, prv
+    if not fn then print("Upvalue failed for "..args[#args]) end
+    return fn
 end
 
---[[function UpvalueHacker.SetUpvalue(start_fn, new_fn, ...)
+function UpvalueHacker.SetUpvalue(start_fn, new_fn, ...)
     local _fn, _fn_i, scope_fn = UpvalueHacker.GetUpvalue(start_fn, ...)
     debug.setupvalue(scope_fn, _fn_i, new_fn)
-end]]
-
-function UpvalueHacker.SetUpvalue(start_fn, new_fn, ...)
-    local _fn, _fn_i, scope_fn = UpvalueHacker.TryGetUpvalue(start_fn, ...)
-    if _fn then debug.setupvalue(scope_fn, _fn_i, new_fn) end
 end
 
 return UpvalueHacker

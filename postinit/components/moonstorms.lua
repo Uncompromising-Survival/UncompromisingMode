@@ -24,7 +24,7 @@ local function SpawnHiveTraps(center)
 	if offset then
 		local beehive = SpawnPrefab("um_beehive_moon")
 		beehive.Transform:SetPosition(newx, 0, newz)
-		beehive.BeginDegrade(beehive)
+		beehive:BeginDegrade()
 	end
 	--end
 end

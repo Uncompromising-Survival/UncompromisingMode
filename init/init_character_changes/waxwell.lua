@@ -19,11 +19,14 @@ for i, TAG in pairs(TOWORK_CANT_TAGS) do
 end
 
 if TUNING.DSTU.WAXWELL then
-    local function IsLeaderInCombat() return false end
-    UMUpvalueHacker.SetUpvalue(ShadowWaxwellBrain.OnStart, IsLeaderInCombat, "IsLeaderInCombat")
+    local _IsLeaderInCombat = UMUpvalueHacker.TryGetUpvalue(ShadowWaxwellBrain.OnStart, "IsLeaderInCombat")
+    if _IsLeaderInCombat then
+        local function IsLeaderInCombat() return false end
+        UMUpvalueHacker.SetUpvalue(ShadowWaxwellBrain.OnStart, IsLeaderInCombat, "IsLeaderInCombat")
+    end
 
-    local _ShouldAvoidExplosive = UMUpvalueHacker.GetUpvalue(ShadowWaxwellBrain.OnStart, "ShouldAvoidExplosive")
-    local _ShouldRunAway = UMUpvalueHacker.GetUpvalue(ShadowWaxwellBrain.OnStart, "ShouldRunAway")
+    local _ShouldAvoidExplosive = UMUpvalueHacker.TryGetUpvalue(ShadowWaxwellBrain.OnStart, "ShouldAvoidExplosive")
+    local _ShouldRunAway = UMUpvalueHacker.TryGetUpvalue(ShadowWaxwellBrain.OnStart, "ShouldRunAway")
 
     local function RemoveNode(self, brainnode)
         if not brainnode then return end

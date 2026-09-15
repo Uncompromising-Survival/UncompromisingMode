@@ -1,45 +1,42 @@
---[[
-Note(Atobá):
-The key is the prefab name of the gem.
+--[[Note(Atobá): The key is the prefab name of the gem.
 
 The values are:
 {
     fns = {
-        onattack = function(item, owner, target, tier) --function that runs when you hit an enemy
-        onupdate = function(item, tier) --function that runs every second
+        onattack = function(item, owner, target, tier) -- function that runs when you hit an enemy
+        onadjustdamage = function(item, damage, owner, target, tier) -- function that runs when the weapon component's GetDamage method on the item is called, getting the item's weapon function and doing stuff directly with it
+        onupdate = function(item, tier) -- function that runs every second
         onapply = function(item, tier) -- function that runs when you apply the gem to an item - also runs on load!
         onremove = function(item, tier) -- function that runs when you remove the gem from an item
         onwork = function(item, owner, target, tier) -- function that runs when you chop/mine/dig/etc
         onequip= function(item, owner, tier) -- function that runs when you equip the item with the gem
         onunequip = function(item, owner, tier) -- function that runs when you unequip the item with the gem
     }
-    color = RGB(r,g,b) --color for the text/durability border in the UI
+    color = RGB(r,g,b) -- color for the text/durability border in the UI
     -- for mineral logbook
-    desc = { --For scrapbook and insight.
+    desc = { -- For scrapbook and insight.
         [1] = "Description for tier 1 gem"
         [2] = "Description for tier 2 gem"
         ...and so forth
     }
-    createprefab = boolean --whether the item prefab is automatically created.
-    build = "string" --build name - even if you don't generate the prefab, you need this for scrapbook/mineral logbook.
-    bank = "string" --bank name
-    anim = "string" --anim name   -- defaults to "idle"
-    img = "string.tex" --texture name --for scrapbook only.
-    atlas = "string.xml" --atlas name
+    createprefab = boolean -- whether the item prefab is automatically created.
+    build = "string" -- build name - even if you don't generate the prefab, you need this for scrapbook/mineral logbook.
+    bank = "string" -- bank name
+    anim = "string" -- anim name   -- defaults to "idle"
+    img = "string.tex" -- texture name -- for scrapbook only.
+    atlas = "string.xml" -- atlas name
     postfn = function(inst) -- function that runs when the prefab is created on the common side on post-init.
 }
 
 Additional note:
 
-Every gemologyable item has two fields called volatile_gemology_data and persistent_gemology_data, with holds any relevant data for gems. For example:
+Every gemologyable item has two fields called volatile_gemology_data and persistent_gemology_data, which holds any relevant data for gems. For example:
 item.persistent_gemology_data[gem_name].foo = true
 item.volatile_gemology_data[gem_name].bar = {thing = 1}
 
 persistent is actually saved and loaded, volatile is not.
 
-This is so we can save some gem-specific data so it can probably revert when removed.
-]]
-
+This is so we can save some gem-specific data so it can probably revert when removed.]]
 
 local GEM_DEFS = {}
 local GEM_LOOKUP = {}
@@ -483,30 +480,18 @@ AddUMGemDef("yellowgem2", {
 AddUMGemDef("palegem1", {
     color = RGB(220, 220, 220),
     fns = {
-        onapply = function(item, tier)
+        --[[onapply = function(item, tier)
             -- stuff is handled elsewhere
             -- see init/init_gemology/special.lua
-
-            if tier ~= 1
-                and AllRecipes ~= nil
-                and (AllRecipes[item.prefab] == nil
-                    or AllRecipes[item.prefab] ~= nil
-                    and (AllRecipes[item.prefab].is_deconstruction_recipe))
-                and item.components.weapon ~= nil then
-                local damage = item.components.weapon.damage
-                item.volatile_gemology_data.um_gemologypalegem1.weapon_damage = damage
-                item.components.weapon:SetDamage(function(inst, attacker, target)
-                    return FunctionOrValue(damage, inst, attacker, target) + (TUNING.DSTU.PALEGEM1_EXTRA_DAMAGE_PER_TIER * (tier - 1))
-                end)
+        end,]]
+        onadjustdamage = function(item, damage, attacker, target, tier)
+            if tier ~= 1 and AllRecipes and (not AllRecipes[item.prefab] or AllRecipes[item.prefab] and (AllRecipes[item.prefab].is_deconstruction_recipe)) then
+                return damage + (TUNING.DSTU.PALEGEM1_EXTRA_DAMAGE_PER_TIER * (tier - 1))
             end
+            return damage
         end,
         onattack = function(item, attacker, target, tier)
             DamageGem("palegem1", item, GEM_USES[tier])
-        end,
-        onremove = function(item, tier)
-            if item.volatile_gemology_data.um_gemologypalegem1 and item.volatile_gemology_data.um_gemologypalegem1.weapon_damage then
-                item.components.weapon:SetDamage(item.volatile_gemology_data.um_gemologypalegem1.weapon_damage)
-            end
         end
     }
 })
@@ -631,23 +616,14 @@ AddUMGemDef("purplegem1", {
                 if item.prefab == "hambat" then -- hambat needs an exception
                     item.volatile_gemology_data.um_gemologypurplegem1.old_update_damage = item.UpdateDamage
                     item.UpdateDamage = HambatUpdateDamage
-                elseif item.components.weapon then
-                    local damage = item.components.weapon.damage
-                    item.volatile_gemology_data.um_gemologypurplegem1.weapon_damage = damage
-                    item.components.weapon:SetDamage(function(inst, attacker, target)
-                        local bonus = 0
-                        if not inst.um_blockgetdamage then
-                            inst.um_blockgetdamage = true
-                            local getdamage = inst.components.weapon:GetDamage(attacker, target)
-                            inst.um_blockgetdamage = nil
-                            if getdamage < TUNING.DSTU.PURPLEGEM1_EXTRA_DAMAGE_THRESHOLD then
-                                bonus = getdamage * tier * TUNING.DSTU.PURPLEGEM1_EXTRA_DAMAGE_MULT
-                            end
-                        end
-                        return FunctionOrValue(damage, inst, attacker, target) + bonus
-                    end)
                 end
             end
+        end,
+        onadjustdamage = function(item, damage, attacker, target, tier)
+            if tier ~= 1 and item.prefab ~= "hambat" then
+                return damage + (damage < TUNING.DSTU.PURPLEGEM1_EXTRA_DAMAGE_THRESHOLD and damage * tier * TUNING.DSTU.PURPLEGEM1_EXTRA_DAMAGE_MULT or 0)
+            end
+            return damage
         end,
         onattack = function(item, attacker, target, tier)
             if tier ~= 1 and item.components.weapon then
@@ -657,9 +633,6 @@ AddUMGemDef("purplegem1", {
         onremove = function(item, tier)
             if item.volatile_gemology_data.um_gemologypurplegem1.old_update_damage then
                 item.UpdateDamage = item.volatile_gemology_data.um_gemologypurplegem1.old_update_damage
-            end
-            if item.volatile_gemology_data.um_gemologypurplegem1.weapon_damage then
-                item.components.weapon:SetDamage(item.volatile_gemology_data.um_gemologypurplegem1.weapon_damage)
             end
         end
     }
