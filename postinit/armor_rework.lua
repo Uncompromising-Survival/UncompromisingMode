@@ -29,7 +29,7 @@ TUNING.ARMORMARBLE_SLOW = .8
 -- Exceptions can be made for specific armors to change their absorption values directly instead of
 -- using the armor_mappings table.
 ARMOR_ABSORPTION_OVERRIDES = {
-    --["beehat"] = .7,
+    ["beehat"] = .7,
     ["armorruins"] = .8,
     ["shieldofterror"] = .75,
     ["cookiecutterhat"] = .7,
@@ -43,7 +43,7 @@ ARMOR_ABSORPTION_OVERRIDES = {
     ["armor_lunarplant_husk"] = .7,
     ["um_armor_bramble_rimeweed"] = .7,
     ["eyemaskhat"] = .7,
-    ["armordragonfly"] = .7,
+    ["armordragonfly"] = .65,
 
     -- Island Adventures
     ["armorlimestone"] = .75,
@@ -67,14 +67,11 @@ local function RemapAbsorption(self, absorb)
     if not self.inst.prefab or absorb == self.umabsorbremap then return absorb end
     local absorb_override = ARMOR_ABSORPTION_OVERRIDES[self.inst.prefab]
     if absorb_override then return absorb_override end
-    if not (self.tags and next(self.tags)) then
-        for _, mapping in ipairs(armor_mappings) do
-            if absorb > mapping.min_val and absorb <= mapping.max_val then
-                return mapping.new_absorb
-            end
+    for _, mapping in ipairs(armor_mappings) do
+        if absorb > mapping.min_val and absorb <= mapping.max_val then
+            return mapping.new_absorb
         end
     end
-    --if not (self.tags and next(self.tags)) and absorb > .6 and absorb <= .95 then absorb = math.max(absorb - .15, .6) end
     return absorb
 end
 

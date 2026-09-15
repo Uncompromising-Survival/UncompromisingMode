@@ -63,9 +63,8 @@ local function fn()
     inst:SetBrain(brain)
     inst.Transform:SetScale(0.6, 0.6, 0.6)
 
-
     inst.components.combat:SetDefaultDamage(20)
-    inst.components.combat:SetRange(TUNING.LAVAE_ATTACK_RANGE * 0.6, TUNING.LAVAE_HIT_RANGE * 0.6)
+    inst.components.combat:SetRange(TUNING.LAVAE_ATTACK_RANGE * .6, TUNING.LAVAE_HIT_RANGE * .6)
     inst.components.combat:SetAttackPeriod(4)
 
     inst.components.locomotor.walkspeed = 11
