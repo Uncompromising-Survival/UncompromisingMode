@@ -4,7 +4,7 @@ The values are:
 {
     fns = {
         onattack = function(item, owner, target, tier) -- function that runs when you hit an enemy
-        onadjustdamage = function(item, damage, owner, target, tier) -- function that runs when the weapon component's GetDamage method on the item is called
+        onadjustdamage = function(item, damage, owner, target, tier) -- function that runs when the weapon component's GetDamage method on the item is called, getting the item's weapon function and doing stuff directly with it
         onupdate = function(item, tier) -- function that runs every second
         onapply = function(item, tier) -- function that runs when you apply the gem to an item - also runs on load!
         onremove = function(item, tier) -- function that runs when you remove the gem from an item
