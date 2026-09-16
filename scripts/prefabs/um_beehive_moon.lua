@@ -47,28 +47,29 @@ end
 -- end
 
 local function BeginDegrade(inst)
-	inst.components.timer:StartTimer("degrade",60*8+math.random()*60*8*4)
+    inst.components.timer:StartTimer("degrade",60*8+math.random()*60*8*4)
 end
 
 local function Revert(inst)
-	local x,y,z = inst.Transform:GetWorldPosition()
-	local hives = TheSim:FindEntities(x,y,z,32,{"beehive"})
-	if #hives < 3 and math.random() < 0.25 then
-		SpawnPrefab("beehive").Transform:SetPosition(x,y,z)
-	end
-	local childspawner = inst.components.childspawner
-	if childspawner then
-		for i,bee in ipairs(childspawner.childrenoutside) do
-			if bee.components.health and not bee.components.health:IsDead() then
-				bee:RemoveComponent("lootdropper")
-				bee:AddComponent("lootdropper") -- wipe the lootdropper component
-				bee:RemoveComponent("workable")
-				bee.components.health:Kill()
-			end
-		end
-	end
-	
-	inst:Remove()
+    local x,y,z = inst.Transform:GetWorldPosition()
+    local hives = TheSim:FindEntities(x,y,z,32,{"beehive"})
+    if #hives < 3 and math.random() < 0.25 then
+        SpawnPrefab("beehive").Transform:SetPosition(x,y,z)
+    end
+    local childspawner = inst.components.childspawner
+    if childspawner then
+        for i,bee in ipairs(childspawner.childrenoutside) do
+            if bee.components.health and not bee.components.health:IsDead() then
+                bee:RemoveComponent("lootdropper")
+                bee:AddComponent("lootdropper") -- wipe the lootdropper component
+                bee:RemoveComponent("workable")
+                bee.um_no_explode = true
+                bee.components.health:Kill()
+            end
+        end
+    end
+
+    inst:Remove()
 end
 
 local function OnIgnite(inst)
@@ -174,11 +175,11 @@ local function fn()
 
     inst.AnimState:SetBank("um_beehive_moon")
     inst.AnimState:SetBuild("um_beehive_moon")
-	inst.AnimState:PlayAnimation("enter", false)
+    inst.AnimState:PlayAnimation("enter", false)
     inst.AnimState:PushAnimation("idle", true)
 
     inst:AddTag("structure")
-	inst:AddTag("lifedrainable") -- by batbat (since it normally doesn't drain from structures)
+    inst:AddTag("lifedrainable") -- by batbat (since it normally doesn't drain from structures)
     inst:AddTag("beaverchewable") -- by werebeaver
     inst:AddTag("hive")
     inst:AddTag("beehive")
@@ -195,22 +196,22 @@ local function fn()
     -------------------
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(900)
-	inst.components.health:StartRegen(TUNING.BUNNYMAN_HEALTH_REGEN_AMOUNT, TUNING.BUNNYMAN_HEALTH_REGEN_PERIOD)
+    inst.components.health:StartRegen(TUNING.BUNNYMAN_HEALTH_REGEN_AMOUNT, TUNING.BUNNYMAN_HEALTH_REGEN_PERIOD)
     -------------------
     inst:AddComponent("childspawner")
     inst.components.childspawner.childname = "um_bee_moon"
     inst.components.childspawner.emergencychildname = "um_bee_moon"
-	inst.components.childspawner.spawnperiod = 2
+    inst.components.childspawner.spawnperiod = 2
     inst.components.childspawner.emergencychildrenperplayer = 1
     inst.components.childspawner.canemergencyspawn = true
     inst.components.childspawner:SetMaxEmergencyChildren(2)
     inst.components.childspawner:SetEmergencyRadius(TUNING.BEEHIVE_EMERGENCY_RADIUS)
 
-	inst.components.childspawner:SetRegenPeriod(60*4)
-	inst.components.childspawner:SetSpawnPeriod(2)
-	inst.components.childspawner:SetMaxChildren(3)
+    inst.components.childspawner:SetRegenPeriod(60*4)
+    inst.components.childspawner:SetSpawnPeriod(2)
+    inst.components.childspawner:SetMaxChildren(3)
 
-	inst:DoTaskInTime(0,function(inst) inst.components.childspawner:StartSpawning() end)
+    inst:DoTaskInTime(0,function(inst) inst.components.childspawner:StartSpawning() end)
     -- if not TUNING.BEEHIVE_ENABLED then
         -- inst.components.childspawner.childreninside = 0
     -- end
@@ -254,9 +255,9 @@ local function fn()
     inst.OnEntitySleep = OnEntitySleep
     inst.OnEntityWake = OnEntityWake
 
-	inst.BeginDegrade = BeginDegrade
-	inst:AddComponent("timer")
-	inst:ListenForEvent("timerdone",Revert)
+    inst.BeginDegrade = BeginDegrade
+    inst:AddComponent("timer")
+    inst:ListenForEvent("timerdone",Revert)
 
     return inst
 end
