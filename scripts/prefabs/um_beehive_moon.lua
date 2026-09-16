@@ -38,16 +38,16 @@ local function StopSpawning(inst)
     end
 end
 
--- local function OnIsDay(inst, isday)
-    -- if isday then
-        -- StartSpawning(inst)
-    -- else
-        -- StopSpawning(inst)
-    -- end
--- end
+--local function OnIsDay(inst, isday)
+    --if isday then
+        --StartSpawning(inst)
+    --else
+        --StopSpawning(inst)
+    --end
+--end
 
 local function BeginDegrade(inst)
-    inst.components.timer:StartTimer("degrade",60*8+math.random()*60*8*4)
+    inst.components.timer:StartTimer("degrade", 60 * 8 + math.random() * 60 * 8 * 4)
 end
 
 local function RemoveChildOnRevert(bee)
@@ -64,9 +64,9 @@ end
 
 local function Revert(inst)
     local x,y,z = inst.Transform:GetWorldPosition()
-    local hives = TheSim:FindEntities(x,y,z,32,{"beehive"})
-    if #hives < 3 and math.random() < 0.25 then
-        SpawnPrefab("beehive").Transform:SetPosition(x,y,z)
+    local hives = TheSim:FindEntities(x, y, z, 32, {"beehive"})
+    if #hives < 3 and math.random() < .25 then
+        SpawnPrefab("beehive").Transform:SetPosition(x, y, z)
     end
     local childspawner = inst.components.childspawner
     if childspawner then
@@ -132,6 +132,7 @@ local function OnHit(inst, attacker, damage)
         inst.AnimState:PushAnimation("idle", true)
     end
 end
+
 local HAUNTTARGET_MUST_TAGS = { "_combat" }
 local HAUNTTARGET_CANT_TAGS = { "insect", "playerghost", "INLIMBO" }
 local HAUNTTARGET_ONEOF_TAGS = { "character", "animal", "monster" }
@@ -160,10 +161,10 @@ local function OnHaunt(inst)
     return false
 end
 
--- local function OnInit(inst)
-    -- inst:WatchWorldState("isday", OnIsDay)
-    -- OnIsDay(inst, TheWorld.state.isday)
--- end
+--local function OnInit(inst)
+    --inst:WatchWorldState("isday", OnIsDay)
+    --OnIsDay(inst, TheWorld.state.isday)
+--end
 
 local function OnPreLoad(inst, data)
     WorldSettings_ChildSpawner_PreLoad(inst, data, TUNING.BEEHIVE_RELEASE_TIME, TUNING.BEEHIVE_REGEN_TIME)
@@ -221,9 +222,9 @@ local function fn()
     inst.components.childspawner:SetMaxChildren(3)
 
     inst:DoTaskInTime(0,function(inst) inst.components.childspawner:StartSpawning() end)
-    -- if not TUNING.BEEHIVE_ENABLED then
-        -- inst.components.childspawner.childreninside = 0
-    -- end
+    --if not TUNING.BEEHIVE_ENABLED then
+        --inst.components.childspawner.childreninside = 0
+    --end
 
     --inst:DoTaskInTime(0, OnInit)
 
@@ -266,7 +267,7 @@ local function fn()
 
     inst.BeginDegrade = BeginDegrade
     inst:AddComponent("timer")
-    inst:ListenForEvent("timerdone",Revert)
+    inst:ListenForEvent("timerdone", Revert)
 
     return inst
 end
