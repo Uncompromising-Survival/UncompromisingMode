@@ -70,15 +70,11 @@ local function Revert(inst)
     end
     local childspawner = inst.components.childspawner
     if childspawner then
-        if next(childspawner.childrenoutside) then
-            for bee in pairs(childspawner.childrenoutside) do
-                RemoveChildOnRevert(bee)
-            end
+        for bee in pairs(childspawner.childrenoutside) do
+            RemoveChildOnRevert(bee)
         end
-        if next(childspawner.emergencychildrenoutside) then
-            for bee in pairs(childspawner.emergencychildrenoutside) do
-                RemoveChildOnRevert(bee)
-            end
+        for bee in pairs(childspawner.emergencychildrenoutside) do
+            RemoveChildOnRevert(bee)
         end
     end
 
