@@ -972,7 +972,7 @@ STRINGS.UM_DESCRIPTOR = {
         },
         PALE2 = {
             "Doubles item durability.",
-            "Tripes item durability.\nIf the item is not prototypeable, adds a chance to not consume durability on use.",
+            "Triples item durability.\nIf the item is not prototypeable, adds a chance to not consume durability on use.",
             "Quadruples item durability.\nIf the item is not prototypeable, adds a chance to not consume durability on use.",
         },
     },
@@ -1048,7 +1048,7 @@ STRINGS.UM_DESCRIPTOR = {
         },
         PALE2 = {
             "Doubles the item durability.",
-            "Tripes the item durability.\nIf the item is not prototypeable, adds a chance to not consume durability on use.",
+            "Triples the item durability.\nIf the item is not prototypeable, adds a chance to not consume durability on use.",
             "Quadruples the item durability.\nIf the item is not prototypeable, adds a chance to not consume durability on use.",
         },
     }
