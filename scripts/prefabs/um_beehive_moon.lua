@@ -50,6 +50,18 @@ local function BeginDegrade(inst)
     inst.components.timer:StartTimer("degrade",60*8+math.random()*60*8*4)
 end
 
+local function RemoveChildOnRevert(bee)
+    if bee:IsAsleep() or not bee.components.health or bee.components.health:IsDead() then
+        bee:Remove()
+    else
+        bee:RemoveComponent("lootdropper")
+        bee:AddComponent("lootdropper") -- wipe the lootdropper component
+        bee:RemoveComponent("workable")
+        bee.um_no_explode = true
+        bee.components.health:Kill()
+    end
+end
+
 local function Revert(inst)
     local x,y,z = inst.Transform:GetWorldPosition()
     local hives = TheSim:FindEntities(x,y,z,32,{"beehive"})
@@ -58,13 +70,14 @@ local function Revert(inst)
     end
     local childspawner = inst.components.childspawner
     if childspawner then
-        for i,bee in ipairs(childspawner.childrenoutside) do
-            if bee.components.health and not bee.components.health:IsDead() then
-                bee:RemoveComponent("lootdropper")
-                bee:AddComponent("lootdropper") -- wipe the lootdropper component
-                bee:RemoveComponent("workable")
-                bee.um_no_explode = true
-                bee.components.health:Kill()
+        if next(childspawner.childrenoutside) then
+            for bee in pairs(childspawner.childrenoutside) do
+                RemoveChildOnRevert(bee)
+            end
+        end
+        if next(childspawner.emergencychildrenoutside) then
+            for bee in pairs(childspawner.emergencychildrenoutside) do
+                RemoveChildOnRevert(bee)
             end
         end
     end
