@@ -303,7 +303,7 @@ local function fn()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("slingshot")
+    inst.AnimState:SetBank("slingshot_matilda")
     inst.AnimState:SetBuild("slingshot_matilda")
     inst.AnimState:PlayAnimation("idle")
 
