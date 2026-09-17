@@ -20,7 +20,7 @@ AddRoomPreInit("LightningBluffAntlion", function(room)
     room.tags = { "sandstorm" }
 end)
 
-local function InsertIntoSetpieceTasks(name, task)
+local function InsertIntoSetpieceTasks(tasksetdata, name, task)
     local setpiece = tasksetdata.set_pieces[name]
     if not setpiece then return end
     table.insert(setpiece.tasks, "Lightning Bluff")
@@ -33,7 +33,7 @@ AddTaskSetPreInitAny(function(tasksetdata)
     -- Enable several setpieces to spawn within the merged desert
     if table.contains(tasksetdata.tasks, "Lightning Bluff") then
         for _, name in pairs(setpiece_list) do
-            InsertIntoSetpieceTasks(name, "Lightning Bluff")
+            InsertIntoSetpieceTasks(tasksetdata, name, "Lightning Bluff")
         end
     end
 end)
