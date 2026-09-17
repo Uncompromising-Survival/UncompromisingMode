@@ -26,7 +26,7 @@ env.AddComponentPostInit("hounded", function(self)
     local function GetSpawnPrefab(upgrade)
         --not good, but I need to be able to refresh this spawn data for caves.
         if upgrade and _spawndata.upgrade_spawn then
-            return (TheWorld.state.iswinter and _spawndata.upgrade_spawn_winter ~= nil and _spawndata.upgrade_spawn_winter or TheWorld.state.issummer and _spawndata.upgrade_spawn_summer ~= nil and _spawndata.upgrade_spawn_summer or _spawndata.upgrade_spawn)
+            return (TheWorld.state.iswinter and _spawndata.upgrade_spawn_winter or TheWorld.state.issummer and _spawndata.upgrade_spawn_summer or _spawndata.upgrade_spawn)
         end
 
         local do_seasonal_spawn = math.random() < GetSpecialSpawnChance()
@@ -41,6 +41,7 @@ env.AddComponentPostInit("hounded", function(self)
 
         return _spawndata.base_prefab
     end
+
     local function NoHoles(pt)
         return not TheWorld.Map:IsPointNearHole(pt)
     end
@@ -59,7 +60,6 @@ env.AddComponentPostInit("hounded", function(self)
             return offset
         end
     end
-
 
     local function SummonSpawn(pt, upgrade, radius_override)
         local prefab = GetSpawnPrefab(upgrade)
@@ -87,7 +87,6 @@ env.AddComponentPostInit("hounded", function(self)
             end
         end
     end
-
 
     if not (TheWorld:HasTag("island") or TheWorld:HasTag("volcano")) then
         UMUpvalueHacker.SetUpvalue(self.SummonSpawn, SummonSpawn, "SummonSpawn")
