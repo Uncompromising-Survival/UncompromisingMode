@@ -6,6 +6,7 @@ GLOBAL.rawset(GLOBAL, "UNCOMPROMISING_MODE", string.find(GLOBAL.KnownModIndex:Ge
 
 require "um_pocketdimensioncontainers"
 
+GLOBAL.UPDATE_CHECK = GLOBAL.CurrentRelease.GreaterOrEqualTo("R43_SHADOWYDEPTHS") -- REMEMBER TO ALWAYS UPDATE THIS WITH NEW BETAS.
 GLOBAL.UMCommonFns = require("tools/um_commonfns")
 
 PrefabFiles = require("uncompromising_prefabs")
