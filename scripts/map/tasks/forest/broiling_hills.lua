@@ -31,18 +31,18 @@ AddTaskPreInit("Badlands", function(task)
 end)
 
 -- Setpiece adjustments
+local target_task = "Badlands"
+local remove_setpiece_list = { "ResurrectionStone", "WormholeGrass", "CaveEntrance" } -- Ensure these setpieces cannot spawn in hooded forest, they aren't prevented by level_set_piece_blocker
 AddTaskSetPreInitAny(function(tasksetdata)
-    if tasksetdata.location ~= "forest" then
-        return
-    end
+    if tasksetdata.location ~= "forest" then return end
 
-
-    local target_task = "Badlands"
-    local remove_setpiece_list = { "ResurrectionStone", "WormholeGrass", "CaveEntrance" } -- Ensure these setpieces cannot spawn in hooded forest, they aren't prevented by level_set_piece_blocker
-    for j, setpiece in ipairs(remove_setpiece_list) do
-        for i, task in ipairs(tasksetdata.set_pieces[setpiece].tasks) do
-            if task == target_task then
-                table.remove(tasksetdata.set_pieces[setpiece].tasks, i)
+    for _, name in ipairs(remove_setpiece_list) do
+        local setpiece = tasksetdata.set_pieces[name]
+        if setpiece then
+            for i, task in ipairs(setpiece.tasks) do
+                if task == target_task then
+                    table.remove(setpiece.tasks, i)
+                end
             end
         end
     end

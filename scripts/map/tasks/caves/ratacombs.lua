@@ -109,45 +109,44 @@ AddTask("Ratty_Maze3", {
 })
 
 --GLOBAL.require("map/tasks/ratacombs")
-	GLOBAL.require("map/rooms/caves/ratacombsrooms")
-	--GLOBAL.require("map/rooms/forest/ratking")
+GLOBAL.require("map/rooms/caves/ratacombsrooms")
+--GLOBAL.require("map/rooms/forest/ratking")
 local Layouts = GLOBAL.require("map/layouts").Layouts
 local StaticLayout = GLOBAL.require("map/static_layout")
 local STRINGS = GLOBAL.STRINGS
-	if GetModConfigData("caved") == false then
-
-		AddTaskSetPreInitAny(function(tasksetdata)
-		if tasksetdata.location ~= "forest" or (tasksetdata.name == STRINGS.UI.CUSTOMIZATIONSCREEN.TASKSETNAMES.VOLCANO or tasksetdata.name == STRINGS.UI.CUSTOMIZATIONSCREEN.TASKSETNAMES.SHIPWRECKED) then
-				return
-			end
-			AddTaskPreInit("Dig that rock",function(task)
-				task.room_choices["RatKingdom"] = 1
-			end)
-		end)
-	else
-		AddTaskPreInit("Dig that rock",function(task)
-			task.room_choices["RattySinkhole"] = 1
-		end)
-	end
-
-
+if GetModConfigData("caved") == false then
 	AddTaskSetPreInitAny(function(tasksetdata)
-		if tasksetdata.location ~= "cave" then
+		if tasksetdata.location ~= "forest" or (tasksetdata.name == STRINGS.UI.CUSTOMIZATIONSCREEN.TASKSETNAMES.VOLCANO or tasksetdata.name == STRINGS.UI.CUSTOMIZATIONSCREEN.TASKSETNAMES.SHIPWRECKED) then
 			return
 		end
-		table.insert(tasksetdata.tasks,"Ratty_Entrance")
-		table.insert(tasksetdata.tasks,"Ratty_Link")
-		table.insert(tasksetdata.tasks,"Ratty_Maze")
-		table.insert(tasksetdata.tasks,"Ratty_Maze")
-		table.insert(tasksetdata.tasks,"Ratty_Maze2")
-		table.insert(tasksetdata.tasks,"Ratty_Maze3")
-		-- if tasksetdata.required_prefabs ~= nil then
-			-- table.insert(tasksetdata.required_prefabs,"ratking")
-			-- table.insert(tasksetdata.required_prefabs,"ratacombslock")
-		-- else
-			-- tasksetdata.required_prefabs = {"ratking","ratacombslock"}
-		-- end
+		AddTaskPreInit("Dig that rock",function(task)
+			task.room_choices["RatKingdom"] = 1
+		end)
 	end)
+else
+	AddTaskPreInit("Dig that rock",function(task)
+		task.room_choices["RattySinkhole"] = 1
+	end)
+end
+
+
+AddTaskSetPreInitAny(function(tasksetdata)
+	if tasksetdata.location ~= "cave" then
+		return
+	end
+	table.insert(tasksetdata.tasks,"Ratty_Entrance")
+	table.insert(tasksetdata.tasks,"Ratty_Link")
+	table.insert(tasksetdata.tasks,"Ratty_Maze")
+	table.insert(tasksetdata.tasks,"Ratty_Maze")
+	table.insert(tasksetdata.tasks,"Ratty_Maze2")
+	table.insert(tasksetdata.tasks,"Ratty_Maze3")
+	-- if tasksetdata.required_prefabs ~= nil then
+		-- table.insert(tasksetdata.required_prefabs,"ratking")
+		-- table.insert(tasksetdata.required_prefabs,"ratacombslock")
+	-- else
+		-- tasksetdata.required_prefabs = {"ratking","ratacombslock"}
+	-- end
+end)
 
 AddLevelPreInitAny(function(level)
 	if level.location == "cave" then
