@@ -4,7 +4,7 @@ GLOBAL.setfenv(1, GLOBAL)
 
 -- Behold the mind of the sleep-deprived college student! (Don't push me till we know that klei doesn't change AG and mess this up, though I did make sure to do everything as compat friendly as possible, more than any other piece of work I've done before, for sure.)
 local easing = require("easing")
-local UpvalueHacker = require("tools/upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 
 local function Health_And_Combat_Check(inst, percent)
     if inst.components.combat and inst.components.combat.target and inst.components.health and not inst.components.health:IsDead() and (percent == nil or (percent and inst.components.health:GetPercent() < percent)) then
@@ -143,14 +143,14 @@ local function MinotaurFunctions(inst)
     
     inst:ListenForEvent("timerdone", CheckForceJump)
     
-    local _OnAttacked = UpvalueHacker.GetUpvalue(Prefabs.minotaur.fn, "OnAttacked")
+    local _OnAttacked = UMUpvalueHacker.GetUpvalue(Prefabs.minotaur.fn, "OnAttacked")
     local function OnAttacked(inst, data)
         if not inst.sg:HasStateTag("newbuild") then
             _OnAttacked(inst,data)
         end
     end
     inst:RemoveEventCallback("attacked",_OnAttacked)
-    UpvalueHacker.SetUpvalue(Prefabs.minotaur.fn, OnAttacked, "OnAttacked")
+    UMUpvalueHacker.SetUpvalue(Prefabs.minotaur.fn, OnAttacked, "OnAttacked")
     
     inst:ListenForEvent("attacked", OnAttacked)
     

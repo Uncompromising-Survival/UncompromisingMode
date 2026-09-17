@@ -1,6 +1,6 @@
 
 
-local UpvalueHacker = GLOBAL.require("tools/upvaluehacker")
+local UMUpvalueHacker = GLOBAL.require("tools/um_upvaluehacker")
 local debug = GLOBAL.debug
 local select = GLOBAL.select
 
@@ -42,29 +42,29 @@ AddComponentPostInit("dynamicmusic", function(self)
 
     -- Note: I would recommend trying to avoid getting upvalues from start/stop danger/busy 
     -- as those are the most commonly wrapped functions
-    local _StartPlayerListeners = UpvalueHacker.GetUpvalue(_OnPlayerActivated, "StartPlayerListeners")
+    local _StartPlayerListeners = UMUpvalueHacker.GetUpvalue(_OnPlayerActivated, "StartPlayerListeners")
 
-    local _StartBusy = UpvalueHacker.GetUpvalue(_StartPlayerListeners, "StartBusy")
-    local _StartDanger = UpvalueHacker.GetUpvalue(_StartPlayerListeners, "OnAttacked", "StartDanger")
-    local _StartTriggeredDanger = UpvalueHacker.GetUpvalue(_StartPlayerListeners, "StartTriggeredDanger")
-    local _StartBusyTheme = UpvalueHacker.GetUpvalue(_StartPlayerListeners, "StartFarming", "StartBusyTheme")
+    local _StartBusy = UMUpvalueHacker.GetUpvalue(_StartPlayerListeners, "StartBusy")
+    local _StartDanger = UMUpvalueHacker.GetUpvalue(_StartPlayerListeners, "OnAttacked", "StartDanger")
+    local _StartTriggeredDanger = UMUpvalueHacker.GetUpvalue(_StartPlayerListeners, "StartTriggeredDanger")
+    local _StartBusyTheme = UMUpvalueHacker.GetUpvalue(_StartPlayerListeners, "StartFarming", "StartBusyTheme")
     -- since tables are mutable there is no need to reget this upvalue
-    local BUSYTHEMES = UpvalueHacker.GetUpvalue(_StartPlayerListeners, "StartFarming", "BUSYTHEMES")
+    local BUSYTHEMES = UMUpvalueHacker.GetUpvalue(_StartPlayerListeners, "StartFarming", "BUSYTHEMES")
 
-    local _StopSoundEmitter = UpvalueHacker.GetUpvalue(_OnPlayerActivated, "StopSoundEmitter")
+    local _StopSoundEmitter = UMUpvalueHacker.GetUpvalue(_OnPlayerActivated, "StopSoundEmitter")
 
-    local _StopDanger = UpvalueHacker.GetUpvalue(_StopSoundEmitter, "StopDanger")
-    local _StopBusy = UpvalueHacker.GetUpvalue(_StopSoundEmitter, "StopBusy")
+    local _StopDanger = UMUpvalueHacker.GetUpvalue(_StopSoundEmitter, "StopDanger")
+    local _StopBusy = UMUpvalueHacker.GetUpvalue(_StopSoundEmitter, "StopBusy")
 
     if not (_StartBusy and _StopBusy and _StartDanger and _StartTriggeredDanger and _StopDanger and _StartBusyTheme and BUSYTHEMES) then
         return
     end
 
     -- Optimization
-    local _, i_busytask = UpvalueHacker.GetUpvalue(_StartBusyTheme, "_busytask")
-    local _, i_extendtime = UpvalueHacker.GetUpvalue(_StartBusyTheme, "_extendtime")
-    local _, i_dangertask = UpvalueHacker.GetUpvalue(_StartBusyTheme, "_dangertask")
-    local _, i_triggeredlevel = UpvalueHacker.GetUpvalue(_StartTriggeredDanger, "_triggeredlevel")
+    local _, i_busytask = UMUpvalueHacker.GetUpvalue(_StartBusyTheme, "_busytask")
+    local _, i_extendtime = UMUpvalueHacker.GetUpvalue(_StartBusyTheme, "_extendtime")
+    local _, i_dangertask = UMUpvalueHacker.GetUpvalue(_StartBusyTheme, "_dangertask")
+    local _, i_triggeredlevel = UMUpvalueHacker.GetUpvalue(_StartTriggeredDanger, "_triggeredlevel")
 
     local get_busytask = function() return select(2, debug.getupvalue(_StartBusyTheme, i_busytask)) end
     local get_dangertask = function() return select(2, debug.getupvalue(_StartBusyTheme, i_dangertask)) end
@@ -156,8 +156,8 @@ AddComponentPostInit("dynamicmusic", function(self)
 
 
     -- All that just to modify one function ಠ_ಠ
-    UpvalueHacker.SetUpvalue(_StartPlayerListeners, StartBusy, "StartBusy")
-    UpvalueHacker.SetUpvalue(_StartPlayerListeners, StartDanger, "OnAttacked", "StartDanger")
+    UMUpvalueHacker.SetUpvalue(_StartPlayerListeners, StartBusy, "StartBusy")
+    UMUpvalueHacker.SetUpvalue(_StartPlayerListeners, StartDanger, "OnAttacked", "StartDanger")
 
     --------------------------------------------------------------------------------------------------
 

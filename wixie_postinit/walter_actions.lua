@@ -1,4 +1,4 @@
-local UpvalueHacker = require("tools/upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 
 local function AddEnemyDebuffFx(fx, target)
     target:DoTaskInTime(math.random()*0.25, function()
@@ -276,17 +276,15 @@ end
 AddAction(wixie_slingshot)
 
 AddSimPostInit(function()
-    local COMPONENT_ACTIONS = UpvalueHacker.GetUpvalue(GLOBAL.EntityScript.CollectActions, "COMPONENT_ACTIONS")
+    local COMPONENT_ACTIONS = UMUpvalueHacker.GetUpvalue(GLOBAL.EntityScript.CollectActions, "COMPONENT_ACTIONS")
     if COMPONENT_ACTIONS then
         local POINT, EQUIPPED = COMPONENT_ACTIONS.POINT, COMPONENT_ACTIONS.EQUIPPED
         if POINT then
-            local OldPOINT_fn = POINT["spellcaster"]
-            if OldPOINT_fn then
+            local _POINT_spellcaster_fn = POINT["spellcaster"]
+            if _POINT_spellcaster_fn then
                 POINT["spellcaster"] = function(inst, doer, pos, actions, right, target, ...)
-                    if doer:HasTag("troublemaker") and inst:HasTag("wixie_weapon") then
-                        if not right then
-                            return
-                        end
+                    if inst:HasTag("wixie_weapon") then
+                        if not (right and doer:HasTag("troublemaker")) then return end
                         local cast_on_water = inst:HasTag("castonpointwater")
                         if inst:HasTag("castonpoint") then
                             local px, py, pz = pos:Get()
@@ -301,23 +299,23 @@ AddSimPostInit(function()
                         end
                         return
                     end
-                    return OldPOINT_fn(inst, doer, pos, actions, right, target, ...)
+                    return _POINT_spellcaster_fn(inst, doer, pos, actions, right, target, ...)
                 end
             end
         end
         if EQUIPPED then
-            local OldEQUIPPED_fn = EQUIPPED["spellcaster"]
-            if OldEQUIPPED_fn then
+            local _EQUIPPED_spellcaster_fn = EQUIPPED["spellcaster"]
+            if _EQUIPPED_spellcaster_fn then
                 EQUIPPED["spellcaster"] = function(inst, doer, target, actions, right, ...)
-                    if doer:HasTag("troublemaker") and inst:HasTag("wixie_weapon") then
-                        if right and (inst:HasTag("castontargets") or (target:HasTag("locomotor") and (inst:HasTag("castonlocomotors")
+                    if inst:HasTag("wixie_weapon") then
+                        if right and doer:HasTag("troublemaker") and (inst:HasTag("castontargets") or (target:HasTag("locomotor") and (inst:HasTag("castonlocomotors")
                             or (inst:HasTag("castonlocomotorspvp") and (target == doer or GLOBAL.TheNet:GetPVPEnabled() or not (target:HasTag("player") and doer:HasTag("player"))))))
                             or (inst:HasTag("castoncombat") and doer.replica.combat and doer.replica.combat:CanTarget(target))) then
                             table.insert(actions, GLOBAL.ACTIONS.WIXIE_SLINGSHOT)
                         end
                         return
                     end
-                    return OldEQUIPPED_fn(inst, doer, target, actions, right, ...)
+                    return _EQUIPPED_spellcaster_fn(inst, doer, target, actions, right, ...)
                 end
             end
         end

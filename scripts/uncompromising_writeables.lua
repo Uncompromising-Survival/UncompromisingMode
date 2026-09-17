@@ -1,8 +1,8 @@
 local SignGenerator = require"signgenerator"
-local UpvalueHacker = require("tools/upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 local writeables = require("writeables")
 
-local kinds = UpvalueHacker.GetUpvalue(writeables.makescreen, "kinds")
+local kinds = UMUpvalueHacker.GetUpvalue(writeables.makescreen, "kinds")
 
 if kinds == nil then
     return

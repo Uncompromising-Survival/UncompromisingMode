@@ -11,7 +11,7 @@ local function OnCooldown(inst)
     inst._cdtask = nil
 end
 
-local UpvalueHacker = require("tools/upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 
 local function ActionHungerDrain(inst, data)
     if inst.components.rider ~= nil and inst.components.rider:IsRiding() then
@@ -280,15 +280,15 @@ end)
 --[[
 
 local GEMSLOTS = 3
-local UpvalueHacker = GLOBAL.require("tools/upvaluehacker")
+local UMUpvalueHacker = GLOBAL.require("tools/um_upvaluehacker")
 
 AddPrefabPostInit("world", function(inst)
     --Get the old functions using upvalue hacker
-    local SetGem = UpvalueHacker.GetUpvalue(GLOBAL.Prefabs.winona_battery_high.fn, "OnGemGiven", "SetGem")
-    local BroadcastCircuitChanged = UpvalueHacker.GetUpvalue(GLOBAL.Prefabs.winona_battery_high.fn, "OnGemGiven", "BroadcastCircuitChanged")
-    local StartBattery = UpvalueHacker.GetUpvalue(GLOBAL.Prefabs.winona_battery_high.fn, "OnGemGiven", "StartBattery")
-    local StartSoundLoop = UpvalueHacker.GetUpvalue(GLOBAL.Prefabs.winona_battery_high.fn, "OnGemGiven", "StartSoundLoop")
-    local PlayHitAnim = UpvalueHacker.GetUpvalue(GLOBAL.Prefabs.winona_battery_high.fn, "OnGemGiven", "PlayHitAnim")
+    local SetGem = UMUpvalueHacker.GetUpvalue(GLOBAL.Prefabs.winona_battery_high.fn, "OnGemGiven", "SetGem")
+    local BroadcastCircuitChanged = UMUpvalueHacker.GetUpvalue(GLOBAL.Prefabs.winona_battery_high.fn, "OnGemGiven", "BroadcastCircuitChanged")
+    local StartBattery = UMUpvalueHacker.GetUpvalue(GLOBAL.Prefabs.winona_battery_high.fn, "OnGemGiven", "StartBattery")
+    local StartSoundLoop = UMUpvalueHacker.GetUpvalue(GLOBAL.Prefabs.winona_battery_high.fn, "OnGemGiven", "StartSoundLoop")
+    local PlayHitAnim = UMUpvalueHacker.GetUpvalue(GLOBAL.Prefabs.winona_battery_high.fn, "OnGemGiven", "PlayHitAnim")
 
     --Using gemerator is hard unless you are a handyman/woman
     local function OnGemGiven(inst, giver, item)
@@ -338,13 +338,13 @@ AddPrefabPostInit("world", function(inst)
         end
     end
     --Now replace the function with our modified one
-    UpvalueHacker.SetUpvalue(GLOBAL.Prefabs.winona_battery_high.fn, OnGemGiven, "OnGemGiven")
+    UMUpvalueHacker.SetUpvalue(GLOBAL.Prefabs.winona_battery_high.fn, OnGemGiven, "OnGemGiven")
 
     --Get the old functions using upvalue hacker
-    local BroadcastCircuitChanged = UpvalueHacker.GetUpvalue(GLOBAL.Prefabs.winona_battery_low.fn, "OnAddFuel", "BroadcastCircuitChanged")
-    local StartBattery = UpvalueHacker.GetUpvalue(GLOBAL.Prefabs.winona_battery_low.fn, "OnAddFuel", "StartBattery")
-    local StartSoundLoop = UpvalueHacker.GetUpvalue(GLOBAL.Prefabs.winona_battery_low.fn, "OnAddFuel", "StartSoundLoop")
-    local PlayHitAnim = UpvalueHacker.GetUpvalue(GLOBAL.Prefabs.winona_battery_low.fn, "OnAddFuel", "PlayHitAnim")
+    local BroadcastCircuitChanged = UMUpvalueHacker.GetUpvalue(GLOBAL.Prefabs.winona_battery_low.fn, "OnAddFuel", "BroadcastCircuitChanged")
+    local StartBattery = UMUpvalueHacker.GetUpvalue(GLOBAL.Prefabs.winona_battery_low.fn, "OnAddFuel", "StartBattery")
+    local StartSoundLoop = UMUpvalueHacker.GetUpvalue(GLOBAL.Prefabs.winona_battery_low.fn, "OnAddFuel", "StartSoundLoop")
+    local PlayHitAnim = UMUpvalueHacker.GetUpvalue(GLOBAL.Prefabs.winona_battery_low.fn, "OnAddFuel", "PlayHitAnim")
 
     local function OnAddFuel(inst)
         local guy = GLOBAL.FindEntity(inst, 40, nil, { "character" })
@@ -373,7 +373,7 @@ AddPrefabPostInit("world", function(inst)
     end
 
     --Now replace the function with our modified one
-    UpvalueHacker.SetUpvalue(GLOBAL.Prefabs.winona_battery_low.fn, OnAddFuel, "OnAddFuel")
+    UMUpvalueHacker.SetUpvalue(GLOBAL.Prefabs.winona_battery_low.fn, OnAddFuel, "OnAddFuel")
 end)
 
 --TODO: add some fail effects
@@ -463,9 +463,8 @@ local function DoOceanFishing(inst, x, z)
 end
 
 if env.GetModConfigData("winonafishing") then
-    env.AddPrefabPostInit("winona_catapult_projectile", function(inst)
-        if not TheWorld.ismastersim then return end
-
-        UpvalueHacker.SetUpvalue(inst.components.complexprojectile.onhitfn, DoOceanFishing, "DoOceanFishing")
+    env.AddSimPostInit(function()
+        local _DoOceanFishing = UMUpvalueHacker.TryGetUpvalue(Prefabs.winona_catapult_projectile.fn, "OnHit", "DoOceanFishing")
+        if _DoOceanFishing then UMUpvalueHacker.SetUpvalue(Prefabs.winona_catapult_projectile.fn, DoOceanFishing, "OnHit", "DoOceanFishing") end
     end)
 end

@@ -1,4 +1,4 @@
-local UpvalueHacker = GLOBAL.require("tools/upvaluehacker")
+local UMUpvalueHacker = GLOBAL.require("tools/um_upvaluehacker")
 
 if TUNING.DSTU.WORTOXCHANGES then
 	AddPrefabPostInitAny(function(inst)

@@ -1,7 +1,7 @@
 local CANNON_MUST = { "boatcannon" }
 local TARGETS_MUST = { "_health", "_combat" }
 local TARGETS_CANT = { "pirate", "bird", "shadow", "structure", "INLIMBO", "notarget", "smallcreature", "wall", "fence" }
-local UpvalueHacker = GLOBAL.require("tools/upvaluehacker")
+local UMUpvalueHacker = GLOBAL.require("tools/um_upvaluehacker")
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
