@@ -161,8 +161,6 @@ env.AddComponentPostInit("lootdropper", function(self)
     end
 end)
 
-local GEM_DEFS = require("gemology_defs").GEM_DEFS
-
 -- Peerless jade effect, if there is an existing damage multiplier, increase it by some amount more
 env.AddComponentPostInit("combat", function(self)
     local _CalcDamage = self.CalcDamage
@@ -190,10 +188,8 @@ env.AddComponentPostInit("combat", function(self)
         end
         local ret = {_CalcDamage(self, target, weapon, multiplier, ...)}
         if weapon then
-            weapon.components.weapon:UMGetEnchantsAndDoFn(function(enchant, tier, _self, _attacker, _target)
-                if GEM_DEFS[enchant].fns.onadjustdamage then
-                    ret[1] = GEM_DEFS[enchant].fns.onadjustdamage(_self.inst, ret[1], _attacker, _target, tier, 3)
-                end
+            UMGemologyFns.GetEnchantsAndDoFn(weapon, "onadjustdamage", function(enchant, tier, gemfn, _self, _attacker, _target)
+                ret[1] = gemfn(_self, ret[1], _attacker, _target, tier, 3)
             end, self.inst, target)
         end
         return unpack(ret)
@@ -210,7 +206,7 @@ env.AddComponentPostInit("combat", function(self)
                 inst:DoTaskInTime(0, function(inst)
                     inst:AddDebuff("buff_furious" .. furious, "buff_furious" .. furious)
                 end)
-                DamageGem("purplegem1", tool, TUNING.DSTU.GEM_USES[furious])
+                UMGemologyFns.DamageGem("purplegem1", tool, TUNING.DSTU.GEM_USES[furious])
             end
         end
         if self.inst:HasTag("agony_gas") then

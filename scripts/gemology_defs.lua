@@ -38,11 +38,12 @@ persistent is actually saved and loaded, volatile is not.
 
 This is so we can save some gem-specific data so it can probably revert when removed.]]
 
-local GEM_DEFS = {}
-local GEM_LOOKUP = {}
-function AddGemDef(name, def)
-    GEM_LOOKUP[#GEM_LOOKUP + 1] = name
-    GEM_DEFS[name] = def
+local UMGemologyFns = {}
+UMGemologyFns.GEM_DEFS = {}
+UMGemologyFns.GEM_LOOKUP = {}
+UMGemologyFns.AddGemDef = function(name, def)
+    UMGemologyFns.GEM_LOOKUP[#UMGemologyFns.GEM_LOOKUP + 1] = name
+    UMGemologyFns.GEM_DEFS[name] = def
 end
 
 local GEM_USES = TUNING.DSTU.GEM_USES
@@ -57,19 +58,31 @@ local function AddUMGemDef(name, def) --helper function to just skip some re-use
 
     def.desc = STRINGS.UM_DESCRIPTOR.GEM_ENCHANTABLE[string.upper(string.gsub(name, "gem", ""))]
 
-    AddGemDef("um_gemology" .. name, def)
+    UMGemologyFns.AddGemDef("um_gemology" .. name, def)
 end
 
 
-function IsEnchantValid(gem)
-    return GEM_DEFS[gem] ~= nil
+UMGemologyFns.IsEnchantValid = function(gem)
+    return UMGemologyFns.GEM_DEFS[gem] ~= nil
 end
 
-function DamageGem(enchant, item, value)
+UMGemologyFns.DamageGem = function(enchant, item, value)
     item = item.um_projectile_owner or item
     local gem_enchantable = item:IsValid() and item.components.gem_enchantable
     if gem_enchantable and gem_enchantable:HasEnchantment("um_gemology" .. enchant) and gem_enchantable:HasDurabilityEnabled("um_gemology" .. enchant) then
         gem_enchantable:DoDurabilityDelta("um_gemology" .. enchant, -value)
+    end
+end
+
+UMGemologyFns.GetEnchantsAndDoFn = function(self, fntype, fn, ...)
+    local item = self.inst or self
+    local weapon = item.um_projectile_owner or item
+    local gem_enchantable = weapon.components.gem_enchantable
+    if gem_enchantable then
+        for enchant, tier in pairs(gem_enchantable.enchants) do
+            local gemfn = UMGemologyFns.GEM_DEFS[enchant].fns[fntype]
+            if gemfn then fn(enchant, tier, gemfn, self, ...) end
+        end
     end
 end
 
@@ -89,7 +102,7 @@ AddUMGemDef("redgem2", {
             if tier ~= 1 and target.components.burnable and target.components.burnable:IsBurning() then
                 target.components.burnable:ExtendBurning()
             end
-            DamageGem("redgem2", inst, GEM_USES[tier])
+            UMGemologyFns.DamageGem("redgem2", inst, GEM_USES[tier])
         end,
         canapply = function(item, tier)
             return item.components.weapon ~= nil
@@ -120,7 +133,7 @@ AddUMGemDef("redgem1", {
                 attacker.components.sanity:DoDelta(recover)
             end
 
-            DamageGem("redgem1", inst, GEM_USES[tier])
+            UMGemologyFns.DamageGem("redgem1", inst, GEM_USES[tier])
         end,
         canapply = function(item, tier)
             return item.components.weapon ~= nil
@@ -180,7 +193,7 @@ local swilson_symbols_to_hide = {
 }
 
 local function SendShadowClone(item, owner, target, tier)
-    DamageGem("greengem1", item, GEM_USES[tier]) --damage on any attack/work because it speeds it up.
+    UMGemologyFns.DamageGem("greengem1", item, GEM_USES[tier]) --damage on any attack/work because it speeds it up.
 
     if target:IsValid() and (tier - 1) * TUNING.DSTU.GREENGEM1_SHADOW_CLONE_CHANCE_MULT > math.random() and tier > 1 then
         if owner:GetDistanceSqToInst(target) > TUNING.DSTU.GREENGEM1_SHADOW_CLONE_MAX_DIST and owner.components.sanity then --Long ways away, it's taking from your mind to send swilsons there
@@ -273,7 +286,7 @@ local function addRandomGemEffects(inst)
 
     while enchant_nums < TUNING.DSTU.GREENGEM2_MAX_ENCHANTS and tries > 0 do
         local enchant = valid_enchants[math.random(#valid_enchants)]
-        if IsEnchantValid(enchant) and not inst.components.gem_enchantable:HasEnchantment(enchant) and (GEM_DEFS[enchant].canapply ~= nil and GEM_DEFS[enchant].canapply(inst, tier) or GEM_DEFS[enchant].canapply == nil) then --don't add already existing other enchants.
+        if UMGemologyFns.IsEnchantValid(enchant) and not inst.components.gem_enchantable:HasEnchantment(enchant) and (UMGemologyFns.GEM_DEFS[enchant].canapply ~= nil and UMGemologyFns.GEM_DEFS[enchant].canapply(inst, tier) or UMGemologyFns.GEM_DEFS[enchant].canapply == nil) then --don't add already existing other enchants.
             inst.components.gem_enchantable:AddEnchantment(enchant, tier, true)
             inst.persistent_gemology_data.um_gemologygreengem2.gem_effects[enchant] = tier
             enchant_nums = enchant_nums + 1
@@ -323,10 +336,10 @@ AddUMGemDef("greengem2", {
             item:StopWatchingWorldState("startday", addRandomGemEffects)
         end,
         onattack = function(item, attacker, target, tier)
-            DamageGem("greengem2", item, GEM_USES[tier])
+            UMGemologyFns.DamageGem("greengem2", item, GEM_USES[tier])
         end,
         onwork = function(item, attacker, target, tier)
-            DamageGem("greengem2", item, GEM_USES[tier])
+            UMGemologyFns.DamageGem("greengem2", item, GEM_USES[tier])
         end
 
     }
@@ -351,7 +364,7 @@ AddUMGemDef("yellowgem1", {
         end,
         onupdate = function(item, tier)
             if item.components.equippable and item.components.equippable:IsEquipped() then
-                DamageGem("yellowgem1", item, 1 / TUNING.DSTU.YELLOWGEM1_DURATION[tier])
+                UMGemologyFns.DamageGem("yellowgem1", item, 1 / TUNING.DSTU.YELLOWGEM1_DURATION[tier])
             end
         end,
         onremove = function(item, tier)
@@ -422,7 +435,7 @@ local function ElectricAttack(inst, attacker, target, tier, original_inst)
 
     ForceElectrocute(target, attacker)
 
-    DamageGem("yellowgem2", original_inst or inst, GEM_USES[tier])
+    UMGemologyFns.DamageGem("yellowgem2", original_inst or inst, GEM_USES[tier])
 end
 
 AddUMGemDef("yellowgem2", {
@@ -475,7 +488,7 @@ AddUMGemDef("palegem1", {
             return damage
         end,
         onattack = function(item, attacker, target, tier)
-            DamageGem("palegem1", item, GEM_USES[tier])
+            UMGemologyFns.DamageGem("palegem1", item, GEM_USES[tier])
         end
     }
 })
@@ -532,10 +545,10 @@ AddUMGemDef("palegem2", {
             end
         end,
         onattack = function(item, attacker, target, tier)
-            DamageGem("palegem2", item, TUNING.DSTU.PALEGEM2_USES[tier])
+            UMGemologyFns.DamageGem("palegem2", item, TUNING.DSTU.PALEGEM2_USES[tier])
         end,
         onwork = function(item, attacker, target, tier)
-            DamageGem("palegem2", item, TUNING.DSTU.PALEGEM2_USES[tier])
+            UMGemologyFns.DamageGem("palegem2", item, TUNING.DSTU.PALEGEM2_USES[tier])
         end,
 
         onremove = function(item, tier)
@@ -611,7 +624,7 @@ AddUMGemDef("purplegem1", {
         end,
         onattack = function(item, attacker, target, tier)
             if tier ~= 1 and item.components.weapon then
-                DamageGem("purplegem1", item, GEM_USES[tier])
+                UMGemologyFns.DamageGem("purplegem1", item, GEM_USES[tier])
             end
         end,
         onremove = function(item, tier)
@@ -650,7 +663,7 @@ local function OnDropedIfDeadGiveBack(inst) -- This is the only one that has an 
             local fx = SpawnPrefab("shadow_puff")
             fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
 
-            DamageGem("purplegem2", inst, TUNING.DSTU.PURPLEGEM2_USES[tier])
+            UMGemologyFns.DamageGem("purplegem2", inst, TUNING.DSTU.PURPLEGEM2_USES[tier])
         end
     end)
 
@@ -690,7 +703,7 @@ local function FindUniqueBaseStructures(inst, tier)
 end
 
 local function BaseSitterAttack(item, attacker, target, tier)
-    DamageGem("orangegem1", item, GEM_USES[tier])
+    UMGemologyFns.DamageGem("orangegem1", item, GEM_USES[tier])
 
     if tier ~= 1 then
         local fx = SpawnPrefab("sand_puff")
@@ -712,7 +725,7 @@ AddUMGemDef("orangegem1", {
             item.structure_bonus = nil
         end,
         onwork = function(item, attacker, target, tier)
-            DamageGem("orangegem1", item, GEM_USES[tier])
+            UMGemologyFns.DamageGem("orangegem1", item, GEM_USES[tier])
         end,
         onupdate = FindUniqueBaseStructures
     }
@@ -780,10 +793,10 @@ AddUMGemDef("orangegem2", {
             end
         end,
         onattack = function(item, attacker, target, tier)
-            DamageGem("orangegem2", item, GEM_USES[tier])
+            UMGemologyFns.DamageGem("orangegem2", item, GEM_USES[tier])
         end,
         onwork = function(item, attacker, target, tier)
-            DamageGem("orangegem2", item, GEM_USES[tier])
+            UMGemologyFns.DamageGem("orangegem2", item, GEM_USES[tier])
         end,
         onremove = function(item, tier)
             if item.HarvestPickable then
@@ -844,7 +857,7 @@ AddUMGemDef("bluegem1", {
             if target.components.freezable then
                 target.components.freezable:AddColdness(TUNING.DSTU.BLUEGEM1_COLDNESS_PER_TIER * tier)
                 target.components.freezable:SpawnShatterFX()
-                DamageGem("bluegem1", item, GEM_USES[tier])
+                UMGemologyFns.DamageGem("bluegem1", item, GEM_USES[tier])
             end
         end
     }
@@ -970,4 +983,4 @@ AddUMGemDef("bluegem2", {
     }
 })
 
-return { GEM_DEFS = GEM_DEFS, GEM_LOOKUP = GEM_LOOKUP }
+return UMGemologyFns
