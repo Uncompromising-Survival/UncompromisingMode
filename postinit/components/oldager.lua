@@ -1,5 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
+-----------------------------------------------------------------
 
 env.AddComponentPostInit("oldager", function(self)
     local _OnTakeDamage = self.OnTakeDamage
