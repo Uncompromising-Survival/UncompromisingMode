@@ -2,7 +2,7 @@ local assets =
 {
     Asset("ANIM", "anim/um_gemologygems.zip"),
 }
-local GEM_DEFS = require("gemology_defs").GEM_DEFS
+local GEM_DEFS = UMGemologyFns.GEM_DEFS
 local function OnSave(inst, data)
     data.tier = inst:GetTier()
     data.revealed = inst:IsRevealed()

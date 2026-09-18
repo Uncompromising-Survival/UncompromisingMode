@@ -5,7 +5,7 @@ local assets =
     Asset("ATLAS", "images/map_icons/um_gemologyforge.xml"),
 }
 
-local GEM_DEFS = require("gemology_defs").GEM_DEFS
+local GEM_DEFS = UMGemologyFns.GEM_DEFS
 
 local ALLPLAYERS_CHECK_RADIUS_SQ = 16 * 16
 

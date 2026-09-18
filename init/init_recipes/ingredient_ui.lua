@@ -3,7 +3,7 @@ GLOBAL.setfenv(1, GLOBAL)
 
 local IngredientUI = require("widgets/ingredientui")
 
-local GEM_DEFS = require("gemology_defs").GEM_DEFS
+local GEM_DEFS = UMGemologyFns.GEM_DEFS
 
 local __ctor = IngredientUI._ctor
 function IngredientUI._ctor(self, atlas, image, quantity, on_hand, has_enough, name, owner, recipe_type, quant_text_scale, ingredient_recipe, ...)

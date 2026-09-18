@@ -1,7 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-local GEM_DEFS = require("gemology_defs").GEM_DEFS
+local GEM_DEFS = UMGemologyFns.GEM_DEFS
 local scrapbook_prefabs = require("scrapbook_prefabs")
 local dataset = require("screens/redux/scrapbookdata")
 local UMUpvalueHacker = require("tools/um_upvaluehacker")

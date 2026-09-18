@@ -1,4 +1,4 @@
-local DEFS                 = require("gemology_defs")
+local DEFS                 = UMGemologyFns
 local GEM_DEFS, GEM_LOOKUP = DEFS.GEM_DEFS, DEFS.GEM_LOOKUP
 local GEM_UPDATE_RATE      = 1
 local DEFAULT_SLOTS        = 1

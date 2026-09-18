@@ -1,8 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-local DEFS = require("gemology_defs")
-local GEM_DEFS = DEFS.GEM_DEFS
+local GEM_DEFS = UMGemologyFns.GEM_DEFS
 local UMUpvalueHacker = require("tools/um_upvaluehacker")
 local UIAnim = require "widgets/uianim"
 

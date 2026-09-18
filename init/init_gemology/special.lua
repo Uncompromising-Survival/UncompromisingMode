@@ -145,7 +145,6 @@ env.AddComponentPostInit("workable", function(self)
     end
 end)
 
-
 --teleports items to the worker's inv after being marked with a hoarding gem
 env.AddComponentPostInit("lootdropper", function(self)
     local _SpawnLootPrefab = self.SpawnLootPrefab
@@ -187,7 +186,13 @@ env.AddComponentPostInit("combat", function(self)
                 multiplier = (multiplier or 1) * (1 + .1 * peerless)
             end
         end
-        return _CalcDamage(self, target, weapon, multiplier, ...)
+        local ret = {_CalcDamage(self, target, weapon, multiplier, ...)}
+        if weapon then
+            UMGemologyFns.GetEnchantsAndDoFn(weapon, "onadjustdamage", function(enchant, tier, gemfn, _self, _attacker, _target)
+                ret[1] = gemfn(_self, ret[1], _attacker, _target, tier, 3)
+            end, self.inst, target)
+        end
+        return unpack(ret)
     end
 
     local _GetAttacked = self.GetAttacked
@@ -201,7 +206,7 @@ env.AddComponentPostInit("combat", function(self)
                 inst:DoTaskInTime(0, function(inst)
                     inst:AddDebuff("buff_furious" .. furious, "buff_furious" .. furious)
                 end)
-                DamageGem("purplegem1", tool, TUNING.DSTU.GEM_USES[furious])
+                UMGemologyFns.DamageGem("purplegem1", tool, TUNING.DSTU.GEM_USES[furious])
             end
         end
         if self.inst:HasTag("agony_gas") then

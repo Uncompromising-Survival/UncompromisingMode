@@ -48,6 +48,8 @@ modimport("init/init_strings/init_descriptions/wanda")
 modimport("init/init_strings/init_descriptions/winky")
 modimport("init/init_strings/init_descriptions/wathom")
 
+GLOBAL.UMGemologyFns = require("gemology_defs")
+
 --    [         Number Tuning and PostInits        ]    --
 modimport("init/init_postinit")
 modimport("init/init_actions")

@@ -1,4 +1,4 @@
-local GEM_DEFS = require("gemology_defs").GEM_DEFS
+local GEM_DEFS = UMGemologyFns.GEM_DEFS
 
 local function RGBToHex(r, g, b)
     r = math.floor(r * 255)

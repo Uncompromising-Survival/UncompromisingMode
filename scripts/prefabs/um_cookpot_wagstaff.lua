@@ -179,77 +179,15 @@ local function getstatus(inst)
         or "COOKING_SHORT"
 end
 
-local function MakeHologram(hologram, inst, scale)
-    hologram:AddTag("FX")
-    hologram:AddTag("NOCLICK")
-    hologram.Transform:SetPosition(inst.Transform:GetWorldPosition())
-    hologram.Physics:Stop()
-    hologram:RemoveComponent("edible")
-    hologram:AddTag("INLIMBO")
-    hologram.components.inventoryitem.canbepickedup = false
-    hologram.persists = false
-    hologram.AnimState:SetErosionParams(0, -0.2, -1.0)
-    hologram.Transform:SetScale(scale, scale, scale)
-    hologram:RemoveComponent("inspectable")
-    hologram.pot = inst
-    hologram:DoTaskInTime(1,
-        function(hologram)
-            hologram:WatchWorldState("startday",
-                function(hologram)
-                    if not hologram.pot.keep_next then
-                        hologram:Remove()
-                    end
-                end)
-        end) -- need a delay
-    hologram:RemoveComponent("burnable")
-    hologram:RemoveComponent("perishable")
-    hologram:RemoveComponent("bait")
-    hologram:RemoveTag("molebait")
-
-    --for ice. Should we just remove all events?
-    hologram.event_listeners["firemelt"] = {}
-    hologram.event_listeners["stopfiremelt"] = {}
-end
-
 -- Spawn Dish Hologram
 local function DishHologram(inst, dish)
-    local hologram = SpawnPrefab(dish)
-    hologram.entity:AddFollower()
-    hologram.Follower:FollowSymbol(inst.display.GUID, "swap_maindish", 0, 45, 0)
-    MakeHologram(hologram, inst, 0.35)
-    table.insert(inst.display.holograms, hologram)
-    -- inst.display.AnimState:ClearOverrideSymbol("swap_maindish")
-    -- inst.display.AnimState:OverrideSymbol("swap_maindish", GetInventoryItemAtlas(dish..".tex"), dish..".tex")
+    inst.display.AnimState:OverrideSymbol("swap_maindish", GetInventoryItemAtlas(dish..".tex"), dish..".tex")
 end
 
 -- Spawn Hologram
 local function Hologram(inst, ingredient, i)
-    local hologram = SpawnPrefab(ingredient)
-    hologram.entity:AddFollower()
-    hologram.Follower:FollowSymbol(inst.display.GUID, "swap_bulb" .. i, 0, 80, 0)
-    local scale = 0.45
-    if ingredient == "giant_blueberry" then
-        scale = 0.3
-    end
-
-    MakeHologram(hologram, inst, scale)
-    table.insert(inst.display.holograms, hologram)
-
-    -- Couldn't get minisign approach to work for items with a nonstandard inventory atlas
-    -- local ingredient_atlas = GetInventoryItemAtlas(ingredient..".tex")
-    -- if ingredient == "giant_blueberry" then
-    -- local temp = SpawnPrefab("giant_blueberry")
-    -- ingredient_atlas = temp.replica.inventoryitem:GetAtlas()
-    -- temp:Remove()
-    -- end
-
-    -- -- for i,v in ipairs(um_foods) do
-    -- -- if ingredient == v then
-    -- -- ingredient_name = nil
-    -- -- end
-    -- -- end
-    -- inst.display.AnimState:ClearOverrideSymbol("swap_bulb"..i)
-    -- inst.display.AnimState:OverrideSymbol("swap_bulb"..i, ingredient_atlas, ingredient..".tex")
+    inst.display.AnimState:ClearOverrideSymbol("swap_bulb"..i)
+    inst.display.AnimState:OverrideSymbol("swap_bulb"..i, GetInventoryItemAtlas(ingredient..".tex"), ingredient..".tex")
 end
 
 local function MakeDisplay(inst)
@@ -305,7 +243,6 @@ local function onload(inst, data)
         inst.todays_dish = data.todays_dish
         inst.todays_ingredients = data.todays_ingredients
         MakeDisplay(inst)
-        inst.display.holograms = {}
         DishHologram(inst, inst.todays_dish)
 
         for i = 1, 4 do
@@ -396,7 +333,6 @@ local effect_dishes = {
 
 local function RedoTodays(inst, bias_to_effects)
     inst.todays_ingredients = {}
-    inst.display.holograms = {}
     for i = 1, 4 do
         local chnce = math.random(1, 186)
         local ingredient = "berries" -- failsafe
@@ -475,9 +411,6 @@ local function LeverReady(inst)
     inst:AddComponent("activatable")
     inst.components.activatable.OnActivate = function(inst)
         if inst.lever then
-            for i, v in ipairs(inst.holograms) do
-                v:Remove()
-            end
             RedoTodays(inst.pot, true)
         elseif inst.lever2 then
             inst.pot.keep_next = true
