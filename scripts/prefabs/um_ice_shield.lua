@@ -66,7 +66,7 @@ local function Init(inst, parent, fx_symbol, tier)
             inst.um_redirect_old = parent.components.health.redirect
         end
         parent.components.health.redirect = function(self, amount, overtime, cause, ...)
-            if amount >= 0 then
+            if amount >= 0 or cause == "oldager_component" then
                 return inst.um_redirect_old and inst.um_redirect_old(self, amount, overtime, cause, ...) or false
             end
 
