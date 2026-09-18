@@ -29,7 +29,10 @@ local function ShouldRecoilIceShield(inst, attacker, weapon, damage)
 
     local fumarolemult = weapon and weapon.components.fumaroletool and weapon.components.fumaroletool:GetTempRange() or 1
 
-    return shouldrecoil, not shouldrecoil and damage and damage * fumarolemult or damage and (damage / 2) * fumarolemult or nil
+    return shouldrecoil,
+        not shouldrecoil and damage and damage * fumarolemult
+        or damage and (damage * 0.66) * fumarolemult
+        or nil
 end
 
 local function Init(inst, parent, fx_symbol, tier)
@@ -108,6 +111,7 @@ local function Init(inst, parent, fx_symbol, tier)
     end
 end
 
+
 local function fn()
     local inst = CreateEntity()
     inst.entity:AddTransform()
@@ -131,14 +135,21 @@ local function fn()
     --this doesn't work as expected. It never actually gets fire damaged directly. fire damage mults are on the redirect.
 
     inst.regen_task = inst:DoPeriodicTask(2.5, function(inst)
-        local temperature_scale = Lerp(2, -2, TheWorld.state.temperature / 80)
-        local value = 1 * inst.tier * temperature_scale
+        local x, y, z = inst._parent.Transform:GetWorldPosition()
+
+        local temperature_scale = inst._parent.components.temperature ~= nil and inst._parent.components.temperature.rate ~= nil and inst._parent.components.temperature.rate * -2 or 1
+
+        local value = inst.tier * temperature_scale
         if value < 0 then
             local fx = SpawnPrefab("washashore_puddle_fx")
             fx.Transform:SetPosition(inst._parent.Transform:GetWorldPosition())
 
             if inst._parent.components.moisture then
-                inst._parent.components.moisture:DoDelta(math.abs(value))
+                inst._parent.extra_moisture_rate = math.abs(value)
+            end
+        else
+            if inst._parent.components.moisture then
+                inst._parent.extra_moisture_rate = 0
             end
         end
 
@@ -154,6 +165,10 @@ local function fn()
 
         if inst._parent then
             inst._parent:PushEvent("ice_shield_death")
+
+            if inst._parent.components.moisture then
+                inst._parent.extra_moisture_rate = 0
+            end
 
             if inst._parent.components.burnable then
                 inst._parent.components.burnable:Extinguish()
