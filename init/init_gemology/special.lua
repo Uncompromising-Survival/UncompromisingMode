@@ -145,7 +145,6 @@ env.AddComponentPostInit("workable", function(self)
     end
 end)
 
-
 --teleports items to the worker's inv after being marked with a hoarding gem
 env.AddComponentPostInit("lootdropper", function(self)
     local _SpawnLootPrefab = self.SpawnLootPrefab
@@ -161,6 +160,8 @@ env.AddComponentPostInit("lootdropper", function(self)
         return loot
     end
 end)
+
+local GEM_DEFS = require("gemology_defs").GEM_DEFS
 
 -- Peerless jade effect, if there is an existing damage multiplier, increase it by some amount more
 env.AddComponentPostInit("combat", function(self)
@@ -187,7 +188,15 @@ env.AddComponentPostInit("combat", function(self)
                 multiplier = (multiplier or 1) * (1 + .1 * peerless)
             end
         end
-        return _CalcDamage(self, target, weapon, multiplier, ...)
+        local ret = {_CalcDamage(self, target, weapon, multiplier, ...)}
+        if weapon then
+            weapon.components.weapon:UMGetEnchantsAndDoFn(function(enchant, tier, _self, _attacker, _target)
+                if GEM_DEFS[enchant].fns.onadjustdamage then
+                    ret[1] = GEM_DEFS[enchant].fns.onadjustdamage(_self.inst, ret[1], _attacker, _target, tier, 3)
+                end
+            end, self.inst, target)
+        end
+        return unpack(ret)
     end
 
     local _GetAttacked = self.GetAttacked
