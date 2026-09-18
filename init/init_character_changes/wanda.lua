@@ -15,6 +15,16 @@ local function noentcheckfn(pt)
     return not TheWorld.Map:IsPointNearHole(pt) and #TheSim:FindEntities(pt.x, pt.y, pt.z, 1, nil, NOTENTCHECK_CANT_TAGS) == 0
 end
 
+local function ToggleUniqueVetCurse(inst, toggle)
+    inst.vetcurse_shadowdeath = toggle
+end
+
+env.AddPrefabPostInit("wanda", function(inst)
+    if not TheWorld.ismastersim then return end
+
+    inst.UMToggleUniqueVetCurse = ToggleUniqueVetCurse
+end)
+
 if TUNING.DSTU.WANDA_NERF then
     env.AddPrefabPostInit("wanda", function(inst)
         if inst.components.combat then
@@ -47,7 +57,7 @@ if TUNING.DSTU.WANDA_NERF then
                 target.components.inventory:GiveItem(SpawnPrefab("pocketwatch_revive_reviver"))
             end
 
-            target:PushEvent("respawnfromghost", {source = inst, from_haunt = doer == target})
+            target:PushEvent("respawnfromghost", { source = inst, from_haunt = doer == target })
             if target.components.health and target.components.health:GetPenaltyPercent() < 0.75 then
                 target.components.health:DeltaPenalty(0.25)
             end
@@ -108,7 +118,7 @@ env.AddPrefabPostInit("pocketwatch_recall", function(inst)
 
     inst.displaynamefn = function(_inst)
         local name = _inst.dest_name:value()
-        return name ~= "" and name and STRINGS.NAMES[string.upper(_inst.prefab)].."\n\"" ..name.."\"" or STRINGS.NAMES[string.upper(_inst.prefab)]
+        return name ~= "" and name and STRINGS.NAMES[string.upper(_inst.prefab)] .. "\n\"" .. name .. "\"" or STRINGS.NAMES[string.upper(_inst.prefab)]
     end
 
     if not TheWorld.ismastersim then return end
@@ -118,18 +128,18 @@ env.AddPrefabPostInit("pocketwatch_recall", function(inst)
     inst.components.writeable:SetAutomaticDescriptionEnabled(false)
     local _Write = inst.components.writeable.Write
     inst.components.writeable.Write = function(self, doer, text, ...)
-		if not text then
-			text = self.text
-			if doer and doer.tool_prefab then
-				doer.components.inventory:GiveItem(SpawnPrefab(doer.tool_prefab), nil, inst:GetPosition())
-			end
-		else
-			inst.SoundEmitter:PlaySound("dontstarve/common/together/draw")
-		end
+        if not text then
+            text = self.text
+            if doer and doer.tool_prefab then
+                doer.components.inventory:GiveItem(SpawnPrefab(doer.tool_prefab), nil, inst:GetPosition())
+            end
+        else
+            inst.SoundEmitter:PlaySound("dontstarve/common/together/draw")
+        end
 
-		inst.dest_name:set(text and text ~= "" and text or "")
-		_Write(self, doer, text, ...)
-	end
+        inst.dest_name:set(text and text ~= "" and text or "")
+        _Write(self, doer, text, ...)
+    end
 
     local _OnLoad = inst.components.writeable.OnLoad
     inst.components.writeable.OnLoad = function(self, ...)
@@ -141,25 +151,25 @@ env.AddPrefabPostInit("pocketwatch_recall", function(inst)
     -- local _onaccept = inst.components.trader.onaccept
 
     inst.components.trader.onaccept = function(inst, giver, item)
-		local portal_watch = SpawnPrefab("pocketwatch_portal")
-		portal_watch:onPreBuilt(giver, {pocketwatch_recall = {[inst] = 1}})
+        local portal_watch = SpawnPrefab("pocketwatch_portal")
+        portal_watch:onPreBuilt(giver, { pocketwatch_recall = { [inst] = 1 } })
 
-		if inst.dest_name then
-			portal_watch.dest_name:set(inst.dest_name:value())
-		end
+        if inst.dest_name then
+            portal_watch.dest_name:set(inst.dest_name:value())
+        end
 
-		local container = inst.components.inventoryitem:GetContainer()
-		if container then
-			local slot = inst.components.inventoryitem:GetSlotNum()
-			inst:Remove()
-			container:GiveItem(portal_watch, slot)
-		else
-			local x, y, z = inst.Transform:GetWorldPosition()
-			inst:Remove()
-			portal_watch.Transform:SetPosition(x, y, z)
-		end
-		portal_watch.SoundEmitter:PlaySound("dontstarve/common/telebase_gemplace")
-	end
+        local container = inst.components.inventoryitem:GetContainer()
+        if container then
+            local slot = inst.components.inventoryitem:GetSlotNum()
+            inst:Remove()
+            container:GiveItem(portal_watch, slot)
+        else
+            local x, y, z = inst.Transform:GetWorldPosition()
+            inst:Remove()
+            portal_watch.Transform:SetPosition(x, y, z)
+        end
+        portal_watch.SoundEmitter:PlaySound("dontstarve/common/telebase_gemplace")
+    end
 end)
 
 env.AddPrefabPostInit("pocketwatch_portal", function(inst)
@@ -167,7 +177,7 @@ env.AddPrefabPostInit("pocketwatch_portal", function(inst)
 
     inst.displaynamefn = function(_inst)
         local name = _inst.dest_name:value()
-        return name ~= "" and name and STRINGS.NAMES[string.upper(_inst.prefab)].."\n\"" ..name.."\"" or STRINGS.NAMES[string.upper(_inst.prefab)]
+        return name ~= "" and name and STRINGS.NAMES[string.upper(_inst.prefab)] .. "\n\"" .. name .. "\"" or STRINGS.NAMES[string.upper(_inst.prefab)]
     end
 
     if not TheWorld.ismastersim then return end
@@ -177,18 +187,18 @@ env.AddPrefabPostInit("pocketwatch_portal", function(inst)
     inst.components.writeable:SetAutomaticDescriptionEnabled(false)
     local _Write = inst.components.writeable.Write
     inst.components.writeable.Write = function(self, doer, text, ...)
-		if not text then
-			text = self.text
-			if doer and doer.tool_prefab then
-				doer.components.inventory:GiveItem(SpawnPrefab(doer.tool_prefab), nil, inst:GetPosition())
-			end
-		else
-			inst.SoundEmitter:PlaySound("dontstarve/common/together/draw")
-		end
+        if not text then
+            text = self.text
+            if doer and doer.tool_prefab then
+                doer.components.inventory:GiveItem(SpawnPrefab(doer.tool_prefab), nil, inst:GetPosition())
+            end
+        else
+            inst.SoundEmitter:PlaySound("dontstarve/common/together/draw")
+        end
 
-		inst.dest_name:set(text and text ~= "" and text or "")
-		_Write(self, doer, text, ...)
-	end
+        inst.dest_name:set(text and text ~= "" and text or "")
+        _Write(self, doer, text, ...)
+    end
 
     local _OnLoad = inst.components.writeable.OnLoad
     inst.components.writeable.OnLoad = function(self, ...)

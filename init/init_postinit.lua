@@ -80,7 +80,8 @@ local component_post = {
     "wavemanager",
     "seamlessplayerswapper",
     "grottowarmanager",
-    "quaker"
+    "quaker",
+    "oldager",
 }
 
 local prefab_post = {
