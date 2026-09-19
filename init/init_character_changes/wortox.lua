@@ -1,6 +1,6 @@
 require "behaviours/chaseandattack"
 
-local UpvalueHacker = GLOBAL.require("tools/upvaluehacker")
+local UMUpvalueHacker = GLOBAL.require("tools/um_upvaluehacker")
 local TheNet = GLOBAL.TheNet
 
 if TUNING.DSTU.WORTOXCHANGES then

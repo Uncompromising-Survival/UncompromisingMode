@@ -1,6 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
-local UpvalueHacker = require("tools/upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 -----------------------------------------------------------------
 
 -----------------------------------------------------------------
@@ -343,7 +343,7 @@ end
 local hermitcrabtea_defs = require("prefabs/hermitcrabtea_defs")
 for _, data in ipairs(hermitcrabtea_defs.buffs) do
     if data.name == "moon_tree_blossom" then
-        local _MoonBlossom_OnAttacked = UpvalueHacker.GetUpvalue(data.onattachedfn, "MoonBlossom_OnAttacked")
+        local _MoonBlossom_OnAttacked = UMUpvalueHacker.TryGetUpvalue(data.onattachedfn, "MoonBlossom_OnAttacked")
         if _MoonBlossom_OnAttacked then
             local hitsparks_fx_colouroverride = { 0, 0, 1 }
             local function SparkLunarOnShadow(inst, attacker)
@@ -365,7 +365,7 @@ for _, data in ipairs(hermitcrabtea_defs.buffs) do
                     AttackShadow(inst, attacker)
                 end
             end
-            UpvalueHacker.SetUpvalue(data.onattachedfn, MoonBlossom_OnAttacked, "MoonBlossom_OnAttacked")
+            UMUpvalueHacker.SetUpvalue(data.onattachedfn, MoonBlossom_OnAttacked, "MoonBlossom_OnAttacked")
         end
     end
 end

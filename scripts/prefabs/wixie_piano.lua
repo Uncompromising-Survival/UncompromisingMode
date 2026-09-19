@@ -32,7 +32,7 @@ end
 local function piano2(inst)
     inst.SoundEmitter:PlaySound("dontstarve/common/teleportato/teleportato_pulled")
     local charles = TheSim:FindFirstEntityWithTag("puzzle_charles")
-    charles.final_code_ready = true
+    if charles then charles.final_code_ready = true end
     TheNet:SystemMessage("Music is in the air...")
     SpawnPrefab("statue_transition").Transform:SetPosition(inst:GetPosition():Get())
     SpawnPrefab("statue_transition_2").Transform:SetPosition(inst:GetPosition():Get())

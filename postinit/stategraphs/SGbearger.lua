@@ -15,12 +15,24 @@ env.AddStategraphPostInit("bearger", function(inst)
         end
     end
 
-    local _OldAttackEvent = inst.events["doattack"].fn
-    inst.events["doattack"].fn = function(inst, data, ...)
-        if inst.rockthrow and not (inst.sg:HasStateTag("busy") or inst.components.health and inst.components.health:IsDead()) then
-            inst.sg:GoToState("pre_shoot", data.target)
-        else
-            _OldAttackEvent(inst, data, ...)
+    local doattackeventhandler = inst.events["doattack"]
+    if doattackeventhandler then
+        local doattackeventhandler_fn = doattackeventhandler.fn
+        doattackeventhandler.fn = function(inst, data, ...)
+            if inst.rockthrow and not (inst.sg:HasStateTag("busy") or inst.components.health and inst.components.health:IsDead()) then
+                inst.sg:GoToState("pre_shoot", data.target)
+            else
+                doattackeventhandler_fn(inst, data, ...)
+            end
+        end
+    end
+
+    local poundstate = inst.states["pound"]
+    if poundstate then
+        local poundstate_onenter = poundstate.onenter
+        poundstate.onenter = function(inst, ...)
+            inst.sg.statemem.um_poundtarget = inst.components.combat.target
+            return poundstate_onenter(inst, ...)
         end
     end
 
@@ -30,7 +42,7 @@ env.AddStategraphPostInit("bearger", function(inst)
             tags = {"busy", "canrotate"},
 
             onenter = function(inst, target)
-                inst.sg.statemem.target = target ~= nil and target:IsValid() and target or inst.components.combat and inst.components.combat.target
+                inst.sg.statemem.target = target ~= nil and target:IsValid() and target or inst.components.combat.target
                 inst.Physics:Stop()
                 --inst.AnimState:SetBuild("bearger_build_old")
                 inst.AnimState:PlayAnimation("taunt")
@@ -63,7 +75,7 @@ env.AddStategraphPostInit("bearger", function(inst)
             tags = {"attack", "canrotate", "busy"},
 
             onenter = function(inst, target)
-                inst.sg.statemem.target = target ~= nil and target:IsValid() and target or inst.components.combat and inst.components.combat.target
+                inst.sg.statemem.target = target ~= nil and target:IsValid() and target or inst.components.combat.target
                 inst.AnimState:SetBuild("bearger_build_old")
                 inst.Physics:Stop()
                 inst.AnimState:PlayAnimation("t")
@@ -81,7 +93,7 @@ env.AddStategraphPostInit("bearger", function(inst)
                     inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/bearger/taunt", "taunt") 
                 end),
                 TimeEvent(25 * FRAMES, function(inst)
-                    if inst.components.combat and inst.sg.statemem.target and inst.sg.statemem.target:IsValid() then
+                    if inst.sg.statemem.target and inst.sg.statemem.target:IsValid() then
                         inst:LaunchProjectile(inst.sg.statemem.target)
                         local x, y, z = inst.Transform:GetWorldPosition()
                         SpawnPrefab("groundpound_fx").Transform:SetPosition(x, 0, z)

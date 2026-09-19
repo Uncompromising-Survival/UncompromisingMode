@@ -757,27 +757,29 @@ local function onunequip(inst, owner)
     owner.AnimState:Show("ARM_normal")
 end
 
-local function onattackwhip(inst, attacker, target, naughtlock)
+local function GetWhipDamage(inst, attacker, target)
+    local freezable = target and target.components.freezable
+    return 51 + (freezable and 68 * math.min(freezable:GetFreezePercent(), 1) or 0)
+end
+
+local function onattackwhip(inst, attacker, target)
     if target and target.components.combat and target.components.freezable then
-        local resistance = target.components.freezable:ResolveResistance()
-        local coldness = target.components.freezable.coldness
+        local resistance, coldness = target.components.freezable:ResolveResistance(), target.components.freezable.coldness
 
         local coldval = 1 / resistance
-        if target:HasTag("um_magmatic_defense") then
-            coldval = coldval * 8
-        end
+        if target:HasTag("um_magmatic_defense") then coldval = coldval * 8 end
 
-        local bonusdamage = 68
-        bonusdamage = bonusdamage * coldness / resistance
+        --[[local bonusdamage = 68
+        bonusdamage = bonusdamage * coldness / resistance]]
 
         --if target.sg and target.sg:HasStateTag("frozen") then
         --SpawnPrefab("bramblefx_rime"):SetFXOwner(target)
         --end
 
-        target.components.combat:GetAttacked(attacker, bonusdamage) -- Frost-type damage, which is based on how close to freezing the enemy is
-        target.components.freezable:SpawnShatterFX()
+        --target.components.combat:GetAttacked(attacker, bonusdamage) -- Frost-type damage, which is based on how close to freezing the enemy is
 
         target.components.freezable:AddColdness(coldval / (resistance > coldness + 2 and 1 or resistance > coldness + 1 and 4 or 8))
+        target.components.freezable:SpawnShatterFX()
 
         -- Lavae Vanilla bug fix
         --if target.components.freezable.coldness >= resistance then
@@ -812,7 +814,7 @@ local function whip()
     end
 
     inst:AddComponent("weapon")
-    inst.components.weapon:SetDamage(51)
+    inst.components.weapon:SetDamage(GetWhipDamage)
     inst.components.weapon:SetRange(TUNING.WHIP_RANGE)
     inst.components.weapon:SetOnAttack(onattackwhip)
 

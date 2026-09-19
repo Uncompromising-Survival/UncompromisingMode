@@ -1,7 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
-local UpvalueHacker = require("tools/upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 
 env.AddComponentPostInit("grottowarmanager", function(self)
     local source = "scripts/components/grottowarmanager.lua"
@@ -16,9 +16,9 @@ env.AddComponentPostInit("grottowarmanager", function(self)
             break
         end
     end
-	local _TryStart = UpvalueHacker.GetUpvalue(_OnPlayerJoined, "OnPlayerAreaChanced","TryStart")
-	local _Stop = UpvalueHacker.GetUpvalue(_OnPlayerJoined, "OnPlayerAreaChanced","Stop")
-	local _players = UpvalueHacker.GetUpvalue(self.GetDebugString,"_players")
+	local _TryStart = UMUpvalueHacker.GetUpvalue(_OnPlayerJoined, "OnPlayerAreaChanced","TryStart")
+	local _Stop = UMUpvalueHacker.GetUpvalue(_OnPlayerJoined, "OnPlayerAreaChanced","Stop")
+	local _players = UMUpvalueHacker.GetUpvalue(self.GetDebugString,"_players")
 
 
 	local function OnPlayerAreaChanced(player, data)
@@ -33,5 +33,5 @@ env.AddComponentPostInit("grottowarmanager", function(self)
 		end
 	end
 		
-	UpvalueHacker.SetUpvalue(_OnPlayerJoined, OnPlayerAreaChanced, "OnPlayerAreaChanced")
+	UMUpvalueHacker.SetUpvalue(_OnPlayerJoined, OnPlayerAreaChanced, "OnPlayerAreaChanced")
 end)

@@ -15,7 +15,7 @@ env.AddClassPostConstruct("screens/playerinfopopupscreen", function(self, owner)
         self.vetcurseskull = self.root:AddChild(Image("images/vetskull.xml", "vetskull.tex"))
         self.vetcurseskull:SetScale(0.15, 0.15)
         self.vetcurseskull:SetPosition(-4.65, 260, 0)
-        self.vetcurseskull:SetHoverText((STRINGS.UI.HUD.UM_VETSKULL[um_vetskull_string] or STRINGS.UI.HUD.UM_VETSKULL.DEFAULT) .. STRINGS.UI.HUD.UM_VETSKULL_VETSITEMS, { offset_y = 60 })
+        self.vetcurseskull:SetHoverText(STRINGS.UI.HUD.UM_VETSKULL_PREFIX .. (STRINGS.UI.HUD.UM_VETSKULL[um_vetskull_string] or STRINGS.UI.HUD.UM_VETSKULL.DEFAULT) .. STRINGS.UI.HUD.UM_VETSKULL_VETSITEMS, { offset_y = 60 })
     end
 
     --[[local OldOnControl = self.OnControl

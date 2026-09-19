@@ -127,10 +127,11 @@ local function Explode(inst)
             v.components.combat:GetAttacked(inst, 50 / (v.isplayer and 2 or 1))
         end
     end
-    spore:ListenForEvent("animover",function(spore) spore:Remove() end)
+    spore:ListenForEvent("animover", function(spore) spore:Remove() end)
 end
 
 local function OnDeath(inst)
+    if inst.um_no_explode or inst:IsAsleep() then return end
     inst:ListenForEvent("animover", Explode)
 end
 
@@ -178,6 +179,7 @@ local function OnWorked(inst, worker)
         worker.components.inventory:GiveItem(inst, nil, inst:GetPosition())
     end
 end
+
 local function fn()
     local inst = CreateEntity()
 
@@ -252,18 +254,17 @@ local function fn()
     ------------------
 
     inst:AddComponent("health")
+    inst.components.health:SetMaxHealth(250)
+
     inst:AddComponent("combat")
     inst.components.combat:SetRange(TUNING.BEE_ATTACK_RANGE)
     inst.components.combat.hiteffectsymbol = "moonbee_torso"
     inst.components.combat:SetPlayerStunlock(PLAYERSTUNLOCK.RARELY)
     inst.components.combat.bonusdamagefn = bonus_damage_via_allergy
-
-    inst.components.health:SetMaxHealth(250)
     inst.components.combat:SetDefaultDamage(34)
     inst.components.combat:SetAttackPeriod(TUNING.BEE_ATTACK_PERIOD)
     inst.components.combat:SetRetargetFunction(2, KillerRetarget)
-    
-    
+
     ------------------
 
     inst:AddComponent("sleeper")
@@ -292,8 +293,9 @@ local function fn()
     inst.incineratesound = inst.sounds.death
     inst:SetBrain(killerbrain)
     MakeHauntablePanic(inst)
-    
-    inst:ListenForEvent("death",OnDeath)
+
+    inst:ListenForEvent("death", OnDeath)
+
     return inst
 end
 

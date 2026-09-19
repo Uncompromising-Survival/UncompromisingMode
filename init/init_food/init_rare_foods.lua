@@ -43,13 +43,13 @@ end)]]
 -- Butterflies appearance rate depends on nr of players
 -----------------------------------------------------------------
 -- TODO complicated
---[[local UpvalueHacker = GLOBAL.require("tools/upvaluehacker")
+--[[local UMUpvalueHacker = GLOBAL.require("tools/um_upvaluehacker")
 AddClassPostConstruct("components/butterflyspawner", function(self)
-    local _activeplayers = UpvalueHacker.GetUpvalue(self, "ScheduleSpawn", "_activeplayers")
-    local _scheduledtasks = UpvalueHacker.GetUpvalue(self, "ScheduleSpawn", "_scheduledtasks")
+    local _activeplayers = UMUpvalueHacker.GetUpvalue(self, "ScheduleSpawn", "_activeplayers")
+    local _scheduledtasks = UMUpvalueHacker.GetUpvalue(self, "ScheduleSpawn", "_scheduledtasks")
     --Get the old functions using upvalue hacker
-    local SpawnButterflyForPlayer = UpvalueHacker.GetUpvalue(self, "ScheduleSpawn", "SpawnButterflyForPlayer")
-    local ScheduleSpawn = UpvalueHacker.GetUpvalue(self, "ScheduleSpawn", "ScheduleSpawn")
+    local SpawnButterflyForPlayer = UMUpvalueHacker.GetUpvalue(self, "ScheduleSpawn", "SpawnButterflyForPlayer")
+    local ScheduleSpawn = UMUpvalueHacker.GetUpvalue(self, "ScheduleSpawn", "ScheduleSpawn")
 
 
     local function ScheduleSpawn(player, initialspawn)
@@ -60,7 +60,7 @@ AddClassPostConstruct("components/butterflyspawner", function(self)
         end
     end
     --Now replace the function with our modified one
-    UpvalueHacker.SetUpvalue(GLOBAL.Prefabs.butterflyspawner.fn, ScheduleSpawn, "ScheduleSpawn")
+    UMUpvalueHacker.SetUpvalue(GLOBAL.Prefabs.butterflyspawner.fn, ScheduleSpawn, "ScheduleSpawn")
 end
 AddPrefabPostInit("world", function(inst)
 

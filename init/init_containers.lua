@@ -4,19 +4,19 @@ local ACTIONS = GLOBAL.ACTIONS
 local Inv = require "widgets/inventorybar"
 local EQUIPSLOTS = GLOBAL.EQUIPSLOTS
 local SpawnPrefab = GLOBAL.SpawnPrefab
-local GEM_DEFS = require("gemology_defs").GEM_DEFS
+local GEM_DEFS = UMGemologyFns.GEM_DEFS
 
 local containers = require("containers")
---[[
-AddComponentPostInit("container", function(self)
-	function self:RemoveSingleItemBySlot(slot)
-		if slot and self.slots[slot] then
-			local item = self.slots[slot]
-			return self:RemoveItem(item)
-		end
-	end
-end)
-]]
+
+--[[AddComponentPostInit("container", function(self)
+    function self:RemoveSingleItemBySlot(slot)
+        if slot and self.slots[slot] then
+            local item = self.slots[slot]
+            return self:RemoveItem(item)
+        end
+    end
+end)]]
+
 function CheckMush(container, item, slot)
     return item:HasTag("mushroom_fuel")
 end

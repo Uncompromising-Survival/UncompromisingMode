@@ -1,39 +1,31 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
+-----------------------------------------------------------------
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
+local FireDetector = require("components/firedetector")
 
-local UpvalueHacker = require("tools/upvaluehacker")
+local _NOTAGS = UMUpvalueHacker.GetUpvalue(FireDetector.Activate, "LookForFiresAndFirestarters", "NOTAGS")
+local NOTAGS = {"campfire", "NIGHTMARE_fueled", "noflingowash"}
+for _, tag in pairs(NOTAGS) do
+    table.insert(_NOTAGS, tag)
+end
 
-env.AddComponentPostInit("firedetector", function(self)
-    local _NOTAGS = UpvalueHacker.GetUpvalue(self.Activate, "LookForFiresAndFirestarters", "NOTAGS")
-    local NOTAGS = {"campfire", "NIGHTMARE_fueled", "noflingowash"}
+local _EMERGENCYTAGS = UMUpvalueHacker.GetUpvalue(FireDetector.ActivateEmergencyMode, "OnDetectEmergencyTargets", "EMERGENCYTAGS")
+local _NONEMERGENCYTAGS = UMUpvalueHacker.GetUpvalue(FireDetector.Activate, "LookForFiresAndFirestarters", "NONEMERGENCYTAGS")
+local TAGS = {"um_washable_goo"}
 
-    if _NOTAGS then
-        for _, tag in pairs(NOTAGS) do
-            table.insert(_NOTAGS, tag)
-        end
+for _, tag in pairs(TAGS) do
+    table.insert(_EMERGENCYTAGS, tag)
+end
+
+for _, tag in pairs(TAGS) do
+    table.insert(_NONEMERGENCYTAGS, tag)
+end
+
+local _CheckTargetScore = UMUpvalueHacker.TryGetUpvalue(FireDetector.Activate, "LookForFiresAndFirestarters", "CheckTargetScore")
+if _CheckTargetScore then
+    local function CheckTargetScore(target, ...)
+        return target and target:HasTag("um_washable_goo") and 8 or _CheckTargetScore(target, ...)
     end
-
-    local _EMERGENCYTAGS = UpvalueHacker.GetUpvalue(self.ActivateEmergencyMode, "OnDetectEmergencyTargets", "EMERGENCYTAGS")
-    local _NONEMERGENCYTAGS = UpvalueHacker.GetUpvalue(self.Activate, "LookForFiresAndFirestarters", "NONEMERGENCYTAGS")
-    local TAGS = {"um_washable_goo"}
-
-    if _EMERGENCYTAGS then
-        for _, tag in pairs(TAGS) do
-            table.insert(_EMERGENCYTAGS, tag)
-        end
-    end
-
-    if _NONEMERGENCYTAGS then
-        for _, tag in pairs(TAGS) do
-            table.insert(_NONEMERGENCYTAGS, tag)
-        end
-    end
-
-    local _CheckTargetScore = UpvalueHacker.GetUpvalue(self.Activate, "LookForFiresAndFirestarters", "CheckTargetScore")
-    if _CheckTargetScore then
-        local function CheckTargetScore(target, ...)
-            return target and target:HasTag("um_washable_goo") and 8 or _CheckTargetScore(target, ...)
-        end
-        UpvalueHacker.SetUpvalue(self.Activate, CheckTargetScore, "LookForFiresAndFirestarters", "CheckTargetScore")
-    end
-end)
+    UMUpvalueHacker.SetUpvalue(FireDetector.Activate, CheckTargetScore, "LookForFiresAndFirestarters", "CheckTargetScore")
+end

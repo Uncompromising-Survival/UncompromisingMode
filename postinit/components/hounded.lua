@@ -2,31 +2,31 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 
-local UpvalueHacker = require("tools/upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 
 env.AddComponentPostInit("hounded", function(self)
-    local _spawndata = UpvalueHacker.GetUpvalue(self.SetSpawnData, "_spawndata")
+    local _spawndata = UMUpvalueHacker.GetUpvalue(self.SetSpawnData, "_spawndata")
     function self:GetSpawnData() return _spawndata end
 
-    local _spawnwintervariant = UpvalueHacker.GetUpvalue(self.SetWinterVariant, "_spawnwintervariant")
-    local _spawnsummervariant = UpvalueHacker.GetUpvalue(self.SetSummerVariant, "_spawnsummervariant")
+    local _spawnwintervariant = UMUpvalueHacker.GetUpvalue(self.SetWinterVariant, "_spawnwintervariant")
+    local _spawnsummervariant = UMUpvalueHacker.GetUpvalue(self.SetSummerVariant, "_spawnsummervariant")
 
-    local SummonSpawn = UpvalueHacker.GetUpvalue(self.SummonSpawn, "SummonSpawn")
-    local _GetSpawnPrefab = UpvalueHacker.GetUpvalue(SummonSpawn, "GetSpawnPrefab")
-    local GetSpecialSpawnChance = UpvalueHacker.GetUpvalue(_GetSpawnPrefab, "GetSpecialSpawnChance")
-    local GetSpawnPoint = UpvalueHacker.GetUpvalue(self.SummonSpawn, "SummonSpawn", "GetSpawnPoint")
-    local _OldGetSpawnPrefab = UpvalueHacker.GetUpvalue(_GetSpawnPrefab, "OldGetSpawnPrefab")
+    local SummonSpawn = UMUpvalueHacker.GetUpvalue(self.SummonSpawn, "SummonSpawn")
+    local _GetSpawnPrefab = UMUpvalueHacker.GetUpvalue(SummonSpawn, "GetSpawnPrefab")
+    local GetSpecialSpawnChance = UMUpvalueHacker.GetUpvalue(_GetSpawnPrefab, "GetSpecialSpawnChance")
+    local GetSpawnPoint = UMUpvalueHacker.GetUpvalue(self.SummonSpawn, "SummonSpawn", "GetSpawnPoint")
+    local _OldGetSpawnPrefab = UMUpvalueHacker.GetUpvalue(_GetSpawnPrefab, "OldGetSpawnPrefab")
 
     --Winterlands compat.
     if _OldGetSpawnPrefab or not GetSpawnPoint then
-        GetSpecialSpawnChance = UpvalueHacker.GetUpvalue(_OldGetSpawnPrefab, "GetSpecialSpawnChance")
-        GetSpawnPoint = UpvalueHacker.GetUpvalue(SummonSpawn, "OldSummonSpawn", "GetSpawnPoint")
+        GetSpecialSpawnChance = UMUpvalueHacker.GetUpvalue(_OldGetSpawnPrefab, "GetSpecialSpawnChance")
+        GetSpawnPoint = UMUpvalueHacker.GetUpvalue(SummonSpawn, "OldSummonSpawn", "GetSpawnPoint")
     end
 
     local function GetSpawnPrefab(upgrade)
         --not good, but I need to be able to refresh this spawn data for caves.
         if upgrade and _spawndata.upgrade_spawn then
-            return (TheWorld.state.iswinter and _spawndata.upgrade_spawn_summer ~= nil and _spawndata.upgrade_spawn_winter or TheWorld.state.issummer and _spawndata.upgrade_spawn_summer ~= nil and _spawndata.upgrade_spawn_summer or _spawndata.upgrade_spawn)
+            return (TheWorld.state.iswinter and _spawndata.upgrade_spawn_winter or TheWorld.state.issummer and _spawndata.upgrade_spawn_summer or _spawndata.upgrade_spawn)
         end
 
         local do_seasonal_spawn = math.random() < GetSpecialSpawnChance()
@@ -41,6 +41,7 @@ env.AddComponentPostInit("hounded", function(self)
 
         return _spawndata.base_prefab
     end
+
     local function NoHoles(pt)
         return not TheWorld.Map:IsPointNearHole(pt)
     end
@@ -59,7 +60,6 @@ env.AddComponentPostInit("hounded", function(self)
             return offset
         end
     end
-
 
     local function SummonSpawn(pt, upgrade, radius_override)
         local prefab = GetSpawnPrefab(upgrade)
@@ -88,9 +88,8 @@ env.AddComponentPostInit("hounded", function(self)
         end
     end
 
-
     if not (TheWorld:HasTag("island") or TheWorld:HasTag("volcano")) then
-        UpvalueHacker.SetUpvalue(self.SummonSpawn, SummonSpawn, "SummonSpawn")
+        UMUpvalueHacker.SetUpvalue(self.SummonSpawn, SummonSpawn, "SummonSpawn")
     end
 end)
 

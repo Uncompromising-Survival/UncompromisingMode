@@ -161,7 +161,7 @@ local function DoScythe(inst, target, doer)
     ]]
 end
 
-local function onattack_blue(inst, attacker, target, skipsanity)
+local function onattack_blue(inst, attacker, target)
     if not target:IsValid() then
         --target killed or removed in combat damage phase
         return

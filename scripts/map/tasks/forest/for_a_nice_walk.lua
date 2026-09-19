@@ -36,9 +36,7 @@ AddTaskPreInit("For a nice walk", function(task)
 end)
 
 AddTaskSetPreInitAny(function(tasksetdata) -- Require the LivingTree
-    if tasksetdata.location ~= "forest" then
-        return
-    end
+    if tasksetdata.location ~= "forest" then return end
 	
     table.insert(tasksetdata.required_prefabs, "livingtree")
 end)

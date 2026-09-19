@@ -146,7 +146,7 @@ DESCRIBE.SALTPACK = "It clears the battlefield!"
 DESCRIBE.SKELETONMEAT = "A... spoil of... war..."
 DESCRIBE.CHIMP = DESCRIBE.MONKEY
 DESCRIBE.SWILSON = "A challenger!"
-DESCRIBE.VAMPIREBAT = "The bigger they are, the harder they fall!"
+DESCRIBE.UM_VAMPIREBAT = "The bigger they are, the harder they fall!"
 DESCRIBE.CRITTERLAB_REAL = DESCRIBE.CRITTERLAB
 DESCRIBE.CRITTERLAB_REAL_BROKEN =
 "With some moon rocks we could create the perfect battlements for tiny creatures!"

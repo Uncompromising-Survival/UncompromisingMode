@@ -3,8 +3,8 @@
 -- with other mods and may break in the future. No, I can't use table.insert. I've tried. treasure_templates
 -- is a "mod-hostile table". It only gets returned once *before* mods load. Any changes wouldn't work for
 -- treasures, despite existing in the table (checked with prints).
-local GEM_DEFS = require("gemology_defs").GEM_DEFS
-local GEM_LOOKUP = require("gemology_defs").GEM_LOOKUP
+local GEM_DEFS = UMGemologyFns.GEM_DEFS
+local GEM_LOOKUP = UMGemologyFns.GEM_LOOKUP
 
 local treasure_templates = {
     --	TREASUREPREFAB1 = -- Prefab to spawn at point

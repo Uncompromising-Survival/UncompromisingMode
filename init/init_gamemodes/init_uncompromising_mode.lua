@@ -48,6 +48,8 @@ modimport("init/init_strings/init_descriptions/wanda")
 modimport("init/init_strings/init_descriptions/winky")
 modimport("init/init_strings/init_descriptions/wathom")
 
+GLOBAL.UMGemologyFns = require("gemology_defs")
+
 --    [         Number Tuning and PostInits        ]    --
 modimport("init/init_postinit")
 modimport("init/init_actions")
@@ -240,10 +242,6 @@ end
 --food stats!
 if GetModConfigData("food_stats") then
     modimport("init/init_food/init_food_stats")
-end
-
-if GetModConfigData("armorrework") then
-    modimport("postinit/armor_rework")
 end
 
 modimport("init/init_weather/init_ripples")

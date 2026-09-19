@@ -21,10 +21,8 @@ AddTaskPreInit("MoonIsland_Beach", function(task)
 end)
 
 AddTaskSetPreInitAny(function(tasksetdata)
-	if tasksetdata.location ~= "forest" then
-		return
-	end
-	
+	if tasksetdata.location ~= "forest" then return end
+
 	if tasksetdata.required_prefabs ~= nil then
 		table.insert(tasksetdata.required_prefabs,"cave_entrance_moon")
 	else

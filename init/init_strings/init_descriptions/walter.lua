@@ -174,7 +174,7 @@ DESCRIBE.SKELETONMEAT =
 "I... I don't like stories about people at their most desperate..."
 DESCRIBE.CHIMP = DESCRIBE.MONKEY
 DESCRIBE.SWILSON = "Woah! Wilson, what happened to you?!"
-DESCRIBE.VAMPIREBAT = "You don't look like a vampire at all!"
+DESCRIBE.UM_VAMPIREBAT = "You don't look like a vampire at all!"
 DESCRIBE.CRITTERLAB_REAL = DESCRIBE.CRITTERLAB
 DESCRIBE.CRITTERLAB_REAL_BROKEN =
 "We can make a mini animal shelter with some moon rocks!"

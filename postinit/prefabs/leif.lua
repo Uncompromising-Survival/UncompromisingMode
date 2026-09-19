@@ -162,7 +162,7 @@ local function SummonStumplings(target)
     end
 end
 
-local function UnHide(inst, data)
+--[[local function UnHide(inst, data)
     if data.statename ~= "sleeping" then
         inst.sg:RemoveStateTag("hiding")
         inst:RemoveEventCallback("newstate", UnHide)
@@ -181,7 +181,7 @@ local function BossCheck(inst, data)
             data.attacker.components.combat:DropTarget()
         end
     end
-end
+end]]
 
 local function OnHitOther(inst, other)
     if other:HasTag("creatureknockbackable") then
@@ -207,10 +207,15 @@ local function OnHitOther(inst, other)
     end
 end
 
-local function isnottree(ent)
-    if ent ~= nil and not ent:HasTag("leif") and not ent:HasTag("stumpling") then -- fix to friendly AOE: refer for later AOE mobs -Axe
+--[[local function isnottree(ent)
+    if ent ~= nil and not ent:HasAnyTag("leif", "stumpling") then -- fix to friendly AOE: refer for later AOE mobs -Axe
         return true
     end
+end]]
+
+local AOE_EXCLUDE_TAGS = {"leif", "stumpling"}
+local function ShouldDoConeCheck(ent, inst)
+    return not inst.sg:HasStateTag("snare")
 end
 
 local function TreeguardFunctions(inst)
@@ -220,13 +225,14 @@ local function TreeguardFunctions(inst)
     inst.FindSnareTargets = FindSnareTargets
     inst.SpawnSnare = SpawnSnare
 
-    inst:ListenForEvent("attacked", BossCheck)
+    --inst:ListenForEvent("attacked", BossCheck)
 
     local combat = inst.components.combat
     if combat then 
         combat.onhitotherfn = OnHitOther
         -- Treeguard now has AOE - Axe
-        combat:SetAreaDamage(3, TUNING.DEERCLOPS_AOE_SCALE, isnottree) -- you can edit these values to your liking -Axe
+        combat:UMSetAreaDamage(3, AOE_EXCLUDE_TAGS, 120, 1.5, ShouldDoConeCheck)
+        --combat:SetAreaDamage(3, TUNING.DEERCLOPS_AOE_SCALE, isnottree) -- you can edit these values to your liking -Axe
     end
 
     local lootdropper = inst.components.lootdropper

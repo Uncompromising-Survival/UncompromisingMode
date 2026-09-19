@@ -598,7 +598,7 @@ configuration_options = {
     Header("Items and Structures"),
     -----------------------------
     BinaryConfig("inventory_backpacks", "Backpacks and Alikes", "When empty, backpacks can be stored in chests and inventories.", true),
-	BinaryConfig("bath_heal", "Bath Bomb", "When used in Boilling Springs, bathing in it restores Max Health. A bit more expensive, and can only be made on Celestial Altar Tier.", true),	
+    BinaryConfig("bath_heal", "Bath Bomb", "When used in Boilling Springs, bathing in it restores Max Health. A bit more expensive, and can only be made on Celestial Altar Tier.", true),
     BinaryConfig("infinite_blueprints_", "Blueprints", "Blueprints are no longer consumed when reading.", false),
     BinaryConfig("funcap_fun", "Funcap Rework", "Changes Funcaps to have a bone crushing surprise, aside from Lunar Funcap.", true),
     BinaryConfig("celestialitems_revert", "Celestial Altar Item Changes", "Glass tools can not be prototyped. Recipes are more expensive.", true),
@@ -829,15 +829,8 @@ configuration_options = {
     SkipSpace(),
 
     Header("Spiders"),
-    {
-        name = "alljumperspiders",
-        label = "Regular Spiders Jump",
-        hover = "Normal Spiders leap just like Spider Warriors, but lesser.",
-        options = {
-            { description = "Default",  data = "lesser" }, { description = "Warrior Range", data = "warrior" },
-            { description = "Disabled", data = false } },
-        default = "lesser"
-    },
+    BinaryConfig("alljumperspiders", "Regular Spiders Jump",
+        "Normal Spiders leap similar to Spider Warriors.", true),
     BinaryConfig("spiderwarriorcounter", "Warrior Counter",
         "Warrior Spiders (and Depth Dwellers) perform a counter-attack when attacked (also lowers health to 300).", true),
     SkipSpace(),
@@ -1442,7 +1435,7 @@ configuration_options = {
     -----------------------------
     --[[Header("> Legacy Options <"),
     -----------------------------
-    -----------------------------	
+    -----------------------------
     {
         name = "flingo_setting",
         label = "Flingomatic Nerf",

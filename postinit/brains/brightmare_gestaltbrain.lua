@@ -1,10 +1,10 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
-local UpvalueHacker = require("tools/upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 local GestaltBrain = require("brains/brightmare_gestaltbrain")
 
-local SHADOW_TAGS = UpvalueHacker.GetUpvalue(GestaltBrain.OnStart, "SHADOW_TAGS")
+local SHADOW_TAGS = UMUpvalueHacker.GetUpvalue(GestaltBrain.OnStart, "SHADOW_TAGS")
 
 if SHADOW_TAGS then
     table.insert(SHADOW_TAGS.oneoftags, "shadow_item")

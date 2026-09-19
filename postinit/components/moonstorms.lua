@@ -3,7 +3,7 @@ GLOBAL.setfenv(1, GLOBAL)
 
 
 -- This code is WIP (will finish it out in a while, isn't called)
--- local UpvalueHacker = require("tools/upvaluehacker")
+-- local UMUpvalueHacker = require("tools/um_upvaluehacker")
 
 
 local function SpawnHiveTraps(center)
@@ -24,7 +24,7 @@ local function SpawnHiveTraps(center)
 	if offset then
 		local beehive = SpawnPrefab("um_beehive_moon")
 		beehive.Transform:SetPosition(newx, 0, newz)
-		beehive.BeginDegrade(beehive)
+		beehive:BeginDegrade()
 	end
 	--end
 end

@@ -6,18 +6,18 @@ AddRoomPreInit("OceanRough", function(room) room.contents.countprefabs = { siren
 
 local ocean_deep =
 {
-	"OceanSwell",
-	"OceanRough",
-	"OceanHazardous"
+    "OceanSwell",
+    "OceanRough",
+    "OceanHazardous"
 }
 
 for k, v in ipairs(ocean_deep) do
-	AddRoomPreInit(v, function(room)
-		if room.contents.distributeprefabs == nil then
-			room.contents.distributeprefabs = {}
-		end
-		room.contents.distributeprefabs.oceanfishableflotsam_water = 0.15
-	end)
+    AddRoomPreInit(v, function(room)
+        if room.contents.distributeprefabs == nil then
+            room.contents.distributeprefabs = {}
+        end
+        room.contents.distributeprefabs.oceanfishableflotsam_water = 0.15
+    end)
 end
 
 
@@ -26,7 +26,8 @@ local StaticLayout = GLOBAL.require("map/static_layout")
 Layouts["utw_biomespawner"] = StaticLayout.Get("map/static_layouts/utw_biomespawner")
 -- UMSS for Ocean
 AddTaskSetPreInitAny(function(tasksetdata)
-	if tasksetdata.name == GLOBAL.STRINGS.UI.CUSTOMIZATIONSCREEN.TASKSETNAMES.DEFAULT or tasksetdata.name == GLOBAL.STRINGS.UI.CUSTOMIZATIONSCREEN.TASKSETNAMES.CLASSIC then
-		tasksetdata.ocean_prefill_setpieces["utw_biomespawner"] = { count = math.random(6, 9) }
-	end
+    if (tasksetdata.name == GLOBAL.STRINGS.UI.CUSTOMIZATIONSCREEN.TASKSETNAMES.DEFAULT or tasksetdata.name == GLOBAL.STRINGS.UI.CUSTOMIZATIONSCREEN.TASKSETNAMES.CLASSIC)
+        and tasksetdata.ocean_prefill_setpieces then
+        tasksetdata.ocean_prefill_setpieces["utw_biomespawner"] = { count = math.random(6, 9) }
+    end
 end)

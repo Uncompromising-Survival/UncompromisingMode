@@ -4,7 +4,7 @@
 -- a side-effect. Instead, modifying GetTile to also include Magma Caves is a better option.
 if not GLOBAL.TheNet:GetIsServer() then return end
 
-local UpvalueHacker = require("tools/upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 
 AddComponentPostInit("fumarolelocaltemperature", function(self)
 	-- Extremely unlikely that someone will also need this too. Postiniting the function will also make the tile call happen twice, let's just
@@ -13,7 +13,7 @@ AddComponentPostInit("fumarolelocaltemperature", function(self)
 	local TILE_SEARCH_HALF_SIZE = 4
 	local _world = TheWorld
 	local _map = _world.Map
-	local _cachetemperature = UpvalueHacker.GetUpvalue(self.GetTemperatureAtXZ, "_cachetemperature") -- Grab it from the old one.
+	local _cachetemperature = UMUpvalueHacker.GetUpvalue(self.GetTemperatureAtXZ, "_cachetemperature") -- Grab it from the old one.
 	local _state = _world.state
 	self.GetTemperatureAtXZ = function(self,x,z)
 		local tx, ty = _map:GetTileCoordsAtPoint(x, 0, z)

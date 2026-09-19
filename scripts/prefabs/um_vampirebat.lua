@@ -427,5 +427,5 @@ local function circlingbatfn()
     return inst
 end]]
 
-return Prefab("vampirebat", fn, assets, prefabs) --[[,
+return Prefab("um_vampirebat", fn, assets, prefabs) --[[,
     Prefab("badlands/objects/circlingbat", circlingbatfn, assets, prefabs)]]

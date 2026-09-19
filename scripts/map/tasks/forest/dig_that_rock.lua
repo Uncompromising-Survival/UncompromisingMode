@@ -40,12 +40,9 @@ if not GLOBAL.KnownModIndex:IsModEnabled("workshop-1467214795") then
 			background_room="BGGrass",
 			colour={r=1,g=1,b=0.5,a=1}
 		})
-		
-		
+
 	AddTaskSetPreInitAny(function(tasksetdata)
-		if tasksetdata.location ~= "forest" then
-			return
-		end
+		if tasksetdata.location ~= "forest" then return end
 		for i,task in ipairs(tasksetdata.optionaltasks) do
 			if task == "Make a Beehat" then
 				tasksetdata.optionaltasks[i] = "UMMakeABeehat"

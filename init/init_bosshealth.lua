@@ -107,11 +107,11 @@ local spookyskeletons_items = {
 }
 
 local unique_loot = { 
-	"fruitflyfruit",
-	"um_cookpot_wagstaff_lever",
-	"um_cookpot_wagstaff_lever2", 
+    "fruitflyfruit",
+    "um_cookpot_wagstaff_lever",
+    "um_cookpot_wagstaff_lever2", 
 }
-	
+
 local function MultiplyLoot(inst, mult)
     local lootdropper = inst.components.lootdropper
     if not lootdropper or mult == 1 then return end
@@ -130,7 +130,7 @@ local function MultiplyLoot(inst, mult)
                 multiply = false
             end
 
-			if table.contains(unique_loot, prefab) then
+            if table.contains(unique_loot, prefab) then
                 multiply = false
             end
                 
@@ -159,180 +159,180 @@ local function Duplicator(inst, n)
 end
 
 local function ExtraRoll(mult)
-	local whole = math.floor(mult - 1)
-	local frac = (mult - 1) % 1
+    local whole = math.floor(mult - 1)
+    local frac = (mult - 1) % 1
 
-	return whole + ((frac > 0 and math.random() < frac) and 1 or 0)
+    return whole + ((frac > 0 and math.random() < frac) and 1 or 0)
 end
 
 local function ExtraChestFX(chest)
-	local x, y, z = chest.Transform:GetWorldPosition()
+    local x, y, z = chest.Transform:GetWorldPosition()
 
-	if chest.SoundEmitter ~= nil then
-		chest.SoundEmitter:PlaySound("dontstarve/common/ghost_spawn")
-	end
+    if chest.SoundEmitter ~= nil then
+        chest.SoundEmitter:PlaySound("dontstarve/common/ghost_spawn")
+    end
 
-	local fx = SpawnPrefab("statue_transition_2")
-	if fx ~= nil then
-		fx.Transform:SetPosition(x, y, z)
-		fx.Transform:SetScale(1, 2, 1)
-	end
+    local fx = SpawnPrefab("statue_transition_2")
+    if fx ~= nil then
+        fx.Transform:SetPosition(x, y, z)
+        fx.Transform:SetScale(1, 2, 1)
+    end
 
-	fx = SpawnPrefab("statue_transition")
-	if fx ~= nil then
-		fx.Transform:SetPosition(x, y, z)
-		fx.Transform:SetScale(1, 1.5, 1)
-	end
+    fx = SpawnPrefab("statue_transition")
+    if fx ~= nil then
+        fx.Transform:SetPosition(x, y, z)
+        fx.Transform:SetScale(1, 1.5, 1)
+    end
 end
 
 local function OverflowChest(mainchest)
-	if mainchest.overflow ~= nil and mainchest.overflow:IsValid() and mainchest.overflow.components.container ~= nil then
-		return mainchest.overflow
-	end
+    if mainchest.overflow ~= nil and mainchest.overflow:IsValid() and mainchest.overflow.components.container ~= nil then
+        return mainchest.overflow
+    end
 
-	local x, y, z = mainchest.Transform:GetWorldPosition()
-	local chest = SpawnPrefab("minotaurchest")
+    local x, y, z = mainchest.Transform:GetWorldPosition()
+    local chest = SpawnPrefab("minotaurchest")
 
-	if chest ~= nil then
-		chest.Transform:SetPosition(x + 2.5, 0, z)
+    if chest ~= nil then
+        chest.Transform:SetPosition(x + 2.5, 0, z)
 
-		chest.multiplication_done = true
-		mainchest.overflow = chest
+        chest.multiplication_done = true
+        mainchest.overflow = chest
 
-		ExtraChestFX(chest)
-	end
+        ExtraChestFX(chest)
+    end
 
-	return chest
+    return chest
 end
 
 local function FillChest(mainchest, item)
-	if item == nil then
-		return
-	end
+    if item == nil then
+        return
+    end
 
-	if mainchest.components.container:GiveItem(item) then
-		return
-	end
+    if mainchest.components.container:GiveItem(item) then
+        return
+    end
 
-	local overflow = OverflowChest(mainchest)
+    local overflow = OverflowChest(mainchest)
 
-	if overflow ~= nil and overflow.components.container ~= nil and overflow.components.container:GiveItem(item) then
-		return
-	end
+    if overflow ~= nil and overflow.components.container ~= nil and overflow.components.container:GiveItem(item) then
+        return
+    end
 
-	local x, y, z = mainchest.Transform:GetWorldPosition()
-	item.Transform:SetPosition(x, y, z)
+    local x, y, z = mainchest.Transform:GetWorldPosition()
+    item.Transform:SetPosition(x, y, z)
 end
 
 AddPrefabPostInit("minotaurchest", function(inst)
-	if not TheWorld.ismastersim then
-		return
-	end
+    if not TheWorld.ismastersim then
+        return
+    end
 
-	local _OnSave = inst.OnSave
-	inst.OnSave = function(inst, data)
-		if _OnSave ~= nil then
-			_OnSave(inst, data)
-		end
+    local _OnSave = inst.OnSave
+    inst.OnSave = function(inst, data)
+        if _OnSave ~= nil then
+            _OnSave(inst, data)
+        end
 
-		data.multiplication_done = inst.multiplication_done
-	end
+        data.multiplication_done = inst.multiplication_done
+    end
 
-	local _OnLoad = inst.OnLoad
-	inst.OnLoad = function(inst, data)
-		if _OnLoad ~= nil then
-			_OnLoad(inst, data)
-		end
+    local _OnLoad = inst.OnLoad
+    inst.OnLoad = function(inst, data)
+        if _OnLoad ~= nil then
+            _OnLoad(inst, data)
+        end
 
-		if data ~= nil and data.multiplication_done then
-			inst.multiplication_done = true
-		end
-	end
+        if data ~= nil and data.multiplication_done then
+            inst.multiplication_done = true
+        end
+    end
 
-	inst:DoTaskInTime(0, function()
-		if inst.components.container == nil then
-			return
-		end
+    inst:DoTaskInTime(0, function()
+        if inst.components.container == nil then
+            return
+        end
 
-		if inst.multiplication_done then
-			return
-		end
+        if inst.multiplication_done then
+            return
+        end
 
-		inst.multiplication_done = true
+        inst.multiplication_done = true
 
-		local n = GetModConfigData("minotaur_health_") or 1
-		local mult = 1 + (n - 1) / 2
+        local n = GetModConfigData("minotaur_health_") or 1
+        local mult = 1 + (n - 1) / 2
 
-		if mult <= 1 then
-			return
-		end
+        if mult <= 1 then
+            return
+        end
 
-		local items = inst.components.container:FindItems(function(item)
-			return item.prefab ~= "atrium_key"
-		end)
+        local items = inst.components.container:FindItems(function(item)
+            return item.prefab ~= "atrium_key"
+        end)
 
-		for _, item in ipairs(items) do
-			local extra = ExtraRoll(mult)
+        for _, item in ipairs(items) do
+            local extra = ExtraRoll(mult)
 
-			for i = 1, extra do
-				local saved = item:GetSaveRecord()
-				local copy = saved ~= nil and SpawnSaveRecord(saved) or SpawnPrefab(item.prefab)
+            for i = 1, extra do
+                local saved = item:GetSaveRecord()
+                local copy = saved ~= nil and SpawnSaveRecord(saved) or SpawnPrefab(item.prefab)
 
-				if copy ~= nil then
-					FillChest(inst, copy)
-				end
-			end
-		end
-	end)
+                if copy ~= nil then
+                    FillChest(inst, copy)
+                end
+            end
+        end
+    end)
 end)
 
 local function CopyBundle(bundle_items)
-	local copy = {}
+    local copy = {}
 
-	for _, item in ipairs(bundle_items) do
-		if type(item) == "table" then
-			table.insert(copy, { item[1], item[2] })
-		else
-			table.insert(copy, item)
-		end
-	end
+    for _, item in ipairs(bundle_items) do
+        if type(item) == "table" then
+            table.insert(copy, { item[1], item[2] })
+        else
+            table.insert(copy, item)
+        end
+    end
 
-	return copy
+    return copy
 end
 
 AddComponentPostInit("klaussackloot", function(self)
-	if self._bosslootmult_klaus_patched then
-		return
-	end
-	
-	self._bosslootmult_klaus_patched = true
+    if self._bosslootmult_klaus_patched then
+        return
+    end
 
-	local _GetLoot = self.GetLoot
+    self._bosslootmult_klaus_patched = true
 
-	self.GetLoot = function(self, ...)
-		local loot = _GetLoot(self, ...)
+    local _GetLoot = self.GetLoot
 
-		local n = GetModConfigData("klaus_health_") or 1
-		local mult = 1 + (n - 1) / 2
+    self.GetLoot = function(self, ...)
+        local loot = _GetLoot(self, ...)
 
-		if mult <= 1 then
-			return loot
-		end
+        local n = GetModConfigData("klaus_health_") or 1
+        local mult = 1 + (n - 1) / 2
 
-		local final = {}
+        if mult <= 1 then
+            return loot
+        end
 
-		for _, bundle_items in ipairs(loot) do
-			table.insert(final, bundle_items)
+        local final = {}
 
-			local extra = ExtraRoll(mult)
+        for _, bundle_items in ipairs(loot) do
+            table.insert(final, bundle_items)
 
-			for i = 1, extra do
-				table.insert(final, CopyBundle(bundle_items))
-			end
-		end
+            local extra = ExtraRoll(mult)
 
-		return final
-	end
+            for i = 1, extra do
+                table.insert(final, CopyBundle(bundle_items))
+            end
+        end
+
+        return final
+    end
 end)
 
 for _, bossname in ipairs(bosses) do
@@ -379,147 +379,147 @@ local function MultiplyShadowLoot(inst, mult)
 end
 
 local function MultiplyBeargerShedder(inst, config)
-	inst:DoTaskInTime(0, function()
-		if inst.components.shedder == nil then return end
-		if inst._bosslootmult_shedder_patched then return end
-		inst._bosslootmult_shedder_patched = true
+    inst:DoTaskInTime(0, function()
+        if inst.components.shedder == nil then return end
+        if inst._bosslootmult_shedder_patched then return end
+        inst._bosslootmult_shedder_patched = true
 
-		local old_DoSingleShed = inst.components.shedder.DoSingleShed
-		inst.components.shedder.DoSingleShed = function(self, ...)
-			old_DoSingleShed(self, ...)
+        local old_DoSingleShed = inst.components.shedder.DoSingleShed
+        inst.components.shedder.DoSingleShed = function(self, ...)
+            old_DoSingleShed(self, ...)
 
-			local n = GetModConfigData(config) or 1
-			local mult = 1 + (n - 1) / 2
-			local extra = ExtraRoll(mult)
+            local n = GetModConfigData(config) or 1
+            local mult = 1 + (n - 1) / 2
+            local extra = ExtraRoll(mult)
 
-			for i = 1, extra do
-				old_DoSingleShed(self, ...)
-			end
-		end
-	end)
+            for i = 1, extra do
+                old_DoSingleShed(self, ...)
+            end
+        end
+    end)
 end
 
 local function MultiplyWormBossBodyLoot(inst)
-	if not TheWorld.ismastersim then return end
+    if not TheWorld.ismastersim then return end
 
-	inst:DoTaskInTime(0, function()
-		if inst.components.lootdropper == nil then return end
-		if inst._bosslootmult_wormbody_patched then return end
-		inst._bosslootmult_wormbody_patched = true
+    inst:DoTaskInTime(0, function()
+        if inst.components.lootdropper == nil then return end
+        if inst._bosslootmult_wormbody_patched then return end
+        inst._bosslootmult_wormbody_patched = true
 
-		local old_FlingItem = inst.components.lootdropper.FlingItem
+        local old_FlingItem = inst.components.lootdropper.FlingItem
 
-		inst.components.lootdropper.FlingItem = function(self, item, ...)
-			old_FlingItem(self, item, ...)
+        inst.components.lootdropper.FlingItem = function(self, item, ...)
+            old_FlingItem(self, item, ...)
 
-			if item == nil or item.prefab == "lucky_goldnugget" then
-				return
-			end
+            if item == nil or item.prefab == "lucky_goldnugget" then
+                return
+            end
 
-			local n = GetModConfigData("worm_boss_health_") or 1
-			local mult = 1 + (n - 1) / 2
-			local extra = ExtraRoll(mult)
+            local n = GetModConfigData("worm_boss_health_") or 1
+            local mult = 1 + (n - 1) / 2
+            local extra = ExtraRoll(mult)
 
-			for i = 1, extra do
-				local copy = SpawnPrefab(item.prefab)
-				if copy ~= nil then
-					old_FlingItem(self, copy, ...)
-				end
-			end
-		end
-	end)
+            for i = 1, extra do
+                local copy = SpawnPrefab(item.prefab)
+                if copy ~= nil then
+                    old_FlingItem(self, copy, ...)
+                end
+            end
+        end
+    end)
 end
 
 AddPrefabPostInit("worm_boss_segment", MultiplyWormBossBodyLoot)
 AddPrefabPostInit("worm_boss", MultiplyWormBossBodyLoot)
 
 local function MultiplyExtraShroomSkins(inst, config)
-	local n = GetModConfigData(config) or 1
-	local mult = 1 + (n - 1) / 2
-	local extra = ExtraRoll(mult)
+    local n = GetModConfigData(config) or 1
+    local mult = 1 + (n - 1) / 2
+    local extra = ExtraRoll(mult)
 
-	if extra <= 0 then
-		return
-	end
+    if extra <= 0 then
+        return
+    end
 
-	local player = inst:GetNearestPlayer()
+    local player = inst:GetNearestPlayer()
 
-	for i = 1, extra do
-		LaunchAt(SpawnPrefab("shroom_skin"), inst, player, 1, 4, 2)
-	end
+    for i = 1, extra do
+        LaunchAt(SpawnPrefab("shroom_skin"), inst, player, 1, 4, 2)
+    end
 end
 
 local function PatchThresholds(prefab, config)
-	AddPrefabPostInit(prefab, function(inst)
-		if not TheWorld.ismastersim then return end
+    AddPrefabPostInit(prefab, function(inst)
+        if not TheWorld.ismastersim then return end
 
-		inst:ListenForEvent("roar", function(inst)
-			inst:DoTaskInTime(0, function()
-				if inst.components.health == nil or inst.components.health:IsDead() then
-					return
-				end
+        inst:ListenForEvent("roar", function(inst)
+            inst:DoTaskInTime(0, function()
+                if inst.components.health == nil or inst.components.health:IsDead() then
+                    return
+                end
 
-				local phase = inst.phase or 1
+                local phase = inst.phase or 1
 
-				if inst.MultiplyLastPhase == phase then
-					return
-				end
+                if inst.MultiplyLastPhase == phase then
+                    return
+                end
 
-				inst.MultiplyLastPhase = phase
+                inst.MultiplyLastPhase = phase
 
-				if phase >= 2 then
-					MultiplyExtraShroomSkins(inst, config)
-				end
-			end)
-		end)
-	end)
+                if phase >= 2 then
+                    MultiplyExtraShroomSkins(inst, config)
+                end
+            end)
+        end)
+    end)
 end
 
 PatchThresholds("toadstool", "toadstool_health_")
 PatchThresholds("toadstool_dark", "toadstool_dark_health_")
 
 local function MultiplyDragonflyScales(inst)
-	if not TheWorld.ismastersim then
-		return
-	end
+    if not TheWorld.ismastersim then
+        return
+    end
 
-	inst:DoTaskInTime(0, function()
-		if inst.components.damagetracker == nil or inst.components.stunnable == nil then
-			return
-		end
+    inst:DoTaskInTime(0, function()
+        if inst.components.damagetracker == nil or inst.components.stunnable == nil then
+            return
+        end
 
-		if inst.ExtraScales then
-			return
-		end
+        if inst.ExtraScales then
+            return
+        end
 
-		inst.ExtraScales = true
+        inst.ExtraScales = true
 
-		local n = GetModConfigData("dragonfly_health_") or 1
-		local mult = 1 + (n - 1) / 2
+        local n = GetModConfigData("dragonfly_health_") or 1
+        local mult = 1 + (n - 1) / 2
 
-		inst.components.damagetracker.damage_threshold = TUNING.DRAGONFLY_BREAKOFF_DAMAGE * n
-		inst.components.stunnable.stun_threshold = TUNING.DRAGONFLY_STUN * n
+        inst.components.damagetracker.damage_threshold = TUNING.DRAGONFLY_BREAKOFF_DAMAGE * n
+        inst.components.stunnable.stun_threshold = TUNING.DRAGONFLY_STUN * n
 
-		local old_damage_threshold_fn = inst.components.damagetracker.damage_threshold_fn
+        local old_damage_threshold_fn = inst.components.damagetracker.damage_threshold_fn
 
-		inst.components.damagetracker.damage_threshold_fn = function(inst, ...)
-			if old_damage_threshold_fn ~= nil then
-				old_damage_threshold_fn(inst, ...)
-			end
+        inst.components.damagetracker.damage_threshold_fn = function(inst, ...)
+            if old_damage_threshold_fn ~= nil then
+                old_damage_threshold_fn(inst, ...)
+            end
 
-			local extra = ExtraRoll(mult)
+            local extra = ExtraRoll(mult)
 
-			if extra <= 0 then
-				return
-			end
+            if extra <= 0 then
+                return
+            end
 
-			local player = inst:GetNearestPlayer()
+            local player = inst:GetNearestPlayer()
 
-			for i = 1, extra do
-				LaunchAt(SpawnPrefab("dragon_scales"), inst, player, 1, 3, 1.5)
-			end
-		end
-	end)
+            for i = 1, extra do
+                LaunchAt(SpawnPrefab("dragon_scales"), inst, player, 1, 3, 1.5)
+            end
+        end
+    end)
 end
 
 --[[local DRAGONFLY_HEALTH_MULT = GetModConfigData("dragonfly_health_") or 1 -- Ideally we should do tunings.
@@ -570,52 +570,52 @@ for _, prefab in ipairs(shadowpieces) do
 end
 
 AddPrefabPostInit("alterguardian_phase3dead", function(inst)
-	if not TheWorld.ismastersim then return end
+    if not TheWorld.ismastersim then return end
 
-	inst:DoTaskInTime(0, function()
-		local n = GetModConfigData("alterguardian_health_") or 1
-		Duplicator(inst, n)
-	end)
+    inst:DoTaskInTime(0, function()
+        local n = GetModConfigData("alterguardian_health_") or 1
+        Duplicator(inst, n)
+    end)
 end)
 
 AddPrefabPostInit("daywalker_pillar", function(inst)
-	if not TheWorld.ismastersim then return end
+    if not TheWorld.ismastersim then return end
 
-	inst:DoTaskInTime(0, function()
-		local n = GetModConfigData("daywalker_health_") or 1
-		Duplicator(inst, n)
-	end)
+    inst:DoTaskInTime(0, function()
+        local n = GetModConfigData("daywalker_health_") or 1
+        Duplicator(inst, n)
+    end)
 end)
 
 AddPrefabPostInit("malbatross", function(inst)
-	if not TheWorld.ismastersim then return end
+    if not TheWorld.ismastersim then return end
 
-	inst:DoTaskInTime(0, function()
-		local old_spawnfeather = inst.spawnfeather
-		if old_spawnfeather == nil then return end
+    inst:DoTaskInTime(0, function()
+        local old_spawnfeather = inst.spawnfeather
+        if old_spawnfeather == nil then return end
 
-		inst.spawnfeather = function(inst, time)
-			old_spawnfeather(inst, time)
+        inst.spawnfeather = function(inst, time)
+            old_spawnfeather(inst, time)
 
-			local n = GetModConfigData("malbatross_health_") or 1
-			local mult = 1 + (n - 1) / 2
-			local extra = ExtraRoll(mult)
+            local n = GetModConfigData("malbatross_health_") or 1
+            local mult = 1 + (n - 1) / 2
+            local extra = ExtraRoll(mult)
 
-			for i = 1, extra do
-				old_spawnfeather(inst, time)
-			end
-		end
-	end)
+            for i = 1, extra do
+                old_spawnfeather(inst, time)
+            end
+        end
+    end)
 end)
 
 AddPrefabPostInit("bearger", function(inst)
-	if not TheWorld.ismastersim then return end
-	MultiplyBeargerShedder(inst, "bearger_health_")
+    if not TheWorld.ismastersim then return end
+    MultiplyBeargerShedder(inst, "bearger_health_")
 end)
 
 AddPrefabPostInit("mutatedbearger", function(inst)
-	if not TheWorld.ismastersim then return end
-	MultiplyBeargerShedder(inst, "mutated_bearger_health_")
+    if not TheWorld.ismastersim then return end
+    MultiplyBeargerShedder(inst, "mutated_bearger_health_")
 end)
 
 AddPrefabPostInit("leif_sparse", function(inst)

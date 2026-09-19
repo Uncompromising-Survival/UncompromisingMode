@@ -1403,11 +1403,11 @@ AddPrefabPostInit("cutlichen", function(inst)
     inst.components.edible.secondaryfoodtype = GLOBAL.FOODTYPE.LICHEN
 end)
 
-local UpvalueHacker = require("tools/upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 AddSimPostInit(function()
-    local _tryproc = UpvalueHacker.GetUpvalue(_G.Prefabs.ruinshat.fn, "tryproc")
-    if _tryproc then
-        local _ruinshat_proc = UpvalueHacker.GetUpvalue(_tryproc, "ruinshat_proc")
+    local _tryproc = UMUpvalueHacker.TryGetUpvalue(_G.Prefabs.ruinshat.fn, "tryproc")
+    local _ruinshat_proc = UMUpvalueHacker.TryGetUpvalue(_tryproc, "ruinshat_proc")
+    if _tryproc and _ruinshat_proc then
         local function tryproc(inst, owner, data, ...)
             if HasSkill(owner, "ancient_kinship_2") then
                 if inst._task == nil and (data and not data.redirected) or not data and math.random() < .7 then
@@ -1417,7 +1417,7 @@ AddSimPostInit(function()
             end
             return _tryproc(inst, owner, data, ...)
         end
-        UpvalueHacker.SetUpvalue(_G.Prefabs.ruinshat.fn, tryproc, "tryproc")
+        UMUpvalueHacker.SetUpvalue(_G.Prefabs.ruinshat.fn, tryproc, "tryproc")
     end
 end)
 

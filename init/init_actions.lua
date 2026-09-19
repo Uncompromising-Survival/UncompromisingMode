@@ -1,4 +1,4 @@
-local UpvalueHacker = require("tools/upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 -- Update for PAWN
 AddAction("LAVASPIT", "LAVASPIT", function(act)
     if act.doer and act.target and act.doer.prefab == "dragonfly" then
@@ -350,6 +350,41 @@ GLOBAL.ACTIONS.ADDWETFUEL.fn = function(act, ...) -- I'M GOING TO ***BOMB KLEI**
     end
 end
 
+--Checks for projectinator/receptionator, basically blocking both the lazy deserter and desert stones
+local _OldStartChannelingFn = GLOBAL.ACTIONS.STARTCHANNELING.fn
+GLOBAL.ACTIONS.STARTCHANNELING.fn = function(act, ...)
+    local target = act.target
+    local doer = act.doer
+    if target ~= nil and doer ~= nil and doer:HasTag("um_astral_projected") then
+        if target:HasTag("um_astral_projector") then
+            return false
+        end
+        if target:HasTag("um_astral_projector_target") and doer.um_astral_target ~= target then
+            return false
+        end
+        if target:HasTag("townportal") then
+            return false
+        end
+    end
+    return _OldStartChannelingFn(act, ...)
+end
+
+local _OldTeleportFn = GLOBAL.ACTIONS.TELEPORT.fn
+GLOBAL.ACTIONS.TELEPORT.fn = function(act, ...)
+    if act.doer ~= nil and act.doer:HasTag("um_astral_projected") then
+        return false
+    end
+    return _OldTeleportFn(act, ...)
+end
+
+local _OldSwapBodiesMapFn = GLOBAL.ACTIONS.SWAPBODIES_MAP.fn
+GLOBAL.ACTIONS.SWAPBODIES_MAP.fn = function(act, ...)
+    if act.doer ~= nil and act.doer:HasTag("um_astral_projected") then
+        return false
+    end
+    return _OldSwapBodiesMapFn(act, ...)
+end
+
 --give priority is 0 (default) so we need to be above it so we can do this action on the pocket watches
 local SET_CUSTOM_NAME = GLOBAL.Action({ distance = 2, mount_valid = true, priority = 1 })
 SET_CUSTOM_NAME.id = "SET_CUSTOM_NAME"
@@ -458,7 +493,6 @@ AddComponentAction("USEITEM", "boatbottle",
 AddStategraphActionHandler("wilson", GLOBAL.ActionHandler(GLOBAL.ACTIONS.STORE_BOAT, "dolongaction"))
 AddStategraphActionHandler("wilson_client", GLOBAL.ActionHandler(GLOBAL.ACTIONS.STORE_BOAT, "dolongaction"))
 
-
 if TUNING.DSTU.WARLY_CHANGES ~= 0 then
     local _murderfn = GLOBAL.ACTIONS.MURDER.fn
     GLOBAL.ACTIONS.MURDER.fn = function(act)
@@ -510,8 +544,6 @@ if TUNING.DSTU.WXLESS then
     AddStategraphActionHandler("wilson", GLOBAL.ActionHandler(GLOBAL.ACTIONS.BREAK_DOWN_MODULE, "dolongaction"))
     AddStategraphActionHandler("wilson_client", GLOBAL.ActionHandler(GLOBAL.ACTIONS.BREAK_DOWN_MODULE, "dolongaction"))
 end
-
-
 
 local _Start_ChannelCastStrFn = GLOBAL.ACTIONS.START_CHANNELCAST.strfn
 GLOBAL.ACTIONS.START_CHANNELCAST.strfn = function(act)
@@ -616,7 +648,7 @@ end
 AddAction(um_gunshooty)
 
 AddSimPostInit(function()
-    local COMPONENT_ACTIONS = UpvalueHacker.GetUpvalue(GLOBAL.EntityScript.CollectActions, "COMPONENT_ACTIONS")
+    local COMPONENT_ACTIONS = UMUpvalueHacker.GetUpvalue(GLOBAL.EntityScript.CollectActions, "COMPONENT_ACTIONS")
     if COMPONENT_ACTIONS then
         local POINT, EQUIPPED = COMPONENT_ACTIONS.POINT, COMPONENT_ACTIONS.EQUIPPED
         if POINT then
@@ -651,8 +683,8 @@ AddSimPostInit(function()
                 EQUIPPED["spellcaster"] = function(inst, doer, target, actions, right, ...)
                     if inst:HasTag("um_gun") then
                         if right and (inst:HasTag("castontargets") or (target:HasTag("locomotor") and (inst:HasTag("castonlocomotors")
-                                    or (inst:HasTag("castonlocomotorspvp") and (target == doer or GLOBAL.TheNet:GetPVPEnabled() or not (target:HasTag("player") and doer:HasTag("player"))))))
-                                or (inst:HasTag("castoncombat") and doer.replica.combat and doer.replica.combat:CanTarget(target))) then
+                            or (inst:HasTag("castonlocomotorspvp") and (target == doer or GLOBAL.TheNet:GetPVPEnabled() or not (target:HasTag("player") and doer:HasTag("player"))))))
+                            or (inst:HasTag("castoncombat") and doer.replica.combat and doer.replica.combat:CanTarget(target))) then
                             table.insert(actions, GLOBAL.ACTIONS.UM_GUNSHOOTY)
                         end
                         return
@@ -873,7 +905,7 @@ ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.UM_CALL_BEEF, "us
 ENV.AddStategraphActionHandler("wilson_client", ActionHandler(ACTIONS.UM_CALL_BEEF, "use_beef_bell"))
 
 ENV.AddSimPostInit(function()
-    local COMPONENT_ACTIONS = UpvalueHacker.GetUpvalue(EntityScript.CollectActions, "COMPONENT_ACTIONS")
+    local COMPONENT_ACTIONS = UMUpvalueHacker.GetUpvalue(EntityScript.CollectActions, "COMPONENT_ACTIONS")
     if COMPONENT_ACTIONS then
         local INVENTORY = COMPONENT_ACTIONS.INVENTORY
         if INVENTORY then

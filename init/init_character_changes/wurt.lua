@@ -1,6 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
-local UpvalueHacker = require("tools/upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 -----------------------------------------------------------------
 
 local WURT_PATHFINDER_TILES_UM = {
@@ -10,7 +10,7 @@ local WURT_PATHFINDER_TILES_UM = {
 }
 
 env.AddSimPostInit(function()
-    local WURT_PATHFINDER_TILES = UpvalueHacker.GetUpvalue(Prefabs.wurt.fn, "master_postinit", "WURT_PATHFINDER_TILES")
+    local WURT_PATHFINDER_TILES = UMUpvalueHacker.GetUpvalue(Prefabs.wurt.fn, "master_postinit", "WURT_PATHFINDER_TILES")
     for _, tile in ipairs(WURT_PATHFINDER_TILES_UM) do
         table.insert(WURT_PATHFINDER_TILES, tile)
     end

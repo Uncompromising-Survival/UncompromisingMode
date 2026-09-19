@@ -7,7 +7,7 @@ local Text = require "widgets/text"
 local Image = require "widgets/image"
 local Widget = require "widgets/widget"
 local UIAnim = require "widgets/uianim"
-local UpvalueHacker = require "tools/upvaluehacker"
+local UMUpvalueHacker = require "tools/um_upvaluehacker"
 local dataset = require("screens/redux/scrapbookdata")
 local TEMPLATES = require "widgets/redux/templates"
 
@@ -34,8 +34,8 @@ local TextButton = require "widgets/textbutton"
 local Menu = require "widgets/menu"
 local Grid = require "widgets/grid"
 local TrueScrollArea = require "widgets/truescrollarea"
-local GEM_DEFS = require("gemology_defs").GEM_DEFS
-local GEM_LOOKUP = require("gemology_defs").GEM_LOOKUP
+local GEM_DEFS = UMGemologyFns.GEM_DEFS
+local GEM_LOOKUP = UMGemologyFns.GEM_LOOKUP
 
 -- TODO: MOVE THIS
 STRINGS.SCRAPBOOK.SPECIALINFO.GEM_UPGRADING = {GEM_UPGRADING = "Can be fed to several creatures to attempt a quality increase, with differing effects and consequences.", UM_GEMOLOGYREDGEM1 = "Favored by Snaildrakes, not favored by Slurtles and Antlion", UM_GEMOLOGYREDGEM2 = "Favored by Snaildrakes, not favored by Slurtles and Antlion.", UM_GEMOLOGYGREENGEM1 = "Favored by Slurtles.", UM_GEMOLOGYGREENGEM2 = "Favored by Slurtles.", UM_GEMOLOGYORANGEGEM1 = "Favored by Antlion.", UM_GEMOLOGYORANGEGEM2 = "Favored by Antlion.", UM_GEMOLOGYPALEGEM1 = "Favored by Rock Lobsters.", UM_GEMOLOGYPALEGEM2 = "Favored by Rock Lobsters.", UM_GEMOLOGYBLUEGEM1 = "Favored by Abominamoles, not favored by Snaildrakes and Antlion.", UM_GEMOLOGYBLUEGEM2 = "Favored by Abominamoles, not favored by Snaildrakes and Antlion.", UM_GEMOLOGYYELLOWGEM1 = "Favored by NOT YET IMPLEMENTED", UM_GEMOLOGYYELLOWGEM2 = "Favored by NOT YET IMPLEMENTED", UM_GEMOLOGYPURPLEGEM1 = "Favored by NOT YET IMPLEMENTED", UM_GEMOLOGYPURPLEGEM2 = "Favored by NOT YET IMPLEMENTED"}

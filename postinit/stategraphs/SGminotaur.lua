@@ -1,6 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
-local UpvalueHacker = require("tools/upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 
 local BOUNCESTUFF_MUST_TAGS = {"_inventoryitem"}
 local BOUNCESTUFF_CANT_TAGS = {"locomotor", "INLIMBO"}

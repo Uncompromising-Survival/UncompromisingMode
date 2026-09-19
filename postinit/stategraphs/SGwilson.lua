@@ -873,7 +873,6 @@ env.AddStategraphPostInit("wilson", function(inst)
             },
         },
 
-
         State {
             name = "curse_controlled",
             tags = { "busy", "pausepredict", "nomorph", "nodangle" },
@@ -933,7 +932,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                 if inst.components.playercontroller ~= nil then
                     inst.components.playercontroller:RemotePausePrediction(stun_frames <= 7 and stun_frames or nil)
                 end
-
 
                 if inst.prefab ~= "wes" then
                     inst.SoundEmitter:PlaySound("UCSounds/Sneeze/sneeze")
@@ -1084,7 +1082,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end),
             },
         },
-
 
         State {
             name = "rne_player_grabbed",
@@ -1274,8 +1271,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                 ForceStopHeavyLifting(inst)
                 inst.components.locomotor:Stop()
                 inst:ClearBufferedAction()
-
-
 
                 inst.AnimState:PlayAnimation("idle_sanity_pre", false)
                 inst.AnimState:PushAnimation("idle_sanity_loop", true)
@@ -2141,7 +2136,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst.sg:GoToState("wingsuit_pst")
             end,
 
-
             timeline =
             {
                 TimeEvent(.9, function(inst)
@@ -2483,102 +2477,47 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst.sg.statemem.target = data.teleporter
                 inst.sg.statemem.teleportarrivestate = "exitastralportal_pre"
 
-                inst.AnimState:PlayAnimation("townportal_enter_pre")
+                local puff = SpawnPrefab("halloween_firepuff_cold_" .. math.random(3))
+                puff.Transform:SetPosition(inst.Transform:GetWorldPosition())
+                inst.SoundEmitter:PlaySound("rifts6/vault_portal/teleport_fx")
 
-                local astpool = SpawnPrefab("um_astral_pool")
-                astpool.Transform:SetScale(1, 1, 1)
-                astpool.Transform:SetPosition(inst.Transform:GetWorldPosition())
-                astpool.components.colourtweener:StartTween({ 1, 1, 1, 1 }, .5)
-                astpool.components.timer:StartTimer("kill_whirlpool", 5)
+                inst.sg.statemem.isteleporting = true
+                inst.components.health:SetInvincible(true)
+                if inst.components.playercontroller ~= nil then
+                    inst.components.playercontroller:Enable(false)
+                end
+                inst.DynamicShadow:Enable(false)
+                inst:Hide()
+                inst:ScreenFade(false, 30 * FRAMES)
             end,
 
             timeline =
             {
-                TimeEvent(8 * FRAMES, function(inst)
-                    local puff = SpawnPrefab("halloween_firepuff_cold_" .. math.random(3))
-                    puff.Transform:SetPosition(inst.Transform:GetWorldPosition())
-                    inst.sg.statemem.isteleporting = true
-                    inst.components.health:SetInvincible(true)
-                    if inst.components.playercontroller ~= nil then
-                        inst.components.playercontroller:Enable(false)
-                    end
-                    inst.DynamicShadow:Enable(false)
-                end),
-                TimeEvent(18 * FRAMES, function(inst)
-                    inst:Hide()
-                end),
-                TimeEvent(26 * FRAMES, function(inst)
+                TimeEvent(30 * FRAMES, function(inst)
                     if inst.sg.statemem.target ~= nil and
                         inst.sg.statemem.target.components.teleporter ~= nil and
                         inst.sg.statemem.target.components.teleporter:Activate(inst) then
+                        inst.sg.statemem.activated = true
                         inst:Hide()
+                        inst.sg:SetTimeout(1)
                     else
                         inst.sg:GoToState("exitastralportal")
                     end
                 end),
             },
 
+            ontimeout = function(inst)
+                inst:ScreenFade(true, 1)
+                inst.sg:GoToState("idle")
+            end,
+
             onexit = function(inst)
                 if inst.sg.statemem.isphysicstoggle then
                     ToggleOnPhysics(inst)
                 end
 
-                if inst.sg.statemem.isteleporting then
-                    inst.components.health:SetInvincible(false)
-                    if inst.components.playercontroller ~= nil then
-                        inst.components.playercontroller:Enable(true)
-                    end
-                    inst:Show()
-                    inst.DynamicShadow:Enable(true)
-                end
-            end,
-        },
-
-        State {
-            name = "enterastralportal_nofx",
-            tags = { "doing", "busy", "nopredict", "nomorph", "nodangle" },
-
-            onenter = function(inst, data)
-                ToggleOffPhysics(inst)
-                inst.Physics:Stop()
-                inst.components.locomotor:Stop()
-
-                inst.sg.statemem.target = data.teleporter
-                inst.sg.statemem.teleportarrivestate = "exitastralportal_pre"
-
-                inst.AnimState:PlayAnimation("townportal_enter_pre")
-            end,
-
-            timeline =
-            {
-                TimeEvent(8 * FRAMES, function(inst)
-                    local puff = SpawnPrefab("halloween_firepuff_cold_" .. math.random(3))
-                    puff.Transform:SetPosition(inst.Transform:GetWorldPosition())
-
-                    inst.sg.statemem.isteleporting = true
-                    inst.components.health:SetInvincible(true)
-                    if inst.components.playercontroller ~= nil then
-                        inst.components.playercontroller:Enable(false)
-                    end
-                    inst.DynamicShadow:Enable(false)
-                end),
-                TimeEvent(18 * FRAMES, function(inst)
-                    inst:Hide()
-                end),
-                TimeEvent(26 * FRAMES, function(inst)
-                    if inst.sg.statemem.target ~= nil and
-                        inst.sg.statemem.target.components.teleporter ~= nil and
-                        inst.sg.statemem.target.components.teleporter:Activate(inst) then
-                        inst:Hide()
-                    else
-                        inst.sg:GoToState("exitastralportal")
-                    end
-                end),
-            },
-
-            onexit = function(inst)
-                if inst.sg.statemem.isphysicstoggle then
-                    ToggleOnPhysics(inst)
+                if not inst.sg.statemem.activated then
+                    inst:ScreenFade(true, 1)
                 end
 
                 if inst.sg.statemem.isteleporting then
@@ -2607,11 +2546,15 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end
                 inst.DynamicShadow:Enable(false)
 
-                inst.sg:SetTimeout(32 * FRAMES)
+                inst._failed_doneteleporting = nil
+                inst:SnapCamera()
+                inst:ScreenFade(true, 1)
+
+                inst.sg:SetTimeout(0)
             end,
 
             ontimeout = function(inst)
-                inst.sg:GoToState("exitastralportal")
+                inst.sg:GoToState("idle")
             end,
 
             onexit = function(inst)
@@ -2671,6 +2614,61 @@ env.AddStategraphPostInit("wilson", function(inst)
             end,
         },
 
+        State{
+            name = "forceexitastralportal",
+            tags = { "doing", "busy", "nopredict", "nomorph", "nodangle" },
+
+            onenter = function(inst, data)
+                inst:ClearBufferedAction()
+
+                ToggleOffPhysics(inst)
+                inst.Physics:Stop()
+                inst.components.locomotor:Stop()
+
+                inst.sg.statemem.data = data
+
+                inst.components.health:SetInvincible(true)
+                if inst.components.playercontroller ~= nil then
+                    inst.components.playercontroller:Enable(false)
+                end
+                inst.DynamicShadow:Enable(false)
+                inst:Hide()
+                inst:ScreenFade(false, data.fadetime)
+
+                inst.sg:SetTimeout(data.fadetime)
+            end,
+
+            ontimeout = function(inst)
+                local data = inst.sg.statemem.data
+                if data.onreturn ~= nil then
+                    data.onreturn(inst)
+                end
+                inst:ScreenFade(true, 1)
+                inst.sg.statemem.not_interrupted = true
+                inst.sg:GoToState("idle")
+            end,
+
+            onexit = function(inst)
+                if inst.sg.statemem.isphysicstoggle then
+                    ToggleOnPhysics(inst)
+                end
+
+                if not inst.sg.statemem.not_interrupted then
+                    local data = inst.sg.statemem.data
+                    if data ~= nil and data.onreturn ~= nil then
+                        data.onreturn(inst)
+                    end
+                    inst:ScreenFade(true, 1)
+                end
+
+                inst.components.health:SetInvincible(false)
+                if inst.components.playercontroller ~= nil then
+                    inst.components.playercontroller:Enable(true)
+                end
+                inst.DynamicShadow:Enable(true)
+                inst:Show()
+            end,
+        },
 
         -- Bluecap
         State {
@@ -3356,7 +3354,6 @@ env.AddStategraphPostInit("wilson", function(inst)
 
                 inst.dyn_anim_mod = mod
 
-
                 inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
             end,
 
@@ -3554,13 +3551,11 @@ env.AddStategraphPostInit("wilson", function(inst)
 
                 inst.dyn_anim_mod = mod
 
-
                 inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
             end,
 
             timeline =
             {
-
 
                 -- 0.7
                 TimeEvent(15 * FRAMES * 0.7, function(inst)
@@ -3689,8 +3684,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                     mod = 0.4
                 end
 
-
-
                 inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
 
                 inst.components.locomotor:Stop()
@@ -3733,7 +3726,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end
 
                 inst.dyn_anim_mod = mod
-
 
                 inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
 
@@ -3803,7 +3795,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                     end
                 end),
 
-
             },
 
             onexit = function(inst)
@@ -3843,7 +3834,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end
 
                 inst.dyn_anim_mod = mod
-
 
                 inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
             end,
@@ -4166,7 +4156,6 @@ env.AddStategraphPostInit("wilson", function(inst)
 
                 inst.dyn_anim_mod = mod
 
-
                 inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
             end,
 
@@ -4221,7 +4210,6 @@ env.AddStategraphPostInit("wilson", function(inst)
 
         },
 
-
         State {
             name = "bluecap_row",
             tags = { "rowing", "doing" },
@@ -4248,7 +4236,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end
 
                 inst.dyn_anim_mod = mod
-
 
                 inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
 
@@ -4448,7 +4435,6 @@ env.AddStategraphPostInit("wilson", function(inst)
 
                 inst.dyn_anim_mod = mod
 
-
                 inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
                 local feed = foodinfo and foodinfo.feed
                 if feed ~= nil then
@@ -4606,7 +4592,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end
 
                 inst.dyn_anim_mod = mod
-
 
                 inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
 
@@ -4801,7 +4786,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst.AnimState:SetDeltaTimeMultiplier(1)
             end,
         },
-
 
         State {
             name = "detonator_remotecast_pre",
@@ -5065,7 +5049,6 @@ env.AddStategraphPostInit("wilson", function(inst)
         },
 
     }
-
 
     for k, v in pairs(events) do
         assert(v:is_a(EventHandler), "Non-event added in mod events table!")

@@ -227,8 +227,12 @@ local function fn()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
 
-    inst.Transform:SetFourFaced()
     MakeCharacterPhysics(inst, 400, .5)
+
+    inst.Transform:SetFourFaced()
+
+    inst:AddTag("animal")
+    inst:AddTag("rocky") -- Boulder crab is same faction as Rock lobster (They're cousins)
 
     inst.AnimState:SetBank("boulder_crab")
     inst.AnimState:SetBuild("boulder_crab")
@@ -251,9 +255,6 @@ local function fn()
     inst.components.inspectable.getstatus = GetStatus
 
     MakeMediumFreezableCharacter(inst, "body")
-
-    inst:AddTag("animal")
-    inst:AddTag("rocky") -- Boulder crab is same faction as Rock lobster (They're cousins)
 
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(500)

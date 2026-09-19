@@ -93,28 +93,26 @@ return Class(function(self, inst)
 		end
 	end
 
-	local function MakeRatBurrow(inst)
-		local x, y, z = inst.Transform:GetWorldPosition()
+	local function IsValidRatBurrowPosition(x, z)
+		if #TheSim:FindEntities(x, 0, z, (TUNING.ANTLION_SINKHOLE.RADIUS * 2), nil, nil, {"antlion_sinkhole_blocker", "structure", "giant_tree"}) > 0 then
+			return false
+		end
+		if #TheSim:FindEntities(x, 0, z, 50, { "player", "playerghost" }) > 0 then
+			return false
+		end
 
-		local function IsValidRatBurrowPosition(x, z)
-			if #TheSim:FindEntities(x, 0, z, (TUNING.ANTLION_SINKHOLE.RADIUS * 2), nil, nil, {"antlion_sinkhole_blocker", "structure", "giant_tree"}) > 0 then
-				return false
-			end
-			if #TheSim:FindEntities(x, 0, z, 50, { "player", "playerghost" }) > 0 then
-				return false
-			end
-
-			for dx = -1, 1 do
-				for dz = -1, 1 do
-					if not
-						TheWorld.Map:IsPassableAtPoint(x + dx * TUNING.ANTLION_SINKHOLE.RADIUS, 0, z + dz * TUNING.ANTLION_SINKHOLE.RADIUS
-							, false, true) then
-						return false
-					end
+		for dx = -1, 1 do
+			for dz = -1, 1 do
+				if not TheWorld.Map:IsPassableAtPoint(x + dx * TUNING.ANTLION_SINKHOLE.RADIUS, 0, z + dz * TUNING.ANTLION_SINKHOLE.RADIUS, false, true) then
+					return false
 				end
 			end
-			return true
 		end
+		return true
+	end
+
+	local function MakeRatBurrow(inst)
+		local x, y, z = inst.Transform:GetWorldPosition()
 
 		for i = 1, 8 do
 			inst.x1, inst.z1 = x + math.random(-200, 200), z + math.random(-200, 200)
@@ -137,37 +135,32 @@ return Class(function(self, inst)
 						ratburrow.components.herd:AddMember(piper)
 					end
 				end
-
 				break
 			end
+		end
+	end
+
+	local function _SpawnRaid(x, y, z)
+		local raid = SpawnPrefab("uncompromising_ratherd")
+		local x2 = x + math.random(-10, 10)
+		local z2 = z + math.random(-10, 10)
+		if TheWorld.Map:IsPassableAtPoint(x2, 0, z2) then
+			raid.Transform:SetPosition(x + math.random(-10, 10), y, z + math.random(-10, 10))
+			--TheWorld:DoTaskInTime(9600 + math.random(4800), CooldownRaid)
+			--TheWorld:PushEvent("ratcooldown", inst)
+			--TheWorld.components.ratcheck:StartTimer()
 		end
 	end
 
 	local function SpawnRaid(inst)
 		local x, y, z = inst.Transform:GetWorldPosition()
 		local players = FindPlayersInRange(x, y, z, 50)
-		if players ~= nil then
+		if next(players) then
 			for i, v in ipairs(players) do
-				local raid = SpawnPrefab("uncompromising_ratherd")
-				local x2 = x + math.random(-10, 10)
-				local z2 = z + math.random(-10, 10)
-				if TheWorld.Map:IsPassableAtPoint(x2, 0, z2) then
-					raid.Transform:SetPosition(x + math.random(-10, 10), y, z + math.random(-10, 10))
-					--TheWorld:DoTaskInTime(9600 + math.random(4800), CooldownRaid)
-					--TheWorld:PushEvent("ratcooldown", inst)
-					--TheWorld.components.ratcheck:StartTimer()
-				end
+				_SpawnRaid(x, y, z)
 			end
 		else
-			local raid = SpawnPrefab("uncompromising_ratherd")
-			local x2 = x + math.random(-10, 10)
-			local z2 = z + math.random(-10, 10)
-			if TheWorld.Map:IsPassableAtPoint(x2, 0, z2) then
-				raid.Transform:SetPosition(x + math.random(-10, 10), y, z + math.random(-10, 10))
-				--TheWorld:DoTaskInTime(9600 + math.random(4800), CooldownRaid)
-				--TheWorld:PushEvent("ratcooldown", inst)
-				--TheWorld.components.ratcheck:StartTimer()
-			end
+			_SpawnRaid(x, y, z)
 		end
 	end
 
@@ -198,11 +191,7 @@ return Class(function(self, inst)
 
 		--if ratburrow ~= nil then
 
-		if ratwarning == nil then
-			ratwarning = 0
-		else
-			ratwarning = ratwarning + 1
-		end
+		ratwarning = (ratwarning or 0) + 1
 		if ratwarning == 1 then
 			inst:DoTaskInTime(0, SoundRaid)
 		end
@@ -222,7 +211,6 @@ return Class(function(self, inst)
 	end
 
 	local function ActiveRaid(src, data)
-
 		if data.doer == nil and data.container ~= nil then
 			data.doer = data.container:GetNearestPlayer(true)
 		end
@@ -246,7 +234,6 @@ return Class(function(self, inst)
 					StartRaid(data.container, data.doer)
 					TheWorld:PushEvent("ratcooldown", inst)
 				else
-
 					if #ents <= 20 then
 						--print("CAN'T SPAWN RATS! There aren't enough items around!")
 					else
@@ -259,7 +246,6 @@ return Class(function(self, inst)
 							end
 						end
 					end
-
 
 					if data.container.components.container:IsEmpty() then
 						--print("CAN'T SPAWN RATS! This container is empty!")
@@ -274,7 +260,6 @@ return Class(function(self, inst)
 					end
 				end
 			end
-
 		end
 	end
 

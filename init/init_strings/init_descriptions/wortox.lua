@@ -145,7 +145,7 @@ DESCRIBE.FRUITBAT = "You are what you eat. Literally."
 DESCRIBE.SKELETONMEAT = "This is just wrong."
 DESCRIBE.CHIMP = DESCRIBE.MONKEY
 DESCRIBE.SWILSON = "Play nice with the imp!"
-DESCRIBE.VAMPIREBAT = "It's a big bat. And that is that."
+DESCRIBE.UM_VAMPIREBAT = "It's a big bat. And that is that."
 
 -- Swampyness
 DESCRIBE.RICEPLANT = "Rice! ...How nice!"

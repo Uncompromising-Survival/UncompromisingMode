@@ -459,8 +459,6 @@ local function fn()
     inst:AddTag("shadow_aligned")
     inst:AddTag("notraptrigger")
     inst:AddTag("ignorewalkableplatforms")
-
-    --shadowsubmissive (from shadowsubmissive component) added to pristine state for optimization
     inst:AddTag("shadowsubmissive")
 
     inst.suprise_task = nil

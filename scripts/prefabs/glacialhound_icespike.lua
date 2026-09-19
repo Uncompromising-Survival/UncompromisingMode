@@ -173,7 +173,7 @@ local function DoDamage(inst)
 
             --TODO: Make not destroy for glacial hound?
             if attackable then
-                DealSpikeDamage(attacker, v, inst, 30)
+                DealSpikeDamage(attacker, v, inst, TUNING.DSTU.GLACIAL_HOUND_SPIKE_DAMAGE)
 
                 if v.components.freezable then
                     v.components.freezable:AddColdness(2)
