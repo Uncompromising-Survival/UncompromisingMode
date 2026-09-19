@@ -207,7 +207,7 @@ if TUNING.DSTU.WORMWOOD_PHOTOSYNTHESIS then
             for name, debuff in pairs(debuffable.debuffs) do
                 local debuffprefab = debuff.inst.prefab
                 if string.sub(debuffprefab, 1, 24) == "healthregenbuff_vetcurse" or healing_debuffs[debuffprefab] then
-                    debuffable:RemoveDebuff(i)
+                    debuffable:RemoveDebuff(name)
                 end
             end
         end
