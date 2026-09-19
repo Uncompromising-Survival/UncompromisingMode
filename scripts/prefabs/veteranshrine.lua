@@ -63,6 +63,8 @@ local function onfar(inst, target)
     inst:DoTaskInTime(0, ShutUpRagtime)
 end
 
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
+
 local function ToggleCurse(inst, doer)
     if not doer.vetcurse then
         local sounds = {"common/teleportato/teleportato_maxwelllaugh", "sanity/creature2/taunt"}
@@ -78,11 +80,9 @@ local function ToggleCurse(inst, doer)
             if fx then
                 fx.Transform:SetPosition(x, y, z)
                 fx.Transform:SetScale(1.2, 1.2, 1.2)
-                if TUNING.DSTU.DATES.APRIL_FOOLS then
-                    SpawnPrefab("balloonparty_confetti_cloud").Transform:SetPosition(x, y, z)
-                end
             end
         end
+        if TUNING.DSTU.DATES.APRIL_FOOLS then SpawnPrefab("balloonparty_confetti_cloud").Transform:SetPosition(x, y, z) end
     end
 end
 
