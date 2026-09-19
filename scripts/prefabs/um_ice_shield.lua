@@ -29,7 +29,9 @@ local function ShouldRecoilIceShield(inst, attacker, weapon, damage)
 
     local fumarolemult = weapon and weapon.components.fumaroletool and weapon.components.fumaroletool:GetTempRange() or 1
 
-    return shouldrecoil, not shouldrecoil and damage and damage * fumarolemult or damage and (damage / 2) * fumarolemult or nil
+    return shouldrecoil, not shouldrecoil and damage and damage * fumarolemult
+        or damage and (damage * .66) * fumarolemult
+        or nil
 end
 
 local function Init(inst, parent, fx_symbol, tier)
@@ -66,7 +68,7 @@ local function Init(inst, parent, fx_symbol, tier)
             inst.um_redirect_old = parent.components.health.redirect
         end
         parent.components.health.redirect = function(self, amount, overtime, cause, ...)
-            if amount >= 0 then
+            if amount >= 0 or cause == "oldager_component" then
                 return inst.um_redirect_old and inst.um_redirect_old(self, amount, overtime, cause, ...) or false
             end
 
@@ -98,7 +100,7 @@ local function Init(inst, parent, fx_symbol, tier)
     parent.shield_fx2 = SpawnPrefab("um_ice_shield_fx")
     parent.shield_fx2.entity:SetParent(parent.entity) --don't need followsymbol here.
 
-    if parent:IsValid() and parent.components.health ~= nil and parent:HasTag("player") then
+    if parent:IsValid() and parent:HasTag("player") and parent.components.health then
         parent.ice_shield_health:set(math.floor(inst.components.health.currenthealth))
         parent.ice_shield_maxhealth:set(math.floor(inst.components.health.maxhealth))
     end
@@ -107,6 +109,7 @@ local function Init(inst, parent, fx_symbol, tier)
         parent.components.temperature:SetInsulationModifier(SEASONS.SUMMER, inst, TUNING.INSULATION_SMALL)
     end
 end
+
 
 local function fn()
     local inst = CreateEntity()
@@ -121,24 +124,31 @@ local function fn()
     inst.tier = 1
     inst.lasthitfxtime = 0
 
-    inst:AddComponent("health")
-    inst.components.health.nofadeout = true
-    inst.components.health.save_maxhealth = true
-    inst.components.health.canheal = false
-    inst.components.health:SetMaxHealth(200)
-    inst.components.health.ondelta = OnHealthDelta
+    local health = inst:AddComponent("health")
+    health.nofadeout = true
+    health.save_maxhealth = true
+    health.canheal = false
+    health:SetMaxHealth(200)
+    health.ondelta = OnHealthDelta
     --inst.components.health.externalfiredamagemultipliers:SetModifier(inst, 10)
     --this doesn't work as expected. It never actually gets fire damaged directly. fire damage mults are on the redirect.
 
     inst.regen_task = inst:DoPeriodicTask(2.5, function(inst)
-        local temperature_scale = Lerp(2, -2, TheWorld.state.temperature / 80)
-        local value = 1 * inst.tier * temperature_scale
+        local x, y, z = inst._parent.Transform:GetWorldPosition()
+
+        local temperature_scale = inst._parent.components.temperature and inst._parent.components.temperature.rate * -2 or 1
+
+        local value = inst.tier * temperature_scale
         if value < 0 then
             local fx = SpawnPrefab("washashore_puddle_fx")
             fx.Transform:SetPosition(inst._parent.Transform:GetWorldPosition())
 
             if inst._parent.components.moisture then
-                inst._parent.components.moisture:DoDelta(math.abs(value))
+                inst._parent.extra_moisture_rate = math.abs(value)
+            end
+        else
+            if inst._parent.extra_moisture_rate then
+                inst._parent.extra_moisture_rate = nil
             end
         end
 
@@ -154,6 +164,10 @@ local function fn()
 
         if inst._parent then
             inst._parent:PushEvent("ice_shield_death")
+
+            if inst._parent.extra_moisture_rate then
+                inst._parent.extra_moisture_rate = nil
+            end
 
             if inst._parent.components.burnable then
                 inst._parent.components.burnable:Extinguish()
