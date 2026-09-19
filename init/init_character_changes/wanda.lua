@@ -129,7 +129,7 @@ local function MakePockWatchWritable(inst)
             if doer and doer.tool_prefab then
                 doer.components.inventory:GiveItem(SpawnPrefab(doer.tool_prefab), nil, inst:GetPosition())
             end
-        elseif not inst.um_dontplaywritesound then
+        else
             inst.SoundEmitter:PlaySound("dontstarve/common/together/draw")
         end
 
@@ -177,8 +177,8 @@ env.AddPrefabPostInit("pocketwatch_portal", function(inst)
 
     if not TheWorld.ismastersim then return end
 
-    inst.components.pocketwatch.DoCastSpell = function(inst, doer, target, pos)
-        local recallmark = inst.components.recallmark
+    inst.components.pocketwatch.DoCastSpell = function(_inst, doer, target, pos)
+        local recallmark = _inst.components.recallmark
 
         if recallmark:IsMarked() then
             local pt = doer:GetPosition()
@@ -196,33 +196,31 @@ env.AddPrefabPostInit("pocketwatch_portal", function(inst)
             local portal = SpawnPrefab("pocketwatch_portal_entrance")
             portal.Transform:SetPosition(pt:Get())
             portal:SpawnExit(recallmark.recall_worldid, recallmark.recall_x, recallmark.recall_y, recallmark.recall_z)
-            inst.SoundEmitter:PlaySound("wanda1/wanda/portal_entrance_pre")
+            _inst.SoundEmitter:PlaySound("wanda1/wanda/portal_entrance_pre")
 
             local new_watch = SpawnPrefab("pocketwatch_recall")
-            new_watch.components.recallmark:Copy(inst)
-            new_watch.um_dontplaywritesound = true
-            new_watch.components.writeable:Write(doer, inst.dest_name:value())
-            new_watch.um_dontplaywritesound = nil
+            new_watch.components.recallmark:Copy(_inst)
+            new_watch.components.writeable:OnLoad(_inst.components.writeable:OnSave())
 
-            local x, y, z = inst.Transform:GetWorldPosition()
+            local x, y, z = _inst.Transform:GetWorldPosition()
             new_watch.Transform:SetPosition(x, y, z)
             new_watch.components.rechargeable:Discharge(TUNING.POCKETWATCH_RECALL_COOLDOWN)
 
-            local owner = inst.components.inventoryitem and inst.components.inventoryitem.owner
+            local owner = _inst.components.inventoryitem and _inst.components.inventoryitem.owner
             local holder = owner and (owner.components.inventory or owner.components.container)
             if holder then
-                local slot = holder:GetItemSlot(inst)
-                inst:Remove()
+                local slot = holder:GetItemSlot(_inst)
+                _inst:Remove()
                 holder:GiveItem(new_watch, slot, Vector3(x, y, z))
             else
-                inst:Remove()
+                _inst:Remove()
             end
 
             return true
         else
             local x, y, z = doer.Transform:GetWorldPosition()
             recallmark:MarkPosition(x, y, z)
-            inst.SoundEmitter:PlaySound("wanda2/characters/wanda/watch/MarkPosition")
+            _inst.SoundEmitter:PlaySound("wanda2/characters/wanda/watch/MarkPosition")
 
             doer:DoTaskInTime(12 * FRAMES, DelayedMarkTalker)
 
