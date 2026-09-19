@@ -63,8 +63,6 @@ local function onfar(inst, target)
     inst:DoTaskInTime(0, ShutUpRagtime)
 end
 
-local UMUpvalueHacker = require("tools/um_upvaluehacker")
-
 local function ToggleCurse(inst, doer)
     if not doer.vetcurse then
         local sounds = {"common/teleportato/teleportato_maxwelllaugh", "sanity/creature2/taunt"}
