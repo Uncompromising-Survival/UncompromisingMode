@@ -549,7 +549,7 @@ env.AddComponentPostInit("locomotor", function(self)
     function self:OnUpdate(dt, arrive_check_only, ...)
         if not self.inst:HasAnyTag("flying", "ghost", "playerghost", "shadowcreature", "nightmarecreature", "brightmare_gestalt", "shadowminion", "shadowchesspiece") and not (self.inst.components.umripples and self.inst.components.umripples.speed_immune) then
             local check = RobustFloodCheck(self.inst)
-            if check and not inst.um_floodcontinualcheck then
+            if check and not self.inst.um_floodcontinualcheck then
                 ToggleFloodCheck(self.inst, true)
                 self.inst.um_floodcontinualcheck = self.inst:DoPeriodicTask(FRAMES, FloodContinualCheck)
             elseif self.inst.um_floodcontinualcheck and not check then
