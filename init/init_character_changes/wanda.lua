@@ -22,11 +22,7 @@ end
 env.AddPrefabPostInit("wanda", function(inst)
     if not TheWorld.ismastersim then return end
 
-    inst.UMToggleUniqueVetCurse = ToggleUniqueVetCurse
-end)
-
-if TUNING.DSTU.WANDA_NERF then
-    env.AddPrefabPostInit("wanda", function(inst)
+    if TUNING.DSTU.WANDA_NERF then
         if inst.components.combat then
             local _CustomCombatDamage = inst.components.combat.customdamagemultfn
             local function CustomCombatDamage(inst, target, weapon, multiplier, mount)
@@ -42,8 +38,12 @@ if TUNING.DSTU.WANDA_NERF then
         if inst.components.damagetyperesist then
             inst.components.damagetyperesist:AddResist("shadow_aligned", inst, 1.25, "runningfromshadows")
         end
-    end)
+    end
 
+    inst.UMToggleUniqueVetCurse = ToggleUniqueVetCurse
+end)
+
+if TUNING.DSTU.WANDA_NERF then
     local function Revive_CanTarget(inst, doer, target)
         -- This is a client side function
         return target ~= nil and target:HasTag("playerghost") and not target:HasTag("reviving")
@@ -57,7 +57,7 @@ if TUNING.DSTU.WANDA_NERF then
                 target.components.inventory:GiveItem(SpawnPrefab("pocketwatch_revive_reviver"))
             end
 
-            target:PushEvent("respawnfromghost", { source = inst, from_haunt = doer == target })
+            target:PushEvent("respawnfromghost", {source = inst, from_haunt = doer == target})
             if target.components.health and target.components.health:GetPenaltyPercent() < 0.75 then
                 target.components.health:DeltaPenalty(0.25)
             end
@@ -81,26 +81,23 @@ if TUNING.DSTU.WANDA_NERF then
     end
 
     env.AddPrefabPostInit("pocketwatch_revive", function(inst)
-        if not TheWorld.ismastersim then
-            return
-        end
-
-        if inst.components.pocketwatch ~= nil then
+        if not TheWorld.ismastersim then return end
+        if inst.components.pocketwatch then
             inst.components.pocketwatch.DoCastSpell = Revive_DoCastSpell
         end
-        if inst.components.hauntable ~= nil then
+        if inst.components.hauntable then
             inst.components.hauntable:SetOnHauntFn(Revive_OnHaunt)
         end
     end)
 
     local function reviver_DoPenalty(inst)
         local owner = inst.components.inventoryitem:GetGrandOwner()
-        if owner == nil or not owner:HasTag("playerghost") then
+        if not owner or not owner:HasTag("playerghost") then
             inst:Remove()
             return
         end
 
-        if owner.components.health ~= nil and
+        if owner.components.health and
             owner.components.health:GetPenaltyPercent() < 0.75 then
             owner.components.health:DeltaPenalty(0.25)
         end
@@ -108,48 +105,51 @@ if TUNING.DSTU.WANDA_NERF then
 
     env.AddPrefabPostInit("pocketwatch_revive_reviver", function(inst)
         if not TheWorld.ismastersim then return end
-
         inst:DoTaskInTime(0, reviver_DoPenalty)
     end)
 end
 
-env.AddPrefabPostInit("pocketwatch_recall", function(inst)
+local function MakePockWatchWritable(inst)
     inst.dest_name = net_string(inst.GUID, "dest_name")
 
     inst.displaynamefn = function(_inst)
         local name = _inst.dest_name:value()
-        return name ~= "" and name and STRINGS.NAMES[string.upper(_inst.prefab)] .. "\n\"" .. name .. "\"" or STRINGS.NAMES[string.upper(_inst.prefab)]
+        return name ~= "" and name and STRINGS.NAMES[string.upper(_inst.prefab)].."\n\""..name.."\"" or STRINGS.NAMES[string.upper(_inst.prefab)]
     end
 
     if not TheWorld.ismastersim then return end
 
-    inst:AddComponent("writeable")
-    inst.components.writeable:SetDefaultWriteable(false)
-    inst.components.writeable:SetAutomaticDescriptionEnabled(false)
-    local _Write = inst.components.writeable.Write
-    inst.components.writeable.Write = function(self, doer, text, ...)
+    local writeable = inst.components.writeable or inst:AddComponent("writeable")
+    writeable:SetDefaultWriteable(false)
+    writeable:SetAutomaticDescriptionEnabled(false)
+    local _Write = writeable.Write
+    writeable.Write = function(self, doer, text, ...)
         if not text then
             text = self.text
             if doer and doer.tool_prefab then
                 doer.components.inventory:GiveItem(SpawnPrefab(doer.tool_prefab), nil, inst:GetPosition())
             end
-        else
+        elseif not inst.um_dontplaywritesound then
             inst.SoundEmitter:PlaySound("dontstarve/common/together/draw")
         end
 
         inst.dest_name:set(text and text ~= "" and text or "")
         _Write(self, doer, text, ...)
     end
-
-    local _OnLoad = inst.components.writeable.OnLoad
-    inst.components.writeable.OnLoad = function(self, ...)
+    local _OnLoad = writeable.OnLoad
+    writeable.OnLoad = function(self, ...)
         _OnLoad(self, ...)
         local text = self.text
         inst.dest_name:set(text and text ~= "" and text or "")
     end
+end
 
-    -- local _onaccept = inst.components.trader.onaccept
+env.AddPrefabPostInit("pocketwatch_recall", function(inst)
+    MakePockWatchWritable(inst)
 
+    if not TheWorld.ismastersim then return end
+
+    --local _onaccept = inst.components.trader.onaccept
     inst.components.trader.onaccept = function(inst, giver, item)
         local portal_watch = SpawnPrefab("pocketwatch_portal")
         portal_watch:onPreBuilt(giver, { pocketwatch_recall = { [inst] = 1 } })
@@ -173,39 +173,9 @@ env.AddPrefabPostInit("pocketwatch_recall", function(inst)
 end)
 
 env.AddPrefabPostInit("pocketwatch_portal", function(inst)
-    inst.dest_name = net_string(inst.GUID, "dest_name")
-
-    inst.displaynamefn = function(_inst)
-        local name = _inst.dest_name:value()
-        return name ~= "" and name and STRINGS.NAMES[string.upper(_inst.prefab)] .. "\n\"" .. name .. "\"" or STRINGS.NAMES[string.upper(_inst.prefab)]
-    end
+    MakePockWatchWritable(inst)
 
     if not TheWorld.ismastersim then return end
-
-    inst:AddComponent("writeable")
-    inst.components.writeable:SetDefaultWriteable(false)
-    inst.components.writeable:SetAutomaticDescriptionEnabled(false)
-    local _Write = inst.components.writeable.Write
-    inst.components.writeable.Write = function(self, doer, text, ...)
-        if not text then
-            text = self.text
-            if doer and doer.tool_prefab then
-                doer.components.inventory:GiveItem(SpawnPrefab(doer.tool_prefab), nil, inst:GetPosition())
-            end
-        else
-            inst.SoundEmitter:PlaySound("dontstarve/common/together/draw")
-        end
-
-        inst.dest_name:set(text and text ~= "" and text or "")
-        _Write(self, doer, text, ...)
-    end
-
-    local _OnLoad = inst.components.writeable.OnLoad
-    inst.components.writeable.OnLoad = function(self, ...)
-        _OnLoad(self, ...)
-        local text = self.text
-        inst.dest_name:set(text and text ~= "" and text or "")
-    end
 
     inst.components.pocketwatch.DoCastSpell = function(inst, doer, target, pos)
         local recallmark = inst.components.recallmark
@@ -230,7 +200,9 @@ env.AddPrefabPostInit("pocketwatch_portal", function(inst)
 
             local new_watch = SpawnPrefab("pocketwatch_recall")
             new_watch.components.recallmark:Copy(inst)
-            new_watch.dest_name:set(inst.dest_name:value())
+            new_watch.um_dontplaywritesound = true
+            new_watch.components.writeable:Write(doer, inst.dest_name:value())
+            new_watch.um_dontplaywritesound = nil
 
             local x, y, z = inst.Transform:GetWorldPosition()
             new_watch.Transform:SetPosition(x, y, z)

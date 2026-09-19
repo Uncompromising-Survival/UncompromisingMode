@@ -29,9 +29,8 @@ local function ShouldRecoilIceShield(inst, attacker, weapon, damage)
 
     local fumarolemult = weapon and weapon.components.fumaroletool and weapon.components.fumaroletool:GetTempRange() or 1
 
-    return shouldrecoil,
-        not shouldrecoil and damage and damage * fumarolemult
-        or damage and (damage * 0.66) * fumarolemult
+    return shouldrecoil, not shouldrecoil and damage and damage * fumarolemult
+        or damage and (damage * .66) * fumarolemult
         or nil
 end
 
@@ -101,7 +100,7 @@ local function Init(inst, parent, fx_symbol, tier)
     parent.shield_fx2 = SpawnPrefab("um_ice_shield_fx")
     parent.shield_fx2.entity:SetParent(parent.entity) --don't need followsymbol here.
 
-    if parent:IsValid() and parent.components.health ~= nil and parent:HasTag("player") then
+    if parent:IsValid() and parent:HasTag("player") and parent.components.health then
         parent.ice_shield_health:set(math.floor(inst.components.health.currenthealth))
         parent.ice_shield_maxhealth:set(math.floor(inst.components.health.maxhealth))
     end
@@ -125,19 +124,19 @@ local function fn()
     inst.tier = 1
     inst.lasthitfxtime = 0
 
-    inst:AddComponent("health")
-    inst.components.health.nofadeout = true
-    inst.components.health.save_maxhealth = true
-    inst.components.health.canheal = false
-    inst.components.health:SetMaxHealth(200)
-    inst.components.health.ondelta = OnHealthDelta
+    local health = inst:AddComponent("health")
+    health.nofadeout = true
+    health.save_maxhealth = true
+    health.canheal = false
+    health:SetMaxHealth(200)
+    health.ondelta = OnHealthDelta
     --inst.components.health.externalfiredamagemultipliers:SetModifier(inst, 10)
     --this doesn't work as expected. It never actually gets fire damaged directly. fire damage mults are on the redirect.
 
     inst.regen_task = inst:DoPeriodicTask(2.5, function(inst)
         local x, y, z = inst._parent.Transform:GetWorldPosition()
 
-        local temperature_scale = inst._parent.components.temperature ~= nil and inst._parent.components.temperature.rate ~= nil and inst._parent.components.temperature.rate * -2 or 1
+        local temperature_scale = inst._parent.components.temperature and inst._parent.components.temperature.rate * -2 or 1
 
         local value = inst.tier * temperature_scale
         if value < 0 then
@@ -148,8 +147,8 @@ local function fn()
                 inst._parent.extra_moisture_rate = math.abs(value)
             end
         else
-            if inst._parent.components.moisture then
-                inst._parent.extra_moisture_rate = 0
+            if inst._parent.extra_moisture_rate then
+                inst._parent.extra_moisture_rate = nil
             end
         end
 
@@ -166,8 +165,8 @@ local function fn()
         if inst._parent then
             inst._parent:PushEvent("ice_shield_death")
 
-            if inst._parent.components.moisture then
-                inst._parent.extra_moisture_rate = 0
+            if inst._parent.extra_moisture_rate then
+                inst._parent.extra_moisture_rate = nil
             end
 
             if inst._parent.components.burnable then

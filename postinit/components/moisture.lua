@@ -31,17 +31,16 @@ env.AddComponentPostInit("moisture", function(self)
 
     local _GetMoistureRate = self.GetMoistureRate
     function self:GetMoistureRate(...)
-        local extra_moisture_rate = self.inst.extra_moisture_rate or 0
-
+        local wetrate
         if not (self.inst.components.inventory and self.inst.components.inventory:IsFloaterHeld() or self:IsInBathingPool()) then
             if self.inst:HasTag("under_the_weather") then
-                return self:UM_GetMoistureRateAssumingTornadoOrWaterFall(1.5, .2)+extra_moisture_rate
+                wetrate = self:UM_GetMoistureRateAssumingTornadoOrWaterFall(1.5, .2)
             elseif self.inst:HasTag("um_waterfall_moisture_override") then
                 local waterfall_bonus = self.inst:HasTag("um_waterfall_bonus") and .5 or 0
-                return self:UM_GetMoistureRateAssumingTornadoOrWaterFall(1 + waterfall_bonus, .2 + waterfall_bonus)+extra_moisture_rate
+                wetrate = self:UM_GetMoistureRateAssumingTornadoOrWaterFall(1 + waterfall_bonus, .2 + waterfall_bonus)
             end
         end
-        return _GetMoistureRate(self, ...)+extra_moisture_rate
+        return (wetrate or _GetMoistureRate(self, ...)) + (self.inst.extra_moisture_rate or 0)
     end
 
     local _DoDelta = self.DoDelta
