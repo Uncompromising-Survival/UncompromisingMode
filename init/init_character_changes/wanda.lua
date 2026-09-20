@@ -23,21 +23,20 @@ env.AddPrefabPostInit("wanda", function(inst)
     if not TheWorld.ismastersim then return end
 
     if TUNING.DSTU.WANDA_NERF then
-        if inst.components.combat then
-            local _CustomCombatDamage = inst.components.combat.customdamagemultfn
-            local function CustomCombatDamage(inst, target, weapon, multiplier, mount)
+        local combat = inst.components.combat
+        if combat then
+            local _CustomCombatDamage = combat.customdamagemultfn
+            combat.customdamagemultfn = function(_inst, target, weapon, multiplier, mount, ...)
                 if not mount then
                     if weapon and weapon.prefab == "pocketwatch_weapon" and not weapon.components.fueled:IsEmpty() then
-                        return inst.age_state == "old" and 102 / 51 or inst.age_state == "normal" and 68 / 51 or 1
+                        return _inst.age_state == "old" and 102 / 51 or _inst.age_state == "normal" and 68 / 51 or 1
                     end
-                    return _CustomCombatDamage(inst, target, weapon, multiplier, mount)
+                    return _CustomCombatDamage(_inst, target, weapon, multiplier, mount, ...)
                 end
             end
-            inst.components.combat.customdamagemultfn = CustomCombatDamage
         end
-        if inst.components.damagetyperesist then
-            inst.components.damagetyperesist:AddResist("shadow_aligned", inst, 1.25, "runningfromshadows")
-        end
+        local damagetyperesist = inst.components.damagetyperesist
+        if damagetyperesist then damagetyperesist:AddResist("shadow_aligned", inst, 1.25, "runningfromshadows") end
     end
 
     inst.UMToggleUniqueVetCurse = ToggleUniqueVetCurse

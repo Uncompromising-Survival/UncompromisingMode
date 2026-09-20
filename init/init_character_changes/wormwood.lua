@@ -200,13 +200,14 @@ if TUNING.DSTU.WORMWOOD_PHOTOSYNTHESIS then
 
     env.modimport("init/init_character_changes/skilltree_wormwood") -- Import New Wormwood Tree
 
+    local healing_debuffs = {["confighealbuff"] = true, ["compostheal_buff"] = true, ["tillweedsalve_buff"] = true}
     local function VetCurseCancelHealing(inst, data)
         local debuffable = inst.components.debuffable
         if inst:HasTag("vetcurse") and debuffable then
-            local debuffs = debuffable.debuffs
-            for i, v in pairs(debuffs) do
-                if string.sub(i, 1, 24) == "healthregenbuff_vetcurse" or i == "confighealbuff" or i == "compostheal_buff" or i == "tillweedsalve_buff" then
-                    debuffable:RemoveDebuff(i)
+            for name, debuff in pairs(debuffable.debuffs) do
+                local debuffprefab = debuff.inst.prefab
+                if string.sub(debuffprefab, 1, 24) == "healthregenbuff_vetcurse" or healing_debuffs[debuffprefab] then
+                    debuffable:RemoveDebuff(name)
                 end
             end
         end
