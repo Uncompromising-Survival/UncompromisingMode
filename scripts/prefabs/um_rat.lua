@@ -173,8 +173,8 @@ end
 
 local function onload_rat(inst, data)
     if data ~= nil then
-        if data.carrying ~= nil then inst.components.inventory:DropEverything() end
-        if data.scouting ~= nil and data.scouting then inst:AddTag("ratscout") end
+        if data.carrying then inst.components.inventory:DropEverything() end
+        if data.scouting then inst:AddTag("ratscout") end
         if data.isfollower then
             inst:AddTag("notraptrigger")
             inst:RemoveTag("canbetrapped")
@@ -229,18 +229,19 @@ local function CancelBuff(inst)
     inst.components.locomotor.runspeed = TUNING.DSTU.RAIDRAT_RUNSPEED
     inst.components.combat:SetAttackPeriod(TUNING.DSTU.RAIDRAT_ATTACK_PERIOD)
 
-    if inst.note ~= nil then
+    if inst.note and inst.note:IsValid() then
         inst.note:Remove()
         inst.note = nil
     end
 
-    if inst.bufftask ~= nil then inst.bufftask:Cancel() end
-
-    inst.bufftask = nil
+    if inst.bufftask then
+        inst.bufftask:Cancel()
+        inst.bufftask = nil
+    end
 end
 
 local function PiedPiperBuff(inst, duration)
-    if inst.bufftask == nil then
+    if not inst.bufftask then
         local fx = SpawnPrefab("rat_note")
         fx.entity:SetParent(inst.entity)
         fx.entity:AddFollower()
@@ -255,7 +256,6 @@ local function PiedPiperBuff(inst, duration)
         inst.bufftask = inst:DoTaskInTime(duration, CancelBuff)
     else
         inst.bufftask:Cancel()
-        inst.bufftask = nil
         inst.bufftask = inst:DoTaskInTime(duration, CancelBuff)
     end
 end
