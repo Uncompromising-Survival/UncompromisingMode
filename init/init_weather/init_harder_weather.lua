@@ -78,7 +78,6 @@ env.AddPrefabPostInit("cave", function(inst)
     -- end)
     inst:AddComponent("um_magmamanager")
 
-    inst:AddComponent("um_tilelogger")
     inst:DoTaskInTime(0.1, function(inst)
         inst.components.um_magmamanager:Init(inst.components.um_tilelogger.Magma)
 

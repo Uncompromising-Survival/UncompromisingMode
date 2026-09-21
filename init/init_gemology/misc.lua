@@ -35,10 +35,10 @@ local function OnCreateLabyrinth(inst, scenariorunner)
             chance = 0.2,
             initfn = function(item)
                 item.components.finiteuses:SetUses(math.random(item.components.finiteuses.total * 0.33, item.components.finiteuses.total * 0.8))
-                if math.random() > 0.25 then                   --AXE 75% chance for spears to be gemology enhanced
+                if math.random() > 0.25 then                                   --AXE 75% chance for spears to be gemology enhanced
                     local enchant = spear_enchants[math.random(1, #spear_enchants)]
                     item.components.gem_enchantable:AddEnchantment(enchant, 1) -- only allow T1 magic for such a basic item	
-                    item.components.gem_enchantable:SetDurability(enchant, 1) -- only allow T1 magic for such a basic item	
+                    item.components.gem_enchantable:SetDurability(enchant, 1)  -- only allow T1 magic for such a basic item	
                 end
             end,
         },
@@ -105,14 +105,14 @@ chest_labyrinth_loot.OnCreate = OnCreateLabyrinth
 local chest_loot =
 {
     { item = { "armorruins", "ruinshat", "ruins_bat" }, count = 1 },
-    { item = { "orangestaff", "yellowstaff" },        count = 1 },
-    { item = { "orangeamulet", "yellowamulet" },      count = 1 },
-    { item = { "yellowgem" },                         count = { 2, 4 } },
-    { item = { "orangegem" },                         count = { 2, 4 } },
-    { item = { "greengem" },                          count = { 2, 3 } },
-    { item = { "thulecite" },                         count = { 8, 14 } },
-    { item = { "thulecite_pieces" },                  count = { 12, 36 } },
-    { item = { "gears" },                             count = { 3, 6 } },
+    { item = { "orangestaff", "yellowstaff" },          count = 1 },
+    { item = { "orangeamulet", "yellowamulet" },        count = 1 },
+    { item = { "yellowgem" },                           count = { 2, 4 } },
+    { item = { "orangegem" },                           count = { 2, 4 } },
+    { item = { "greengem" },                            count = { 2, 3 } },
+    { item = { "thulecite" },                           count = { 8, 14 } },
+    { item = { "thulecite_pieces" },                    count = { 12, 36 } },
+    { item = { "gears" },                               count = { 3, 6 } },
 }
 
 local magic_staff_enchants = { "um_gemologypurplegem2", "um_gemologyorangegem1", "um_gemologyorangegem2", "um_gemologypalegem2" }
@@ -150,7 +150,7 @@ local function dospawnchest(inst, loading)
                     end
                 end
                 if item.prefab == "ruins_bat" or item.prefab == "orangestaff" or item.prefab == "yellowstaff" then
-                    if item.prefab == "ruins_bat" then          --AXE For the AG loot drops, the tools will always be enchanted, unlike the lab chests, which are only enchanted with some chance.
+                    if item.prefab == "ruins_bat" then                             --AXE For the AG loot drops, the tools will always be enchanted, unlike the lab chests, which are only enchanted with some chance.
                         local enchant = spear_enchants[math.random(1, #spear_enchants)]
                         item.components.gem_enchantable:AddEnchantment(enchant, 2) -- higher enchant on the magic items
                         item.components.gem_enchantable:SetDurability(enchant, 1)
@@ -196,13 +196,8 @@ local function dospawnchest(inst, loading)
 end
 
 env.AddPrefabPostInit("minotaurchestspawner", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
-    if inst.task then
-        inst.task:Cancel()
-        inst.task = nil
-    end
+    if not TheWorld.ismastersim then return end
+    if inst.task then inst.task:Cancel() end
     inst.task = inst:DoTaskInTime(3, dospawnchest) --AXE Replace AG loot.
 end)
 
@@ -235,9 +230,21 @@ local function OnMONKEYWake(inst)
 end
 
 env.AddPrefabPostInit("monkey", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
+    if not TheWorld.ismastersim then return end
     inst:ListenForEvent("entitywake", OnMONKEYWake)
     inst:ListenForEvent("entitysleep", OnMONKEYSleep)
+end)
+
+
+--IMPORTANT: THIS SHOULD BE ALWAYS *AFTER* init_gemology/common.
+env.AddPrefabPostInitAny(function(inst)
+    inst.um_cangemrepair = net_bool(inst.GUID, inst.prefab..".um_cangemrepair")
+
+    if not TheWorld.ismastersim then return end
+
+    if (inst.components.armor and not inst.components.armor:IsIndestructible())
+        or inst.components.finiteuses or inst.components.gem_enchantable then
+	    inst.repair_count = 1
+        inst.um_cangemrepair:set(true)
+    end
 end)
