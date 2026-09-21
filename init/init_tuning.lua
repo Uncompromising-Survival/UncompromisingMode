@@ -890,12 +890,6 @@ TUNING.BOAT.GRASSBOAT_LEAK_DAMAGE.small_leak = 50
 
 TUNING.MONKEY_PIRATE_TREASURE_BOAT_CHANCE = 0.5
 
-if TUNING.DSTU.BUTTERFLYWINGS_NERF == "stat_nerf" then
-    FOOD_BUTTERFLY_WING_HEALTH = 1
-    FOOD_BUTTERFLY_WING_HUNGER = 2.5
-    FOOD_BUTTERFLY_WING_PERISHTIME = total_day_time / 2
-end
-
 -- Faster Daywalker Regen
 TUNING.DAYWALKER_RESPAWN_DAYS_COUNT = 5 -- Days after the last defeat.
 
@@ -905,9 +899,8 @@ if GetModConfigData("warly_changes") then
     TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WARLY = { "portablecookpot_item", "spicepack", "potato", "potato", "garlic" }
 end
 
-
 local wathgrithr_rework_enum = GetModConfigData("wathgrithr_rework_")
 TUNING.DSTU.WATHGRITHR_REWORK = {}
-TUNING.DSTU.WATHGRITHR_REWORK.ENABLED = (wathgrithr_rework_enum == 1 or wathgrithr_rework_enum == 3)
-TUNING.DSTU.WATHGRITHR_REWORK.SPEAR_LUNGE_REPAIR = (wathgrithr_rework_enum == 3)
-TUNING.DSTU.WATHGRITHR_REWORK.BATTLEBORN_NERF = (wathgrithr_rework_enum ~= 0)
+TUNING.DSTU.WATHGRITHR_REWORK.ENABLED = wathgrithr_rework_enum == 1 or wathgrithr_rework_enum == 3
+TUNING.DSTU.WATHGRITHR_REWORK.SPEAR_LUNGE_REPAIR = wathgrithr_rework_enum == 3
+TUNING.DSTU.WATHGRITHR_REWORK.BATTLEBORN_NERF = wathgrithr_rework_enum ~= 0

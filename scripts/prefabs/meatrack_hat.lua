@@ -50,7 +50,6 @@ local function onstartdrying(inst, ingredient, buildfile)
     inst.SoundEmitter:PlaySound("dontstarve/common/together/put_meat_rack")
 
     if softresolvefilepath("images/inventoryimages/meatrack_hat_" .. inst.meat .. ".xml") then
-        print("soft resolve")
         local owner = inst.components.inventoryitem.owner
         inst.AnimState:SetBank("meatrack_hat_swap")
         inst.AnimState:SetBuild("meatrack_hat_swap_" .. inst.meat)
@@ -65,7 +64,6 @@ local function onstartdrying(inst, ingredient, buildfile)
             --inst.components.dryer:Pause()
         end
     else
-        print("default")
         local owner = inst.components.inventoryitem.owner
         inst.AnimState:SetBank("meatrack_hat_swap")
         inst.AnimState:SetBuild("meatrack_hat_swap_default")
@@ -111,11 +109,9 @@ end
 local function ToGround(inst)
     if inst.meat ~= nil then
         if softresolvefilepath("images/inventoryimages/meatrack_hat_" .. inst.meat .. ".xml") then
-            print("soft resolve")
             inst.components.inventoryitem.atlasname = "images/inventoryimages/meatrack_hat_" .. inst.meat .. ".xml"
             inst.components.inventoryitem:ChangeImageName("meatrack_hat_" .. inst.meat)
         else
-            print("default")
             inst.components.inventoryitem:ChangeImageName("meatrack_hat_default")
             inst.components.inventoryitem.atlasname = "images/inventoryimages/meatrack_hat_default.xml"
         end
@@ -128,11 +124,9 @@ end
 local function ToInventory(inst)
     if inst.meat ~= nil then
         if softresolvefilepath("images/inventoryimages/meatrack_hat_" .. inst.meat .. ".xml") then
-            print("soft resolve")
             inst.components.inventoryitem.atlasname = "images/inventoryimages/meatrack_hat_" .. inst.meat .. ".xml"
             inst.components.inventoryitem:ChangeImageName("meatrack_hat_" .. inst.meat)
         else
-            print("default")
             inst.components.inventoryitem:ChangeImageName("meatrack_hat_default")
             inst.components.inventoryitem.atlasname = "images/inventoryimages/meatrack_hat_default.xml"
         end

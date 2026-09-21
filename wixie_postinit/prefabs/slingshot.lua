@@ -260,7 +260,6 @@ env.AddPrefabPostInit("slingshot", function(inst)
                 _Old_onequipfn(inst, owner)
 
                 if TUNING.DSTU.DATES.APRIL_FOOLS then
-                    print("April Fools!")
                     owner.AnimState:OverrideSymbol("swap_object", "swap_wixiegun", "swap_wixiegun")
                 end
             end)

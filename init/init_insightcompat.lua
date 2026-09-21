@@ -1,6 +1,6 @@
 _G = GLOBAL
 
-print("Loaded insight compat")
+--print("Loaded insight compat")
 
 local function AddDescriptors()
     if not _G.rawget(_G, "Insight") then return end
@@ -23,7 +23,6 @@ local function AddDescriptors()
 end
 
 AddSimPostInit(AddDescriptors) -- _G.Insight.descriptors may not exist yet, but it will exist at AddSimPostInit.
-
 
 AddComponentPostInit("shard_insight", function(self)
     function self:SetWidowSpawner(entity)

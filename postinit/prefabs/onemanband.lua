@@ -12,7 +12,6 @@ local function CalcDapperness(inst, owner)
 end
 
 local function LeaveHouse(house)
-	--print(house, "is occupied: ", house.components.spawner:IsOccupied())
 	if house.components.spawner and house.components.spawner:IsOccupied() then
 		house.components.spawner:ReleaseChild()
 	end

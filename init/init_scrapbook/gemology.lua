@@ -36,7 +36,7 @@ SPECIALINFO.GEMOLOGY_GEM_EFFECTS  = "Gem Effects:"
 -- Turns "- Text.\n- like this."
 -- into "Text. Like this."
 ---@param tooltip string
-function ParseTooltip(tooltip)
+local function ParseTooltip(tooltip)
     if tooltip ~= nil then
         local str = string.gsub(tooltip, "[\n- ]", " ")
         str = string.gsub(str, "- ", "")

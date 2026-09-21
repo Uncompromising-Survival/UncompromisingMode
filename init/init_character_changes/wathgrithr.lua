@@ -38,52 +38,51 @@ TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_CLAMP_MULT = 0.33 -- This has an effect o
 TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_BONUS_MULT = 0.66 -- This affects mainly big creatures
 
 if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then -- Enabled only
-TUNING.WATHGRITHR_BASE_INSPIRATION_GAIN_MULT = 1 
+    TUNING.WATHGRITHR_BASE_INSPIRATION_GAIN_MULT = 1 
 
---------------------------------------------------------------------------
--- SHADOW HUNTRESS
---------------------------------------------------------------------------
+    --------------------------------------------------------------------------
+    -- SHADOW HUNTRESS
+    --------------------------------------------------------------------------
 
-TUNING.DSTU.WATHGRITHR_SHADOW_INSPIRATION_GAIN_MULT = 0 -- How fast it goes up per hit
-TUNING.DSTU.WATHGRITHR_SHADOW_INSPIRATION_BUFFER_MULT = 1 -- How much time out of combatbefore it starts going down
-TUNING.DSTU.WATHGRITHR_SHADOW_INSPIRATION_DRAIN_MULT = 1 -- How fast it ticks down
+    TUNING.DSTU.WATHGRITHR_SHADOW_INSPIRATION_GAIN_MULT = 0 -- How fast it goes up per hit
+    TUNING.DSTU.WATHGRITHR_SHADOW_INSPIRATION_BUFFER_MULT = 1 -- How much time out of combatbefore it starts going down
+    TUNING.DSTU.WATHGRITHR_SHADOW_INSPIRATION_DRAIN_MULT = 1 -- How fast it ticks down
 
-TUNING.DSTU.WATHGRITHR_SHADOW_BATTLEBORN_CLAMP_MULT = 1.15 -- This has an effect on small creatures only
-TUNING.DSTU.WATHGRITHR_SHADOW_BATTLEBORN_BONUS_MULT = 1.15 -- This affects mainly big creatures
---TUNING.DSTU.WATHGRITHR_SHADOW_HUNGER_MULT = 1.2
---TUNING.DSTU.WATHGRITHR_MAXHEALTH_MULT = 1.25 -- 200 * value
-TUNING.DSTU.WATHGRITHR_SHADOW_ABSORPTION = 0.35 -- Vanilla 0.25
-TUNING.DSTU.WATHGRITHR_SHADOW_DAPPERNESS_MULT = 0.5 --How much sanity shadow items drain. 0-1
-TUNING.DSTU.DREADSTONE_PREFABS = {"armordreadstone", "dreadstonehat"}
+    TUNING.DSTU.WATHGRITHR_SHADOW_BATTLEBORN_CLAMP_MULT = 1.15 -- This has an effect on small creatures only
+    TUNING.DSTU.WATHGRITHR_SHADOW_BATTLEBORN_BONUS_MULT = 1.15 -- This affects mainly big creatures
+    --TUNING.DSTU.WATHGRITHR_SHADOW_HUNGER_MULT = 1.2
+    --TUNING.DSTU.WATHGRITHR_MAXHEALTH_MULT = 1.25 -- 200 * value
+    TUNING.DSTU.WATHGRITHR_SHADOW_ABSORPTION = 0.35 -- Vanilla 0.25
+    TUNING.DSTU.WATHGRITHR_SHADOW_DAPPERNESS_MULT = 0.5 --How much sanity shadow items drain. 0-1
+    TUNING.DSTU.DREADSTONE_PREFABS = {"armordreadstone", "dreadstonehat"}
 
---------------------------------------------------------------------------
--- LUNAR MELODIST
---------------------------------------------------------------------------
+    --------------------------------------------------------------------------
+    -- LUNAR MELODIST
+    --------------------------------------------------------------------------
 
---TUNING.DSTU.WATHGRITHR_LUNAR_INSPIRATION_GAIN_MULT = 1.5
---TUNING.DSTU.WATHGRITHR_LUNAR_INSPIRATION_BUFFER_MULT = 5
---TUNING.DSTU.WATHGRITHR_LUNAR_INSPIRATION_DRAIN_MULT = 0.2
+    --TUNING.DSTU.WATHGRITHR_LUNAR_INSPIRATION_GAIN_MULT = 1.5
+    --TUNING.DSTU.WATHGRITHR_LUNAR_INSPIRATION_BUFFER_MULT = 5
+    --TUNING.DSTU.WATHGRITHR_LUNAR_INSPIRATION_DRAIN_MULT = 0.2
 
---TUNING.DSTU.WATHGRITHR_LUNAR_BATTLEBORN_MULT = 0 -- Currently not in use
+    --TUNING.DSTU.WATHGRITHR_LUNAR_BATTLEBORN_MULT = 0 -- Currently not in use
 
--- Songs
---TUNING.BATTLESONG_LUNAR_DURABILITY_ARMOR_MULT_SINGER = 0.15
---TUNING.DSTU.BATTLESONG_LUNAR_DURABILITY_MULT_SINGER = 0.9  -- We are multiplying 0.75 by this number
---TUNING.DSTU.BATTLESONG_LUNAR_HEALTHGAIN_MULT_SINGER = 2.5  -- We are multiplying 0.5 by this number 
---TUNING.DSTU.BATTLESONG_LUNAR_SANITYGAIN_MULT_SINGER = 1.25 -- We are multiplying 1 by this number
-TUNING.DSTU.BATTLESONG_LUNAR_SANITYAURA_MULT_SINGER = 0.8  -- We are multiplying 0.5 by this number
+    -- Songs
+    --TUNING.BATTLESONG_LUNAR_DURABILITY_ARMOR_MULT_SINGER = 0.15
+    --TUNING.DSTU.BATTLESONG_LUNAR_DURABILITY_MULT_SINGER = 0.9  -- We are multiplying 0.75 by this number
+    --TUNING.DSTU.BATTLESONG_LUNAR_HEALTHGAIN_MULT_SINGER = 2.5  -- We are multiplying 0.5 by this number 
+    --TUNING.DSTU.BATTLESONG_LUNAR_SANITYGAIN_MULT_SINGER = 1.25 -- We are multiplying 1 by this number
+    TUNING.DSTU.BATTLESONG_LUNAR_SANITYAURA_MULT_SINGER = 0.8  -- We are multiplying 0.5 by this number
 
-TUNING.DSTU.BATTLESONG_LUNAR_REGEN_PERIOD = 5 -- Every X Seconds
-TUNING.DSTU.BATTLESONG_LUNAR_REGEN_AMOUNT_HEALTH = 1
-TUNING.DSTU.BATTLESONG_LUNAR_REGEN_AMOUNT_SANITY = 1
-TUNING.DSTU.BATTLESONG_LUNAR_DURABILITY_MOD_ARMOR = 0.85 -- 1 does nothing, 0 armor takes no damage
+    TUNING.DSTU.BATTLESONG_LUNAR_REGEN_PERIOD = 5 -- Every X Seconds
+    TUNING.DSTU.BATTLESONG_LUNAR_REGEN_AMOUNT_HEALTH = 1
+    TUNING.DSTU.BATTLESONG_LUNAR_REGEN_AMOUNT_SANITY = 1
+    TUNING.DSTU.BATTLESONG_LUNAR_DURABILITY_MOD_ARMOR = 0.85 -- 1 does nothing, 0 armor takes no damage
 
-TUNING.DSTU.BATTLESONG_LUNAR_LUNARALIGNED_LUNAR_RESIST = 0.85 -- Vanilla 0.9
-TUNING.DSTU.BATTLESONG_LUNAR_LUNARALIGNED_VS_SHADOW_BONUS = 1.1 -- Vanilla 1.05
-TUNING.DSTU.BATTLESONG_LUNAR_SHADOWALIGNED_SHADOW_RESIST0 = 0.85 -- Vanilla 0.9
-TUNING.DSTU.BATTLESONG_LUNAR_SHADOWALIGNED_VS_LUNAR_BONUS = 1.1 -- Vanilla 1.05
+    TUNING.DSTU.BATTLESONG_LUNAR_LUNARALIGNED_LUNAR_RESIST = 0.85 -- Vanilla 0.9
+    TUNING.DSTU.BATTLESONG_LUNAR_LUNARALIGNED_VS_SHADOW_BONUS = 1.1 -- Vanilla 1.05
+    TUNING.DSTU.BATTLESONG_LUNAR_SHADOWALIGNED_SHADOW_RESIST0 = 0.85 -- Vanilla 0.9
+    TUNING.DSTU.BATTLESONG_LUNAR_SHADOWALIGNED_VS_LUNAR_BONUS = 1.1 -- Vanilla 1.05
 end
-
 
 --------------------------------------------------------------------------
 -- EQUIPMENT PERKS
@@ -124,4 +123,3 @@ if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then -- Only with rework enabled
 
     TUNING.SADDLE_WATHGRITHR_BONUS_DAMAGE = 12 -- 5
 end
-
