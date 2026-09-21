@@ -114,6 +114,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     UM_MAGNIFIER_PURPLEGEM = "- Reveals the quality of Strange Gems.\n- Discovering new Strange Gems permanently reveals the name\nand catalogues effects to the Scrapbook.",
     UM_MAGNIFIER_OBSIDIAN = "- Reveals the quality of Strange Gems.\n- Discovering new Strange Gems permanently reveals the name\nand catalogues effects to the Scrapbook..",
     UM_MAGNERANG = "- Temporarily holds targets in place.",
+    UM_GEM_REPAIR_KIT = "- Repairs durability of tools, weapons and armor.\n- Repairing has diminishing returns.\n- Also repairs Gem enchantment uses."
 }
 local TOOLTIPS = STRINGS.UNCOMP_TOOLTIP
 
