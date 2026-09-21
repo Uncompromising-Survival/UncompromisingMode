@@ -335,7 +335,7 @@ function GLOBAL.require(modulename, ...)
     local should_load = post_modulename and package.loaded[modulename] == nil and GLOBAL.kleifileexists("scripts/" .. modulename .. ".lua") and GLOBAL.kleifileexists(MODROOT .. "postinit/package/" .. post_modulename .. ".lua")
     local rets = { _require(modulename, ...) }
     if should_load then
-        print("loading module post", "scripts/" .. modulename, MODROOT .. "postinit/package/" .. post_modulename)
+        --print("loading module post", "scripts/" .. modulename, MODROOT .. "postinit/package/" .. post_modulename)
         modimport("postinit/package/" .. post_modulename)
     end
     return GLOBAL.unpack(rets)

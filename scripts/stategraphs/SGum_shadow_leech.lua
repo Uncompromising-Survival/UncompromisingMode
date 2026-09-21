@@ -20,19 +20,15 @@ local events =
 }
 
 local function TryAttach(inst, target)
-	print(inst.sg.statemem.target)
-	if target ~= nil and target:IsValid() and inst:IsNear(target, 3) then
-		print("invade")
-		if target ~= nil and target:HasTag("player") and target.components.inventory ~= nil then
-			if target.components.inventory:IsFull() then
-				inst.components.thief:StealItem(target)
-			end
-			
-			inst.StartLeeching(inst, target)
-			
-			inst.sg:GoToState("attached")
-			--target.components.inventory:GiveItem(inst)
+	if target and target:IsValid() and target:HasTag("player") and inst:IsNear(target, 3) and target.components.inventory then
+		if target.components.inventory:IsFull() then
+			inst.components.thief:StealItem(target)
 		end
+
+		inst.StartLeeching(inst, target)
+
+		inst.sg:GoToState("attached")
+		--target.components.inventory:GiveItem(inst)
 	end
 end
 
@@ -283,7 +279,6 @@ local states =
 			end
 			inst:ForceFacePoint(target)
 			inst.sg.statemem.speed = math.min(16.5, dist / (5 * FRAMES))
-			print("leap speed"..inst.sg.statemem.speed)
 			inst.Physics:SetMotorVelOverride(inst.sg.statemem.speed, 0, 0)
 			inst.Physics:ClearCollidesWith(COLLISION.SANITY)
 		end,

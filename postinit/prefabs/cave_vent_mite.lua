@@ -8,9 +8,7 @@ env.AddSimPostInit(function()
     if _SetUpChanceLoot then
         local function SetUpChanceLoot(inst, ...)
             local ret = _SetUpChanceLoot(inst, ...)
-            --print("is geode?", inst.isGeode)
             if inst.isGeode then
-                --print("add gem vent")
                 inst.components.lootdropper:AddChanceLoot("um_gemology_geode_vent", 1)
             end
             return ret

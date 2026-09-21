@@ -196,10 +196,8 @@ end
 
 local function Proxy_Shoot(inst, owner, fixedpowerlevel, shotcount)
 	local ammo = shotcount == 1 and inst.loaded_projectile1 and inst.loaded_projectile1.."_secondary"
-					or shotcount == 2 and inst.loaded_projectile2 and inst.loaded_projectile2.."_secondary"
-					or shotcount == 3 and inst.loaded_projectile3 and inst.loaded_projectile3.."_secondary"
-	
-	print(ammo)
+		or shotcount == 2 and inst.loaded_projectile2 and inst.loaded_projectile2.."_secondary"
+		or shotcount == 3 and inst.loaded_projectile3 and inst.loaded_projectile3.."_secondary"
 	if shotcount == 1 and inst.loaded_projectile1 or
 		shotcount == 2 and inst.loaded_projectile2 or
 		shotcount == 3 and inst.loaded_projectile3 then

@@ -30,7 +30,6 @@ local brain = require "brains/fuelseekerbrain"
 
 local function ChangeFire(inst)
 	inst.fire_num = inst.fire_num + 1
-	print("firelevel == "..inst.firelevel)
 	--inst.AnimState:OverrideSymbol("flames_wide_"..inst.old_fire_num, "um_fuelseeker", "flames_wide_"..inst.fire_num)
 	--inst.AnimState:ClearOverrideSymbol("flames_wide")
 	inst.AnimState:OverrideSymbol("flames_wide", "um_fuelseeker", "flames_wide_"..inst.firelevel.."_"..inst.fire_num)
@@ -45,16 +44,12 @@ end
 
 local function SeekerLevelUp(inst)
 	inst.level = inst.level + 0.2
-	print("level update"..inst.level)
-	
+
 	if inst.level <= 1 then
-		print("level 1")
 		inst.firelevel = 1
 	elseif inst.level <= 2 then
-		print("level 2")
 		inst.firelevel = 2
 	else
-		print("level 3")
 		inst.firelevel = 3
 	end
 end

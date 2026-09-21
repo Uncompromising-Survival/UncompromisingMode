@@ -16,22 +16,16 @@ local function OnAttached(inst, target, followsymbol, followoffset, data)
 	inst.AnimState:PlayAnimation("level2_controlled_burn", true)
 	
 	if target ~= nil and target:IsValid() and target.components.combat ~= nil and target.components.locomotor ~= nil then
-			local taunt_bonus = data ~= nil and data.inflicter ~= nil and 
-								(data.inflicter:HasTag("wixie_taunteffect_3") and .15 or 
-								data.inflicter:HasTag("wixie_taunteffect_2") and .1 or 
-								data.inflicter:HasTag("wixie_taunteffect_1") and .05) or 0
-		print(taunt_bonus)
-							
+			local taunt_bonus = data ~= nil and data.inflicter ~= nil and (data.inflicter:HasTag("wixie_taunteffect_3") and .15
+				or data.inflicter:HasTag("wixie_taunteffect_2") and .1 or data.inflicter:HasTag("wixie_taunteffect_1") and .05) or 0
+
 		target.components.combat.externaldamagetakenmultipliers:SetModifier(inst, 1.1)
 		target.components.locomotor:SetExternalSpeedMultiplier(target, "wixie_taunt", 1.1 - taunt_bonus)
 	
 		inst:ListenForEvent("wixie_taunt_lvl2", function(target, data)
-			local taunt_bonus = data ~= nil and data.inflicter ~= nil and 
-								(data.inflicter:HasTag("wixie_taunteffect_3") and .15 or 
-								data.inflicter:HasTag("wixie_taunteffect_2") and .1 or 
-								data.inflicter:HasTag("wixie_taunteffect_1") and .05) or 0
-		print(taunt_bonus)
-		
+			local taunt_bonus = data ~= nil and data.inflicter ~= nil and (data.inflicter:HasTag("wixie_taunteffect_3") and .15
+				or data.inflicter:HasTag("wixie_taunteffect_2") and .1 or data.inflicter:HasTag("wixie_taunteffect_1") and .05) or 0
+
 			target.components.combat.externaldamagetakenmultipliers:SetModifier(inst, 1.15)
 			target.components.locomotor:SetExternalSpeedMultiplier(target, "wixie_taunt", 1.15 - taunt_bonus)
 			inst.components.timer:StopTimer("buffover")
@@ -41,12 +35,9 @@ local function OnAttached(inst, target, followsymbol, followoffset, data)
 		end, target)
 		
 		inst:ListenForEvent("wixie_taunt_lvl3", function(target, data)
-			local taunt_bonus = data ~= nil and data.inflicter ~= nil and 
-								(data.inflicter:HasTag("wixie_taunteffect_3") and .15 or 
-								data.inflicter:HasTag("wixie_taunteffect_2") and .1 or 
-								data.inflicter:HasTag("wixie_taunteffect_1") and .05) or 0
-		print(taunt_bonus)
-								
+			local taunt_bonus = data ~= nil and data.inflicter ~= nil and (data.inflicter:HasTag("wixie_taunteffect_3") and .15
+				or data.inflicter:HasTag("wixie_taunteffect_2") and .1 or data.inflicter:HasTag("wixie_taunteffect_1") and .05) or 0
+
 			target.components.combat.externaldamagetakenmultipliers:SetModifier(inst, 1.2)
 			target.components.locomotor:SetExternalSpeedMultiplier(target, "wixie_taunt", 1.25 - taunt_bonus)
 			inst.components.timer:StopTimer("buffover")

@@ -306,11 +306,9 @@ local function Proxy_Shoot(inst, owner, fixedpowerlevel, shotcount)
         end
 
         if wx then
-            --print("owner and wixiepoint")
             if ammo ~= nil then
                 inst.SoundEmitter:PlaySound("wixie/characters/wixie/jessie_shoot")
-                
-                --print("ammo ~= nil")
+
                 if ammo == "slingshotammo_shadow_proj_secondary" then
                     local xmod = owner.wixiepointx
                     local zmod = owner.wixiepointz

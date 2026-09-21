@@ -116,19 +116,19 @@ env.AddStategraphPostInit("shadow_bishop", function(inst) --First time properly 
 				    --print(i)
 				    --print("angle:" )
 				    --print(inst._angle)
-                    
+
                     local offset = FindWalkableOffset(pos, inst._angle, 12 * dist_off[inst.level], 8, false, true)
                     if offset ~= nil then
                         local player, distsq = FindClosestPlayerInRange(pos.x + offset.x, 0, pos.z + offset.z, 8, true) -- check for any players in 8 unit radius near the position you want to teleport to
                         if player == nil then -- No players? Good, teleport
-				    	    --print("NO PLAYER FOUND")
+                            --print("NO PLAYER FOUND")
                             bestoffset = offset
                             break
-                         elseif i == 8 then --Ran out of tries and the target is surrounded by other players
-					    	--print("SURROUNDED BY PLAYERS")
-					    	inst.sg.statemem.surrounded = true
-					    	end
-				    	end
+                        elseif i == 8 then --Ran out of tries and the target is surrounded by other players
+                            --print("SURROUNDED BY PLAYERS")
+                            inst.sg.statemem.surrounded = true
+                        end
+                    end
                         --print("---------")
                 end
                 if bestoffset ~= nil then
