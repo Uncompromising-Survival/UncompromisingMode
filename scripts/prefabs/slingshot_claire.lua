@@ -184,7 +184,6 @@ local function OnStopChanneling(inst, user)
 end
 
 local function createlight(inst, user)
-    --print("wixie should be shooting right now")
     if inst.components.equippable.isequipped then
         user.SoundEmitter:KillSound("twirl")
         inst._wheel:SetSpinning(false)
