@@ -1,5 +1,5 @@
 local assets = {
-    Asset("ANIM", "anim/blueprinting_kit.zip"),
+    Asset("ANIM", "anim/um_gem_repair_kit.zip"),
 }
 
 function CreateGemRepairKit(name, durability, build, bank, common_fn)
@@ -52,4 +52,4 @@ function CreateGemRepairKit(name, durability, build, bank, common_fn)
     return Prefab(name, fn, assets)
 end
 
-return CreateGemRepairKit("um_gem_repair_kit", 10, "blueprinting_kit", "blueprinting_kit")
+return CreateGemRepairKit("um_gem_repair_kit", 5)

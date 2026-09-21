@@ -473,7 +473,8 @@ local inventoryitems =
     "um_blueprinting_kit",
     "um_cookpot_wagstaff_lever",
     "um_cookpot_wagstaff_lever2",
-    "um_feather_totem"
+    "um_feather_totem",
+    "um_gem_repair_kit"
 }
 
 local minimap_icons = {
@@ -557,7 +558,7 @@ local minimap_icons = {
     "um_astral_projector",
     "um_astral_projector_target",
     "um_hotspring",
-    "um_feather_totem"
+    "um_feather_totem",
 }
 
 for _, item in ipairs(inventoryitems) do
@@ -1539,6 +1540,7 @@ Assets = {
     Asset("ANIM", "anim/um_pathfinderpulse.zip"),
 
     --INVENTORY ITEMS [ANIMS & INV_IMAGE]
+    Asset("ANIM", "anim/um_gem_repair_kit.zip"),
     Asset("ANIM", "anim/um_boatbottle.zip"),
     Asset("ANIM", "anim/hat_crab.zip"),
     Asset("ANIM", "anim/staff_starfall.zip"),

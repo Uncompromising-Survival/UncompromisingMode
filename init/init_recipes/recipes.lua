@@ -74,6 +74,10 @@ ChangeSortKey("um_backpack_amuletuse", "bathbomb", "CRAFTING_STATION", true)
 ChangeSortKey("um_backpack_amuletuse", "backpack", "CLOTHING", true)
 ChangeSortKey("um_backpack_amuletuse", "backpack", "CONTAINERS", true)
 
+AddRecipe2("um_gem_repair_kit", { Ingredient("um_gemologypalegem2", 1), Ingredient("steelwool", 2), Ingredient("walrus_tusk", 1) }, TECH.MAGIC_THREE, { "MAGIC", "TOOLS", "ARMOUR" })
+ChangeSortKey("um_gem_repair_kit", "sewingkit", "TOOLS", true)
+ChangeSortKey("um_gem_repair_kit", "um_magnifier_purplegem", "MAGIC", true)
+
 
 AddRecipe2(
     "jawed_scythe",
