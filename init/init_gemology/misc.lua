@@ -196,13 +196,8 @@ local function dospawnchest(inst, loading)
 end
 
 env.AddPrefabPostInit("minotaurchestspawner", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
-    if inst.task then
-        inst.task:Cancel()
-        inst.task = nil
-    end
+    if not TheWorld.ismastersim then return end
+    if inst.task then inst.task:Cancel() end
     inst.task = inst:DoTaskInTime(3, dospawnchest) --AXE Replace AG loot.
 end)
 
@@ -235,9 +230,7 @@ local function OnMONKEYWake(inst)
 end
 
 env.AddPrefabPostInit("monkey", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
+    if not TheWorld.ismastersim then return end
     inst:ListenForEvent("entitywake", OnMONKEYWake)
     inst:ListenForEvent("entitysleep", OnMONKEYSleep)
 end)
@@ -245,16 +238,13 @@ end)
 
 --IMPORTANT: THIS SHOULD BE ALWAYS *AFTER* init_gemology/common.
 env.AddPrefabPostInitAny(function(inst)
-    inst.um_cangemrepair = net_bool(inst.GUID, "um_cangemrepair", "um_cangemrepair.dirty")
+    inst.um_cangemrepair = net_bool(inst.GUID, inst.prefab..".um_cangemrepair")
 
-    if not TheWorld.ismastersim then
-        return
-    end
+    if not TheWorld.ismastersim then return end
 
-    inst.repair_count = 1
-
-    if (inst.components.armor ~= nil and not inst.components.armor:IsIndestructible())
-        or inst.components.finiteuses ~= nil or inst.components.gem_enchantable ~= nil then
+    if (inst.components.armor and not inst.components.armor:IsIndestructible())
+        or inst.components.finiteuses or inst.components.gem_enchantable then
+	    inst.repair_count = 1
         inst.um_cangemrepair:set(true)
     end
 end)
