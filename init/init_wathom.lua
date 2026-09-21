@@ -651,22 +651,19 @@ AddStategraphPostInit("wilson", function(inst)
 
             onenter = function(inst)
                 inst:ClearBufferedAction()
-
-                --                inst.components.talker:Say("Can't... Breathe...", nil, true) -- I can't think of something cool for Wathom to say, so away this goes.
-
+                --inst.components.talker:Say("Can't... Breathe...", nil, true) -- I can't think of something cool for Wathom to say, so away this goes.
                 inst.AnimState:PlayAnimation("sing_fail", false)
                 if inst.components.adrenaline:GetPercent() < 0.25 and not inst:HasAnyTag("amped", "deathamp") then
                     local health = inst.components.health
                     if health and not health:IsDead() then
                         if health.currenthealth > 5 or TUNING.DSTU.DATES.APRIL_FOOLS then
-                            print(health.currenthealth)
                             health:DoDelta(-5, nil, "DEATHAMP", nil, nil, true)
                         end
                         inst.components.adrenaline:DoDelta(25)
                         inst.components.grogginess.grog_amount = 0
                         local x, y, z = inst.Transform:GetWorldPosition()
                         SpawnPrefab("minotaur_blood3").Transform:SetPosition(x, y, z)
-                        inst:DoTaskInTime(.5, function()
+                        inst:DoTaskInTime(12 * FRAMES, function()
                             SpawnPrefab("minotaur_blood3").Transform:SetPosition(x, y, z)
                             if health.currenthealth > 5 or TUNING.DSTU.DATES.APRIL_FOOLS then
                                 health:DoDelta(-5, nil, "DEATHAMP", nil, nil, true)
@@ -674,21 +671,22 @@ AddStategraphPostInit("wilson", function(inst)
                         end)
                     end
                 end
-
                 inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/leap") -- maybe make something new later?
             end,
+
             timeline =
             {
                 TimeEvent(12 * FRAMES, function(inst)
                     inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/leap") --place your funky sounds here
                 end),                                                       --bark twice.
             },
+
             events =
             {
                 EventHandler("animover", function(inst)
                     if inst.AnimState:AnimDone() then
                         inst.sg:GoToState("idle")
-                        inst.sg:RemoveStateTag("busy")
+                        --inst.sg:RemoveStateTag("busy")
                         inst:ClearBufferedAction()
                     end
                 end),

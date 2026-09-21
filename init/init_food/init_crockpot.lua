@@ -675,21 +675,14 @@ if TUNING.DSTU.GOODIESNERF then
     local spices = { "salt", "chili", "garlic", "sugar" }
 
     for type, dishes in pairs(foods) do
-        print(type, dishes)
         for k, dish in pairs(dishes) do
-            print(k, dish)
             AddPrefabPostInit(dish, function(inst)
-                if not GLOBAL.TheWorld.ismastersim then
-                    return
-                end
+                if not GLOBAL.TheWorld.ismastersim then return end
                 inst.components.edible.foodtype = GLOBAL.FOODTYPE[type]
             end)
             for k, v in pairs(spices) do
-                print(k, v)
                 AddPrefabPostInit(dish .. "_spice_" .. v, function(inst)
-                    if not GLOBAL.TheWorld.ismastersim then
-                        return
-                    end
+                    if not GLOBAL.TheWorld.ismastersim then return end
                     inst.components.edible.foodtype = GLOBAL.FOODTYPE[type]
                 end)
             end

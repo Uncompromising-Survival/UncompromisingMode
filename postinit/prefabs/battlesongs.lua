@@ -155,10 +155,6 @@ end
 -- BATTLESONG HEALTHGAIN
 --------------------------------------------------------------------------
 local function TryStartHealthRegen(inst, target) 
-    --print("Applying battlesong healthgain")
-    --print("Is near lunar melodist: " ..tostring(IsNearLunarMelodist(target)))
-    --print("Is task nil: ".. tostring(inst.battlesong_healthgain_task == nil))
-
     if IsNearLunarMelodist(target) and inst.battlesong_healthgain_task == nil then
         inst.battlesong_healthgain_task = inst:DoPeriodicTask(TUNING.DSTU.BATTLESONG_LUNAR_REGEN_PERIOD, function()
             target.components.health:DoDelta(TUNING.DSTU.BATTLESONG_LUNAR_REGEN_AMOUNT_HEALTH)

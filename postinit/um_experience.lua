@@ -19,11 +19,11 @@ local function ResetSkills(prefab)
 end
 
 local function SyncXp(prefab, xp)
-    print(xp)
+    --print(xp)
     if xp > 140 then
         xp = 140
     end
-    print(xp)
+    --print(xp)
     GLOBAL.TheSkillTree.skillxp[prefab] = math.min(xp, GLOBAL.TheSkillTree:GetMaximumExperiencePoints())
     if GLOBAL.ThePlayer ~= nil and GLOBAL.ThePlayer.components.skilltreeupdater ~= nil and GLOBAL.ThePlayer.components.skilltreeupdater.skilltree ~= nil then
         GLOBAL.ThePlayer.components.skilltreeupdater.skilltree.skillxp[prefab] = math.min(xp, GLOBAL.TheSkillTree:GetMaximumExperiencePoints()) --sync points for everyone with day count.
@@ -38,8 +38,8 @@ end
 
 
 local function SyncBossKills(sending_shard_id, boss, isminiboss)
-    print("Hi! Sync boss kills!")
-    print(sending_shard_id, boss_kills, miniboss_kills)
+    --[[print("Hi! Sync boss kills!")
+    print(sending_shard_id, boss_kills, miniboss_kills)]]
     if isminiboss then
         GLOBAL.TheWorld.minibosses_defeated[boss] = true
     else
@@ -120,7 +120,7 @@ local function TrySkilltreeReset(character)
 end
 
 local function __newindex(t, k, v)
-    print("__newindex")
+    --print("__newindex")
 
     for k, player in pairs(AllPlayers) do
         player.components.skilltreeupdater.skilltree.skillxp[player.prefab] = math.min(TheWorld.state.cycles + GetBossXPBonus(), TheSkillTree:GetMaximumExperiencePoints())

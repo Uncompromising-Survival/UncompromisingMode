@@ -936,7 +936,6 @@ local function secondaryproj_fn(symbol, overridebuild)
     inst.components.projectile:SetLaunchOffset(Vector3(1, 0.5, 0))
 
     inst:DoPeriodicTask(FRAMES, CollisionCheck)
-	print(2 - (inst.powerlevel * inst.powerlevel))
     inst:DoTaskInTime(2 - (inst.powerlevel * inst.powerlevel), inst.Remove)
 
     return inst
