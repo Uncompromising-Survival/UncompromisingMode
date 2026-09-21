@@ -52,4 +52,4 @@ function CreateBlueprintingKit(name, durability, build, bank, common_fn)
     return Prefab(name, fn, assets)
 end
 
-return CreateBlueprintingKit("um_blueprinting_kit", 2, "blueprinting_kit", "blueprinting_kit")
+return CreateBlueprintingKit("um_blueprinting_kit", 10, "blueprinting_kit", "blueprinting_kit")

@@ -777,7 +777,7 @@ UM_GEM_REPAIR.fn = function(act)
     local target = act.target
     local repairtool = act.invobject
 
-    if repairtool ~= nil and repairtool.components.gemrepairer ~= nil and target ~= nil and target.components.gem_enchantable ~= nil then
+    if repairtool ~= nil and repairtool.components.gemrepairer ~= nil and target ~= nil and target.um_cangemrepair ~= nil and target.um_cangemrepair:value() then
         local success, reason = repairtool.components.gemrepairer:OnUsed(target, act.doer)
 
         if not success then
@@ -791,7 +791,7 @@ UM_GEM_REPAIR.fn = function(act)
 end
 
 ENV.AddComponentAction("USEITEM", "gemrepairer", function(inst, doer, target, actions, right)
-    if inst ~= nil and inst:HasTag("gemrepairer") and target ~= nil and target.replica.gem_enchantable ~= nil and right then
+    if inst ~= nil and inst:HasTag("gemrepairer") and target ~= nil and target.um_cangemrepair ~= nil and target.um_cangemrepair:value() and right then
         table.insert(actions, ACTIONS.UM_GEM_REPAIR)
     end
 end)
