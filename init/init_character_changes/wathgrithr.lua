@@ -1,36 +1,27 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-
 env.AddPrefabPostInit("wathgrithr", function(inst)
+    if not TheWorld.ismastersim then return end
 
-	if not TheWorld.ismastersim then
-		return
-	end
+    if TUNING.DSTU.WATHGRITHR_REWORK.BATTLEBORN_NERF then
+        if inst.components.battleborn ~= nil then
+            inst.components.battleborn:SetClampMin(0.33 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_CLAMP_MULT)
+            inst.components.battleborn:SetClampMax(2 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_CLAMP_MULT)
+            inst.components.battleborn:SetBattlebornBonus(0.25 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_BONUS_MULT)
+        end
+    end
 
-	if TUNING.DSTU.WATHGRITHR_REWORK.BATTLEBORN_NERF then
-		if inst.components.battleborn ~= nil then
-			inst.components.battleborn:SetClampMin(0.33 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_CLAMP_MULT)
-			inst.components.battleborn:SetClampMax(2 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_CLAMP_MULT)
-			inst.components.battleborn:SetBattlebornBonus(0.25 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_BONUS_MULT)
-		end
-	end
-
-	if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then
-		if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then inst:AddComponent("efficientuser") end
-	end
+    if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then inst:AddComponent("efficientuser") end
 end)
 
 if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then
-	env.AddPrefabPostInit("battlesong_container", function(inst)
+    env.AddPrefabPostInit("battlesong_container", function(inst)
+        if not TheWorld.ismastersim then return end
 
-		if not TheWorld.ismastersim then
-			return
-		end
-
-		inst:RemoveComponent("burnable")
-		inst:RemoveComponent("propagator")
-	end)
+        inst:RemoveComponent("burnable")
+        inst:RemoveComponent("propagator")
+    end)
 end
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -99,38 +90,38 @@ end
 --------------------------------------------------------------------------
 
 if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then -- Only with rework enabled
-	-- Spear
-	TUNING.DSTU.SPEAR_WATHGRITHR_LIGHTNING_LUNGE_USES = 2 -- Base cost of lunge
-	--TUNING.DSTU.SPEAR_WATHGRITHR_LIGHTNING_LUNGE_ONHIT_USES = 0.5 -- Durability lost per mob hit
-	--TUNING.DSTU.SPEAR_WATHGRITHR_LIGHTNING_LUNGE_MAX_HITS = 8 -- After this number of hits it will no longer drain durability
+    -- Spear
+    TUNING.DSTU.SPEAR_WATHGRITHR_LIGHTNING_LUNGE_USES = 2 -- Base cost of lunge
+    --TUNING.DSTU.SPEAR_WATHGRITHR_LIGHTNING_LUNGE_ONHIT_USES = 0.5 -- Durability lost per mob hit
+    --TUNING.DSTU.SPEAR_WATHGRITHR_LIGHTNING_LUNGE_MAX_HITS = 8 -- After this number of hits it will no longer drain durability
 
-	if not TUNING.DSTU.WATHGRITHR_REWORK.SPEAR_LUNGE_REPAIR then
-		TUNING.SPEAR_WATHGRITHR_LIGHTNING_USES = 200 ---150 base
-		TUNING.SPEAR_WATHGRITHR_LIGHTNING_CHARGED_USES = 200 -- 200 base
-	end
-	TUNING.DSTU.SPEAR_WATHGRITHR_LIGHTNING_CHARGED_LIGHTNINGREPAIR = 25 -- Uses
+    if not TUNING.DSTU.WATHGRITHR_REWORK.SPEAR_LUNGE_REPAIR then
+        TUNING.SPEAR_WATHGRITHR_LIGHTNING_USES = 200 ---150 base
+        TUNING.SPEAR_WATHGRITHR_LIGHTNING_CHARGED_USES = 200 -- 200 base
+    end
+    TUNING.DSTU.SPEAR_WATHGRITHR_LIGHTNING_CHARGED_LIGHTNINGREPAIR = 25 -- Uses
 
-	-- Shield
-	TUNING.WATHGRITHR_SHIELD_COOLDOWN = 5 --10
-	--TUNING.WATHGRITHR_SHIELD_COOLDOWN_ONEQUIP = 2
-	TUNING.WATHGRITHR_SHIELD_PARRY_DURATION = 1 * 2.5 --1 Apply it to the base shield
-	TUNING.SKILLS.WATHGRITHR.SHIELD_PARRY_DURATION_MULT = 1 --2.5 This skill is no longer about parry duration, so remove the multiplier
-	TUNING.WATHGRITHR_SHIELD_COOLDOWN_ONPARRY_REDUCTION = 0.4 --0.7 Advances to 70% cooldown, so the new cooldown is 30% of WATHGRITHR_SHIELD_COOLDOWN.
+    -- Shield
+    TUNING.WATHGRITHR_SHIELD_COOLDOWN = 5 --10
+    --TUNING.WATHGRITHR_SHIELD_COOLDOWN_ONEQUIP = 2
+    TUNING.WATHGRITHR_SHIELD_PARRY_DURATION = 1 * 2.5 --1 Apply it to the base shield
+    TUNING.SKILLS.WATHGRITHR.SHIELD_PARRY_DURATION_MULT = 1 --2.5 This skill is no longer about parry duration, so remove the multiplier
+    TUNING.WATHGRITHR_SHIELD_COOLDOWN_ONPARRY_REDUCTION = 0.4 --0.7 Advances to 70% cooldown, so the new cooldown is 30% of WATHGRITHR_SHIELD_COOLDOWN.
 
-	--TUNUNG.WATHGRITHR_SHIELD_DAMAGE = wilson_attack * 1.5
+    --TUNUNG.WATHGRITHR_SHIELD_DAMAGE = wilson_attack * 1.5
 
-	TUNING.SKILLS.WATHGRITHR.SHIELD_PARRY_BONUS_DAMAGE = {min=15, max=100} --{ min=15, max=30 }
-	TUNING.SKILLS.WATHGRITHR.SHIELD_PARRY_BONUS_DAMAGE_SCALE = 0.8 --0.5
+    TUNING.SKILLS.WATHGRITHR.SHIELD_PARRY_BONUS_DAMAGE = {min=15, max=100} --{ min=15, max=30 }
+    TUNING.SKILLS.WATHGRITHR.SHIELD_PARRY_BONUS_DAMAGE_SCALE = 0.8 --0.5
 
-	TUNING.DSTU.WATHGRITHR_SHIELD_DURABILITY_MULT = 1.3
+    TUNING.DSTU.WATHGRITHR_SHIELD_DURABILITY_MULT = 1.3
 
-	--TUNING.DSTU.WATHGRITHR_SHIELD_BASE_PARRY_EFFICIENCY = 0.6 --Parry durability loss = Hit damage * ( BASE_PARRY_EFFICIENCY - (UPGRADE_PARRY_EFFICIENCY * skil level))
-	--TUNING.DSTU.WATHGRITHR_SHIELD_UPGRADE_PARRY_EFFICIENCY = 0.2 -- additive per upgrade with WATHGRITHR_SHIELD_BASE_PARRY_EFFICIENCY
-	TUNING.DSTU.WATHGRITHR_SHIELD_PARRY_DURABILITY_LOSS = 0.1 -- Percentage of the hit damage that deducts durability. 0.2 = (100 damage hit will reduce shield durability by 20)
+    --TUNING.DSTU.WATHGRITHR_SHIELD_BASE_PARRY_EFFICIENCY = 0.6 --Parry durability loss = Hit damage * ( BASE_PARRY_EFFICIENCY - (UPGRADE_PARRY_EFFICIENCY * skil level))
+    --TUNING.DSTU.WATHGRITHR_SHIELD_UPGRADE_PARRY_EFFICIENCY = 0.2 -- additive per upgrade with WATHGRITHR_SHIELD_BASE_PARRY_EFFICIENCY
+    TUNING.DSTU.WATHGRITHR_SHIELD_PARRY_DURABILITY_LOSS = 0.1 -- Percentage of the hit damage that deducts durability. 0.2 = (100 damage hit will reduce shield durability by 20)
 
-	-- Commander Helm
-	TUNING.BATTLEBORN_REPAIR_EQUIPMENT_MULT = 3.5 * 0.4
+    -- Commander Helm
+    TUNING.BATTLEBORN_REPAIR_EQUIPMENT_MULT = 3.5 * 0.4
 
-	TUNING.SADDLE_WATHGRITHR_BONUS_DAMAGE = 12 -- 5
+    TUNING.SADDLE_WATHGRITHR_BONUS_DAMAGE = 12 -- 5
 end
 
