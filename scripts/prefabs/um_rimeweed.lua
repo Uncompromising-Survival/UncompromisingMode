@@ -166,15 +166,15 @@ local function MakeFX(name, anim)
     return Prefab(name, fn)
 end
 --/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-local function AnimateRetaliateOver(inst)
+local function AnimateRetaliateBarrierOver(inst)
     inst.retaliating = nil
     if not (inst.components.health and inst.components.health:IsDead()) then
         inst.AnimState:PlayAnimation("bramble_"..inst.type.."_idle", true)
     end
-    inst:RemoveEventCallback("animover", AnimateRetaliateOver)
+    inst:RemoveEventCallback("animover", AnimateRetaliateBarrierOver)
 end
 
-local function Retaliate(inst)
+local function RetaliateBarrier(inst)
     if not inst.retaliating then
         inst.retaliating = true
 
@@ -189,8 +189,8 @@ local function Retaliate(inst)
             inst.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
         end
         if not (inst.components.health and inst.components.health:IsDead()) then
-            inst.AnimState:PlayAnimation("bramble_"..inst.type.."_hit", false)
-            inst:ListenForEvent("animover", AnimateRetaliateOver)
+            inst.AnimState:PlayAnimation("bramble_"..inst.type.."_hit")
+            inst:ListenForEvent("animover", AnimateRetaliateBarrierOver)
         end
     end
 end
@@ -236,7 +236,7 @@ local function BarrierDie(inst)
     RemoveFromBrambleTable(inst.rimeweed_main, inst)
     --TheNet:Announce("DODEATH")
     RemovePhysicsColliders(inst)
-    inst.AnimState:PlayAnimation("bramble_"..(inst.type or math.random(0, 2)).."_shrink", false)
+    inst.AnimState:PlayAnimation("bramble_"..(inst.type or math.random(0, 2)).."_shrink")
     if math.random() < .1 and not inst.noloot then
         inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
     end
@@ -454,7 +454,7 @@ end
 local function MainDie(inst)
     inst:AddTag("dead")
     MainRemove(inst)
-    inst.AnimState:PlayAnimation("flower_"..((inst.stage or 1) - 1).."_shrink", false)
+    inst.AnimState:PlayAnimation("flower_"..((inst.stage or 1) - 1).."_shrink")
     if not inst.stage then return end
     if inst.stage >= 1 and not inst.noloot then
         inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
@@ -478,15 +478,15 @@ end
 
 local function PlayStagedAnim(inst)
     if not inst:HasTag("dead") then
-        inst.AnimState:PushAnimation("flower_"..(inst.stage - 1).."_idle")
+        inst.AnimState:PushAnimation("flower_"..(inst.stage - 1).."_idle", true)
     end
 end
 
 local function InitializePlant(inst)
     inst.stage = 1
     inst.components.timer:StartTimer("grow", .5 * 8 * 60)
-    inst.AnimState:PlayAnimation("flower_"..(inst.stage - 1).."_grow", false)
-    inst.AnimState:PushAnimation("flower_"..(inst.stage - 1).."_idle")
+    inst.AnimState:PlayAnimation("flower_"..(inst.stage - 1).."_grow")
+    inst.AnimState:PushAnimation("flower_"..(inst.stage - 1).."_idle", true)
 end
 
 local function ChangeMiniMapIcon(inst)
@@ -532,7 +532,7 @@ local function TryGrowPoint(inst, x, z)
         table.insert(inst.bramble, weed)
         weed.rimeweed_main = inst
         weed.type = math.random(0, 2)
-        weed.AnimState:PlayAnimation("bramble_"..weed.type.."_grow", false)
+        weed.AnimState:PlayAnimation("bramble_"..weed.type.."_grow")
         weed.AnimState:PushAnimation("bramble_"..weed.type.."_idle", true)
     end
 end
@@ -591,7 +591,7 @@ end
 
 local function TimerDone(inst, data)
     if data and data.name == "grow" then
-        inst.AnimState:PlayAnimation("flower_"..(inst.stage).."_grow", false)
+        inst.AnimState:PlayAnimation("flower_"..(inst.stage).."_grow")
         inst.stage = inst.stage + 1
         if inst.stage == 2 and not inst:HasTag("dead") then
             inst.components.timer:StartTimer("growbranch", .5 * 8 * 60)
@@ -612,16 +612,25 @@ local function TimerDone(inst, data)
     end
 end
 
-local function OnAttacked(inst, data)
+local function AnimateRetaliateMainOver(inst)
+    inst.retaliating = nil
     if not (inst.components.health and inst.components.health:IsDead()) then
-        if inst.stage > 2 then
-            inst:DoTaskInTime(4 * FRAMES, function(_inst) SpawnPrefab("bramblefx_rime"):SetFXOwner(_inst) end) -- Slight Delay
-            if inst.SoundEmitter then
-                inst.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
-            end
+        inst.AnimState:PlayAnimation("flower_"..(inst.stage - 1).."_idle", true)
+    end
+    inst:RemoveEventCallback("animover", AnimateRetaliateMainOver)
+end
+
+local function RetaliateMain(inst, data)
+    if inst.stage > 2 and not inst.retaliating then
+        inst.retaliating = true
+        inst:DoTaskInTime(4 * FRAMES, function(_inst) SpawnPrefab("bramblefx_rime"):SetFXOwner(_inst) end) -- Slight Delay
+        if inst.SoundEmitter then
+            inst.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
         end
+    end
+    if not (inst.components.health and inst.components.health:IsDead()) then
         inst.AnimState:PlayAnimation("flower_"..(inst.stage - 1).."_hit")
-        inst.AnimState:PushAnimation("flower_"..(inst.stage - 1).."_idle")
+        inst:ListenForEvent("animover", AnimateRetaliateMainOver)
     end
 end
 
@@ -697,7 +706,7 @@ local function mainweed()
     inst.components.health:StartRegen(TUNING.BUNNYMAN_HEALTH_REGEN_AMOUNT, TUNING.BUNNYMAN_HEALTH_REGEN_PERIOD)
 
     inst:AddComponent("combat")
-    inst:ListenForEvent("attacked", OnAttacked)
+    inst:ListenForEvent("attacked", RetaliateMain)
 
     ---------------------
 
