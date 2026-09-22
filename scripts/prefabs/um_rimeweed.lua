@@ -275,7 +275,7 @@ local function KillOffRimeweed(inst, toggle)
     inst.persists = false
     if inst.killrimeweedtask then return end
     inst.killrimeweedtask = inst:DoTaskInTime(math.min(math.random() * .5, .5), function(inst)
-        if not TheWorld.state.iswinter or TheWorld.state.israining then
+        if not TheWorld.state.iswinter then
             inst.nospread = true
             KillOrRemove(inst, true)
         else
@@ -286,8 +286,7 @@ end
 
 local function SetupWatchWorldState(inst)
     inst:WatchWorldState("season", KillOffRimeweed)
-    inst:WatchWorldState("israining", KillOffRimeweed)
-    KillOffRimeweed(inst, not TheWorld.state.iswinter or TheWorld.state.israining)
+    KillOffRimeweed(inst, not TheWorld.state.iswinter)
 end
 
 local function OnIsPathFindingDirty(inst)
@@ -608,7 +607,7 @@ local function TimerDone(inst, data)
     end
 
     if data and data.name == "growbranch" then
-        if TheWorld.state.iswinter and not TheWorld.state.israining then
+        if TheWorld.state.iswinter then
             inst.components.timer:StartTimer("growbranch", .15 * 8 * 60)
             GrowBranch(inst)
         else
