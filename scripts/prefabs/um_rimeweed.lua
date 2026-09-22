@@ -210,6 +210,15 @@ local function RemoveFromBrambleTable(inst, target)
     end
 end
 
+local function KillOrRemove(inst, noloot)
+    if not inst:IsAsleep() and inst.components.health and not inst.components.health:IsDead() then
+        if noloot then inst.noloot = true end
+        inst.components.health:Kill()
+    else
+        inst:Remove()
+    end
+end
+
 local function BarrierRemove(inst)
     RemoveFromBrambleTable(inst.rimeweed_main, inst)
     if not inst.nospread then
@@ -219,13 +228,7 @@ local function BarrierRemove(inst)
             local v = ents[i]
             if v and v:IsValid() and v ~= inst and v.prefab == "rimeweed_barrier" then
                 v.nospread = true
-                v:DoTaskInTime(.5 * inst:GetDistanceSqToInst(v) ^ .5, function(v)
-                    if v.components.health and not v.components.health:IsDead() then
-                        v.components.health:Kill()
-                    else
-                        v:Remove()
-                    end
-                end)
+                v:DoTaskInTime(.5 * inst:GetDistanceSqToInst(v) ^ .5, KillOrRemove)
             end
         end
     end
@@ -247,13 +250,7 @@ local function BarrierDie(inst)
         for i, v in ipairs(TheSim:FindEntities(x, y, z, 5, { "rimeweed" })) do
             if v ~= inst and v.prefab == "rimeweed_barrier" then
                 v.nospread = true
-                v:DoTaskInTime(.5 * inst:GetDistanceSqToInst(v) ^ .5, function(v)
-                    if v.components.health and not v.components.health:IsDead() then
-                        v.components.health:Kill()
-                    else
-                        v:Remove()
-                    end
-                end)
+                v:DoTaskInTime(.5 * inst:GetDistanceSqToInst(v) ^ .5, KillOrRemove)
             end
         end
     end
@@ -273,21 +270,24 @@ local function BarrierLoad(inst, data)
     end
 end
 
-local function KillOffRimeweed(inst)
-    if TheWorld.state.iswinter then return end
+local function KillOffRimeweed(inst, toggle)
+    if not toggle then return end
     inst.persists = false
     if inst.killrimeweedtask then return end
     inst.killrimeweedtask = inst:DoTaskInTime(math.min(math.random() * .5, .5), function(inst)
-        if not TheWorld.state.iswinter then
+        if not TheWorld.state.iswinter or TheWorld.state.israining then
             inst.nospread = true
-            if inst.components.health and not inst.components.health:IsDead() then
-                inst.noloot = true
-                inst.components.health:Kill()
-            else
-                inst:Remove()
-            end
+            KillOrRemove(inst, true)
+        else
+            inst.killrimeweedtask = nil
         end
     end)
+end
+
+local function SetupWatchWorldState(inst)
+    inst:WatchWorldState("season", KillOffRimeweed)
+    inst:WatchWorldState("israining", KillOffRimeweed)
+    KillOffRimeweed(inst, not TheWorld.state.iswinter or TheWorld.state.israining)
 end
 
 local function OnIsPathFindingDirty(inst)
@@ -402,8 +402,9 @@ local function barrierweed()
             inst.AnimState:PlayAnimation("bramble_" .. inst.type .. "_idle", true)
         end
     end)
-    inst:WatchWorldState("season", KillOffRimeweed)
-    inst:WatchWorldState("startrain", KillOffRimeweed)
+
+    SetupWatchWorldState(inst)
+
     return inst
 end
 
@@ -446,25 +447,11 @@ local function MainRemove(inst)
     if inst.fx and inst.fx:IsValid() then inst.fx:Remove() end
     if #inst.bramble > 0 and not inst.nospread then
         --[[for i, v in ipairs(inst.bramble) do
-            if v:IsValid() then
-                if v.components.health and not v.components.health:IsDead() then
-                    v.noloot = true
-                    v.components.health:Kill()
-                else
-                    v:Remove()
-                end
-            end
+            if v:IsValid() then KillOrRemove(v, true) end
         end]]
         for i = #inst.bramble, 1, -1 do
             local v = inst.bramble[i]
-            if v:IsValid() then
-                if v.components.health and not v.components.health:IsDead() then
-                    v.noloot = true
-                    v.components.health:Kill()
-                else
-                    v:Remove()
-                end
-            end
+            if v:IsValid() then KillOrRemove(v, true) end
         end
     end
 end
@@ -621,11 +608,11 @@ local function TimerDone(inst, data)
     end
 
     if data and data.name == "growbranch" then
-        if TheWorld.state.iswinter then
+        if TheWorld.state.iswinter and not TheWorld.state.israining then
             inst.components.timer:StartTimer("growbranch", .15 * 8 * 60)
             GrowBranch(inst)
         else
-            KillOffRimeweed(inst)
+            KillOffRimeweed(inst, true)
         end
     end
 end
@@ -725,8 +712,8 @@ local function mainweed()
     inst.OnLoad = OnLoadMain
     inst.OnLoadPostPass = OnLoadPostPassMain
     inst:DoTaskInTime(0, SetStage)
-    inst:WatchWorldState("season", KillOffRimeweed)
-    inst:WatchWorldState("startrain", KillOffRimeweed)
+
+    SetupWatchWorldState(inst)
 
     inst:ListenForEvent("onremove", function(inst)
         TheWorld.components.um_snowstormmanager:UnregisterRimeweed(inst)
