@@ -209,8 +209,8 @@ local function RemoveFromBrambleTable(inst, target)
 end
 
 local function KillOrRemove(inst, noloot)
+    if noloot then inst.noloot = true end
     if not inst:IsAsleep() and inst.components.health and not inst.components.health:IsDead() then
-        if noloot then inst.noloot = true end
         inst.components.health:Kill()
     else
         inst:Remove()
@@ -237,18 +237,20 @@ local function BarrierDie(inst)
     --TheNet:Announce("DODEATH")
     RemovePhysicsColliders(inst)
     inst.AnimState:PlayAnimation("bramble_"..(inst.type or math.random(0, 2)).."_shrink")
-    if math.random() < .1 and not inst.noloot then
-        inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
-    end
-    if math.random() < .01 and not inst.noloot then
-        inst.components.lootdropper:SpawnLootPrefab("dug_marsh_bush")
-    end
-    if not inst.nospread then
-        local x, y, z = inst.Transform:GetWorldPosition()
-        for i, v in ipairs(TheSim:FindEntities(x, y, z, 5, { "rimeweed" })) do
-            if v ~= inst and v.prefab == "rimeweed_barrier" then
-                v.nospread = true
-                v:DoTaskInTime(.5 * inst:GetDistanceSqToInst(v) ^ .5, KillOrRemove)
+    if not inst.noloot then
+        if math.random() < .1 then
+            inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
+        end
+        if math.random() < .01 then
+            inst.components.lootdropper:SpawnLootPrefab("dug_marsh_bush")
+        end
+        if not inst.nospread then
+            local x, y, z = inst.Transform:GetWorldPosition()
+            for i, v in ipairs(TheSim:FindEntities(x, y, z, 5, { "rimeweed" })) do
+                if v ~= inst and v.prefab == "rimeweed_barrier" then
+                    v.nospread = true
+                    v:DoTaskInTime(.5 * inst:GetDistanceSqToInst(v) ^ .5, KillOrRemove)
+                end
             end
         end
     end
@@ -442,35 +444,37 @@ local function MainRemove(inst)
     if inst.fx and inst.fx:IsValid() then inst.fx:Remove() end
     if #inst.bramble > 0 and not inst.nospread then
         --[[for i, v in ipairs(inst.bramble) do
-            if v:IsValid() then KillOrRemove(v, true) end
+            if v:IsValid() then KillOrRemove(v, inst.noloot) end
         end]]
         for i = #inst.bramble, 1, -1 do
             local v = inst.bramble[i]
-            if v:IsValid() then KillOrRemove(v, true) end
+            if v:IsValid() then KillOrRemove(v, inst.noloot) end
         end
     end
 end
 
 local function MainDie(inst)
+    local stage = inst.stage or 1
     inst:AddTag("dead")
     MainRemove(inst)
-    inst.AnimState:PlayAnimation("flower_"..((inst.stage or 1) - 1).."_shrink")
-    if not inst.stage then return end
-    if inst.stage >= 1 and not inst.noloot then
-        inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
-    end
-    if inst.stage == 2 and not inst.noloot then
-        if math.random() < .25 then
-            inst.components.lootdropper:SpawnLootPrefab("rimeweed_whip")
+    inst.AnimState:PlayAnimation("flower_"..(stage - 1).."_shrink")
+    if not inst.noloot then
+        if stage >= 1 then
+            inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
         end
-        inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
-    end
-    if inst.stage >= 3 and not inst.noloot then
-        inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
-        if math.random() > .5 then
-            inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemflower")
-        else
-            inst.components.lootdropper:SpawnLootPrefab("rimeweed_whip")
+        if stage == 2 then
+            if math.random() < .25 then
+                inst.components.lootdropper:SpawnLootPrefab("rimeweed_whip")
+            end
+            inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
+        end
+        if stage >= 3 then
+            inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
+            if math.random() > .5 then
+                inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemflower")
+            else
+                inst.components.lootdropper:SpawnLootPrefab("rimeweed_whip")
+            end
         end
     end
     inst:RemoveEventCallback("onremove", MainRemove)
