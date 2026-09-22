@@ -624,7 +624,12 @@ local function RetaliateMain(inst, data)
     if not inst.retaliating then
         inst.retaliating = true
         if inst.stage > 2 then
-            inst:DoTaskInTime(4 * FRAMES, function(_inst) SpawnPrefab("bramblefx_rime"):SetFXOwner(_inst) end) -- Slight Delay
+            inst:DoTaskInTime(4 * FRAMES, function(_inst)
+                SpawnPrefab("bramblefx_rime"):SetFXOwner(_inst)
+                if _inst.SoundEmitter then
+                    _inst.SoundEmitter:PlaySound("dontstarve/wilson/blowdart_shoot")
+                end
+            end) -- Slight Delay
             if inst.SoundEmitter then
                 inst.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
             end
