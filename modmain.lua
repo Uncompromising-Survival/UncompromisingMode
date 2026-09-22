@@ -80,10 +80,7 @@ AddPrefabPostInit("world", function(inst)
         end
     end)]]
 
-    GLOBAL.TheWorld:AddTag("um_beta") -- Added so it's easy to tell if the um beta is active
-    if not inst.ismastersim then
-        return
-    end
+    inst:AddTag("um_beta") -- Added so it's easy to tell if the um beta is active
 end)
 
 modimport("init/init_gamemodes/init_uncompromising_mode")
@@ -323,8 +320,8 @@ end
 AddClientModRPCHandler("UncompromisingSurvival", "LearnGemologyGem", LearnGemologyGem)
 
 AddClientModRPCHandler("UncompromisingSurvival", "OnTerraform", function(data)
-    local data = GLOBAL.DecodeAndUnzipString(data)
-    if GLOBAL.TheWorld and GLOBAL.TheWorld.components.um_localtilewatcher ~= nil then
+    if GLOBAL.TheWorld and GLOBAL.TheWorld.components.um_localtilewatcher then
+        local data = GLOBAL.DecodeAndUnzipString(data)
         GLOBAL.TheWorld.components.um_localtilewatcher:OnTerraform(data)
     end
 end)
