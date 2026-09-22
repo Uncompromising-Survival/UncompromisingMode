@@ -244,13 +244,13 @@ local function BarrierDie(inst)
         if math.random() < .01 then
             inst.components.lootdropper:SpawnLootPrefab("dug_marsh_bush")
         end
-        if not inst.nospread then
-            local x, y, z = inst.Transform:GetWorldPosition()
-            for i, v in ipairs(TheSim:FindEntities(x, y, z, 5, { "rimeweed" })) do
-                if v ~= inst and v.prefab == "rimeweed_barrier" then
-                    v.nospread = true
-                    v:DoTaskInTime(.5 * inst:GetDistanceSqToInst(v) ^ .5, KillOrRemove)
-                end
+    end
+    if not inst.nospread then
+        local x, y, z = inst.Transform:GetWorldPosition()
+        for i, v in ipairs(TheSim:FindEntities(x, y, z, 5, { "rimeweed" })) do
+            if v ~= inst and v.prefab == "rimeweed_barrier" then
+                v.nospread = true
+                v:DoTaskInTime(.5 * inst:GetDistanceSqToInst(v) ^ .5, KillOrRemove)
             end
         end
     end
