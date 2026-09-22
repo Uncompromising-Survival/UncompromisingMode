@@ -621,16 +621,18 @@ local function AnimateRetaliateMainOver(inst)
 end
 
 local function RetaliateMain(inst, data)
-    if inst.stage > 2 and not inst.retaliating then
+    if not inst.retaliating then
         inst.retaliating = true
-        inst:DoTaskInTime(4 * FRAMES, function(_inst) SpawnPrefab("bramblefx_rime"):SetFXOwner(_inst) end) -- Slight Delay
-        if inst.SoundEmitter then
-            inst.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
+        if inst.stage > 2 then
+            inst:DoTaskInTime(4 * FRAMES, function(_inst) SpawnPrefab("bramblefx_rime"):SetFXOwner(_inst) end) -- Slight Delay
+            if inst.SoundEmitter then
+                inst.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
+            end
         end
-    end
-    if not (inst.components.health and inst.components.health:IsDead()) then
-        inst.AnimState:PlayAnimation("flower_"..(inst.stage - 1).."_hit")
-        inst:ListenForEvent("animover", AnimateRetaliateMainOver)
+        if not (inst.components.health and inst.components.health:IsDead()) then
+            inst.AnimState:PlayAnimation("flower_"..(inst.stage - 1).."_hit")
+            inst:ListenForEvent("animover", AnimateRetaliateMainOver)
+        end
     end
 end
 
