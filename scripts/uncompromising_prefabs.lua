@@ -485,7 +485,7 @@ local prefabs = {
     "um_blowdart_pyre",
 
     -- Rimeweed Stuff
-    "rimeweed",
+    "um_rimeweed",
 
     -- Mutation Extrapolation
     "umdebuff_moonburn",
