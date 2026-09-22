@@ -381,7 +381,7 @@ local function barrierweed()
     local multsize = math.random(40, 42) / 20
     inst.Transform:SetScale(multsize, multsize, multsize)
     ---------------------
-    inst:ListenForEvent("attacked", Retaliate)
+    inst:ListenForEvent("attacked", RetaliateBarrier)
     inst:ListenForEvent("onremove", BarrierRemove)
     inst:ListenForEvent("death", BarrierDie)
 
