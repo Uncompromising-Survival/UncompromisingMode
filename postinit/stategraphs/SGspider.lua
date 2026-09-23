@@ -55,30 +55,6 @@ env.AddStategraphPostInit("spider", function(inst)
         return "dontstarve/creatures/" .. creature .. "/" .. event
     end
 
-    local _OldAttackEvent = inst.events["doattack"] and inst.events["doattack"].fn
-    if _OldAttackEvent then
-        inst.events["doattack"].fn = function(inst, data, ...)
-            if not (inst.sg:HasStateTag("busy") or inst.components.health:IsDead()) and data.target and data.target:IsValid() then
-                if inst.sg.mem.wantstoevade then
-                    inst.sg.mem.wantstoevade = nil
-                    inst.sg:GoToState("evade_loop")
-                    return
-                end
-                if inst:HasTag("spider_regular") then
-                    inst.sg:GoToState(TUNING.DSTU.REGSPIDERJUMP and not inst:IsNear(data.target, TUNING.SPIDER_WARRIOR_MELEE_RANGE)
-                        and "warrior_attack" or "attack", data.target) -- Do leap attack
-                    return
-                end
-                if inst:HasTag("trapdoorspider") then
-                    inst.sg:GoToState(not inst.web_cd and inst.hooded and "spit_web" -- *Hooded* Trapdoor spider web attack
-                        or data.target:IsValid() and not inst:IsNear(data.target, TUNING.SPIDER_WARRIOR_MELEE_RANGE) and "trapdoor_attack" or "attack", data.target)
-                    return
-                end
-            end
-            return _OldAttackEvent(inst, data, ...)
-        end
-    end
-
     local doattackeventhandler = inst.events["doattack"]
     if doattackeventhandler then
         local doattackeventhandler_fn = doattackeventhandler.fn
