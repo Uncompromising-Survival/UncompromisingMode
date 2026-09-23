@@ -31,7 +31,7 @@ env.AddStategraphPostInit("koalefant", function(inst)
         EventHandler("um_counterattack", function(inst, data)
             if inst.components.health and not inst.components.health:IsDead()
                 and not (inst.sg:HasAnyStateTag("attack", "electrocute", "charging") or inst.sg:HasStateTag("busy")
-                and not inst.sg:HasStateTag("hit")) and data.target and data.target:IsValid() and inst:IsNear(data.target, 4) then
+                and not inst.sg:HasStateTag("hit")) and data.target:IsValid() and inst:IsNear(data.target, 4) then
                 if inst.um_counterattack then
                     local counterrate = TUNING.DSTU.KOALEFANT_STOMP_COUNTERATTACK
                     inst.um_counterattack = math.random(counterrate.MIN, counterrate.MAX)
