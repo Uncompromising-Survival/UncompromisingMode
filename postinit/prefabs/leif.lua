@@ -218,6 +218,10 @@ local function ShouldDoConeCheck(ent, inst)
     return not inst.sg:HasStateTag("snare")
 end
 
+local function GetAreaHitRange(combat)
+    return combat:GetHitRange()
+end
+
 local function TreeguardFunctions(inst)
     inst:AddComponent("timer")
 
@@ -231,7 +235,7 @@ local function TreeguardFunctions(inst)
     if combat then 
         combat.onhitotherfn = OnHitOther
         -- Treeguard now has AOE - Axe
-        combat:UMSetAreaDamage(3, AOE_EXCLUDE_TAGS, 120, 1.5, ShouldDoConeCheck)
+        combat:UMSetAreaDamage(GetAreaHitRange, AOE_EXCLUDE_TAGS, 120, 1.5, ShouldDoConeCheck)
         --combat:SetAreaDamage(3, TUNING.DEERCLOPS_AOE_SCALE, isnottree) -- you can edit these values to your liking -Axe
     end
 

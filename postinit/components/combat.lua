@@ -114,7 +114,7 @@ env.AddComponentPostInit("combat", function(self)
         if self.um_areahit and not self.um_ignoreareahit then
             self.ignorehitrange = true
             self.um_ignoreareahit = true
-            local range = self.um_areahitrange
+            local range = FunctionOrValue(self.um_areahitrange, self)
             local x, y, z = self.inst.Transform:GetWorldPosition()
             for i, ent in ipairs(TheSim:FindEntities(x, y, z, range + .5, AREAATTACK_MUST_TAGS, self.um_areahitexcludetags and JoinArrays(self.um_areahitexcludetags, AREA_EXCLUDE_TAGS) or AREA_EXCLUDE_TAGS)) do
                 if ent ~= self.inst and self:CanTarget(ent)
