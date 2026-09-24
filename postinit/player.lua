@@ -164,6 +164,7 @@ local function OnSetOwner(inst)
         inst.components.playeractionpicker.pointspecialactionsfn = GetPointSpecialActions
     end
 end
+
 local SCRAPBOOK_CANT_TAGS = { "FX", "INLIMBO" }
 local function UpdateMineralLog(inst)
     --assert(inst = ThePlayer)
@@ -177,7 +178,6 @@ local function UpdateMineralLog(inst)
         end
     end
 end
-
 
 local function DespawnIceShield(inst)
     if inst:HasTag("ice_shielded") and inst.ice_shield ~= nil then
