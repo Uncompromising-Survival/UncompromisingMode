@@ -6,7 +6,8 @@ env.AddStategraphPostInit("beefalo", function(inst)
     if doattackeventhandler then
         local doattackeventhandler_fn = doattackeventhandler.fn
         doattackeventhandler.fn = function(inst, data, ...)
-            if not (inst.components.health and inst.components.health:IsDead()) and (inst.sg:HasStateTag("charging") or inst:HasTag("chargespeed")) then
+            if not (inst.components.health:IsDead() or inst.sg:HasStateTag("electrocute")) and inst.sg.mem.um_chargeattack then
+                inst.sg.mem.um_chargeattack = nil
                 inst.sg:GoToState("chargeattack", data.target)
             else
                 doattackeventhandler_fn(inst, data, ...)
@@ -14,16 +15,20 @@ env.AddStategraphPostInit("beefalo", function(inst)
         end
     end
 
+    local attackedeventhandler = inst.events["attacked"]
+    if attackedeventhandler then
+        local attackedeventhandler_fn = attackedeventhandler.fn
+        attackedeventhandler.fn = function(inst, data, ...)
+            if inst.components.health and not inst.components.health:IsDead() and inst.sg:HasStateTag("charging") then
+                CommonHandlers.TryElectrocuteOnAttacked(inst, data)
+                return
+            end
+            return attackedeventhandler_fn(inst, data, ...)
+        end
+    end
+
     local attackstate = inst.states["attack"]
     if attackstate then
-        local attackstate_onenter = attackstate.onenter
-        attackstate.onenter = function(inst, target, ...)
-            if inst:HasTag("chargespeed") then
-                inst.components.locomotor.runspeed = TUNING.BEEFALO_RUN_SPEED.DEFAULT
-                inst:RemoveTag("chargespeed")
-            end
-            return attackstate_onenter(inst, target, ...)
-        end
         local attackstate_animqueueover_fn = attackstate.events["animqueueover"].fn
         attackstate.events["animqueueover"].fn = function(inst, ...)
             if inst.components.combat.target and inst.components.combat.target:IsValid() then
@@ -42,7 +47,7 @@ env.AddStategraphPostInit("beefalo", function(inst)
     {
         State{
             name = "charge_start",
-            tags = {"charging", "busy", "attack", "canrotate"},
+            tags = {"charging", "busy", "canrotate"},
 
             onenter = function(inst, target)
                 inst.sg.statemem.target = target ~= nil and target:IsValid() and target or inst.components.combat and inst.components.combat.target
@@ -64,10 +69,7 @@ env.AddStategraphPostInit("beefalo", function(inst)
                 if inst.components.rideable and inst.components.rideable:GetRider() then
                     inst:ApplyBuildOverrides(inst.components.rideable:GetRider().AnimState)
                 end
-                inst.sg:GoToState("charge")
-                if inst.components.combat then -- Somehow combat was removed in a prior bug report.
-                    inst.components.combat:ResetCooldown()
-                end
+                inst.sg:GoToState("charge", inst.sg.statemem.target)
             end,
 
             onexit = function(inst)
@@ -76,45 +78,46 @@ env.AddStategraphPostInit("beefalo", function(inst)
         },
         State{
             name = "charge",
-            tags = {"moving", "running", "charging", "busy", "attack"},
+            tags = {"charging", "busy"},
 
-            onenter = function(inst)
+            onenter = function(inst, target)
+                inst.sg.statemem.target = target ~= nil and target:IsValid() and target or inst.components.combat and inst.components.combat.target
                 inst.AnimState:SetDeltaTimeMultiplier(1.2)
-                inst.components.combat:ResetCooldown()
                 if not inst.AnimState:IsCurrentAnimation("run_loop") then
                     inst.AnimState:PlayAnimation("run_loop", true)
                 end
-                if not inst:HasTag("chargespeed") then inst:AddTag("chargespeed") end
-                --inst.sg:SetTimeout(inst.AnimState:GetCurrentAnimationLength())
             end,
 
-            onupdate = function(inst)
+            onupdate = function(inst, dt)
                 inst.components.locomotor.runspeed = TUNING.BEEFALO_RUN_SPEED.DEFAULT * 2.29 -- Should be equal to Rook.
                 inst.components.locomotor:RunForward()
+                if inst:IsAsleep() then
+                    inst.sg:GoToState("idle")
+                    return
+                elseif dt > 0 then
+                    local target = inst.sg.statemem.target
+                    if target and target:IsValid() and inst:GetDistanceSqToInst(target) <= inst.components.combat:CalcAttackRangeSq(target) then
+                        inst.components.combat:ResetCooldown()
+                        inst.sg:RemoveStateTag("busy")
+                        if inst.components.combat:TryAttack(target) then inst.sg.mem.um_chargeattack = true end
+                        inst.sg:GoToState("idle")
+                    end
+                end
             end,
 
             timeline =
             {
-                --TimeEvent(5 * FRAMES,  function(inst) inst.SoundEmitter:PlaySound(inst.effortsound) end),
                 TimeEvent(5 * FRAMES, function(inst) SpawnPrefab("ground_chunks_breaking").Transform:SetPosition(inst.Transform:GetWorldPosition()) end),
                 TimeEvent(9 * FRAMES, function(inst) SpawnPrefab("ground_chunks_breaking").Transform:SetPosition(inst.Transform:GetWorldPosition()) end),
                 TimeEvent(10 * FRAMES, PlayFootstep),
                 TimeEvent(14 * FRAMES, function(inst) SpawnPrefab("ground_chunks_breaking").Transform:SetPosition(inst.Transform:GetWorldPosition()) end),
-                TimeEvent(15 * FRAMES, function(inst)
-                    if inst:HasTag("chargespeed") then inst:RemoveTag("chargespeed") end
-                    inst.sg:GoToState("idle")
-                end),
+                TimeEvent(15 * FRAMES, function(inst) inst.sg:GoToState("idle") end),
             },
 
             onexit = function(inst)
                 inst.AnimState:SetDeltaTimeMultiplier(1)
                 inst.components.locomotor.runspeed = TUNING.BEEFALO_RUN_SPEED.DEFAULT
             end,
-
-            --[[events =
-            {   
-                EventHandler("animover", function(inst) inst.sg:GoToState("charge") end),
-            },]]
         },
         State{
             name = "chargeattack",
@@ -122,15 +125,10 @@ env.AddStategraphPostInit("beefalo", function(inst)
 
             onenter = function(inst, target)
                 inst.sg.statemem.target = target
-                --inst.SoundEmitter:KillSound("charge")
                 inst.SoundEmitter:PlaySound(inst.sounds.angry)
                 inst.components.combat:StartAttack()
                 inst.components.locomotor:StopMoving()
                 inst.AnimState:PlayAnimation("atk")
-                if inst:HasTag("chargespeed") then
-                    inst.components.locomotor.runspeed = TUNING.BEEFALO_RUN_SPEED.DEFAULT
-                    inst:RemoveTag("chargespeed")
-                end
             end,
 
             timeline =

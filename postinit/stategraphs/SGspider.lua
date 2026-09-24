@@ -22,9 +22,9 @@ env.AddStategraphPostInit("spider", function(inst)
             projectile.shadow.scaleFactor = scaleFactor
             projectile.shadow.Transform:SetScale(scaleFactor, scaleFactor, scaleFactor)
             projectile.shadow = projectile.shadow:DoPeriodicTask(FRAMES, ShadowFade, nil, 5)  
-			if inst.components.follower and inst.components.follower.leader then
-				projectile.leader = inst.components.follower.leader
-			end
+            if inst.components.follower and inst.components.follower.leader then
+                projectile.leader = inst.components.follower.leader
+            end
             local a, b, c = target.Transform:GetWorldPosition()
             local targetpos = target:GetPosition()
             if not angle then
@@ -55,40 +55,21 @@ env.AddStategraphPostInit("spider", function(inst)
         return "dontstarve/creatures/" .. creature .. "/" .. event
     end
 
-    local _OldAttackEvent = inst.events["doattack"] and inst.events["doattack"].fn
-    if _OldAttackEvent then
-        inst.events["doattack"].fn = function(inst, data, ...)
-            if not (inst.sg:HasStateTag("busy") or inst.components.health:IsDead()) and data.target and data.target:IsValid() then
-                if inst.sg.mem.wantstoevade then
-                    inst.sg.mem.wantstoevade = nil
-                    inst.sg:GoToState("evade_loop")
-                    return
-                end
-                if inst:HasTag("spider_regular") then
-                    inst.sg:GoToState(TUNING.DSTU.REGSPIDERJUMP and not inst:IsNear(data.target, TUNING.SPIDER_WARRIOR_MELEE_RANGE)
-                        and "warrior_attack" or "attack", data.target) -- Do leap attack
-                    return
-                end
-                if inst:HasTag("trapdoorspider") then
-                    inst.sg:GoToState(not inst.web_cd and inst.hooded and "spit_web" -- *Hooded* Trapdoor spider web attack
-                        or data.target:IsValid() and not inst:IsNear(data.target, TUNING.SPIDER_WARRIOR_MELEE_RANGE) and "trapdoor_attack" or "attack", data.target)
-                    return
-                end
+    local events =
+    {
+        EventHandler("um_counterattack", function(inst, data)
+            if not (inst.sg:HasAnyStateTag("busy") or inst.components.health:IsDead())
+                and data.target:IsValid() and inst:GetDistanceSqToInst(data.target) <= inst.components.combat:CalcAttackRangeSq(data.target) then
+                inst.sg:GoToState("evade_loop", data.target)
             end
-            return _OldAttackEvent(inst, data, ...)
-        end
-    end
+        end)
+    }
 
     local doattackeventhandler = inst.events["doattack"]
     if doattackeventhandler then
         local doattackeventhandler_fn = doattackeventhandler.fn
         doattackeventhandler.fn = function(inst, data, ...)
             if not (inst.sg:HasStateTag("busy") or inst.components.health:IsDead()) then
-                if inst.sg.mem.wantstoevade then
-                    inst.sg.mem.wantstoevade = nil
-                    inst.sg:GoToState("evade_loop")
-                    return
-                end
                 if inst:HasTag("spider_regular") then
                     inst.sg:GoToState(TUNING.DSTU.REGSPIDERJUMP and data.target:IsValid() and not inst:IsNear(data.target, TUNING.SPIDER_WARRIOR_MELEE_RANGE)
                         and "warrior_attack" or "attack", data.target) -- Do leap attack
@@ -108,15 +89,14 @@ env.AddStategraphPostInit("spider", function(inst)
     if attackedeventhandler then
         local attackedeventhandler_fn = attackedeventhandler.fn
         attackedeventhandler.fn = function(inst, data, ...)
-            if not (inst.components.health and inst.components.health:IsDead()) then
+            if inst.components.health and not inst.components.health:IsDead() then
                 if CommonHandlers.TryElectrocuteOnAttacked(inst, data) then
                     return
                 elseif TUNING.DSTU.SPIDERWARRIORCOUNTER and inst:HasTag("spider_warrior") and not inst:HasTag("trapdoorspider")
                     and not (inst.sg:HasAnyStateTag("caninterrupt", "electrocute") or inst:HasTag("forcestunned")) then
-                    if not inst.sg:HasAnyStateTag("attack", "evade") and inst.components.combat.target then -- don't interrupt attack or exit shield
-                        inst.sg.mem.wantstoevade = true
-                        inst.components.combat:ResetCooldown()
-                        inst.sg:GoToState("idle")
+                    if not inst.sg:HasAnyStateTag("attack", "evade") then
+                        if not inst.sg:HasStateTag("moving") then inst.sg:GoToState("hit") end
+                        inst:PushEvent("um_counterattack", {target = data.attacker})
                     end
                     return
                 end
@@ -285,19 +265,18 @@ env.AddStategraphPostInit("spider", function(inst)
             name = "evade_loop",
             tags = {"busy", "evade", "no_stun"},
 
-            onenter = function(inst)
-                if inst ~= nil then
-                    inst.sg:SetTimeout(0.1)
-                    if inst.components.combat.target and inst.components.combat.target:IsValid() then
-                        inst:ForceFacePoint(inst.components.combat.target:GetPosition())
-                    else
-                        inst.sg:GoToState("hit")
-                    end
-                    inst.components.locomotor:Stop()
-                    inst.AnimState:PlayAnimation("evade", true)
-                    inst.Physics:SetMotorVelOverride(-30, 0, 0)
-                    inst.components.locomotor:EnableGroundSpeedMultiplier(false)
+            onenter = function(inst, target)
+                inst.sg.statemem.target = target
+                if inst.sg.statemem.target and inst.sg.statemem.target:IsValid() then
+                    inst:ForceFacePoint(inst.sg.statemem.target:GetPosition())
+                else
+                    inst.sg:GoToState("hit")
                 end
+                inst.components.locomotor:Stop()
+                inst.components.locomotor:EnableGroundSpeedMultiplier(false)
+                inst.AnimState:PlayAnimation("evade", true)
+                inst.Physics:SetMotorVelOverride(-30, 0, 0)
+                inst.sg:SetTimeout(.1)
             end,
 
             timeline =
@@ -307,8 +286,13 @@ env.AddStategraphPostInit("spider", function(inst)
             },
 
             ontimeout = function(inst)
-                if inst.components.combat.target and inst.components.combat.target:IsValid() then
+                local target = inst.sg.statemem.target
+                inst.sg:RemoveStateTag("busy")
+                if target and target:IsValid() then
                     inst.components.combat:ResetCooldown()
+                    inst.components.combat.ignorehitrange = true
+                    inst.components.combat:TryAttack(target)
+                    inst.components.combat.ignorehitrange = nil
                 end
                 inst.sg:GoToState("idle")
             end,
@@ -372,10 +356,10 @@ env.AddStategraphPostInit("spider", function(inst)
     }
 
 
-    --[[for k, v in pairs(events) do
+    for k, v in pairs(events) do
         assert(v:is_a(EventHandler), "Non-event added in mod events table!")
         inst.events[v.name] = v
-    end]]
+    end
 
     for k, v in pairs(states) do
         assert(v:is_a(State), "Non-state added in mod state table!")
