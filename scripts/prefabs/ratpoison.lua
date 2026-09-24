@@ -10,7 +10,7 @@ local assets =
 	
 }
 
-local itemprefabs=
+local itemprefabs =
 {
     "ratpoison",
 }
@@ -48,17 +48,18 @@ local function OnLoad(inst,data)
     end
 end
 
--- local function OnPicked(inst)
-    -- inst:Remove()
--- end
+--[[local function OnPicked(inst)
+    inst:Remove()
+end]]
     
 local function fn()
     local inst = CreateEntity()
+
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
-    
+
     MakeInventoryPhysics(inst)
 
     inst.AnimState:SetLayer(LAYER_BACKGROUND)
@@ -66,9 +67,7 @@ local function fn()
     inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
     inst.AnimState:SetBank("um_goo")
     inst.AnimState:SetBuild("um_goo")
-
     inst.AnimState:PlayAnimation("true_idle")
-    inst.entity:SetPristine()
 
     inst:AddTag("NOBLOCK")
     inst:AddTag("NORATCHECK")
@@ -77,18 +76,22 @@ local function fn()
     inst:AddTag("um_washable_goo")
     inst:AddTag("noflingowash")
 
+    inst.entity:SetPristine()
+
     if not TheWorld.ismastersim then return inst end
-    
+
+    inst:AddComponent("inspectable")
+
     local edible = inst:AddComponent("edible")
     edible.foodtype = FOODTYPE.VEGGIE --Horrible is generally unedible
     edible.healthvalue = -TUNING.DSTU.RATPOISON_EAT_DAMAGE
     edible:SetOnEatenFn(oneaten)
     
     inst:AddComponent("bait")
-    inst:AddComponent("named")
-    inst.components.named:SetName("Poisonous Jam")
-    inst:AddComponent("inspectable")
-    
+
+    local named = inst:AddComponent("named")
+    named:SetName("Poisonous Jam")
+
     local inventoryitem = inst:AddComponent("inventoryitem")
     inventoryitem.nobounce = true
     inventoryitem.canbepickedup = false
@@ -96,7 +99,7 @@ local function fn()
     inventoryitem.canonlygoinpocket = true
     --[[inventoryitem:SetOnPutInInventoryFn(OnPicked)
     inventoryitem:SetOnPickupFn(OnPicked)]]
-    
+
     local perishable = inst:AddComponent("perishable")
     perishable:SetPerishTime(TUNING.PERISH_SUPERSLOW)
 
@@ -119,34 +122,35 @@ end
 
 local function itemfn()
     local inst = CreateEntity()
+
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddNetwork()
-    
+
     MakeInventoryPhysics(inst)
 
     inst.AnimState:SetBank("um_ratpoison")
     inst.AnimState:SetBuild("um_ratpoison")
     inst.AnimState:PlayAnimation("idle")
-    
+
     inst:AddTag("donotautopick")
 
     inst.entity:SetPristine()
-    
+
     if not TheWorld.ismastersim then return inst end
-    
+
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
 
-    inst:AddComponent("stackable")
-    inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
-    
-    inst:AddComponent("deployable")
-    inst.components.deployable.ondeploy = OnDeploy
+    local stackable = inst:AddComponent("stackable")
+    stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
+
+    local deployable = inst:AddComponent("deployable")
+    deployable.ondeploy = OnDeploy
 
     MakeHauntableLaunch(inst)
-    
+
     return inst
 end
 

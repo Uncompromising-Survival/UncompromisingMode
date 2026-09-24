@@ -206,7 +206,7 @@ function GemEnchantable:OnSave()
     local _enchants = {}
     for k, v in pairs(self.enchants) do
         --do not save hidden enchants (chaotic re-applies them on apply)
-        if v ~= nil and not table.contains(self.hidden_enchants, k) then
+        if v and not table.contains(self.hidden_enchants, k) then
             _enchants[k] = v
         end
     end
@@ -221,21 +221,21 @@ end
 
 function GemEnchantable:OnLoad(data)
     self.loading = true
-    local _enchants = data.enchants
 
-    self.inst.persistent_gemology_data = data.gem_data
-
-    for enchant, tier in pairs(_enchants) do
+    for enchant, tier in pairs(data.enchants) do
+        if data.gem_data then
+            for _enchant, gemdata in pairs(data.gem_data[enchant]) do
+                self.inst.persistent_gemology_data[enchant][_enchant] = gemdata
+            end
+        end
         self:AddEnchantment(enchant, tier, nil, true) --running add enchant to re-apply onapply effects.
     end
 
-    self.enchant_durabilty = data.durability
+    for enchant, durability in pairs(data.durability) do
+        self.enchant_durabilty[enchant] = durability
+    end
 
-    self.inst:DoTaskInTime(0, function(inst)
-        self.enchant_durabilty = data.durability
-        self.dirty = true
-        self.loading = false
-    end)
+    self.loading = false
 
     self.dirty = true
 end
@@ -247,10 +247,10 @@ function GemEnchantable:RemoveAllEnchantments()
 end
 
 function GemEnchantable:OnRemoveFromEntity()
-    if self.gem_update_task ~= nil then
+    if self.gem_update_task then
         self.gem_update_task:Cancel()
+        self.gem_update_task = nil
     end
-    self.gem_update_task = nil
 end
 
 function GemEnchantable:HasSlots()
