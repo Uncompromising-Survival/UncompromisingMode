@@ -397,9 +397,9 @@ local function ShockChain(inst, attacker, target, ShockAgain, tier, original_ins
 
                     SpawnPrefab("electricchargedfx").Transform:SetPosition(_inst.Transform:GetWorldPosition())
 
-                    _inst:DoTaskInTime(TUNING.DSTU.YELLOWGEM2_SHOCK_COOLDOWN, function(__inst)
-                        if __inst:IsValid() then
-                            __inst:RemoveTag("arcgrounded")
+                    _inst:DoTaskInTime(TUNING.DSTU.YELLOWGEM2_SHOCK_COOLDOWN, function()
+                        if _inst:IsValid() then
+                            _inst:RemoveTag("arcgrounded")
                         end
                     end)
                     _inst.um_shockdamage_table = nil
