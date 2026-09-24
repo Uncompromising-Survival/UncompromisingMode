@@ -939,7 +939,7 @@ AddUMGemDef("bluegem2", {
             -- inst.components.finiteuses.Use = function() end
             item:AddTag("frozen")
             if fillable then -- Good ending for watering cans, I could have just made them remove the fillable component
-                item.persistent_gemology_data.um_gemologybluegem2.old_onfill = item.components.fillable.overrideonfillfn
+                item.volatile_gemology_data.um_gemologybluegem2.old_onfill = item.components.fillable.overrideonfillfn
                 item.components.fillable.overrideonfillfn = PerishFill
             end
         end,
@@ -948,7 +948,7 @@ AddUMGemDef("bluegem2", {
             local old_finite = item.volatile_gemology_data.um_gemologybluegem2.old_finiteuses
             local old_fueled = item.volatile_gemology_data.um_gemologybluegem2.old_fueled
             local old_perishtime = item.volatile_gemology_data.um_gemologybluegem2.old_perishtime
-            local old_onfill = item.persistent_gemology_data.um_gemologybluegem2.old_onfill
+            local old_onfill = item.volatile_gemology_data.um_gemologybluegem2.old_onfill
 
             if old_finite then
                 item.components.finiteuses = old_finite

@@ -1,7 +1,6 @@
 local function OnTick(inst, target)
-    if not (target.components.health and target.components.health:IsDead()) and
-        not target:HasTag("playerghost") then
-
+    if target:IsValid() and target.components.health
+        and not target.components.health:IsDead() and not target:HasTag("playerghost") then
         local damage = target:HasTag("raidrat") and TUNING.DSTU.RATPOISON_TICK_DAMAGE * TUNING.DSTU.RATPOISON_RATMULT or TUNING.DSTU.RATPOISON_TICK_DAMAGE
         inst.attackcount = (inst.attackcount or 1) + 1
         if target.components.combat and inst.attackcount >= 5 then
