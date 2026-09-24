@@ -164,6 +164,7 @@ local function OnSetOwner(inst)
         inst.components.playeractionpicker.pointspecialactionsfn = GetPointSpecialActions
     end
 end
+
 local SCRAPBOOK_CANT_TAGS = { "FX", "INLIMBO" }
 local function UpdateMineralLog(inst)
     --assert(inst = ThePlayer)
@@ -177,7 +178,6 @@ local function UpdateMineralLog(inst)
         end
     end
 end
-
 
 local function DespawnIceShield(inst)
     if inst:HasTag("ice_shielded") and inst.ice_shield ~= nil then
@@ -227,16 +227,9 @@ env.AddPlayerPostInit(function(inst)
     ---------------------------------------------------------------------------------------
 
     local _IsInAnyStormOrCloud = inst.IsInAnyStormOrCloud
-
-    local function IsInAnyStormOrCloud(inst)
-        if inst.thicketcheck then
-            return true
-        else
-            return _IsInAnyStormOrCloud(inst)
-        end
+    inst.IsInAnyStormOrCloud = function(_inst, ...)
+        return _inst.thicketcheck or _IsInAnyStormOrCloud(_inst, ...)
     end
-
-    inst.IsInAnyStormOrCloud = IsInAnyStormOrCloud
 
     inst.Advertisee = net_entity(inst.GUID, "SetAdvertisee.plyr", "SetAdvertiseedirty")
 
@@ -250,17 +243,16 @@ env.AddPlayerPostInit(function(inst)
 
     inst.um_canseeinstorm = net_bool(inst.GUID, "UMCanSeeInstorm.enabled", "UMCanSeeInstorm.dirty")
 
-    inst:ListenForEvent("UMCanSeeInstorm.dirty", function(inst)
-        local enabled = inst.um_canseeinstorm:value()
+    inst:ListenForEvent("UMCanSeeInstorm.dirty", function(_inst)
+        local enabled = _inst.um_canseeinstorm:value()
 
-        if inst.components.playervision ~= nil then
-            inst.components.playervision:ForceGoggleVision(enabled)
+        if _inst.components.playervision then
+            _inst.components.playervision:ForceGoggleVision(enabled)
         end
     end)
 
-
     if not TheWorld.ismastersim then
-        inst:DoPeriodicTask(0.5, function(inst)
+        inst:DoPeriodicTask(0.5, function()
             local tornadoposition
             if TheInput:GetWorldEntityUnderMouse() then
                 tornadoposition = TheInput:GetWorldEntityUnderMouse():GetPosition()
@@ -277,8 +269,8 @@ env.AddPlayerPostInit(function(inst)
     inst.components.locomotor:SetFasterOnGroundTile(WORLD_TILES.SCALE, true)
 
     local _IsNearDanger = inst.IsNearDanger
-    inst.IsNearDanger = function(inst, hounded_ok, ...)
-        return _IsNearDanger(inst, hounded_ok, ...) or inst:HasTag("under_the_weather")
+    inst.IsNearDanger = function(_inst, hounded_ok, ...)
+        return _inst:HasTag("under_the_weather") or _IsNearDanger(_inst, hounded_ok, ...)
     end
 
     if TUNING.DSTU.ADVERTISEMENTS then
@@ -306,8 +298,6 @@ env.AddPlayerPostInit(function(inst)
 
                 inst.Transform:SetScale(hunger_percent or 1, health_percent or 1, percent_median or 1)
 
-
-
                 if sanity_percent <= 0.2 then
                     inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
                 else
@@ -320,58 +310,48 @@ env.AddPlayerPostInit(function(inst)
     inst:AddTag("SLUDGE_CORK_upgradeuser")
 
     -- instead of just winky, why the hell not make it *all* followers?!
-    local _OnDespawn = inst.OnDespawn
-    inst.um_all_followers = {}
-    -- adding um_ prefix just in case...
+    inst.um_all_followers = {} -- adding um_ prefix just in case...
 
-    inst.OnDespawn = function(inst, migrationdata, ...)
-        DespawnFollowers(inst)
-        DespawnIceShield(inst)
-        return _OnDespawn(inst, migrationdata, ...)
+    local _OnDespawn = inst.OnDespawn
+    inst.OnDespawn = function(_inst, migrationdata, ...)
+        DespawnFollowers(_inst)
+        DespawnIceShield(_inst)
+        return _OnDespawn(_inst, migrationdata, ...)
     end
 
     local _OnSave = inst.OnSave
-    inst.OnSave = function(inst, data, ...)
-        data.um_all_followers = inst.um_all_followers
-        data.ice_shield_saverecord = inst.ice_shield_saverecord
-        data.ice_shield_tier = inst.ice_shield_tier
-
-        if _OnSave then
-            return _OnSave(inst, data, ...)
-        end
+    inst.OnSave = function(_inst, data, ...)
+        data.um_all_followers = _inst.um_all_followers
+        data.ice_shield_saverecord = _inst.ice_shield_saverecord
+        data.ice_shield_tier = _inst.ice_shield_tier
+        if _OnSave then return _OnSave(_inst, data, ...) end
     end
 
     local _OnLoad = inst.OnLoad
-    inst.OnLoad = function(inst, data, ...)
+    inst.OnLoad = function(_inst, data, ...)
         if data then
             if data.um_all_followers then
                 for k, v in pairs(data.um_all_followers) do
-                    inst:DoTaskInTime(0.2 * math.random(), function(inst)
+                    _inst:DoTaskInTime(0.2 * math.random(), function(_inst)
                         local follower = SpawnSaveRecord(v)
                         inst.components.leader:AddFollower(follower)
                         follower:DoTaskInTime(0, function(follower)
-                            if inst:IsValid() and not follower:IsNear(inst, 8) then
-                                follower.Transform:SetPosition(
-                                    inst.Transform:GetWorldPosition())
+                            if _inst:IsValid() and not follower:IsNear(_inst, 8) then
+                                follower.Transform:SetPosition(_inst.Transform:GetWorldPosition())
                                 follower.sg:GoToState("idle")
                             end
                         end)
                         local fx = SpawnPrefab("spawn_fx_small")
-                        fx.Transform:SetPosition(
-                            follower.Transform:GetWorldPosition())
+                        fx.Transform:SetPosition(follower.Transform:GetWorldPosition())
                     end)
                 end
             end
-
             if data.ice_shield_saverecord and data.ice_shield_tier then
                 local shield = SpawnSaveRecord(data.ice_shield_saverecord)
-                shield:Init(inst, "swap_body", data.ice_shield_tier)
+                shield:Init(_inst, "swap_body", data.ice_shield_tier)
             end
         end
-
-        if _OnLoad then
-            return _OnLoad(inst, data, ...)
-        end
+        if _OnLoad then return _OnLoad(_inst, data, ...) end
     end
 
     if TUNING.DSTU.MAXTEMPDAMAGE or TUNING.DSTU.MAXHUNGERDAMAGE then
