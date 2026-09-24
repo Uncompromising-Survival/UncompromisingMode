@@ -243,16 +243,16 @@ env.AddPlayerPostInit(function(inst)
 
     inst.um_canseeinstorm = net_bool(inst.GUID, "UMCanSeeInstorm.enabled", "UMCanSeeInstorm.dirty")
 
-    inst:ListenForEvent("UMCanSeeInstorm.dirty", function(inst)
-        local enabled = inst.um_canseeinstorm:value()
+    inst:ListenForEvent("UMCanSeeInstorm.dirty", function(_inst)
+        local enabled = _inst.um_canseeinstorm:value()
 
-        if inst.components.playervision then
-            inst.components.playervision:ForceGoggleVision(enabled)
+        if _inst.components.playervision then
+            _inst.components.playervision:ForceGoggleVision(enabled)
         end
     end)
 
     if not TheWorld.ismastersim then
-        inst:DoPeriodicTask(0.5, function(inst)
+        inst:DoPeriodicTask(0.5, function()
             local tornadoposition
             if TheInput:GetWorldEntityUnderMouse() then
                 tornadoposition = TheInput:GetWorldEntityUnderMouse():GetPosition()
