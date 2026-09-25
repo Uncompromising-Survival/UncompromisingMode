@@ -713,7 +713,7 @@ local um_preparedfoods =
         oneat_desc = STRINGS.UI.COOKBOOK.UM_RIMEWEED_TEQUILA,
         oneatenfn = function(inst, eater)
             local iceShield = SpawnPrefab("um_ice_shield")
-            iceShield:Init(eater, "swap_body", .25)
+            iceShield:Init(eater, "swap_body", .33)
             eater:AddDebuff("um_rimeweed_tequila_buff", "um_rimeweed_tequila_buff")
         end,
         warly_only = true,
