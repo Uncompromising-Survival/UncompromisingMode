@@ -81,13 +81,13 @@ env.AddPrefabPostInit("cave", function(inst)
                             end
 
                             local valid = true
+                            local point = valid_tiles[math.random(#valid_tiles)]
+                            local x, z = point.x, point.z
                             local pt = FindNearbyLand(Vector3(x, 0, z), 20)
 
                             if not pt then
                                 valid = false
                             else
-                                local point = valid_tiles[math.random(#valid_tiles)]
-                                local x, z = point.x, point.z
                                 local nearby_ents = TheSim:FindEntities(x, 0, z, 1, nil, { "FX", "INLIMBO", "DECOR", "NOCLICK", "NOBLOCK" })
                                 local S = TheWorld.Map:IsLandTileAtPoint(pt.x + 2, 0, pt.z)
                                 local N = TheWorld.Map:IsLandTileAtPoint(pt.x - 2, 0, pt.z)
