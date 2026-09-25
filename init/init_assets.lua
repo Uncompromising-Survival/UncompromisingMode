@@ -451,6 +451,7 @@ local inventoryitems =
     "um_gemology_geode_ruins",
     "um_gemology_geode_sink",
     "um_gemology_geode_vent",
+    "um_gemology_geode_magma",
 
     "um_flamethrower",
     "um_firecream",
@@ -559,6 +560,8 @@ local minimap_icons = {
     "um_astral_projector_target",
     "um_hotspring",
     "um_feather_totem",
+    "um_magmastone",
+    "um_magmastone_outcrop"
 }
 
 for _, item in ipairs(inventoryitems) do
@@ -577,6 +580,7 @@ local scrapbook_icons = {
     "um_gemology_geode_sink",
     "um_gemology_geode_slime",
     "um_gemology_geode_vent",
+    "um_gemology_geode_magma",
     "um_gemologybluegem1",
     "um_gemologybluegem2",
     "um_gemologyredgem1",
@@ -608,7 +612,9 @@ local scrapbook_icons = {
     "um_sinkmound_rock_gemless",
     "um_slimestone_rock",
     "um_slimestone_rock_gemless",
-    "icon_curseditem"
+    "icon_curseditem",
+    "um_magmastone",
+    "um_magmastone_outcrop"
 }
 
 for _, item in ipairs(scrapbook_icons) do
@@ -2001,7 +2007,9 @@ Assets = {
 
     Asset("ANIM", "anim/um_bomb_vortex.zip"),
 
-    Asset("ANIM", "anim/ui_krampusbag_2x5.zip")
+    Asset("ANIM", "anim/ui_krampusbag_2x5.zip"),
+
+    Asset("ANIM", "anim/um_magmastone.zip"),
 }
 
 for _, asset in pairs(inventoryitems) do

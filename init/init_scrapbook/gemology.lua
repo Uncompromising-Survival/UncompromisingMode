@@ -27,6 +27,9 @@ SPECIALINFO.UM_ROCKLOBSTER_ROCK = "Rock Lobster eggs. Rock Lobsters lay their eg
 SPECIALINFO.ROCK_FLINTLESS = "Rock Lobsters lay their eggs on this Boulder at the begining of Autumn"
 SPECIALINFO.UM_SINKMOUND_ROCK = "Houses a variety of creatures.\nRegrows after 10 days once mined."
 SPECIALINFO.UM_SINKMOUND_ROCK_GEMLESS = "Houses a variety of creatures.\nRegrows after 10 days once mined."
+SPECIALINFO.UM_MAGMASTONE = "Can crystalize to create Magma Geodes if in a VERY warm location, given enough time."
+SPECIALINFO.UM_MAGMASTONE_OUTCROP = "Erupts after earthquakes, eventually solidifying into a "..STRINGS.NAMES.UM_MAGMASTONE.."."
+
 SPECIALINFO.GEMOLOGY_NEEDS_SCAN = "Analyze this gem with a Gem Magnifier to discover its effects."
 SPECIALINFO.GEMOLOGY_GEM_EFFECTS  = "Gem Effects:"
 --thermite init_changes/stuff in changes.lua
@@ -331,6 +334,26 @@ CreateGemSourceEntry("um_rocklobster_rock", "um_rocklobster_rock", "um_rocklobst
     "um_gemology_geode_lobster",
     "rocky",
     "rock_flintless"
+})
+
+--magmastone
+CreateGemSourceEntry("um_magmastone", "um_magmastone", "um_magmastone", "gemified_full", {
+    "rocks",
+    "flint",
+    "goldnugget",
+    "um_gemology_geode_magma",
+    "nitre",
+    "um_magmastone_outcrop"
+    --"um_fyrite"
+})
+
+CreateGemSourceEntry("um_magmastone_outcrop", "um_magmastone", "um_magmastone", "outcrop_idle", {
+    "rocks",
+    "flint",
+    "goldnugget",
+    "redgem",
+    "nitre",
+    --"um_fyrite"
 })
 
 --glass
