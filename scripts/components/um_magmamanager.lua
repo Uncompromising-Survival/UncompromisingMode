@@ -305,7 +305,7 @@ function MagmaManager:OnUpdate(dt)
                 return
             end
 
-            if i == #self.temp_tiles then
+            if i == #self.temp_tiles and #self.temp_tile > 1 then
                 self.next_batch = 1
                 break
             end
