@@ -70,46 +70,45 @@ env.AddPrefabPostInit("cave", function(inst)
                     inst.magma_outcrops = {}
                 end
 
-                if inst.components.um_magmamanager ~= nil then
-                    if count < 10 then
-                        local valid_tiles = inst.components.um_magmamanager.magma_tiles
-                        local tries = 0
-                        for i = 1, math.random(1, 3) do
-                            tries = tries + 1
-                            if tries > 10 then
-                                break
-                            end
+                local um_magmamanager = inst.components.um_magmamanager
+                local valid_tiles = um_magmamanager and um_magmamanager.magma_tiles
+                if count < 10 and valid_tiles and next(valid_tiles) then
+                    local tries = 0
+                    for i = 1, math.random(1, 3) do
+                        tries = tries + 1
+                        if tries > 10 then
+                            break
+                        end
 
-                            local valid = true
-                            local point = valid_tiles[math.random(#valid_tiles)]
-                            local x, z = point.x, point.z
-                            local pt = FindNearbyLand(Vector3(x, 0, z), 20)
+                        local valid = true
+                        local point = valid_tiles[math.random(#valid_tiles)]
+                        local x, z = point.x, point.z
+                        local pt = FindNearbyLand(Vector3(x, 0, z), 20)
 
-                            if not pt then
+                        if not pt then
+                            valid = false
+                        else
+                            local nearby_ents = TheSim:FindEntities(x, 0, z, 1, nil, { "FX", "INLIMBO", "DECOR", "NOCLICK", "NOBLOCK" })
+                            local S = TheWorld.Map:IsLandTileAtPoint(pt.x + 2, 0, pt.z)
+                            local N = TheWorld.Map:IsLandTileAtPoint(pt.x - 2, 0, pt.z)
+                            local E = TheWorld.Map:IsLandTileAtPoint(pt.x, 0, pt.z + 2)
+                            local W = TheWorld.Map:IsLandTileAtPoint(pt.x, 0, pt.z - 2)
+
+                            if pt.x == 0 and pt.z == 0 or #nearby_ents > 0 or not (S and N and E and W) then
                                 valid = false
-                            else
-                                local nearby_ents = TheSim:FindEntities(x, 0, z, 1, nil, { "FX", "INLIMBO", "DECOR", "NOCLICK", "NOBLOCK" })
-                                local S = TheWorld.Map:IsLandTileAtPoint(pt.x + 2, 0, pt.z)
-                                local N = TheWorld.Map:IsLandTileAtPoint(pt.x - 2, 0, pt.z)
-                                local E = TheWorld.Map:IsLandTileAtPoint(pt.x, 0, pt.z + 2)
-                                local W = TheWorld.Map:IsLandTileAtPoint(pt.x, 0, pt.z - 2)
-
-                                if pt.x == 0 and pt.z == 0 or #nearby_ents > 0 or not (S and N and E and W) then
-                                    valid = false
-                                end
                             end
+                        end
 
-                            if valid then
-                                inst:DoTaskInTime(math.random(5, 10), function(inst)
-                                    local new_outcrop = SpawnPrefab("um_magmastone_outcrop")
-                                    new_outcrop.Transform:SetPosition(pt.x, 0, pt.z)
-                                    new_outcrop.AnimState:PlayAnimation("outcrop_grow")
-                                    new_outcrop.AnimState:PushAnimation("outcrop_idle", true)
-                                end)
-                            else
-                                -- retry.
-                                i = i - 1
-                            end
+                        if valid then
+                            inst:DoTaskInTime(math.random(5, 10), function(inst)
+                                local new_outcrop = SpawnPrefab("um_magmastone_outcrop")
+                                new_outcrop.Transform:SetPosition(pt.x, 0, pt.z)
+                                new_outcrop.AnimState:PlayAnimation("outcrop_grow")
+                                new_outcrop.AnimState:PushAnimation("outcrop_idle", true)
+                            end)
+                        else
+                            -- retry.
+                            i = i - 1
                         end
                     end
                 end
