@@ -1,5 +1,11 @@
 local function UpdateRippleFXTransform(inst)
     local ripples = inst.replica.umripples
+
+    if not ripples then
+        print("PANIC! No replica umripples on prefab ", inst.prefab)
+        return
+    end
+
     local front_fx, back_fx = ripples.front_fx, ripples.back_fx
     local xscale, yscale, zscale = ripples.xscale and ripples.xscale:value() and tonumber(ripples.xscale:value()), ripples.yscale and ripples.yscale:value() and tonumber(ripples.yscale:value()), ripples.zscale and ripples.zscale:value() and tonumber(ripples.zscale:value())
     if front_fx then
