@@ -99,7 +99,7 @@ local function GetAttackedPostInit(self, fn)
             damage = damage * (self.inst:HasTag("EPIC") and 1.25 or 1.5)
         end
         local gem_enchantable_weapon = weapon and weapon.components.gem_enchantable
-        local citrine = gem_enchantable_weapon and gem_enchantable_tool:GetEnchantmentTier("um_gemologyorangegem2")
+        local citrine = gem_enchantable_weapon and gem_enchantable_weapon:GetEnchantmentTier("um_gemologyorangegem2")
         if citrine and citrine > 1 then
             if not self.inst.um_marked_for_hoarding then
                 self.inst.um_marked_for_hoarding = attacker
