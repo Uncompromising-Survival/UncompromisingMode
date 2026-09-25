@@ -3,6 +3,12 @@ local function UpdateRippleFXTransform(inst)
 
     if not ripples then
         print("PANIC! No replica umripples on prefab ", inst.prefab)
+        print("Printing netvars and similar.")
+        for k, v in pairs(inst) do
+            if type(v) == "userdata" and v.value then
+                print(k, v, v:value())
+            end
+        end
         return
     end
 
