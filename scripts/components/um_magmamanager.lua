@@ -294,26 +294,24 @@ end
 function MagmaManager:OnUpdate(dt)
     --skip the loop if its raining directly.
 
-    --we only update up to 100 tiles per frame for performance.
+    --we only update up to 50 tiles per frame for performance.
     --if we have more, we'll update them next frame.
     if not TheWorld.state.israining then
-        for i = self.next_batch or 1, #self.temp_tiles do
+        self.next_batch = self.next_batch or 1
+        for i = self.next_batch, #self.temp_tiles do
             local data = self.temp_tiles[i]
             if data == nil then
                 print("PANIC! Data invalid!")
                 return
             end
 
-            if i == #self.temp_tiles then
+            if i == #self.temp_tiles and #self.temp_tiles > 1 then
                 self.next_batch = 1
+                break
             end
 
             if i % 50 == 0 and i ~= self.next_batch then
-                if i + 50 >= #self.temp_tiles then
-                    self.next_batch = 1
-                else
-                    self.next_batch = i
-                end
+                self.next_batch = i
                 break
             end
 

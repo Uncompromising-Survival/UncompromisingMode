@@ -261,7 +261,7 @@ env.AddStategraphPostInit("wilson", function(inst)
     local timelinefn = abyss_fall.timeline[3].fn
 
     abyss_fall.timeline[3].fn = function(inst, ...)
-        if inst.sg.statemem then
+        if inst.sg.statemem.lavafall then
             if inst.components.drownable ~= nil then
                 inst.components.drownable:Teleport()
             else
