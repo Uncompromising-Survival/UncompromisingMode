@@ -17,7 +17,7 @@ local function fn()
 
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
-	inst.entity:AddLight()
+    inst.entity:AddLight()
     inst.entity:AddNetwork()
 
     MakeInventoryPhysics(inst)
@@ -26,12 +26,12 @@ local function fn()
     inst.AnimState:SetBuild("um_moss")
     inst.AnimState:PlayAnimation("idle")
     MakeInventoryFloatable(inst)
-	MakeDeployableFertilizerPristine(inst)
+    MakeDeployableFertilizerPristine(inst)
 
     inst:AddTag("fertilizerresearchable")
 
     inst.GetFertilizerKey = GetFertilizerKey
-    
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
@@ -55,17 +55,17 @@ local function fn()
 
     inst:AddComponent("inventoryitem")
 
-	inst:AddComponent("tradable")
-	
+    inst:AddComponent("tradable")
+
     inst:AddComponent("fertilizerresearchable")
     inst.components.fertilizerresearchable:SetResearchFn(fertilizerresearchfn)
-	
-	local fertilizer = inst:AddComponent("fertilizer")
-	fertilizer.fertilizervalue = TUNING.SOILAMENDER_FERTILIZE_MED
-	fertilizer.soil_cycles = TUNING.SOILAMENDER_SOILCYCLES_MED
-	fertilizer.withered_cycles = TUNING.SOILAMENDER_WITHEREDCYCLES_MED
-	fertilizer:SetNutrients(FERTILIZER_DEFS.soil_amender_med.nutrients)
-			
+
+    local fertilizer = inst:AddComponent("fertilizer")
+    fertilizer.fertilizervalue = TUNING.SOILAMENDER_FERTILIZE_MED
+    fertilizer.soil_cycles = TUNING.SOILAMENDER_SOILCYCLES_MED
+    fertilizer.withered_cycles = TUNING.SOILAMENDER_WITHEREDCYCLES_MED
+    fertilizer:SetNutrients(FERTILIZER_DEFS.soil_amender_med.nutrients)
+
     MakeSmallBurnable(inst, TUNING.SMALL_BURNTIME)
     MakeSmallPropagator(inst)
 

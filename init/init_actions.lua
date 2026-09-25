@@ -215,7 +215,7 @@ local _combinestackfn = GLOBAL.ACTIONS.COMBINESTACK.fn
 GLOBAL.ACTIONS.COMBINESTACK.fn = function(act, ...)
     --local target = act.target
     local invobj = act.invobject
-    act.doer:PushEvent("um_combinestack", {item = invobj})
+    act.doer:PushEvent("um_combinestack", { item = invobj })
     return _combinestackfn(act, ...)
 end
 
@@ -245,8 +245,8 @@ local USESPELLBOOK_strfn = GLOBAL.ACTIONS.USESPELLBOOK.strfn
 GLOBAL.ACTIONS.USESPELLBOOK.strfn = function(act, ...)
     local invobject = act.invobject
     return invobject and (invobject.prefab == "um_detonator" and "UM_DETONATE"
-        or invobject:HasTag("telestaff") and "TELESTAFF"
-        or invobject:HasTag("um_antlionstaff") and "UM_ANTLIONSTAFF")
+            or invobject:HasTag("telestaff") and "TELESTAFF"
+            or invobject:HasTag("um_antlionstaff") and "UM_ANTLIONSTAFF")
         or USESPELLBOOK_strfn(act, ...)
 end
 
@@ -683,8 +683,8 @@ AddSimPostInit(function()
                 EQUIPPED["spellcaster"] = function(inst, doer, target, actions, right, ...)
                     if inst:HasTag("um_gun") then
                         if right and (inst:HasTag("castontargets") or (target:HasTag("locomotor") and (inst:HasTag("castonlocomotors")
-                            or (inst:HasTag("castonlocomotorspvp") and (target == doer or GLOBAL.TheNet:GetPVPEnabled() or not (target:HasTag("player") and doer:HasTag("player"))))))
-                            or (inst:HasTag("castoncombat") and doer.replica.combat and doer.replica.combat:CanTarget(target))) then
+                                    or (inst:HasTag("castonlocomotorspvp") and (target == doer or GLOBAL.TheNet:GetPVPEnabled() or not (target:HasTag("player") and doer:HasTag("player"))))))
+                                or (inst:HasTag("castoncombat") and doer.replica.combat and doer.replica.combat:CanTarget(target))) then
                             table.insert(actions, GLOBAL.ACTIONS.UM_GUNSHOOTY)
                         end
                         return
@@ -718,13 +718,13 @@ GLOBAL.ACTIONS.ADD_CARD_TO_DECK.instant = true
 GLOBAL.ACTIONS.ADD_CARD_TO_DECK._oldrangecheckfn = GLOBAL.ACTIONS.ADD_CARD_TO_DECK.rangecheckfn -- Storing this here just in case someone wants it.
 GLOBAL.ACTIONS.ADD_CARD_TO_DECK.rangecheckfn = nil
 
-local ENV = env
+local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 local UM_ACTIVATABLE_ITEM = Action({ mount_valid = true, priority = 1, rmb = true })
 UM_ACTIVATABLE_ITEM.id = "UM_ACTIVATABLE_ITEM"
 UM_ACTIVATABLE_ITEM.str = STRINGS.ACTIONS.UM_ACTIVATABLE_ITEM
-ENV.AddAction(UM_ACTIVATABLE_ITEM)
+env.AddAction(UM_ACTIVATABLE_ITEM)
 
 UM_ACTIVATABLE_ITEM.strfn = function(act)
     return act.invobject ~= nil and act.invobject.actiontype ~= nil and act.invobject.actiontype or STRINGS.ACTIONS.UM_ACTIVATABLE_ITEM.GENERIC
@@ -738,7 +738,7 @@ UM_ACTIVATABLE_ITEM.fn = function(act)
     end
 end
 
-ENV.AddComponentAction("INVENTORY", "um_activatable_item", function(inst, doer, actions, right)
+env.AddComponentAction("INVENTORY", "um_activatable_item", function(inst, doer, actions, right)
     if inst ~= doer then
         table.insert(actions, ACTIONS.UM_ACTIVATABLE_ITEM)
     end
@@ -747,7 +747,7 @@ end)
 local SCAN_GEMOLOGY_GEM = Action({ mount_valid = false, priority = 10, rmb = false })
 SCAN_GEMOLOGY_GEM.id = "SCAN_GEMOLOGY_GEM"
 SCAN_GEMOLOGY_GEM.str = "Analyze"
-ENV.AddAction(SCAN_GEMOLOGY_GEM)
+env.AddAction(SCAN_GEMOLOGY_GEM)
 SCAN_GEMOLOGY_GEM.fn = function(act)
     local gem = act.target
     if gem ~= nil and gem:HasTag("gemology_gem") and act.invobject ~= nil and act.invobject.components.gemologyscanner ~= nil then
@@ -757,7 +757,7 @@ SCAN_GEMOLOGY_GEM.fn = function(act)
     return false, "GEM_ALREADY_KNOWN"
 end
 
-ENV.AddComponentAction("USEITEM", "gemologyscanner", function(inst, doer, target, actions, right)
+env.AddComponentAction("USEITEM", "gemologyscanner", function(inst, doer, target, actions, right)
     local known, tier = TheMineralLogbook:IsGemKnown(target.prefab)
     if inst ~= nil and inst:HasTag("gemologyscanner") and target ~= nil and target:HasTag("gemology_gem") then
         if not target:IsRevealed() or not known or tier < target:GetTier() then
@@ -766,12 +766,12 @@ ENV.AddComponentAction("USEITEM", "gemologyscanner", function(inst, doer, target
     end
 end)
 
-ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.SCAN_GEMOLOGY_GEM, "doshortaction"))
+env.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.SCAN_GEMOLOGY_GEM, "doshortaction"))
 
 local UM_GEM_REPAIR = Action({ mound_valid = true, priority = 10, rmb = true })
 UM_GEM_REPAIR.id = "UM_GEM_REPAIR"
 UM_GEM_REPAIR.str = "Repair"
-ENV.AddAction(UM_GEM_REPAIR)
+env.AddAction(UM_GEM_REPAIR)
 
 UM_GEM_REPAIR.fn = function(act)
     local target = act.target
@@ -790,13 +790,13 @@ UM_GEM_REPAIR.fn = function(act)
     end
 end
 
-ENV.AddComponentAction("USEITEM", "gemrepairer", function(inst, doer, target, actions, right)
+env.AddComponentAction("USEITEM", "gemrepairer", function(inst, doer, target, actions, right)
     if inst ~= nil and inst:HasTag("gemrepairer") and target ~= nil and target.um_cangemrepair ~= nil and target.um_cangemrepair:value() and right then
         table.insert(actions, ACTIONS.UM_GEM_REPAIR)
     end
 end)
 
-ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.UM_GEM_REPAIR, "dolongaction"))
+env.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.UM_GEM_REPAIR, "dolongaction"))
 
 local UM_FORGE_GEM = Action({ priority = 1, mount_valid = true })
 UM_FORGE_GEM.id = "UM_FORGE_GEM"
@@ -820,9 +820,9 @@ UM_FORGE_GEM.fn = function(act)
     end
 end
 
-ENV.AddAction(UM_FORGE_GEM)
+env.AddAction(UM_FORGE_GEM)
 
-ENV.AddComponentAction("SCENE", "gem_forge", function(inst, doer, actions, right)
+env.AddComponentAction("SCENE", "gem_forge", function(inst, doer, actions, right)
     if right and (inst.replica.container ~= nil and
             inst.replica.container:IsFull() and
             inst.replica.container:IsOpenedBy(doer)
@@ -831,7 +831,7 @@ ENV.AddComponentAction("SCENE", "gem_forge", function(inst, doer, actions, right
     end
 end)
 
-ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.UM_FORGE_GEM, "doshortaction"))
+env.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.UM_FORGE_GEM, "doshortaction"))
 
 local function CanMakeBlueprintWithTarget(builder, target)
     return builder and builder:CanLearn(target.prefab) and builder:KnowsRecipe(target.prefab) and PrefabExists(target.prefab .. "_blueprint")
@@ -848,15 +848,15 @@ MAKE_BLUEPRINT.fn = function(act)
     return false
 end
 
-ENV.AddAction(MAKE_BLUEPRINT)
+env.AddAction(MAKE_BLUEPRINT)
 
-ENV.AddComponentAction("USEITEM", "blueprinter", function(inst, doer, target, actions, right)
+env.AddComponentAction("USEITEM", "blueprinter", function(inst, doer, target, actions, right)
     if target and target.prefab and (CanMakeBlueprintWithTarget(doer.replica.builder, target) or string.find(target.prefab, "blueprint")) then
         table.insert(actions, ACTIONS.MAKE_BLUEPRINT)
     end
 end)
 
-ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.MAKE_BLUEPRINT, "dolongaction"))
+env.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.MAKE_BLUEPRINT, "dolongaction"))
 
 -------------------------------------------------------------------------------------------------------------------
 --- Beefalo bell
@@ -899,12 +899,12 @@ UM_CALL_BEEF.fn = function(act)
     end
 end
 
-ENV.AddAction(UM_CALL_BEEF)
+env.AddAction(UM_CALL_BEEF)
 
-ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.UM_CALL_BEEF, "use_beef_bell"))
-ENV.AddStategraphActionHandler("wilson_client", ActionHandler(ACTIONS.UM_CALL_BEEF, "use_beef_bell"))
+env.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.UM_CALL_BEEF, "use_beef_bell"))
+env.AddStategraphActionHandler("wilson_client", ActionHandler(ACTIONS.UM_CALL_BEEF, "use_beef_bell"))
 
-ENV.AddSimPostInit(function()
+env.AddSimPostInit(function()
     local COMPONENT_ACTIONS = UMUpvalueHacker.GetUpvalue(EntityScript.CollectActions, "COMPONENT_ACTIONS")
     if COMPONENT_ACTIONS then
         local INVENTORY = COMPONENT_ACTIONS.INVENTORY
@@ -921,3 +921,104 @@ ENV.AddSimPostInit(function()
         end
     end
 end)
+
+--magma cooling
+local UM_COOL_MAGMA = Action({ priority = 100, rmb = true, tile_placer = "gridplacer", invalid_hold_action = true, })
+UM_COOL_MAGMA.id = "UM_COOL_MAGMA"
+UM_COOL_MAGMA.str = STRINGS.ACTIONS.UM_COOL_MAGMA
+UM_COOL_MAGMA.distance = 20
+UM_COOL_MAGMA.mount_valid = true
+UM_COOL_MAGMA.rmb = true
+local function DamageItem(inst, doer)
+    if inst.components.finiteuses ~= nil then
+        inst.components.finiteuses:OnUsedAsItem(ACTIONS.UM_COOL_MAGMA, doer)
+    end
+end
+
+UM_COOL_MAGMA.fn = function(act)
+    if not act.invobject:HasTag("magma_cooler") then return end
+
+    if ShouldItemMimicBeRevealedFor(act.invobject, act.doer) then
+        return false, "ITEMMIMIC"
+    end
+
+    local magma_manager = TheWorld.components.um_magmamanager
+    if magma_manager ~= nil then
+        local pos = act:GetActionPoint()
+        local cooled = magma_manager:CoolDownMagmaTile(pos.x, pos.z, TUNING.DSTU.MAGMATILE_DEFAULT_COOL_TIME)
+        if cooled then
+            local fx = SpawnPrefab("sharkboi_iceimpact_fx")
+            local fx2 = SpawnPrefab("crab_king_icefx")
+            local tx, ty, tz = TheWorld.Map:GetTileCenterPoint(pos:Get())
+
+            fx.Transform:SetPosition(tx, ty, tz)
+            fx2.Transform:SetPosition(tx, ty, tz)
+            DamageItem(act.invobject, act.doer)
+            return true
+        else
+            return false
+        end
+    end
+end
+
+env.AddAction(UM_COOL_MAGMA)
+
+
+--watering can cooling
+local UM_COOL_MAGMA_WATER = Action({ priority = 100, rmb = true, tile_placer = "gridplacer", invalid_hold_action = true, })
+UM_COOL_MAGMA_WATER.id = "UM_COOL_MAGMA_WATER"
+UM_COOL_MAGMA_WATER.str = STRINGS.ACTIONS.UM_COOL_MAGMA
+UM_COOL_MAGMA_WATER.distance = 4
+UM_COOL_MAGMA_WATER.mount_valid = false
+UM_COOL_MAGMA_WATER.rmb = true
+
+UM_COOL_MAGMA_WATER.fn = function(act)
+    if not act.invobject:HasTag("magma_cooler") then return end
+
+    if ShouldItemMimicBeRevealedFor(act.invobject, act.doer) then
+        return false, "ITEMMIMIC"
+    end
+
+    if act.invobject.components.finiteuses ~= nil and act.invobject.components.finiteuses:GetUses() <= 0 then
+        return false, (act.invobject:HasTag("wateringcan") and "OUT_OF_WATER" or nil)
+    end
+
+    local magma_manager = TheWorld.components.um_magmamanager
+    if magma_manager ~= nil then
+        local pos = act:GetActionPoint()
+        local cooled = magma_manager:CoolDownMagmaTile(pos.x, pos.z, TUNING.DSTU.MAGMATILE_ICE_STAFF_COOL_TIME)
+        if cooled then
+            local tx, ty, tz = TheWorld.Map:GetTileCenterPoint(pos:Get())
+
+            for i = 1, math.random(3, 5) do
+                SpawnPrefab("slow_steam_fx" .. math.random(1, 5)).Transform:SetPosition(tx + math.random(-2, 2), 0, tz + math.random(-2, 2))
+            end
+
+            act.invobject.components.wateryprotection:SpreadProtectionAtPoint(act:GetActionPoint():Get())
+
+            return true
+        else
+            return false
+        end
+    end
+end
+
+env.AddAction(UM_COOL_MAGMA_WATER)
+
+
+env.AddComponentAction("POINT", "magma_cooler", function(inst, doer, pos, actions, right, target)
+    local tx, tz = TheWorld.Map:GetTileCoordsAtPoint(pos:Get())
+    if right and inst:HasTag("magma_cooler") and (TheWorld.Map:GetTile(tx, tz) == WORLD_TILES.UM_MAGMA_LAVAMOLTEN or TheWorld.Map:GetTile(tx, tz) == WORLD_TILES.UM_MAGMA_LAVACOOLED) then
+        if inst:HasTag("wateringcan") then
+            table.insert(actions, ACTIONS.UM_COOL_MAGMA_WATER)
+        else
+            table.insert(actions, ACTIONS.UM_COOL_MAGMA)
+        end
+    end
+end)
+
+env.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.UM_COOL_MAGMA, "castspell"))
+env.AddStategraphActionHandler("wilson_client", ActionHandler(ACTIONS.UM_COOL_MAGMA, "castspell"))
+
+env.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.UM_COOL_MAGMA_WATER, "pour"))
+env.AddStategraphActionHandler("wilson_client", ActionHandler(ACTIONS.UM_COOL_MAGMA_WATER, "pour"))

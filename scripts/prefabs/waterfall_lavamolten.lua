@@ -60,16 +60,15 @@ local function Init(inst, dir, x, y)
 end
 
 local function EnableSound(inst, enable)
-    -- TODO (HALF): Add your sound here, losers :)
-    -- if enable then
-    --     if not inst.SoundEmitter:PlayingSound("WATERFALL") then
-	-- 	    inst.SoundEmitter:PlaySound("dontstarve_DLC003/amb/Waterfall/LP_1", "WATERFALL")
-    --     end
-    -- elseif not enable then
-    --     if inst.SoundEmitter:PlayingSound("WATERFALL") then
-    --         inst.SoundEmitter:KillSound("WATERFALL")
-    --     end
-    -- end
+    if enable then
+        if not inst.SoundEmitter:PlayingSound("WATERFALL") then
+		    inst.SoundEmitter:PlaySound("dontstarve/creatures/together/deer/fx/fire_circle_LP", "WATERFALL")
+        end
+    elseif not enable then
+        if inst.SoundEmitter:PlayingSound("WATERFALL") then
+            inst.SoundEmitter:KillSound("WATERFALL")
+        end
+    end
 end
 
 local function fn()

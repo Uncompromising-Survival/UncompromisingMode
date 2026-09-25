@@ -640,7 +640,8 @@ local prefabs = {
     "magma_tile",
     "um_blueprinting_kit",
     "minerstatue",
-    "um_gem_repair_kit"
+    "um_gem_repair_kit",
+    "um_magmastone"
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then

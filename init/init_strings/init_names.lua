@@ -729,6 +729,8 @@ NAMES.UM_MEATCOMB = "Carrion Honeycomb"
 NAMES.UM_MEATHONEY = "Carrion Honey"
 
 NAMES.FYRITEROCK = "Pyrite Outcropping"
+NAMES.UM_PYRITE_CEILING = "Pyrite Stalactite"
+
 NAMES.UM_FYRITE = "Pyrite"
 NAMES.UM_FYRE_BOMB = "Pyre Bomb"
 NAMES.UM_MANNY = "Plaunt Manny"
@@ -825,6 +827,7 @@ NAMES.UM_GEMOLOGY_GEODE_SLIME = "Slimy Geode"
 NAMES.UM_GEMOLOGY_GEODE_RUINS = "Junk Geode"
 NAMES.UM_GEMOLOGY_GEODE_VENT = "Pumice Geode"
 NAMES.UM_GEMOLOGY_GEODE_SINK = "Mossy Geode"
+NAMES.UM_GEMOLOGY_GEODE_MAGMA = "Molten Geode"
 
 NAMES.UM_BOOMBERRY_BOMB = "Boomberry Bomb"
 NAMES.UM_BOOMBERRYPIE = "Boomberry Pie"
@@ -867,6 +870,5 @@ NAMES.UM_MUSHROOM_MOON = "Moon Mushroom"
 NAMES.UM_POOFSHROOM = "Poofshroom"
 NAMES.UM_BLUEPRINTING_KIT = "Blueprinting Kit"
 NAMES.UM_GEM_REPAIR_KIT = "Mending Kit"
-
-
-
+NAMES.UM_MAGMASTONE = "Magmatic Boulder"
+NAMES.UM_MAGMASTONE_OUTCROP = "Magmatic Outcrop"

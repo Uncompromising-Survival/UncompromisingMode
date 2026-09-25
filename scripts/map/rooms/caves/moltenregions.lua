@@ -130,6 +130,7 @@ AddRoom("GrassMagmaCliffs", {
         {
             lava_pond_cave = 0.1,
             magmarock1 = 0.025,
+            um_magmastone = 0.0125,
             mushtree_shadow = 0.025,
             pyrethicket_builder = 0.5,
             fyriterock = 0.05,
@@ -148,6 +149,7 @@ AddRoom("GrassMagmaCliffsDragon", {
         {
             lava_pond_cave = 0.1,
             magmarock1 = 0.025,
+            um_magmastone = 0.0125,
             mushtree_shadow = 0.025,
             pyrethicket_builder = 0.5,
             fyriterock = 0.05,
@@ -184,6 +186,7 @@ AddRoom("FossilMagma", {
         {
             lava_pond_cave = 0.01,
             magmarock1 = 0.01,
+            um_magmastone = 0.005,
             magmabone = 0.025,
             fyriterock = 0.007,
             um_pyrite_ceiling = 0.005,
@@ -226,37 +229,37 @@ AddRoom("GloomyMagma", {
 AddRoom("Shroomy", {
     colour = { r = 0.3, g = 0.2, b = 0.1, a = 0.3 },
     value = WORLD_TILES.UM_MAGMA,
-	random_node_entrance_weight = 0,
-    contents =  {
+    random_node_entrance_weight = 0,
+    contents = {
         distributepercent = .3,
-        distributeprefabs=
+        distributeprefabs =
         {
             magmarock1 = 0.1,
             mushtree_shadow = 0.9,
             cave_fern_withered = 0.05,
         },
-		countprefabs = 
-		{
-			viperfruit_plant = 1,
-		}
+        countprefabs =
+        {
+            viperfruit_plant = 1,
+        }
     }
 })
 
 AddRoom("GemForge1", {
-    colour={r=0.3,g=0.2,b=0.1,a=0.3},
+    colour = { r = 0.3, g = 0.2, b = 0.1, a = 0.3 },
     value = WORLD_TILES.UM_MAGMA_MIX,
     random_node_entrance_weight = 0,
-    contents =  {
+    contents = {
         distributepercent = .4,
-        distributeprefabs=
+        distributeprefabs =
         {
-			magmarock1 = 0.1,
-			mushtree_shadow = 0.40,
+            magmarock1 = 0.1,
+            mushtree_shadow = 0.40,
             pyrethicket_builder = 0.45,
             viperfruit_plant = 0.05,
-			
+
         },
-		countstaticlayouts={["gemforge1"]=1},
+        countstaticlayouts = { ["gemforge1"] = 1 },
     }
 })
 
@@ -299,6 +302,27 @@ AddRoom("MagmaStairs", {
         },
     }
 })
+
+AddRoom("MagmaActive", {
+    colour = { r = 0, g = .9, b = 0, a = .50 },
+    tags = { "UM_ActiveLavaZone" },
+    value = WORLD_TILES.UM_MAGMA,
+    contents = {
+        distributepercent = .1,
+        distributeprefabs =
+        {
+            rocks = .03,
+            flint = .03,
+            magmarock1 = 0.25,
+            fyriterock_spawner = 0.1,
+            burnt_marsh_bush = 0.2
+        },
+        countprefabs = {
+            um_magmastone = function() return math.random(2, 5) end,
+        }
+    }
+})
+
 
 AddRoom("MagmaVolcano_IA", {
     colour = { r = 0.3, g = 0.2, b = 0.1, a = 0.3 },

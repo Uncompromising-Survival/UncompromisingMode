@@ -163,6 +163,21 @@ GEODE_LOOT_TABLE = {
             orangegem = 0.05,
         },
     },
+    ["um_gemology_geode_magma"] =
+    {
+        notgemloot = {
+            rocks = 2,
+            nitre = 1,
+        },
+        gemloot = {
+            um_gemologypalegem2 = 1,
+            um_gemologyyellowgem1 = 1,
+            um_gemologygreengem2 = 1,
+            um_gemologyredgem2 = 1,
+            redgem = 0.5,
+            um_fyrite = 0.5,
+        },
+    },
 }
 function GetGeodeSourcesFromGem(gem_name)
     local sources = {}

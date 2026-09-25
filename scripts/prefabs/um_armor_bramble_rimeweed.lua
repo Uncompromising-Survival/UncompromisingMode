@@ -97,7 +97,7 @@ local function fn()
 
     inst.AnimState:SetBank("um_armor_bramble_rimeweed")
     inst.AnimState:SetBuild("um_armor_bramble_rimeweed")
-    
+	inst.AnimState:PlayAnimation("idle")
 
     inst.scrapbook_specialinfo = "ARMORBRAMBLE"
     inst.scrapbook_damage = TUNING.ARMORBRAMBLE_DMG
@@ -110,7 +110,6 @@ local function fn()
     if not TheWorld.ismastersim then
         return inst
     end
-	inst.AnimState:PlayAnimation("idle")
     inst._hitcount = nil
 
     inst:AddComponent("inspectable")

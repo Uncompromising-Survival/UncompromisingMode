@@ -16,14 +16,14 @@ local data =
         build = "gloomcap",
         icon = "gloomcap.tex",
         lightradius = 1.25,
-        lightcolour = { 227/255, 0/255, 0/255 },
+        lightcolour = { 227 / 255, 0 / 255, 0 / 255 },
     },
 }
 
 local function onsave(inst, data)
     data.stump = inst:HasTag("stump") or nil
-	data.scale = inst.scale
-	data.direction = inst.direction
+    data.scale = inst.scale
+    data.direction = inst.direction
 end
 
 local function swapbuild(inst, build)
@@ -51,15 +51,14 @@ local function workcallback(inst, worker, workleft)
     if workleft > 0 then
         inst.AnimState:PlayAnimation("chop")
         inst.AnimState:PushAnimation("idle_loop", true)
-
     end
     --V2C: different anims are played in workfinishcallback if workleft <= 0
 end
 
 local function GooNearby(inst)
-    local x,y,z = inst.Transform:GetWorldPosition()
-    local others = TheSim:FindEntities(x,y,z,3,{"_sanity","_health"})
-    for i,other in ipairs(others) do
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local others = TheSim:FindEntities(x, y, z, 3, { "_sanity", "_health" })
+    for i, other in ipairs(others) do
         if not other.components.health:IsDead() then
             if other.components.inkable then
                 other.components.inkable:Ink()
@@ -70,8 +69,7 @@ local function GooNearby(inst)
 end
 
 local function maketree(name, data, state)
-
-	local function onspawnfn(inst, spawn)
+    local function onspawnfn(inst, spawn)
         local miasmamanager = TheWorld.components.miasmamanager
         if miasmamanager then
             local x, y, z = inst.Transform:GetWorldPosition()
@@ -86,20 +84,20 @@ local function maketree(name, data, state)
         if spawn then -- just using periodicspawner as a timer... miasmamangager is handling the actual miasma
             spawn:Remove()
         end
-	end
-	
-	local function ontimerdone(inst, data)
-		if data.name == "regrow" then
-			inst.AnimState:PlayAnimation("regrow")
-			inst.AnimState:PushAnimation("idle_loop")
-			inst.normal_tree(inst, true)
-		end
-	end
-	
+    end
+
+    local function ontimerdone(inst, data)
+        if data.name == "regrow" then
+            inst.AnimState:PlayAnimation("regrow")
+            inst.AnimState:PushAnimation("idle_loop")
+            inst.normal_tree(inst, true)
+        end
+    end
+
     local function makestump(inst)
-		if inst.components.sanityaura then
-			inst:RemoveComponent("sanityaura")
-		end
+        if inst.components.sanityaura then
+            inst:RemoveComponent("sanityaura")
+        end
         if inst._changetask ~= nil then
             inst._changetask:Cancel()
             inst._changetask = nil
@@ -111,7 +109,7 @@ local function maketree(name, data, state)
         inst:RemoveTag("shelter")
 
         inst:RemoveComponent("propagator")
-		inst.components.raindome:SetRadius(0)
+        inst.components.raindome:SetRadius(0)
         MakeSmallPropagator(inst)
 
         inst.components.workable:SetWorkAction(ACTIONS.DIG)
@@ -128,50 +126,49 @@ local function maketree(name, data, state)
         inst:ListenForEvent("timerdone", ontimerdone)
 
         if not inst.components.timer:TimerExists("regrow") then
-            inst.components.timer:StartTimer("regrow", math.random(1,2)*1/2*60*80*15)
+            inst.components.timer:StartTimer("regrow", math.random(1, 2) * 1 / 2 * 60 * 80 * 15)
         end
-		if inst.components.periodicspawner then
-			inst:RemoveComponent("periodicspawner")
-		end
-		inst:StopWatchingWorldState("nightmarephase",inst.SporeTask)
-	end
-	local function workfinishcallback(inst,other)
-		inst.SoundEmitter:PlaySound("dontstarve/forest/treefall")
-		makestump(inst)
+        if inst.components.periodicspawner then
+            inst:RemoveComponent("periodicspawner")
+        end
+        inst:StopWatchingWorldState("nightmarephase", inst.SporeTask)
+    end
+    local function workfinishcallback(inst, other)
+        inst.SoundEmitter:PlaySound("dontstarve/forest/treefall")
+        makestump(inst)
         GooNearby(inst)
-		inst.AnimState:PlayAnimation("fall")
-		inst.AnimState:PushAnimation("idle_stump")
+        inst.AnimState:PlayAnimation("fall")
+        inst.AnimState:PushAnimation("idle_stump")
 
-		inst.components.lootdropper:DropLoot(inst:GetPosition())
-	end
-	
+        inst.components.lootdropper:DropLoot(inst:GetPosition())
+    end
+
     local function normal_tree(inst, instant)
-	
-		if inst.components.workable then -- Reset components
-			inst:RemoveComponent("workable")
-		end
-		if inst.components.lootdropper then
-			inst:RemoveComponent("lootdropper")
-		end
-		if inst.components.sanityaura then
-			inst:RemoveComponent("sanityaura")
-		end		
-		if inst.components.sanityaura then
-			inst:RemoveComponent("sanityaura")
-		end		
-		if inst.components.periodicspawner then
-			inst:RemoveComponent("periodicspawner")
-		end		
-		
-		inst:AddComponent("sanityaura")
-		inst.components.sanityaura.aura = -TUNING.SANITYAURA_MED
+        if inst.components.workable then -- Reset components
+            inst:RemoveComponent("workable")
+        end
+        if inst.components.lootdropper then
+            inst:RemoveComponent("lootdropper")
+        end
+        if inst.components.sanityaura then
+            inst:RemoveComponent("sanityaura")
+        end
+        if inst.components.sanityaura then
+            inst:RemoveComponent("sanityaura")
+        end
+        if inst.components.periodicspawner then
+            inst:RemoveComponent("periodicspawner")
+        end
+
+        inst:AddComponent("sanityaura")
+        inst.components.sanityaura.aura = -TUNING.SANITYAURA_MED
         if inst._changetask ~= nil then
             inst._changetask:Cancel()
         end
-		if inst:HasTag("stump") then
-			inst:RemoveTag("stump")
-		end
-		
+        if inst:HasTag("stump") then
+            inst:RemoveTag("stump")
+        end
+
         inst:AddComponent("workable")
         inst.components.workable:SetWorkAction(ACTIONS.CHOP)
         inst.components.workable:SetWorkLeft(5)
@@ -182,38 +179,38 @@ local function maketree(name, data, state)
         })
         inst.components.workable:SetOnWorkCallback(workcallback)
         inst.components.workable:SetOnFinishCallback(workfinishcallback)
-		inst.Light:Enable(true)
-		inst.components.raindome:SetRadius(TUNING.VOIDCLOTH_UMBRELLA_DOME_RADIUS)
+        inst.Light:Enable(true)
+        inst.components.raindome:SetRadius(TUNING.VOIDCLOTH_UMBRELLA_DOME_RADIUS)
         if instant then
             swapbuild(inst, data.build)
         else
             inst._changetask = inst:DoTaskInTime(math.random() * 3 * TUNING.SEG_TIME, startchange, data.build, "dontstarve/cave/mushtree_tall_shrink")
         end
-		
+
         inst:AddComponent("periodicspawner")
         inst.components.periodicspawner:SetPrefab("miasma_cloud")
         inst.components.periodicspawner:SetOnSpawnFn(onspawnfn)
         --inst.components.periodicspawner:SetDensityInRange(TUNING.MUSHSPORE_MAX_DENSITY_RAD, TUNING.MUSHSPORE_MAX_DENSITY)
         inst.components.periodicspawner:Stop()
-		
-		inst:WatchWorldState("nightmarephase",inst.SporeTask)
+
+        inst:WatchWorldState("nightmarephase", inst.SporeTask)
     end
 
 
 
-	local function onload(inst, loaddata)
-		if loaddata ~= nil then
-			if loaddata.stump then
-				makestump(inst)
-			else
-				normal_tree(inst, true)
-			end
-			if loaddata.scale then
-				inst.scale = loaddata.scale
-			end
-		end
-	end
-	
+    local function onload(inst, loaddata)
+        if loaddata ~= nil then
+            if loaddata.stump then
+                makestump(inst)
+            else
+                normal_tree(inst, true)
+            end
+            if loaddata.scale then
+                inst.scale = loaddata.scale
+            end
+        end
+    end
+
 
 
     return function()
@@ -245,14 +242,14 @@ local function maketree(name, data, state)
         inst:AddTag("plant")
         inst:AddTag("shelter")
         inst:AddTag("tree")
-		
-		inst:AddComponent("raindome")
-		
+
+        inst:AddComponent("raindome")
+
         inst:SetPrefabName(name)
 
         inst.entity:SetPristine()
-		
-		
+
+
         if not TheWorld.ismastersim then
             return inst
         end
@@ -261,50 +258,50 @@ local function maketree(name, data, state)
 
         local color = .5 + math.random() * .5
         inst.AnimState:SetMultColour(color, color, color, 1)
-		inst.AnimState:SetFrame(math.random(inst.AnimState:GetCurrentAnimationNumFrames()) - 1)
+        inst.AnimState:SetFrame(math.random(inst.AnimState:GetCurrentAnimationNumFrames()) - 1)
 
         MakeMediumPropagator(inst)
 
-	
+
 
         inst:AddComponent("inspectable")
         inst.components.inspectable.getstatus = inspect_tree
 
 
-		inst.normal_tree = normal_tree
+        inst.normal_tree = normal_tree
 
         inst:AddComponent("timer")
-		
-		
-		inst.SporeTask = function(inst,phase,instant)
-			if phase == "calm" then
-				inst.components.periodicspawner:Stop()
-			elseif phase == "warn" or phase == "dawn" then
-				inst.components.periodicspawner:Start(math.random(10,30))
-			elseif phase == "wild" then
-				inst.components.periodicspawner:Start(math.random(5,10))
-			end		
-		end
+
+
+        inst.SporeTask = function(inst, phase, instant)
+            if phase == "calm" then
+                inst.components.periodicspawner:Stop()
+            elseif phase == "warn" or phase == "dawn" then
+                inst.components.periodicspawner:Start(math.random(10, 30))
+            elseif phase == "wild" then
+                inst.components.periodicspawner:Start(math.random(5, 10))
+            end
+        end
 
         MakeHauntableIgnite(inst)
 
         inst.OnSave = onsave
         inst.OnLoad = onload
-		inst:DoTaskInTime(0,function(inst)
-			if not inst.scale then
-				inst.scale = math.random(10,17)/10
-			end
-			if not inst.direction then
-				if math.random() > 0.5 then
-					inst.direction = 1
-				else
-					inst.direction = -1
-				end
-			end
-			inst.Transform:SetScale(inst.scale,inst.scale,inst.scale)
-			inst.AnimState:SetScale(inst.direction, 1, 1)
-		end)
-		
+        inst:DoTaskInTime(0, function(inst)
+            if not inst.scale then
+                inst.scale = math.random(10, 17) / 10
+            end
+            if not inst.direction then
+                if math.random() > 0.5 then
+                    inst.direction = 1
+                else
+                    inst.direction = -1
+                end
+            end
+            inst.Transform:SetScale(inst.scale, inst.scale, inst.scale)
+            inst.AnimState:SetScale(inst.direction, 1, 1)
+        end)
+
         if state == "stump" then
             makestump(inst)
         else
@@ -321,8 +318,8 @@ function treeset(name, data, build_file_name)
     local assets =
     {
         buildasset,
-		Asset("IMAGE", "images/map_icons/gloomcap.tex"),
-		Asset("ATLAS", "images/map_icons/gloomcap.xml"),
+        Asset("IMAGE", "images/map_icons/gloomcap.tex"),
+        Asset("ATLAS", "images/map_icons/gloomcap.xml"),
         Asset("MINIMAP_IMAGE", data.icon),
         Asset("MINIMAP_IMAGE", "mushroom_tree_stump"),
     }
@@ -330,7 +327,7 @@ function treeset(name, data, build_file_name)
     local prefabs =
     {
         data.spore,
-        name.."_stump",
+        name .. "_stump",
         "ash",
         "charcoal",
         "log",
@@ -338,29 +335,29 @@ function treeset(name, data, build_file_name)
     }
 
     table.insert(treeprefabs, Prefab(name, maketree(name, data), assets, prefabs))
-    table.insert(treeprefabs, Prefab(name.."_stump", maketree(name, data, "stump"), assets, prefabs))
+    table.insert(treeprefabs, Prefab(name .. "_stump", maketree(name, data, "stump"), assets, prefabs))
 end
 
 require "tuning"
 
 local assetsregular =
 {
-	Asset("ANIM", "anim/gloomcap_item.zip"),
-	Asset("ATLAS", "images/inventoryimages/gloomcap.xml"),
-	Asset("IMAGE", "images/inventoryimages/gloomcap.tex"),
+    Asset("ANIM", "anim/gloomcap_item.zip"),
+    Asset("ATLAS", "images/inventoryimages/gloomcap.xml"),
+    Asset("IMAGE", "images/inventoryimages/gloomcap.tex"),
 }
 
 local assets_cooked =
 {
-	Asset("ANIM", "anim/gloomcap_item.zip"),
-	Asset("ATLAS", "images/inventoryimages/gloomcap_cooked.xml"),
-	Asset("IMAGE", "images/inventoryimages/gloomcap_cooked.tex"),
+    Asset("ANIM", "anim/gloomcap_item.zip"),
+    Asset("ATLAS", "images/inventoryimages/gloomcap_cooked.xml"),
+    Asset("IMAGE", "images/inventoryimages/gloomcap_cooked.tex"),
 }
 
 
 local easing = require("easing")
 
-local function SpawnMushroomBombProjectile(inst,targetpos)
+local function SpawnMushroomBombProjectile(inst, targetpos)
     local x, y, z = inst.Transform:GetWorldPosition()
     local projectile = SpawnPrefab("mushroombomb_projectile")
     projectile.Transform:SetPosition(x, y, z)
@@ -369,10 +366,10 @@ local function SpawnMushroomBombProjectile(inst,targetpos)
     --V2C: scale the launch speed based on distance
     --     because 15 does not reach our max range.
 
-    local dx = targetpos.x 
-    local dz = targetpos.z 
-	targetpos.x = targetpos.x + x
-	targetpos.z = targetpos.z + z
+    local dx = targetpos.x
+    local dz = targetpos.z
+    targetpos.x = targetpos.x + x
+    targetpos.z = targetpos.z + z
     local rangesq = dx * dx + dz * dz
     local maxrange = 15
     local bigNum = 10 -- 13 + (math.random()*4)
@@ -382,71 +379,71 @@ local function SpawnMushroomBombProjectile(inst,targetpos)
 end
 
 local function oneatenregular(inst, eater)
-	if eater.components.skilltreeupdater and eater.components.skilltreeupdater:IsActivated("wormwood_moon_cap_eating") then
-		local cloud = SpawnPrefab("um_agonycloud")
-		cloud.Transform:SetPosition(eater.Transform:GetWorldPosition())
-		cloud:SetOwner(eater)
-	end
+    if eater.components.skilltreeupdater and eater.components.skilltreeupdater:IsActivated("wormwood_moon_cap_eating") then
+        local cloud = SpawnPrefab("um_agonycloud")
+        cloud.Transform:SetPosition(eater.Transform:GetWorldPosition())
+        cloud:SetOwner(eater)
+    end
 end
-			
+
 local function fnregular()
-	local inst = CreateEntity()
+    local inst = CreateEntity()
 
-	inst.entity:AddTransform()
-	inst.entity:AddAnimState()
-	inst.entity:AddNetwork()
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddNetwork()
 
-	MakeInventoryPhysics(inst)
+    MakeInventoryPhysics(inst)
 
-	inst.AnimState:SetBank("gloomcap_item")
-	inst.AnimState:SetBuild("gloomcap_item")
-	inst.AnimState:PlayAnimation("idle")
-	MakeInventoryFloatable(inst, "med", 0.05, 0.68)
-	--cookable (from cookable component) added to pristine state for optimization
-	inst:AddTag("cookable")
-    inst:AddTag("mushroom")	
-	inst:AddTag("mushroom_fuel")
-	inst.entity:SetPristine()
-	
-	if not TheWorld.ismastersim then
-		return inst
-	end
-	
+    inst.AnimState:SetBank("gloomcap_item")
+    inst.AnimState:SetBuild("gloomcap_item")
+    inst.AnimState:PlayAnimation("idle")
+    MakeInventoryFloatable(inst, "med", 0.05, 0.68)
+    --cookable (from cookable component) added to pristine state for optimization
+    inst:AddTag("cookable")
+    inst:AddTag("mushroom")
+    inst:AddTag("mushroom_fuel")
+    inst.entity:SetPristine()
 
-	inst:AddComponent("edible")
-	inst.components.edible.healthvalue = -20
-	inst.components.edible.hungervalue = 18.8
-	inst.components.edible.sanityvalue = -33
-	inst.components.edible.foodtype = FOODTYPE.VEGGIE
-	
-	inst:AddComponent("perishable")
-	inst.components.perishable:SetPerishTime((3*TUNING.PERISH_TWO_DAY))
-	inst.components.perishable:StartPerishing()
-	inst.components.perishable.onperishreplacement = "spoiled_food"
-	inst.components.edible:SetOnEatenFn(oneatenregular)
-	
-	inst:AddComponent("stackable")
-	inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
-	inst:AddComponent("inspectable")
-	
-	
-	inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/gloomcap.xml"
+    if not TheWorld.ismastersim then
+        return inst
+    end
 
 
-	MakeSmallPropagator(inst)
-    ---------------------        
+    inst:AddComponent("edible")
+    inst.components.edible.healthvalue = -20
+    inst.components.edible.hungervalue = 18.8
+    inst.components.edible.sanityvalue = -33
+    inst.components.edible.foodtype = FOODTYPE.VEGGIE
+
+    inst:AddComponent("perishable")
+    inst.components.perishable:SetPerishTime((3 * TUNING.PERISH_TWO_DAY))
+    inst.components.perishable:StartPerishing()
+    inst.components.perishable.onperishreplacement = "spoiled_food"
+    inst.components.edible:SetOnEatenFn(oneatenregular)
+
+    inst:AddComponent("stackable")
+    inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
+    inst:AddComponent("inspectable")
+
+
+    inst:AddComponent("inventoryitem")
+    inst.components.inventoryitem.atlasname = "images/inventoryimages/gloomcap.xml"
+
+
+    MakeSmallPropagator(inst)
+    ---------------------
 
     inst:AddComponent("bait")
 
     ------------------------------------------------
     inst:AddComponent("tradable")
-	inst.components.tradable.goldvalue = 0
-    ------------------------------------------------  
+    inst.components.tradable.goldvalue = 0
+    ------------------------------------------------
 
     inst:AddComponent("cookable")
     inst.components.cookable.product = "gloomcap_cooked"
-	
+
     return inst
 end
 
@@ -454,64 +451,63 @@ local function oneatenfncooked(inst, eater)
     if eater:HasTag("player") then
         if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and not (eater.components.health ~= nil and eater.components.health:IsDead()) and not eater:HasTag("playerghost") then
             eater.components.debuffable:AddDebuff("buff_smallcourage", "buff_smallcourage")
-			eater.components.debuffable:AddDebuff("healingsalve_acidbuff", "healingsalve_acidbuff")
+            eater.components.debuffable:AddDebuff("healingsalve_acidbuff", "healingsalve_acidbuff")
         end
-		
     end
 end
 
 local function fn_cooked()
-	local inst = CreateEntity()
+    local inst = CreateEntity()
 
-	inst.entity:AddTransform()
-	inst.entity:AddAnimState()
-	inst.entity:AddNetwork()
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddNetwork()
 
-	MakeInventoryPhysics(inst)
+    MakeInventoryPhysics(inst)
 
-	inst.AnimState:SetBank("gloomcap_item")
-	inst.AnimState:SetBuild("gloomcap_item")
-	inst.AnimState:PlayAnimation("cooked")
-	
-	inst.entity:SetPristine()
+    inst.AnimState:SetBank("gloomcap_item")
+    inst.AnimState:SetBuild("gloomcap_item")
+    inst.AnimState:PlayAnimation("cooked")
 
-	if not TheWorld.ismastersim then
-		return inst
-	end
-	
+    inst.entity:SetPristine()
 
-	inst:AddComponent("perishable")
-	inst.components.perishable:SetPerishTime((4*TUNING.PERISH_TWO_DAY))
-	inst.components.perishable:StartPerishing()
-	inst.components.perishable.onperishreplacement = "spoiled_food"
-
-	inst:AddComponent("edible")
-	inst.components.edible.healthvalue = -3
-	inst.components.edible.hungervalue = 18.8
-	inst.components.edible.sanityvalue = -10
-	inst.components.edible.foodtype = FOODTYPE.VEGGIE
-	inst.components.edible:SetOnEatenFn(oneatenfncooked)
-	
-	inst:AddComponent("stackable")
-	inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
-	inst:AddComponent("inspectable")
-	
-	inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/gloomcap_cooked.xml"
+    if not TheWorld.ismastersim then
+        return inst
+    end
 
 
-	MakeSmallPropagator(inst)
-	---------------------        
+    inst:AddComponent("perishable")
+    inst.components.perishable:SetPerishTime((4 * TUNING.PERISH_TWO_DAY))
+    inst.components.perishable:StartPerishing()
+    inst.components.perishable.onperishreplacement = "spoiled_food"
 
-	inst:AddComponent("bait")
+    inst:AddComponent("edible")
+    inst.components.edible.healthvalue = -3
+    inst.components.edible.hungervalue = 18.8
+    inst.components.edible.sanityvalue = -10
+    inst.components.edible.foodtype = FOODTYPE.VEGGIE
+    inst.components.edible:SetOnEatenFn(oneatenfncooked)
 
-	------------------------------------------------
-	inst:AddComponent("tradable")
+    inst:AddComponent("stackable")
+    inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
+    inst:AddComponent("inspectable")
 
-	inst.components.tradable.goldvalue = 0
-	MakeHauntableLaunchAndPerish(inst)
+    inst:AddComponent("inventoryitem")
+    inst.components.inventoryitem.atlasname = "images/inventoryimages/gloomcap_cooked.xml"
 
-	return inst
+
+    MakeSmallPropagator(inst)
+    ---------------------
+
+    inst:AddComponent("bait")
+
+    ------------------------------------------------
+    inst:AddComponent("tradable")
+
+    inst.components.tradable.goldvalue = 0
+    MakeHauntableLaunchAndPerish(inst)
+
+    return inst
 end
 
 
@@ -546,14 +542,14 @@ local function onworked(inst, worker)
     inst:RemoveTag("spore")
 end
 
-local SPORE_TAGS = {"spore"}
+local SPORE_TAGS = { "spore" }
 local function checkforcrowding(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    local spores = TheSim:FindEntities(x,y,z, TUNING.MUSHSPORE_MAX_DENSITY_RAD, SPORE_TAGS)
+    local spores = TheSim:FindEntities(x, y, z, TUNING.MUSHSPORE_MAX_DENSITY_RAD, SPORE_TAGS)
     if #spores > TUNING.MUSHSPORE_MAX_DENSITY then
         inst.components.perishable:SetPercent(0)
     else
-        inst.crowdingtask = inst:DoTaskInTime(TUNING.MUSHSPORE_DENSITY_CHECK_TIME + math.random()*TUNING.MUSHSPORE_DENSITY_CHECK_VAR, checkforcrowding)
+        inst.crowdingtask = inst:DoTaskInTime(TUNING.MUSHSPORE_DENSITY_CHECK_TIME + math.random() * TUNING.MUSHSPORE_DENSITY_CHECK_VAR, checkforcrowding)
     end
 end
 
@@ -605,15 +601,15 @@ local function spore_entity_wake(inst)
     do_proximity_test(inst)
 end
 
-local function OnHitOther(inst,data)
-	local other = data.target
-	if other and other.components.sanity then
-		other.components.sanity:DoDelta(-15)
-	end
+local function OnHitOther(inst, data)
+    local other = data.target
+    if other and other.components.sanity then
+        other.components.sanity:DoDelta(-15)
+    end
 end
 
-local COLOUR_R, COLOUR_G, COLOUR_B = 0/255, 0/255, 0/255
-local ZERO_VEC = Vector3(0,0,0)
+local COLOUR_R, COLOUR_G, COLOUR_B = 0 / 255, 0 / 255, 0 / 255
+local ZERO_VEC = Vector3(0, 0, 0)
 local function fnspore()
     local inst = CreateEntity()
 
@@ -644,8 +640,8 @@ local function fnspore()
     if not TheWorld.ismastersim then
         return inst
     end
-	
-	inst.AnimState:SetMultColour(0.4, 0, 0, 0.6)
+
+    inst.AnimState:SetMultColour(0.4, 0, 0, 0.6)
     inst.scrapbook_anim = "idle_flight_loop"
     inst.scrapbook_animoffsety = 65
     inst.scrapbook_animpercent = 0.36
@@ -675,7 +671,7 @@ local function fnspore()
 
     inst:AddComponent("combat")
     inst.components.combat:SetDefaultDamage(1)
-	inst:ListenForEvent("onhitother", OnHitOther)
+    inst:ListenForEvent("onhitother", OnHitOther)
     MakeHauntablePerish(inst, .5)
 
     inst:ListenForEvent("popped", onpopped)
@@ -683,7 +679,7 @@ local function fnspore()
     inst:SetStateGraph("SGmoonspore")
 
     -- note: the first check is faster, because this might be from dropping a stack
-    inst.crowdingtask = inst:DoTaskInTime(1 + math.random()*TUNING.MUSHSPORE_DENSITY_CHECK_VAR, checkforcrowding)
+    inst.crowdingtask = inst:DoTaskInTime(1 + math.random() * TUNING.MUSHSPORE_DENSITY_CHECK_VAR, checkforcrowding)
 
     inst.OnLoad = onload
     inst.OnEntitySleep = spore_entity_sleep
@@ -699,6 +695,6 @@ end
 treeset("mushtree_shadow", data.shadow, "anim/gloomcap.zip")
 
 return unpack(treeprefabs),
-Prefab("gloomcap", fnregular, assetsregular),
-		Prefab("gloomcap_cooked", fn_cooked, assets_cooked),
-		Prefab("spore_shadow", fnspore)
+    Prefab("gloomcap", fnregular, assetsregular),
+    Prefab("gloomcap_cooked", fn_cooked, assets_cooked),
+    Prefab("spore_shadow", fnspore)

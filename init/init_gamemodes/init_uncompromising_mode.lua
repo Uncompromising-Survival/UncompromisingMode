@@ -2,6 +2,11 @@ local require = GLOBAL.require
 
 --    [     Import Prefabs, Assets, Widgets and Util    ]    --
 modimport("init/init_util")
+
+-- Needs to go up here, other files will try to reference it
+modimport("init/init_tuning")
+
+
 modimport("init/init_assets")
 modimport("init/init_widgets")
 modimport("init/init_compat")
@@ -16,8 +21,6 @@ modimport("init/init_weather/init_dragonfly_bait")
 --modimport("init/init_food/init_stuffed")
 --Currently shelved due to hunger upvalue return error
 
--- Needs to go up here, other files will try to reference it
-modimport("init/init_tuning")
 
 --    [     Import Names and Descriptions    ]    --
 modimport("init/init_strings/init_strings")
@@ -92,8 +95,8 @@ modimport("init/init_gemology/misc") -- AXE Monkeys angering when you mine slime
 modimport("init/init_gemology/trades")
 
 --scrapbook
-modimport("init/init_scrapbook/additions")
 modimport("init/init_scrapbook/changes")
+modimport("init/init_scrapbook/additions") --run add after changes to overwrite tooltip strings.
 modimport("init/init_scrapbook/gemology")
 
 --if GetModConfigData("harder_monsters") then

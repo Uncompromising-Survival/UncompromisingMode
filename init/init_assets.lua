@@ -451,6 +451,7 @@ local inventoryitems =
     "um_gemology_geode_ruins",
     "um_gemology_geode_sink",
     "um_gemology_geode_vent",
+    "um_gemology_geode_magma",
 
     "um_flamethrower",
     "um_firecream",
@@ -476,6 +477,12 @@ local inventoryitems =
     "um_feather_totem",
     "um_gem_repair_kit"
 }
+
+local um_preparedfoods = require("um_preparedfoods")
+
+for k, v in pairs(um_preparedfoods) do
+    table.insert(inventoryitems, k)
+end
 
 local minimap_icons = {
     "riceplant",
@@ -559,6 +566,8 @@ local minimap_icons = {
     "um_astral_projector_target",
     "um_hotspring",
     "um_feather_totem",
+    "um_magmastone",
+    "um_magmastone_outcrop"
 }
 
 for _, item in ipairs(inventoryitems) do
@@ -577,6 +586,7 @@ local scrapbook_icons = {
     "um_gemology_geode_sink",
     "um_gemology_geode_slime",
     "um_gemology_geode_vent",
+    "um_gemology_geode_magma",
     "um_gemologybluegem1",
     "um_gemologybluegem2",
     "um_gemologyredgem1",
@@ -608,7 +618,70 @@ local scrapbook_icons = {
     "um_sinkmound_rock_gemless",
     "um_slimestone_rock",
     "um_slimestone_rock_gemless",
-    "icon_curseditem"
+    "icon_curseditem",
+    "um_astral_projector",
+    "um_astral_projector_target",
+    "mock_dragonfly",
+    "um_beeguard_seeker",
+    "um_beeguard_shooter",
+    "um_beeguard_blocker",
+    "bulletbee",
+    "veteranshrine",
+    "hoodedwidow",
+    "moonmaw_dragonfly",
+    "moonmaw_lavae",
+    "webbedcreature",
+    "spider_trapdoor_hooded",
+    "hoodedtrapdoor",
+    "spider_trapdoor",
+    "trapdoorgrass",
+    "trapdoor",
+    "cave_entrance_magmabiome",
+    "springrock3",
+    "springrock2",
+    "springrock1",
+    "um_hotspring",
+    "um_spongeplant",
+    "snaildrake_slime",
+    "snaildrake_magma",
+    "snaildrake_hole",
+    "boulder_crab",
+    "aphid",
+    "blueberryplant",
+    "fruitbat",
+    "giant_tree",
+    "giant_tree_birdnest",
+    "hooded_fern",
+    "um_bear_trap",
+    "um_bear_trap_old",
+    "um_fern_fox",
+    "um_fern_fox_den",
+    "woodpecker",
+    "pitcherplant",
+    "icon_fuel_salt",
+    "icon_fuel_batterypower",
+    "glacialhound",
+    "rimeweed_barrier",
+    "rimeweed_main",
+    "snowmong",
+    "snowpile",
+    "fyriterock",
+    "magmabone",
+    "magmarock1",
+    "mushtree_shadow",
+    "ruins_statue_miner",
+    "um_ghost_pepper",
+    "um_pepperdragon",
+    "um_pepperdragon_nest",
+    "um_pyre_nettles",
+    "um_pyrite_ceiling",
+    "um_ribopod",
+    "um_ribopodden",
+    "viperfruit_plant",
+    "viperling",
+    "viperworm",
+    "um_magmastone",
+    "um_magmastone_outcrop"
 }
 
 for _, item in ipairs(scrapbook_icons) do
@@ -2001,7 +2074,9 @@ Assets = {
 
     Asset("ANIM", "anim/um_bomb_vortex.zip"),
 
-    Asset("ANIM", "anim/ui_krampusbag_2x5.zip")
+    Asset("ANIM", "anim/ui_krampusbag_2x5.zip"),
+
+    Asset("ANIM", "anim/um_magmastone.zip"),
 }
 
 for _, asset in pairs(inventoryitems) do

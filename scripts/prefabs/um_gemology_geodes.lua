@@ -10,6 +10,7 @@ local slimeassets = { Asset("ANIM", "anim/um_geode_slime.zip") }
 local ruinsassets = { Asset("ANIM", "anim/um_geode_ruins.zip") }
 local sinksassets = { Asset("ANIM", "anim/um_geode_sink.zip") }
 local ventassets = { Asset("ANIM", "anim/um_geode_vent.zip") }
+local magmaassets = { Asset("ANIM", "anim/um_geode_magma.zip") }
 
 local loot_table = require("um_gemology_geode_defs")
 
@@ -73,7 +74,7 @@ local function geodemain(bankbuild)
 
     inst:AddTag("molebait")
     inst:AddTag("gemology_geode")
-	
+
     MakeInventoryPhysics(inst)
     MakeInventoryFloatable(inst, "med", nil, 0.68)
 
@@ -156,6 +157,10 @@ local function vent()
     return geodemain("um_geode_vent")
 end
 
+local function magma()
+    return geodemain("um_geode_magma")
+end
+
 return Prefab("um_gemology_geode_red", mushred, mushredassets),
     Prefab("um_gemology_geode_green", mushgreen, mushgreenassets),
     Prefab("um_gemology_geode_blue", mushblue, mushblueassets),
@@ -165,4 +170,5 @@ return Prefab("um_gemology_geode_red", mushred, mushredassets),
     Prefab("um_gemology_geode_slime", slime, slimeassets),
     Prefab("um_gemology_geode_ruins", ruins, ruinsassets),
     Prefab("um_gemology_geode_sink", sink, sinksassets),
-    Prefab("um_gemology_geode_vent", vent, ventassets)
+    Prefab("um_gemology_geode_vent", vent, ventassets),
+    Prefab("um_gemology_geode_magma", magma, magmaassets)

@@ -191,6 +191,7 @@ local function fn()
 
     inst.scrapbook_anim = "bubble_lava"
     inst.scrapbook_specialinfo = "LAVAPOND"
+    inst.scrapbook_proxy = "lava_pond"
 
     inst.MiniMapEntity:SetIcon("lava_pond.png")
 
