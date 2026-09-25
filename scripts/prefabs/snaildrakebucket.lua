@@ -131,7 +131,6 @@ local function ondeploy(inst, pt, deployer)
     ChangeSprite(inst)
 end
 
-
 local function CanDeploy(inst, pt, mouseover, deployer, rot)
     return TheWorld.Map:IsPassableAtPoint(pt:Get()) or TheWorld.Map:GetTileAtPoint(pt:Get()) == WORLD_TILES.UM_MAGMA_LAVAMOLTEN
 end
@@ -230,9 +229,9 @@ local function getstatus(inst)
     end
 end
 
-
 local function fn()
     local inst = CreateEntity()
+
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddNetwork()
@@ -258,35 +257,35 @@ local function fn()
         return inst
     end
 
-    inst:AddComponent("inspectable")
-    inst.components.inspectable.getstatus = getstatus
+    local inspectable = inst:AddComponent("inspectable")
+    inspectable.getstatus = getstatus
 
-    inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = resolvefilepath("images/inventoryimages/snaildrakebucket_empty.xml")
-    inst.components.inventoryitem:ChangeImageName("snaildrakebucket_empty")
+    local inventoryitem = inst:AddComponent("inventoryitem")
+    inventoryitem.atlasname = resolvefilepath("images/inventoryimages/snaildrakebucket_empty.xml")
+    inventoryitem:ChangeImageName("snaildrakebucket_empty")
 
-    inst:AddComponent("lootdropper")
-    inst.components.lootdropper:SetChanceLootTable("snaildrakebucket")
+    local lootdropper = inst:AddComponent("lootdropper")
+    lootdropper:SetChanceLootTable("snaildrakebucket")
 
-    inst:AddComponent("workable")
-    inst.components.workable:SetWorkAction(ACTIONS.HAMMER)
-    inst.components.workable:SetWorkLeft(1)
-    inst.components.workable:SetOnFinishCallback(ExplodeContents)
-    inst.components.workable.savestate = false
+    local workable = inst:AddComponent("workable")
+    workable:SetWorkAction(ACTIONS.HAMMER)
+    workable:SetWorkLeft(1)
+    workable:SetOnFinishCallback(ExplodeContents)
+    workable.savestate = false
 
-    inst:AddComponent("fillable")
-    inst.components.fillable.overrideonfillfn = OnFill
-    inst.components.fillable.showoceanaction = true
-    inst.components.fillable.acceptsoceanwater = false
-    inst.components.fillable.oceanwatererrorreason = "UNSUITABLE_FOR_PLANTS"
+    local fillable = inst:AddComponent("fillable")
+    fillable.overrideonfillfn = OnFill
+    fillable.showoceanaction = true
+    fillable.acceptsoceanwater = false
+    fillable.oceanwatererrorreason = "UNSUITABLE_FOR_PLANTS"
 
     inst.uses = 0 -- Not using finiteuses because we'll be using durability for the shell itself, the image will change to represent how much liquid is in it.
 
-    inst:AddComponent("fueled")
-    inst.components.fueled.fueltype = FUELTYPE.USAGE
-    inst.components.fueled:InitializeFuelLevel(8 * 60 * 70) -- Standard rate is a whole year
-    inst.components.fueled:SetDepletedFn(ExplodeContents)
-    inst.components.fueled.no_sewing = true
+    local fueled = inst:AddComponent("fueled")
+    fueled.fueltype = FUELTYPE.USAGE
+    fueled:InitializeFuelLevel(8 * 60 * 70) -- Standard rate is a whole year
+    fueled:SetDepletedFn(ExplodeContents)
+    fueled.no_sewing = true
 
     inst:WatchWorldState("iswinter", EvaluateFueledRate) -- Dynamic fuel consumption rate for shell w/ water in it during winter
 
@@ -319,7 +318,6 @@ local function CreateGrid()
     inst.AnimState:SetLayer(LAYER_BACKGROUND)
     inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
 
-
     return inst
 end
 
@@ -334,11 +332,6 @@ local function addtional_placer_fn(inst)
             placer.AnimState:SetMultColour(0, 0, 1, 1)
             inst.deploy_helpers[{ x = i, z = j }] = placer
         end
-    end
-
-    for pos, placer in pairs(inst.deploy_helpers) do
-        print("placer", placer)
-        printwrap("pos", pos)
     end
 
     inst:DoPeriodicTask(0, function(inst)

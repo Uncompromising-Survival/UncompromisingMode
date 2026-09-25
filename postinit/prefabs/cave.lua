@@ -55,53 +55,49 @@ env.AddPrefabPostInit("cave", function(inst)
     inst:DoTaskInTime(0, function()
         if inst.net ~= nil then
             inst.net:ListenForEvent("startquake", function(_inst) -- we still want the old world, not network.
-                print("starting quake")
-                printwrap("magma outcrops", inst.magma_outcrops)
                 local count = 0
 
                 if inst.magma_outcrops ~= nil then
                     for k, v in pairs(inst.magma_outcrops) do
                         if v ~= nil and v.StartGrowing ~= nil and v.components.timer ~= nil and not v.components.timer:TimerExists("grow") then
                             count = count + 1
-                            print("starting growing")
                             v:DoTaskInTime(math.random(5, 10), function(inst)
-                                print("start growing for real")
                                 inst:StartGrowing()
                             end)
                         end
                     end
-                    print("total count", count)
                 else
                     inst.magma_outcrops = {}
                 end
 
                 if inst.components.um_magmamanager ~= nil then
                     if count < 10 then
-                        print("spawning more")
                         local valid_tiles = inst.components.um_magmamanager.magma_tiles
                         local tries = 0
                         for i = 1, math.random(1, 3) do
-                            print("spawn attempt ", tries)
                             tries = tries + 1
                             if tries > 10 then
                                 break
                             end
 
                             local valid = true
-                            local point = valid_tiles[math.random(#valid_tiles)]
-                            local x, z = point.x, point.z
                             local pt = FindNearbyLand(Vector3(x, 0, z), 20)
-                            local nearby_ents = TheSim:FindEntities(x, 0, z, 1, nil, { "FX", "INLIMBO", "DECOR", "NOCLICK", "NOBLOCK" })
-                            local S = TheWorld.Map:IsLandTileAtPoint(pt.x + 2, 0, pt.z)
-                            local N = TheWorld.Map:IsLandTileAtPoint(pt.x - 2, 0, pt.z)
-                            local E = TheWorld.Map:IsLandTileAtPoint(pt.x, 0, pt.z + 2)
-                            local W = TheWorld.Map:IsLandTileAtPoint(pt.x, 0, pt.z - 2)
 
-
-                            if pt.x == 0 and pt.z == 0 or #nearby_ents > 0 or not (S and N and E and W) then
+                            if not pt then
                                 valid = false
-                            end
+                            else
+                                local point = valid_tiles[math.random(#valid_tiles)]
+                                local x, z = point.x, point.z
+                                local nearby_ents = TheSim:FindEntities(x, 0, z, 1, nil, { "FX", "INLIMBO", "DECOR", "NOCLICK", "NOBLOCK" })
+                                local S = TheWorld.Map:IsLandTileAtPoint(pt.x + 2, 0, pt.z)
+                                local N = TheWorld.Map:IsLandTileAtPoint(pt.x - 2, 0, pt.z)
+                                local E = TheWorld.Map:IsLandTileAtPoint(pt.x, 0, pt.z + 2)
+                                local W = TheWorld.Map:IsLandTileAtPoint(pt.x, 0, pt.z - 2)
 
+                                if pt.x == 0 and pt.z == 0 or #nearby_ents > 0 or not (S and N and E and W) then
+                                    valid = false
+                                end
+                            end
 
                             if valid then
                                 inst:DoTaskInTime(math.random(5, 10), function(inst)
@@ -121,5 +117,3 @@ env.AddPrefabPostInit("cave", function(inst)
         end
     end)
 end)
-
-

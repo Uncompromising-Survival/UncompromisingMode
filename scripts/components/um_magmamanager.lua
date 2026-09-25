@@ -312,7 +312,6 @@ function MagmaManager:OnUpdate(dt)
                 else
                     self.next_batch = i
                 end
-                print("new batch", self.next_batch)
                 break
             end
 
