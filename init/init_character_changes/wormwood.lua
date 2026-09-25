@@ -200,13 +200,14 @@ if TUNING.DSTU.WORMWOOD_PHOTOSYNTHESIS then
 
     env.modimport("init/init_character_changes/skilltree_wormwood") -- Import New Wormwood Tree
 
+    local healing_debuffs = {["confighealbuff"] = true, ["compostheal_buff"] = true, ["tillweedsalve_buff"] = true}
     local function VetCurseCancelHealing(inst, data)
         local debuffable = inst.components.debuffable
         if inst:HasTag("vetcurse") and debuffable then
-            local debuffs = debuffable.debuffs
-            for i, v in pairs(debuffs) do
-                if string.sub(i, 1, 24) == "healthregenbuff_vetcurse" or i == "confighealbuff" or i == "compostheal_buff" or i == "tillweedsalve_buff" then
-                    debuffable:RemoveDebuff(i)
+            for name, debuff in pairs(debuffable.debuffs) do
+                local debuffprefab = debuff.inst.prefab
+                if string.sub(debuffprefab, 1, 24) == "healthregenbuff_vetcurse" or healing_debuffs[debuffprefab] then
+                    debuffable:RemoveDebuff(name)
                 end
             end
         end
@@ -414,10 +415,7 @@ local function StartGrowing(inst, giver, product)
     end
 end
 
-local UpvalueHacker = require("tools/upvaluehacker")
-env.AddSimPostInit(function()
-    UpvalueHacker.SetUpvalue(Prefabs.mushroom_farm.fn, StartGrowing, "onacceptitem", "StartGrowing")
-end)
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 
 local TREESTATES =
 {
@@ -472,35 +470,40 @@ end
 
 local PLANT_DEFS = require("prefabs/farm_plant_defs").PLANT_DEFS
 
-env.AddPrefabPostInit("world", function(inst)
-    if not _G.TheWorld.ismastersim then return end
+env.AddSimPostInit(function()
+    local _StartGrowing = UMUpvalueHacker.TryGetUpvalue(Prefabs.mushroom_farm.fn, "onacceptitem", "StartGrowing")
+    if _StartGrowing then UMUpvalueHacker.SetUpvalue(Prefabs.mushroom_farm.fn, StartGrowing, "onacceptitem", "StartGrowing") end
 
-    local _DoAOEeffect = UpvalueHacker.GetUpvalue(_G.Prefabs.wormwood.fn, "master_postinit", "UpdateBloomStage", "EnableFullBloom", "DoAOEeffect")
-    local function DoAOEeffect(inst, enable)
-        _DoAOEeffect(inst, enable)
-        local skilltreeupdater = inst.components.skilltreeupdater
-        if skilltreeupdater and skilltreeupdater:IsActivated("wormwood_sympathetic_blooming") then
-            DoSympatheticBlooming(inst)
+    local _DoAOEeffect = UMUpvalueHacker.TryGetUpvalue(Prefabs.wormwood.fn, "master_postinit", "UpdateBloomStage", "EnableFullBloom", "DoAOEeffect")
+    if _DoAOEeffect then
+        local function DoAOEeffect(inst, enable)
+            _DoAOEeffect(inst, enable)
+            local skilltreeupdater = inst.components.skilltreeupdater
+            if skilltreeupdater and skilltreeupdater:IsActivated("wormwood_sympathetic_blooming") then
+                DoSympatheticBlooming(inst)
+            end
         end
+        UMUpvalueHacker.SetUpvalue(Prefabs.wormwood.fn, DoAOEeffect, "master_postinit", "UpdateBloomStage", "EnableFullBloom", "DoAOEeffect")
     end
-    UpvalueHacker.SetUpvalue(_G.Prefabs.wormwood.fn, DoAOEeffect, "master_postinit", "UpdateBloomStage", "EnableFullBloom", "DoAOEeffect")
 
-    local _EnableFullBloom = UpvalueHacker.GetUpvalue(_G.Prefabs.wormwood.fn, "master_postinit", "UpdateBloomStage", "EnableFullBloom")
-    local function EnableFullBloom(inst, enable)
-        if enable then
-            if not inst.fullbloom then
+    local _EnableFullBloom = UMUpvalueHacker.TryGetUpvalue(Prefabs.wormwood.fn, "master_postinit", "UpdateBloomStage", "EnableFullBloom")
+    if _EnableFullBloom then
+        local function EnableFullBloom(inst, enable)
+            if enable then
+                if not inst.fullbloom then
+                    if inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated("wormwood_blooming_overheatprotection") then
+                        inst.components.moisture.waterproofnessmodifiers:SetModifier(inst, TUNING.WATERPROOFNESS_SMALL)
+                    end
+                end
+            elseif inst.fullbloom then
                 if inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated("wormwood_blooming_overheatprotection") then
-                    inst.components.moisture.waterproofnessmodifiers:SetModifier(inst, TUNING.WATERPROOFNESS_SMALL)
+                    inst.components.moisture.waterproofnessmodifiers:SetModifier(inst, 0)
                 end
             end
-        elseif inst.fullbloom then
-            if inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated("wormwood_blooming_overheatprotection") then
-                inst.components.moisture.waterproofnessmodifiers:SetModifier(inst, 0)
-            end
+            _EnableFullBloom(inst, enable)
         end
-        _EnableFullBloom(inst, enable)
+        UMUpvalueHacker.SetUpvalue(Prefabs.wormwood.fn, EnableFullBloom, "master_postinit", "UpdateBloomStage", "EnableFullBloom")
     end
-    UpvalueHacker.SetUpvalue(_G.Prefabs.wormwood.fn, EnableFullBloom, "master_postinit", "UpdateBloomStage", "EnableFullBloom")
 
     for k, v in pairs(PLANT_DEFS) do
         env.AddPrefabPostInit(v.prefab, function(inst)
@@ -508,71 +511,76 @@ env.AddPrefabPostInit("world", function(inst)
         end)
     end
 
-    local _OnBlocked = UpvalueHacker.GetUpvalue(_G.Prefabs.armor_bramble.fn, "OnBlocked")
-    local function OnBlocked(owner, data, inst)
-        _OnBlocked(owner, data, inst)
-        if data ~= nil and not data.redirected then
-            if owner.components.skilltreeupdater and owner.components.skilltreeupdater:IsActivated("wormwood_armor_bramble2") then
-                owner:DoTaskInTime(0.6, function(owner) --AXE The capstone ability triggers the bramble effect a second time.
-                    if owner then
-                        SpawnPrefab("bramblefx_armor"):SetFXOwner(owner)
-                        if owner.SoundEmitter ~= nil then
-                            owner.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
+    local _OnBlocked = UMUpvalueHacker.TryGetUpvalue(Prefabs.armor_bramble.fn, "OnBlocked")
+    if _OnBlocked then
+        local function OnBlocked(owner, data, inst)
+            _OnBlocked(owner, data, inst)
+            if data ~= nil and not data.redirected then
+                if owner.components.skilltreeupdater and owner.components.skilltreeupdater:IsActivated("wormwood_armor_bramble2") then
+                    owner:DoTaskInTime(0.6, function(owner) --AXE The capstone ability triggers the bramble effect a second time.
+                        if owner then
+                            SpawnPrefab("bramblefx_armor"):SetFXOwner(owner)
+                            if owner.SoundEmitter ~= nil then
+                                owner.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
+                            end
                         end
-                    end
-                end)
+                    end)
+                end
             end
         end
+        UMUpvalueHacker.SetUpvalue(Prefabs.armor_bramble.fn, OnBlocked, "OnBlocked")
     end
-    UpvalueHacker.SetUpvalue(_G.Prefabs.armor_bramble.fn, OnBlocked, "OnBlocked")
 
-    local _OnHuskBlocked = UpvalueHacker.GetUpvalue(_G.Prefabs.armor_lunarplant_husk.fn, "husk_master_postinit", "OnHuskBlocked")
-    local function OnHuskBlocked(owner, data, inst)
-        _OnHuskBlocked(owner, data, inst)
+    local _OnHuskBlocked = UMUpvalueHacker.TryGetUpvalue(Prefabs.armor_lunarplant_husk.fn, "husk_master_postinit", "OnHuskBlocked")
+    if _OnHuskBlocked then
+        local function OnHuskBlocked(owner, data, inst)
+            _OnHuskBlocked(owner, data, inst)
 
-        if data ~= nil and not data.redirected then
-            if owner.components.skilltreeupdater and owner.components.skilltreeupdater:IsActivated("wormwood_armor_bramble2") then
-                owner:DoTaskInTime(0.6, function(owner) --AXE The capstone ability triggers the bramble effect a second time.
-                    if owner then
-                        SpawnPrefab("bramblefx_armor_upgrade"):SetFXOwner(owner)
-                        if owner.SoundEmitter ~= nil then
-                            owner.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
+            if data ~= nil and not data.redirected then
+                if owner.components.skilltreeupdater and owner.components.skilltreeupdater:IsActivated("wormwood_armor_bramble2") then
+                    owner:DoTaskInTime(0.6, function(owner) --AXE The capstone ability triggers the bramble effect a second time.
+                        if owner then
+                            SpawnPrefab("bramblefx_armor_upgrade"):SetFXOwner(owner)
+                            if owner.SoundEmitter ~= nil then
+                                owner.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
+                            end
                         end
-                    end
-                end)
+                    end)
+                end
+            end
+
+            -- Brambleshade also snares enemies
+            if owner == nil or data == nil then
+                return
+            end
+
+            local attacker = data.attacker
+            if not attacker or not attacker.components.locomotor
+                or (attacker.components.health and attacker.components.health:IsDead()) then
+                return
+            end
+
+            local owner_skilltreeupdater = owner.components.skilltreeupdater
+            if owner_skilltreeupdater and owner_skilltreeupdater:IsActivated("wormwood_allegiance_lunar_plant_gear_1") then
+                attacker:AddDebuff("wormwood_vined_debuff", "wormwood_vined_debuff")
             end
         end
-
-        -- Brambleshade also snares enemies
-        if owner == nil or data == nil then
-            return
-        end
-
-        local attacker = data.attacker
-        if not attacker or not attacker.components.locomotor
-            or (attacker.components.health and attacker.components.health:IsDead()) then
-            return
-        end
-
-        local owner_skilltreeupdater = owner.components.skilltreeupdater
-        if owner_skilltreeupdater and owner_skilltreeupdater:IsActivated("wormwood_allegiance_lunar_plant_gear_1") then
-            attacker:AddDebuff("wormwood_vined_debuff", "wormwood_vined_debuff")
-        end
+        UMUpvalueHacker.SetUpvalue(Prefabs.armor_lunarplant_husk.fn, OnHuskBlocked, "husk_master_postinit", "OnHuskBlocked")
     end
 
-    UpvalueHacker.SetUpvalue(_G.Prefabs.armor_lunarplant_husk.fn, OnHuskBlocked, "husk_master_postinit", "OnHuskBlocked")
-
-    local function DoThornsTrap(inst, pos)
-        local thorns = SpawnPrefab("bramblefx_trap")
-        thorns.Transform:SetPosition(pos:Get())
-        thorns.canhitplayers = TheNet:GetPVPEnabled()
-        if inst.bonusrange then
-            thorns.range = thorns.range + 2
-            thorns.Transform:SetScale(2, 2, 2)
+    local _DoThorns = UMUpvalueHacker.TryGetUpvalue(Prefabs.trap_bramble.fn, "OnExplode", "DoThorns")
+    if _DoThorns then
+        local function DoThornsTrap(inst, pos)
+            local thorns = SpawnPrefab("bramblefx_trap")
+            thorns.Transform:SetPosition(pos:Get())
+            thorns.canhitplayers = TheNet:GetPVPEnabled()
+            if inst.bonusrange then
+                thorns.range = thorns.range + 2
+                thorns.Transform:SetScale(2, 2, 2)
+            end
         end
+        UMUpvalueHacker.SetUpvalue(Prefabs.trap_bramble.fn, DoThornsTrap, "OnExplode", "DoThorns")
     end
-
-    UpvalueHacker.SetUpvalue(_G.Prefabs.trap_bramble.fn, DoThornsTrap, "OnExplode", "DoThorns")
 end)
 
 local function on_planted(inst, data)

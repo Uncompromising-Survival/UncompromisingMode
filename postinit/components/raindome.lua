@@ -50,7 +50,6 @@ env.AddComponentPostInit("raindome", function(self)
                 oldtargets[target] = nil
             else
                 if not target:HasTag("tornado_nosucky") then
-                    --print("adding tag!")
                     target:AddTag("tornado_nosucky")
                 end
             end

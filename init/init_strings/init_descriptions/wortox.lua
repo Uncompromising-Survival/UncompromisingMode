@@ -145,7 +145,7 @@ DESCRIBE.FRUITBAT = "You are what you eat. Literally."
 DESCRIBE.SKELETONMEAT = "This is just wrong."
 DESCRIBE.CHIMP = DESCRIBE.MONKEY
 DESCRIBE.SWILSON = "Play nice with the imp!"
-DESCRIBE.VAMPIREBAT = "It's a big bat. And that is that."
+DESCRIBE.UM_VAMPIREBAT = "It's a big bat. And that is that."
 
 -- Swampyness
 DESCRIBE.RICEPLANT = "Rice! ...How nice!"
@@ -312,6 +312,7 @@ DESCRIBE.MOONMAW_GLASSSHARDS_RING = "I'd best steer clear of those!"
 DESCRIBE.MOONMAW_GLASSSHARDS = "I'd best steer clear of those!"
 DESCRIBE.MOONMAW_LAVAE_RING = DESCRIBE.MOONMAW_LAVAE
 DESCRIBE.MUTATOR_TRAPDOOR = DESCRIBE.MUTATOR_WARRIOR
+DESCRIBE.MUTATOR_TRAPDOOR_HOODED = DESCRIBE.MUTATOR_WARRIOR
 
 DESCRIBE.WOODPECKER = "I wouldn't find a life of drilling all that thrilling."
 DESCRIBE.SNOTROAST = "This is just gross."

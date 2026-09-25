@@ -1,7 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
-local UpvalueHacker = require("tools/upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 
 local function DisableThatStuff(inst)
     TheWorld:PushEvent("beequeenkilled")
@@ -613,8 +613,8 @@ local function BeeQueenPost(inst)
     -- No more honey when attacking
 
     if inst.prefab == "cherry_beequeen" then
-        local OnMissOther = UpvalueHacker.GetUpvalue(Prefabs.cherry_beequeen.fn, "OnMissOther")
-        local OnAttackOther = UpvalueHacker.GetUpvalue(Prefabs.cherry_beequeen.fn, "OnAttackOther")
+        local OnMissOther = UMUpvalueHacker.GetUpvalue(Prefabs.cherry_beequeen.fn, "OnMissOther")
+        local OnAttackOther = UMUpvalueHacker.GetUpvalue(Prefabs.cherry_beequeen.fn, "OnAttackOther")
 
         inst:RemoveEventCallback("onattackother", OnAttackOther)
         inst:RemoveEventCallback("onareaattackother", OnAttackOther)
@@ -653,8 +653,8 @@ local function BeeQueenPost(inst)
         inst:ListenForEvent("onattackother", OnAttackOther)
         inst:ListenForEvent("onareaattackother", OnAttackOther)
     else
-        local OnMissOther = UpvalueHacker.GetUpvalue(Prefabs.beequeen.fn, "OnMissOther")
-        local OnAttackOther = UpvalueHacker.GetUpvalue(Prefabs.beequeen.fn, "OnAttackOther")
+        local OnMissOther = UMUpvalueHacker.GetUpvalue(Prefabs.beequeen.fn, "OnMissOther")
+        local OnAttackOther = UMUpvalueHacker.GetUpvalue(Prefabs.beequeen.fn, "OnAttackOther")
         inst:RemoveEventCallback("onattackother", OnAttackOther)
         inst:RemoveEventCallback("onmissother", OnMissOther)
     end
@@ -696,7 +696,6 @@ local function BeeQueenPost(inst)
     inst.components.combat:SetRange(TUNING.BEEQUEEN_ATTACK_RANGE, TUNING.BEEQUEEN_HIT_RANGE) --Tune her attack.
 
     inst.hasWall = HasWall
-
 
     inst.StartHoney = function(inst) end
 

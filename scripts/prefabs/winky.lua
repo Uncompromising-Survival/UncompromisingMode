@@ -124,6 +124,9 @@ local function CustomFoodStatsMod(inst, health_delta, hunger_delta, sanity_delta
         "milkywhites",
         "frogfishbowl",
         "devilsfruitcake",
+        "shroom_skin",
+        "shroom_skin_fragment",
+        "tentaclespots"
     }
     for _, prefab in pairs(gross_food_list) do
         if food and (food.prefab == prefab or food.prefab == prefab .. "_cooked" or food.prefab == prefab .. "_lesser") and sanity_delta and sanity_delta < 0 then

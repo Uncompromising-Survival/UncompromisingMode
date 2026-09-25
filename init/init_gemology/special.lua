@@ -1,16 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-function DamageGem(enchant, item, value)
-    if --[[not item.components.finiteuses
-        and not item.components.fueled
-        and not item.components.armor
-        and not item.components.perishable
-        and]] item.components.gem_enchantable:HasDurabilityEnabled("um_gemology" .. enchant) then
-        item.components.gem_enchantable:DoDurabilityDelta("um_gemology" .. enchant, -value)
-    end
-end
-
 -- Neurotic Peridot, increase the attack speed
 env.AddStategraphPostInit("wilson", function(inst) -- Plan on moving this to the other blue mushroomhat states, this is a way cleaner way of making a state play out faster
     local _onenter = inst.states["attack"].onenter
@@ -18,7 +8,7 @@ env.AddStategraphPostInit("wilson", function(inst) -- Plan on moving this to the
         _onenter(inst, pushanim, ...)
         local buffaction = inst:GetBufferedAction()
         local neurotic_item_mult = inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS).um_neurotic_mod
-        if not (buffaction and buffaction.mockattack) and not (inst.components.rider and inst.components.rider:IsRiding()) and neurotic_item_mult then
+        if not (buffaction and buffaction.um_mockattack) and not (inst.components.rider and inst.components.rider:IsRiding()) and neurotic_item_mult then
             inst.AnimState:SetDeltaTimeMultiplier(neurotic_item_mult)
             if inst.sg.timeout then inst.sg:SetTimeout(inst.sg.timeout / neurotic_item_mult) end
             -- Incase we want to add other sources of speed buff
@@ -155,7 +145,6 @@ env.AddComponentPostInit("workable", function(self)
     end
 end)
 
-
 --teleports items to the worker's inv after being marked with a hoarding gem
 env.AddComponentPostInit("lootdropper", function(self)
     local _SpawnLootPrefab = self.SpawnLootPrefab
@@ -197,7 +186,13 @@ env.AddComponentPostInit("combat", function(self)
                 multiplier = (multiplier or 1) * (1 + .1 * peerless)
             end
         end
-        return _CalcDamage(self, target, weapon, multiplier, ...)
+        local ret = {_CalcDamage(self, target, weapon, multiplier, ...)}
+        if weapon then
+            UMGemologyFns.GetEnchantsAndDoFn(weapon, "onadjustdamage", function(enchant, tier, gemfn, _self, _attacker, _target)
+                ret[1] = gemfn(_self, ret[1], _attacker, _target, tier, 3)
+            end, self.inst, target)
+        end
+        return unpack(ret)
     end
 
     local _GetAttacked = self.GetAttacked
@@ -211,7 +206,7 @@ env.AddComponentPostInit("combat", function(self)
                 inst:DoTaskInTime(0, function(inst)
                     inst:AddDebuff("buff_furious" .. furious, "buff_furious" .. furious)
                 end)
-                DamageGem("purplegem1", tool, TUNING.DSTU.GEM_USES[furious])
+                UMGemologyFns.DamageGem("purplegem1", tool, TUNING.DSTU.GEM_USES[furious])
             end
         end
         if self.inst:HasTag("agony_gas") then

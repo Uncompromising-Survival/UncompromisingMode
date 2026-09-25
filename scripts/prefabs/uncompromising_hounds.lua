@@ -67,67 +67,67 @@ local sounds =
 }
 
 SetSharedLootTable('hound_lightning',
-    {
-        { 'monstermeat', 1.0 },
-        { 'houndstooth', 1.0 },
-        { 'goldnugget',  1.0 },
-        { 'goldnugget',  0.5 },
-    })
+{
+    { 'monstermeat', 1 },
+    { 'houndstooth', 1 },
+    { 'goldnugget',  1 },
+    { 'goldnugget',  .5 },
+})
 
 SetSharedLootTable('hound_magma',
-    {
-        { 'monstermeat', 1.00 },
-        { 'monstermeat', 1.00 },
-        { 'monstermeat', 1.00 },
-        { 'monstermeat', 0.50 },
-        { 'houndstooth', 1.00 },
-        { 'houndstooth', 0.33 },
-        { 'monstermeat', 1.0 },
-        { 'flint',       1.0 },
-        { 'rocks',       1.0 },
-        { 'rocks',       0.5 },
-        { 'redgem',      1.0 },
-    })
+{
+    { 'monstermeat', 1 },
+    { 'monstermeat', 1 },
+    { 'monstermeat', 1 },
+    { 'monstermeat', .5 },
+    { 'houndstooth', 1 },
+    { 'houndstooth', .33 },
+    { 'monstermeat', 1 },
+    { 'flint',       1 },
+    { 'rocks',       1 },
+    { 'rocks',       .5 },
+    { 'redgem',      1 },
+})
 
 SetSharedLootTable('hound_rne',
-    {
-        { 'monstermeat',   1.0 },
-        { 'nightmarefuel', 1.0 },
-        { 'nightmarefuel', 0.5 },
-        { 'purplegem',     0.25 },
-    })
+{
+    { 'monstermeat',   1 },
+    { 'nightmarefuel', 1 },
+    { 'nightmarefuel', .5 },
+    { 'purplegem',     .25 },
+})
 
 SetSharedLootTable('hound_glacial',
-    {
-        { 'monstermeat', 1.00 },
-        { 'monstermeat', 1.00 },
-        { 'monstermeat', 1.00 },
-        { 'monstermeat', 0.50 },
-        { 'houndstooth', 1.00 },
-        { 'houndstooth', 0.33 },
-        { 'ice',         1.0 },
-        { 'ice',         0.5 },
-        { 'bluegem',     1.0 },
-    })
+{
+    { 'monstermeat', 1 },
+    { 'monstermeat', 1 },
+    { 'monstermeat', 1 },
+    { 'monstermeat', .5 },
+    { 'houndstooth', 1 },
+    { 'houndstooth', .33 },
+    { 'ice',         1. },
+    { 'ice',         .5 },
+    { 'bluegem',     1. },
+})
 
 SetSharedLootTable('hound_spore',
-    {
-        { 'spoiled_food',         1.0 },
-        { 'houndstooth',          1.0 },
-        { 'sporecloud_toad',      1.0 },
-        { 'shroom_skin_fragment', 0.5 },
+{
+    { 'spoiled_food',         1 },
+    { 'houndstooth',          1 },
+    { 'shroom_skin_fragment', .5 },
 
-    })
+})
 
 local WAKE_TO_FOLLOW_DISTANCE = 8
 local SLEEP_NEAR_HOME_DISTANCE = 10
 local SHARE_TARGET_DIST = 30
 local HOME_TELEPORT_DIST = 30
 
-local NO_TAGS = { "FX", "NOCLICK", "DECOR", "INLIMBO" }
-local FREEZABLE_TAGS = { "freezable" }
+local NO_TAGS = {"FX", "NOCLICK", "DECOR", "INLIMBO"}
+local FREEZABLE_TAGS = {"freezable"}
 
-local SINKHOLD_BLOCKER_TAGS = { "hound_lightning" }
+local SINKHOLD_BLOCKER_TAGS = {"hound_lightning"}
+
 local function Zap(inst, posx, posz)
     --local projectile = SpawnPrefab("hound_lightning")
     --projectile.Transform:SetPosition(posx, 0, posz)
@@ -151,10 +151,7 @@ local function Zap(inst, posx, posz)
         or nil
 
     if offset then
-        local lightning = SpawnPrefab("hound_lightning")
-        lightning.owner = inst
-        lightning.NoTags = JoinArrays(lightning.NoTags, {"hound", "houndfriend"})
-        lightning.Transform:SetPosition(x + offset.x, 0, z + offset.z)
+        UMCommonFns.SpawnHoundLightning(inst, {pos = {x = x + offset.x, z = z + offset.z}})
     end
 end
 
@@ -168,14 +165,14 @@ end
 local function Charging(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
 
-    local x1 = x + math.random(-0.5, 0.5)
-    local z1 = z + math.random(-0.5, 0.5)
+    local x1 = x + math.random(-.5, .5)
+    local z1 = z + math.random(-.5, .5)
 
-    if math.random() >= 0.8 then
+    if math.random() >= .8 then
         SpawnPrefab("electricchargedfx").Transform:SetPosition(x1, 0, z1)
     end
 
-    SpawnPrefab("sparks").Transform:SetPosition(x1, 0 + 0.25 * math.random(), z1)
+    SpawnPrefab("sparks").Transform:SetPosition(x1, 0 + .25 * math.random(), z1)
 end
 
 local function CancelCharge(inst)
@@ -186,7 +183,7 @@ local function CancelCharge(inst)
 end
 
 local function Charge(inst)
-    inst.task = inst:DoPeriodicTask(0.15, function(inst) Charging(inst) end)
+    inst.task = inst:DoPeriodicTask(.15, function(inst) Charging(inst) end)
 end
 
 local function ShouldWakeUp(inst)
@@ -639,7 +636,7 @@ local function ontimerdone(inst, data)
 end
 
 local function DoLightningExplosion(inst)
-    SpawnPrefab("hound_lightning").Transform:SetPosition(inst.Transform:GetWorldPosition())
+    UMCommonFns.SpawnHoundLightning(inst, {pos = inst:GetPosition()})
 end
 
 local function OnLightningAttacked(inst, data)
@@ -656,9 +653,11 @@ local function OnLightningAttacked(inst, data)
     end
 end
 
+local ISALLY_TAGS = {"hound", "houndfriend", "houndmound"}
+
 local function IsAlly(inst, guy)
     -- Prevents lightning from forking from a Lightning Hound's target to other Hounds and friends.
-    return UMCommonFns.IsAlly(inst, guy, { "hound", "houndfriend", "houndmound" })
+    return UMCommonFns.IsAlly(inst, guy, ISALLY_TAGS)
 end
 
 local function fnlightning()
@@ -733,7 +732,7 @@ local function GlacialProjectile(inst, target)
             spike.Transform:SetRotation(rad)
             spike.Transform:SetPosition(x1, y, z1)
 
-            local size = Lerp(1.0, 0.75, i / numspikes)
+            local size = Lerp(1, .75, i / numspikes)
             spike.Transform:SetScale(size, size, size)
         end)
     end
@@ -751,7 +750,7 @@ local function GlacialCharging(inst)
 
     local x1 = x + math.random(-2, 2)
     local z1 = z + math.random(-2, 2)
-    local y1 = 0 + 0.25 * math.random()
+    local y1 = 0 + .25 * math.random()
 
     local flakes = SpawnPrefab("deer_ice_flakes")
     flakes.AnimState:PlayAnimation("idle")
@@ -855,8 +854,8 @@ local function fnglacial()
     inst:ListenForEvent("timerdone", ontimerdone)
     inst.Transform:SetScale(1.3, 1.3, 1.3)
 
-    inst.components.combat:SetDefaultDamage(TUNING.HOUND_DAMAGE * 2)
-    inst.components.health:SetMaxHealth(TUNING.WARGLET_HEALTH * 1.25)
+    inst.components.combat:SetDefaultDamage(TUNING.DSTU.GLACIAL_HOUND_DAMAGE)
+    inst.components.health:SetMaxHealth(TUNING.DSTU.GLACIAL_HOUND_HEALTH)
 
     inst.task = nil
 
@@ -1082,7 +1081,7 @@ end
 local function ShootFireMagmaHound(inst, total_flame) --AXE obviously called by magmahound to perform its continuous fire breath attack
     for i = 1, total_flame do
         inst:DoTaskInTime(0 + math.random(1, 15) * FRAMES, function(inst)
-            SetUpFire(inst, 5, 20, 0.8 + math.random(0, 10) / 100, 2)
+            SetUpFire(inst, 5, 20, .8 + math.random(0, 10) / 100, TUNING.DSTU.MAGMA_HOUND_FIRE_DAMAGE)
             PoofNearby(inst)
         end)
     end
@@ -1090,8 +1089,8 @@ end
 
 local function FirePoof(inst) --AXE Visual support for when the fire hound is briefly charging the spitfire attack
     local x, y, z = inst.Transform:GetWorldPosition()
-    local x1 = x + 0.05 * math.random(-10, 10)
-    local z1 = z + 0.05 * math.random(-10, 10)
+    local x1 = x + .05 * math.random(-10, 10)
+    local z1 = z + .05 * math.random(-10, 10)
     local y1 = 0 + .25 * math.random()
     SpawnPrefab("halloween_firepuff_1").Transform:SetPosition(x1, y1, z1)
     local magmafire = SpawnPrefab("magmafire")
@@ -1131,8 +1130,8 @@ local function fnmagma()
 
     inst.task = nil
 
-    inst.components.combat:SetDefaultDamage(TUNING.HOUND_DAMAGE * 2)
-    inst.components.health:SetMaxHealth(TUNING.WARGLET_HEALTH * 1.25)
+    inst.components.combat:SetDefaultDamage(TUNING.DSTU.MAGMA_HOUND_DAMAGE)
+    inst.components.health:SetMaxHealth(TUNING.DSTU.MAGMA_HOUND_HEALTH)
 
     inst.components.combat:SetRange(10, 3)
 
@@ -1156,6 +1155,57 @@ local function fnmagma()
     return inst
 end
 
+local function OnSporeCloudRemoved(inst)
+    inst:RemoveEventCallback("attacked", inst.OnAttacked, inst.owner)
+    inst:RemoveEventCallback("leaderchanged", inst.OnLeaderChanged, inst.owner)
+    inst:RemoveEventCallback("onremove", inst.OnSporeHoundRemoved, inst.owner)
+    inst:RemoveEventCallback("onremove", inst.OnSporeHoundRemoved)
+end
+
+local function SpawnSporeCloud(inst)
+    local sporecloud = SpawnPrefab("sporecloud_toad")
+    sporecloud.Transform:SetPosition(inst.Transform:GetWorldPosition())
+    sporecloud.owner = inst
+    sporecloud.NoTags = ISALLY_TAGS
+    local follower = inst.components.follower
+    local leader = follower and follower:GetLeader()
+    if leader then sporecloud.ownerleader = leader end -- Look into refining and making this a thing for the other follower projectiles/traps.
+    sporecloud.OnAttacked = function(_inst, data)
+        if sporecloud.ownerleader == data.attacker then
+            sporecloud.ownerleader = nil
+        end
+    end
+    sporecloud.OnLeaderChanged = function(_inst, data)
+        local health = _inst.components.health
+        if not (health and health:IsDead()) then
+            local newleader = data.new
+            if sporecloud.ownerleader ~= newleader then
+                sporecloud.ownerleader = newleader
+            end
+        end
+    end
+    sporecloud.OnSporeHoundRemoved = function(_inst) OnSporeCloudRemoved(sporecloud) end
+    sporecloud:ListenForEvent("attacked", sporecloud.OnAttacked, sporecloud.owner)
+    sporecloud:ListenForEvent("leaderchanged", sporecloud.OnLeaderChanged, sporecloud.owner)
+    sporecloud:ListenForEvent("onremove", sporecloud.OnSporeHoundRemoved, sporecloud.owner)
+    sporecloud:ListenForEvent("onremove", sporecloud.OnSporeHoundRemoved)
+end
+
+local function SporeCloudAttack(inst, target)
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local ents = TheSim:FindEntities(x, y, z, 2.5, {"_combat"}, {"wall", "hound", "houndfriend", "houndmound"})
+    for i, v in ipairs(ents) do
+        if not (v.components.health and v.components.health:IsDead()) and UMCommonFns.IsNotFriendly(inst, v) then
+            v.components.combat:GetAttacked(inst, 25, nil)
+        end
+    end
+    SpawnSporeCloud(inst)
+end
+
+local function DoSporeExplosion(inst)
+    SpawnSporeCloud(inst)
+end
+
 local function OnHitOther_Spore(inst, data)
     if data.target and data.target:HasTag("player") and not data.target:HasAnyTag("hasplaguemask", "automaton") and TUNING.DSTU.MAXHPHITTERS then
         data.target.components.health:DeltaPenalty(.05)
@@ -1164,11 +1214,13 @@ end
 
 local function fnspore()
     --local inst = fncommon("hound", "hound_spore_ocean", nil, nil, nil, {"sporehound"}, {amphibious = true})
-    local inst = fncommon("hound", "hound_spore", nil, nil, nil, { "sporehound" })
+    local inst = fncommon("hound", "hound_spore", nil, nil, nil, {"sporehound"})
 
     if not TheWorld.ismastersim then
         return inst
     end
+
+    inst.UMIsAlly = IsAlly
 
     --inst:SetBrain(sporebrain)
 
@@ -1182,6 +1234,9 @@ local function fnspore()
     MakeMediumFreezableCharacter(inst, "hound_body")
     MakeMediumBurnableCharacter(inst, "hound_body")
 
+    inst.LaunchProjectile = SporeCloudAttack
+
+    inst:ListenForEvent("death", DoSporeExplosion)
     inst:ListenForEvent("onhitother", OnHitOther_Spore)
 
     return inst

@@ -7,7 +7,7 @@ local Text = require "widgets/text"
 local Image = require "widgets/image"
 local Widget = require "widgets/widget"
 local UIAnim = require "widgets/uianim"
-local UpvalueHacker = require "tools/upvaluehacker"
+local UMUpvalueHacker = require "tools/um_upvaluehacker"
 local dataset = require("screens/redux/scrapbookdata")
 local TEMPLATES = require "widgets/redux/templates"
 
@@ -34,8 +34,8 @@ local TextButton = require "widgets/textbutton"
 local Menu = require "widgets/menu"
 local Grid = require "widgets/grid"
 local TrueScrollArea = require "widgets/truescrollarea"
-local GEM_DEFS = require("gemology_defs").GEM_DEFS
-local GEM_LOOKUP = require("gemology_defs").GEM_LOOKUP
+local GEM_DEFS = UMGemologyFns.GEM_DEFS
+local GEM_LOOKUP = UMGemologyFns.GEM_LOOKUP
 
 -- TODO: MOVE THIS
 STRINGS.SCRAPBOOK.SPECIALINFO.GEM_UPGRADING = {

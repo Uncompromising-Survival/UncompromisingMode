@@ -242,7 +242,7 @@ DESCRIBE.SALTPACK = "The device releases sodium chloride into the atmosphere."
 DESCRIBE.SKELETONMEAT = "Oh my goodness!"
 DESCRIBE.CHIMP = DESCRIBE.MONKEY
 DESCRIBE.SWILSON = "One of the shadows taking the form of Wilson. It's armed."
-DESCRIBE.VAMPIREBAT = "This one has managed to reach adulthood."
+DESCRIBE.UM_VAMPIREBAT = "This one has managed to reach adulthood."
 DESCRIBE.CRITTERLAB_REAL = DESCRIBE.CRITTERLAB
 DESCRIBE.CRITTERLAB_REAL_BROKEN =
 "Moon debris may make the perfect new home for some critters."
@@ -429,6 +429,7 @@ DESCRIBE.MOONMAW_GLASSSHARDS = DESCRIBE.ARMOR_GLASSMAIL_SHARDS
 DESCRIBE.MOONMAW_LAVAE_RING = DESCRIBE.MOONMAW_LAVAE
 
 DESCRIBE.MUTATOR_TRAPDOOR = DESCRIBE.MUTATOR_WARRIOR
+DESCRIBE.MUTATOR_TRAPDOOR_HOODED = DESCRIBE.MUTATOR_WARRIOR
 
 DESCRIBE.WOODPECKER = "Some species of picidae."
 DESCRIBE.SNOTROAST = "It must be full of diseases."

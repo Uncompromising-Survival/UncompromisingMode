@@ -3,7 +3,7 @@ GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 if TUNING.DSTU.MUSHROOM_CHANGES then
 
-	local UpvalueHacker = require("tools/upvaluehacker")
+	local UMUpvalueHacker = require("tools/um_upvaluehacker")
 	
 	env.AddPrefabPostInit("mushroom_farm", function(inst)
 		if not TheNet:GetIsServer() then
@@ -32,8 +32,8 @@ if TUNING.DSTU.MUSHROOM_CHANGES then
 			return _AcceptTest(inst, item, giver)
 		end
 
-		local FULLY_REPAIRED_WORKLEFT = UpvalueHacker.GetUpvalue(Prefabs.mushroom_farm.fn, "FULLY_REPAIRED_WORKLEFT")
-		local updatelevel = UpvalueHacker.GetUpvalue(Prefabs.mushroom_farm.fn, "updatelevel")
+		local FULLY_REPAIRED_WORKLEFT = UMUpvalueHacker.GetUpvalue(Prefabs.mushroom_farm.fn, "FULLY_REPAIRED_WORKLEFT")
+		local updatelevel = UMUpvalueHacker.GetUpvalue(Prefabs.mushroom_farm.fn, "updatelevel")
 		-- Adds harvest value based on inst.refuel_items
 		local function OnAcceptItem(inst, giver, item)
 			if inst.refuel_items[item.prefab] then

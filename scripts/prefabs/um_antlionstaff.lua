@@ -7,84 +7,59 @@ local assets =
 local prefabs =
 {
     "reticule",
-    "sandspike",
-    "sandblock",
+    "um_antlionstaff_sandspike",
+    "um_antlionstaff_sandblock",
 }
 
 local SANDSPIKE_MIN = 17
 local SANDSPIKE_MAX = 20
 local SANDSPIKE_SPREAD_RADIUS = 5
 local SANDSPIKE_RADIUS_BONUS = 1.15
+local SANDSPIKE_DAMAGE_MULT = .35
 
 local SANDCASTLE_COUNT = 7
 local SANDCASTLE_ARC_RADIUS = 6.5
 local SANDCASTLE_ARC_SWEEP = PI * .65
+local SANDCASTLE_RADIUS = 1
 
-local SHIELD_CANDIDATE_TAGS = { "epic", "player" }
+local BLOCK_OVERLAP_CHECK_RADIUS = 10
+local OVERLAP_TRIGGER_BUFFER = .3
 
-local function ShouldShield(entity, caster)
-    if entity.components.health == nil or entity.components.combat == nil then
-        return false
-    end
-    if entity:HasTag("player") then
-        return entity ~= caster
-    end
-    return entity.components.locomotor == nil
-end
+local NOSPAWN_TAGS = { "epic" }
+local NOSPAWN_CHECK_RADIUS = 10
+local NOSPAWN_BUFFER = 1
 
-local function ShieldEntity(entity)
-    if (entity._um_antlionstaff_shieldcount or 0) <= 0 then
-        entity._um_antlionstaff_shieldcount = 0
-        entity._um_antlionstaff_wasinvincible = entity.components.health:IsInvincible()
-        entity.components.health:SetInvincible(true)
-    end
-    entity._um_antlionstaff_shieldcount = entity._um_antlionstaff_shieldcount + 1
-end
-
-local function UnshieldEntity(entity)
-    if not entity:IsValid() or entity._um_antlionstaff_shieldcount == nil then
-        return
-    end
-
-    entity._um_antlionstaff_shieldcount = entity._um_antlionstaff_shieldcount - 1
-    if entity._um_antlionstaff_shieldcount > 0 or entity.components.health == nil then
-        return
-    end
-    entity.components.health:SetInvincible(entity._um_antlionstaff_wasinvincible)
-end
-
-local function MakeObstacleSafe(obstacle, caster)
-    local x, _, z = obstacle.Transform:GetWorldPosition()
-    local nearby = TheSim:FindEntities(x, 0, z, 3, nil, nil, SHIELD_CANDIDATE_TAGS)
-    if #nearby == 0 then
-        return
-    end
-
-    local shielded = {}
+-- purely cosmetic fn, so neither castles or spikes spawn in an ugly looking way on top of the ocean for example
+local function ShouldSkipSpawn(x, z)
+    local nearby = TheSim:FindEntities(x, 0, z, NOSPAWN_CHECK_RADIUS, nil, nil, NOSPAWN_TAGS)
     for _, entity in ipairs(nearby) do
-        if entity:HasTag("epic") then
-            obstacle.Physics:SetCollisionGroup(COLLISION.SMALLOBSTACLES)
-        end
-        if ShouldShield(entity, caster) then
-            ShieldEntity(entity)
-            table.insert(shielded, entity)
+        if entity.components.health ~= nil
+            and entity.components.combat ~= nil
+            and entity.components.locomotor == nil then
+            local ex, _, ez = entity.Transform:GetWorldPosition()
+            local dx, dz = ex - x, ez - z
+            local mindist = entity:GetPhysicsRadius(0) + NOSPAWN_BUFFER
+            if dx * dx + dz * dz < mindist * mindist then
+                return true
+            end
         end
     end
+    return false
+end
 
-    if #shielded == 0 then
-        return
+local function WouldLoseCollision(x, z, radius)
+    local nearby = TheSim:FindEntities(x, 0, z, BLOCK_OVERLAP_CHECK_RADIUS)
+    for _, entity in ipairs(nearby) do
+        if entity.Physics ~= nil and entity.components.locomotor ~= nil and not entity:HasTag("groundspike") then
+            local ex, _, ez = entity.Transform:GetWorldPosition()
+            local dx, dz = ex - x, ez - z
+            local mindist = radius + entity:GetPhysicsRadius(0) + OVERLAP_TRIGGER_BUFFER
+            if dx * dx + dz * dz < mindist * mindist then
+                return true
+            end
+        end
     end
-
-    local task
-    task = obstacle:DoPeriodicTask(FRAMES, function()
-        if obstacle:IsValid() and not obstacle.Physics:IsActive() then
-            return
-        end
-        task:Cancel()
-        for _, entity in ipairs(shielded) do
-            UnshieldEntity(entity)
-        end
-    end)
+    return false
 end
 
 local function ConsumeAmmo(inst)
@@ -95,22 +70,27 @@ local function ConsumeAmmo(inst)
     end
 end
 
-local function TrySpawnObstacle(prefabname, x, z, caster, onspawned)
+local function TrySpawnObstacle(prefabname, x, z, onspawned)
     local ground = TheWorld.Map
     local spot = Vector3(x, 0, z)
     if not (ground:IsPassableAtPoint(x, 0, z) and not ground:IsGroundTargetBlocked(spot)) then
         return
     end
 
+    if ShouldSkipSpawn(x, z) then return end
+
+    if prefabname == "um_antlionstaff_sandblock" and WouldLoseCollision(x, z, SANDCASTLE_RADIUS) then
+        return
+    end
+
     local obstacle = SpawnPrefab(prefabname)
     obstacle.Transform:SetPosition(x, 0, z)
-    MakeObstacleSafe(obstacle, caster)
     if onspawned ~= nil then
         onspawned(obstacle)
     end
 end
 
-local function SpawnSandspikes(inst, caster, pos)
+local function SpawnSandSpikes(inst, caster, pos)
     for i = 1, math.random(SANDSPIKE_MIN, SANDSPIKE_MAX) do
         inst:DoTaskInTime(math.random() * .5, function()
             if not inst:IsValid() then
@@ -120,20 +100,18 @@ local function SpawnSandspikes(inst, caster, pos)
             local radius = math.random() * SANDSPIKE_SPREAD_RADIUS
             local x = pos.x + math.cos(theta) * radius
             local z = pos.z + math.sin(theta) * radius
-            TrySpawnObstacle("sandspike", x, z, caster, function(spike)
+            TrySpawnObstacle("um_antlionstaff_sandspike", x, z, function(spike)
+                spike.caster = caster
                 spike.spikeradius = spike.spikeradius + SANDSPIKE_RADIUS_BONUS
+                spike.components.combat:SetDefaultDamage(spike.components.combat.defaultdamage * SANDSPIKE_DAMAGE_MULT)
             end)
         end)
     end
 end
 
-local function SpawnSandcastles(inst, caster, pos)
+local function SpawnSandCastles(inst, caster, pos)
     local cx, _, cz = caster.Transform:GetWorldPosition()
     local dx, dz = pos.x - cx, pos.z - cz
-    local dist = math.sqrt(dx * dx + dz * dz)
-    if dist < 1 then
-        return
-    end
 
     local facing_angle = math.atan2(dz, dx)
     local start_angle = facing_angle - SANDCASTLE_ARC_SWEEP / 2
@@ -150,7 +128,9 @@ local function SpawnSandcastles(inst, caster, pos)
             if not inst:IsValid() then
                 return
             end
-            TrySpawnObstacle("sandblock", x, z, caster)
+            TrySpawnObstacle("um_antlionstaff_sandblock", x, z, function(block)
+                block.spikeradius = SANDCASTLE_RADIUS
+            end)
         end)
     end
 end
@@ -180,11 +160,11 @@ local function SelectMode(inst, defensive)
     end
 end
 
-local GetSpellwheelItems
+local GetSpellWheelItems
 
 local function OnSelectMode(inst, defensive)
     inst.defensivemode = defensive
-    inst.components.spellbook:SetItems(GetSpellwheelItems(inst))
+    inst.components.spellbook:SetItems(GetSpellWheelItems(inst))
     SelectMode(inst, defensive)
 end
 
@@ -193,7 +173,7 @@ local SPELLWHEEL_ICON_RADIUS = 50
 local SPELLWHEEL_RADIUS = 120
 local SPELLWHEEL_FOCUS_RADIUS = 123
 
-GetSpellwheelItems = function(inst)
+GetSpellWheelItems = function(inst)
     local items =
     {
         {
@@ -238,16 +218,18 @@ local function CastSpell(staff, target, pos)
 
     ConsumeAmmo(staff)
 
+    local cd = TUNING.DSTU.ANTLIONSTAFF_SPIKE_COOLDOWN
     if staff.defensivemode then
-        SpawnSandcastles(staff, caster, targetpos)
+        cd = TUNING.DSTU.ANTLIONSTAFF_BLOCK_COOLDOWN
+        SpawnSandCastles(staff, caster, targetpos)
     else
-        SpawnSandspikes(staff, caster, targetpos)
+        SpawnSandSpikes(staff, caster, targetpos)
     end
 
-    UMCommonFns.StartRechargeableCooldown(staff, {cooldown = TUNING.DSTU.ANTLIONSTAFF_COOLDOWN, tags = {"um_antlionstaff"}})
+    UMCommonFns.StartRechargeableCooldown(staff, {cooldown = cd, tags = {"um_antlionstaff"}})
 end
 
-local function light_reticuletargetfn()
+local function LightReticuleTargetFn()
     local player = ThePlayer
     local ground = TheWorld.Map
     local pos = Vector3()
@@ -260,7 +242,7 @@ local function light_reticuletargetfn()
     return pos
 end
 
-local function onequip(inst, owner)
+local function OnEquip(inst, owner)
     if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.HANDS) then return end
     owner.AnimState:OverrideSymbol("swap_object", "swap_antlionstaff", "symbol0")
     owner.AnimState:Show("ARM_carry")
@@ -269,24 +251,18 @@ local function onequip(inst, owner)
     owner:AddTag("um_antlionstaff_spellbook_user")
 end
 
-local function onunequip(inst, owner)
+local function OnUnequip(inst, owner)
     owner.AnimState:Hide("ARM_carry")
     owner.AnimState:Show("ARM_normal")
     inst.components.container:Close()
     owner:RemoveTag("um_antlionstaff_spellbook_user")
 end
 
-local function onsave(inst, data)
-    data.defensivemode = inst.defensivemode
+local function CanCastFn(inst)
+    return true
 end
 
-local function onload(inst, data)
-    if data ~= nil and data.defensivemode ~= nil then
-        inst.defensivemode = data.defensivemode
-    end
-end
-
-local function staff_fn()
+local function StaffFn()
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -309,21 +285,21 @@ local function staff_fn()
     inst:AddTag("shadowlevel")
     inst:AddTag("donotautopick")
 
-    MakeInventoryFloatable(inst)
-
     local reticule = inst:AddComponent("reticule")
-    reticule.targetfn = light_reticuletargetfn
+    reticule.targetfn = LightReticuleTargetFn
     reticule.mouseenabled = true
     reticule.ease = true
     reticule.ispassableatallpoints = true
 
     local spellbook = inst:AddComponent("spellbook")
-    spellbook:SetItems(GetSpellwheelItems(inst))
+    spellbook:SetItems(GetSpellWheelItems(inst))
     spellbook:SetRequiredTag("um_antlionstaff_spellbook_user")
     spellbook:SetRadius(SPELLWHEEL_RADIUS)
     spellbook:SetFocusRadius(SPELLWHEEL_FOCUS_RADIUS)
 
     inst.um_cancastontarget = UMCommonFns.DefaultCanCastOnTarget
+
+    MakeInventoryFloatable(inst)
 
     inst.entity:SetPristine()
 
@@ -343,8 +319,8 @@ local function staff_fn()
     inst:AddComponent("inventoryitem")
 
     local equippable = inst:AddComponent("equippable")
-    equippable:SetOnEquip(onequip)
-    equippable:SetOnUnequip(onunequip)
+    equippable:SetOnEquip(OnEquip)
+    equippable:SetOnUnequip(OnUnequip)
 
     local shadowlevel = inst:AddComponent("shadowlevel")
     shadowlevel:SetDefaultLevel(TUNING.DSTU.ANTLIONSTAFF_SHADOW_LEVEL)
@@ -354,9 +330,9 @@ local function staff_fn()
 
     local spellcaster = inst:AddComponent("spellcaster")
     spellcaster:SetSpellFn(CastSpell)
+    spellcaster:SetCanCastFn(CanCastFn)
     spellcaster.canuseontargets = true
-    spellcaster.canonlyuseonworkable = true
-    spellcaster.canonlyuseoncombat = true
+    spellcaster.canuseondead = true
     spellcaster.canuseonpoint = true
     spellcaster.canuseonpoint_water = false
     spellcaster.quickcast = true
@@ -372,10 +348,7 @@ local function staff_fn()
 
     MakeHauntableLaunch(inst)
 
-    inst.OnSave = onsave
-    inst.OnLoad = onload
-
     return inst
 end
 
-return Prefab("um_antlionstaff", staff_fn, assets, prefabs)
+return Prefab("um_antlionstaff", StaffFn, assets, prefabs)

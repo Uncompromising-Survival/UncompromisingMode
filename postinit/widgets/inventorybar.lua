@@ -14,48 +14,48 @@ backpack layouts.
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-local UpvalueHacker = require("tools/upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 local ImageButton = require("widgets/imagebutton")
 local ItemTile = require("widgets/itemtile")
+local Inv = require("widgets/inventorybar")
 
-env.AddClassPostConstruct("widgets/inventorybar", function(self, owner)
-    local _RebuildLayout = UpvalueHacker.GetUpvalue(self.Rebuild, "RebuildLayout")
-
-    if not _RebuildLayout then return end
-        
-    -- This function is used to highlight or grey out the backpack's button when it is valid to
-    -- press. For example, the Silken Sack's wrap button will be greyed out when there is not
-    -- Silk in its Silk slot or there are no valid items to bundle.
-    function self:RefreshOverflowButton()
-        local inventory = self.owner.replica.inventory
-        local overflow = inventory:GetOverflowContainer()
-        overflow = (overflow ~= nil and overflow:IsOpenedBy(self.owner)) and overflow or nil
-        if not overflow then
-            return
-        end
-        local container = overflow.inst
-        local widget = overflow:GetWidget()
-        if self.overflow_button ~= nil then
-            if widget and widget.buttoninfo ~= nil and widget.buttoninfo.validfn ~= nil then
-                if widget.buttoninfo.validfn(container) then
-                    self.overflow_button:Enable()
-                else
-                    self.overflow_button:Disable()
-                end
+-- This function is used to highlight or grey out the backpack's button when it is valid to
+-- press. For example, the Silken Sack's wrap button will be greyed out when there is not
+-- Silk in its Silk slot or there are no valid items to bundle.
+function Inv:RefreshOverflowButton()
+    local inventory = self.owner.replica.inventory
+    local overflow = inventory:GetOverflowContainer()
+    overflow = (overflow ~= nil and overflow:IsOpenedBy(self.owner)) and overflow or nil
+    if not overflow then
+        return
+    end
+    local container = overflow.inst
+    local widget = overflow:GetWidget()
+    if self.overflow_button ~= nil then
+        if widget and widget.buttoninfo ~= nil and widget.buttoninfo.validfn ~= nil then
+            if widget.buttoninfo.validfn(container) then
+                self.overflow_button:Enable()
+            else
+                self.overflow_button:Disable()
             end
         end
     end
+end
 
+local __ctor = Inv._ctor
+function Inv:_ctor(...)
+    local ret = __ctor(self, ...)
     self.inst:ListenForEvent("itemget", function(inst, data) self:RefreshOverflowButton() end, self.owner)
     self.inst:ListenForEvent("itemlose", function(inst, data) self:RefreshOverflowButton() end, self.owner)
     self.inst:ListenForEvent("refreshinventory", function(inst, data) self:RefreshOverflowButton() end, self.owner)
+    return ret
+end
 
-    -- Make sure to initially update the backpack's button when it is equipped, dropped, or its UI
-    -- is refreshed.
-    local _BackpackGet = UpvalueHacker.GetUpvalue(self.Rebuild, "RebuildLayout", "BackpackGet")
-    local _BackpackLose = UpvalueHacker.GetUpvalue(self.Rebuild, "RebuildLayout", "BackpackLose")
-    local _BackpackRefresh = UpvalueHacker.GetUpvalue(self.Rebuild, "RebuildLayout", "BackpackRefresh")
+-- Make sure to initially update the backpack's button when it is equipped, dropped, or its UI
+-- is refreshed.
 
+local _BackpackGet = UMUpvalueHacker.TryGetUpvalue(Inv.Rebuild, "RebuildLayout", "BackpackGet")
+if _BackpackGet then
     local function BackpackGet(inst, data)
         local owner = ThePlayer
         if owner ~= nil and owner.HUD ~= nil and owner.replica.inventory:IsHolding(inst) then
@@ -66,7 +66,11 @@ env.AddClassPostConstruct("widgets/inventorybar", function(self, owner)
         end
         return _BackpackGet(inst, data)
     end
+    UMUpvalueHacker.SetUpvalue(Inv.Rebuild, BackpackGet, "RebuildLayout", "BackpackGet")
+end
 
+local _BackpackLose = UMUpvalueHacker.TryGetUpvalue(Inv.Rebuild, "RebuildLayout", "BackpackLose")
+if _BackpackLose then
     local function BackpackLose(inst, data)
         local owner = ThePlayer
         if owner ~= nil and owner.HUD ~= nil and owner.replica.inventory:IsHolding(inst) then
@@ -77,7 +81,11 @@ env.AddClassPostConstruct("widgets/inventorybar", function(self, owner)
         end
         return _BackpackLose(inst, data)
     end
+    UMUpvalueHacker.SetUpvalue(Inv.Rebuild, BackpackLose, "RebuildLayout", "BackpackLose")
+end
 
+local _BackpackRefresh = UMUpvalueHacker.TryGetUpvalue(Inv.Rebuild, "RebuildLayout", "BackpackRefresh")
+if _BackpackRefresh then
     local function BackpackRefresh(inst)
         local owner = ThePlayer
         local inventory = owner and owner.HUD and owner.replica.inventory or nil
@@ -90,15 +98,13 @@ env.AddClassPostConstruct("widgets/inventorybar", function(self, owner)
         end
         return _BackpackRefresh(inst)
     end
+    UMUpvalueHacker.SetUpvalue(Inv.Rebuild, BackpackRefresh, "RebuildLayout", "BackpackRefresh")
+end
 
-    UpvalueHacker.SetUpvalue(self.Rebuild, BackpackGet, "RebuildLayout", "BackpackGet")
-    UpvalueHacker.SetUpvalue(self.Rebuild, BackpackLose, "RebuildLayout", "BackpackLose")
-    UpvalueHacker.SetUpvalue(self.Rebuild, BackpackRefresh, "RebuildLayout", "BackpackRefresh")
-
-    -- RebuildLayout refeshes the visual components of the backpack. This includes creating all the
-    -- inventory icons, positioning them, and in the case of the Silken Sack, creating the button.
-    local _RebuildLayout = UpvalueHacker.GetUpvalue(self.Rebuild, "RebuildLayout")
-
+-- RebuildLayout refeshes the visual components of the backpack. This includes creating all the
+-- inventory icons, positioning them, and in the case of the Silken Sack, creating the button.
+local _RebuildLayout = UMUpvalueHacker.TryGetUpvalue(Inv.Rebuild, "RebuildLayout")
+if _RebuildLayout then
     local function RebuildLayout(self, inventory, overflow, do_integrated_backpack, do_self_inspect)
         -- Call _RebuildLayout first to make sure widget elements are properly defined before we
         -- start modifying them.
@@ -180,6 +186,5 @@ env.AddClassPostConstruct("widgets/inventorybar", function(self, owner)
             end
         end
     end
-
-    UpvalueHacker.SetUpvalue(self.Rebuild, RebuildLayout, "RebuildLayout")
-end)
+    UMUpvalueHacker.SetUpvalue(Inv.Rebuild, RebuildLayout, "RebuildLayout")
+end

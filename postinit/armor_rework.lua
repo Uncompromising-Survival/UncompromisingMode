@@ -19,6 +19,11 @@ add their own armors and protection values.
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
+-- Tunings we change related to the rework. Moved here to keep everything consolidated!
+TUNING.WEREMOOSE_ABSORPTION = .8
+TUNING.SHIELDOFTERROR_DAMAGE = 59.5
+TUNING.ARMORMARBLE_SLOW = .8
+
 --if not TheNet:GetIsServer() then return end
 
 -- Exceptions can be made for specific armors to change their absorption values directly instead of
@@ -37,13 +42,14 @@ ARMOR_ABSORPTION_OVERRIDES = {
     ["armor_lunarplant"] = .7,
     ["armor_lunarplant_husk"] = .7,
     ["um_armor_bramble_rimeweed"] = .7,
+    ["eyemaskhat"] = .7,
 
     -- Island Adventures
     ["armorlimestone"] = .75,
     ["armorobsidian"] = .7,
     ["armorseashell"] = .7,
     ["armorcactus"] = .7,
-    ["oxhat"] = .75,
+    ["oxhat"] = .75
 }
 
 -- Lower bounds are exclusive while upper bounds are inclusive. For example, a Log Suit with a
@@ -71,9 +77,9 @@ end
 env.AddPrefabPostInitAny(function(inst)
     local armor = inst.components.armor
     if armor then
-		armor:SetAbsorption(armor.absorb_percent)
-		armor.umabsorbremap = armor.absorb_percent
-	end
+        armor:SetAbsorption(armor.absorb_percent)
+        armor.umabsorbremap = armor.absorb_percent
+    end
 end)
 
 env.AddComponentPostInit("armor", function(self)
@@ -92,7 +98,7 @@ env.AddComponentPostInit("armor", function(self)
         return _InitIndestructible(self, RemapAbsorption(self, absorb_percent), ...)
     end
 
-    function self:UMOverrideAbsorption(absorb_percent)
-        return _SetAbsorption(self, absorb_percent)
+    function self:UMOverrideAbsorption(absorb_percent, ...)
+        return _SetAbsorption(self, absorb_percent, ...)
     end
 end)

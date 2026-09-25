@@ -1,9 +1,8 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-local DEFS = require("gemology_defs")
-local GEM_DEFS = DEFS.GEM_DEFS
-local UpvalueHacker = require("tools/upvaluehacker")
+local GEM_DEFS = UMGemologyFns.GEM_DEFS
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 local UIAnim = require "widgets/uianim"
 
 --------------------------------------------------------------------------
@@ -17,8 +16,6 @@ env.AddPrefabPostInitAny(function(inst)
 
     if inst.components.equippable and inst.components.equippable.equipslot == EQUIPSLOTS.HANDS and (inst.components.tool or inst.components.weapon) and not inst.components.stackable and not inst.components.gem_enchantable then
         inst:AddComponent("gem_enchantable")
-
-        inst.repair_count = 1
 
         local _OnSave = inst.OnSave
         local function OnSave(inst, data, ...)

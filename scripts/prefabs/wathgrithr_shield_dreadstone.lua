@@ -179,7 +179,6 @@ local function OnParry(inst, doer, attacker, damage)
         AddEnemyDebuffFx("battlesong_instant_panic_fx", attacker)
     end
 
-    local damageFix = 0.5
 	inst.components.armor:TakeDamage(damage * TUNING.DSTU.WATHGRITHR_SHIELD_PARRY_DURABILITY_LOSS * 0.5)
 end
 

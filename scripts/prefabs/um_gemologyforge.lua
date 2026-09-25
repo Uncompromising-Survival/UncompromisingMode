@@ -5,7 +5,7 @@ local assets =
     Asset("ATLAS", "images/map_icons/um_gemologyforge.xml"),
 }
 
-local GEM_DEFS = require("gemology_defs").GEM_DEFS
+local GEM_DEFS = UMGemologyFns.GEM_DEFS
 
 local ALLPLAYERS_CHECK_RADIUS_SQ = 16 * 16
 
@@ -62,7 +62,7 @@ local function ForgeGem(inst)
 end
 
 --{ slot = in_slot, item = item, src_pos = src_pos, }
-function ShowItems(inst, data)
+local function ShowItems(inst, data)
     --delay a frame.
     inst:DoTaskInTime(0, function(inst)
         if inst.tool_fx ~= nil then

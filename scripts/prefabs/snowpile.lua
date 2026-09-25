@@ -374,13 +374,9 @@ local function OnSeasonChange(inst)
     if TheWorld.state.iswinter then return end
     inst.persists = false
     if inst.removesnowpile then return end
-    if not inst:IsAsleep() then
-        inst.removesnowpile = inst:DoTaskInTime(math.min(math.random() * .5, .5), function(inst)
-            if not TheWorld.state.iswinter then inst:Remove() end
-        end)
-    else
-        inst:Remove()
-    end
+    inst.removesnowpile = inst:DoTaskInTime(math.min(math.random() * .5, .5), function(inst)
+        if not TheWorld.state.iswinter then inst:Remove() end
+    end)
 end
 
 local function SlowlyPickAway(inst)

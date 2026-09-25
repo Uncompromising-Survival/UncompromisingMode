@@ -1,4 +1,4 @@
-local DEFS                 = require("gemology_defs")
+local DEFS                 = UMGemologyFns
 local GEM_DEFS, GEM_LOOKUP = DEFS.GEM_DEFS, DEFS.GEM_LOOKUP
 local GEM_UPDATE_RATE      = 1
 local DEFAULT_SLOTS        = 1
@@ -29,7 +29,7 @@ local GemEnchantable = Class(function(self, inst)
     self.slots = DEFAULT_SLOTS
     self.hidden_enchants = {}   --WARNING: NOT SAVED
     self.slotless_enchants = {}
-    self.dirty = false
+    self.dirty = true
 
     --this data saves
     if self.inst.persistent_gemology_data == nil then
@@ -57,13 +57,9 @@ local GemEnchantable = Class(function(self, inst)
                     GEM_DEFS[enchant].fns.onupdate(item, tier)
                 end
             end
+            item.components.gem_enchantable.dirty = true
         end
-
-        self.dirty = true
     end)
-
-
-    self.dirty = true
 
     self.inst:ListenForEvent("perishchange", function(inst, data)
         local new_durability = data.percent
@@ -161,8 +157,6 @@ function GemEnchantable:AddEnchantment(enchant, tier, slotless, fix_tier)
         GEM_DEFS[enchant].fns.onapply(self.inst, tier)
     end
 
-
-
     if slotless then
         self.slotless_enchants[enchant] = true
     else
@@ -212,7 +206,7 @@ function GemEnchantable:OnSave()
     local _enchants = {}
     for k, v in pairs(self.enchants) do
         --do not save hidden enchants (chaotic re-applies them on apply)
-        if v ~= nil and not table.contains(self.hidden_enchants, k) then
+        if v and not table.contains(self.hidden_enchants, k) then
             _enchants[k] = v
         end
     end
@@ -227,21 +221,21 @@ end
 
 function GemEnchantable:OnLoad(data)
     self.loading = true
-    local _enchants = data.enchants
 
-    self.inst.persistent_gemology_data = data.gem_data
-
-    for enchant, tier in pairs(_enchants) do
+    for enchant, tier in pairs(data.enchants) do
+        if data.gem_data then
+            for _enchant, gemdata in pairs(data.gem_data[enchant]) do
+                self.inst.persistent_gemology_data[enchant][_enchant] = gemdata
+            end
+        end
         self:AddEnchantment(enchant, tier, nil, true) --running add enchant to re-apply onapply effects.
     end
 
-    self.enchant_durabilty = data.durability
+    for enchant, durability in pairs(data.durability) do
+        self.enchant_durabilty[enchant] = durability
+    end
 
-    self.inst:DoTaskInTime(0, function(inst)
-        self.enchant_durabilty = data.durability
-        self.dirty = true
-        self.loading = false
-    end)
+    self.loading = false
 
     self.dirty = true
 end
@@ -253,10 +247,10 @@ function GemEnchantable:RemoveAllEnchantments()
 end
 
 function GemEnchantable:OnRemoveFromEntity()
-    if self.gem_update_task ~= nil then
+    if self.gem_update_task then
         self.gem_update_task:Cancel()
+        self.gem_update_task = nil
     end
-    self.gem_update_task = nil
 end
 
 function GemEnchantable:HasSlots()

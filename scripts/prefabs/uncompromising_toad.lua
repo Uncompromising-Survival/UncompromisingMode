@@ -1,22 +1,31 @@
 local assets =
 {
-	Asset("ANIM", "anim/frog_yellow_build.zip"),
+    Asset("ANIM", "anim/frog_yellow_build.zip"),
 }
 
 local prefabs =
 {
     "froglegs",
     "frogsplash",
-	"sporecloud"
+    "sporecloud"
 }
 
 SetSharedLootTable('uncompromising_toad',
 {
     --{'froglegs', 1.0},
-    {'sporecloud_toad', .5},
 })
 
 local brain = require "brains/uncompromising_toadbrain"
+
+local NORMAL_SOUNDS = {
+    attack_spit  = "dontstarve/frog/attack_spit",
+    attack_voice = "dontstarve/frog/attack_voice",
+    die          = "dontstarve/frog/die",
+    grunt        = "dontstarve/frog/grunt",
+    walk         = "dontstarve/frog/walk",
+    splat        = "dontstarve/frog/splat",
+    wake         = "dontstarve/frog/wake",
+}
 
 local function retargetfn(inst)
     if not inst.components.health:IsDead() and not inst.components.sleeper:IsAsleep() then
@@ -48,6 +57,14 @@ local function OnHitOther(inst, other, damage)
     inst.components.thief:StealItem(other)
 end
 
+local function DoSporeExplosion(inst)
+    if math.random() <= .5 then
+        local sporecloud = SpawnPrefab("sporecloud_toad")
+        sporecloud.Transform:SetPosition(inst.Transform:GetWorldPosition())
+        sporecloud.owner = inst
+    end
+end
+
 local function fn()
     local inst = CreateEntity()
 
@@ -63,7 +80,7 @@ local function fn()
     inst.Transform:SetFourFaced()
 
     inst.AnimState:SetBank("frog")
-	inst.AnimState:SetBuild("frog_yellow_build")
+    inst.AnimState:SetBuild("frog_yellow_build")
     inst.AnimState:PlayAnimation("idle")
 
     inst:AddTag("animal")
@@ -72,13 +89,15 @@ local function fn()
     inst:AddTag("smallcreature")
     inst:AddTag("frog")
     inst:AddTag("canbetrapped")
-	inst:AddTag("toad")
+    inst:AddTag("toad")
 
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
         return inst
     end
+
+    inst.sounds = NORMAL_SOUNDS
 
     inst:AddComponent("locomotor") -- locomotor must be constructed before the stategraph
     inst.components.locomotor.walkspeed = 6
@@ -90,7 +109,7 @@ local function fn()
 
     inst:AddComponent("sleeper")
     inst.components.sleeper:SetSleepTest(ShouldSleep)
-	
+    
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(TUNING.FROG_HEALTH + 20)
 
@@ -115,6 +134,7 @@ local function fn()
 
     inst:ListenForEvent("attacked", OnAttacked)
     inst:ListenForEvent("goinghome", OnGoingHome)
+    inst:ListenForEvent("death", DoSporeExplosion)
 
     return inst
 end

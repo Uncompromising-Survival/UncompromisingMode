@@ -12,9 +12,8 @@ end
 -- Wixie goofy aaa
 if GetModConfigData("wixie_walter") then
     AddTaskSetPreInitAny(function(tasksetdata)
-        if tasksetdata.location ~= "forest" then -- HF only spawns on Surface
-            return
-        end
+        if tasksetdata.location ~= "forest" then return end -- HF only spawns on Surface
+
         table.insert(tasksetdata.required_prefabs, "wixie_wardrobe") -- Make sure wixie appears.
         table.insert(tasksetdata.required_prefabs, "wixie_clock")
         table.insert(tasksetdata.required_prefabs, "wixie_piano")

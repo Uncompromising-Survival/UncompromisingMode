@@ -156,7 +156,7 @@ DESCRIBE.SALTPACK = "Saves time on shoveling."
 DESCRIBE.SKELETONMEAT = "A bit off-putting, but might be useful in the future."
 DESCRIBE.CHIMP = DESCRIBE.MONKEY
 DESCRIBE.SWILSON = "The shadows have taken hold of you!"
-DESCRIBE.VAMPIREBAT = "Stay away! My hair could never hold something as big as you!"
+DESCRIBE.UM_VAMPIREBAT = "Stay away! My hair could never hold something as big as you!"
 DESCRIBE.CRITTERLAB_REAL = DESCRIBE.CRITTERLAB
 DESCRIBE.CRITTERLAB_REAL_BROKEN = "Maybe a moon rock would fix it."
 DESCRIBE.CHARLIEPHONOGRAPH_100 = "Have I heard this tune before?"
@@ -332,6 +332,7 @@ DESCRIBE.MOONMAW_GLASSSHARDS = DESCRIBE.ARMOR_GLASSMAIL_SHARDS
 DESCRIBE.MOONMAW_LAVAE_RING = DESCRIBE.MOONMAW_LAVAE
 
 DESCRIBE.MUTATOR_TRAPDOOR = DESCRIBE.MUTATOR_WARRIOR
+DESCRIBE.MUTATOR_TRAPDOOR_HOODED = DESCRIBE.MUTATOR_WARRIOR
 
 DESCRIBE.WOODPECKER = "Takes patience to do what they do."
 DESCRIBE.SNOTROAST = "This is quite the new low for me."

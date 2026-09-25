@@ -149,7 +149,7 @@ DESCRIBE.SALTPACK = "Would anyone mind if I use this salt?"
 DESCRIBE.SKELETONMEAT = "Some dishes probably shouldn't be made."
 DESCRIBE.CHIMP = DESCRIBE.MONKEY
 DESCRIBE.SWILSON = "He's looking to make chopped liver!"
-DESCRIBE.VAMPIREBAT = "I assure you, I taste horrible!"
+DESCRIBE.UM_VAMPIREBAT = "I assure you, I taste horrible!"
 DESCRIBE.CRITTERLAB_REAL = DESCRIBE.CRITTERLAB
 DESCRIBE.CRITTERLAB_REAL_BROKEN =
 "Some moon rocks would be the perfect ingredient for a new little home."
@@ -325,6 +325,7 @@ DESCRIBE.MOONMAW_GLASSSHARDS = DESCRIBE.ARMOR_GLASSMAIL_SHARDS
 DESCRIBE.MOONMAW_LAVAE_RING = DESCRIBE.MOONMAW_LAVAE
 
 DESCRIBE.MUTATOR_TRAPDOOR = DESCRIBE.MUTATOR_WARRIOR
+DESCRIBE.MUTATOR_TRAPDOOR_HOODED = DESCRIBE.MUTATOR_WARRIOR
 
 DESCRIBE.WOODPECKER = "The wood might give it a smoky flavor."
 DESCRIBE.SNOTROAST = "This has to be the worst dish I've created."

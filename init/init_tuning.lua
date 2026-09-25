@@ -12,7 +12,7 @@ local multiplayer_armor_durability_modifier = 0.7
 local wilson_attack = 34
 local wilson_health = 150
 
-TUNING = GLOBAL.TUNING
+local TUNING = GLOBAL.TUNING
 
 -- [              DSTU Related Overrides                  ]
 
@@ -178,6 +178,16 @@ TUNING.DSTU = {
     MONSTER_MCTUSK_HOUND_NUMBER = 5,
     -- Hounds
     MONSTER_HOUNDS_PER_WAVE_INCREASE = 1.5, -- Controlled by player settings
+
+    MAGMA_HOUND_FIRE_DAMAGE = 1,
+    MAGMA_HOUND_DAMAGE = TUNING.HOUND_DAMAGE * 2,
+    MAGMA_HOUND_HEALTH = TUNING.WARGLET_HEALTH * 1.25,
+
+    GLACIAL_HOUND_DAMAGE = TUNING.HOUND_DAMAGE * 2,
+    GLACIAL_HOUND_HEALTH = TUNING.WARGLET_HEALTH * 1.25,
+    GLACIAL_HOUND_SPIKE_DAMAGE = 30,
+
+    HOUND_LIGHTNING_DAMAGE = 10, --Also used for tornado
     -- Spawn New Bosses
     --GOOSE_SETTING = GetModConfigData("goose_setting"),
     SPAWNWILTINGFLY = GetModConfigData("wiltfly"),
@@ -314,8 +324,8 @@ TUNING.DSTU = {
     RAIDRAT_BUFFED_WALKSPEED = 6,
     RAIDRAT_SPAWNRATE = seg_time / 5,
     RAIDRAT_SPAWNRATE_VARIANCE = (seg_time / 5) * 0.5,
-    SNIFFER_ITEM = 40,
-    SNIFFER_PLAYER = 120,
+    SNIFFER_ITEM_RANGE = 40,
+    SNIFFER_PLAYER_RANGE = 120,
 
     PIEDPIPER_TOOT_RANGE = 25,
     -- Weather Start Date
@@ -353,7 +363,6 @@ TUNING.DSTU = {
     TOADLING_WALK_SPEED = 5,
     TOADLING_RUN_SPEED = 6,
     TOADLING_TARGET_DIST = 12,
-    BAT_HEALTH = 75,
     TOAD_RAIN_DELAY = { min = 5, max = 10 },
     SUMMER_CAVES_TEMP_MULT = .85,
     WINTER_CAVES_TEMP_MULT = 1.25,
@@ -362,8 +371,8 @@ TUNING.DSTU = {
     ALL_MUST_BE_GATHERED = false,
     WATERING_TEMPERATURE = GetModConfigData("watering_thermal"),
     BATH_BOMB = GetModConfigData("bath_heal"),
-    KLAUS_AMULET_SECOND_HIT_DAMAGE_MULT = 0.75,
-    KLAUS_AMULET_ABSORPTION = 0.3,
+    KLAUS_AMULET_SECOND_HIT_DAMAGE_MULT = .75,
+    KLAUS_AMULET_ABSORPTION = .3,
     ORANGESTAFF_COOLDOWN_1 = 5,
     ORANGESTAFF_COOLDOWN_2 = 10,
     ORANGESTAFF_COOLDOWN_3 = 15,
@@ -371,7 +380,8 @@ TUNING.DSTU = {
     ORANGESTAFF_DISTANCE_2 = 16,
     KOALEFANT_HEALTH = 2000,
     KOALEFANT_STOMP_COUNTERATTACK = { MIN = 8, MAX = 12 },
-    SNAILDRAKEHAT_FIRE_RESIST = 0.75,
+    SNAILDRAKEHAT_FIRE_RESIST = .75,
+    BEEQUEEN_STOMP_DAMAGE_MULT = math.max(200 / TUNING.BEEQUEEN_DAMAGE, 1),
 
     ----------------------------------------------------------------------------
     -- Dynamic Boss Resistance
@@ -512,7 +522,8 @@ TUNING.DSTU = {
 
     CURSED_ANTLER_COOLDOWN = 5,
     SLOBBERLOBBER_COOLDOWN = 45,
-    ANTLIONSTAFF_COOLDOWN = 4,
+    ANTLIONSTAFF_SPIKE_COOLDOWN = 5,
+    ANTLIONSTAFF_BLOCK_COOLDOWN = 14,
     CRYSTAL_CURSED_ANTLER_COOLDOWN = 5,
     SHIELDOFTERROR_COOLDOWN = 5,
     CASTSPELL_OVERRIDECONTROL = GLOBAL.CONTROL_FORCE_ATTACK,
@@ -532,10 +543,11 @@ TUNING.DSTU = {
     RUINSNIGHTMARE_DAMAGE = 75,
     HERMITCRAB_MOONTREEBLOSSOMTEA_SHADOWCREATURE_DAMAGE = 75,
 
-    NO_THICKET_APHIDS = { "tumbleweed", "beefalo", "fruitbat" },   --AXE Add more as needed, most things >should< spawn aphids though.
+    NO_THICKET_APHIDS = { "beefalo", "fruitbat" }, --AXE Add more as needed, most things >should< spawn aphids though.
+    APHID_SPAWN_CHANCE = .1,
 
     RIPPLE_BLACKLIST_PREFABS = { "webbedcreature", "rainometer" }, -- AXE Many cases would like "structure" tag still count for ripples, but many structures are incompatible, so we do a prefab based blacklist as well
-    RIPPLE_BLACKLIST_TAGS = { "projectile", "FX", "balloon" },     -- AXE other cases are universal, projectiles shouldn't really ever have ripples
+    RIPPLE_BLACKLIST_TAGS = { "projectile", "FX", "balloon" },   -- AXE other cases are universal, projectiles shouldn't really ever have ripples
 
     -- Rat Poison
     RATPOISON_EAT_DAMAGE = 24,
@@ -547,9 +559,9 @@ TUNING.DSTU = {
 
     -- Gemology
     GEM_USES = {
-        1 / 150, --tier 1
-        1 / 250, --tier 2
-        1 / 450  --tier 3
+        1 / 200, --tier 1
+        1 / 300, --tier 2
+        1 / 500  --tier 3
     },
 
     REDGEM2_DAMAGE = {
@@ -615,7 +627,6 @@ TUNING.DSTU = {
         { 0.25, 1.5 },
     },
 
-
     YELLOWGEM2_SHOCK_RANGE = 4,
     YELLOWGEM2_ATTACK_TIME_FACTOR = 5,
     YELLOWGEM2_SHOCK_COOLDOWN = 3,
@@ -633,7 +644,6 @@ TUNING.DSTU = {
         0.7,
         0.4,
     },
-
 
     PURPLEGEM1_EXTRA_DAMAGE_THRESHOLD = 50,
     PURPLEGEM1_EXTRA_DAMAGE_MULT = 0.25,
@@ -667,8 +677,16 @@ TUNING.DSTU = {
         0.4,
         0.2,
         0.1, --min repair value
-    }
+    },
 
+    --Magma tile stuff
+    MAGMATILE_HEAT = 120,
+    MAGMATILE_HEAT_RADIUS = 8, --Atobá: NOT RECOMMENDED TO INCREASE THIS. TILE DIST CHECK VERY UNPERFORMANT.
+    MAGMATILE_REFRESH_THRESHOLD = 300,
+    MAGMATILE_DEFAULT_COOL_TIME = 1200,
+    MAGMATILE_ICE_STAFF_COOL_TIME = 1200*2,
+
+    MAGMATILE_COOL_TIME_RANGE = 200,
 }
 
 -- [              DST Related Overrides              ]
@@ -691,12 +709,6 @@ end
 --TUNING.WEREMOOSE_DAMAGE = wilson_attack * 1.5
 --TUNING.SKILLS.WOODIE.MOOSE_SMASH_DAMAGE = wilson_attack * 3
 --end
-
-if GetModConfigData("armorrework") then
-    TUNING.WEREMOOSE_ABSORPTION = 0.8
-    TUNING.SHIELDOFTERROR_DAMAGE = 59.5
-    TUNING.ARMORMARBLE_SLOW = 0.8
-end
 
 TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WATHOM = {}
 TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WINKY = {}
@@ -886,12 +898,6 @@ TUNING.BOAT.GRASSBOAT_LEAK_DAMAGE.small_leak = 50
 
 TUNING.MONKEY_PIRATE_TREASURE_BOAT_CHANCE = 0.5
 
-if TUNING.DSTU.BUTTERFLYWINGS_NERF == "stat_nerf" then
-    FOOD_BUTTERFLY_WING_HEALTH = 1
-    FOOD_BUTTERFLY_WING_HUNGER = 2.5
-    FOOD_BUTTERFLY_WING_PERISHTIME = total_day_time / 2
-end
-
 -- Faster Daywalker Regen
 TUNING.DAYWALKER_RESPAWN_DAYS_COUNT = 5 -- Days after the last defeat.
 
@@ -901,9 +907,8 @@ if GetModConfigData("warly_changes") then
     TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WARLY = { "portablecookpot_item", "spicepack", "potato", "potato", "garlic" }
 end
 
-
 local wathgrithr_rework_enum = GetModConfigData("wathgrithr_rework_")
 TUNING.DSTU.WATHGRITHR_REWORK = {}
-TUNING.DSTU.WATHGRITHR_REWORK.ENABLED = (wathgrithr_rework_enum == 1 or wathgrithr_rework_enum == 3)
-TUNING.DSTU.WATHGRITHR_REWORK.SPEAR_LUNGE_REPAIR = (wathgrithr_rework_enum == 3)
-TUNING.DSTU.WATHGRITHR_REWORK.BATTLEBORN_NERF = (wathgrithr_rework_enum ~= 0)
+TUNING.DSTU.WATHGRITHR_REWORK.ENABLED = wathgrithr_rework_enum == 1 or wathgrithr_rework_enum == 3
+TUNING.DSTU.WATHGRITHR_REWORK.SPEAR_LUNGE_REPAIR = wathgrithr_rework_enum == 3
+TUNING.DSTU.WATHGRITHR_REWORK.BATTLEBORN_NERF = wathgrithr_rework_enum ~= 0

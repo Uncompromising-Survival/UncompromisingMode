@@ -133,12 +133,10 @@ env.AddClassPostConstruct("widgets/healthbadge", function(self, owner)
         function self:SetPercent(val, max, penaltypercent, ...)
             _SetPercent(self, val, max, penaltypercent, ...)
 
-            if self.topperanim then
-                if penaltypercent < .25 then
-                    self.topperanim:GetAnimState():SetMultColour(.2, .2, .2, 1)
-                else
-                    self.topperanim:GetAnimState():SetMultColour(0, 0, 0, 1)
-                end
+            if penaltypercent and penaltypercent < .25 then
+                self.topperanim:GetAnimState():SetMultColour(.2, .2, .2, 1)
+            else
+                self.topperanim:GetAnimState():SetMultColour(0, 0, 0, 1)
             end
         end
     end

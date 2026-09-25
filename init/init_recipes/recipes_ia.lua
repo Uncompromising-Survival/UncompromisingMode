@@ -91,18 +91,21 @@ if GLOBAL.NAUGHTY_VALUE["ballphin"] ~= nil then
         end
     end
 
-    SetRecipeIngredientsForGameTypes("ice", RECIPE_GAME_TYPE.SW, { Ingredient("hail_ice", 4) })
-    SetRecipeIngredientsForGameTypes("ice", RECIPE_GAME_TYPE.ROG, { Ingredient("snowball_item", 4) })
+    if TUNING.DSTU.SNOWSTORMS then
+        SetRecipeIngredientsForGameTypes("ice", RECIPE_GAME_TYPE.SW, { Ingredient("hail_ice", 4) })
+        SetRecipeIngredientsForGameTypes("ice", RECIPE_GAME_TYPE.ROG, { Ingredient("snowball_item", 4) })
+    end
 
-    SetRecipeIngredientsForGameTypes("slingshotammo_tar", RECIPE_GAME_TYPE.SW, { Ingredient("tar", 1) })
-    SetRecipeIngredientsForGameTypes("slingshotammo_tar", RECIPE_GAME_TYPE.ROG, { Ingredient("sludge", 1) })
+    if TUNING.DSTU.WIXIE then
+        SetRecipeIngredientsForGameTypes("slingshot_gnasher", RECIPE_GAME_TYPE.SW, { Ingredient("livinglog", 1), Ingredient("nightmarefuel", 2), Ingredient("mosquitosack_yellow", 2) }) --TODO: replace sacks with shark fins.
+        SetRecipeIngredientsForGameTypes("slingshot_matilda", RECIPE_GAME_TYPE.SW, { Ingredient("ox_horn", 1), Ingredient("vine", 2), Ingredient("mosquitosack_yellow", 3) }) --TODO: replace sacks with shark fins.
+        SetRecipeIngredientsForGameTypes("slingshotammo_rubber", RECIPE_GAME_TYPE.SW, { Ingredient("mosquitosack_yellow", 1) }) --TODO: replace sacks with shark fins.
+        SetRecipeIngredientsForGameTypes("slingshotammo_tar", RECIPE_GAME_TYPE.SW, { Ingredient("tar", 1) })
+        SetRecipeIngredientsForGameTypes("slingshotammo_tar", RECIPE_GAME_TYPE.ROG, { Ingredient("sludge", 1) })
+        SetRecipeValidForGameTypes("slingshotammo_obsidian", { RECIPE_GAME_TYPE.SW })
+    end
 
-    SetRecipeValidForGameTypes("slingshotammo_obsidian", { RECIPE_GAME_TYPE.SW })
-
-    SetRecipeIngredientsForGameTypes("portableboat_item", RECIPE_GAME_TYPE.SW, { Ingredient("mosquitosack_yellow", 2), Ingredient("rope", 2) })                                      --TODO: replace sacks with shark fins.
-    SetRecipeIngredientsForGameTypes("slingshot_gnasher", RECIPE_GAME_TYPE.SW, { Ingredient("livinglog", 1), Ingredient("nightmarefuel", 2), Ingredient("mosquitosack_yellow", 2) }) --TODO: replace sacks with shark fins.
-    SetRecipeIngredientsForGameTypes("slingshot_matilda", RECIPE_GAME_TYPE.SW, { Ingredient("ox_horn", 1), Ingredient("vine", 2), Ingredient("mosquitosack_yellow", 3) })            --TODO: replace sacks with shark fins.
-    SetRecipeIngredientsForGameTypes("slingshotammo_rubber", RECIPE_GAME_TYPE.SW, { Ingredient("mosquitosack_yellow", 1) })                                                          --TODO: replace sacks with shark fins.
+    SetRecipeIngredientsForGameTypes("portableboat_item", RECIPE_GAME_TYPE.SW, { Ingredient("mosquitosack_yellow", 2), Ingredient("rope", 2) }) --TODO: replace sacks with shark fins.
     SetRecipeIngredientsForGameTypes("gasmask", RECIPE_GAME_TYPE.SW, { Ingredient("doydoyfeather", 10), Ingredient("red_cap", 2), Ingredient("pigskin", 2) })
 
     SetRecipeIngredientsForGameTypes("um_record_menu", RECIPE_GAME_TYPE.SW, { Ingredient("dorsalfin", 2) })

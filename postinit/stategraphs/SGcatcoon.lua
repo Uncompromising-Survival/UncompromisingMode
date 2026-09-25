@@ -23,8 +23,8 @@ env.AddStategraphPostInit("catcoon", function(inst)
             end
         end),
         --[[EventHandler("um_counterattack", function(inst, data)
-            if inst.components.health and not inst.components.health:IsDead() and not table.contains(COUNTERATTACK_CANT_STATES, inst.sg.currentstate.name) and data.target and data.target:IsValid()
-                and inst:IsNear(data.target, TUNING.CATCOON_MELEE_RANGE * TUNING.CATCOON_MELEE_RANGE / (1.5 * 1.5)) then
+            if inst.components.health and not inst.components.health:IsDead() and not table.contains(COUNTERATTACK_CANT_STATES, inst.sg.currentstate.name) and data.target:IsValid()
+                and inst:GetDistanceSqToInst(data.target) <= inst.component.combat:CalcAttackRangeSq(data.target) then
                 if inst.um_counterattack then inst.um_counterattack = 3 end
                 inst.sg:GoToState("pounceattack", data.target)
             end

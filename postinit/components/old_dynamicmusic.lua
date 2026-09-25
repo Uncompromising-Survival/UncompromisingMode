@@ -1,4 +1,4 @@
-local UpvalueHacker = GLOBAL.require("tools/upvaluehacker")
+local UMUpvalueHacker = GLOBAL.require("tools/um_upvaluehacker")
 local SetSoundAlias = GLOBAL.require("tools/soundmanager")
 
 --We can hack our way through the hounded component and create our own variables so we don't have to touch any of the private data --KoreanWaffles

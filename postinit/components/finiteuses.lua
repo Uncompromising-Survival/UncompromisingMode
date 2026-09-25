@@ -8,7 +8,7 @@ env.AddComponentPostInit("finiteuses", function(self)
     function self:IgnoresCombatDurabilityLoss(...)
         local owner = self.inst.components.inventoryitem and self.inst.components.inventoryitem.owner
         local buffaction = owner and owner:GetBufferedAction()
-        if buffaction and buffaction.mockattack then return true end
+        if buffaction and buffaction.um_mockattack then return true end
         return _IgnoresCombatDurabilityLoss(self, ...)
     end
 end)

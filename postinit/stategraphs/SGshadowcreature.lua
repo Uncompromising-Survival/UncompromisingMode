@@ -89,16 +89,18 @@ env.AddStategraphPostInit("shadowcreature", function(inst)
             events =
             {
                 EventHandler("animqueueover", function(inst)
-                    if math.random() < .333 then
-                        if inst:HasTag("terrorbeak") and inst.components.combat and inst.components.combat.target and inst.components.combat.target:HasTag("player") then --taunt teleporting is only really useful against a player
-                            inst.sg:GoToState("tauntport")
+                    if inst.AnimState:AnimDone() then
+                        if math.random() < .333 then
+                            if inst:HasTag("terrorbeak") and inst.components.combat and inst.components.combat.target and inst.components.combat.target:HasTag("player") then --taunt teleporting is only really useful against a player
+                                inst.sg:GoToState("tauntport")
+                            else
+                                TryDropTarget(inst)
+                                inst.forceretarget = true --V2C: try to keep legacy behaviour; it used SetTarget(nil) here, which would always result in a retarget
+                                inst.sg:GoToState("taunt")
+                            end
                         else
-                            TryDropTarget(inst)
-                            inst.forceretarget = true --V2C: try to keep legacy behaviour; it used SetTarget(nil) here, which would always result in a retarget
-                            inst.sg:GoToState("taunt")
+                            inst.sg:GoToState("idle")
                         end
-                    else
-                        inst.sg:GoToState("idle")
                     end
                 end),
             },
@@ -116,7 +118,7 @@ env.AddStategraphPostInit("shadowcreature", function(inst)
 
             events =
             {
-                EventHandler("animover", function(inst) inst.sg:GoToState("taunttp") end),
+                EventHandler("animover", function(inst) if inst.AnimState:AnimDone() then inst.sg:GoToState("taunttp") end end),
             },
         },
 
@@ -132,34 +134,36 @@ env.AddStategraphPostInit("shadowcreature", function(inst)
             events =
             {
                 EventHandler("animover", function(inst)
-                    local max_tries = 4
-                    local target = inst.components.combat.target
-                    
-                    if target ~= nil then
-                        for k = 1, max_tries do
-                            local x, y, z = target.Transform:GetWorldPosition()
-                            local offset = 10
-                            x = x + math.random(2 * offset) - offset
-                            z = z + math.random(2 * offset) - offset
-                            if TheWorld.Map:IsPassableAtPoint(x, y, z) and #TheSim:FindEntities(x, y, z, 3, { "player" }) == 0 then
-                                inst.Physics:Teleport(x, y, z)
-                                break
+                    if inst.AnimState:AnimDone() then
+                        local max_tries = 4
+                        local target = inst.components.combat.target
+                        
+                        if target ~= nil then
+                            for k = 1, max_tries do
+                                local x, y, z = target.Transform:GetWorldPosition()
+                                local offset = 10
+                                x = x + math.random(2 * offset) - offset
+                                z = z + math.random(2 * offset) - offset
+                                if TheWorld.Map:IsPassableAtPoint(x, y, z) and #TheSim:FindEntities(x, y, z, 3, { "player" }) == 0 then
+                                    inst.Physics:Teleport(x, y, z)
+                                    break
+                                end
+                            end
+                        else
+                            for k = 1, max_tries do
+                                local x, y, z = inst.Transform:GetWorldPosition()
+                                local offset = 10
+                                x = x + math.random(2 * offset) - offset
+                                z = z + math.random(2 * offset) - offset
+                                if TheWorld.Map:IsPassableAtPoint(x, y, z) then
+                                    inst.Physics:Teleport(x, y, z)
+                                    break
+                                end
                             end
                         end
-                    else
-                        for k = 1, max_tries do
-                            local x, y, z = inst.Transform:GetWorldPosition()
-                            local offset = 10
-                            x = x + math.random(2 * offset) - offset
-                            z = z + math.random(2 * offset) - offset
-                            if TheWorld.Map:IsPassableAtPoint(x, y, z) then
-                                inst.Physics:Teleport(x, y, z)
-                                break
-                            end
-                        end
-                    end
 
-                    inst.sg:GoToState("appear")
+                        inst.sg:GoToState("appear")
+                    end
                 end),
             },
         }

@@ -1,19 +1,12 @@
 local require = GLOBAL.require
 
-require "um_pocketdimensioncontainers"
+--live: 󰀕 white skull
+--beta: 󰀕 red skull
+GLOBAL.rawset(GLOBAL, "UNCOMPROMISING_MODE", string.find(GLOBAL.KnownModIndex:GetModFancyName(modname), "󰀕") ~= nil and "LIVE" or "BETA")
 
-GLOBAL.FUELTYPE.BATTERYPOWER = "BATTERYPOWER"
-GLOBAL.FUELTYPE.SALT = "SALT"
-GLOBAL.FUELTYPE.WOOL = "WOOL"
-GLOBAL.FUELTYPE.EYE = "EYE"
-GLOBAL.FUELTYPE.SLUDGE = "SLUDGE"
-GLOBAL.UPGRADETYPES.ELECTRICAL = "ELECTRICAL"
-GLOBAL.UPGRADETYPES.SLUDGE_CORK = "SLUDGE_CORK"
-GLOBAL.UPGRADETYPES.SOUL_SHADOW = "SOUL_SHADOW"
-GLOBAL.UPGRADETYPES.SOUL_LUNAR = "SOUL_LUNAR"
+require("um_pocketdimensioncontainers")
 
-
-GLOBAL.UPDATE_CHECK = GLOBAL.CurrentRelease.GreaterOrEqualTo("R42_HEATED_VAULT") -- REMEMBER TO ALWAYS UPDATE THIS WITH NEW BETAS.
+GLOBAL.UPDATE_CHECK = GLOBAL.CurrentRelease.GreaterOrEqualTo("R43_SHADOWYDEPTHS") -- REMEMBER TO ALWAYS UPDATE THIS WITH NEW BETAS.
 
 GLOBAL.UMCommonFns = require("tools/um_commonfns")
 GLOBAL.MAX_GEM_TIER = 3
@@ -92,10 +85,7 @@ AddPrefabPostInit("world", function(inst)
         end
     end)]]
 
-    GLOBAL.TheWorld:AddTag("um_beta") -- Added so it's easy to tell if the um beta is active
-    if not inst.ismastersim then
-        return
-    end
+    inst:AddTag("um_beta") -- Added so it's easy to tell if the um beta is active
 end)
 
 modimport("init/init_gamemodes/init_uncompromising_mode")
@@ -201,24 +191,15 @@ end
 
 AddClientModRPCHandler("UncompromisingSurvival", "UpdateAllFocuses", UpdateAllFocuses)
 
-local function PianoPuzzleComplete1()
-    local piano = TheSim:FindFirstEntityWithTag("wixie_piano")
-    piano:PushEvent("pianopuzzlecomplete_1")
+for i = 1, 3 do
+    AddModRPCHandler("UncompromisingSurvival", "PianoPuzzleComplete"..i, function(player)
+        local piano = not player.um_piano_cooldown and TheSim:FindFirstEntityWithTag("wixie_piano")
+        if piano and player:IsNear(piano, 6) then
+            piano:PushEvent("pianopuzzlecomplete_"..i)
+            player.um_piano_cooldown = player:DoTaskInTime(1, function(inst) inst.um_piano_cooldown = nil end)
+        end
+    end)
 end
-
-local function PianoPuzzleComplete2()
-    local piano = TheSim:FindFirstEntityWithTag("wixie_piano")
-    piano:PushEvent("pianopuzzlecomplete_2")
-end
-
-local function PianoPuzzleComplete3()
-    local piano = TheSim:FindFirstEntityWithTag("wixie_piano")
-    piano:PushEvent("pianopuzzlecomplete_3")
-end
-
-AddModRPCHandler("UncompromisingSurvival", "PianoPuzzleComplete1", PianoPuzzleComplete1)
-AddModRPCHandler("UncompromisingSurvival", "PianoPuzzleComplete2", PianoPuzzleComplete2)
-AddModRPCHandler("UncompromisingSurvival", "PianoPuzzleComplete3", PianoPuzzleComplete3)
 
 AddClientModRPCHandler("UncompromisingSurvival", "WathomMusicToggle", WathomMusicToggle)
 --AddClientModRPCHandler("UncompromisingSurvival", "WathomAdrenalineStinger", DoAdrenalineUpStinger)
@@ -335,8 +316,8 @@ end
 AddClientModRPCHandler("UncompromisingSurvival", "LearnGemologyGem", LearnGemologyGem)
 
 AddClientModRPCHandler("UncompromisingSurvival", "OnTerraform", function(data)
-    local data = GLOBAL.DecodeAndUnzipString(data)
-    if GLOBAL.TheWorld and GLOBAL.TheWorld.components.um_localtilewatcher ~= nil then
+    if GLOBAL.TheWorld and GLOBAL.TheWorld.components.um_localtilewatcher then
+        local data = GLOBAL.DecodeAndUnzipString(data)
         GLOBAL.TheWorld.components.um_localtilewatcher:OnTerraform(data)
     end
 end)
@@ -446,33 +427,6 @@ AddShardModRPCHandler("UncompromisingSurvival", "AcidMushroomsTargetFinished", f
     GLOBAL.TheWorld:PushEvent("master_acidmushroomsfinished", data)
 end)]]
 -- since ChangeImageName just does that, we need to assign the new atlas as well. I don't want to pack 2 images in the same atlas (mostly because idk how)
-
---Checks for projectinator/receptionator, basically blocking both the lazy deserter and desert stones
-local _OldStartChannelingFn = GLOBAL.ACTIONS.STARTCHANNELING.fn
-GLOBAL.ACTIONS.STARTCHANNELING.fn = function(act)
-    local target = act.target
-    local doer = act.doer
-    if target ~= nil and doer ~= nil and doer:HasTag("um_astral_projected") then
-        if target:HasTag("um_astral_projector") then
-            return false
-        end
-        if target:HasTag("um_astral_projector_target") and doer.um_astral_target ~= target then
-            return false
-        end
-        if target:HasTag("townportal") then
-            return false
-        end
-    end
-    return _OldStartChannelingFn(act)
-end
-
-local _OldTeleportFn = GLOBAL.ACTIONS.TELEPORT.fn
-GLOBAL.ACTIONS.TELEPORT.fn = function(act)
-    if act.doer ~= nil and act.doer:HasTag("um_astral_projected") then
-        return false
-    end
-    return _OldTeleportFn(act)
-end
 
 GLOBAL.plaguemask_init_fn = function(inst, build_name) GLOBAL.basic_init_fn(inst, build_name, "hat_plaguemask") end
 

@@ -5,14 +5,17 @@ local STOMP_MUST_TAGS = {"_combat", "_health"}
 local STOMP_CANT_TAGS = {"INLIMBO", "notarget", "invisible", "noattack", "flight", "playerghost", "shadow", "shadowchesspiece", "shadowcreature", "bee", "beehive"}
 
 local function DoStomp(inst)
+    inst.components.combat.ignorehitrange = true
+    inst.components.combat.externaldamagemultipliers:SetModifier(inst, TUNING.DSTU.BEEQUEEN_STOMP_DAMAGE_MULT, "um_beequeen_stomp")
     local x, y, z = inst.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, 6, STOMP_MUST_TAGS, STOMP_CANT_TAGS)
-    for i, ent in ipairs(ents) do
-        if not ent.components.health:IsDead() then
-            ent.components.combat:GetAttacked(inst, 200)
+    for i, ent in ipairs(TheSim:FindEntities(x, y, z, TUNING.BEEQUEEN_HIT_RANGE + .5, STOMP_MUST_TAGS, STOMP_CANT_TAGS)) do
+        if ent:IsValid() and not ent.components.health:IsDead() and inst.components.combat:CanTarget(ent) then
+            inst.components.combat:DoAttack(ent)
         end
     end
     inst.components.groundpounder:GroundPound()
+    inst.components.combat.externaldamagemultipliers:RemoveModifier(inst, "um_beequeen_stomp")
+    inst.components.combat.ignorehitrange = nil
 end
 
 local function DoScreech(inst)
@@ -414,7 +417,10 @@ env.AddStategraphPostInit("beequeen", function(inst)
 
             timeline =
             {
-                TimeEvent(9 * FRAMES, StopFlapping),
+                TimeEvent(9 * FRAMES, function(inst)
+                    StopFlapping(inst)
+                    LandFlyingCreature(inst)
+                end),
             },
 
             events =
@@ -425,6 +431,7 @@ env.AddStategraphPostInit("beequeen", function(inst)
             onexit = function(inst)
                 inst.components.timer:ResumeTimer("spawnguards_cd")
                 RestoreFlapping(inst)
+                RaiseFlyingCreature(inst)
             end
         },
 
@@ -434,6 +441,7 @@ env.AddStategraphPostInit("beequeen", function(inst)
 
             onenter = function(inst)
                 StopFlapping(inst)
+                LandFlyingCreature(inst)
                 inst.components.timer:PauseTimer("spawnguards_cd")
                 inst.components.locomotor:StopMoving()
                 inst.AnimState:PlayAnimation("tired_loop", true)
@@ -448,6 +456,7 @@ env.AddStategraphPostInit("beequeen", function(inst)
 
             onexit = function(inst)
                 RestoreFlapping(inst)
+                RaiseFlyingCreature(inst)
             end,
         },
 
@@ -457,6 +466,8 @@ env.AddStategraphPostInit("beequeen", function(inst)
 
             onenter = function(inst)
                 inst.AnimState:PlayAnimation("tired_pst")
+                StopFlapping(inst)
+                LandFlyingCreature(inst)
             end,
 
             events =
@@ -466,6 +477,7 @@ env.AddStategraphPostInit("beequeen", function(inst)
 
             onexit = function(inst)
                 RestoreFlapping(inst)
+                RaiseFlyingCreature(inst)
             end,
         },
 
@@ -475,6 +487,7 @@ env.AddStategraphPostInit("beequeen", function(inst)
 
             onenter = function(inst)
                 StopFlapping(inst)
+                LandFlyingCreature(inst)
                 inst.components.locomotor:StopMoving()
                 inst.AnimState:PlayAnimation("tired_hit")
                 inst.SoundEmitter:PlaySound("dontstarve/creatures/together/bee_queen/hit")
@@ -484,7 +497,7 @@ env.AddStategraphPostInit("beequeen", function(inst)
             timeline =
             {
                 TimeEvent(10 * FRAMES, function(inst)
-                    if (not inst.tiredcount or inst.tiredcount < 0) then
+                    if not inst.tiredcount or inst.tiredcount < 0 then
                         inst.sg:GoToState("tired_pst")
                     else
                         inst.sg:RemoveStateTag("notiredhit")
@@ -503,6 +516,7 @@ env.AddStategraphPostInit("beequeen", function(inst)
 
             onexit = function(inst)
                 RestoreFlapping(inst)
+                RaiseFlyingCreature(inst)
             end,
         },
 

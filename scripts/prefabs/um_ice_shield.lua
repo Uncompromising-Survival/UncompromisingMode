@@ -12,25 +12,27 @@ local function OnHealthDelta(inst, oldpercent, newpercent, overtime, cause, affl
     end
 end
 
-local function ShouldWeaponPierce(inst, weapon, attacker)
-    return attacker and attacker:HasTag("pierces_ice_shield")
+local function ShouldWeaponPierce(inst, attacker, weapon, damage)
+    return attacker and (attacker.UMShouldPierceIceShield and attacker:UMShouldPierceIceShield(inst, weapon, damage) or attacker:HasTag("um_pierces_iceshield"))
         or weapon and (weapon.components.gem_enchantable and weapon.components.gem_enchantable:HasEnchantment("um_gemologyredgem2")
-            or weapon:HasTag("pierces_ice_shield") or weapon.components.obsidiantool
+            or weapon.UMShouldPierceIceShield and weapon:UMShouldPierceIceShield(inst, attacker, damage)
+            or weapon:HasTag("um_pierces_iceshield") or weapon.components.obsidiantool
             or weapon.components.fumaroletool and weapon.components.fumaroletool:GetTempRange() > 2
             or weapon.components.weapon and (weapon.components.weapon.stimuli == "fire" or weapon.components.weapon:GetDamage(attacker, inst) == 0))
 end
 
 local function ShouldRecoilIceShield(inst, attacker, weapon, damage)
-    local shouldrecoil = inst:HasTag("ice_shielded") and not ShouldWeaponPierce(inst, weapon, attacker)
+    local shouldrecoil = inst:HasTag("ice_shielded") and not ShouldWeaponPierce(inst, attacker, weapon, damage)
     if shouldrecoil and attacker and attacker.components.talker and attacker:HasTag("player") then
         attacker.components.talker:Say(GetString(attacker, "ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD"))
     end
 
     local fumarolemult = weapon and weapon.components.fumaroletool and weapon.components.fumaroletool:GetTempRange() or 1
 
-    return shouldrecoil, (ShouldWeaponPierce(inst, weapon, attacker) or not inst:HasTag("ice_shielded")) and damage and damage * fumarolemult or damage and (damage / 2) * fumarolemult or nil
+    return shouldrecoil, not shouldrecoil and damage and damage * fumarolemult
+        or damage and (damage * .66) * fumarolemult
+        or nil
 end
-
 
 local function Init(inst, parent, fx_symbol, tier)
     if parent.ice_shield then
@@ -66,7 +68,7 @@ local function Init(inst, parent, fx_symbol, tier)
             inst.um_redirect_old = parent.components.health.redirect
         end
         parent.components.health.redirect = function(self, amount, overtime, cause, ...)
-            if amount >= 0 then
+            if amount >= 0 or cause == "oldager_component" then
                 return inst.um_redirect_old and inst.um_redirect_old(self, amount, overtime, cause, ...) or false
             end
 
@@ -95,19 +97,19 @@ local function Init(inst, parent, fx_symbol, tier)
     parent.shield_fx.entity:AddFollower()
     parent.shield_fx.Follower:FollowSymbol(parent.GUID, fx_symbol, 0, 0, 0)
 
-
     parent.shield_fx2 = SpawnPrefab("um_ice_shield_fx")
     parent.shield_fx2.entity:SetParent(parent.entity) --don't need followsymbol here.
 
-    if parent:IsValid() and parent.components.health ~= nil and parent:HasTag("player") then
+    if parent:IsValid() and parent:HasTag("player") and parent.components.health then
         parent.ice_shield_health:set(math.floor(inst.components.health.currenthealth))
         parent.ice_shield_maxhealth:set(math.floor(inst.components.health.maxhealth))
     end
 
-    if parent.components.temperature and UPDATE_CHECK then
+    if parent.components.temperature then
         parent.components.temperature:SetInsulationModifier(SEASONS.SUMMER, inst, TUNING.INSULATION_SMALL)
     end
 end
+
 
 local function fn()
     local inst = CreateEntity()
@@ -122,24 +124,31 @@ local function fn()
     inst.tier = 1
     inst.lasthitfxtime = 0
 
-    inst:AddComponent("health")
-    inst.components.health.nofadeout = true
-    inst.components.health.save_maxhealth = true
-    inst.components.health.canheal = false
-    inst.components.health:SetMaxHealth(200)
-    inst.components.health.ondelta = OnHealthDelta
+    local health = inst:AddComponent("health")
+    health.nofadeout = true
+    health.save_maxhealth = true
+    health.canheal = false
+    health:SetMaxHealth(200)
+    health.ondelta = OnHealthDelta
     --inst.components.health.externalfiredamagemultipliers:SetModifier(inst, 10)
     --this doesn't work as expected. It never actually gets fire damaged directly. fire damage mults are on the redirect.
 
     inst.regen_task = inst:DoPeriodicTask(2.5, function(inst)
-        local temperature_scale = Lerp(2, -2, TheWorld.state.temperature / 80)
-        local value = 1 * inst.tier * temperature_scale
+        local x, y, z = inst._parent.Transform:GetWorldPosition()
+
+        local temperature_scale = inst._parent.components.temperature and inst._parent.components.temperature.rate * -2 or 1
+
+        local value = inst.tier * temperature_scale
         if value < 0 then
             local fx = SpawnPrefab("washashore_puddle_fx")
             fx.Transform:SetPosition(inst._parent.Transform:GetWorldPosition())
 
             if inst._parent.components.moisture then
-                inst._parent.components.moisture:DoDelta(math.abs(value))
+                inst._parent.extra_moisture_rate = math.abs(value)
+            end
+        else
+            if inst._parent.extra_moisture_rate then
+                inst._parent.extra_moisture_rate = nil
             end
         end
 
@@ -156,6 +165,10 @@ local function fn()
         if inst._parent then
             inst._parent:PushEvent("ice_shield_death")
 
+            if inst._parent.extra_moisture_rate then
+                inst._parent.extra_moisture_rate = nil
+            end
+
             if inst._parent.components.burnable then
                 inst._parent.components.burnable:Extinguish()
             end
@@ -171,7 +184,7 @@ local function fn()
                 inst._parent.components.health.redirect = inst.um_redirect_old
             end
 
-            if inst._parent.components.temperature and UPDATE_CHECK then
+            if inst._parent.components.temperature then
                 inst._parent.components.temperature:RemoveInsulationModifier(SEASONS.SUMMER, inst)
             end
 

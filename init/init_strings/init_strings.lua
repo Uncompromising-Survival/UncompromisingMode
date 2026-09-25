@@ -36,6 +36,7 @@ RECIPE_DESC.UM_BEAR_TRAP_EQUIPPABLE_TOOTH = "These jaws need to get a grip!"
 RECIPE_DESC.UM_BEAR_TRAP_EQUIPPABLE_GOLD = "My shiny teeth and me!"
 RECIPE_DESC.ARMOR_GLASSMAIL = "Surround yourself with broken glass."
 RECIPE_DESC.MUTATOR_TRAPDOOR = "They're smart, allegedly."
+RECIPE_DESC.MUTATOR_TRAPDOOR_HOODED = "They're moody, allegedly."
 RECIPE_DESC.DRIFTWOODFISHINGROD = TUNING.DSTU.DATES.APRIL_FOOLS and "Go fucking fishing. For fucking fish." or "Go fancy fishing. For fancy fish."
 RECIPE_DESC.UNCOMPROMISING_FISHINGNET = "Nothing but net!"
 RECIPE_DESC.UNCOMPROMISING_HARPOON = "Keel Haul 'Em!"
@@ -193,7 +194,7 @@ RECIPE_DESC.WORMWOOD_MUSHTREE = "Create your very own fungus among us."
 RECIPE_DESC.WORMWOOD_EQEX = "Friends come and go."
 RECIPE_DESC.UM_BOMB_MOON = "Create freaks scorched by the moon's light!"
 RECIPE_DESC.UM_BLUEPRINTING_KIT = "Write down what you know and copy what others wrote before you."
-
+RECIPE_DESC.UM_GEM_REPAIR_KIT = "Mend together that gear you're gearing up with."
 RECIPE_DESC.UM_THULECITE_RAZOR = "Essential for the ancient technique of \"shaving\" "
 -- [              DSTU Related Overrides                  ]
 
@@ -267,9 +268,12 @@ STRINGS.ACTIONS.ACTIVATE.UM_TORNADOTRACKER = "Locate Tornadoes -"
 STRINGS.ACTIONS.CASTAOE.WATHGRITHR_SHIELD_DREADSTONE = STRINGS.ACTIONS.CASTAOE.WATHGRITHR_SHIELD
 STRINGS.ACTIONS.START_CHANNELCAST.MOONFALL = "Start Casting"
 STRINGS.ACTIONS.UM_GUNSHOOTY = "Shoot"
+STRINGS.ACTIONS.UM_CALL_BEEF = "Call Beefalo"
+STRINGS.ACTIONS.UM_COOL_MAGMA = "Solidify"
 
 STRINGS.UI.APPLY_GEM = "Forge!"
-STRINGS.UI.HUD.UM_VETSKULL_GENERIC = "Veteran's Curse:\n - Receive more damage when attacked.\n - Hunger drains faster.\n - Health and Sanity from foods is applied *slowly* over time."
+STRINGS.UI.HUD.UM_VETSKULL_PREFIX = "Veteran's Curse:\n"
+STRINGS.UI.HUD.UM_VETSKULL_GENERIC = " - Receive more damage when attacked.\n - Hunger drains faster.\n - Health and Sanity from foods is applied *slowly* over time."
 STRINGS.UI.HUD.UM_VETSKULL = {
     DEFAULT = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,      --WIP
     WILLOW = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,       --WilloWIP
@@ -278,19 +282,19 @@ STRINGS.UI.HUD.UM_VETSKULL = {
     WX78 = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,         --WIP
     WICKERBOTTOM = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
     WOODIE = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,       --WIP
-    WES = "Veteran's Curse:\n - Wes Must Die.",
-    WAXWELL = "Veteran's Curse:\n - Half of taken attack damage is also applied as maximum health loss.\n - Maximum health loss is capped at 99% instead of 75%.",
+    WES = " - Wes Must Die.",
+    WAXWELL = " - Half of taken attack damage is also applied as maximum health loss.\n - Maximum health loss is capped at 99% instead of 75%.",
     WATHGRITHR = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,   --WIP
     WEBBER = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,       --WIP
     WINONA = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,       --WIP
     WARLY = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,        --WIP
     WORTOX = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,       --WIP
-    WORMWOOD = "Veteran's Curse:\n - Health from healing items is applied *slowly* over time.\n - Getting attacked and fire damage interrupt the healing.",
+    WORMWOOD = " - Health from healing items is applied *slowly* over time.\n - Getting attacked and fire damage interrupt the healing.",
     WURT = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,         --Wurt to Womp transition, real. Soon.
-    WALTER = "Veteran's Curse:\n - Damage taken also applies a maximum Sanity penalty.\n - The penalty heals itself after a while without getting hurt.",
-    WANDA = "Veteran's Curse:\n - Age faster when damaged.\n - Hunger drains faster.\n - Sanity from foods is applied *slowly* over time.",
-    WINKY = "Veteran's Curse:\n - Lose 5 inventory slots.",
-    WATHOM = "Veteran's Curse:\n - When above 50% Sanity, becomes enlighted.",
+    WALTER = " - Damage taken also applies a maximum Sanity penalty.\n - The penalty heals itself after a while without getting hurt.",
+    WANDA = " - Getting attacked by shadows cause you to age to certain death.",
+    WINKY = " - Lose 5 inventory slots.",
+    WATHOM = " - When above 50% Sanity, become enlighted.",
     WIXIE = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
 }
 STRINGS.UI.HUD.UM_VETSKULL_VETSITEMS = "\n - You're able to wield cursed items, dropped by certain bosses."
@@ -801,7 +805,7 @@ STRINGS.UM_LOADINGTIPS = {
     CONFIGS = "Not a fan of some changes? Need a change of pace? Check out Uncompromising Mode's configuration options! Almost everything is configurable!",
     WIKI = "Lost? Confused? Hungering for knowledge? Visit Uncompromising Mode's Wiki! It's... *mostly* accurate! (Make sure to use Wiki.gg and watch out for Outdated warnings!)",
     RATS_FOODSCORE = "\"Our rations appear to be attracting unwanted attention. I should get rid of our stale food...\" - W",
-    RATS_ITEMSCORE = "\"The vermin have noticed the mess around camp, I really should do a bit of Spring cleaning...\" - W",
+    --RATS_ITEMSCORE = "\"The vermin have noticed the mess around camp, I really should do a bit of Spring cleaning...\" - W",
     RATS_BURROWBONUS = "\"I've spotted a rat den where there wasn't one before, I think they are multiplying, and fast!\" - W",
     SNOWPILES = "\"The snow is accumulating here rather fast. We should dig it soon before it covers everything, or worse...\" - W",
     UNHAPPYTOMATO = "\"My tomato harvest seems to have shortened this fall, I guess they're feeling under the weather.\" - W",
@@ -970,7 +974,7 @@ STRINGS.UM_DESCRIPTOR = {
         },
         PALE2 = {
             "Doubles item durability.",
-            "Tripes item durability.\nIf the item is not prototypeable, adds a chance to not consume durability on use.",
+            "Triples item durability.\nIf the item is not prototypeable, adds a chance to not consume durability on use.",
             "Quadruples item durability.\nIf the item is not prototypeable, adds a chance to not consume durability on use.",
         },
     },
@@ -1046,7 +1050,7 @@ STRINGS.UM_DESCRIPTOR = {
         },
         PALE2 = {
             "Doubles the item durability.",
-            "Tripes the item durability.\nIf the item is not prototypeable, adds a chance to not consume durability on use.",
+            "Triples the item durability.\nIf the item is not prototypeable, adds a chance to not consume durability on use.",
             "Quadruples the item durability.\nIf the item is not prototypeable, adds a chance to not consume durability on use.",
         },
     }

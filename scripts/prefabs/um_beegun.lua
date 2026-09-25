@@ -111,67 +111,29 @@ end
 
 local function collectbees(inst, target, pos)
     local owner = inst.components.inventoryitem.owner
-    local ownerpos = owner ~= nil and owner:GetPosition()
-    local currentstacks = 0
+    local ownerpos = owner and owner:GetPosition()
     local currentitem = inst.components.container:GetItemInSlot(1)
+    local currentstacks = currentitem and currentitem.components.stackable:StackSize() or 0
+    local targetpos = pos or target and target:GetPosition()
+    if ownerpos then
+        for i, v in pairs(TheSim:FindEntities(targetpos.x, 0, targetpos.z, 8, {"_inventoryitem", "bee"}, {"INLIMBO", "mutant"})) do
+            if i + currentstacks > 20 then return end
 
-    if currentitem ~= nil then
-        currentstacks = currentitem.components.stackable:StackSize()
-    end
-
-    if owner ~= nil then
-        if pos ~= nil then
-            local findbees = TheSim:FindEntities(pos.x, 0, pos.z, 8, { "bee" },{"mutant"})
-            if findbees ~= nil then
-                for i, v in pairs(findbees) do
-                    if i + currentstacks > 20 then
-                        break
-                    end
-
-                    if v ~= nil and not v:IsInLimbo() and v:IsValid() and v.components.inventoryitem and
-                        not v.components.health:IsDead() then
-                        if inst.components.container ~= nil then
-                            local beeball = SpawnPrefab("um_" .. v.prefab .. "_ball")
-                            beeball.Transform:SetPosition(v.Transform:GetWorldPosition())
-                            beeball.components.complexprojectile:Launch(ownerpos, owner, owner)
-                            beeball.beegun = inst
-
-                            v:Remove()
-                            --inst.components.container:GiveItem(v)
-                        end
-                    end
-                end
-            end
-        elseif target ~= nil then
-            local x, y, z = target.Transform:GetWorldPosition()
-
-            local findbees = TheSim:FindEntities(x, 0, z, 8, { "bee" })
-            if findbees ~= nil then
-                for i, v in pairs(findbees) do
-                    if i + currentstacks > 20 then
-                        break
-                    end
-
-                    if v ~= nil and not v:IsInLimbo() and v:IsValid() and v.components.inventoryitem and
-                        not v.components.health:IsDead() then
-                        if inst.components.container ~= nil then
-                            local beeball = SpawnPrefab("um_" .. v.prefab .. "_ball")
-                            beeball.Transform:SetPosition(v.Transform:GetWorldPosition())
-                            beeball.components.complexprojectile:Launch(ownerpos, owner, owner)
-                            beeball.beegun = inst
-
-                            v:Remove()
-                            --inst.components.container:GiveItem(v)
-                        end
-                    end
-                end
+            if v:IsValid() and not (v.components.health and v.components.health:IsDead())
+                and inst.components.container then
+                local beeball = SpawnPrefab("um_"..v.prefab.."_ball")
+                beeball.Transform:SetPosition(v.Transform:GetWorldPosition())
+                beeball.components.complexprojectile:Launch(ownerpos, owner, owner)
+                beeball.beegun = inst
+                v:Remove()
+                --inst.components.container:GiveItem(v)
             end
         end
     end
 end
 
-local function can_cast_fn(doer, target, pos)
-    return doer:HasTag("vetcurse")
+local function CanCastFn(inst)
+    return true
 end
 
 local function onattack(inst, attacker, target)
@@ -205,8 +167,6 @@ local function fn(anim, name, swap, beetype)
     inst:AddTag("donotautopick")
     --inst.projectiledelay = PROJECTILE_DELAY
 
-    MakeInventoryFloatable(inst, "med", 0.075, { 0.5, 0.4, 0.5 }, true, -7, floater_swap_data)
-
     local reticule = inst:AddComponent("reticule")
     reticule.targetfn = ReticuleTargetFn
     reticule.ease = true
@@ -214,6 +174,8 @@ local function fn(anim, name, swap, beetype)
     reticule.ispassableatallpoints = true
 
     inst.um_cancastontarget = UMCommonFns.DefaultCanCastOnTarget
+
+    MakeInventoryFloatable(inst, "med", 0.075, { 0.5, 0.4, 0.5 }, true, -7, floater_swap_data)
 
     inst.entity:SetPristine()
 
@@ -255,10 +217,9 @@ local function fn(anim, name, swap, beetype)
 
     local spellcaster = inst:AddComponent("spellcaster")
     spellcaster:SetSpellFn(collectbees)
-    spellcaster:SetCanCastFn(can_cast_fn)
+    spellcaster:SetCanCastFn(CanCastFn)
     spellcaster.canuseontargets = true
-    spellcaster.canonlyuseonworkable = true
-    spellcaster.canonlyuseoncombat = true
+    spellcaster.canuseondead = true
     spellcaster.canuseonpoint = true
     spellcaster.canuseonpoint_water = true
 

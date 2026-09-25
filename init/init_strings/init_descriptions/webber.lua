@@ -148,7 +148,7 @@ DESCRIBE.SALTPACK = "We kinda want to play in the snow, though."
 DESCRIBE.SKELETONMEAT = "I haven't seen my own skin in... forever!"
 DESCRIBE.CHIMP = DESCRIBE.MONKEY
 DESCRIBE.SWILSON = "No, stop! It's us, Wilson!"
-DESCRIBE.VAMPIREBAT = "Nice monster!"
+DESCRIBE.UM_VAMPIREBAT = "Nice monster!"
 DESCRIBE.CRITTERLAB_REAL = DESCRIBE.CRITTERLAB
 DESCRIBE.CRITTERLAB_REAL_BROKEN =
 "Moon rocks would make a great new home for some little critters!"
@@ -316,6 +316,7 @@ DESCRIBE.MOONMAW_GLASSSHARDS = DESCRIBE.ARMOR_GLASSMAIL_SHARDS
 DESCRIBE.MOONMAW_LAVAE_RING = DESCRIBE.MOONMAW_LAVAE
 
 DESCRIBE.MUTATOR_TRAPDOOR = "I tried something different this time!"
+DESCRIBE.MUTATOR_TRAPDOOR_HOODED = "Ooh, this one's extra sneaky!"
 
 DESCRIBE.WOODPECKER = "We like your beak!"
 DESCRIBE.SNOTROAST = "Whoa! So many boogies!"

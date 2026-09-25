@@ -106,7 +106,7 @@ if GetModConfigData("wanda_nerf") then
     }
 end
 
-if TUNING.DSTU.GOTOBED ~= false then
+if TUNING.DSTU.GOTOBED then
     AllRecipes["siestahut"].ingredients = {
         Ingredient("silk", 6),
         Ingredient("boards", 4),
@@ -421,10 +421,12 @@ if TUNING.DSTU.SHAVE_MODE then
     AllRecipes["razor"].level = TechTree.Create(TECH.NONE)
 end
 
-AllRecipes["blowdart_pipe"].numtogive = TUNING.DSTU.DART_YIELD
-AllRecipes["blowdart_fire"].numtogive = TUNING.DSTU.DART_YIELD
-AllRecipes["blowdart_sleep"].numtogive = TUNING.DSTU.DART_YIELD
-AllRecipes["blowdart_yellow"].numtogive = TUNING.DSTU.DART_YIELD
+if TUNING.DSTU.DART_YIELD ~= 1 then
+    AllRecipes["blowdart_pipe"].numtogive = TUNING.DSTU.DART_YIELD
+    AllRecipes["blowdart_fire"].numtogive = TUNING.DSTU.DART_YIELD
+    AllRecipes["blowdart_sleep"].numtogive = TUNING.DSTU.DART_YIELD
+    AllRecipes["blowdart_yellow"].numtogive = TUNING.DSTU.DART_YIELD
+end
 
 ----BIG WATHOM ANCIENT KINSHIP I SECTION----
 AllRecipes["thulecite"].no_builder_skill = "wathom_allegiance_neutral"

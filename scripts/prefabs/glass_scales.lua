@@ -16,7 +16,7 @@ local function fngeode()
     inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
 	
     inst.Light:SetColour(111/255, 111/255, 227/255)
-    inst.Light:SetIntensity(0.75)
+    inst.Light:SetIntensity(0.25)
     inst.Light:SetFalloff(0.5)
     inst.Light:SetRadius(1.5)
     inst.Light:Enable(true)  
@@ -45,7 +45,6 @@ local function fngeode()
     inst.components.workable:SetOnFinishCallback(onhammered)
 	
 	inst:AddComponent("lootdropper")
-	inst.Transform:SetScale(1.5,1.5,1.5)
     MakeHauntableLaunch(inst)
 
     return inst
@@ -62,7 +61,7 @@ local function fn()
     inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
 
     inst.Light:SetColour(111/255, 111/255, 227/255)
-    inst.Light:SetIntensity(0.75)
+    inst.Light:SetIntensity(0.25)
     inst.Light:SetFalloff(0.5)
     inst.Light:SetRadius(1)
     inst.Light:Enable(true)  

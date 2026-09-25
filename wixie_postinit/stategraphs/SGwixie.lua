@@ -796,8 +796,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst.AnimState:SetDeltaTimeMultiplier(1.5)
                 
                 inst.AnimState:OverrideSymbol("hound_whistle01", "walterwhistle", "hound_whistle01")
-                --inst.AnimState:Hide("ARM_carry")
-                inst.AnimState:Show("ARM_normal")
             end,
 
             timeline =
@@ -831,11 +829,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
             onexit = function(inst)
                 inst.AnimState:SetDeltaTimeMultiplier(1)
-                
-                if inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) then
-                    inst.AnimState:Show("ARM_carry")
-                    inst.AnimState:Hide("ARM_normal")
-                end
+                inst.AnimState:ClearOverrideSymbol("hound_whistle01")
             end,
         },
         State{

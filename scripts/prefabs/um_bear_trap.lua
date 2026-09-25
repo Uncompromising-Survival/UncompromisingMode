@@ -1,6 +1,47 @@
 require "prefabutil"
 
+local function ToggleSlowDownDebuff(inst, trap, toggle) -- TODO: Rework this into a real debuff maybe?
+    if trap.um_ignoredebuffremoval then return end
+    local traptype, debuffkey = trap.traptype or "regular", trap.prefab
+    local locomotor = inst.components.locomotor
+    if toggle then
+        if locomotor then
+            locomotor:SetExternalSpeedMultiplier(inst, debuffkey, traptype and .35 or .2)
+            if inst["um_bear_trap_speedmulttask_"..traptype] then inst["um_bear_trap_speedmulttask_"..traptype]:Cancel() end
+            inst["um_bear_trap_speedmulttask_"..traptype] = inst:DoTaskInTime(traptype and 30 or 10, function(_inst)
+                if _inst.components.locomotor then
+                    _inst.components.locomotor:RemoveExternalSpeedMultiplier(_inst, debuffkey)
+                end
+                _inst["um_bear_trap_speedmulttask_"..traptype] = nil
+            end)
+            if inst["um_caught_on_"..debuffkey] and inst["um_caught_on_"..debuffkey]:IsValid() then inst["um_caught_on_"..debuffkey].um_ignoredebuffremoval = true end
+            inst["um_caught_on_"..debuffkey] = trap
+        end
+    else
+        if locomotor then locomotor:RemoveExternalSpeedMultiplier(inst, debuffkey) end
+        if inst["um_bear_trap_speedmulttask_"..traptype] then
+            inst["um_bear_trap_speedmulttask_"..traptype]:Cancel()
+            inst["um_bear_trap_speedmulttask_"..traptype] = nil
+        end
+        inst["um_caught_on_"..debuffkey] = nil
+    end
+end
+
 local function onfinished_normal(inst)
+    inst:RemoveEventCallback("death", onfinished_normal)
+    inst:RemoveEventCallback("onremove", onfinished_normal)
+    if inst.latchedtarget then
+        if inst.OnFinishedOnTarget then
+            inst:RemoveEventCallback("death", inst.OnFinishedOnTarget, inst.latchedtarget)
+            inst:RemoveEventCallback("onremove", inst.OnFinishedOnTarget, inst.latchedtarget)
+        end
+        if inst.latchedtarget:IsValid() then
+            local pos = Vector3(inst.latchedtarget.Transform:GetWorldPosition())
+            ToggleSlowDownDebuff(inst.latchedtarget, inst)
+            inst.latchedtarget:RemoveChild(inst)
+            inst.Physics:Teleport(pos.x, pos.y, pos.z)
+        end
+    end
     if inst.components.finiteuses then
         inst.components.finiteuses:Use(1)
         if inst.components.finiteuses:GetUses() > 0 and inst.traptype then
@@ -44,23 +85,12 @@ local function onfinished_normal(inst)
     inst.AnimState:PushAnimation("death", false)
 
     inst.SoundEmitter:PlaySound("dontstarve/common/destroy_stone")
-    inst:DoTaskInTime(3, inst.Remove)
 
-    if inst.latchedtarget and inst.latchedtarget:IsValid() then
-        local pos = Vector3(inst.latchedtarget.Transform:GetWorldPosition())
-        if inst.latchedtarget.components.locomotor then
-            inst.latchedtarget.components.locomotor:RemoveExternalSpeedMultiplier(inst.latchedtarget, inst.prefab)
-            if inst.latchedtarget._bear_trap_speedmulttask then
-                inst.latchedtarget._bear_trap_speedmulttask:Cancel()
-                inst.latchedtarget._bear_trap_speedmulttask = nil
-            end
-        end
-        inst.latchedtarget:RemoveChild(inst)
-        inst.Physics:Teleport(pos.x, pos.y, pos.z)
-    end
+    inst:DoTaskInTime(2, inst.Remove)
 end
 
 local function OnExplode(inst, target)
+    inst:ListenForEvent("onremove", onfinished_normal)
     if not target or not target:IsValid() then
         onfinished_normal(inst)
     else
@@ -89,36 +119,15 @@ local function OnExplode(inst, target)
         inst.AnimState:SetFinalOffset(1)
         inst.Physics:Teleport(0, 0, 0)
         target:AddChild(inst)
-        -- inst.entity:AddFollower():FollowSymbol(target.GUID, target.components.combat.hiteffectsymbol or "body", 0, --[[-50]]0, 0)
+        --inst.entity:AddFollower():FollowSymbol(target.GUID, target.components.combat.hiteffectsymbol or "body", 0, --[[-50]]0, 0)
 
         if target.components.health and target.components.health:IsDead() then
             inst.components.health:Kill()
         else
-            local debuffkey = inst.prefab
-
-            inst:ListenForEvent("death", function(player) onfinished_normal(inst) end, target)
-            inst:ListenForEvent("onremoved", function(player) onfinished_normal(inst) end, target)
-            if target.components.locomotor then
-                target.components.locomotor:SetExternalSpeedMultiplier(target, debuffkey, inst.traptype and 0.35 or 0.2)
-                target._bear_trap_speedmulttask = target:DoTaskInTime(inst.traptype and 30 or 10, function(i)
-                    if i.components.locomotor then
-                        i.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey)
-                    end
-                    i._bear_trap_speedmulttask = nil
-                end)
-
-                local function RemoveSpeed(inst)
-                    if inst.components.locomotor then
-                        inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, debuffkey)
-                    end
-                    if inst._bear_trap_speedmulttask then
-                        inst._bear_trap_speedmulttask:Cancel()
-                        inst._bear_trap_speedmulttask = nil
-                    end
-                end
-
-                target:ListenForEvent("onremoved", RemoveSpeed, inst)
-            end
+            inst.OnFinishedOnTarget = function(_inst) onfinished_normal(inst) end
+            inst:ListenForEvent("death", inst.OnFinishedOnTarget, target)
+            inst:ListenForEvent("onremove", inst.OnFinishedOnTarget, target)
+            ToggleSlowDownDebuff(target, inst, true)
             inst:DoTaskInTime(10, function(inst) inst.components.health:Kill() end)
 
             inst.persists = false
@@ -131,10 +140,6 @@ end
 
 local function OnReset(inst)
     inst.Snapped = false
-
-    inst.Physics:ClearCollisionMask()
-    -- inst:SetPhysicsRadiusOverride(3)
-    inst.Physics:CollidesWith(COLLISION.WORLD)
 
     if inst.components.inventoryitem then
         inst.components.inventoryitem.nobounce = true
@@ -151,7 +156,6 @@ local function SetSprung(inst)
     if inst.components.inventoryitem then
         inst.components.inventoryitem.nobounce = true
     end
-    if not inst:IsInLimbo() then end
     inst.AnimState:PlayAnimation("idle_active")
 end
 
@@ -192,7 +196,6 @@ local function OnHaunt(inst, haunter)
     return false
 end
 
-
 local function BecomeItem(inst)
     local jaw = SpawnPrefab("snappy_jaw")
     jaw.Transform:SetPosition(inst.Transform:GetWorldPosition())
@@ -231,6 +234,13 @@ local function calculate_mine_test_time()
     return TUNING.STARFISH_TRAP_TIMING.BASE + (math.random() * TUNING.STARFISH_TRAP_TIMING.VARIANCE)
 end
 
+local CANT_HIT_TAGS_WALRUS = {"walrus", "houndmound", "hound", "houndfriend"}
+
+local function FindValidTrappable(target, inst)
+    return not (target.components.health and target.components.health:IsDead())
+        and target.components.combat:CanBeAttacked(inst) and not target:HasAnyTag(CANT_HIT_TAGS_WALRUS)
+end
+
 local function CommonMine(inst, alignment, reset)
     local mine = inst:AddComponent("mine")
     mine:SetRadius(TUNING.TRAP_TEETH_RADIUS * 1.3)
@@ -240,12 +250,11 @@ local function CommonMine(inst, alignment, reset)
     mine:SetOnSprungFn(SetSprung)
     mine:SetOnDeactivateFn(SetInactive)
     mine:SetTestTimeFn(calculate_mine_test_time)
-    if reset then
-        mine:Reset()
-    end
+    if alignment == "bear_trap_immune" then mine:SetSearchTestFn(FindValidTrappable) end
+    if reset then mine:Reset() end
 end
 
-local function common_fn()
+local function commonfn()
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -267,8 +276,6 @@ local function common_fn()
     inst:AddTag("houndfriend")
     inst:AddTag("trap")
     inst:AddTag("bear_trap")
-    inst:AddTag("smallcreature")
-    inst:AddTag("mech")
     inst:AddTag("noclaustrophobia")
     inst:AddTag("donotautopick")
 
@@ -277,8 +284,6 @@ local function common_fn()
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then return inst end
-
-
 
     inst.latchedtarget = nil
     inst.Snapped = false
@@ -293,11 +298,13 @@ local function common_fn()
 
     CommonMine(inst, "bear_trap_immune", true)
 
-    inst:AddComponent("health")
-    inst.components.health:SetMaxHealth(TUNING.WALRUS_HEALTH)
+    local health = inst:AddComponent("health")
+    health:SetMaxHealth(TUNING.WALRUS_HEALTH)
+    health.nofadeout = true
     inst:ListenForEvent("death", onfinished_normal)
 
-    inst:AddComponent("combat")
+    local combat = inst:AddComponent("combat")
+    combat.noimpactsound = true
     inst:ListenForEvent("attacked", OnAttacked)
 
     inst:AddComponent("deployable")
@@ -333,8 +340,6 @@ local function old_fn(build)
     inst:AddTag("houndfriend")
     inst:AddTag("trap")
     inst:AddTag("bear_trap")
-    inst:AddTag("smallcreature")
-    inst:AddTag("mech")
     inst:AddTag("noclaustrophobia")
 
     MakeInventoryFloatable(inst)
@@ -355,11 +360,13 @@ local function old_fn(build)
 
     CommonMine(inst, "bear_trap_immune", true)
 
-    inst:AddComponent("health")
-    inst.components.health:SetMaxHealth(TUNING.WALRUS_HEALTH)
+    local health = inst:AddComponent("health")
+    health:SetMaxHealth(TUNING.WALRUS_HEALTH)
+    health.nofadeout = true
     inst:ListenForEvent("death", onfinished_normal)
 
-    inst:AddComponent("combat")
+    local combat = inst:AddComponent("combat")
+    combat.noimpactsound = true
     inst:ListenForEvent("attacked", OnAttacked)
 
     inst:AddComponent("deployable")
@@ -374,16 +381,18 @@ local function old_fn(build)
     return inst
 end
 
-local function OnTrapLand(inst, target)
-    if FindEntity(inst,DEPLOYSPACING.LESS,nil,{"bear_trap"}) then
+local function OnTrapLand(inst, attacker, target)
+    --[[if FindEntity(inst, DEPLOYSPACING.LESS, nil,{"bear_trap"}) then
         if inst.traptype then
-            inst.trap = SpawnPrefab("um_bear_trap_equippable_"..inst.traptype) 
-        end    
-    else
+            inst.trap = SpawnPrefab("um_bear_trap_equippable_"..inst.traptype)
+        end
+    else]]
         inst.trap = SpawnPrefab("um_bear_trap")
-    end
+    --end
     if inst.trap then
         inst.trap.Transform:SetPosition(inst.Transform:GetWorldPosition())
+        local testtask = inst.trap.components.mine.testtask
+        if testtask then testtask.fn(unpack(testtask.arg)) end
         if inst.components.finiteuses and inst.trap.components.finiteuses then
             inst.components.finiteuses:SetUses(inst.components.finiteuses:GetUses())
         end
@@ -391,54 +400,8 @@ local function OnTrapLand(inst, target)
     inst:Remove()    
 end
 
-local function OnHitTarget(inst, target)
-    local x, y, z = inst.Transform:GetWorldPosition()
-
-    inst.trap = SpawnPrefab("um_bear_trap")
-    inst.trap.Transform:SetPosition(x, 0, z)
-    if target then inst.trap.components.mine:Explode(target) end
-
-    if inst.components.finiteuses and inst.trap.components.finiteuses then
-        inst.components.finiteuses:SetUses(inst.components.finiteuses:GetUses())
-    end
-
-    inst:Remove()
-end
-
-local function oncollide(inst, other)
-    local x, y, z = inst.Transform:GetWorldPosition()
-    if other and not other:HasTag("walrus") and not other:HasTag("hound") and
-        other:IsValid() and other:HasTag("_combat") then
-        OnHitTarget(inst, other)
-    elseif y <= inst:GetPhysicsRadius() + 0.001 then
-        OnTrapLand(inst, other)
-    end
-end
-
-local function onthrown_player(inst)
-    inst:AddTag("NOCLICK")
-    inst.persists = false
-    inst.AnimState:SetBank("um_bear_trap")
-    inst.AnimState:SetBuild("um_bear_trap")
-    inst.AnimState:PlayAnimation("spin_loop", true)
-
-    inst.Physics:SetMass(1)
-    inst.Physics:SetFriction(10)
-    inst.Physics:SetDamping(5)
-    -- inst.Physics:SetCollisionGroup(COLLISION.OBSTACLES)
-    inst.Physics:ClearCollisionMask()
-    inst:SetPhysicsRadiusOverride(3)
-    inst.Physics:CollidesWith(COLLISION.WORLD)
-    -- inst.Physics:CollidesWith(COLLISION.CHARACTERS)
-    inst.Physics:SetCapsule(1.5, 1.5)
-
-    inst.Physics:SetCollisionCallback(oncollide)
-end
-
 local function projectilefn()
     local inst = CreateEntity()
-
-    inst:AddTag("bear_trap")
 
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
@@ -446,9 +409,25 @@ local function projectilefn()
     inst.entity:AddPhysics()
     inst.entity:AddNetwork()
 
+    inst.Physics:SetMass(1)
+    inst.Physics:SetFriction(10)
+    inst.Physics:SetDamping(5)
+    inst.Physics:SetCollisionGroup(COLLISION.CHARACTERS)
+    inst.Physics:SetCollisionMask(
+        COLLISION.GROUND,
+        COLLISION.OBSTACLES,
+        COLLISION.ITEMS
+    )
+    inst.Physics:SetCapsule(.2, .2)
+
+    inst:AddTag("NOCLICK")
+    inst:AddTag("projectile")
+    inst:AddTag("complexprojectile")
+    inst:AddTag("bear_trap")
+
     inst.AnimState:SetBank("um_bear_trap")
     inst.AnimState:SetBuild("um_bear_trap")
-    inst.AnimState:PushAnimation("idle", false)
+    inst.AnimState:PlayAnimation("spin_loop", true)
 
     inst.entity:SetPristine()
 
@@ -456,7 +435,6 @@ local function projectilefn()
 
     inst:AddComponent("complexprojectile")
     inst.components.complexprojectile:SetOnHit(OnTrapLand)
-    inst.components.complexprojectile:SetOnLaunch(onthrown_player)
     inst.components.complexprojectile:SetHorizontalSpeed(60)
     inst.components.complexprojectile:SetLaunchOffset(Vector3(2, 2, 0))
     inst.components.complexprojectile.usehigharc = false
@@ -570,59 +548,18 @@ local function ghost_walrusfn() -- ghost walrus
     return inst
 end
 
-local function OnTrapLand(inst, target)
+local function OnTrapLand_player(inst, attacker, target)
+    MakeInventoryPhysics(inst)
+
     inst:RemoveTag("NOCLICK")
     inst:RemoveTag("projectile")
 
-    if inst.components.mine then
-        local x, y, z = inst.Transform:GetWorldPosition()
-
-        MakeInventoryPhysics(inst)
-
-        inst.components.mine:Reset()
-
-        inst.Transform:SetPosition(x, y, z)
-        -- inst.trap = SpawnPrefab("um_bear_trap")
-        -- inst.trap.Transform:SetPosition(x, 0, z)
-
-        -- inst:Remove()
-    end
-end
-
-local function OnHitTarget_player(inst, target)
-    inst:RemoveTag("NOCLICK")
-    inst:RemoveTag("projectile")
-
-    if inst.components.mine then
-        local x, y, z = inst.Transform:GetWorldPosition()
-
-        MakeInventoryPhysics(inst)
-
-        inst.components.mine:Reset()
-
-        inst.Transform:SetPosition(x, y, z)
-        -- inst.trap = SpawnPrefab("um_bear_trap")
-        -- inst.trap.Transform:SetPosition(x, 0, z)
-        if target then
-            -- inst.trap.components.mine:Explode(target)
-            inst.components.mine:Explode(target)
-        end
-
-        -- inst:Remove()
-    end
-end
-
-local function oncollide_player(inst, other)
-    local x, y, z = inst.Transform:GetWorldPosition()
-
-    if other and not other:HasTag("player") and
-        not other:HasTag("notraptrigger") and not other:HasTag("player") and
-        not other:HasTag("flying") and not other:HasTag("ghost") and
-        not other:HasTag("playerghost") and not other:HasTag("spawnprotection") and
-        other:IsValid() and other:HasTag("_combat") then
-        OnHitTarget_player(inst, other)
-    elseif y <= inst:GetPhysicsRadius() + 0.001 then
-        OnTrapLand(inst, other)
+    local mine = inst.components.mine
+    if mine then
+        mine:Reset()
+        inst.Transform:SetPosition(inst.Transform:GetWorldPosition())
+        local testtask = mine.testtask
+        if testtask then testtask.fn(unpack(testtask.arg)) end
     end
 end
 
@@ -641,24 +578,17 @@ local function onthrown_player(inst)
     inst:AddTag("NOCLICK")
     inst:AddTag("projectile")
 
-    inst.persists = false
-
-    inst.AnimState:SetBank("um_bear_trap")
-    -- inst.AnimState:SetBuild("um_bear_trap")
     inst.AnimState:PlayAnimation("spin_loop", true)
 
-    inst.Physics:SetMass(1)
     inst.Physics:SetFriction(10)
     inst.Physics:SetDamping(5)
-    inst.Physics:SetCollisionGroup(COLLISION.OBSTACLES)
-    inst.Physics:ClearCollisionMask()
-    -- inst:SetPhysicsRadiusOverride(3)
-    -- inst.Physics:CollidesWith(COLLISION.WORLD)
-    inst.Physics:CollidesWith(COLLISION.GIANTS)
-    inst.Physics:CollidesWith(COLLISION.CHARACTERS)
-    inst.Physics:SetCapsule(1.5, 1.5)
-
-    inst.Physics:SetCollisionCallback(oncollide_player)
+    inst.Physics:SetCollisionGroup(COLLISION.CHARACTERS)
+    inst.Physics:SetCollisionMask(
+        COLLISION.GROUND,
+        COLLISION.OBSTACLES,
+        COLLISION.ITEMS
+    )
+    inst.Physics:SetCapsule(.2, .2)
 end
 
 local function ReticuleTargetFn()
@@ -690,22 +620,20 @@ local function equiptoothfn()
 
     MakeInventoryPhysics(inst)
 
-    -- projectile (from complexprojectile component) added to pristine state for optimization
-
     inst.AnimState:SetBank("um_bear_trap")
     inst.AnimState:SetBuild("um_bear_trap_tooth")
     inst.AnimState:PlayAnimation("idle_active")
 
     inst:AddTag("weapon")
+    inst:AddTag("projectile")
+    inst:AddTag("complexprojectile")
     inst:AddTag("soulless")
     inst:AddTag("trap")
     inst:AddTag("bear_trap")
-    inst:AddTag("smallcreature")
-    inst:AddTag("mech")
     inst:AddTag("noclaustrophobia")
     inst:AddTag("donotautopick")
 
-    MakeInventoryFloatable(inst, "med", 0.05, 0.65)
+    MakeInventoryFloatable(inst, "med", .05, .65)
 
     inst.entity:SetPristine()
 
@@ -725,7 +653,7 @@ local function equiptoothfn()
     inst.components.complexprojectile:SetGravity(-35)
     inst.components.complexprojectile:SetLaunchOffset(Vector3(.25, 1, 0))
     inst.components.complexprojectile:SetOnLaunch(onthrown_player)
-    inst.components.complexprojectile:SetOnHit(OnTrapLand)
+    inst.components.complexprojectile:SetOnHit(OnTrapLand_player)
 
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(0)
@@ -742,12 +670,15 @@ local function equiptoothfn()
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)
     inst.components.equippable.equipstack = true
-    inst:AddComponent("health")
-    inst.components.health.canmurder = false
-    inst.components.health:SetMaxHealth(TUNING.WALRUS_HEALTH / 2)
+
+    local health = inst:AddComponent("health")
+    health:SetMaxHealth(TUNING.WALRUS_HEALTH / 2)
+    health.canmurder = false
+    health.nofadeout = true
     inst:ListenForEvent("death", onfinished_normal)
 
-    inst:AddComponent("combat")
+    local combat = inst:AddComponent("combat")
+    combat.noimpactsound = true
     inst:ListenForEvent("attacked", OnAttacked)
 
     inst:AddComponent("hauntable")
@@ -771,21 +702,19 @@ local function equipgoldfn()
 
     MakeInventoryPhysics(inst)
 
-    -- projectile (from complexprojectile component) added to pristine state for optimization
-
     inst.AnimState:SetBank("um_bear_trap")
     inst.AnimState:SetBuild("um_bear_trap_gold")
     inst.AnimState:PlayAnimation("idle_active")
 
     inst:AddTag("weapon")
+    inst:AddTag("projectile")
+    inst:AddTag("complexprojectile")
     inst:AddTag("soulless")
     inst:AddTag("trap")
     inst:AddTag("bear_trap")
-    inst:AddTag("smallcreature")
-    inst:AddTag("mech")
     inst:AddTag("noclaustrophobia")
     inst:AddTag("donotautopick")
-    MakeInventoryFloatable(inst, "med", 0.05, 0.65)
+    MakeInventoryFloatable(inst, "med", .05, .65)
 
     inst.entity:SetPristine()
 
@@ -810,13 +739,13 @@ local function equipgoldfn()
     inst:AddComponent("complexprojectile")
     inst.components.complexprojectile:SetHorizontalSpeed(15)
     inst.components.complexprojectile:SetGravity(-35)
-    inst.components.complexprojectile:SetLaunchOffset(Vector3(2, 2, 0))
+    inst.components.complexprojectile:SetLaunchOffset(Vector3(.25, 1, 0))
     inst.components.complexprojectile:SetOnLaunch(onthrown_player)
-    inst.components.complexprojectile:SetOnHit(OnTrapLand)
+    inst.components.complexprojectile:SetOnHit(OnTrapLand_player)
 
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(0)
-    inst.components.weapon:SetRange(20, 0.5)
+    inst.components.weapon:SetRange(8, 10)
 
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem:SetOnDroppedFn(OnDropped)
@@ -829,12 +758,14 @@ local function equipgoldfn()
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)
 
-    inst:AddComponent("health")
-    inst.components.health.canmurder = false
-    inst.components.health:SetMaxHealth(TUNING.WALRUS_HEALTH / 1.5)
+    local health = inst:AddComponent("health")
+    health:SetMaxHealth(TUNING.WALRUS_HEALTH / 1.5)
+    health.canmurder = false
+    health.nofadeout = true
     inst:ListenForEvent("death", onfinished_normal)
 
-    inst:AddComponent("combat")
+    local combat = inst:AddComponent("combat")
+    combat.noimpactsound = true
     inst:ListenForEvent("attacked", OnAttacked)
 
     inst:AddComponent("hauntable")
@@ -845,7 +776,8 @@ local function equipgoldfn()
     return inst
 end
 
-return Prefab("um_bear_trap", common_fn), Prefab("um_bear_trap_old", old_fn),
+return Prefab("um_bear_trap", commonfn),
+    Prefab("um_bear_trap_old", old_fn),
     MakePlacer("um_bear_trap_placer", "trap_teeth", "trap_teeth", "idle"),
     Prefab("um_bear_trap_projectile", projectilefn),
     Prefab("ghost_walrus", ghost_walrusfn),

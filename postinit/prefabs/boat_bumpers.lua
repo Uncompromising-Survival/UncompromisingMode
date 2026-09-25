@@ -63,11 +63,8 @@ for k, v in ipairs(bumpers) do
     -------------------------------------------------------------------------------------------
     if v == "kelp" then
         env.AddPrefabPostInit("boat_bumper_" .. v, function(inst)
-            inst:DoPeriodicTask(30, function(inst)
-                if inst.components.health ~= nil then
-                    inst.components.health:DoDelta(5)
-                end
-            end)  
+            local health = inst.components.health
+            if health then health:StartRegen(5, 30) end
         end)
     end
 end

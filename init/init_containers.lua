@@ -4,19 +4,19 @@ local ACTIONS = GLOBAL.ACTIONS
 local Inv = require "widgets/inventorybar"
 local EQUIPSLOTS = GLOBAL.EQUIPSLOTS
 local SpawnPrefab = GLOBAL.SpawnPrefab
-local GEM_DEFS = require("gemology_defs").GEM_DEFS
+local GEM_DEFS = UMGemologyFns.GEM_DEFS
 
 local containers = require("containers")
---[[
-AddComponentPostInit("container", function(self)
-	function self:RemoveSingleItemBySlot(slot)
-		if slot and self.slots[slot] then
-			local item = self.slots[slot]
-			return self:RemoveItem(item)
-		end
-	end
-end)
-]]
+
+--[[AddComponentPostInit("container", function(self)
+    function self:RemoveSingleItemBySlot(slot)
+        if slot and self.slots[slot] then
+            local item = self.slots[slot]
+            return self:RemoveItem(item)
+        end
+    end
+end)]]
+
 function CheckMush(container, item, slot)
     return item:HasTag("mushroom_fuel")
 end
@@ -532,9 +532,9 @@ modparams.um_feather_totem =
     {
         slotpos =
         {
-            Vector3(-(64 + 12), 0, 0),
-            Vector3(0, 0, 0),
-            Vector3(64 + 12, 0, 0),
+            Vector3(15+(-(64 + 12)), 0, 0),
+            Vector3(15, 0, 0),
+            Vector3(15+(64 + 12), 0, 0), 
         },
         slotbg =
         {
@@ -542,9 +542,9 @@ modparams.um_feather_totem =
             { image = "feather_slot.tex", atlas = "images/feather_slot.xml" },
             { image = "feather_slot.tex", atlas = "images/feather_slot.xml" },
         },
-        animbank = "ui_beard_3x1",
-        animbuild = "ui_beard_3x1",
-        pos = Vector3(0, 220, 0),
+        animbank = "ui_um_feather_totem",
+        animbuild = "ui_um_feather_totem",
+        pos = Vector3(0, 130, 0),
         side_align_tip = 160,
     },
     type = "chest",

@@ -232,7 +232,7 @@ local function NormalRetargetFn(inst)
             inst,
             TUNING.PIG_TARGET_DIST,
             function(guy)
-                for i, v in ipairs(inst.hitlist) do
+                for i, v in ipairs(inst.remembered_threats) do
                     if guy.userid ~= nil and v == guy.userid then
 
                         local taskid = guy.userid
@@ -242,7 +242,7 @@ local function NormalRetargetFn(inst)
                             inst.taskid = nil
                         end
 
-                        --inst.taskid = inst:DoTaskInTime(60, function(inst) table.removetablevalue(inst.hitlist, taskid) end)
+                        --inst.taskid = inst:DoTaskInTime(60, function(inst) table.removetablevalue(inst.remembered_threats, taskid) end)
 
                         return (guy.LightWatcher == nil or guy.LightWatcher:IsInLight())
                             and inst.components.combat:CanTarget(guy)
@@ -308,6 +308,8 @@ local function SetGuardPig(inst)
 
     inst.components.talker:StopIgnoringAll("becamewerepig")
     inst.components.follower:SetLeader(nil)
+
+
 end
 
 
@@ -405,8 +407,8 @@ end
 local function OnSave(inst, data)
     data.build = inst.build
     data._pigtokeninitialized = inst._pigtokeninitialized
-    if inst.hitlist ~= nil then
-        data.hitlist = inst.hitlist
+    if inst.remembered_threats ~= nil then
+        data.remembered_threats = inst.remembered_threats
     end
 end
 
@@ -417,8 +419,8 @@ local function OnLoad(inst, data)
             inst.AnimState:SetBuild(inst.build)
         end
         inst._pigtokeninitialized = data._pigtokeninitialized
-        if data.hitlist ~= nil then
-            inst.hitlist = data.hitlist
+        if data.remembered_threats ~= nil then
+            inst.remembered_threats = data.remembered_threats
         end
     end
 end
@@ -487,23 +489,23 @@ local function OnNewTarget(inst, data)
         if data.target:HasTag("pig") and not data.target:HasTag("werepig") then
             inst.components.combat.target = nil
         end
-        if data.target.userid ~= nil and inst.hitlist ~= nil and not table.contains(inst.hitlist, data.target.userid) then
-            table.insert(inst.hitlist, data.target.userid)
+        if data.target.userid ~= nil and inst.remembered_threats ~= nil and not table.contains(inst.remembered_threats, data.target.userid) then
+            table.insert(inst.remembered_threats, data.target.userid)
 
             --local taskid = data.target.userid
-            --inst.taskid = inst:DoTaskInTime(60, function(inst) table.removetablevalue(inst.hitlist, taskid) end)
+            --inst.taskid = inst:DoTaskInTime(60, function(inst) table.removetablevalue(inst.remembered_threats, taskid) end)
         end
         if data.target.userid ~= nil then
             local x, y, z = inst.Transform:GetWorldPosition()
             local ents = TheSim:FindEntities(x, y, z, 40, { "pig", "guard" }) --Spread the news, they'll let any new pig guards nearby know that there's a bad man around
             for i, v in ipairs(ents) do
                 if v ~= inst and not v.components.health:IsDead() then
-                    if data.target.userid ~= nil and v.hitlist ~= nil and
-                        not table.contains(v.hitlist, data.target.userid) then
-                        table.insert(v.hitlist, data.target.userid)
+                    if data.target.userid ~= nil and v.remembered_threats ~= nil and
+                        not table.contains(v.remembered_threats, data.target.userid) then
+                        table.insert(v.remembered_threats, data.target.userid)
 
                         --local taskid = data.target.userid
-                        --v.taskid = v:DoTaskInTime(60, function(v) table.removetablevalue(v.hitlist, taskid) end)
+                        --v.taskid = v:DoTaskInTime(60, function(v) table.removetablevalue(v.remembered_threats, taskid) end)
                     end
                 end
             end
@@ -637,8 +639,13 @@ local function common(moonbeast)
     inst:ListenForEvent("attacked", OnAttacked)
     inst:ListenForEvent("newcombattarget", OnNewTarget)
     inst:ListenForEvent("suggest_tree_target", SuggestTreeTarget)
-    inst.hitlist = {}
+    inst.remembered_threats = {}
     return inst
+end
+
+local function OnBecomeNormal(inst)
+    inst.remembered_threats = {}
+    SetGuardPig(inst)
 end
 
 local function guard()
@@ -655,7 +662,7 @@ local function guard()
 	
     inst.build = guardbuilds[math.random(#guardbuilds)]
     inst.AnimState:SetBuild(inst.build)
-    inst.components.werebeast:SetOnNormalFn(SetGuardPig)
+    inst.components.werebeast:SetOnNormalFn(OnBecomeNormal)
     SetGuardPig(inst)
     return inst
 end

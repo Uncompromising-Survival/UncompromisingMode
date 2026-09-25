@@ -7,6 +7,7 @@ local component_post = {
     "propagator",
     "moisture",
     "weapon",
+    "projectile",
     --"hunter",
     "kramped",
     "explosiveresist",
@@ -15,6 +16,7 @@ local component_post = {
     "hounded",
     "sleeper",
     "fueled",
+    "freezable",
     --"perishable",
     --"carnivalevent",
     "lootdropper",
@@ -78,7 +80,8 @@ local component_post = {
     "wavemanager",
     "seamlessplayerswapper",
     "grottowarmanager",
-    "quaker"
+    "quaker",
+    "oldager",
 }
 
 local prefab_post = {
@@ -260,7 +263,8 @@ local prefab_post = {
     "onemanband",
     "cursed_monkey_token",
     "slurtle_shellpieces",
-    "fused_shadeling"
+    "fused_shadeling",
+    "eyeturret",
 }
 
 local stategraph_post = {
@@ -315,7 +319,8 @@ local brain_post = {
     "deer",
     "hound",
     "iceshield",
-    "brightmare_gestalt"
+    "brightmare_gestalt",
+    "beefalo",
 }
 
 --package post system courtesy of IA team!
@@ -330,7 +335,7 @@ function GLOBAL.require(modulename, ...)
     local should_load = post_modulename and package.loaded[modulename] == nil and GLOBAL.kleifileexists("scripts/" .. modulename .. ".lua") and GLOBAL.kleifileexists(MODROOT .. "postinit/package/" .. post_modulename .. ".lua")
     local rets = { _require(modulename, ...) }
     if should_load then
-        print("loading module post", "scripts/" .. modulename, MODROOT .. "postinit/package/" .. post_modulename)
+        --print("loading module post", "scripts/" .. modulename, MODROOT .. "postinit/package/" .. post_modulename)
         modimport("postinit/package/" .. post_modulename)
     end
     return GLOBAL.unpack(rets)
@@ -457,9 +462,9 @@ end
 if GetModConfigData("firehound") then
     table.insert(prefab_post, "firehound")
 end
-	
+
 if GetModConfigData("icehound") then
-    table.insert(prefab_post, "icehound")	
+    table.insert(prefab_post, "icehound")
 end
 
 if TUNING.DSTU.HARDER_SPIDERQUEEN then
@@ -611,6 +616,10 @@ end
 for _, v in pairs(class_post) do
     -- These contain a path already, e.g. v= "widgets/inventorybar"
     modimport("postinit/" .. v)
+end
+
+if TUNING.DSTU.ARMORREWORK then
+    modimport("postinit/armor_rework")
 end
 
 modimport("scripts/um_fxlist")

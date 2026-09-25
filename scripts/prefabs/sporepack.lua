@@ -3,13 +3,6 @@ local assets =
     Asset("ANIM", "anim/backpack.zip"),
     Asset("ANIM", "anim/swap_piggyback.zip"),
 }
-local function DoSporeRefresh(inst)
-    for k, v in pairs(inst.components.container.slots) do
-        if v.components.perishable ~= nil and (v:HasTag("spore") or v:HasTag("spore_special")) then
-            v.components.perishable:ReducePercent(-0.005)
-        end
-    end
-end
 
 local function CreateBase()
     local inst = CreateEntity()
@@ -20,7 +13,6 @@ local function CreateBase()
 
     inst:AddTag("FX")
     inst:AddTag("NOCLICK")
-    inst.persists = false
 
     inst.AnimState:SetBank("sporecloud_base")
     inst.AnimState:SetBuild("sporecloud_base")
@@ -33,19 +25,22 @@ local function CreateBase()
     --inst.AnimState:PlayAnimation("sporecloud_base_pre")
     --inst.AnimState:PushAnimation("sporecloud_base_pst", false)
 
-    inst.Transform:SetScale(0.6, 0.6, 0.6)
-    inst.AnimState:SetMultColour(1, 1, 1, 0.7)
+    inst.Transform:SetScale(.6, .6, .6)
+    inst.AnimState:SetMultColour(1, 1, 1, .7)
 
     if not TheWorld.ismastersim then
         return inst
     end
 
-    inst.SoundEmitter:PlaySound("dontstarve/creatures/together/toad_stool/infection_post", nil, 0.5)
+    inst.SoundEmitter:PlaySound("dontstarve/creatures/together/toad_stool/infection_post", nil, .5)
     --inst:ListenForEvent("animqueueover", function(inst) inst:Remove() end)
     inst:ListenForEvent("animover", function(inst) inst:Remove() end)
 
+    inst.persists = false
+
     return inst
 end
+
 local function onequip(inst, owner)
     owner.AnimState:OverrideSymbol("swap_body", "swap_sporepack", "backpack")
     owner.AnimState:OverrideSymbol("swap_body", "swap_sporepack", "swap_body")
@@ -56,6 +51,14 @@ local function onunequip(inst, owner)
     owner.AnimState:ClearOverrideSymbol("swap_body")
     owner.AnimState:ClearOverrideSymbol("backpack")
     inst.components.container:Close(owner)
+end
+
+local function DoSporeRefresh(inst)
+    for k, v in pairs(inst.components.container.slots) do
+        if v.components.perishable and v:HasAnyTag("spore", "spore_special") then
+            v.components.perishable:ReducePercent(-.005)
+        end
+    end
 end
 
 local function fn()
@@ -74,15 +77,13 @@ local function fn()
     inst.AnimState:SetBuild("sporepack")
     inst.AnimState:PlayAnimation("idle")
 
-    inst.rottask = nil
-
     inst.foleysound = "dontstarve/movement/foley/backpack"
 
     inst:AddTag("backpack")
     inst:AddTag("sporepack")
     inst:AddTag("donotautopick")
 
-    MakeInventoryFloatable(inst, "med", 0.1, 0.65)
+    MakeInventoryFloatable(inst, "med", .1, .65)
 
     inst.entity:SetPristine()
 
@@ -93,33 +94,28 @@ local function fn()
         return inst
     end
 
-    inst:DoPeriodicTask(3, DoSporeRefresh)
-
     inst:AddComponent("inspectable")
 
-    inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.cangoincontainer = false
+    local inventoryitem = inst:AddComponent("inventoryitem")
+    inventoryitem.cangoincontainer = false
 
-    inst:AddComponent("equippable")
-    if EQUIPSLOTS["BACK"] ~= nil then
-        inst.components.equippable.equipslot = EQUIPSLOTS.BACK
-    else
-        inst.components.equippable.equipslot = EQUIPSLOTS.BODY
-    end
+    local equippable = inst:AddComponent("equippable")
+    equippable.equipslot = EQUIPSLOTS.BACK or EQUIPSLOTS.BODY
+    equippable:SetOnEquip(onequip)
+    equippable:SetOnUnequip(onunequip)
 
-    inst.components.equippable:SetOnEquip(onequip)
-    inst.components.equippable:SetOnUnequip(onunequip)
+    local waterproofer = inst:AddComponent("waterproofer")
+    waterproofer:SetEffectiveness(0)
 
-    inst:AddComponent("waterproofer")
-    inst.components.waterproofer:SetEffectiveness(0)
+    local container = inst:AddComponent("container")
+    container:WidgetSetup("piggyback")
 
-    inst:AddComponent("container")
-    inst.components.container:WidgetSetup("piggyback")
-
-    inst:AddComponent("preserver")
-    inst.components.preserver:SetPerishRateMultiplier(2)
+    local preserver = inst:AddComponent("preserver")
+    preserver:SetPerishRateMultiplier(2)
 
     MakeHauntableLaunchAndDropFirstItem(inst)
+
+    inst.sporerefresh_task = inst:DoPeriodicTask(3, DoSporeRefresh)
 
     return inst
 end

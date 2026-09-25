@@ -5,7 +5,7 @@
 
 local function smallfury_attach(inst, target)
     if target.components.health ~= nil then
-        target.components.health.externalabsorbmodifiers:SetModifier(inst, 0.05)
+        target.components.health.externalabsorbmodifiers:SetModifier(inst, 0.15)
     end
 end
 
@@ -17,7 +17,7 @@ end
 
 local function medfury_attach(inst, target)
     if target.components.health ~= nil then
-        target.components.health.externalabsorbmodifiers:SetModifier(inst, 0.1)
+        target.components.health.externalabsorbmodifiers:SetModifier(inst, 0.2)
     end
 end
 
@@ -454,5 +454,5 @@ return MakeBuff("electricretaliation", attachretaliationdamage, electric_extend,
     MakeBuff("amusementcorn", OnAmuseAttach, OnAmuseExtended, OnAmuseDone, 15, 2, true),
     MakeBuff("smallcourage", smallcourage_attach, smallcourage_extend, smallcourage_detach, 8 * 60, 2, true),
     MakeBuff("furious1", smallfury_attach, nil, smallfury_detatch, 5, true, true),
-    MakeBuff("furious2", medfury_attach, nil, medfury_detatch, 5, true, true),
-    MakeBuff("furious3", largefury_attach, nil, largefury_detatch, 5, true, true)
+    MakeBuff("furious2", medfury_attach, nil, medfury_detatch, 6, true, true),
+    MakeBuff("furious3", largefury_attach, nil, largefury_detatch, 7, true, true)

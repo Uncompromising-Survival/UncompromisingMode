@@ -1,6 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
-local UpvalueHacker = require("tools/upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 -----------------------------------------------------------------
 
 -----------------------------------------------------------------
@@ -152,6 +152,17 @@ env.AddPrefabPostInit("yellowamulet", function(inst)
     YellowAmuletPostInit(inst)
 end)
 
+-------Blue
+
+local function BlueAmuletPostInit(inst)
+    inst.components.fueled:InitializeFuelLevel(TUNING.BLUEAMULET_FUEL * 1.5)
+end
+
+env.AddPrefabPostInit("blueamulet", function(inst)
+    if not TheWorld.ismastersim then return end
+    BlueAmuletPostInit(inst)
+end)
+
 -------Orange
 
 local function OrangeAmuletPostInit(inst)
@@ -234,7 +245,7 @@ local function OrangeAmuletPostInit(inst)
     end
 
     local function ontakefuel_orange(inst)
-        local SERVER_PlayFuelSound = UpvalueHacker.GetUpvalue(_G.Prefabs.orangeamulet.fn, "SERVER_PlayFuelSound")
+        local SERVER_PlayFuelSound = UMUpvalueHacker.GetUpvalue(_G.Prefabs.orangeamulet.fn, "SERVER_PlayFuelSound")
         if SERVER_PlayFuelSound then
             SERVER_PlayFuelSound(inst)
         end

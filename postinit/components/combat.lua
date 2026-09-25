@@ -7,9 +7,9 @@ local function HasSkill(inst, name)
     return inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated(name)
 end
 
-env.AddComponentPostInit("combat", function(self)
-    local _GetAttacked = self.GetAttacked
-    function self:GetAttacked(attacker, damage, weapon, stimuli, spdamage, ...)
+local function GetAttackedPostInit(self, fn)
+	local _GetAttackedOrInternal = self[fn]
+	self[fn] = function(self, attacker, damage, weapon, stimuli, spdamage, ...)
         if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" and self.inst.UMSlipAway and self.inst:UMSlipAway({attacker = attacker, weapon = weapon, stimuli = stimuli}, true) then
             if attacker and weapon and weapon:IsValid() then
                 attacker:PushEvent("um_attacker_attacked_pst", {weapon = weapon})
@@ -86,19 +86,54 @@ env.AddComponentPostInit("combat", function(self)
         elseif self.inst:HasTag("ratwhisperer") and attacker and attacker.prefab == "catcoon" and self.inst.components.health then
             self.inst.components.health:DoDelta(-10, false, attacker.prefab)
         end
-        local ret = {_GetAttacked(self, attacker, damage, weapon, stimuli, spdamage, ...)}
+        local ret = {_GetAttackedOrInternal(self, attacker, damage, weapon, stimuli, spdamage, ...)}
         if attacker and attacker:IsValid() and weapon and weapon:IsValid() then
             attacker:PushEvent("um_attacker_attacked_pst", {weapon = weapon})
         end
         return unpack(ret)
+	end
+end
+
+env.AddComponentPostInit("combat", function(self)
+    GetAttackedPostInit(self, UPDATE_CHECK and "GetAttacked_Internal" or "GetAttacked")
+
+    function self:UMSetAreaDamage(range, excludetags, coneangle, circleradius, areahitconecheck, areahitcheck)
+        self.um_areahit = range ~= nil or nil
+        self.um_areahitrange = range
+        self.um_areahitexcludetags = excludetags
+        self.um_areahitconeangle = coneangle
+        self.um_areahitcircleradius = circleradius
+        self.um_areahitconecheck = areahitconecheck
+        self.um_areahitcheck = areahitcheck
+    end
+
+    local AREAATTACK_MUST_TAGS = {"_combat"}
+    local AREA_EXCLUDE_TAGS = {"INLIMBO", "notarget", "noattack", "flight", "invisible"}
+    local _DoAttack = self.DoAttack
+    function self:DoAttack(targ, weapon, projectile, stimuli, instancemult, instrangeoverride, instpos, ...)
+        if self.um_areahit and not self.um_ignoreareahit then
+            self.ignorehitrange = true
+            self.um_ignoreareahit = true
+            local range = FunctionOrValue(self.um_areahitrange, self)
+            local x, y, z = self.inst.Transform:GetWorldPosition()
+            for i, ent in ipairs(TheSim:FindEntities(x, y, z, range + .5, AREAATTACK_MUST_TAGS, self.um_areahitexcludetags and JoinArrays(self.um_areahitexcludetags, AREA_EXCLUDE_TAGS) or AREA_EXCLUDE_TAGS)) do
+                if ent ~= self.inst and self:CanTarget(ent)
+                    and (self.um_areahitconecheck and not self.um_areahitconecheck(ent, self.inst) or self.inst:IsEntityInFrontConeSlice(ent, self.um_areahitconeangle or 160, range + ent:GetPhysicsRadius(0), self.um_areahitcircleradius and self.um_areahitcircleradius + ent:GetPhysicsRadius(0) or nil))
+                    and (not self.um_areahitcheck or self.um_areahitcheck(ent, self.inst)) then
+                    self:DoAttack(ent, weapon, projectile, stimuli, instancemult, instrangeoverride, instpos, ...)
+                end
+            end
+            self.um_ignoreareahit = nil
+            self.ignorehitrange = nil
+            return
+        end
+        return _DoAttack(self, targ, weapon, projectile, stimuli, instancemult, instrangeoverride, instpos, ...)
     end
 
     --[[ Vanilla SetLastTarget accesses self.inst.components.combat, but if the entity was already removed (e.g. a dead bunnyman whose losetargetcallback fires late idk how but ive had this happen more than once), that field is nil and causes a crash, guarding it here since we can't patch vanilla directly]]--
     local _SetLastTarget = self.SetLastTarget
     function self:SetLastTarget(target)
-        if self.inst == nil or not self.inst:IsValid() then
-            return
-        end
+        if not (self.inst and self.inst:IsValid()) then return end
         return _SetLastTarget(self, target)
     end
 end)

@@ -378,7 +378,7 @@ local function castspell(inst, target, pos)
     inst.unpausefuel_task = inst:DoTaskInTime(2, unpausefueled)
 end
 
-local function can_cast_fn(inst)
+local function CanCastFn(inst)
     -- YES, STOP SAYING "I CAN'T DO THAT" WHEN CASTING ON TARGETS FFS
     return true
 end
@@ -403,9 +403,6 @@ local function realfn()
 
     -- inst.foleysound = "dontstarve/creatures/together/deer/bell"
 
-    local swap_data = {sym_build = "swap_charles", bank = "charles_t_horse"}
-    MakeInventoryFloatable(inst, "med", 0.05, {0.85, 0.45, 0.85}, true, 1, swap_data)
-
     inst.spelltype = "CHARLES_CHARGE"
 
     inst:AddComponent("reticule")
@@ -423,6 +420,9 @@ local function realfn()
     inst.components.reticule.ispassableatallpoints = true
 
     inst.um_cancastontarget = UMCommonFns.DefaultCanCastOnTarget
+
+    local swap_data = {sym_build = "swap_charles", bank = "charles_t_horse"}
+    MakeInventoryFloatable(inst, "med", 0.05, {0.85, 0.45, 0.85}, true, 1, swap_data)
 
     inst.entity:SetPristine()
 
@@ -453,12 +453,11 @@ local function realfn()
 
     inst:AddComponent("spellcaster")
     inst.components.spellcaster:SetSpellFn(castspell)
-    inst.components.spellcaster:SetCanCastFn(can_cast_fn)
+    inst.components.spellcaster:SetCanCastFn(CanCastFn)
     inst.components.spellcaster.canuseontargets = true
     inst.components.spellcaster.canuseondead = true
     inst.components.spellcaster.canuseonpoint = true
     inst.components.spellcaster.canuseonpoint_water = true
-    inst.components.spellcaster.canusefrominventory = false
 
     inst.fuelmetask = inst:DoPeriodicTask(0.5, fuelme)
 

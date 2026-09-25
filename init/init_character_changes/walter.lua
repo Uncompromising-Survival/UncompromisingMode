@@ -1,8 +1,8 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
---local UpvalueHacker = require("tools/upvaluehacker")
---local _OnHealthDelta = UpvalueHacker.GetUpvalue(Prefabs.walter.master_postinit, "OnHealthDelta")
+--local UMUpvalueHacker = require("tools/um_upvaluehacker")
+--local _OnHealthDelta = UMUpvalueHacker.GetUpvalue(Prefabs.walter.master_postinit, "OnHealthDelta")
 
 --local timeleft = inst.components.timer:GetTimeLeft("um_walterpenalty_passiveheal")
 --local health_drain = (1 - inst.components.health:GetPercentWithPenalty()) * TUNING.WALTER_SANITY_HEALTH_DRAIN * inst._sanity_damage_protection:Get()

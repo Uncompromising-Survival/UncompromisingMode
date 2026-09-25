@@ -40,7 +40,6 @@ env.AddClassPostConstruct("widgets/statusdisplays", function(self)
                 self.inspirationbadge:Hide()
             end
         end
-        print("badge event received, visible: ", visible)
     end
 
     self.inst:DoTaskInTime(0, function()

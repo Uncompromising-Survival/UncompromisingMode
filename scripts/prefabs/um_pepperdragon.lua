@@ -22,7 +22,7 @@ local function ShouldResetRange(inst,data)
 	end
 end
 
-local loot = UPDATE_CHECK and { "meat", "meat", "meat", "meat", "um_pepperdragon_bladder", "mitegland", "mitegland" } or { "meat", "meat", "meat", "meat", "um_pepperdragon_bladder" }
+local loot = { "meat", "meat", "meat", "meat", "um_pepperdragon_bladder", "mitegland", "mitegland" }
 local MAX_CHASEAWAY_DIST = 32
 local MAX_CHASE_DIST = 256
 

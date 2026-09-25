@@ -19,9 +19,9 @@ local function onread(inst, reader)
 	if not canread(reader) then
 		if reader.components.talker then
 			if reader.components.sanity:GetMaxWithPenalty() < TUNING.DSTU.OLD_SHADOWWAXWELL_SANITY_COST then
-				reader.components.talker:Say(GetString(reader.prefab, "ANNOUNCE_NOSANITY"))
+				reader.components.talker:Say(GetString(reader, "ANNOUNCE_NOSANITY"))
 			elseif reader.components.health.currenthealth <= TUNING.DSTU.SHADOWWAXWELL_HEALTH_COST then
-				reader.components.talker:Say(GetString(reader.prefab, "ANNOUNCE_NOHEALTH"))
+				reader.components.talker:Say(GetString(reader, "ANNOUNCE_NOHEALTH"))
 			end
 			return true
 		end
@@ -30,7 +30,7 @@ local function onread(inst, reader)
 		--Check reagent
 	if not reader.components.inventory:Has("nightmarefuel", TUNING.DSTU.SHADOWWAXWELL_FUEL_COST) then
 		if reader.components.talker then
-			reader.components.talker:Say(GetString(reader.prefab, "ANNOUNCE_NOFUEL"))
+			reader.components.talker:Say(GetString(reader, "ANNOUNCE_NOFUEL"))
 			return true
 		end
 	end

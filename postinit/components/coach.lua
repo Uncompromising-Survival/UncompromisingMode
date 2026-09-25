@@ -1,10 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
+-----------------------------------------------------------------
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
+local Coach = require("components/coach")
 
-local UpvalueHacker = require("tools/upvaluehacker")
-
-env.AddComponentPostInit("coach", function(self)
-    if not TheWorld.ismastersim then return end
-
-    UpvalueHacker.SetUpvalue(self.StartInspiring, 0, "inspire", "SANITY_BUFF")
-end)
+UMUpvalueHacker.SetUpvalue(Coach.StartInspiring, 0, "inspire", "SANITY_BUFF")

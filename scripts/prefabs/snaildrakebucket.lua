@@ -96,6 +96,14 @@ local function SpreadProtectionAtPoint(x, y, z, dist) -- This is taken from Wate
             if TheWorld.components.farming_manager ~= nil then
                 TheWorld.components.farming_manager:AddSoilMoistureAtPoint(x + _x, y, z + _z, 100)
             end
+
+            if TheWorld.components.um_magmamanager ~= nil then
+                local cooled = TheWorld.components.um_magmamanager:CoolDownMagmaTile(x + _x, z + _z, TUNING.DSTU.MAGMATILE_DEFAULT_COOL_TIME)
+                if cooled then
+                    local tx, ty, tz = TheWorld.Map:GetTileCenterPoint(TheWorld.Map:GetTileCoordsAtPoint(x + _x, y, z + _z))
+                    SpawnPrefab("slow_steam_fx" .. math.random(1, 5)).Transform:SetPosition(tx + (math.random(-2, 2)*math.random()), 0, tz + (math.random(-2, 2)*math.random()))
+                end
+            end
         end
     end
 end
@@ -125,15 +133,14 @@ end
 
 
 local function CanDeploy(inst, pt, mouseover, deployer, rot)
-    return true
+    return TheWorld.Map:IsPassableAtPoint(pt:Get()) or TheWorld.Map:GetTileAtPoint(pt:Get()) == WORLD_TILES.UM_MAGMA_LAVAMOLTEN
 end
 
 local function EnableDeploy(inst)
     inst:AddComponent("deployable")
     inst.components.deployable.ondeploy = ondeploy
     inst.components.deployable.keep_in_inventory_on_deploy = true
-    inst.components.deployable.mode = DEPLOYMODE.ANYWHERE
-    --inst._custom_candeploy_fn = CanDeploy
+    inst.components.deployable.mode = DEPLOYMODE.CUSTOM
     inst.components.deployable:SetDeploySpacing(DEPLOYSPACING.NONE)
 end
 
@@ -243,6 +250,8 @@ local function fn()
 
     MakeInventoryFloatable(inst, "small", 0.2, 0.80)
 
+    inst._custom_candeploy_fn = CanDeploy
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
@@ -290,5 +299,71 @@ local function fn()
     return inst
 end
 
+local function CreateGrid()
+    local inst = CreateEntity()
+
+    inst:AddTag("CLASSIFIED")
+    inst:AddTag("NOCLICK")
+    inst:AddTag("placer")
+    --[[Non-networked entity]]
+    inst.entity:SetCanSleep(false)
+    inst.persists = false
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+
+    inst.AnimState:SetBank("gridplacer")
+    inst.AnimState:SetBuild("gridplacer")
+    inst.AnimState:PlayAnimation("anim", true)
+    inst.AnimState:SetLightOverride(1)
+    inst.AnimState:SetLayer(LAYER_BACKGROUND)
+    inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
+
+
+    return inst
+end
+
+local function addtional_placer_fn(inst)
+    inst.deploy_helpers = {}
+
+    for i = -1, 1 do
+        for j = -1, 1 do
+            print("adding placers for pos", i, j)
+            local placer = CreateGrid()
+            placer:Hide()
+            placer.AnimState:SetMultColour(0, 0, 1, 1)
+            inst.deploy_helpers[{ x = i, z = j }] = placer
+        end
+    end
+
+    for pos, placer in pairs(inst.deploy_helpers) do
+        print("placer", placer)
+        printwrap("pos", pos)
+    end
+
+    inst:DoPeriodicTask(0, function(inst)
+        for pos, placer in pairs(inst.deploy_helpers) do
+            local x, y, z = inst.Transform:GetWorldPosition()
+            local tx, tz = TheWorld.Map:GetTileCoordsAtPoint(x, 0, z)
+            local tcx, tcy, tcz = TheWorld.Map:GetTileCenterPoint(tx + pos.x, tz + pos.z)
+
+            local tile = TheWorld.Map:GetTile(tx + pos.x, tz + pos.z)
+            if tile == WORLD_TILES.UM_MAGMA_LAVAMOLTEN or tile == WORLD_TILES.UM_MAGMA_LAVACOOLED or tile == WORLD_TILES.FARMING_SOIL then
+                placer:Show()
+            else
+                placer:Hide()
+            end
+
+            placer.Transform:SetPosition(tcx, 0, tcz)
+        end
+    end)
+
+    inst:ListenForEvent("onremove", function(inst)
+        for k, v in pairs(inst.deploy_helpers) do
+            v:Remove()
+        end
+    end)
+end
+
 return Prefab("snaildrakebucket", fn, assets),
-    MakePlacer("snaildrakebucket_placer", nil, nil, nil)
+    MakePlacer("snaildrakebucket_placer", nil, nil, nil, nil, nil, nil, nil, nil, nil, addtional_placer_fn)

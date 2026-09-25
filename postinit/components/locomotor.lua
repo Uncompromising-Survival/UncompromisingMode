@@ -1,5 +1,5 @@
 local env = env
---local UpvalueHacker = GLOBAL.require("tools/upvaluehacker")
+--local UMUpvalueHacker = GLOBAL.require("tools/um_upvaluehacker")
 
 GLOBAL.setfenv(1, GLOBAL)
 local no_nettle = { "PyreToxinImmune", "plantkin", "shadowcreature", "flying", "FX", "INLIMBO", "invisible", "notarget", "noattack", "playerghost", "smog", "wall" }

@@ -151,7 +151,7 @@ DESCRIBE.SALTPACK = "I should've thought of this sooner!"
 DESCRIBE.SKELETONMEAT = "This is a terrible idea."
 DESCRIBE.CHIMP = DESCRIBE.MONKEY
 DESCRIBE.SWILSON = "Woah! That axe is real!"
-DESCRIBE.VAMPIREBAT = "It might be older, but it looks as angry as the others!"
+DESCRIBE.UM_VAMPIREBAT = "It might be older, but it looks as angry as the others!"
 
 -- Swampyness
 DESCRIBE.RICEPLANT = "I need to build something to reach it."
@@ -334,6 +334,7 @@ DESCRIBE.MOONMAW_GLASSSHARDS = DESCRIBE.ARMOR_GLASSMAIL_SHARDS
 DESCRIBE.MOONMAW_LAVAE_RING = DESCRIBE.MOONMAW_LAVAE
 
 DESCRIBE.MUTATOR_TRAPDOOR = DESCRIBE.MUTATOR_WARRIOR
+DESCRIBE.MUTATOR_TRAPDOOR_HOODED = DESCRIBE.MUTATOR_WARRIOR
 
 DESCRIBE.WOODPECKER = "A hard worker. I respect 'em."
 DESCRIBE.SNOTROAST = "Now THAT's a loogie!"

@@ -1,5 +1,3 @@
-require "webbedcreatureloot"
-
 local assets =
 {
     Asset("MINIMAP_IMAGE", "whitespider_den"),
@@ -10,31 +8,32 @@ local prefabs =
     "spider_dropper",
 }
 
-local function TrySpawnCocoon(x, z)
+local function TrySpawnCocoon(x, z, tries)
     local xi = x + math.random(-8, 8)
     local zi = z + math.random(-8, 8)
-    if #TheSim:FindEntities(xi, 0, zi, 1.5, { "webbedcreature" }) == 0 and
-        #TheSim:FindEntities(xi, 0, zi, 3, { "webbedcreature" }) < 2 and
-        #TheSim:FindEntities(xi, 0, zi, 8, { "webbedcreature" }) < 6 then
+    tries = tries - 1
+    if #TheSim:FindEntities(xi, 0, zi, 1.5, {"webbedcreature"}) == 0 and
+        #TheSim:FindEntities(xi, 0, zi, 3, {"webbedcreature"}) < 2 and
+        #TheSim:FindEntities(xi, 0, zi, 8, {"webbedcreature"}) < 6 then
         local cocoon = SpawnPrefab("webbedcreature")
         cocoon.Transform:SetPosition(xi, 0, zi)
-    else
-        TrySpawnCocoon(x, z)
+    elseif tries > 0 then
+        TrySpawnCocoon(x, z, tries)
     end
 end
 
 local blacklisted_coocoons = { "krampus", "walrus", "grassgator" }
 local function RerollCocoons(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    local existing_cocoons = TheSim:FindEntities(x, y, z, 30, { "webbedcreature" })
+    local existing_cocoons = TheSim:FindEntities(x, y, z, 30, {"webbedcreature"})
     local widowweb = TheSim:FindFirstEntityWithTag("widowweb")
 
     if widowweb --[[Just to prevent a crash if it was deleted.]] and widowweb.components.childspawner:IsFull() and widowweb.components.childspawner.numchildrenoutside == 0 then
         for k, v in ipairs(existing_cocoons) do
-            if table.contains(blacklisted_coocoons, v.cocoon_creature) --[[or table.contains(COCOON_CHARACTERS, v.cocoon_creature)]] then
+            if table.contains(blacklisted_coocoons, v.cocoon_creature) --[[or table.contains(UMWebbedCreatureUtil.COCOON_CHARACTERS, v.cocoon_creature)]] then
             else
                 v:Remove()
-                TrySpawnCocoon(x, z)
+                TrySpawnCocoon(x, z, 5)
             end
         end
     end

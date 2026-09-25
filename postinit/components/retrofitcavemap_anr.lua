@@ -48,16 +48,15 @@ local function RetrofitArchivesBridge()
 	return true
 end
 
-
 env.AddComponentPostInit("retrofitcavemap_anr", function(self)
 	local oldonpostinit_cave = self.OnPostInit
 	function self:OnPostInit(...)
-		print("code is running")
+		--print("code is running")
 		local building_bridges = RetrofitArchivesBridge()
 		if building_bridges then
-			print("Re-added the archives bridge after it was swallowed by the void!")
+			--print("Re-added the archives bridge after it was swallowed by the void!")
 		else
-			print("Couldn't re-add the archives bridge! Dunno why! Should check in this world to see if it is directly connected to grotto!")
+			--print("Couldn't re-add the archives bridge! Dunno why! Should check in this world to see if it is directly connected to grotto!")
 		end
 		return oldonpostinit_cave(self, ...)
 	end

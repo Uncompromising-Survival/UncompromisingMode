@@ -1,4 +1,4 @@
-local UpvalueHacker = GLOBAL.require("tools/upvaluehacker")
+local UMUpvalueHacker = GLOBAL.require("tools/um_upvaluehacker")
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
@@ -7,8 +7,8 @@ local function AuraFreezeEnemies(inst)
     if inst.components.combat.target and not (inst.components.health and inst.components.health:IsDead()) then
         if inst:GetDistanceSqToPoint(inst.components.combat.target:GetPosition()) < 4 then
             inst:PushEvent("start_aurafreeze")
-        else
-            inst.components.combat:SetRange(TUNING.DEERCLOPS_ATTACK_RANGE * 0.6)
+        --else
+            --inst.components.combat:SetRange(TUNING.DEERCLOPS_ATTACK_RANGE * 0.6)
         end
     else
         inst.components.timer:StartTimer("auratime", 15)
@@ -139,7 +139,7 @@ local function DeerclopsClientFunctions(inst)
 end
 
 local function DeerclopsFunctions(inst)
-    local _OnHitOther = UpvalueHacker.GetUpvalue(Prefabs.deerclops.fn, "OnHitOther")
+    local _OnHitOther = UMUpvalueHacker.GetUpvalue(Prefabs.deerclops.fn, "OnHitOther")
     local function OnHitOther(inst, data)
         if inst.sg:HasStateTag("heavyhit") then
             local other = data.target

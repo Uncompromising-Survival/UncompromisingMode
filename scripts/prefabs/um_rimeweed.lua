@@ -166,22 +166,22 @@ local function MakeFX(name, anim)
     return Prefab(name, fn)
 end
 --/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-local function AnimateRetaliateOver(inst)
+local function AnimateRetaliateBarrierOver(inst)
     inst.retaliating = nil
     if not (inst.components.health and inst.components.health:IsDead()) then
-        inst.AnimState:PlayAnimation("bramble_" .. inst.type .. "_idle", true)
+        inst.AnimState:PlayAnimation("bramble_"..inst.type.."_idle", true)
     end
-    inst:RemoveEventCallback("animover", AnimateRetaliateOver)
+    inst:RemoveEventCallback("animover", AnimateRetaliateBarrierOver)
 end
 
-local function Retaliate(inst)
+local function RetaliateBarrier(inst)
     if not inst.retaliating then
         inst.retaliating = true
 
-        inst:DoTaskInTime(6 * FRAMES, function(inst)
-            SpawnPrefab("bramblefx_rime"):SetFXOwner(inst)
-            if inst.SoundEmitter then
-                inst.SoundEmitter:PlaySound("dontstarve/wilson/blowdart_shoot")
+        inst:DoTaskInTime(6 * FRAMES, function(_inst)
+            SpawnPrefab("bramblefx_rime"):SetFXOwner(_inst)
+            if _inst.SoundEmitter then
+                _inst.SoundEmitter:PlaySound("dontstarve/wilson/blowdart_shoot")
             end
         end) -- Slight Delay
 
@@ -189,15 +189,36 @@ local function Retaliate(inst)
             inst.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
         end
         if not (inst.components.health and inst.components.health:IsDead()) then
-            inst.AnimState:PlayAnimation("bramble_" .. inst.type .. "_hit", false)
-            inst:ListenForEvent("animover", function(inst)
-                AnimateRetaliateOver(inst)
-            end)
+            inst.AnimState:PlayAnimation("bramble_"..inst.type.."_hit")
+            inst:ListenForEvent("animover", AnimateRetaliateBarrierOver)
         end
     end
 end
 
+local function RemoveFromBrambleTable(inst, target)
+    local bramble = inst and inst:IsValid() and inst.bramble
+    if bramble then
+        for i = #bramble, 1, -1 do
+            local v = bramble[i]
+            if v == target then
+                table.remove(bramble, i)
+                break
+            end
+        end
+    end
+end
+
+local function KillOrRemove(inst, noloot)
+    if noloot then inst.noloot = true end
+    if not inst:IsAsleep() and inst.components.health and not inst.components.health:IsDead() then
+        inst.components.health:Kill()
+    else
+        inst:Remove()
+    end
+end
+
 local function BarrierRemove(inst)
+    RemoveFromBrambleTable(inst.rimeweed_main, inst)
     if not inst.nospread then
         local x, y, z = inst.Transform:GetWorldPosition()
         local ents = TheSim:FindEntities(x, y, z, 5, { "rimeweed" })
@@ -205,40 +226,31 @@ local function BarrierRemove(inst)
             local v = ents[i]
             if v and v:IsValid() and v ~= inst and v.prefab == "rimeweed_barrier" then
                 v.nospread = true
-                v:DoTaskInTime(.5 * inst:GetDistanceSqToInst(v) ^ .5, function(v)
-                    if v.components.health and not v.components.health:IsDead() then
-                        v.components.health:Kill()
-                    else
-                        v:Remove()
-                    end
-                end)
+                v:DoTaskInTime(.5 * inst:GetDistanceSqToInst(v) ^ .5, KillOrRemove)
             end
         end
     end
 end
 
 local function BarrierDie(inst)
+    RemoveFromBrambleTable(inst.rimeweed_main, inst)
     --TheNet:Announce("DODEATH")
     RemovePhysicsColliders(inst)
-    inst.AnimState:PlayAnimation("bramble_" .. (inst.type or math.random(0, 2)) .. "_shrink", false)
-    if math.random() < .1 and not inst.noloot then
-        inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
-    end
-    if math.random() < .01 and not inst.noloot then
-        inst.components.lootdropper:SpawnLootPrefab("dug_marsh_bush")
+    inst.AnimState:PlayAnimation("bramble_"..(inst.type or math.random(0, 2)).."_shrink")
+    if not inst.noloot then
+        if math.random() < .1 then
+            inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
+        end
+        if math.random() < .01 then
+            inst.components.lootdropper:SpawnLootPrefab("dug_marsh_bush")
+        end
     end
     if not inst.nospread then
         local x, y, z = inst.Transform:GetWorldPosition()
         for i, v in ipairs(TheSim:FindEntities(x, y, z, 5, { "rimeweed" })) do
             if v ~= inst and v.prefab == "rimeweed_barrier" then
                 v.nospread = true
-                v:DoTaskInTime(.5 * inst:GetDistanceSqToInst(v) ^ .5, function(v)
-                    if v.components.health and not v.components.health:IsDead() then
-                        v.components.health:Kill()
-                    else
-                        v:Remove()
-                    end
-                end)
+                v:DoTaskInTime(.5 * inst:GetDistanceSqToInst(v) ^ .5, KillOrRemove)
             end
         end
     end
@@ -254,25 +266,31 @@ end
 local function BarrierLoad(inst, data)
     if data and data.type then
         inst.type = data.type
-        inst.AnimState:PushAnimation("bramble_" .. inst.type .. "_idle", true)
+        inst.AnimState:PushAnimation("bramble_"..inst.type.."_idle", true)
     end
 end
 
-local function KillOffRimeweed(inst)
-    if TheWorld.state.iswinter then return end
+local function KillOffRimeweed(inst, toggle)
+    if not toggle then return end
     inst.persists = false
     if inst.killrimeweedtask then return end
-    inst.killrimeweedtask = inst:DoTaskInTime(math.min(math.random() * .5, .5), function(inst)
+    inst.killrimeweedtask = inst:DoTaskInTime(math.min(math.random() * .5, .5), function(_inst)
         if not TheWorld.state.iswinter then
-            inst.nospread = true
-            if inst.components.health and not inst.components.health:IsDead() then
-                inst.noloot = true
-                inst.components.health:Kill()
-            else
-                inst:Remove()
-            end
+            _inst.nospread = true
+            KillOrRemove(_inst, true)
+        else
+            _inst.killrimeweedtask = nil
         end
     end)
+end
+
+local function OnSeasonChanged(inst, season)
+    KillOffRimeweed(inst, season ~= SEASONS.WINTER)
+end
+
+local function SetupWatchWorldState(inst)
+    inst:WatchWorldState("season", OnSeasonChanged)
+    KillOffRimeweed(inst, not TheWorld.state.iswinter)
 end
 
 local function OnIsPathFindingDirty(inst)
@@ -349,30 +367,27 @@ local function barrierweed()
         return inst
     end
 
-    inst:ListenForEvent("death", function(inst)
-        clearobstacle(inst)
-    end)
+    inst:AddComponent("inspectable")
+
+    inst:ListenForEvent("death", clearobstacle)
 
     inst.OnRemoveEntity = onremove
-
 
     inst:AddComponent("lootdropper")
     --inst:ListenForEvent("timerdone", TimerDone)
 
-    inst:AddComponent("health")
-    inst.components.health:SetMaxHealth(200)
-    inst.components.health:StartRegen(TUNING.BUNNYMAN_HEALTH_REGEN_AMOUNT, TUNING.BUNNYMAN_HEALTH_REGEN_PERIOD)
+    local health = inst:AddComponent("health")
+    health:SetMaxHealth(200)
+    health:StartRegen(TUNING.BUNNYMAN_HEALTH_REGEN_AMOUNT, TUNING.BUNNYMAN_HEALTH_REGEN_PERIOD)
+
     inst:AddComponent("combat")
-    inst:AddComponent("inspectable")
+
+    inst.AnimState:SetScale(math.random() > .5 and -1 or 1, 1, 1)
+
     local multsize = math.random(40, 42) / 20
-    if math.random() > .5 then
-        inst.AnimState:SetScale(-1, 1, 1)
-    else
-        inst.AnimState:SetScale(1, 1, 1)
-    end
     inst.Transform:SetScale(multsize, multsize, multsize)
     ---------------------
-    inst:ListenForEvent("attacked", Retaliate)
+    inst:ListenForEvent("attacked", RetaliateBarrier)
     inst:ListenForEvent("onremove", BarrierRemove)
     inst:ListenForEvent("death", BarrierDie)
 
@@ -382,14 +397,15 @@ local function barrierweed()
     MakeHauntableIgnite(inst)
     inst.OnSave = BarrierSave
     inst.OnLoad = BarrierLoad
-    inst:DoTaskInTime(0, function(inst)
-        if not inst.type then
-            inst.type = math.random(0, 2)
-            inst.AnimState:PlayAnimation("bramble_" .. inst.type .. "_idle", true)
+    inst:DoTaskInTime(0, function(_inst)
+        if not _inst.type then
+            _inst.type = math.random(0, 2)
+            _inst.AnimState:PlayAnimation("bramble_".._inst.type.."_idle", true)
         end
     end)
-    inst:WatchWorldState("season", KillOffRimeweed)
-    inst:WatchWorldState("startrain", KillOffRimeweed)
+
+    SetupWatchWorldState(inst)
+
     return inst
 end
 
@@ -398,7 +414,7 @@ local function OnSaveMain(inst, data)
     if inst.bramble then
         data.bramble = {}
         for i, v in pairs(inst.bramble) do
-            if v:IsValid() and v.prefab then
+            if v:IsValid() then
                 data.bramble[i] = v.GUID
                 table.insert(ents, v.GUID)
             end
@@ -411,77 +427,58 @@ local function OnSaveMain(inst, data)
 end
 
 local function OnLoadMain(inst, data)
-    if data then
-        if data.stage then
-            inst.stage = data.stage
-        end
-    end
+    local stage = data and data.stage
+    if stage then inst.stage = stage end
 end
 
 local function OnLoadPostPassMain(inst, newents, data)
-    if data then
-        if data.bramble and #data.bramble > 0 then
-            inst.bramble = {}
-            for i, v in pairs(data.bramble) do
-                if newents[v] then
-                    inst.bramble[i] = newents[v].entity
-                end
+    local bramble = data and data.bramble
+    if bramble and #bramble > 0 then
+        inst.bramble = {}
+        for i, v in pairs(bramble) do
+            if newents[v] then
+                inst.bramble[i] = newents[v].entity
+                inst.bramble[i].rimeweed_main = inst
             end
         end
     end
 end
 
 local function MainRemove(inst)
-    if inst.fx and inst.fx:IsValid() then
-        inst.fx:Remove()
-        inst.fx = nil
-    end
+    if inst.fx and inst.fx:IsValid() then inst.fx:Remove() end
     if #inst.bramble > 0 and not inst.nospread then
-        for i, v in ipairs(inst.bramble) do
-            if v:IsValid() then
-                if v.components.health and not v.components.health:IsDead() then
-                    v.noloot = true
-                    v.components.health:Kill()
-                else
-                    v:Remove()
-                end
-            end
+        --[[for i, v in ipairs(inst.bramble) do
+            if v:IsValid() then KillOrRemove(v, inst.noloot) end
+        end]]
+        for i = #inst.bramble, 1, -1 do
+            local v = inst.bramble[i]
+            if v:IsValid() then KillOrRemove(v, inst.noloot) end
         end
     end
 end
 
 local function MainDie(inst)
+    local stage = inst.stage or 1
     inst:AddTag("dead")
-    if inst.fx then inst.fx:Remove() end
-    if #inst.bramble > 0 and not inst.nospread then
-        for i, v in ipairs(inst.bramble) do
-            if v:IsValid() then
-                if v.components.health and not v.components.health:IsDead() then
-                    v.noloot = true
-                    v.components.health:Kill()
-                else
-                    v:Remove()
-                end
+    MainRemove(inst)
+    inst.AnimState:PlayAnimation("flower_"..(stage - 1).."_shrink")
+    if not inst.noloot then
+        if stage >= 1 then
+            inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
+        end
+        if stage == 2 then
+            if math.random() < .25 then
+                inst.components.lootdropper:SpawnLootPrefab("rimeweed_whip")
             end
+            inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
         end
-    end
-    inst.AnimState:PlayAnimation("flower_" .. ((inst.stage or 1) - 1) .. "_shrink", false)
-    if not inst.stage then return end
-    if inst.stage >= 1 and not inst.noloot then
-        inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
-    end
-    if inst.stage == 2 and not inst.noloot then
-        if math.random() < .25 then
-            inst.components.lootdropper:SpawnLootPrefab("rimeweed_whip")
-        end
-        inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
-    end
-    if inst.stage >= 3 and not inst.noloot then
-        inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
-        if math.random() > .5 then
-            inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemflower")
-        else
-            inst.components.lootdropper:SpawnLootPrefab("rimeweed_whip")
+        if stage >= 3 then
+            inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
+            if math.random() > .5 then
+                inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemflower")
+            else
+                inst.components.lootdropper:SpawnLootPrefab("rimeweed_whip")
+            end
         end
     end
     inst:RemoveEventCallback("onremove", MainRemove)
@@ -489,15 +486,15 @@ end
 
 local function PlayStagedAnim(inst)
     if not inst:HasTag("dead") then
-        inst.AnimState:PushAnimation("flower_" .. (inst.stage - 1) .. "_idle")
+        inst.AnimState:PushAnimation("flower_"..(inst.stage - 1).."_idle", true)
     end
 end
 
 local function InitializePlant(inst)
     inst.stage = 1
     inst.components.timer:StartTimer("grow", .5 * 8 * 60)
-    inst.AnimState:PlayAnimation("flower_" .. (inst.stage - 1) .. "_grow", false)
-    inst.AnimState:PushAnimation("flower_" .. (inst.stage - 1) .. "_idle")
+    inst.AnimState:PlayAnimation("flower_"..(inst.stage - 1).."_grow")
+    inst.AnimState:PushAnimation("flower_"..(inst.stage - 1).."_idle", true)
 end
 
 local function ChangeMiniMapIcon(inst)
@@ -541,9 +538,10 @@ local function TryGrowPoint(inst, x, z)
         local weed = SpawnPrefab("rimeweed_barrier")
         weed.Transform:SetPosition(x, 0, z)
         table.insert(inst.bramble, weed)
+        weed.rimeweed_main = inst
         weed.type = math.random(0, 2)
-        weed.AnimState:PlayAnimation("bramble_" .. weed.type .. "_grow", false)
-        weed.AnimState:PushAnimation("bramble_" .. weed.type .. "_idle", true)
+        weed.AnimState:PlayAnimation("bramble_"..weed.type.."_grow")
+        weed.AnimState:PushAnimation("bramble_"..weed.type.."_idle", true)
     end
 end
 
@@ -601,7 +599,7 @@ end
 
 local function TimerDone(inst, data)
     if data and data.name == "grow" then
-        inst.AnimState:PlayAnimation("flower_" .. (inst.stage) .. "_grow", false)
+        inst.AnimState:PlayAnimation("flower_"..(inst.stage).."_grow")
         inst.stage = inst.stage + 1
         if inst.stage == 2 and not inst:HasTag("dead") then
             inst.components.timer:StartTimer("growbranch", .5 * 8 * 60)
@@ -617,7 +615,36 @@ local function TimerDone(inst, data)
             inst.components.timer:StartTimer("growbranch", .15 * 8 * 60)
             GrowBranch(inst)
         else
-            KillOffRimeweed(inst)
+            KillOffRimeweed(inst, true)
+        end
+    end
+end
+
+local function AnimateRetaliateMainOver(inst)
+    inst.retaliating = nil
+    if not (inst.components.health and inst.components.health:IsDead()) then
+        inst.AnimState:PlayAnimation("flower_"..(inst.stage - 1).."_idle", true)
+    end
+    inst:RemoveEventCallback("animover", AnimateRetaliateMainOver)
+end
+
+local function RetaliateMain(inst, data)
+    if not inst.retaliating then
+        inst.retaliating = true
+        if inst.stage > 2 then
+            inst:DoTaskInTime(4 * FRAMES, function(_inst)
+                SpawnPrefab("bramblefx_rime"):SetFXOwner(_inst)
+                if _inst.SoundEmitter then
+                    _inst.SoundEmitter:PlaySound("dontstarve/wilson/blowdart_shoot")
+                end
+            end) -- Slight Delay
+            if inst.SoundEmitter then
+                inst.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
+            end
+        end
+        if not (inst.components.health and inst.components.health:IsDead()) then
+            inst.AnimState:PlayAnimation("flower_"..(inst.stage - 1).."_hit")
+            inst:ListenForEvent("animover", AnimateRetaliateMainOver)
         end
     end
 end
@@ -649,7 +676,7 @@ local function OnEntitySleep(inst)
         inst.cooftask = nil
     end
     if inst.fx then
-        inst.fx:Remove()
+        if inst.fx:IsValid() then inst.fx:Remove() end
         inst.fx = nil
     end
 end
@@ -677,7 +704,6 @@ local function mainweed()
         return inst
     end
 
-
     local scale = 1.5
     inst.Transform:SetScale(scale, scale, scale)
 
@@ -692,21 +718,10 @@ local function mainweed()
 
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(600)
-
     inst.components.health:StartRegen(TUNING.BUNNYMAN_HEALTH_REGEN_AMOUNT, TUNING.BUNNYMAN_HEALTH_REGEN_PERIOD)
+
     inst:AddComponent("combat")
-    inst:ListenForEvent("attacked", function(inst)
-        if not (inst.components.health and inst.components.health:IsDead()) then
-            if inst.stage > 2 then
-                inst:DoTaskInTime(4 * FRAMES, function(inst) SpawnPrefab("bramblefx_rime"):SetFXOwner(inst) end) -- Slight Delay
-                if inst.SoundEmitter then
-                    inst.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
-                end
-            end
-            inst.AnimState:PlayAnimation("flower_" .. (inst.stage - 1) .. "_hit")
-            inst.AnimState:PushAnimation("flower_" .. (inst.stage - 1) .. "_idle")
-        end
-    end)
+    inst:ListenForEvent("attacked", RetaliateMain)
 
     ---------------------
 
@@ -718,11 +733,11 @@ local function mainweed()
     inst.OnLoad = OnLoadMain
     inst.OnLoadPostPass = OnLoadPostPassMain
     inst:DoTaskInTime(0, SetStage)
-    inst:WatchWorldState("season", KillOffRimeweed)
-    inst:WatchWorldState("startrain", KillOffRimeweed)
 
-    inst:ListenForEvent("onremove", function(inst)
-        TheWorld.components.um_snowstormmanager:UnregisterRimeweed(inst)
+    SetupWatchWorldState(inst)
+
+    inst:ListenForEvent("onremove", function(_inst)
+        TheWorld.components.um_snowstormmanager:UnregisterRimeweed(_inst)
     end)
 
     if not inst.bramble then
@@ -750,27 +765,29 @@ local function onunequip(inst, owner)
     owner.AnimState:Show("ARM_normal")
 end
 
-local function onattackwhip(inst, attacker, target, naughtlock)
+local function GetWhipDamage(inst, attacker, target)
+    local freezable = target and target.components.freezable
+    return 51 + (freezable and 68 * math.min(freezable:GetFreezePercent(), 1) or 0)
+end
+
+local function onattackwhip(inst, attacker, target)
     if target and target.components.combat and target.components.freezable then
-        local resistance = target.components.freezable:ResolveResistance()
-        local coldness = target.components.freezable.coldness
+        local resistance, coldness = target.components.freezable:ResolveResistance(), target.components.freezable.coldness
 
         local coldval = 1 / resistance
-        if target:HasTag("um_magmatic_defense") then
-            coldval = coldval * 8
-        end
+        if target:HasTag("um_magmatic_defense") then coldval = coldval * 8 end
 
-        local bonusdamage = 68
-        bonusdamage = bonusdamage * coldness / resistance
+        --[[local bonusdamage = 68
+        bonusdamage = bonusdamage * coldness / resistance]]
 
         --if target.sg and target.sg:HasStateTag("frozen") then
         --SpawnPrefab("bramblefx_rime"):SetFXOwner(target)
         --end
 
-        target.components.combat:GetAttacked(attacker, bonusdamage) -- Frost-type damage, which is based on how close to freezing the enemy is
-        target.components.freezable:SpawnShatterFX()
+        --target.components.combat:GetAttacked(attacker, bonusdamage) -- Frost-type damage, which is based on how close to freezing the enemy is
 
         target.components.freezable:AddColdness(coldval / (resistance > coldness + 2 and 1 or resistance > coldness + 1 and 4 or 8))
+        target.components.freezable:SpawnShatterFX()
 
         -- Lavae Vanilla bug fix
         --if target.components.freezable.coldness >= resistance then
@@ -805,7 +822,7 @@ local function whip()
     end
 
     inst:AddComponent("weapon")
-    inst.components.weapon:SetDamage(51)
+    inst.components.weapon:SetDamage(GetWhipDamage)
     inst.components.weapon:SetRange(TUNING.WHIP_RANGE)
     inst.components.weapon:SetOnAttack(onattackwhip)
 

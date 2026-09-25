@@ -52,7 +52,7 @@ local function fn()
 
     inst:AddComponent("edible")
     inst.components.edible.healthvalue = 0
-    inst.components.edible.hungervalue = TUNING.CALORIES_TINY --9.375, same as berries.
+    inst.components.edible.hungervalue = 12.5
     inst.components.edible.sanityvalue = 0
     inst.components.edible.foodtype = FOODTYPE.UM_HORRIBLE_VEGGIE
 

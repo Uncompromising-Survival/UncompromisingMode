@@ -67,7 +67,8 @@ local function fn()
     inst:AddTag("hat")
     inst:AddTag("nightvision")
     inst:AddTag("donotautopick")
-
+    inst:AddTag("monstermeat")
+    
     MakeInventoryFloatable(inst, "small", 0.2, 0.80)
 
     inst.entity:SetPristine()
@@ -88,6 +89,10 @@ local function fn()
 
     inst:AddComponent("edible")
     inst.components.edible.foodtype = FOODTYPE.HORRIBLE
+    inst.components.edible.secondaryfoodtype = FOODTYPE.MONSTER
+    inst.components.edible.healthvalue = 60
+    inst.components.edible.hungervalue = 75
+    inst.components.edible.sanityvalue = -10
 
     inst:AddComponent("perishable")
     inst.components.perishable:SetPerishTime((7.5 * TUNING.PERISH_TWO_DAY))

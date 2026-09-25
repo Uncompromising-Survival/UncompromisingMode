@@ -148,6 +148,10 @@ local function onunequip(inst, owner)
     --inst:RemoveEventCallback("working", Working, owner)
 end
 
+local function CanCastFn(inst)
+    return true
+end
+
 local function staff_fn()
     local inst = CreateEntity()
 
@@ -164,13 +168,12 @@ local function staff_fn()
 
     inst:AddTag("nopunch")
     inst:AddTag("beargerclaw")
+    inst:AddTag("allow_action_on_impassable")
     inst:AddTag("quickcast")
     inst:AddTag("vetcurse_item")
     inst:AddTag("tool")
     inst:AddTag("shadowlevel")
     inst:AddTag("donotautopick")
-
-    MakeInventoryFloatable(inst)
 
     inst.spelltype = "UM_BEARGERCLAW"
     
@@ -180,6 +183,8 @@ local function staff_fn()
     reticule.ispassableatallpoints = true
 
     inst.um_cancastontarget = UMCommonFns.DefaultCanCastOnTarget
+
+    MakeInventoryFloatable(inst)
 
     inst.entity:SetPristine()
 
@@ -206,9 +211,9 @@ local function staff_fn()
     
     local spellcaster = inst:AddComponent("spellcaster")
     spellcaster:SetSpellFn(createlight)
+    spellcaster:SetCanCastFn(CanCastFn)
     spellcaster.canuseontargets = true
-    spellcaster.canonlyuseonworkable = true
-    spellcaster.canonlyuseoncombat = true
+    spellcaster.canuseondead = true
     spellcaster.canuseonpoint = true
     spellcaster.canuseonpoint_water = true
 

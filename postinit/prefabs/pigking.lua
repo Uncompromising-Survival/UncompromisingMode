@@ -1,6 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
-local UpvalueHacker = require("tools/upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 
 if TUNING.DSTU.PK_GUARDS then
     env.AddPrefabPostInit("pigking", function(inst)
@@ -82,7 +82,7 @@ if TUNING.DSTU.PK_GUARDS then
     -- Make sure everything else has loaded
     local BLOCKING_CANT_OBJECTS = {"pkpole"}
     env.AddSimPostInit(function()
-        local _BLOCKING_CANT_OBJECTS = UpvalueHacker.GetUpvalue(Prefabs.pigking.fn, "AbleToAcceptTest", "CanStartMinigame", "IsAreaClearForMinigame", "BLOCKING_CANT_OBJECTS")
+        local _BLOCKING_CANT_OBJECTS = UMUpvalueHacker.GetUpvalue(Prefabs.pigking.fn, "AbleToAcceptTest", "CanStartMinigame", "IsAreaClearForMinigame", "BLOCKING_CANT_OBJECTS")
         for i, TAG in pairs(BLOCKING_CANT_OBJECTS) do
             table.insert(_BLOCKING_CANT_OBJECTS, TAG)
         end

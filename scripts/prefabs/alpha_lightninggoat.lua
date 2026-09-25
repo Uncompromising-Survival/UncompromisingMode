@@ -74,39 +74,36 @@ local function KeepTargetFn(inst, target)
     return herd == nil or inst:IsNear(herd, TUNING.LIGHTNING_GOAT_CHASE_DIST)
 end
 
+local HOUND_LIGHNTING_CANT_TAGS = {"lightninggoat", "bird", "prey"}
+
 local function setcharged(inst, instant)
-	local x, y, z = inst.Transform:GetWorldPosition()
-    inst:AddTag("charged")
-	local shocktime = 1
-	
-	inst.sg:GoToState("shocked")
-	shocktime = .2
-	
-	inst:DoTaskInTime(shocktime, function(inst)
-		for i = 1, 8 do 
-			local lightning = SpawnPrefab("hound_lightning")
-			lightning.Transform:SetPosition(x + math.random(-6, 6), 0, z + math.random(-6, 6))
-			lightning.NoTags = { "INLIMBO", "shadow", "structure", "wall", "lightninggoat", "prey", "bird" }
-		end
-	end)
+    local x, y, z = inst.Transform:GetWorldPosition()
+    inst.sg:GoToState("shocked")
+    inst:DoTaskInTime(.2, function(inst)
+        for i = 1, 8 do
+            UMCommonFns.SpawnHoundLightning(inst, {pos = {x = x + math.random(-6, 6), z = z + math.random(-6, 6)}, canttags = HOUND_LIGHNTING_CANT_TAGS})
+        end
+    end)
 end
 
 local function IsChargedGoat(dude)
-    return dude:HasTag("lightninggoat") and (dude:HasTag("charged") or dude:HasTag("alpha_goat"))
+    return dude:HasTag("lightninggoat") and dude:HasAnyTag("charged", "alpha_goat")
 end
 
 local function OnAttacked(inst, data)
     if data ~= nil and data.attacker ~= nil then
         if inst.charged then
             if data.attacker.components.health ~= nil and not data.attacker.components.health:IsDead() and
+                data.stimuli ~= "soul" and
                 (data.weapon == nil or ((data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil) and data.weapon.components.projectile == nil)) and
-                not (data.attacker.components.inventory ~= nil and data.attacker.components.inventory:IsInsulated()) then
-
-                if data.attacker:HasTag("player") and not data.attacker.sg:HasStateTag("dead") then
-                    data.attacker.sg:GoToState("electrocute")
+                not (data.attacker.components.inventory ~= nil and data.attacker.components.inventory:IsInsulated()) and
+                not data.attacker:HasTag("catapult")
+            then
+                local damage_mult = 1
+                if not IsEntityElectricImmune(data.attacker) then
+                    damage_mult = TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * data.attacker:GetWetMultiplier()
                 end
-				
-                data.attacker.components.health:DoDelta(-TUNING.LIGHTNING_GOAT_DAMAGE, nil, inst.prefab, nil, inst)
+                data.attacker.components.combat:GetAttacked(inst, damage_mult * TUNING.LIGHTNING_GOAT_DAMAGE, nil, "electric")
             end
         elseif data.stimuli == "electric" or (data.weapon ~= nil and data.weapon.components.weapon ~= nil and data.weapon.components.weapon.stimuli == "electric") then
             setcharged(inst)
@@ -118,7 +115,7 @@ local function OnAttacked(inst, data)
 end
 
 local function onspawnedforhunt(inst)
-	TheWorld:PushEvent("ms_sendlightningstrike", inst:GetPosition())
+    TheWorld:PushEvent("ms_sendlightningstrike", inst:GetPosition())
 end
 
 local function OnSave(inst, data)
@@ -135,18 +132,46 @@ local function OnLoad(inst, data)
     end
 end
 
+local ELECTRIC_ATTACK_MUST_TAGS = {"_combat"}
+local ELECTRIC_ATTACK_CANT_TAGS = JoinArrays(UMCommonFns.GHOSTLIKE_TAGS, {"INLIMBO", "structure", "wall", "lightninggoat", "prey", "bird"})
+local function ElectricStompAttack(inst)
+    local stomp_count = inst.stomp_count or 0
+
+    local ringfx = SpawnPrefab("firering_fx")
+    ringfx.Transform:SetPosition(inst.Transform:GetWorldPosition())
+    ringfx.Transform:SetScale(0.8 + (stomp_count / 9), 0.8 + (stomp_count / 9), 0.8 + (stomp_count / 9))
+    
+    local groundpounder = inst.components.groundpounder
+    groundpounder.destructionRings = 1 + stomp_count
+    groundpounder.platformPushingRings = 1 + stomp_count
+    groundpounder.numRings = 1 + stomp_count
+    groundpounder:GroundPound()
+
+    local x, y, z = inst.Transform:GetWorldPosition()
+    for i, ent in ipairs(TheSim:FindEntities(x, y, z, 5.5 + stomp_count, ELECTRIC_ATTACK_MUST_TAGS, ELECTRIC_ATTACK_CANT_TAGS)) do
+        if not (ent.components.health and ent.components.health:IsDead()) and inst.components.combat:CanTarget(ent)
+            and not (ent.components.inventory and ent.components.inventory:IsInsulated()) and not ent:HasTag("catapult") then
+            local damage_mult = 1
+            if not IsEntityElectricImmune(ent) then
+                damage_mult = TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * ent:GetWetMultiplier()
+            end
+            ent.components.combat:GetAttacked(inst, damage_mult * TUNING.LIGHTNING_GOAT_DAMAGE * 1.5, nil, "electric")
+        end
+    end
+end
+
 local function LightningAttack(inst)
-	if inst.components.combat and inst.components.combat.target and inst.components.combat.target:IsValid() then
-		local x,y,z = inst.Transform:GetWorldPosition()
-		local x1,y1,z1 = inst.components.combat.target.Transform:GetWorldPosition()
-		local angle = -math.atan2((z-z1),(x-x1))
-		local newangle = angle+math.random(-2,2)*PI/16
-		local shocker = SpawnPrefab("goat_lightning")
-		shocker.destination = inst.components.combat.target:GetPosition()
-		shocker.destination.x = x1 + 4*math.cos(newangle)
-		shocker.destination.z = z1 + 4*math.sin(newangle)
-		shocker.Transform:SetPosition(x,y,z)
-	end
+    if inst.components.combat and inst.components.combat.target and inst.components.combat.target:IsValid() then
+        local x,y,z = inst.Transform:GetWorldPosition()
+        local x1,y1,z1 = inst.components.combat.target.Transform:GetWorldPosition()
+        local angle = -math.atan2((z-z1),(x-x1))
+        local newangle = angle+math.random(-2,2)*PI/16
+        local shocker = SpawnPrefab("goat_lightning")
+        shocker.destination = inst.components.combat.target:GetPosition()
+        shocker.destination.x = x1 + 4*math.cos(newangle)
+        shocker.destination.z = z1 + 4*math.sin(newangle)
+        shocker.Transform:SetPosition(x,y,z)
+    end
 end
 
 local function fn()
@@ -169,8 +194,8 @@ local function fn()
     inst.AnimState:SetBuild("alpha_lightning_goat_build")
     inst.AnimState:PlayAnimation("idle_loop", true)
     inst.AnimState:Hide("fx")
-	
-	inst.Transform:SetScale(1.1, 1.1, 1.1)
+    
+    inst.Transform:SetScale(1.1, 1.1, 1.1)
 
     ------------------------------------------
 
@@ -197,8 +222,8 @@ local function fn()
         return inst
     end
 
-	--inst.getting_angry = false
-	--inst.pissed_count = 0
+    --inst.getting_angry = false
+    --inst.pissed_count = 0
 
     ------------------------------------------
 
@@ -215,7 +240,7 @@ local function fn()
     inst.components.combat:SetRetargetFunction(1, RetargetFn)
     inst.components.combat:SetKeepTargetFunction(KeepTargetFn)
     inst.components.combat:SetHurtSound("dontstarve_DLC001/creatures/lightninggoat/hurt")
-	
+    
     inst:AddComponent("groundpounder")
     inst.components.groundpounder.destroyer = false
     inst.components.groundpounder.damageRings = 0
@@ -225,7 +250,7 @@ local function fn()
     inst.components.groundpounder.groundpoundfx = "sparks"
     inst.components.groundpounder.groundpoundringfx = "sparks"
     --inst.components.groundpounder.groundpoundringfx = "firering_fx"
-	
+    
     ------------------------------------------
 
     inst:AddComponent("sleeper")
@@ -260,33 +285,35 @@ local function fn()
 
     MakeMediumBurnableCharacter(inst, "lightning_goat_body")
     MakeMediumFreezableCharacter(inst, "lightning_goat_body")
-	
-	inst.LightningAttack = LightningAttack
-	inst:ListenForEvent("spawnedforhunt", onspawnedforhunt)
+
+    inst.ElectricStompAttack = ElectricStompAttack
+
+    inst.LightningAttack = LightningAttack
+    inst:ListenForEvent("spawnedforhunt", onspawnedforhunt)
 
     inst:ListenForEvent("lightningstrike", setcharged)
     inst.setcharged = setcharged
 
     inst.OnSave = OnSave
     inst.OnLoad = OnLoad
-	
-	--inst:DoPeriodicTask(10, function(inst)
-		--if not inst.getting_angry and not inst.components.combat:HasTarget() then
-			--if inst.pissed_count > 0 then
-				--inst.pissed_count = inst.pissed_count - 1
-			--end
-		--end
-	--end)
-	
-	inst.Recharge = function(inst)
-		TheNet:Announce("StartRecharge")
-		inst.Recharging = inst:DoTaskInTime(10,function(inst)
-			TheNet:Announce("FinishRecharge")
-			if inst.recharging_electric then
-				inst.recharging_electric = nil
-			end
-		end)
-	end
+    
+    --inst:DoPeriodicTask(10, function(inst)
+        --if not inst.getting_angry and not inst.components.combat:HasTarget() then
+            --if inst.pissed_count > 0 then
+                --inst.pissed_count = inst.pissed_count - 1
+            --end
+        --end
+    --end)
+    
+    inst.Recharge = function(inst)
+        TheNet:Announce("StartRecharge")
+        inst.Recharging = inst:DoTaskInTime(10,function(inst)
+            TheNet:Announce("FinishRecharge")
+            if inst.recharging_electric then
+                inst.recharging_electric = nil
+            end
+        end)
+    end
 
     ------------------------------------------
 

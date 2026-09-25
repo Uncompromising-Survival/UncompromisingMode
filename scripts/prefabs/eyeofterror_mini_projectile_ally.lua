@@ -4,9 +4,9 @@ local function spawn_eye(inst)
     minieye.Transform:SetPosition(mx, my, mz)
     minieye.sg:GoToState("appear")
     minieye:PushEvent("on_landed")
-    if inst.player then
-        inst.player.components.leader:AddFollower(minieye)
-    end
+    local player = inst.player and inst.player:IsValid() and inst.player
+    local leader = player and player.components.leader
+    if leader then leader:AddFollower(minieye) end
     inst:Remove()
 end
 

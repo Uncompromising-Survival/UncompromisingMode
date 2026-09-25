@@ -98,10 +98,10 @@ local prefabs = {
     "magmarocks",
 
 
-    "vampirebat",
+    "um_vampirebat",
     "icecreamsanityregenbuff",
     "zaspberryparfait",
-    "uncompromising_foodbuffs",
+    "uncompromising_buffs",
     "shockfx",
     "shockstundebuff",
     "carapacecooler",
@@ -331,7 +331,7 @@ local prefabs = {
     --DAMNIT SCRIMBLES
     "uncompromising_harpoon",
     "uncompromising_axepoon",
-    "uncompromising_magharpoon",
+    "um_magnerang",
     "uncompromising_fishingnet",
     "uncompromising_fishingnetvisualizer",
     "um_windturbine",
@@ -485,7 +485,7 @@ local prefabs = {
     "um_blowdart_pyre",
 
     -- Rimeweed Stuff
-    "rimeweed",
+    "um_rimeweed",
 
     -- Mutation Extrapolation
     "umdebuff_moonburn",
@@ -502,6 +502,7 @@ local prefabs = {
     "slobberlobber",
     "beargerclaw",
     "um_antlionstaff",
+    "um_antlionstaff_sandspike",
     "klaus_amulet",
     "gore_horn_hat",
     "crabclaw",
@@ -558,9 +559,10 @@ local prefabs = {
 
     "um_boatbottle",
     "jawed_scythe",
-    "um_ice_sicle",
+    "um_ice_scythe",
     "um_fire_projectile",
     "um_buttery_fly",
+    "um_buttercup",
 
     "um_pepperdragon",
     "um_pepperdragon_nest",
@@ -620,7 +622,7 @@ local prefabs = {
 
     "um_magmacave_umss",
     "glacialhound_icespike",
-    "iceshield",
+    "um_ice_shield",
     "um_feather_totem",
     "um_magnifier",
     "um_gemology_pouch",
@@ -638,12 +640,12 @@ local prefabs = {
     "magma_tile",
     "um_blueprinting_kit",
     "minerstatue",
-    "um_gem_repair_kit"
+    "um_gem_repair_kit",
+    "um_magmastone"
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then
     table.insert(prefabs, "placeholder_recipe_item")
 end
-
 
 return prefabs

@@ -1,6 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
-local UpvalueHacker = require("tools/upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 
 local function GestaltHungrySleep(target)
     if target.components.grogginess and target.components.grogginess:IsKnockedOut() and target.components.hunger then
@@ -20,7 +20,7 @@ end
 
 env.AddStategraphPostInit("gestalt", function(inst)
     local attackstate = inst.states["attack"]
-    local _DoSpecialAttack = attackstate and UpvalueHacker.GetUpvalue(attackstate.onupdate, "DoSpecialAttack")
+    local _DoSpecialAttack = attackstate and UMUpvalueHacker.TryGetUpvalue(attackstate.onupdate, "DoSpecialAttack")
     if _DoSpecialAttack then
         local function DoSpecialAttack(inst, target, ...)
             if target.components.hunger then -- additional hunger lost per hit
@@ -37,6 +37,6 @@ env.AddStategraphPostInit("gestalt", function(inst)
             end)
             return ret
         end
-        UpvalueHacker.SetUpvalue(attackstate.onupdate, DoSpecialAttack, "DoSpecialAttack")
+        UMUpvalueHacker.SetUpvalue(attackstate.onupdate, DoSpecialAttack, "DoSpecialAttack")
     end
 end)

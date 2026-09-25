@@ -1,14 +1,14 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
-local UpvalueHacker = require("tools/upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 local ShadowWaxwellBrain = require("brains/shadowwaxwellbrain")
 
 local DIG_TAGS = {"snowpile_basic", "snowpile"}
 local TOWORK_CANT_TAGS = {"sludgestack"}
 
-local _DIG_TAGS = UpvalueHacker.GetUpvalue(ShadowWaxwellBrain.OnStart, "DIG_TAGS")
-local _TOWORK_CANT_TAGS = UpvalueHacker.GetUpvalue(ShadowWaxwellBrain.OnStart, "FindEntityToWorkAction", "TOWORK_CANT_TAGS")
+local _DIG_TAGS = UMUpvalueHacker.GetUpvalue(ShadowWaxwellBrain.OnStart, "DIG_TAGS")
+local _TOWORK_CANT_TAGS = UMUpvalueHacker.GetUpvalue(ShadowWaxwellBrain.OnStart, "FindEntityToWorkAction", "TOWORK_CANT_TAGS")
 
 for i, TAG in pairs(DIG_TAGS) do
     table.insert(_DIG_TAGS, TAG)
@@ -19,14 +19,14 @@ for i, TAG in pairs(TOWORK_CANT_TAGS) do
 end
 
 if TUNING.DSTU.WAXWELL then
-    local _IsLeaderInCombat = UpvalueHacker.GetUpvalue(ShadowWaxwellBrain.OnStart, "IsLeaderInCombat")
+    local _IsLeaderInCombat = UMUpvalueHacker.TryGetUpvalue(ShadowWaxwellBrain.OnStart, "IsLeaderInCombat")
     if _IsLeaderInCombat then
         local function IsLeaderInCombat() return false end
-        UpvalueHacker.SetUpvalue(ShadowWaxwellBrain.OnStart, IsLeaderInCombat, "IsLeaderInCombat")
+        UMUpvalueHacker.SetUpvalue(ShadowWaxwellBrain.OnStart, IsLeaderInCombat, "IsLeaderInCombat")
     end
 
-    local _ShouldAvoidExplosive = UpvalueHacker.GetUpvalue(ShadowWaxwellBrain.OnStart, "ShouldAvoidExplosive")
-    local _ShouldRunAway = UpvalueHacker.GetUpvalue(ShadowWaxwellBrain.OnStart, "ShouldRunAway")
+    local _ShouldAvoidExplosive = UMUpvalueHacker.TryGetUpvalue(ShadowWaxwellBrain.OnStart, "ShouldAvoidExplosive")
+    local _ShouldRunAway = UMUpvalueHacker.TryGetUpvalue(ShadowWaxwellBrain.OnStart, "ShouldRunAway")
 
     local function RemoveNode(self, brainnode)
         if not brainnode then return end
@@ -81,7 +81,7 @@ local function ShadowMimicSpellFn(inst, doer)
     if inst.components.fueled:IsEmpty() then
         return false, "NO_FUEL"
     elseif doer.components.health.currenthealth <= TUNING.DSTU.SHADOWWAXWELL_HEALTH_COST then
-        doer.components.talker:Say(GetString(doer.prefab, "ANNOUNCE_NOHEALTH"))
+        doer.components.talker:Say(GetString(prefab, "ANNOUNCE_NOHEALTH"))
     elseif not CheckMaxSanity(doer, "shadowduelist") then
         return false, "NO_MAX_SANITY"
     else

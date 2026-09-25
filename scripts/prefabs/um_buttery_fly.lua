@@ -5,6 +5,12 @@ local assets =
 	Asset("ANIM", "anim/um_buttery_fly.zip"),
 }
 
+local prefabs =
+{
+    "butter",
+    "um_buttercup",
+}
+
 local brain = require "brains/butterflybrain"
 
 local function OnDropped(inst)
@@ -48,6 +54,19 @@ local function OnMutate(inst, transformed_inst)
 	if transformed_inst then
 		transformed_inst.sg:GoToState("idle")
 	end
+end
+
+local function OnDeploy(inst, pt, deployer)
+    local flower = SpawnPrefab("um_buttercup")
+    if flower then
+        flower.Transform:SetPosition(pt:Get())
+        inst.components.stackable:Get():Remove()
+        AwardPlayerAchievement("growfrombutterfly", deployer)
+        TheWorld:PushEvent("CHEVO_growfrombutterfly", {target = flower, doer = deployer})
+        if deployer and deployer.SoundEmitter then
+            deployer.SoundEmitter:PlaySound("dontstarve/common/plant")
+        end
+    end
 end
 
 local function fn()
@@ -135,6 +154,11 @@ local function fn()
     ------------------
     inst:AddComponent("tradable")
     ------------------
+    inst:AddComponent("deployable")
+    inst.components.deployable.ondeploy = OnDeploy
+    inst.components.deployable:SetDeployMode(DEPLOYMODE.PLANT)
+    inst.components.deployable:SetDeploySpacing(DEPLOYSPACING.LESS)
+    ------------------
     MakeHauntablePanicAndIgnite(inst)
 
     inst:SetBrain(brain)
@@ -156,4 +180,5 @@ local function fn()
     return inst
 end
 
-return Prefab("um_buttery_fly", fn, assets)
+return Prefab("um_buttery_fly", fn, assets, prefabs),
+    MakePlacer("um_buttery_fly_placer", "um_buttercup", "um_buttercup", "idle")

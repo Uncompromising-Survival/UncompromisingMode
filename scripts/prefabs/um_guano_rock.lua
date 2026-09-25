@@ -1,48 +1,47 @@
 local assets =
 {
     Asset("ANIM", "anim/um_guano_rock.zip"),
-	Asset("IMAGE", "images/map_icons/um_guano_rock_icon.tex"),
-	Asset("ATLAS", "images/map_icons/um_guano_rock_icon.xml"),		
+    Asset("IMAGE", "images/map_icons/um_guano_rock_icon.tex"),
+    Asset("ATLAS", "images/map_icons/um_guano_rock_icon.xml"),
 }
 
-local function ReleaseBats(inst,target)
-	for i = 1,math.random(1,2) do
-		local bat = SpawnPrefab("bat")
-		bat.Transform:SetPosition(inst.Transform:GetWorldPosition())
-		bat.components.combat:SetTarget(target)
-		bat.sg:GoToState("taunt")
-	end
+local function ReleaseBats(inst, target)
+    for i = 1, math.random(1, 2) do
+        local bat = SpawnPrefab("bat")
+        bat.Transform:SetPosition(inst.Transform:GetWorldPosition())
+        bat.components.combat:SetTarget(target)
+        bat.sg:GoToState("taunt")
+    end
 end
 
-local tier_chance = {0.1,0.5,1}
+local tier_chance = { 0.1, 0.5, 1 }
 local function OnWork(inst, worker, workleft)
     if workleft <= 0 then
         local pt = inst:GetPosition()
         SpawnPrefab("rock_break_fx").Transform:SetPosition(pt.x, pt.y, pt.z)
         inst.components.lootdropper:DropLoot(pt)
-		if inst.prefab == "um_guano_rock" and math.random() < tier_chance[inst.tier] then
-			inst.components.lootdropper:SpawnLootPrefab("um_gemology_geode_guano")
-		end
-		inst:Remove()
+        if inst.prefab == "um_guano_rock" and math.random() < tier_chance[inst.tier] then
+            inst.components.lootdropper:SpawnLootPrefab("um_gemology_geode_guano")
+        end
+        inst:Remove()
     else
-		if inst.tier == 3 then
-			inst.AnimState:PlayAnimation(
-				(workleft < TUNING.ROCKS_MINE / 3 and "tall_2") or
-				(workleft < TUNING.ROCKS_MINE * 2 / 3 and "tall_1") or
-				"tall_0"
-			)
-			if workleft > 2 then
-				ReleaseBats(inst,worker)
-			end
-			
-		elseif inst.tier == 2 then
-			inst.AnimState:PlayAnimation(
-				(workleft < TUNING.ROCKS_MINE * 2 / 3 and "med_1") or
-				"med_0"
-			)
-		else
-			inst.AnimState:PlayAnimation("low_0")		
-		end
+        if inst.tier == 3 then
+            inst.AnimState:PlayAnimation(
+                (workleft < TUNING.ROCKS_MINE / 3 and "tall_2") or
+                (workleft < TUNING.ROCKS_MINE * 2 / 3 and "tall_1") or
+                "tall_0"
+            )
+            if workleft > 2 then
+                ReleaseBats(inst, worker)
+            end
+        elseif inst.tier == 2 then
+            inst.AnimState:PlayAnimation(
+                (workleft < TUNING.ROCKS_MINE * 2 / 3 and "med_1") or
+                "med_0"
+            )
+        else
+            inst.AnimState:PlayAnimation("low_0")
+        end
     end
 end
 
@@ -58,10 +57,10 @@ local function onload(inst, data)
     end
 end
 
-local function Reworkable(inst,work)
-	if inst.components.workable then
-		inst:RemoveComponent("workable")
-	end
+local function Reworkable(inst, work)
+    if inst.components.workable then
+        inst:RemoveComponent("workable")
+    end
     inst:AddComponent("workable")
     inst.components.workable:SetWorkAction(ACTIONS.MINE)
     inst.components.workable:SetWorkLeft(work)
@@ -69,61 +68,60 @@ local function Reworkable(inst,work)
 end
 
 
-SetSharedLootTable( 'um_guano_rock3',
-{
-    {'rocks',   1.0},
-    {'rocks',   1.0},
-    {'guano',   1.0},
-    {'guano',   1.0},
-    {'rocks',   1.0},
-    {'guano',   1.0},
-	{'nitre',   1.0},
-	{'nitre',   1.0},
-})
+SetSharedLootTable('um_guano_rock3',
+    {
+        { 'rocks', 1.0 },
+        { 'rocks', 1.0 },
+        { 'guano', 1.0 },
+        { 'guano', 1.0 },
+        { 'rocks', 1.0 },
+        { 'guano', 1.0 },
+        { 'nitre', 1.0 },
+        { 'nitre', 1.0 },
+    })
 
-SetSharedLootTable( 'um_guano_rock2',
-{
-    {'rocks',   1.0},
-    {'rocks',   1.0},
-    {'guano',   1.0},
-    {'guano',   1.0},
-	{'nitre',   1.0},
-})
+SetSharedLootTable('um_guano_rock2',
+    {
+        { 'rocks', 1.0 },
+        { 'rocks', 1.0 },
+        { 'guano', 1.0 },
+        { 'guano', 1.0 },
+        { 'nitre', 1.0 },
+    })
 
-SetSharedLootTable( 'um_guano_rock1',
-{
-    {'rocks',   1.0},
-    {'guano',   1.0},
-	{'nitre',   0.5},
-})
+SetSharedLootTable('um_guano_rock1',
+    {
+        { 'rocks', 1.0 },
+        { 'guano', 1.0 },
+        { 'nitre', 0.5 },
+    })
 
 
-local tier_anims = {"low","med","tall"}
+local tier_anims = { "low", "med", "tall" }
 
 local function SetTier(inst)
-	Reworkable(inst,inst.tier*TUNING.ROCKS_MINE/3)
-	inst.AnimState:PlayAnimation(tier_anims[inst.tier].."_0")
-	inst.components.lootdropper:SetChanceLootTable('um_guano_rock'..inst.tier)
+    Reworkable(inst, inst.tier * TUNING.ROCKS_MINE / 3)
+    inst.AnimState:PlayAnimation(tier_anims[inst.tier] .. "_0")
+    inst.components.lootdropper:SetChanceLootTable('um_guano_rock' .. inst.tier)
 end
 
 local function SetTierAnimOver(inst)
-	inst:RemoveEventCallback("animqueueover",SetTierAnimOver)
-	SetTier(inst)
+    inst:RemoveEventCallback("animqueueover", SetTierAnimOver)
+    SetTier(inst)
 end
 
 local function RandomDetermineTier(inst)
-	if not inst.tier then
-		inst.tier = math.random(1,3)
-		
-	end 
-	inst:DoTaskInTime(1,SetTier)
+    if not inst.tier then
+        inst.tier = math.random(1, 3)
+    end
+    inst:DoTaskInTime(1, SetTier)
 end
 
-local function UpgradeTier(inst,tier) --AXE do not call UpgradeTier(inst,1), it will call an animation that does not exist.
-	inst.AnimState:PlayAnimation(tier_anims[inst.tier].."_grow_1")
-	inst.AnimState:PushAnimation(tier_anims[tier].."_grow_0",false)
-	inst.tier = tier
-	inst:ListenForEvent("animqueueover",SetTierAnimOver)
+local function UpgradeTier(inst, tier) --AXE do not call UpgradeTier(inst,1), it will call an animation that does not exist.
+    inst.AnimState:PlayAnimation(tier_anims[inst.tier] .. "_grow_1")
+    inst.AnimState:PushAnimation(tier_anims[tier] .. "_grow_0", false)
+    inst.tier = tier
+    inst:ListenForEvent("animqueueover", SetTierAnimOver)
 end
 
 local function mainrocks(bank)
@@ -137,11 +135,11 @@ local function mainrocks(bank)
 
     MakeObstaclePhysics(inst, 1)
 
-	inst.MiniMapEntity:SetIcon("um_guano_rock_icon.tex")
+    inst.MiniMapEntity:SetIcon("um_guano_rock_icon.tex")
 
     inst.AnimState:SetBank(bank)
     inst.AnimState:SetBuild("um_guano_rock")
-	inst.AnimState:PlayAnimation("tier3_full")
+    inst.AnimState:PlayAnimation("tier3_full")
 
 
     inst:AddTag("guano_rock")
@@ -161,36 +159,36 @@ local function mainrocks(bank)
 
 
 
-    local colour = math.random(75,100)*0.01
+    local colour = math.random(75, 100) * 0.01
     inst.AnimState:SetMultColour(colour, colour, colour, 1)
 
 
     inst:AddComponent("inspectable")
-	Reworkable(inst,TUNING.ROCKS_MINE)
-	inst.OnSave = onsave
-	inst.OnLoad = onload
-	inst.SetTier = SetTier
-	inst.UpgradeTier = UpgradeTier
-	inst:DoTaskInTime(0,RandomDetermineTier)
+    Reworkable(inst, TUNING.ROCKS_MINE)
+    inst.OnSave = onsave
+    inst.OnLoad = onload
+    inst.SetTier = SetTier
+    inst.UpgradeTier = UpgradeTier
+    inst:DoTaskInTime(0, RandomDetermineTier)
     MakeHauntableWork(inst)
 
-	inst.Transform:SetScale(1.25,1.25,1.25)
+    inst.Transform:SetScale(1.25, 1.25, 1.25)
 
     return inst
 end
 
 local function guanorock_gemless()
-	local inst = mainrocks("um_guano_rock_gemless")
-	
-	return inst
+    local inst = mainrocks("um_guano_rock_gemless")
+
+    return inst
 end
 
 local function guanorock()
-	local inst = mainrocks("um_guano_rock_gem")
-	
-	return inst
+    local inst = mainrocks("um_guano_rock_gem")
+
+    return inst
 end
 
 
 return Prefab("um_guano_rock_gemless", guanorock_gemless, assets),
-Prefab("um_guano_rock", guanorock, assets)
+    Prefab("um_guano_rock", guanorock, assets)

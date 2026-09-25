@@ -1,3 +1,6 @@
+
+--live: 󰀕 white skull
+--beta: 󰀕 red skull
 name = "󰀕 Uncompromising Mode"
 -- borrowed from IA
 folder_name = folder_name or "workshop-"
@@ -7,7 +10,7 @@ end
 
 --MAJOR.MINOR.FIX
 --INCREASE THIS VERSION
-local _version = "5.13.3"
+local _version = "5.13.4"
 
 description = [[
     󰀔 ["On The Rocks!" v1.6  (Beta ver: v]] .. _version .. [[)]
@@ -30,7 +33,7 @@ author = "󰀈 The Uncomp Dev Team 󰀈"
 version = "On The Rocks! v1.6 Testing v" .. _version
 
 
-forumthread = "/topic/111892-announcement-uncompromising-mode/"
+--forumthread = "/topic/111892-announcement-uncompromising-mode/"
 
 api_version = 10
 
@@ -544,8 +547,7 @@ configuration_options = {
             { description = "Enabled",              data = "enabled" },
             { description = "Enabled (No Respawn)", data = "norespawn", hover = "Traps don't respawn over time." },
             { description = "Disabled",             data = "disabled" } },
-        default =
-        "enabled"
+        default = "enabled"
     },
     BinaryConfig("rice", "Rice", "Rice spawns in swamp ponds.", true),
     BinaryConfig("trapdoorspiders", "Trapdoor Spiders",
@@ -596,7 +598,7 @@ configuration_options = {
     Header("Items and Structures"),
     -----------------------------
     BinaryConfig("inventory_backpacks", "Backpacks and Alikes", "When empty, backpacks can be stored in chests and inventories.", true),
-	BinaryConfig("bath_heal", "Bath Bomb", "When used in Boilling Springs, bathing in it restores Max Health. A bit more expensive, and can only be made on Celestial Altar Tier.", true),	
+    BinaryConfig("bath_heal", "Bath Bomb", "When used in Boilling Springs, bathing in it restores Max Health. A bit more expensive, and can only be made on Celestial Altar Tier.", true),
     BinaryConfig("infinite_blueprints_", "Blueprints", "Blueprints are no longer consumed when reading.", false),
     BinaryConfig("funcap_fun", "Funcap Rework", "Changes Funcaps to have a bone crushing surprise, aside from Lunar Funcap.", true),
     BinaryConfig("celestialitems_revert", "Celestial Altar Item Changes", "Glass tools can not be prototyped. Recipes are more expensive.", true),
@@ -655,8 +657,7 @@ configuration_options = {
             { description = "Default",  data = "default", hover = "Only heal max health loss if BELOW 25%." },
             { description = "Legacy",   data = "legacy",  hover = "Heal max health lost regardless of %." },
             { description = "Disabled", data = false } },
-        default =
-        "default"
+        default = "default"
     },
     {
         name = "sleepingbuff",
@@ -828,15 +829,8 @@ configuration_options = {
     SkipSpace(),
 
     Header("Spiders"),
-    {
-        name = "alljumperspiders",
-        label = "Regular Spiders Jump",
-        hover = "Normal Spiders leap just like Spider Warriors, but lesser.",
-        options = {
-            { description = "Default",  data = "lesser" }, { description = "Warrior Range", data = "warrior" },
-            { description = "Disabled", data = false } },
-        default = "lesser"
-    },
+    BinaryConfig("alljumperspiders", "Regular Spiders Jump",
+        "Normal Spiders leap similar to Spider Warriors.", true),
     BinaryConfig("spiderwarriorcounter", "Warrior Counter",
         "Warrior Spiders (and Depth Dwellers) perform a counter-attack when attacked (also lowers health to 300).", true),
     SkipSpace(),
@@ -1441,7 +1435,7 @@ configuration_options = {
     -----------------------------
     --[[Header("> Legacy Options <"),
     -----------------------------
-    -----------------------------	
+    -----------------------------
     {
         name = "flingo_setting",
         label = "Flingomatic Nerf",

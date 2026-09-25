@@ -226,7 +226,8 @@ function Umripples:OnLandedServer(forced)
 
         if self.splash and (not self.inst.components.inventoryitem or not self.inst.components.inventoryitem:IsHeld()) then
             local splash = SpawnPrefab(self.inst.components.inventoryitem and (hotsplash and "hot_splash" or "splash") or "splash_green")
-            splash.Transform:SetPosition(self.inst.Transform:GetWorldPosition())
+            local pos = self.inst:GetPosition()
+            splash.Transform:SetPosition(pos.x, splash ~= "splash_green" and pos.y or 0, pos.z)
         end
 
         self.inst:PushEvent("umripples_startfloating")

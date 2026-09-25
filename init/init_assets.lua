@@ -103,6 +103,7 @@ local inventoryitems =
     "moon_tear",
     "moonglass_geode",
     "mutator_trapdoor",
+    "mutator_trapdoor_hooded",
     "nervoustick_1",
     "nervoustick_2",
     "nervoustick_3",
@@ -450,6 +451,7 @@ local inventoryitems =
     "um_gemology_geode_ruins",
     "um_gemology_geode_sink",
     "um_gemology_geode_vent",
+    "um_gemology_geode_magma",
 
     "um_flamethrower",
     "um_firecream",
@@ -471,7 +473,9 @@ local inventoryitems =
     "um_astral_projector_target",
     "um_blueprinting_kit",
     "um_cookpot_wagstaff_lever",
-    "um_cookpot_wagstaff_lever2"
+    "um_cookpot_wagstaff_lever2",
+    "um_feather_totem",
+    "um_gem_repair_kit"
 }
 
 local um_preparedfoods = require("um_preparedfoods")
@@ -560,7 +564,10 @@ local minimap_icons = {
     "um_scrapper",
     "um_astral_projector",
     "um_astral_projector_target",
-    "um_hotspring"
+    "um_hotspring",
+    "um_feather_totem",
+    "um_magmastone",
+    "um_magmastone_outcrop"
 }
 
 for _, item in ipairs(inventoryitems) do
@@ -579,6 +586,7 @@ local scrapbook_icons = {
     "um_gemology_geode_sink",
     "um_gemology_geode_slime",
     "um_gemology_geode_vent",
+    "um_gemology_geode_magma",
     "um_gemologybluegem1",
     "um_gemologybluegem2",
     "um_gemologyredgem1",
@@ -672,6 +680,8 @@ local scrapbook_icons = {
     "viperfruit_plant",
     "viperling",
     "viperworm",
+    "um_magmastone",
+    "um_magmastone_outcrop"
 }
 
 for _, item in ipairs(scrapbook_icons) do
@@ -1171,6 +1181,7 @@ Assets = {
     Asset("ANIM", "anim/lazy_chester.zip"),
 
     Asset("ANIM", "anim/um_buttery_fly.zip"),
+    Asset("ANIM", "anim/um_buttercup.zip"),
 
     Asset("ANIM", "anim/um_ghost_pepper_item.zip"),
 
@@ -1602,6 +1613,7 @@ Assets = {
     Asset("ANIM", "anim/um_pathfinderpulse.zip"),
 
     --INVENTORY ITEMS [ANIMS & INV_IMAGE]
+    Asset("ANIM", "anim/um_gem_repair_kit.zip"),
     Asset("ANIM", "anim/um_boatbottle.zip"),
     Asset("ANIM", "anim/hat_crab.zip"),
     Asset("ANIM", "anim/staff_starfall.zip"),
@@ -2062,7 +2074,9 @@ Assets = {
 
     Asset("ANIM", "anim/um_bomb_vortex.zip"),
 
-    Asset("ANIM", "anim/ui_krampusbag_2x5.zip")
+    Asset("ANIM", "anim/ui_krampusbag_2x5.zip"),
+
+    Asset("ANIM", "anim/um_magmastone.zip"),
 }
 
 for _, asset in pairs(inventoryitems) do

@@ -29,8 +29,6 @@ modimport("init/init_strings/init_names")
 modimport("init/init_strings/init_tooltips") --load before postinit please!
 modimport("init/init_bonusdescriptors")      -- doesn't contain strings
 
-
-
 -- Character descriptions
 modimport("init/init_strings/init_descriptions/generic")
 modimport("init/init_strings/init_descriptions/willow")
@@ -53,7 +51,7 @@ modimport("init/init_strings/init_descriptions/wanda")
 modimport("init/init_strings/init_descriptions/winky")
 modimport("init/init_strings/init_descriptions/wathom")
 
-
+GLOBAL.UMGemologyFns = require("gemology_defs")
 
 --    [         Number Tuning and PostInits        ]    --
 modimport("init/init_postinit")
@@ -90,7 +88,6 @@ local GAMEMODE_CUSTOM_SETTINGS = 2;
 if GetModConfigData("horriblefood") then
     modimport("init/init_horriblefood")
 end
-
 
 modimport("init/init_gemology/common")
 modimport("init/init_gemology/special")
@@ -247,10 +244,6 @@ end
 --food stats!
 if GetModConfigData("food_stats") then
     modimport("init/init_food/init_food_stats")
-end
-
-if GetModConfigData("armorrework") then
-    modimport("postinit/armor_rework")
 end
 
 modimport("init/init_weather/init_ripples")

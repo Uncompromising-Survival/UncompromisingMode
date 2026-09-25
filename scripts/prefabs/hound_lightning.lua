@@ -9,11 +9,11 @@ local function Sparks(inst)
     local x1 = x + math.random(-2, 2)
     local z1 = z + math.random(-2, 2)
 
-    if math.random() >= 0.6 then
+    if math.random() >= .6 then
         SpawnPrefab("electricchargedfx").Transform:SetPosition(x1, 0, z1)
     end
 
-    SpawnPrefab("sparks").Transform:SetPosition(x1, 0 + 0.25 * math.random(), z1)
+    SpawnPrefab("sparks").Transform:SetPosition(x1, 0 + .25 * math.random(), z1)
 end
 
 local function ChargeItem(inst, item)
@@ -44,14 +44,13 @@ local function Zap(inst)
     end
     
     local radius = 3.5
-    local ents = TheSim:FindEntities(x, y, z, radius, { "_health" }, inst.NoTags)
-    local chargeables = TheSim:FindEntities(x, y, z, radius, { "_inventoryitem", }, inst.NoTags)
-    local lightningrods = TheSim:FindEntities(x, y, z, radius, { "structure", "lightningrod"}, {"INLIMBO"})
+    local ents = TheSim:FindEntities(x, y, z, radius, {"_combat"}, inst.NoTags)
+    local chargeables = TheSim:FindEntities(x, y, z, radius, {"_inventoryitem"}, inst.NoTags)
+    local lightningrods = TheSim:FindEntities(x, y, z, radius, {"structure", "lightningrod"}, {"INLIMBO"})
 
 
     -- Items on the ground
     for k, item in pairs(chargeables) do
-        --print(k, item)
         if item ~= nil then
             ChargeItem(inst, item)
         end
@@ -71,12 +70,8 @@ local function Zap(inst)
             if v.components.health and not v.components.health:IsDead() and UMCommonFns.IsNotFriendly(attacker, v) then
                 if not v:HasTag("electricdamageimmune") then
                     --v.components.combat:GetAttacked(inst, 20, nil, "electric")
-                    local insulated = v:HasTag("electricdamageimmune") or v.components.inventory and v.components.inventory:IsInsulated()
-
-                    local mult = not insulated and TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * (v.components.moisture ~= nil and v.components.moisture:GetMoisturePercent()
-                        or (v:GetIsWet() and 1 or 0)) or 1
-
-                    local damage = -10 * mult
+                    local insulated = IsEntityElectricImmune(v)
+                    local damage = -TUNING.DSTU.HOUND_LIGHTNING_DAMAGE * (not insulated and TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * v:GetWetMultiplier() or 1)
 
                     if v.sg and not v.sg:HasStateTag("nointerrupt") and not insulated and v:HasTag("player") then
                         v.sg:GoToState("electrocute")
@@ -130,7 +125,7 @@ local function fn()
 
     inst.NoTags = JoinArrays(UMCommonFns.GHOSTLIKE_TAGS, {"INLIMBO", "structure", "wall"})
 
-    inst.task = inst:DoPeriodicTask(0.05, Sparks)
+    inst.task = inst:DoPeriodicTask(.05, Sparks)
 
     inst:DoTaskInTime(0, function() --modern problems require modern solutions
         -- need this or else when something sets inst.Delay the task will already have started with 1.

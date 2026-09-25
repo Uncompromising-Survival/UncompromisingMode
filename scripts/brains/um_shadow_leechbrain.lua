@@ -34,8 +34,7 @@ local function SafeLightDist(inst, target)
     if target:HasTag("player") or target:HasTag("playerlight") then
         return 5
     end
-	
-	print(target.Light ~= nil and target.Light:GetCalculatedRadius() or "not light target")
+
     local owner = target.components.inventoryitem ~= nil and target.components.inventoryitem:GetGrandOwner() or nil
     return (owner ~= nil and owner:HasTag("player") and 5)
         or (target.Light ~= nil and target.Light:GetCalculatedRadius())

@@ -1,7 +1,9 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
-
 -----------------------------------------------------------------
+-----------------------------------------------------------------
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
+local PlayerController = require("components/playercontroller")
 
 --[[env.AddComponentPostInit("playercontroller", function(self) --By Summerrr, I didn't do anything lool -C
     local _GetActionButtonAction = self.GetActionButtonAction
@@ -20,8 +22,6 @@ end)]]
 --[[Patching OnEquip/OnUnequip (local fns in components/playercontroller.lua)because they skip all reticule cleanup whenever the currently active reticule's item also has a spellbook component aka the antlionstaff, it has both reticule and spellbook, so its reticule never gets torn down through the normal vanilla flow path
 
 This exempts just that one guard condition for this item, the rest of the reticule cleanup logic is still intact, so it should be safe to do this]]
-
-local UpvalueHacker = require("tools/upvaluehacker")
 
 --[[local function OnEquip(inst, data)
     if data.eslot ~= EQUIPSLOTS.HANDS then
@@ -92,38 +92,35 @@ local function OnUnequip(inst, data)
     end
 end]]
 
-local _OnEquip
-local function OnEquip(inst, data, ...)
-    if data.eslot == EQUIPSLOTS.HANDS then
-        local self = inst.components.playercontroller
-        if self.reticule and self.reticule.inst:HasTag("um_killreticuleonequipchange") then
-            --Make sure the wheel doesnt leave IsEnabled() reporting false for whatever is getting equipped, which would hide its fresh reticule
-            if inst.HUD and inst.HUD:IsSpellWheelOpen() then inst.HUD:CloseSpellWheel() end
-            self.reticule:DestroyReticule()
-            self.reticule = nil
+local _OnEquip = UMUpvalueHacker.TryGetUpvalue(PlayerController.Activate, "OnEquip")
+if _OnEquip then
+    local function OnEquip(inst, data, ...)
+        if data.eslot == EQUIPSLOTS.HANDS then
+            local self = inst.components.playercontroller
+            if self.reticule and self.reticule.inst:HasTag("um_killreticuleonequipchange") then
+                --Make sure the wheel doesnt leave IsEnabled() reporting false for whatever is getting equipped, which would hide its fresh reticule
+                if inst.HUD and inst.HUD:IsSpellWheelOpen() then inst.HUD:CloseSpellWheel() end
+                self.reticule:DestroyReticule()
+                self.reticule = nil
+            end
         end
+        return _OnEquip(inst, data, ...)
     end
-    return _OnEquip and _OnEquip(inst, data, ...)
+    UMUpvalueHacker.SetUpvalue(PlayerController.Activate, OnEquip, "OnEquip")
 end
 
-local _OnUnequip
-local function OnUnequip(inst, data, ...)
-    if data.eslot == EQUIPSLOTS.HANDS then
-        local self = inst.components.playercontroller
-        if self.reticule and self.reticule.inst:HasTag("um_killreticuleonequipchange") then
-            if inst.HUD and inst.HUD:IsSpellWheelOpen() then inst.HUD:CloseSpellWheel() end
-            self.reticule:DestroyReticule()
-            self.reticule = nil
+local _OnUnequip = UMUpvalueHacker.TryGetUpvalue(PlayerController.Activate, "OnUnequip")
+if _OnUnequip then
+    local function OnUnequip(inst, data, ...)
+        if data.eslot == EQUIPSLOTS.HANDS then
+            local self = inst.components.playercontroller
+            if self.reticule and self.reticule.inst:HasTag("um_killreticuleonequipchange") then
+                if inst.HUD and inst.HUD:IsSpellWheelOpen() then inst.HUD:CloseSpellWheel() end
+                self.reticule:DestroyReticule()
+                self.reticule = nil
+            end
         end
+        return _OnUnequip(inst, data, ...)
     end
-    return _OnUnequip and _OnUnequip(inst, data, ...)
+    UMUpvalueHacker.SetUpvalue(PlayerController.Activate, OnUnequip, "OnUnequip")
 end
-
-env.AddComponentPostInit("playercontroller", function(self)
-    if not _OnEquip then
-        _OnEquip = UpvalueHacker.GetUpvalue(self.Activate, "OnEquip")
-        UpvalueHacker.SetUpvalue(self.Activate, OnEquip, "OnEquip")
-        _OnUnequip = UpvalueHacker.GetUpvalue(self.Activate, "OnUnequip")
-        UpvalueHacker.SetUpvalue(self.Activate, OnUnequip, "OnUnequip")
-    end
-end)

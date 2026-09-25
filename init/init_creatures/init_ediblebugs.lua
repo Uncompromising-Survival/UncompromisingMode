@@ -17,7 +17,7 @@ local function IsEdibleToTarget(inst, target)
         and (not target:HasTag("player") or target.prefab == "waxwell" or target.replica.inventory and target.replica.inventory:EquipHasTag("um_insect_eater"))
 end
 
-local function AddEdibles(prefab)
+for _, prefab in pairs(EDIBLES) do
     AddPrefabPostInit(prefab, function(inst)
         inst.UMIsEdibleToTarget = IsEdibleToTarget
 
@@ -27,10 +27,6 @@ local function AddEdibles(prefab)
         edible.sanityvalue = 10
         edible.foodtype = FOODTYPE.INSECT
     end)
-end
-
-for k, v in pairs(EDIBLES) do
-    AddEdibles(v)
 end
 
 AddComponentPostInit("eater", function(self)
@@ -48,9 +44,9 @@ local function IsAnActiveItemAndMounted(inst, doer)
     return mount and (isactiveitem or (not right and doer.components.playercontroller.isclientcontrollerattached)) and mount
 end
 
-local UpvalueHacker = require("tools/upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 AddSimPostInit(function()
-    local COMPONENT_ACTIONS = UpvalueHacker.GetUpvalue(GLOBAL.EntityScript.CollectActions, "COMPONENT_ACTIONS")
+    local COMPONENT_ACTIONS = UMUpvalueHacker.GetUpvalue(GLOBAL.EntityScript.CollectActions, "COMPONENT_ACTIONS")
     if COMPONENT_ACTIONS then
         local USEITEM, INVENTORY = COMPONENT_ACTIONS.USEITEM, COMPONENT_ACTIONS.INVENTORY
         if USEITEM then

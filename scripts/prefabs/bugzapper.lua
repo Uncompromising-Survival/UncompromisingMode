@@ -53,12 +53,13 @@ local function turnoff(inst)
         inst.components.weapon:RemoveElectric()
         inst.components.fueled:StopConsuming()
     end
+
     inst.SoundEmitter:PlaySound("dontstarve/wilson/lantern_off")
 
     if inst.sparktask ~= nil then
         inst.sparktask:Cancel()
+        inst.sparktask = nil
     end
-    inst.sparktask = nil
 end
 
 local function OnRemove(inst)
@@ -123,59 +124,25 @@ local function ontakefuel(inst, owner)
     end
 end
 
---------------------------------------------------------------------------
-local bugzapper_range = 4
+local function GetDamage(inst, attacker, target)
+    return 25 + (not (inst.components.fueled and inst.components.fueled:IsEmpty())
+        and (target:HasTag("insect") and 20 or target:HasAnyTag("spider", "hoodedwidow") and 10) or 0)
+end
 
 local function onattack(inst, attacker, target)
-    if target ~= nil and target:IsValid() and attacker ~= nil and attacker:IsValid() and
-        not inst.components.fueled:IsEmpty() then
-        if target:HasTag("insect") then
-            if not target.components.health:IsDead() then
-                target.components.combat:GetAttacked(attacker, 30, nil)
-                --target.components.health:DoDelta(-30, false, attacker)
+    if target and target:IsValid() and target:HasAnyTag("insect", "spider", "hoodedwidow")
+        and attacker and attacker:IsValid() and not inst.components.fueled:IsEmpty() then
+
+        SpawnPrefab("electrichitsparks"):AlignToTarget(target, attacker, true)
+
+        local x, y, z = target.Transform:GetWorldPosition()
+        for i, v in ipairs(TheSim:FindEntities(x, y, z, 4, {"_combat"}, {"INLIMBO", "player", "notarget", "noattack"}, {"insect", "spider", "hoodedwidow"})) do
+            if v ~= inst and v ~= target and v:IsValid()
+                and not (v.components.health and v.components.health:IsDead()) and attacker.components.combat:CanTarget(v) then
+                --v.components.health:DoDelta( -10, false, attacker, false, attacker)
+                v.components.combat:GetAttacked(attacker, 5, nil)
+                SpawnPrefab("electrichitsparks"):AlignToTarget(v, attacker, true)
             end
-
-            SpawnPrefab("electrichitsparks"):AlignToTarget(target, attacker, true)
-
-            local x, y, z = target.Transform:GetWorldPosition()
-            local ents = TheSim:FindEntities(x, y, z, bugzapper_range, nil, { "INLIMBO", "player", "abigail" },
-                { "insect", "spider", "hoodedwidow" })
-
-            for i, v in ipairs(ents) do
-                if v ~= inst and v ~= target and v:IsValid() and not v:IsInLimbo() then
-                    if (v.components.health ~= nil and not v.components.health:IsDead()) and not v.sg:HasStateTag("noattack") then
-                        --v.components.health:DoDelta( -10, false, attacker, false, attacker)
-                        v.components.combat:GetAttacked(attacker, 5, nil)
-                        SpawnPrefab("electrichitsparks"):AlignToTarget(v, attacker, true)
-                    end
-                end
-            end
-
-            return
-        end
-
-        if (target:HasTag("spider") or target:HasTag("hoodedwidow")) then
-            if not target.components.health:IsDead() then
-                target.components.combat:GetAttacked(attacker, 15, nil)
-            end
-
-            SpawnPrefab("electrichitsparks"):AlignToTarget(target, attacker, true)
-
-            local x, y, z = target.Transform:GetWorldPosition()
-            local ents = TheSim:FindEntities(x, y, z, bugzapper_range, nil, { "INLIMBO", "player", "abigail" },
-                { "insect", "spider", "hoodedwidow" })
-
-            for i, v in ipairs(ents) do
-                if v ~= inst and v ~= target and v:IsValid() and not v:IsInLimbo() then
-                    if (v.components.health ~= nil and not v.components.health:IsDead()) and v.components.combat ~= nil and not v.sg:HasStateTag("noattack") then
-                        --v.components.health:DoDelta( -10, false, attacker, false, attacker)
-                        v.components.combat:GetAttacked(attacker, 5, nil)
-                        SpawnPrefab("electrichitsparks"):AlignToTarget(v, attacker, true)
-                    end
-                end
-            end
-
-            return
         end
     end
 end
@@ -193,9 +160,11 @@ local function OnBatteryUsed(inst, battery, mult)
     local newpercent = math.clamp(inst.components.fueled:GetPercent() + mult, 0, 1)
     inst.components.fueled:SetPercent(newpercent)
     SpawnElectricHitSparks(inst, battery, true)
+    if not inst.sparktask then turnon(inst) end
 
     return true
 end
+
 local function fn()
     local inst = CreateEntity()
 
@@ -222,12 +191,13 @@ local function fn()
     end
 
     inst:AddComponent("inspectable")
-    --[[
-    inst:AddComponent("burnable")
+
+    --[[inst:AddComponent("burnable")
     inst.components.burnable.canlight = false
     inst.components.burnable.fxprefab = nil]]
+
     inst:AddComponent("weapon")
-    inst.components.weapon:SetDamage(25)
+    inst.components.weapon:SetDamage(GetDamage)
     inst.components.weapon:SetOnAttack(onattack)
 
     inst:AddComponent("inventoryitem")

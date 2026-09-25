@@ -274,7 +274,7 @@ end
     end
 end]]
 
-local function FindTarget(inst, radius)
+--[[local function FindTarget(inst, radius)
     return FindEntity(
         inst,
         SpringCombatMod(radius),
@@ -287,27 +287,25 @@ local function FindTarget(inst, radius)
         {"spiderwhisperer", "spiderdisguise", "INLIMBO"}
     )
 end
---[[
 local function WarriorRetarget(inst)
     return FindTarget(inst, TUNING.SPIDER_WARRIOR_TARGET_DIST)
-end--]]
+end]]
 
 env.AddPrefabPostInit("spider", function(inst)
     inst:AddTag("spider_regular")
 
     if not TheWorld.ismastersim then return end
 
-    local attackrangemod = TUNING.DSTU.REGSPIDERJUMP == "lesser" and .5 or 1
-    local hitrangemod = TUNING.DSTU.REGSPIDERJUMP == "lesser" and .8 or 1
-	if inst.components.combat and TUNING.DSTU.REGSPIDERJUMP then
-        inst.components.combat:SetRange(TUNING.SPIDER_WARRIOR_ATTACK_RANGE * attackrangemod, TUNING.SPIDER_WARRIOR_HIT_RANGE * hitrangemod)
-		--inst.components.combat:SetRetargetFunction(2, WarriorRetarget)
-	end
+    local combat = inst.components.combat
+    if TUNING.DSTU.REGSPIDERJUMP and combat then
+        combat.attackrange = TUNING.SPIDER_WARRIOR_ATTACK_RANGE
+        --combat:SetRetargetFunction(2, WarriorRetarget)
+    end
 
-   --[[ inst:AddComponent("playerprox")
-    inst.components.playerprox:SetDist(5, 13) --set specific values
-    inst.components.playerprox:SetOnPlayerNear(onnear)
-    inst.components.playerprox:SetPlayerAliveMode(inst.components.playerprox.AliveModes.AliveOnly)]]
+   --[[local playerprox = inst:AddComponent("playerprox")
+    playerprox:SetDist(5, 13) --set specific values
+    playerprox:SetOnPlayerNear(onnear)
+    playerprox:SetPlayerAliveMode(playerprox.AliveModes.AliveOnly)]]
 
     if TUNING.DSTU.MOON_TRANSFORMATIONS then
         inst:WatchWorldState("isfullmoon", OnFullMoon)
