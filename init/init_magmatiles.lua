@@ -292,26 +292,21 @@ function Map:CanDeployBridgeAtPointWithFilter(pt, inst, mouseover, tilefilterfn,
 end
 
 --caching flingos and crystaleyezers
-env.AddPrefabPostInit("firesuppressor", function(inst)
-    if not TheWorld.ismastersim then return end
+local firefighters = {
+    ["firesuppressor"] = "flingos",
+    ["deerclopseyeball_sentryward"] = "crystaleyezers"
+}
 
-    if TheWorld.components.um_magmamanager ~= nil then
-        TheWorld.components.um_magmamanager:RegisterFlingomatic(inst)
-    end
-
-    inst:ListenForEvent("onremove", function(_inst)
-        TheWorld.components.um_magmamanager:UnregisterFlingomatic(_inst)
+for name, type in pairs(firefighters) do
+    env.AddPrefabPostInit(name, function(inst)
+        if not TheWorld.ismastersim then return end
+        local um_magmamanager = TheWorld.components.um_magmamanager
+        if um_magmamanager then
+            um_magmamanager:RegisterFireFighter(inst, type)
+            inst:ListenForEvent("onremove", function(_inst)
+                local um_magmamanager = TheWorld.components.um_magmamanager
+                if um_magmamanager then um_magmamanager:UnregisterFireFighter(_inst, type) end
+            end)
+        end
     end)
-end)
-
-env.AddPrefabPostInit("deerclopseyeball_sentryward", function(inst)
-    if not TheWorld.ismastersim then return end
-
-    if TheWorld.components.um_magmamanager ~= nil then
-        TheWorld.components.um_magmamanager:RegisterCrystaleyezer(inst)
-    end
-
-    inst:ListenForEvent("onremove", function(_inst)
-        TheWorld.components.um_magmamanager:UnregisterCrystaleyezer(_inst)
-    end)
-end)
+end
