@@ -91,7 +91,7 @@ local function GetAttackedPostInit(self, fn)
         local furious = gem_enchantable_tool and gem_enchantable_tool:GetEnchantmentTier("um_gemologypurplegem1")
         if furious then
             self.inst:DoTaskInTime(0, function(inst)
-                self.inst:AddDebuff("buff_furious" .. furious, "buff_furious" .. furious)
+                self.inst:AddDebuff("buff_furious"..furious, "buff_furious"..furious)
             end)
             UMGemologyFns.DamageGem("purplegem1", tool, TUNING.DSTU.GEM_USES[furious])
         end
