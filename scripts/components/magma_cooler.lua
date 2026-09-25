@@ -1,0 +1,5 @@
+local MagmaCooler = Class(function(self, inst)
+    self.inst = inst
+end)
+
+return MagmaCooler

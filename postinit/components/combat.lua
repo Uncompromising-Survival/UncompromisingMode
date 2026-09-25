@@ -48,7 +48,7 @@ local function GetAttackedPostInit(self, fn)
         if TUNING.DSTU.BEEFALO_NERF and damageredirecttarget and damageredirecttarget.components.rideable and redirect_combat then
             if self.inst.components.health and not self.inst.components.health:IsDead() then
                 redirect_combat:GetAttacked(attacker, damage, weapon, stimuli)
-                return _GetAttacked(self, attacker, damage / 2, weapon, "beefalo_half_damage", ...) -- added new stimuli to prevent Stackoverflow
+                return _GetAttackedOrInternal(self, attacker, damage / 2, weapon, "beefalo_half_damage", ...) -- added new stimuli to prevent Stackoverflow
             else
                 redirect_combat:GetAttacked(attacker, damage, weapon, stimuli)
             end

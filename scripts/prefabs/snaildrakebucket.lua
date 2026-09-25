@@ -1,28 +1,28 @@
 local assets =
 {
     Asset("ANIM", "anim/snaildrakebucket.zip"),
-    
+
     Asset("ATLAS", "images/inventoryimages/snaildrakebucket_empty.xml"),
     Asset("IMAGE", "images/inventoryimages/snaildrakebucket_empty.tex"),
-    
+
     Asset("ATLAS", "images/inventoryimages/snaildrakebucket_lava_low.xml"),
     Asset("IMAGE", "images/inventoryimages/snaildrakebucket_lava_low.tex"),
-    
+
     Asset("ATLAS", "images/inventoryimages/snaildrakebucket_lava_med.xml"),
     Asset("IMAGE", "images/inventoryimages/snaildrakebucket_lava_med.tex"),
-    
+
     Asset("ATLAS", "images/inventoryimages/snaildrakebucket_lava_full.xml"),
     Asset("IMAGE", "images/inventoryimages/snaildrakebucket_lava_full.tex"),
-    
+
     Asset("ATLAS", "images/inventoryimages/snaildrakebucket_water_low.xml"),
     Asset("IMAGE", "images/inventoryimages/snaildrakebucket_water_low.tex"),
-    
+
     Asset("ATLAS", "images/inventoryimages/snaildrakebucket_water_med.xml"),
     Asset("IMAGE", "images/inventoryimages/snaildrakebucket_water_med.tex"),
-    
+
     Asset("ATLAS", "images/inventoryimages/snaildrakebucket_water_full.xml"),
     Asset("IMAGE", "images/inventoryimages/snaildrakebucket_water_full.tex"),
-    
+
 }
 
 SetSharedLootTable("snaildrakebucket",
@@ -30,10 +30,10 @@ SetSharedLootTable("snaildrakebucket",
         { 'slurtle_shellpieces', 1 },
         { 'slurtle_shellpieces', 0.5 },
     })
-        
-local function UpdateInvAndAnim(inst,name)
-    inst.components.inventoryitem.atlasname = resolvefilepath("images/inventoryimages/snaildrakebucket_"..name..".xml")
-    inst.components.inventoryitem:ChangeImageName("snaildrakebucket_"..name)
+
+local function UpdateInvAndAnim(inst, name)
+    inst.components.inventoryitem.atlasname = resolvefilepath("images/inventoryimages/snaildrakebucket_" .. name .. ".xml")
+    inst.components.inventoryitem:ChangeImageName("snaildrakebucket_" .. name)
     inst.AnimState:PlayAnimation(name)
 end
 
@@ -41,17 +41,17 @@ local function ChangeSprite(inst)
     local name
     if inst.uses == 0 then
         name = "empty"
-        UpdateInvAndAnim(inst,name)
+        UpdateInvAndAnim(inst, name)
     elseif inst.uses == 1 then
-        name = inst.contains.."_low"
-        UpdateInvAndAnim(inst,name)
+        name = inst.contains .. "_low"
+        UpdateInvAndAnim(inst, name)
     elseif inst.uses == 2 then
-        name = inst.contains.."_med"
-        UpdateInvAndAnim(inst,name)
+        name = inst.contains .. "_med"
+        UpdateInvAndAnim(inst, name)
     elseif inst.uses == 3 then
-        name = inst.contains.."_full"
-        UpdateInvAndAnim(inst,name)
-    end    
+        name = inst.contains .. "_full"
+        UpdateInvAndAnim(inst, name)
+    end
 end
 
 local ignoretags = { "FX", "DECOR", "INLIMBO", "burnt" }
@@ -66,10 +66,9 @@ local function SpreadProtectionAtPoint(x, y, z, dist) -- This is taken from Wate
             if v.components.burnable:IsBurning() or v.components.burnable:IsSmoldering() then
                 v.components.burnable:Extinguish(true, TUNING.WATERINGCAN_EXTINGUISH_HEAT_PERCENT)
             end
-
         end
         if v.components.temperature ~= nil then
-            v.components.temperature:SetTemperature(v.components.temperature:GetCurrent() - TUNING.WATERINGCAN_TEMP_REDUCTION/10)
+            v.components.temperature:SetTemperature(v.components.temperature:GetCurrent() - TUNING.WATERINGCAN_TEMP_REDUCTION / 10)
         end
         if v.components.moisture ~= nil then
             local waterproofness = v.components.moisture:GetWaterproofness()
@@ -80,7 +79,7 @@ local function SpreadProtectionAtPoint(x, y, z, dist) -- This is taken from Wate
     end
 
     -- Goo
-    local ents = TheSim:FindEntities(x, y, z, 2*dist, {"um_washable_goo"})
+    local ents = TheSim:FindEntities(x, y, z, 2 * dist, { "um_washable_goo" })
     for i, v in ipairs(ents) do
         if v.prefab == "ratpoison" then
             v:Remove()
@@ -92,10 +91,18 @@ local function SpreadProtectionAtPoint(x, y, z, dist) -- This is taken from Wate
     if TheWorld.components.farming_manager ~= nil then
         TheWorld.components.farming_manager:AddSoilMoistureAtPoint(x, y, z, 100)
     end
-    for _x = -4,4 do
-        for _z = -4,4 do
+    for _x = -4, 4 do
+        for _z = -4, 4 do
             if TheWorld.components.farming_manager ~= nil then
-                TheWorld.components.farming_manager:AddSoilMoistureAtPoint(x+_x, y, z+_z, 100)
+                TheWorld.components.farming_manager:AddSoilMoistureAtPoint(x + _x, y, z + _z, 100)
+            end
+
+            if TheWorld.components.um_magmamanager ~= nil then
+                local cooled = TheWorld.components.um_magmamanager:CoolDownMagmaTile(x + _x, z + _z, TUNING.DSTU.MAGMATILE_DEFAULT_COOL_TIME)
+                if cooled then
+                    local tx, ty, tz = TheWorld.Map:GetTileCenterPoint(TheWorld.Map:GetTileCoordsAtPoint(x + _x, y, z + _z))
+                    SpawnPrefab("slow_steam_fx" .. math.random(1, 5)).Transform:SetPosition(tx + (math.random(-2, 2)*math.random()), 0, tz + (math.random(-2, 2)*math.random()))
+                end
             end
         end
     end
@@ -109,13 +116,13 @@ local function ondeploy(inst, pt, deployer)
         effect.persists = false
     elseif inst.contains == "water" then
         effect = SpawnPrefab("mudpuddle_splash")
-        SpreadProtectionAtPoint(pt.x,pt.y,pt.z,4)
-        effect.Transform:SetScale(2,1,2)
+        SpreadProtectionAtPoint(pt.x, pt.y, pt.z, 4)
+        effect.Transform:SetScale(2, 1, 2)
     end
     if effect then
-        effect.Transform:SetPosition(pt.x,pt.y,pt.z)
+        effect.Transform:SetPosition(pt.x, pt.y, pt.z)
     end
-    
+
     inst.uses = inst.uses - 1
     if inst.uses == 0 then
         inst.components.fueled:StopConsuming()
@@ -124,17 +131,15 @@ local function ondeploy(inst, pt, deployer)
     ChangeSprite(inst)
 end
 
-
 local function CanDeploy(inst, pt, mouseover, deployer, rot)
-    return true
+    return TheWorld.Map:IsPassableAtPoint(pt:Get()) or TheWorld.Map:GetTileAtPoint(pt:Get()) == WORLD_TILES.UM_MAGMA_LAVAMOLTEN
 end
 
 local function EnableDeploy(inst)
     inst:AddComponent("deployable")
     inst.components.deployable.ondeploy = ondeploy
     inst.components.deployable.keep_in_inventory_on_deploy = true
-    inst.components.deployable.mode = DEPLOYMODE.ANYWHERE
-    --inst._custom_candeploy_fn = CanDeploy
+    inst.components.deployable.mode = DEPLOYMODE.CUSTOM
     inst.components.deployable:SetDeploySpacing(DEPLOYSPACING.NONE)
 end
 
@@ -156,7 +161,7 @@ end
 local function OnFill(inst, from_object)
     inst.uses = 3
     inst.components.fueled:StartConsuming()
-     
+
     if not inst.components.deployable then
         EnableDeploy(inst)
     end
@@ -198,7 +203,7 @@ local function ExplodeContents(inst)
             if sludge.removetask then
                 sludge.removetask:Cancel()
             end
-            sludge.removetask = sludge:DoTaskInTime(4*TUNING.SNAILDRAKE_SLIME_SLUDGE_DURATION, inst.Remove) -- LONGER
+            sludge.removetask = sludge:DoTaskInTime(4 * TUNING.SNAILDRAKE_SLIME_SLUDGE_DURATION, inst.Remove) -- LONGER
         end
     end
     inst.components.lootdropper:DropLoot()
@@ -206,7 +211,7 @@ local function ExplodeContents(inst)
     inst:Remove()
 end
 
-local function EvaluateFueledRate(inst,iswinter)
+local function EvaluateFueledRate(inst, iswinter)
     if inst.contains and inst.contains == "water" and inst.uses ~= 0 then
         inst.components.fueled.rate = iswinter and 20 or 1
     end
@@ -224,14 +229,14 @@ local function getstatus(inst)
     end
 end
 
-
 local function fn()
     local inst = CreateEntity()
+
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddNetwork()
     inst.entity:AddSoundEmitter()
-    
+
     MakeInventoryPhysics(inst)
 
     inst.AnimState:SetBank("snaildrakebucket")
@@ -244,52 +249,114 @@ local function fn()
 
     MakeInventoryFloatable(inst, "small", 0.2, 0.80)
 
+    inst._custom_candeploy_fn = CanDeploy
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
         return inst
     end
 
-    inst:AddComponent("inspectable")
-    inst.components.inspectable.getstatus = getstatus
+    local inspectable = inst:AddComponent("inspectable")
+    inspectable.getstatus = getstatus
 
-    inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = resolvefilepath("images/inventoryimages/snaildrakebucket_empty.xml")
-    inst.components.inventoryitem:ChangeImageName("snaildrakebucket_empty")
+    local inventoryitem = inst:AddComponent("inventoryitem")
+    inventoryitem.atlasname = resolvefilepath("images/inventoryimages/snaildrakebucket_empty.xml")
+    inventoryitem:ChangeImageName("snaildrakebucket_empty")
 
-    inst:AddComponent("lootdropper")
-    inst.components.lootdropper:SetChanceLootTable("snaildrakebucket")
+    local lootdropper = inst:AddComponent("lootdropper")
+    lootdropper:SetChanceLootTable("snaildrakebucket")
 
-    inst:AddComponent("workable")
-    inst.components.workable:SetWorkAction(ACTIONS.HAMMER)
-    inst.components.workable:SetWorkLeft(1)
-    inst.components.workable:SetOnFinishCallback(ExplodeContents)
-    inst.components.workable.savestate = false
+    local workable = inst:AddComponent("workable")
+    workable:SetWorkAction(ACTIONS.HAMMER)
+    workable:SetWorkLeft(1)
+    workable:SetOnFinishCallback(ExplodeContents)
+    workable.savestate = false
 
-    inst:AddComponent("fillable")
-    inst.components.fillable.overrideonfillfn = OnFill
-    inst.components.fillable.showoceanaction = true
-    inst.components.fillable.acceptsoceanwater = false
-    inst.components.fillable.oceanwatererrorreason = "UNSUITABLE_FOR_PLANTS"
+    local fillable = inst:AddComponent("fillable")
+    fillable.overrideonfillfn = OnFill
+    fillable.showoceanaction = true
+    fillable.acceptsoceanwater = false
+    fillable.oceanwatererrorreason = "UNSUITABLE_FOR_PLANTS"
 
     inst.uses = 0 -- Not using finiteuses because we'll be using durability for the shell itself, the image will change to represent how much liquid is in it.
-    
-    inst:AddComponent("fueled")
-    inst.components.fueled.fueltype = FUELTYPE.USAGE
-    inst.components.fueled:InitializeFuelLevel(8*60*70) -- Standard rate is a whole year
-    inst.components.fueled:SetDepletedFn(ExplodeContents)
-    inst.components.fueled.no_sewing = true
-    
+
+    local fueled = inst:AddComponent("fueled")
+    fueled.fueltype = FUELTYPE.USAGE
+    fueled:InitializeFuelLevel(8 * 60 * 70) -- Standard rate is a whole year
+    fueled:SetDepletedFn(ExplodeContents)
+    fueled.no_sewing = true
+
     inst:WatchWorldState("iswinter", EvaluateFueledRate) -- Dynamic fuel consumption rate for shell w/ water in it during winter
 
     inst.OnSave = OnSave
     inst.OnLoad = OnLoad
-        
+
     MakeHauntableLaunch(inst)
     --------------------------------------------------------------
 
     return inst
 end
 
+local function CreateGrid()
+    local inst = CreateEntity()
+
+    inst:AddTag("CLASSIFIED")
+    inst:AddTag("NOCLICK")
+    inst:AddTag("placer")
+    --[[Non-networked entity]]
+    inst.entity:SetCanSleep(false)
+    inst.persists = false
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+
+    inst.AnimState:SetBank("gridplacer")
+    inst.AnimState:SetBuild("gridplacer")
+    inst.AnimState:PlayAnimation("anim", true)
+    inst.AnimState:SetLightOverride(1)
+    inst.AnimState:SetLayer(LAYER_BACKGROUND)
+    inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
+
+    return inst
+end
+
+local function addtional_placer_fn(inst)
+    inst.deploy_helpers = {}
+
+    for i = -1, 1 do
+        for j = -1, 1 do
+            print("adding placers for pos", i, j)
+            local placer = CreateGrid()
+            placer:Hide()
+            placer.AnimState:SetMultColour(0, 0, 1, 1)
+            inst.deploy_helpers[{ x = i, z = j }] = placer
+        end
+    end
+
+    inst:DoPeriodicTask(0, function(inst)
+        for pos, placer in pairs(inst.deploy_helpers) do
+            local x, y, z = inst.Transform:GetWorldPosition()
+            local tx, tz = TheWorld.Map:GetTileCoordsAtPoint(x, 0, z)
+            local tcx, tcy, tcz = TheWorld.Map:GetTileCenterPoint(tx + pos.x, tz + pos.z)
+
+            local tile = TheWorld.Map:GetTile(tx + pos.x, tz + pos.z)
+            if tile == WORLD_TILES.UM_MAGMA_LAVAMOLTEN or tile == WORLD_TILES.UM_MAGMA_LAVACOOLED or tile == WORLD_TILES.FARMING_SOIL then
+                placer:Show()
+            else
+                placer:Hide()
+            end
+
+            placer.Transform:SetPosition(tcx, 0, tcz)
+        end
+    end)
+
+    inst:ListenForEvent("onremove", function(inst)
+        for k, v in pairs(inst.deploy_helpers) do
+            v:Remove()
+        end
+    end)
+end
+
 return Prefab("snaildrakebucket", fn, assets),
-    MakePlacer("snaildrakebucket_placer", nil, nil, nil)
+    MakePlacer("snaildrakebucket_placer", nil, nil, nil, nil, nil, nil, nil, nil, nil, addtional_placer_fn)

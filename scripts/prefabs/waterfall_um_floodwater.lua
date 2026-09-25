@@ -61,6 +61,7 @@ end
 
 local function EnableSound(inst, enable)
     -- TODO (HALF): Add your sound here, losers :)
+    -- (Atobá) We use Klei's waterfall sound system instead :) 
     -- if enable then
     --     if not inst.SoundEmitter:PlayingSound("WATERFALL") then
     -- 	    inst.SoundEmitter:PlaySound("dontstarve_DLC003/amb/Waterfall/LP_1", "WATERFALL")

@@ -330,59 +330,34 @@ AddTile(
     { --minimap_tile_def 5
         name = "hoodedmoss.tex",
         atlas = "ancienthoodedturf.xml",
-        noise_texture = "mini_ground_xenobasalt.tex"
+        noise_texture = "mini_um_magmamolten.tex"
     }
 )
 
 AddTile(
-    "UM_MAGMA_LAVATEMP", --tile_name 1
-    "LAND",              --tile_range 2
-    {                    --tile_data 3
-        ground_name = "magma_rock",
-    },
-    {
-        name = "rocky_clear",
-        noise_texture = "ground_magma_rock_lavaborder.tex", --Gearless's art
-        runsound = "dontstarve/movement/run_dirt",
-        walksound = "dontstarve/movement/walk_dirt",
-        snowsound = "dontstarve/movement/run_ice",
-        mudsound = "dontstarve/movement/run_mud",
-        colors = GROUND_OCEAN_COLOR
-    },
-    { --Placeholder minimap
-        name = "hoodedmoss.tex",
-        atlas = "ancienthoodedturf.xml",
-        noise_texture = "mini_um_magma.tex"
-    }
-)
-
-
-AddTile(
-    "UM_MAGMA_LAVABORDER", --tile_name 1
+    "UM_MAGMA_LAVACOOLED", --tile_name 1
     "LAND",                --tile_range 2
     {                      --tile_data 3
         ground_name = "magma_rock",
     },
     {
         name = "rocky_clear",
-        noise_texture = "ground_magma_rock_lavaborder.tex", --Gearless's art
+        noise_texture = "ground_magma_cooled.tex", --Gearless's art
         runsound = "dontstarve/movement/run_dirt",
         walksound = "dontstarve/movement/walk_dirt",
         snowsound = "dontstarve/movement/run_ice",
         mudsound = "dontstarve/movement/run_mud",
-        colors = GROUND_OCEAN_COLOR
+        colors = GROUND_OCEAN_COLOR,
+        cannotbedug = true,
+        istemptile = true,
     },
-    { --Placeholder minimap
+    { 
         name = "hoodedmoss.tex",
         atlas = "ancienthoodedturf.xml",
         noise_texture = "mini_um_magma.tex"
-    },
-    { --Placeholder turf
-        name = "magma_rock",
-        anim = "magma_rock",
-        bank_build = "turf_archives"
     }
 )
+
 
 AddTile(
     "UM_FLOORTOX", --tile_name 1
@@ -559,14 +534,6 @@ local function GetTileForGrottoFloodHeavySandy(noise)
     return WORLD_TILES.PEBBLEBEACH
 end
 
-local function GetTileForMoltenMagma(noise)
-    if noise < 0.75 then
-        return WORLD_TILES.UM_MAGMA_LAVATEMP
-    end
-
-    return WORLD_TILES.UM_MAGMA
-end
-
 
 AddTile("UM_HOTSPRING", "NOISE")
 AddTile("UM_HOTSPRING_IA", "NOISE")
@@ -603,9 +570,6 @@ NoiseTileFunctions[WORLD_TILES.UM_MAGMA_FUMAROLE] = GetTileForMagmaRole
 NoiseTileFunctions[WORLD_TILES.UM_MAGMA_MIX] = GetTileForMagmaMix
 
 NoiseTileFunctions[WORLD_TILES.UM_MAGMAVOLCANO_IA] = GetTileForVolcanoMagma
-
-NoiseTileFunctions[WORLD_TILES.UM_MAGMA_MOLTEN] = GetTileForMoltenMagma
-
 
 NoiseTileFunctions[WORLD_TILES.UM_GROTTO_PATCHY] = GetTileForGrottoPatchy
 NoiseTileFunctions[WORLD_TILES.UM_GROTTO_LIGHTFLOODED] = GetTileForGrottoFloodLight

@@ -7,8 +7,7 @@ local easing = require("easing")
 local function OnNightmarePhaseChanged(inst, phase)
     if phase == "warn" then
         if inst.trepspawners ~= nil then
-            local chooseone = #inst.trepspawners > 1 and math.random(1, #inst.trepspawners)
-                or 1
+            local chooseone = #inst.trepspawners > 1 and math.random(1, #inst.trepspawners) or 1
 
             for i, v in ipairs(inst.trepspawners) do
                 if v ~= nil and i == chooseone then
@@ -20,23 +19,9 @@ local function OnNightmarePhaseChanged(inst, phase)
     end
 end
 
-local UM_LAVA_WAVE_DATA = {
-    texture = resolvefilepath("images/um_lava_wave.tex"),
-    shader = resolvefilepath("shaders/waves.ksh"),
-    params = { 13.5, 2.5, -1 },
-    size = { 80, 3.5 },
-    motion = { 3, 0.5, 0.25 },
-    radius = 20,
-}
+local UM_LAVA_WAVE_DATA = { texture = resolvefilepath("images/um_lava_wave.tex"), shader = resolvefilepath("shaders/waves.ksh"), params = { 13.5, 2.5, -1 }, size = { 80, 3.5 }, motion = { 3, 0.5, 0.25 }, radius = 20 }
 
-local UM_FLOODWATER_WAVE_DATA = {
-    texture = resolvefilepath("images/wave.tex"),
-    shader = resolvefilepath("shaders/waves.ksh"),
-    params = { 13.5, 2.5, -1 },
-    size = { 80, 3.5 },
-    motion = { 3, 0.5, 0.25 },
-    radius = 20,
-}
+local UM_FLOODWATER_WAVE_DATA = { texture = resolvefilepath("images/wave.tex"), shader = resolvefilepath("shaders/waves.ksh"), params = { 13.5, 2.5, -1 }, size = { 80, 3.5 }, motion = { 3, 0.5, 0.25 }, radius = 20 }
 
 env.AddPrefabPostInit("cave", function(inst)
     if not TheNet:IsDedicated() then
@@ -65,4 +50,70 @@ env.AddPrefabPostInit("cave", function(inst)
         inst:WatchWorldState("nightmarephase", OnNightmarePhaseChanged)
         OnNightmarePhaseChanged(inst, TheWorld.state.nightmarephase, true)
     end
+
+    -- quaker stuff
+    inst:DoTaskInTime(0, function()
+        if inst.net ~= nil then
+            inst.net:ListenForEvent("startquake", function(_inst) -- we still want the old world, not network.
+                local count = 0
+
+                if inst.magma_outcrops ~= nil then
+                    for k, v in pairs(inst.magma_outcrops) do
+                        if v ~= nil and v.StartGrowing ~= nil and v.components.timer ~= nil and not v.components.timer:TimerExists("grow") then
+                            count = count + 1
+                            v:DoTaskInTime(math.random(5, 10), function(inst)
+                                inst:StartGrowing()
+                            end)
+                        end
+                    end
+                else
+                    inst.magma_outcrops = {}
+                end
+
+                if inst.components.um_magmamanager ~= nil then
+                    if count < 10 then
+                        local valid_tiles = inst.components.um_magmamanager.magma_tiles
+                        local tries = 0
+                        for i = 1, math.random(1, 3) do
+                            tries = tries + 1
+                            if tries > 10 then
+                                break
+                            end
+
+                            local valid = true
+                            local pt = FindNearbyLand(Vector3(x, 0, z), 20)
+
+                            if not pt then
+                                valid = false
+                            else
+                                local point = valid_tiles[math.random(#valid_tiles)]
+                                local x, z = point.x, point.z
+                                local nearby_ents = TheSim:FindEntities(x, 0, z, 1, nil, { "FX", "INLIMBO", "DECOR", "NOCLICK", "NOBLOCK" })
+                                local S = TheWorld.Map:IsLandTileAtPoint(pt.x + 2, 0, pt.z)
+                                local N = TheWorld.Map:IsLandTileAtPoint(pt.x - 2, 0, pt.z)
+                                local E = TheWorld.Map:IsLandTileAtPoint(pt.x, 0, pt.z + 2)
+                                local W = TheWorld.Map:IsLandTileAtPoint(pt.x, 0, pt.z - 2)
+
+                                if pt.x == 0 and pt.z == 0 or #nearby_ents > 0 or not (S and N and E and W) then
+                                    valid = false
+                                end
+                            end
+
+                            if valid then
+                                inst:DoTaskInTime(math.random(5, 10), function(inst)
+                                    local new_outcrop = SpawnPrefab("um_magmastone_outcrop")
+                                    new_outcrop.Transform:SetPosition(pt.x, 0, pt.z)
+                                    new_outcrop.AnimState:PlayAnimation("outcrop_grow")
+                                    new_outcrop.AnimState:PushAnimation("outcrop_idle", true)
+                                end)
+                            else
+                                -- retry.
+                                i = i - 1
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end)
 end)

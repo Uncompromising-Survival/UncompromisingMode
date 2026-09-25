@@ -10,7 +10,7 @@ local function OnTerraForm(inst, data)
         SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "OnTerraform"), nil, ZipAndEncodeString(data))
         if inst.components.um_localtilewatcher ~= nil then
             inst.components.um_localtilewatcher:OnTerraform(data)
-        end 
+        end
     end
 end
 
@@ -34,6 +34,8 @@ env.AddPrefabPostInit("world", function(inst)
 
         inst:AddComponent("um_waterfallmanager")
         inst.components.um_waterfallmanager:RegisterWaterfallTile(WORLD_TILES.UM_MAGMA_LAVAMOLTEN, "waterfall_lavamolten")
+        inst.components.um_waterfallmanager:RegisterWaterfallTile(WORLD_TILES.UM_MAGMA_LAVACOOLED, "waterfall_lavamolten")
+
         inst.components.um_waterfallmanager:RegisterWaterfallTile(WORLD_TILES.UM_FLOODWATER_GROTTO, "waterfall_um_floodwater")
     end
 
@@ -50,7 +52,6 @@ env.AddPrefabPostInit("world", function(inst)
 
     local count_skull, count_winky, items_skull, items_winky = 0, 0
     inst:DoTaskInTime(0, function()
-
         --count all skullchests and winky burrows
         for k, v in pairs(Ents) do
             if v.prefab == "skullchest" then
@@ -128,4 +129,5 @@ env.AddPrefabPostInit("world", function(inst)
     if inst:HasTag("forest") then
         --inst:AddComponent("acidmushrooms")
     end
+
 end)

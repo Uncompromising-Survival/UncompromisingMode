@@ -543,11 +543,11 @@ TUNING.DSTU = {
     RUINSNIGHTMARE_DAMAGE = 75,
     HERMITCRAB_MOONTREEBLOSSOMTEA_SHADOWCREATURE_DAMAGE = 75,
 
-    NO_THICKET_APHIDS = {"beefalo", "fruitbat"},   --AXE Add more as needed, most things >should< spawn aphids though.
+    NO_THICKET_APHIDS = { "beefalo", "fruitbat" }, --AXE Add more as needed, most things >should< spawn aphids though.
     APHID_SPAWN_CHANCE = .1,
 
-    RIPPLE_BLACKLIST_PREFABS = {"webbedcreature", "rainometer"}, -- AXE Many cases would like "structure" tag still count for ripples, but many structures are incompatible, so we do a prefab based blacklist as well
-    RIPPLE_BLACKLIST_TAGS = {"projectile", "FX", "balloon"},     -- AXE other cases are universal, projectiles shouldn't really ever have ripples
+    RIPPLE_BLACKLIST_PREFABS = { "webbedcreature", "rainometer" }, -- AXE Many cases would like "structure" tag still count for ripples, but many structures are incompatible, so we do a prefab based blacklist as well
+    RIPPLE_BLACKLIST_TAGS = { "projectile", "FX", "balloon" },   -- AXE other cases are universal, projectiles shouldn't really ever have ripples
 
     -- Rat Poison
     RATPOISON_EAT_DAMAGE = 24,
@@ -665,7 +665,7 @@ TUNING.DSTU = {
     BLUEGEM1_INSULATION_PER_TIER = TUNING.INSULATION_SMALL,
     BLUEGEM1_COLDNESS_PER_TIER = 0.15,
     BLUEGEM1_ICE_SHIELD_TIER_PER_TIER = 0.125,
-    BLUEGEM1_ICE_SHIELD_TIER_BASE = 0.25,
+    BLUEGEM1_ICE_SHIELD_TIER_BASE = 0.125,
 
     BLUEGEM2_PERISHABLE_EXTRA_TIME_MULT = 0.5,
 
@@ -677,8 +677,16 @@ TUNING.DSTU = {
         0.4,
         0.2,
         0.1, --min repair value
-    }
+    },
 
+    --Magma tile stuff
+    MAGMATILE_HEAT = 120,
+    MAGMATILE_HEAT_RADIUS = 8, --Atobá: NOT RECOMMENDED TO INCREASE THIS. TILE DIST CHECK VERY UNPERFORMANT.
+    MAGMATILE_REFRESH_THRESHOLD = 300,
+    MAGMATILE_DEFAULT_COOL_TIME = 1200,
+    MAGMATILE_ICE_STAFF_COOL_TIME = 1200*2,
+
+    MAGMATILE_COOL_TIME_RANGE = 200,
 }
 
 -- [              DST Related Overrides              ]

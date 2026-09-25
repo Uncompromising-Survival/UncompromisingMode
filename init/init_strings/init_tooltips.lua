@@ -100,7 +100,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     BRINE_BALM = "- Hurts you a little, heals you a lot over time.\n- Restores lost maximum health.",
     UM_EYEBALM = "- Grants protection against snowstorms/sandstorms when used.",
     UM_HAT_RIME = "- Protection depends on how low the user's temperature is.\n- Melts overtime instead of breaking on hit.",
-    RUINS_BAT = "- Spawns Shadow Tentacles every 4 hits.\n- Consumes less durability and deals more damage \nagainst lunar-aligned creatures.",
+    RUINS_BAT = "- Consumes less durability and deals more damage \nagainst lunar-aligned creatures.",
     UM_ICE_SICLE = "- Reaps plants and freezes enemies.\n- Lowers temperature on reaping and even more on attacking.\n- Clothing helps resist the cold.",
     JAWED_SCYTHE = "- Reaps plants.",
     HOUNDIOUS_OBSERVIOUS = "- Warns of incoming giants or hounds.",
@@ -244,12 +244,12 @@ if TUNING.DSTU.FUNCAP_REWORK then
 end
 if not TUNING.DSTU.ELECTRICALMISHAP then
     TOOLTIPS.NIGHTSTICK =
-    "- Can be fueled by various electrical items, generators, and potatoes."
+    "- Can be fueled by various electrical items, and potatoes."
     TOOLTIPS.BUGZAPPER =
     "- Deals bonus damage, and area damage to Insects.\n- Deals electrical damage.\n- Can be fueled by various electrical items, generators, and potatoes."
 else
     TOOLTIPS.NIGHTSTICK =
-    "- Functions as a portable lightning rod.\n- Regains fuel when struck by lightning or when charged at generators."
+    "- Functions as a portable lightning rod.\n- Regains fuel when struck by lightning."
     TOOLTIPS.BUGZAPPER =
     "- Deals bonus damage, and area damage to Insects.\n- Deals electrical damage.\n - Can be charged at generators."
 end

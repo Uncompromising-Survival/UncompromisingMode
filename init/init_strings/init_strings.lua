@@ -82,9 +82,9 @@ RECIPE_DESC.UM_BLOWDART_RIME = "Chilly ranged assault."
 RECIPE_DESC.BOAT_ANCIENT_ITEM = "They don't build them like they used to."
 RECIPE_DESC.BOAT_ANCIENT_ITEM_BLUEPRINT = "There is always something to learn from the past."
 
--- Veteran Shrine Crafts
+-- Veteran Shrine Crafts [UNUSED]
 
-RECIPE_DESC.CURSED_ANTLER = "Freeze, crush, kill."
+--[[RECIPE_DESC.CURSED_ANTLER = "Freeze, crush, kill."
 RECIPE_DESC.BEARGERCLAW = "Fling some rocks!"
 RECIPE_DESC.KLAUS_AMULET = "Double slap!"
 RECIPE_DESC.SILKSACK = "Wrap up your valuables."
@@ -96,7 +96,7 @@ RECIPE_DESC.UM_BEEGUN = "Bullet Bees!"
 RECIPE_DESC.UM_WINGSUIT = "Take flight!"
 RECIPE_DESC.UM_EXHUMER = "Judge, jury, resurrector."
 RECIPE_DESC.UM_BEEGUN_CHERRY = "Poisonous bullet bees!"
-RECIPE_DESC.UM_MOONFLY_LANTERN = "Light the path, lead the way!"
+RECIPE_DESC.UM_MOONFLY_LANTERN = "Light the path, lead the way!"]]
 
 RECIPE_DESC.WINONA_CATAPULT_ITEM_UM = RECIPE_DESC.WINONA_CATAPULT
 RECIPE_DESC.WINONA_SPOTLIGHT_ITEM_UM = RECIPE_DESC.WINONA_SPOTLIGHT
@@ -269,6 +269,7 @@ STRINGS.ACTIONS.CASTAOE.WATHGRITHR_SHIELD_DREADSTONE = STRINGS.ACTIONS.CASTAOE.W
 STRINGS.ACTIONS.START_CHANNELCAST.MOONFALL = "Start Casting"
 STRINGS.ACTIONS.UM_GUNSHOOTY = "Shoot"
 STRINGS.ACTIONS.UM_CALL_BEEF = "Call Beefalo"
+STRINGS.ACTIONS.UM_COOL_MAGMA = "Solidify"
 
 STRINGS.UI.APPLY_GEM = "Forge!"
 STRINGS.UI.HUD.UM_VETSKULL_PREFIX = "Veteran's Curse:\n"
@@ -417,8 +418,8 @@ STRINGS.UI.COOKBOOK.UM_ZASPBERRYPARFAIT = "Shocks your attackers"
 STRINGS.UI.COOKBOOK.UM_DURIAN_CREAM_MARSHCAKE = "Exotic out of season"
 STRINGS.UI.COOKBOOK.UM_BOOMBERRYPIE = "Will blow you away!"
 STRINGS.UI.COOKBOOK.UM_BOOM_TART = "Will blow others away!"
-STRINGS.UI.COOKBOOK.UM_RIMEWEED_SPAGETT = "Freezes your surroundings"
-STRINGS.UI.COOKBOOK.UM_RIMEWEED_TEQUILA = "Increases resistance to freezing"
+STRINGS.UI.COOKBOOK.UM_RIMEWEED_SPAGETT = "Freezes your surroundings, grants an Ice Shield"
+STRINGS.UI.COOKBOOK.UM_RIMEWEED_TEQUILA = "Increases resistance to freezing, grants an Ice Shield"
 
 STRINGS.NAMES.UM_VARGLET_PET_NAMES = {
 "Cupcake", --Shy

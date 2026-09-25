@@ -14,7 +14,7 @@ local function PushMusic(inst)
     elseif ThePlayer:IsNear(inst, inst._playingmusic and 40 or 20) then
         TheFocalPoint.um_triggeredEventMusic[inst] = "UMMusic2/music/um_epicfight_moonmaw"
         inst._playingmusic = true
-        ThePlayer:PushEvent("triggeredevent", {um_source = inst, name = "default"})
+        ThePlayer:PushEvent("triggeredevent", { um_source = inst, name = "default" })
     elseif inst._playingmusic and not ThePlayer:IsNear(inst, 50) then
         inst._playingmusic = false
     end
@@ -46,7 +46,7 @@ TUNING.DRAGONFLY_SLEEP_WHEN_SATISFIED_TIME = 240
 TUNING.DRAGONFLY_VOMIT_TARGETS_FOR_SATISFIED = 40
 TUNING.DRAGONFLY_ASH_EATEN_FOR_SATISFIED = 20
 
-local BASE_TAGS = {"structure"}
+local BASE_TAGS = { "structure" }
 local SEE_STRUCTURE_DIST = 20
 
 local TARGET_DIST = 3
@@ -140,7 +140,6 @@ local function OnEntitySleep(inst)
                 local angle = PlayerPosition:GetAngleToPoint(init_pos)
                 local offset = FindWalkableOffset(player_pos, angle * DEGREES, 30, 10)
                 if offset ~= nil then
-
                     local pos = player_pos + offset
 
                     if pos and distsq(player_pos, init_pos) > 1600 then
@@ -156,9 +155,7 @@ local function OnEntitySleep(inst)
                                 end
                             end
                         end)
-
                     end
-
                 else
                     local offset = FindSwimmableOffset(player_pos, angle * DEGREES, 30, 10)
                     local pos = player_pos + offset
@@ -176,7 +173,6 @@ local function OnEntitySleep(inst)
                                 end
                             end
                         end)
-
                     end
                 end
             end
@@ -322,11 +318,11 @@ local function OnKill(inst, data)
     end -- ]]
 end
 
-local loot = {"meat", "meat", "meat", "meat", "meat", "meat", "meat", "meat", "glass_scales", "moonglass_geode", "moonglass_geode", "moonglass_geode"}
+local loot = { "meat", "meat", "meat", "meat", "meat", "meat", "meat", "meat", "glass_scales", "moonglass_geode", "moonglass_geode", "moonglass_geode" }
 
 local function OnDead(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, 50, {"player"})
+    local ents = TheSim:FindEntities(x, y, z, 50, { "player" })
     for i, v in ipairs(ents) do
         if v.components.sanity ~= nil then
             v.components.sanity:EnableLunacy(false, "moonmaw")
@@ -527,7 +523,7 @@ end
 
 local function CheckPlayers(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    local players = TheSim:FindEntities(x, y, z, 35, {"player"}, {"playerghost"})
+    local players = TheSim:FindEntities(x, y, z, 35, { "player" }, { "playerghost" })
     for i, v in ipairs(players) do
         OnNear(inst, v)
     end
@@ -583,7 +579,7 @@ local function fn(Sim)
         inst._playingmusic = false
         inst:DoPeriodicTask(1, PushMusic, 0)
     end
-    
+
     inst:AddTag("lunar_aligned")
 
     inst.entity:SetPristine()
@@ -618,7 +614,7 @@ local function fn(Sim)
     inst.components.groundpounder.groundpoundfx = "moonstorm_glass_ground_fx"
     inst.components.groundpounder.groundpounddamagemult = .5
     inst.components.groundpounder.groundpoundringfx = "moonstorm_glass_ground_fx"
-    inst.components.groundpounder.noTags = {"FX", "NOCLICK", "DECOR", "INLIMBO", "moonglasscreature"}
+    inst.components.groundpounder.noTags = { "FX", "NOCLICK", "DECOR", "INLIMBO", "moonglasscreature" }
 
     inst:AddComponent("combat")
     inst.components.combat:SetDefaultDamage(100)
