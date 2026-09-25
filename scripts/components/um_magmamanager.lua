@@ -136,8 +136,10 @@ local function removecrackedicefx(dx, dz)
         end
     end
 end
+
 function MagmaManager:CreateMoltenLavaTiles()
     --get a random point inside the biome
+    if not next(self.magma_tiles) then return end
     local num_points = 12
     local points = {}
     for i = 1, num_points do
@@ -397,45 +399,24 @@ function MagmaManager:CanCoolDownTileAtPoint(x, y, z)
     end
 end
 
-function MagmaManager:RegisterFlingomatic(ent)
-    if ent ~= nil and ent:IsValid() and self.flingos[ent.GUID] == nil then
-        self.flingos[ent.GUID] = ent
+function MagmaManager:RegisterFireFighter(ent, type)
+    if ent and ent:IsValid() and self[type] and self[type][ent.GUID] == nil then
+        self[type][ent.GUID] = ent
     end
 end
 
-function MagmaManager:UnregisterFlingomatic(ent)
-    if self.flingos[ent.GUID] ~= nil then
-        self.flingos[ent.GUID] = nil
+function MagmaManager:UnregisterFireFighter(ent, type)
+    if self[type] and self[type][ent.GUID] ~= nil then
+        self[type][ent.GUID] = nil
         local new_ents = {}
 
-        for guid, ent in pairs(self.flingos) do
+        for guid, ent in pairs(self[type]) do
             if ent ~= nil then
                 new_ents[guid] = ent
             end
         end
 
-        self.flingos = new_ents
-    end
-end
-
-function MagmaManager:RegisterCrystaleyezer(ent)
-    if ent ~= nil and ent:IsValid() and self.crystaleyezers[ent.GUID] == nil then
-        self.crystaleyezers[ent.GUID] = ent
-    end
-end
-
-function MagmaManager:UnregisterCrystaleyezer(ent)
-    if self.crystaleyezers[ent.GUID] ~= nil then
-        self.crystaleyezers[ent.GUID] = nil
-        local new_ents = {}
-
-        for guid, ent in pairs(self.crystaleyezers) do
-            if ent ~= nil then
-                new_ents[guid] = ent
-            end
-        end
-
-        self.crystaleyezers = new_ents
+        self[type] = new_ents
     end
 end
 

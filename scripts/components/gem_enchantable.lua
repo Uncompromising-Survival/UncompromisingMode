@@ -1,7 +1,7 @@
-local DEFS                 = UMGemologyFns
+local DEFS = UMGemologyFns
 local GEM_DEFS, GEM_LOOKUP = DEFS.GEM_DEFS, DEFS.GEM_LOOKUP
-local GEM_UPDATE_RATE      = 1
-local DEFAULT_SLOTS        = 1
+local GEM_UPDATE_RATE = 1
+local DEFAULT_SLOTS = 1
 
 local function on_enchants(self, flag)
     if self.dirty then
@@ -40,7 +40,6 @@ local GemEnchantable = Class(function(self, inst)
     if self.inst.volatile_gemology_data == nil then
         self.inst.volatile_gemology_data = {}
     end
-
 
     for k, v in pairs(GEM_LOOKUP) do
         self.inst.persistent_gemology_data[v] = {}
@@ -174,7 +173,6 @@ function GemEnchantable:RemoveEnchantment(enchant)
 
     local tier = self.enchants[enchant]
 
-
     if GEM_DEFS[enchant].fns.onremove then
         GEM_DEFS[enchant].fns.onremove(self.inst, tier)
     end
@@ -210,7 +208,6 @@ function GemEnchantable:OnSave()
             _enchants[k] = v
         end
     end
-
 
     return {
         enchants = _enchants,

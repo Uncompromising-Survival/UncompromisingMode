@@ -86,6 +86,27 @@ local function GetAttackedPostInit(self, fn)
         elseif self.inst:HasTag("ratwhisperer") and attacker and attacker.prefab == "catcoon" and self.inst.components.health then
             self.inst.components.health:DoDelta(-10, false, attacker.prefab)
         end
+        local tool = self.inst.components.inventory and self.inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+        local gem_enchantable_tool = tool and tool.components.gem_enchantable
+        local furious = gem_enchantable_tool and gem_enchantable_tool:GetEnchantmentTier("um_gemologypurplegem1")
+        if furious then
+            self.inst:DoTaskInTime(0, function(inst)
+                self.inst:AddDebuff("buff_furious"..furious, "buff_furious"..furious)
+            end)
+            UMGemologyFns.DamageGem("purplegem1", tool, TUNING.DSTU.GEM_USES[furious])
+        end
+        if self.inst:HasTag("agony_gas") then
+            damage = damage * (self.inst:HasTag("EPIC") and 1.25 or 1.5)
+        end
+        local gem_enchantable_weapon = weapon and weapon.components.gem_enchantable
+        local citrine = gem_enchantable_weapon and gem_enchantable_tool:GetEnchantmentTier("um_gemologyorangegem2")
+        if citrine and citrine > 1 then
+            if not self.inst.um_marked_for_hoarding then
+                self.inst.um_marked_for_hoarding = attacker
+            end
+        elseif self.inst.um_marked_for_hoarding then
+            self.inst.um_marked_for_hoarding = nil
+        end
         local ret = {_GetAttackedOrInternal(self, attacker, damage, weapon, stimuli, spdamage, ...)}
         if attacker and attacker:IsValid() and weapon and weapon:IsValid() then
             attacker:PushEvent("um_attacker_attacked_pst", {weapon = weapon})
@@ -96,6 +117,39 @@ end
 
 env.AddComponentPostInit("combat", function(self)
     GetAttackedPostInit(self, UPDATE_CHECK and "GetAttacked_Internal" or "GetAttacked")
+
+    -- Peerless jade effect, if there is an existing damage multiplier, increase it by some amount more
+    local _CalcDamage = self.CalcDamage
+    function self:CalcDamage(target, weapon, multiplier, ...)
+        local gem_enchantable = weapon and weapon.components.gem_enchantable
+        local peerless = gem_enchantable and gem_enchantable:GetEnchantmentTier("um_gemologypalegem1")
+        if peerless then
+            local basemultiplier = self.damagemultiplier
+            local externaldamagemultipliers = self.externaldamagemultipliers
+            local damagetypemult = 1
+            local bonus = self.damagebonus --not affected by multipliers
+            local mount = nil
+            --local spdamage
+
+            local mult = (basemultiplier or 1)
+                * externaldamagemultipliers:Get()
+                * damagetypemult
+                * (multiplier or 1)
+                * (self.customdamagemultfn ~= nil and self.customdamagemultfn(self.inst, target, weapon, multiplier, mount) or 1)
+                + (bonus or 0)                     -- temporarily calculate our damage bonuses to see what it would be.
+
+            if peerless and mult and mult > 1 then -- There must be an existing multiplier... not just 0.1, wendy's negative multiplier is not helped.
+                multiplier = (multiplier or 1) * (1 + .1 * peerless)
+            end
+        end
+        local ret = {_CalcDamage(self, target, weapon, multiplier, ...)}
+        if weapon then
+            UMGemologyFns.GetEnchantsAndDoFn(weapon, "onadjustdamage", function(enchant, tier, gemfn, _self, _attacker, _target)
+                ret[1] = gemfn(_self, ret[1], _attacker, _target, tier, 3)
+            end, self.inst, target)
+        end
+        return unpack(ret)
+    end
 
     function self:UMSetAreaDamage(range, excludetags, coneangle, circleradius, areahitconecheck, areahitcheck)
         self.um_areahit = range ~= nil or nil
