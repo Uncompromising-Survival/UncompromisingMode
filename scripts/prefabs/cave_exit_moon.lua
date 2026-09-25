@@ -28,7 +28,7 @@ local function fn()
 
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
-    inst.entity:AddSoundEmitter() 
+    inst.entity:AddSoundEmitter()
     inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
 
@@ -40,6 +40,8 @@ local function fn()
     inst.AnimState:SetBuild("cave_exit")
     inst.AnimState:PlayAnimation("open")
 
+    inst.scrapbook_proxy = "cave_exit"
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
@@ -50,7 +52,7 @@ local function fn()
         --On non-sharded servers we'll make these vanish for now, but still generate them
         --into the world so that they can magically appear in existing saves when sharded
         RemovePhysicsColliders(inst)
-        inst.AnimState:SetScale(0,0)
+        inst.AnimState:SetScale(0, 0)
         inst.MiniMapEntity:SetEnabled(false)
         inst:AddTag("NOCLICK")
         inst:AddTag("CLASSIFIED")
@@ -61,13 +63,13 @@ local function fn()
     inst.components.inspectable.getstatus = GetStatus
 
     inst:AddComponent("worldmigrator")
-	inst.components.worldmigrator:SetID(798)
+    inst.components.worldmigrator:SetID(798)
     inst:ListenForEvent("migration_available", open)
     inst:ListenForEvent("migration_unavailable", close)
     inst:ListenForEvent("migration_full", full)
     inst:ListenForEvent("migration_activate", activate)
-	
-	inst.AnimState:SetMultColour(0.6,1,0.8,1)
+
+    inst.AnimState:SetMultColour(0.6, 1, 0.8, 1)
     return inst
 end
 

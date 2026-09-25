@@ -36,6 +36,8 @@ local function fn()
 
     inst.MiniMapEntity:SetIcon("cave_open2.png")
 
+    inst.scrapbook_proxy = "cave_exit"
+
     inst.AnimState:SetBank("cave_stairs")
     inst.AnimState:SetBuild("cave_exit")
     inst.AnimState:PlayAnimation("open")

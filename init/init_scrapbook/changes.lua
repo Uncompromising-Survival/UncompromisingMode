@@ -3,6 +3,10 @@ local STRINGS = GLOBAL.STRINGS
 local SPECIALINFO = STRINGS.SCRAPBOOK.SPECIALINFO
 local TOOLTIP = STRINGS.UNCOMP_TOOLTIP
 
+STRINGS.SCRAPBOOK.SUBCATS.UM_DEBUG_CHANGES = "Debug/Changes"
+
+local debug = true
+
 --Damnit klei.
 --Sets the scrabookdata specialinfo of some entries to something else. These entries re-use something else.
 local scrapbookdata = require("screens/redux/scrapbookdata")
@@ -25,11 +29,16 @@ SPECIALINFO.MUSHTREE = SPECIALINFO.TREE
 
 --then change the special info.
 for k, v in pairs(specialinfo_ovewrite) do
+    if debug then
+        scrapbookdata[k].subcat = "um_debug_changes"
+    end
     scrapbookdata[k]["specialinfo"] = v
 end
 --idfk where to put this
-scrapbookdata["shieldofterror"].notes = {cursed_enhanced_item = true}
-
+scrapbookdata["shieldofterror"].notes = { cursed_enhanced_item = true }
+if debug then
+    scrapbookdata["shieldofterror"].subcat = "um_debug_changes"
+end
 --helper function to format tooltip strings into scrapbook special info.
 -- Turns "- Text.\n- like this."
 -- into "Text. Like this."
@@ -50,6 +59,10 @@ end
 ---@param info string
 ---@param overwrite? boolean
 local function AddAddtionalScrapbookInfo(page, info, overwrite)
+    if debug and scrapbookdata[string.lower(page)] ~= nil then
+        scrapbookdata[string.lower(page)].subcat = "um_debug_changes"
+    end
+
     if string.match(page, "ITEM") ~= nil or string.match(page, "KIT") ~= nil then return end -- only show for the actual buildings, not kit/item versions.
     if SPECIALINFO[page] ~= nil then
         if overwrite then
@@ -137,7 +150,7 @@ end
 --this table contains extra things, also used for stuff that the tooltip prefab ~= scrapbook. Additionally supports overwrites.
 --example:
 --REDAMULET = {"string", bool} --wherein bool can be ommited unless you're overwriting.
-local clockwork_str = "No longer flameable, additionally, does not panic from fires."
+local clockwork_str = "No longer flameable. Additionally, does not panic from fires."
 local um_specialinfo = {
     --TOOLTIPS - these are the stuff that have tooltips that either require overwrites or due to different key/prefab names need to be manually defined.
     REDAMULET = { ParseTooltip(TOOLTIP.AMULET), true },
@@ -195,7 +208,7 @@ local um_specialinfo = {
     STINGER = "Self-stacks. Burnable as fuel.",
     SLURTLE = "Faster attack speed but less health.",
     SNURTLE = "Less health.",
-    ANTLION = "May harrass survivors at sea.\nIncreased resistance against explosives.",
+    ANTLION = "Increased resistance against explosives.",
     BEEQUEEN = "Reworked fight. Several new attacks and bees.",
     MONKEY_MEDIUMHAT = "Increases boat steering speed.",
     EYEMASKHAT = "Negative food stats no longer contribute for repairs.",
@@ -204,6 +217,7 @@ local um_specialinfo = {
     HOMESIGN = "No longer has collision.",
     PENGUIN = "Aggressive near its breeding ground.",
     CACTUS = "No longer grows in Winter.",
+    OASIS_CACTUS = "No longer grows in Winter.",
     BANANABUSH = "No longer grows in Winter.",
     MARSH_BUSH = "No longer grows in Winter.",
     --ROCK_AVOCADO_BUSH = "No longer grows in Winter",
@@ -222,9 +236,10 @@ local um_specialinfo = {
     EYEOFTERROR = "Has a new attack.",
     TWINOFTERROR1 = "Has new attacks, matching more closely to its source material.",
     TWINOFTERROR2 = "Has new attacks, matching more closely to its source material.",
-    BUTTERFLY = "Immune to aura damage.", --outdated
+    BUTTERFLY = "Slips away from incoming melee attacks, unless landed.\nImmune to aura damage.", -- Make it config dependent.
+    KELPHAT = "Wearer's wetness will slowly rise up to 33%.",
     --CRABKING = "Reworked fight.\nTakes damage from being rammed by boats, healing is interruped by cannons or by killing its claws. Main attack no longer creates leaks.",
-    CAVE_VENT_MITE = "May ocassionally be dazzling."
+    CAVE_VENT_MITE = "May ocassionally be dazzling.",
 }
 
 --adds the addtional scrapbook info based on the table above.
@@ -275,4 +290,15 @@ for k, v in pairs(wixiethings) do
             inst.components.pointofinterest:SetHeight(0)
         end
     end)
+end
+
+local uses_batterypower = {
+    "nightstick",
+    "winona_telebrella",
+    "winona_remote",
+    "winona_storage_robot",
+}
+
+for k, v in pairs(uses_batterypower) do
+    scrapbookdata[v].fueledtype1 = "BATTERYPOWER"
 end

@@ -122,20 +122,18 @@ end
 
 local function displaynamefn(inst)
     return STRINGS.NAMES[
-        (inst:HasTag("lure") and "VIPERWORM_PLANT") or
-            (inst:HasTag("dirt") and "WORM_DIRT") or
-            "VIPERWORM"
-        ]
-
+    (inst:HasTag("lure") and "VIPERWORM_PLANT") or
+    (inst:HasTag("dirt") and "WORM_DIRT") or
+    "VIPERWORM"
+    ]
 end
 
 local function displaynamefnviperling(inst)
     return STRINGS.NAMES[
-        --(inst:HasTag("lure") and "WORM_PLANT") or
-        --(inst:HasTag("dirt") and "WORM_DIRT") or
-        "VIPERLING"
-        ]
-
+    --(inst:HasTag("lure") and "WORM_PLANT") or
+    --(inst:HasTag("dirt") and "WORM_DIRT") or
+    "VIPERLING"
+    ]
 end
 
 local function getstatus(inst)
@@ -257,6 +255,8 @@ local function fnviperling()
     inst:AddTag("shadow")
     inst:AddTag("shadow_aligned")
 
+    inst.scrapbook_inspectonseen = true
+
     inst.AnimState:SetMultColour(0, 0, 0, 0.5)
 
     inst._lightframe = net_smallbyte(inst.GUID, "worm._lightframe", "lightdirty")
@@ -332,57 +332,57 @@ local function fnviperling()
 end
 
 local function EnforceLimit(inst)
-	if inst.components.follower == nil or inst.components.follower.leader == nil then
-		return
-	end
+    if inst.components.follower == nil or inst.components.follower.leader == nil then
+        return
+    end
 
-	local leader = inst.components.follower.leader
+    local leader = inst.components.follower.leader
 
-	if leader == nil or not leader:IsValid() then
-		return
-	end
+    if leader == nil or not leader:IsValid() then
+        return
+    end
 
-	local x, y, z = leader.Transform:GetWorldPosition()
-	local vipers = TheSim:FindEntities(x, y, z, 40, { "viperlingfriend" }, { "INLIMBO" })
-	local owned_vipers = {}
+    local x, y, z = leader.Transform:GetWorldPosition()
+    local vipers = TheSim:FindEntities(x, y, z, 40, { "viperlingfriend" }, { "INLIMBO" })
+    local owned_vipers = {}
 
-	for _, v in ipairs(vipers) do
-		if v:IsValid() and v.components.follower ~= nil and v.components.follower.leader == leader then
-			table.insert(owned_vipers, v)
-		end
-	end
+    for _, v in ipairs(vipers) do
+        if v:IsValid() and v.components.follower ~= nil and v.components.follower.leader == leader then
+            table.insert(owned_vipers, v)
+        end
+    end
 
-	if #owned_vipers <= 6 then
-		return
-	end
+    if #owned_vipers <= 6 then
+        return
+    end
 
-	table.sort(owned_vipers, function(a, b)
-		return (a.despawn_time or 0) < (b.despawn_time or 0)
-	end)
+    table.sort(owned_vipers, function(a, b)
+        return (a.despawn_time or 0) < (b.despawn_time or 0)
+    end)
 
-	local excess = #owned_vipers - 6
+    local excess = #owned_vipers - 6
 
-	for i = 1, excess do
-		local v = owned_vipers[i]
+    for i = 1, excess do
+        local v = owned_vipers[i]
 
-		if v ~= nil and v:IsValid() then
-			v:ShadowDespawn()
-		end
-	end
+        if v ~= nil and v:IsValid() then
+            v:ShadowDespawn()
+        end
+    end
 end
 
 local function FindPerson(inst)
-	local person = FindEntity(inst, 10, nil, { "player" })
+    local person = FindEntity(inst, 10, nil, { "player" })
 
-	if person ~= nil then
-		person.components.leader:AddFollower(inst)
+    if person ~= nil then
+        person.components.leader:AddFollower(inst)
 
-		inst:DoTaskInTime(0, function()
-			EnforceLimit(inst)
-		end)
-	else
-		inst.sg:GoToState("death")
-	end
+        inst:DoTaskInTime(0, function()
+            EnforceLimit(inst)
+        end)
+    else
+        inst.sg:GoToState("death")
+    end
 end
 
 local function fnviperlingfriend()
@@ -408,7 +408,10 @@ local function fnviperlingfriend()
     --inst:AddTag("shadowcreature")
     inst:AddTag("shadow")
     inst:AddTag("shadow_aligned")
-    
+
+    inst.scrapbook_inspectonseen = true
+    inst.scrapbook_proxy = "viperling"
+
     inst.AnimState:SetMultColour(0, 0, 0, 0.5)
 
     inst.AnimState:UsePointFiltering(true)
@@ -416,7 +419,6 @@ local function fnviperlingfriend()
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
-
         return inst
     end
 
@@ -445,9 +447,9 @@ local function fnviperlingfriend()
     inst:AddComponent("timer")
     --inst:ListenForEvent("timerover",ShadowDespawn)
     --inst.components.timer:StartTimer("despawn",60)
-	inst.despawn_time = GetTime() + 240
-	inst:DoTaskInTime(240, ShadowDespawn)
-	
+    inst.despawn_time = GetTime() + 240
+    inst:DoTaskInTime(240, ShadowDespawn)
+
     inst:DoTaskInTime(0, FindPerson)
     inst.persists = false
 
