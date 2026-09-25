@@ -6,7 +6,7 @@ GLOBAL.setfenv(1, GLOBAL)
 STRINGS.SCRAPBOOK.SUBCATS.VETERANSCURSE = "Veteran's Curse"
 STRINGS.SCRAPBOOK.SUBCATS.UM_DEBUG = "Debug/Additions"
 
-local debug = true
+local debug = false
 
 local scrapbook_prefabs = require("scrapbook_prefabs")
 local scrapbookdata = require("screens/redux/scrapbookdata")

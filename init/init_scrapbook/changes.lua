@@ -5,7 +5,7 @@ local TOOLTIP = STRINGS.UNCOMP_TOOLTIP
 
 STRINGS.SCRAPBOOK.SUBCATS.UM_DEBUG_CHANGES = "Debug/Changes"
 
-local debug = true
+local debug = false
 
 --Damnit klei.
 --Sets the scrabookdata specialinfo of some entries to something else. These entries re-use something else.
