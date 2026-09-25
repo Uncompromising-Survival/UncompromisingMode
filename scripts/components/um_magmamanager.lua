@@ -139,7 +139,7 @@ end
 
 function MagmaManager:CreateMoltenLavaTiles()
     --get a random point inside the biome
-    if not next(self.magma_tiles) then print("this won't work!") return end
+    if not next(self.magma_tiles) then return end
     local num_points = 12
     local points = {}
     for i = 1, num_points do
