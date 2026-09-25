@@ -86,20 +86,25 @@ local function GetAttackedPostInit(self, fn)
         elseif self.inst:HasTag("ratwhisperer") and attacker and attacker.prefab == "catcoon" and self.inst.components.health then
             self.inst.components.health:DoDelta(-10, false, attacker.prefab)
         end
+
         local tool = self.inst.components.inventory and self.inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
         local gem_enchantable_tool = tool and tool.components.gem_enchantable
         local furious = gem_enchantable_tool and gem_enchantable_tool:GetEnchantmentTier("um_gemologypurplegem1")
+
         if furious then
             self.inst:DoTaskInTime(0, function(inst)
                 self.inst:AddDebuff("buff_furious"..furious, "buff_furious"..furious)
             end)
             UMGemologyFns.DamageGem("purplegem1", tool, TUNING.DSTU.GEM_USES[furious])
         end
+
         if self.inst:HasTag("agony_gas") then
             damage = damage * (self.inst:HasTag("EPIC") and 1.25 or 1.5)
         end
+
         local gem_enchantable_weapon = weapon and weapon.components.gem_enchantable
-        local citrine = gem_enchantable_weapon and gem_enchantable_tool:GetEnchantmentTier("um_gemologyorangegem2")
+        local citrine = gem_enchantable_weapon and gem_enchantable_weapon:GetEnchantmentTier("um_gemologyorangegem2")
+
         if citrine and citrine > 1 then
             if not self.inst.um_marked_for_hoarding then
                 self.inst.um_marked_for_hoarding = attacker
@@ -107,10 +112,13 @@ local function GetAttackedPostInit(self, fn)
         elseif self.inst.um_marked_for_hoarding then
             self.inst.um_marked_for_hoarding = nil
         end
+
         local ret = {_GetAttackedOrInternal(self, attacker, damage, weapon, stimuli, spdamage, ...)}
+
         if attacker and attacker:IsValid() and weapon and weapon:IsValid() then
             attacker:PushEvent("um_attacker_attacked_pst", {weapon = weapon})
         end
+
         return unpack(ret)
 	end
 end
