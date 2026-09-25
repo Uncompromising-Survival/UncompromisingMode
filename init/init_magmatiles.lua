@@ -301,10 +301,12 @@ for name, type in pairs(firefighters) do
     env.AddPrefabPostInit(name, function(inst)
         if not TheWorld.ismastersim then return end
         local um_magmamanager = TheWorld.components.um_magmamanager
-        if um_magmamanager then um_magmamanager:RegisterFireFighter(inst, type)
-        inst:ListenForEvent("onremove", function(_inst)
-            local um_magmamanager = TheWorld.components.um_magmamanager
-            if um_magmamanager then um_magmamanager:UnregisterFireFighter(_inst, type) end
-        end)
+        if um_magmamanager then
+            um_magmamanager:RegisterFireFighter(inst, type)
+            inst:ListenForEvent("onremove", function(_inst)
+                local um_magmamanager = TheWorld.components.um_magmamanager
+                if um_magmamanager then um_magmamanager:UnregisterFireFighter(_inst, type) end
+            end)
+        end
     end)
 end
