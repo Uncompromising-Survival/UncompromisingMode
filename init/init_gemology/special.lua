@@ -47,7 +47,7 @@ env.AddStategraphPostInit("wilson", function(inst) -- Plan on moving this to the
         inst.states[state].onenter = function(inst, pushanim, ...)
             _onenter(inst, pushanim, ...)
             local tool = inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-            local comfy_bonus = tool and tool.structurebonus --TODO: port this change to the onupdatefn of the new gem defs
+            local comfy_bonus = tool and tool.um_structurebonus --TODO: port this change to the onupdatefn of the new gem defs
             if not (inst.components.rider and inst.components.rider:IsRiding()) and comfy_bonus then
                 comfy_bonus = comfy_bonus + 1
                 inst.AnimState:SetDeltaTimeMultiplier(comfy_bonus)
@@ -158,73 +158,6 @@ env.AddComponentPostInit("lootdropper", function(self)
         end
 
         return loot
-    end
-end)
-
--- Peerless jade effect, if there is an existing damage multiplier, increase it by some amount more
-env.AddComponentPostInit("combat", function(self)
-    local _CalcDamage = self.CalcDamage
-    function self:CalcDamage(target, weapon, multiplier, ...)
-        if weapon and weapon.components.gem_enchantable then
-            local peerless = weapon.components.gem_enchantable.enchants["um_gemologypalegem1"]
-
-            local basemultiplier = self.damagemultiplier
-            local externaldamagemultipliers = self.externaldamagemultipliers
-            local damagetypemult = 1
-            local bonus = self.damagebonus --not affected by multipliers
-            local mount = nil
-            --local spdamage
-
-            local mult = (basemultiplier or 1)
-                * externaldamagemultipliers:Get()
-                * damagetypemult
-                * (multiplier or 1)
-                * (self.customdamagemultfn ~= nil and self.customdamagemultfn(self.inst, target, weapon, multiplier, mount) or 1)
-                + (bonus or 0)                     -- temporarily calculate our damage bonuses to see what it would be.
-
-            if peerless and mult and mult > 1 then -- There must be an existing multiplier... not just 0.1, wendy's negative multiplier is not helped.
-                multiplier = (multiplier or 1) * (1 + .1 * peerless)
-            end
-        end
-        local ret = {_CalcDamage(self, target, weapon, multiplier, ...)}
-        if weapon then
-            UMGemologyFns.GetEnchantsAndDoFn(weapon, "onadjustdamage", function(enchant, tier, gemfn, _self, _attacker, _target)
-                ret[1] = gemfn(_self, ret[1], _attacker, _target, tier, 3)
-            end, self.inst, target)
-        end
-        return unpack(ret)
-    end
-
-    local _GetAttacked = self.GetAttacked
-    function self:GetAttacked(attacker, damage, weapon, stimuli, spdamage, ...)
-        local inst = self.inst
-        local tool = inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-        if tool and tool.components.gem_enchantable then
-            local furious = tool.components.gem_enchantable.enchants["um_gemologypurplegem1"]
-
-            if furious then
-                inst:DoTaskInTime(0, function(inst)
-                    inst:AddDebuff("buff_furious" .. furious, "buff_furious" .. furious)
-                end)
-                UMGemologyFns.DamageGem("purplegem1", tool, TUNING.DSTU.GEM_USES[furious])
-            end
-        end
-        if self.inst:HasTag("agony_gas") then
-            damage = damage * (self.inst:HasTag("EPIC") and 1.25 or 1.5)
-        end
-        if weapon and weapon.components.gem_enchantable then
-            local citrine = weapon.components.gem_enchantable.enchants["um_gemologyorangegem2"]
-
-            if citrine ~= nil and citrine > 1 then
-                if not self.inst.um_marked_for_hoarding then
-                    self.inst.um_marked_for_hoarding = attacker
-                end
-            end
-        elseif self.inst.um_marked_for_hoarding then
-            self.inst.um_marked_for_hoarding = nil
-        end
-
-        return _GetAttacked(self, attacker, damage, weapon, stimuli, spdamage, ...)
     end
 end)
 

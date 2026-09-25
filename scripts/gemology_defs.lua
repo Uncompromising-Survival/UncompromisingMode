@@ -689,7 +689,7 @@ AddUMGemDef("purplegem2", {
 ---Orange1
 
 local function FindUniqueBaseStructures(inst, tier)
-    if inst.entity:IsAwake() then
+    if not inst:IsAsleep() then
         local x, y, z = inst.Transform:GetWorldPosition()
         local ents = TheSim:FindEntities(x, y, z, TUNING.DSTU.ORANGEGEM1_STRUCTURE_RANGE, { "structure" })
         local uniquestructures = {}
@@ -698,7 +698,7 @@ local function FindUniqueBaseStructures(inst, tier)
                 table.insert(uniquestructures, v.prefab)
             end
         end
-        inst.structurebonus = math.clamp(#uniquestructures, 0, TUNING.DSTU.ORANGEGEM1_MAX_STRUCTURES) * tier / TUNING.DSTU.ORANGEGEM1_BONUS_FACTOR
+        inst.um_structurebonus = math.clamp(#uniquestructures, 0, TUNING.DSTU.ORANGEGEM1_MAX_STRUCTURES) * tier / TUNING.DSTU.ORANGEGEM1_BONUS_FACTOR
     end
 end
 
@@ -708,21 +708,20 @@ local function BaseSitterAttack(item, attacker, target, tier)
     if tier ~= 1 then
         local fx = SpawnPrefab("sand_puff")
         fx.Transform:SetPosition(target.Transform:GetWorldPosition())
-        fx.Transform:SetScale(0.05 + 2 * item.structurebonus, 0.05 + 2 * item.structurebonus, 0.05 + 2 * item.structurebonus)
+        fx.Transform:SetScale(0.05 + 2 * item.um_structurebonus, 0.05 + 2 * item.um_structurebonus, 0.05 + 2 * item.um_structurebonus)
     end
 end
-
 
 AddUMGemDef("orangegem1", {
     color = RGB(249, 203, 156),
     fns = {
         onadjustdamage = function(item, damage, attacker, target, tier, calcnum)
-            if tier ~= 1 and calcnum == 1 then return damage + damage * item.structurebonus end
+            if tier ~= 1 and calcnum == 1 then return damage + damage * item.um_structurebonus end
             return damage
         end,
         onattack = BaseSitterAttack,
         onremove = function(item, tier)
-            item.structure_bonus = nil
+            item.um_structurebonus = nil
         end,
         onwork = function(item, attacker, target, tier)
             UMGemologyFns.DamageGem("orangegem1", item, GEM_USES[tier])
