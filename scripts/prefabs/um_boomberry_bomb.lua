@@ -3,7 +3,8 @@ local um_boomberry_bomb_assets =
 	Asset("ANIM", "anim/um_boomberry_bomb.zip"),
     Asset("ANIM", "anim/swap_um_boomberry_bomb.zip"),
 }
-local shouldnt_hit = { "FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost" }
+
+local shouldnt_hit = {"FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost"}
 local function OnHitBoomBerry(inst, attacker, target)
 	local x,y,z = inst.Transform:GetWorldPosition()
 	SpawnPrefab("blueberryexplosion").Transform:SetPosition(x,y,z)
@@ -12,16 +13,13 @@ local function OnHitBoomBerry(inst, attacker, target)
 	puddle.playermade = true
 
 	puddle.SoundEmitter:PlaySound("turnoftides/creatures/together/starfishtrap/trap")
-	local ents = TheSim:FindEntities(x, y, z, 3, nil,shouldnt_hit)
-	if #ents > 0 then
-		for i, v in pairs(ents) do
-			if (not v:HasTag("player") or v == attacker) then
-				if v.components.combat and v.components.combat:CanBeAttacked(attacker) then
-					v.components.combat:GetAttacked(attacker,TUNING.DSTU.BOOMBERRYBOMB_DAMAGE)
-				end
-			end
-		end
-	end
+    for i, v in pairs(TheSim:FindEntities(x, y, z, 3, nil, shouldnt_hit)) do
+        if (not v:HasTag("player") or v == attacker) then
+            if v.components.combat and v.components.combat:CanBeAttacked(attacker) then
+                v.components.combat:GetAttacked(attacker, TUNING.DSTU.BOOMBERRYBOMB_DAMAGE)
+            end
+        end
+    end
 	inst:Hide()
 	inst.components.wateryprotection:SpreadProtection(inst)
 	inst:Remove()
