@@ -100,6 +100,8 @@ local function onthrown(inst)
     inst:AddTag("NOCLICK")
     inst.persists = false
 
+    inst.ispvp = attacker ~= nil and attacker:IsValid() and attacker:HasAnyTag("player", "possessedbody")
+
     inst.AnimState:PlayAnimation("spin_loop", true)
 
     inst.Physics:SetMass(1)
