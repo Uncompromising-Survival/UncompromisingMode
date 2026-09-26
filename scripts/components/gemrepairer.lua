@@ -16,10 +16,6 @@ function GemRepairer:OnUsed(target, doer)
     local repair_value = TUNING.DSTU.GEM_REPAIRER_REPAIR_VALUE[math.clamp(target.repair_count, 1, #TUNING.DSTU.GEM_REPAIRER_REPAIR_VALUE)]
     local success = false
 
-    if self.on_used_fn then
-        self.on_used_fn(self.inst, target, doer)
-    end
-
     if target.components.gem_enchantable ~= nil and target.components.gem_enchantable:IsEnchanted() then
         for k, v in pairs(target.components.gem_enchantable.enchants) do
             if target.components.gem_enchantable:HasDurabilityEnabled(k) and target.components.gem_enchantable:GetDurability(k) < 1 then
@@ -47,6 +43,10 @@ function GemRepairer:OnUsed(target, doer)
         target:PushEvent("repair")
 
         target.repair_count = target.repair_count + 1
+    end
+
+    if self.on_used_fn then
+        self.on_used_fn(self.inst, target, doer, success)
     end
 
     return success, not success and "NO_REPAIR_NEEDED" or nil

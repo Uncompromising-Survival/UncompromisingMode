@@ -33,8 +33,8 @@ function CreateGemRepairKit(name, durability, build, bank, common_fn)
         inst:AddComponent("inventoryitem")
 
         inst:AddComponent("gemrepairer")
-        inst.components.gemrepairer:SetOnUsedFn(function(inst, target, owner)
-            if inst.components.finiteuses ~= nil then
+        inst.components.gemrepairer:SetOnUsedFn(function(inst, target, owner, success)
+            if inst.components.finiteuses ~= nil and success then
                 inst.components.finiteuses:Use(1)
             end
         end)
