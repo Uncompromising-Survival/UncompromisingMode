@@ -1,6 +1,7 @@
 require "behaviours/wander"
 require "behaviours/chaseandattack"
 require "behaviours/follow"
+local BrainCommon = require("brains/braincommon")
 
 local MIN_FOLLOW = 8
 local MED_FOLLOW = 15
@@ -52,25 +53,25 @@ end
 local TARGET_FOLLOW_DIST = 7
 local MAX_FOLLOW_DIST = 10
 local function WithinDomain(inst)
-	local x, y, z = inst.Transform:GetWorldPosition()
-	local nearestspawner = FindEntity(inst, 50, nil,{"trepidationspawner"})
-	local home = GetHome(inst)
-	if nearestspawner ~= nil and home ~= nil then
-		local dist1 = inst:GetDistanceSqToInst(nearestspawner)
-		local dist2 = inst:GetDistanceSqToInst(home)
-			if dist1-4 > dist2 then
-				return false
-			else
-				return true
-			end
-		else
-		return true
-	end
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local nearestspawner = FindEntity(inst, 50, nil, { "trepidationspawner" })
+    local home = GetHome(inst)
+    if nearestspawner ~= nil and home ~= nil then
+        local dist1 = inst:GetDistanceSqToInst(nearestspawner)
+        local dist2 = inst:GetDistanceSqToInst(home)
+        if dist1 - 4 > dist2 then
+            return false
+        else
+            return true
+        end
+    else
+        return true
+    end
 end
 
 local function ShouldChase_UM(self)
     local target = self.inst.components.combat.target or self.inst.followtarget
-	return target or nil
+    return target or nil
 end
 
 --[[local function ShouldChase_UM(self)
@@ -106,27 +107,33 @@ end
 
 function TrepidationBrain:OnStart()
     local root = PriorityNode(
-    {	
-		WhileNode(function() return ShouldUseAbility(self) end, "Ability",
-				ActionNode(function()
+        {
+            --BrainCommon.PanicTriggerShadowCreature(self.inst), breaks it.
+            WhileNode(function() return ShouldUseAbility(self) end, "Ability",
+                ActionNode(function()
                     self.inst:PushEvent(self.abilityname, self.abilitydata)
                     self.abilityname = nil
                     self.abilitydata = nil
                 end)),
-				
-        WhileNode(function() return ShouldAttack(self) end, "Attack", ChaseAndAttack(self.inst)),
-		
-		WhileNode(function() return ShouldChase_UM(self) ~= nil end, "Chase",
-            Follow(self.inst, ShouldChase_UM(self), MIN_FOLLOW, MED_FOLLOW, MAX_FOLLOW, false)),
-			
-		FaceEntity(self.inst, GetFaceTargetFn, KeepFaceTargetFn),
-		
-        WhileNode(function() return self.inst.components.combat and not self.inst.components.combat.target end, "Home",
-		Wander(self.inst, function() return self.inst.components.knownlocations:GetLocation("home") end, 20)),
-    }, .25)
+
+            WhileNode(function() return ShouldAttack(self) end, "Attack", ChaseAndAttack(self.inst)),
+
+            WhileNode(function() return ShouldChase_UM(self) ~= nil end, "Chase",
+                Follow(self.inst, ShouldChase_UM(self), MIN_FOLLOW, MED_FOLLOW, MAX_FOLLOW, false)),
+
+            FaceEntity(self.inst, GetFaceTargetFn, KeepFaceTargetFn),
+
+            WhileNode(function() return self.inst.components.combat and not self.inst.components.combat.target end, "Home",
+                Wander(self.inst, function() return self.inst.components.knownlocations:GetLocation("home") end, 20)),
+        }, .25)
+
+    if UPDATE_CHECK then
+        table.insert(root.children, 2, BrainCommon.RunAwayFromQueenTorch(self))
+    end
 
     self.bt = BT(self.inst, root)
 end
+
 function TrepidationBrain:OnInitializationComplete()
     local pos = self.inst:GetPosition()
     pos.y = 0
