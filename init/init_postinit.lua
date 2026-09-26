@@ -310,7 +310,7 @@ local brain_post = {
     --"hound",
     "frog",
     "krampus",
-    "nofirepanic",
+    "shouldpanic",
     "chester",
     "mossling",
     "perd",
@@ -318,7 +318,6 @@ local brain_post = {
     "walrus",
     "deer",
     "hound",
-    "iceshield",
     "brightmare_gestalt",
     "beefalo",
 }

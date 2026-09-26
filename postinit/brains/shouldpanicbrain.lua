@@ -9,7 +9,7 @@ if _ShouldTriggerPanic then
     local function ShouldTriggerPanic(inst, ...)
         local takingfiredamage
         local health = inst.components.health
-        if inst:HasTag("ice_shielded") and health and health.takingfiredamage then
+        if (inst.brain and inst.brain.um_nofirepanic or inst:HasAnyTag("ice_shielded")) and health and health.takingfiredamage then
             takingfiredamage = health.takingfiredamage
             health.takingfiredamage = false
         end
@@ -18,4 +18,11 @@ if _ShouldTriggerPanic then
         return ret
     end
     UMUpvalueHacker.SetUpvalue(BrainCommon.PanicTrigger, ShouldTriggerPanic, "ShouldTriggerPanic")
+end
+
+local NO_FIREPANIC_LIST = {"spiderqueen", "knight", "bishop", "rook", "uncompromising_pawn"}
+for _, name in pairs(NO_FIREPANIC_LIST) do
+    env.AddBrainPostInit(name.."brain", function(self)
+        self.um_nofirepanic = true
+    end)
 end
