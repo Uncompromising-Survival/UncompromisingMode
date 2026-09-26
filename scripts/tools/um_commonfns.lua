@@ -105,8 +105,7 @@ UMCommonFns.DoAOEExplosion = function(inst, um_explodeparams) -- Modified copy o
     local attacker = um_explodeparams.attacker or um_explodeparams.pvpattacker
 
     local workablecount = TUNING.EXPLOSIVE_MAX_WORKABLE_INVENTORYITEMS
-    local ents = TheSim:FindEntities(x, y, z, um_explodeparams.explosiverange, nil, CANT_EXPLODE_TAGS, um_explodeparams.oneoftags)
-    for i, v in ipairs(ents) do
+    for i, v in ipairs(TheSim:FindEntities(x, y, z, um_explodeparams.explosiverange, nil, CANT_EXPLODE_TAGS, um_explodeparams.oneoftags)) do
         if v ~= inst and not v:IsInLimbo() and v:IsValid() and (not um_explodeparams.pvpattacker or v == um_explodeparams.pvpattacker or not v:HasTag("player")) then
             local damagetypemult = inst.components.damagetypebonus and self.inst.components.damagetypebonus:GetBonus(v) or 1
 
