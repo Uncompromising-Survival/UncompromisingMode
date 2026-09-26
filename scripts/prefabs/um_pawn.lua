@@ -172,7 +172,6 @@ local function DoSpawnSpikes(inst, pts, level)
 end
 
 local function SpawnSpikes(inst)
-
     local spikes, source = GenerateSpiralSpikes(inst)
 
     if #spikes > 0 then for i, v in ipairs(spikes) do inst:DoTaskInTime((v.t / 1.5), DoSpawnSpikes, v.pts, v.level) end end
@@ -291,7 +290,6 @@ local function ExplodePing(inst)
             inst.sparks = SpawnPrefab("sparks")
             inst.sparks.entity:AddFollower()
             inst.sparks.Follower:FollowSymbol(inst.GUID, "body", 0 + math.random(-0.2, .2), -40, 0 + math.random(-0.2, .2))
-
         end
     --else
         --if inst.task == nil then
@@ -329,21 +327,20 @@ end
 local function pawn_common(pawntype)
     local inst = CreateEntity()
     local shadow = inst.entity:AddDynamicShadow()
-    inst.entity:AddTransform()
-    inst.entity:AddAnimState()
-    inst.entity:AddPhysics()
+    local trans = inst.entity:AddTransform()
+    local anim = inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
     inst.entity:AddDynamicShadow()
     inst.entity:AddNetwork()
 
     shadow:SetSize(1.5, .5)
-    inst.Transform:SetFourFaced()
+    trans:SetFourFaced()
 
-    MakeCharacterPhysics(inst, 1, 0.5)
+    MakeCharacterPhysics(inst, 1, .5)
 
-    inst.AnimState:SetBank("um_pawn")
-    inst.AnimState:SetBuild("um_pawn" .. pawntype)
-    inst.AnimState:PlayAnimation("idle")
+    anim:SetBank("um_pawn")
+    anim:SetBuild("um_pawn"..pawntype)
+    anim:PlayAnimation("idle")
 
     inst:AddTag("cavedweller")
     inst:AddTag("uncompromising_pawn")
@@ -372,10 +369,10 @@ local function pawn_common(pawntype)
 
     inst:AddComponent("inspectable")
     inst.components.inspectable.getstatus = getstatus
-    
+
     inst:AddComponent("burnable")
     inst.components.burnable:SetOnIgniteFn(function(inst) inst.components.explosive:OnBurnt() end)
-    
+
     inst:AddComponent("explosive")
     inst.components.explosive:SetOnExplodeFn(OnExplodeFn)
     inst.components.explosive.explosiverange = 6
@@ -392,9 +389,9 @@ local function pawn_common(pawntype)
     if inst.pawntype == "_nightmare" then
         inst.components.locomotor.runspeed = 6.5
         inst.explode_timer_count = 1
-    
+
         inst:ListenForEvent("newcombattarget", OnNewTarget)
-    
+
         inst:AddTag("uncompromising_nightmarepawn")
         inst.components.combat:SetRetargetFunction(1, NormalRetarget)
     else
@@ -418,6 +415,7 @@ local function pawn_common(pawntype)
     inst:AddTag("soulless")
     inst.sg:GoToState("hide_post")
     inst:DoTaskInTime(0, function(inst) if TUNING.DSTU.PAWNS == false then inst:Remove() end end)
+
     return inst
 end
 
