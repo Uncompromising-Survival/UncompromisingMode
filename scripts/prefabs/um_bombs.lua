@@ -90,7 +90,6 @@ local function OnHitMutate(inst, attacker, target)
         um_explodeparams.attacker = attacker
     end
     UMCommonFns.DoAOEExplosion(inst, um_explodeparams)
-    inst:Remove()
 end
 
 local function onequip(inst, owner)
