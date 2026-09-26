@@ -247,7 +247,7 @@ local data = {
     viperling = { name = "viperling", tex = "viperling.tex", type = "creature", prefab = "viperling", sanityaura = -0.41666666666667, health = 100, damage = 37.5, multcolour = { "0", "0", "0" }, animpercent = 0.37, build = "viperworm", bank = "worm", anim = "atk", notes = { shadow_aligned = true }, use_bg = true },
     ruins_statue_miner = { name = "ancient_statue", tex = "ruins_statue_miner.tex", subcat = "structure", type = "thing", prefab = "ruins_statue_miner", speechname = "ancient_statue", build = "minerstatue", bank = "minerstatue", anim = "idle_full", workable = "MINE", deps = { "nightmarefuel", "thulecite", }, use_bg = true },
     um_pepperdragon_nest = CreateBasicEntry("um_pepperdragon_nest", "thing", nil, { workable = "HAMMER", use_bg = true, deps = { "um_pepperdragon", "firenettles", "boneshard" } }),
-    um_pepperdragon = CreateBasicEntry("um_pepperdragon", "giant", "idle1", { health = 2000, damage = 75, deps = UPDATE_CHECK and { "meat", "um_pepperdragon_bladder", "mitegland" } or { "meat", "um_pepperdragon_bladder" }, use_bg = true }),
+    um_pepperdragon = CreateBasicEntry("um_pepperdragon", "giant", "idle1", { health = 2000, damage = 75, deps = { "meat", "um_pepperdragon_bladder", "mitegland" } or { "meat", "um_pepperdragon_bladder" }, use_bg = true }),
 }
 
 return data

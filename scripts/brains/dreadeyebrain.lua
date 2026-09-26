@@ -1,6 +1,7 @@
 require "behaviours/wander"
 require "behaviours/chaseandattack"
 require "behaviours/follow"
+local BrainCommon = require("brains/braincommon")
 
 local MIN_FOLLOW = 5
 local MED_FOLLOW = 13
@@ -43,6 +44,13 @@ local function ShouldAttack(self)
         self._harasstarget = self.inst.components.combat.target
         return false
     end
+    if self._harasstarget ~= nil and self._harasstarget:IsValid() and self._harasstarget.components.inventory then
+        local held_item = self._harasstarget.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+        if held_item ~= nil and held_item.prefab == "queen_torch" then --UPDATEME
+            return false
+        end
+    end
+
     self._harasstarget = nil
     return true
 end
@@ -61,7 +69,7 @@ end
 
 local function KeepFaceTargetFn(self)
     return not (self.inst.sg:HasStateTag("busy") or
-                self.inst:HasTag("notarget"))
+            self.inst:HasTag("notarget"))
         and self.mytarget ~= nil and self.inst:IsNear(self.mytarget, HARASS_MED)
 end
 
@@ -72,9 +80,9 @@ end
 local function targetatsea(inst)
     if inst.components.combat.target and inst.followtosea then
         local target = inst.components.combat.target
-        local x,y,z = target.Transform:GetWorldPosition()
-        if not TheWorld.Map:IsVisualGroundAtPoint(x,y,z) then
-           return true
+        local x, y, z = target.Transform:GetWorldPosition()
+        if not TheWorld.Map:IsVisualGroundAtPoint(x, y, z) then
+            return true
         end
     end
 end
@@ -84,7 +92,7 @@ local function GetFaceTargetFn(self)
 end
 
 local function teleport(inst)
-     inst:PushEvent("teleport_to_sea")
+    inst:PushEvent("teleport_to_sea")
 end
 
 function DreadEyeBrain:OnStart()
@@ -92,27 +100,33 @@ function DreadEyeBrain:OnStart()
     self:SetTarget(self.inst.spawnedforplayer)
 
     local root = PriorityNode(
-    {
-        IfNode(function() return targetatsea(self.inst) end, "target on land",
-                    DoAction(self.inst, teleport)),
-        WhileNode(function() return ShouldAttack(self) end, "Attack", ChaseAndAttack(self.inst, 100)),
-        WhileNode(function() return ShouldHarass(self) end, "Harass",
-            PriorityNode({
-                WhileNode(function() return ShouldChaseAndHarass(self) end, "ChaseAndHarass",
-                    Follow(self.inst, function() return self._harasstarget end, HARASS_MIN, HARASS_MED, HARASS_MAX)),
-                ActionNode(function()
-                    self.inst.components.combat:BattleCry()
-                    --[[if self.inst.sg.currentstate.name == "taunt" then
+        {
+            BrainCommon.PanicTriggerShadowCreature(self.inst),
+            IfNode(function() return targetatsea(self.inst) end, "target on land",
+                DoAction(self.inst, teleport)),
+            WhileNode(function() return ShouldAttack(self) end, "Attack", ChaseAndAttack(self.inst, 100)),
+            WhileNode(function() return ShouldHarass(self) end, "Harass",
+                PriorityNode({
+                    WhileNode(function() return ShouldChaseAndHarass(self) end, "ChaseAndHarass",
+                        Follow(self.inst, function() return self._harasstarget end, HARASS_MIN, HARASS_MED, HARASS_MAX)),
+                    ActionNode(function()
+                        self.inst.components.combat:BattleCry()
+                        --[[if self.inst.sg.currentstate.name == "taunt" then
                         self.inst:ForceFacePoint(self._harasstarget.Transform:GetWorldPosition())
                     end]]
-                end),
-            }, .25)),
-        FaceEntity(self.inst, GetFaceTargetFn, KeepFaceTargetFn),
-        WhileNode(function() return self._harasstarget ~= nil and self._harasstarget:IsValid() end, "LoiterAndHarass",
-            Wander(self.inst, function() return self._harasstarget:GetPosition() end, 20, { minwaittime = 0, randwaittime = .3 }, function() return GetHarassWanderDir(self) end)),
-        Follow(self.inst, function() return self.mytarget end, MIN_FOLLOW, MED_FOLLOW, MAX_FOLLOW),
-        Wander(self.inst, function() return self.mytarget ~= nil and self.mytarget:GetPosition() or nil end, 20),
-    }, .25)
+                    end),
+                }, .25)),
+            FaceEntity(self.inst, GetFaceTargetFn, KeepFaceTargetFn),
+            WhileNode(function() return self._harasstarget ~= nil and self._harasstarget:IsValid() end, "LoiterAndHarass",
+                Wander(self.inst, function() return self._harasstarget:GetPosition() end, 20, { minwaittime = 0, randwaittime = .3 }, function() return GetHarassWanderDir(self) end)),
+            Follow(self.inst, function() return self.mytarget end, MIN_FOLLOW, MED_FOLLOW, MAX_FOLLOW),
+            Wander(self.inst, function() return self.mytarget ~= nil and self.mytarget:GetPosition() or nil end, 20),
+        }, .25)
+
+ 
+    if UPDATE_CHECK then
+        table.insert(root.children, 2, BrainCommon.RunAwayFromQueenTorch(self))
+    end
 
     self.bt = BT(self.inst, root)
 end
