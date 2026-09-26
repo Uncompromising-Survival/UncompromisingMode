@@ -2,6 +2,7 @@ require "behaviours/standstill"
 require "behaviours/wander"
 require "behaviours/chaseandattack"
 require "behaviours/leash"
+local BrainCommon = require("brains/braincommon")
 
 local ViperlingBrain = Class(Brain, function(self, inst)
     Brain._ctor(self, inst)
@@ -31,14 +32,14 @@ end
 
 local EAT_CANT_TAGS = { "outofreach" }
 local EAT_ONEOF_TAGS = {
-            "edible_GENERIC",
-            "edible_VEGGIE",
-            "edible_INSECT",
-            "edible_SEEDS",
-            "edible_MEAT",
-            "pickable",
-            "harvestable",
-        }
+    "edible_GENERIC",
+    "edible_VEGGIE",
+    "edible_INSECT",
+    "edible_SEEDS",
+    "edible_MEAT",
+    "pickable",
+    "harvestable",
+}
 local function EatFoodAction(inst)
     if inst.sg:HasStateTag("busy") or
         (inst.components.eater:TimeSinceLastEating() ~= nil and inst.components.eater:TimeSinceLastEating() < TUNING.WORM_EATING_COOLDOWN) then
@@ -97,14 +98,17 @@ end
 
 function ViperlingBrain:OnStart()
     local root = PriorityNode(
-    {
+        {
+            BrainCommon.PanicTriggerShadowCreature(self.inst),
+            Follow(self.inst, GetLeader, MIN_FOLLOW_LEADER, TARGET_FOLLOW_LEADER, MAX_FOLLOW_LEADER),
+            ChaseAndAttack(self.inst, TUNING.WORM_CHASE_TIME, TUNING.WORM_CHASE_DIST),
+            Wander(self.inst, function() return self.inst:GetPosition() end, TUNING.WORM_WANDER_DIST),
+            StandStill(self.inst),
+        }, .25)
 
-		Follow(self.inst, GetLeader, MIN_FOLLOW_LEADER, TARGET_FOLLOW_LEADER, MAX_FOLLOW_LEADER),
-        ChaseAndAttack(self.inst, TUNING.WORM_CHASE_TIME, TUNING.WORM_CHASE_DIST),
-        Wander(self.inst, function() return self.inst:GetPosition() end, TUNING.WORM_WANDER_DIST),
-        StandStill(self.inst),
-
-    }, .25)
+    if UPDATE_CHECK then
+        table.insert(root.children, 2, BrainCommon.RunAwayFromQueenTorch(self))
+    end
     self.bt = BT(self.inst, root)
 end
 
