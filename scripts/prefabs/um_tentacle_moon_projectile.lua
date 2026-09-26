@@ -31,7 +31,6 @@ local function OnLand(inst)
             mine.attacker = inst.attacker
             mine.attacker_faction = inst.attacker_faction
         end
-        mine.SoundEmitter:PlaySound("dontstarve/impacts/impact_metal_armour_blunt")
         mine.components.mine:Reset()
         mine.Transform:SetPosition(x,y,z)
     end
