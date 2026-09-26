@@ -353,50 +353,52 @@ local function pawn_common(pawntype)
 
     inst.pawntype = pawntype
 
-    inst:AddComponent("sanityaura")
+    local inspectable = inst:AddComponent("inspectable")
+    inspectable.getstatus = getstatus
 
     inst:AddComponent("knownlocations")
-    inst:AddComponent("combat")
-    inst.components.combat.hiteffectsymbol = "chest"
 
-    inst:AddComponent("health")
-    inst.components.health:SetMaxHealth(100)
+    local combat = inst:AddComponent("combat")
+    combat.hiteffectsymbol = "neck"
 
-    MakeTinyFreezableCharacter(inst, "chest")
+    local health = inst:AddComponent("health")
+    health:SetMaxHealth(100)
 
-    inst:AddComponent("lootdropper")
-    inst.components.lootdropper:SetChanceLootTable('um_pawn')
+    local lootdropper = inst:AddComponent("lootdropper")
+    lootdropper:SetChanceLootTable('um_pawn')
 
-    inst:AddComponent("inspectable")
-    inst.components.inspectable.getstatus = getstatus
-
-    inst:AddComponent("burnable")
-    inst.components.burnable:SetOnIgniteFn(function(inst) inst.components.explosive:OnBurnt() end)
-
-    inst:AddComponent("explosive")
-    inst.components.explosive:SetOnExplodeFn(OnExplodeFn)
-    inst.components.explosive.explosiverange = 6
-    inst.components.explosive.buildingdamage = 0
-    inst.components.explosive.explosivedamage = TUNING.GUNPOWDER_DAMAGE
-
-    inst:AddComponent("locomotor") -- locomotor must be constructed before the stategraph
-    inst.components.locomotor:SetTriggersCreep(false)
-    inst.components.locomotor.runspeed = 5.5
-    inst.components.locomotor.walkspeed = 2.5
+    local locomotor = inst:AddComponent("locomotor")
+    locomotor:SetTriggersCreep(false)
+    locomotor.runspeed = 5.5
+    locomotor.walkspeed = 2.5
 
     inst:SetStateGraph("SGuncompromising_pawn")
 
     if inst.pawntype == "_nightmare" then
-        inst.components.locomotor.runspeed = 6.5
+        locomotor.runspeed = 6.5
+
+        local explosive = inst:AddComponent("explosive")
+        explosive:SetOnExplodeFn(OnExplodeFn)
+        explosive.explosiverange = 6
+        explosive.buildingdamage = 0
+        explosive.explosivedamage = TUNING.GUNPOWDER_DAMAGE
+
+        local burnable = inst:AddComponent("burnable")
+        burnable:SetOnIgniteFn(function(_inst) _inst.components.explosive:OnBurnt() end)
+
         inst.explode_timer_count = 1
 
         inst:ListenForEvent("newcombattarget", OnNewTarget)
 
         inst:AddTag("uncompromising_nightmarepawn")
-        inst.components.combat:SetRetargetFunction(1, NormalRetarget)
+        combat:SetRetargetFunction(1, NormalRetarget)
     else
-        inst.components.combat:SetShouldAggroFn(ShouldAggro)
+        combat:SetShouldAggroFn(ShouldAggro)
+
+        MakeSmallBurnableCharacter(inst, "neck")
     end
+
+    MakeTinyFreezableCharacter(inst, "neck")
 
     inst.OnEntityWake = OnWake
     inst.OnEntitySleep = OnSleep
@@ -425,11 +427,11 @@ local function pawn()
 
     if not TheWorld.ismastersim then return inst end
 
-    inst:AddComponent("playerprox")
-    inst.components.playerprox:SetDist(7, 13) -- set specific values
-    inst.components.playerprox:SetOnPlayerNear(onnear)
-    inst.components.playerprox:SetOnPlayerFar(onfar)
-    inst.components.playerprox:SetPlayerAliveMode(inst.components.playerprox.AliveModes.AliveOnly)
+    local playerprox = inst:AddComponent("playerprox")
+    playerprox:SetDist(7, 13) -- set specific values
+    playerprox:SetOnPlayerNear(onnear)
+    playerprox:SetOnPlayerFar(onfar)
+    playerprox:SetPlayerAliveMode(playerprox.AliveModes.AliveOnly)
 
     return inst
 end
@@ -437,11 +439,10 @@ end
 local function pawn_nightmare()
     local inst = pawn_common("_nightmare")
 
-
-    if not TheWorld.ismastersim then return inst end
-
     inst:AddTag("landmine")
     inst:AddTag("shadow_aligned")
+
+    if not TheWorld.ismastersim then return inst end
 
     return inst
 end
