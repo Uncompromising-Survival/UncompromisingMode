@@ -5,16 +5,9 @@ local assets =
     Asset("ANIM", "anim/um_detonator.zip"),
 }
 
-local prefabs =
-{
-
-}
-
 local function ShouldRepeatCast(inst, doer)
     return not inst:HasTag("usesdepleted")
 end
-
-
 
 local function PingCatapult(inst, doer, pos, catapult)
     local ping = SpawnPrefab("reticuleaoewinonaengineeringping")
@@ -34,11 +27,6 @@ local function PingCatapult(inst, doer, pos, catapult)
 
     return true
 end
-
-
-
---------------------------------------------------------------------------
-
 
 --------------------------------------------------------------------------
 
@@ -72,7 +60,6 @@ local function IsMeleeMine(prefab)
     end
 end
 
-
 local function FindNearbyTarget(pos)
     local ents = TheSim:FindEntities(pos.x, pos.y, pos.z, 16, { "_health" })
     local dist = 999
@@ -89,56 +76,61 @@ local function FindNearbyTarget(pos)
 end
 
 local function ExplodeSpellFn(inst, doer, pos)
-    local ents = TheSim:FindEntities(pos.x, pos.y, pos.z, 4)
-    for i, v in ipairs(ents) do
-        if v:HasTag("INLIMBO") and v.components.inventoryitem and not TheNet:GetPVPEnabled() then
-            local owner = v.components.inventoryitem:GetGrandOwner()
-            if owner ~= nil and owner:HasTag("player") and owner ~= doer then
-                return
+    for i, v in ipairs(TheSim:FindEntities(pos.x, pos.y, pos.z, 4)) do
+        if v:IsValid() then
+            if v:HasTag("INLIMBO") and v.components.inventoryitem and not TheNet:GetPVPEnabled() then
+                local owner = v.components.inventoryitem:GetGrandOwner()
+                if owner ~= nil and owner:HasTag("player") and owner ~= doer then
+                    return
+                end
             end
-        end
-        if v.prefab == "spore_moon" then -- Spores
-            inst.components.finiteuses:Use(1)
-            v.sg:GoToState("pre_pop")
-        end
-        if IsStandardExplosive(v.prefab) and v.components.explosive then -- Gunpowder, the likes
-            inst.components.finiteuses:Use(1)
-            v.components.explosive:OnBurnt()
-        end
-        if IsExplosiveEnemy(v.prefab) then                                  -- Exploding enemies, mostly UM
-            if v.prefab == "snaildrake_magma" or v.prefab == "snaildrake_slime" then -- These guys have different handling
-                inst.components.finiteuses:Use(50)
-                v:DoExplosion()
-                v.components.combat:GetAttacked(doer, 100, nil)
-            elseif v.components.explosive then
-                inst.components.finiteuses:Use(50)
+
+            if v.prefab == "spore_moon" then -- Spores
+                inst.components.finiteuses:Use(1)
+                v.sg:GoToState("pre_pop")
+            end
+
+            if IsStandardExplosive(v.prefab) and v.components.explosive then -- Gunpowder, the likes
+                inst.components.finiteuses:Use(1)
                 v.components.explosive:OnBurnt()
-            elseif v.components.health and not v.components.health:IsDead() then
-                inst.components.finiteuses:Use(50)
-                v.components.health:Kill()
             end
-        end
-        if v.components.mine then
-            local target = FindNearbyTarget(pos)
-            inst.components.finiteuses:Use(1)
-            if IsMeleeMine(v.prefab) then
-                v.components.mine:Explode()
-            else
-                v.components.mine:Explode(target)
+
+            if IsExplosiveEnemy(v.prefab) then                                  -- Exploding enemies, mostly UM
+                if v.prefab == "snaildrake_magma" or v.prefab == "snaildrake_slime" then -- These guys have different handling
+                    inst.components.finiteuses:Use(50)
+                    v:DoExplosion()
+                    v.components.combat:GetAttacked(doer, 100, nil)
+                elseif v.components.explosive then
+                    inst.components.finiteuses:Use(50)
+                    v.components.explosive:OnBurnt()
+                elseif v.components.health and not v.components.health:IsDead() then
+                    inst.components.finiteuses:Use(50)
+                    v.components.health:Kill()
+                end
             end
-        end
 
-        if v.components.boatcannon and v.components.boatcannon:IsAmmoLoaded() then
-            v.components.boatcannon:Shoot()
-        end
+            if v.components.mine then
+                local target = FindNearbyTarget(pos)
+                inst.components.finiteuses:Use(1)
+                if IsMeleeMine(v.prefab) then
+                    v.components.mine:Explode()
+                else
+                    v.components.mine:Explode(target)
+                end
+            end
 
-        if v.ModdedExplodeFn then
-            v.ModdedExplodeFn(v, inst, doer, pos) -- If there is a modded prefab, let them postinit this function and add their own handling!
-        end
+            if v.components.boatcannon and v.components.boatcannon:IsAmmoLoaded() then
+                v.components.boatcannon:Shoot()
+            end
 
-        if v.ModdedTargetExplodeFn then
-            local target = FindNearbyTarget(pos)
-            v.ModdedTargetExplodeFn(v, target) -- If there is a modded mine or something that needs a target, let them postinit this function and add their own handling!
+            if v.ModdedExplodeFn then
+                v.ModdedExplodeFn(v, inst, doer, pos) -- If there is a modded prefab, let them postinit this function and add their own handling!
+            end
+
+            if v.ModdedTargetExplodeFn then
+                local target = FindNearbyTarget(pos)
+                v.ModdedTargetExplodeFn(v, target) -- If there is a modded mine or something that needs a target, let them postinit this function and add their own handling!
+            end
         end
     end
 end
@@ -146,9 +138,6 @@ end
 local function ExplodeSpellUpdatePositionFn(inst, pos, reticule, ease, smoothing, dt)
     reticule.Transform:SetPosition(pos:Get())
 end
-
---------------------------------------------------------------------------
-
 
 --------------------------------------------------------------------------
 
@@ -260,7 +249,6 @@ end
 -- COPIED CODE FROM WINONA REMOTE CONTROL (DISABLED)
 --------------------------------------------------------------------------
 --[[
-
 
 local function SetLedEnabled(inst, enabled)
 	if enabled then
@@ -578,10 +566,9 @@ local function fn()
     -- inst._wired = nil
     -- inst._inittask = inst:DoTaskInTime(0, OnInit)
 
-
     inst.ModdedExplodeFn = function(inst, prefab) end -- Fellow Modders, if you want the detonator to work on something from your mod, simply postinit this prefab, call the ExplodeSpellFn, add your own handlers, and then you should be good.
 
     return inst
 end
 
-return Prefab("um_detonator", fn, assets, prefabs)
+return Prefab("um_detonator", fn, assets)

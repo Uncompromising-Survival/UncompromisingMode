@@ -2,7 +2,7 @@ require "behaviours/wander"
 require "behaviours/runaway"
 require "behaviours/chaseandattack"
 require "behaviours/doaction"
-require "behaviours/panic"
+local BrainCommon = require("brains/braincommon")
 
 local STOP_RUN_DIST = 10
 local SEE_PLAYER_DIST = 7
@@ -52,7 +52,7 @@ function Uncompromising_PawnBrain:OnStart()
 
     local root = PriorityNode(
     {
-        WhileNode(function() return self.inst.components.health.takingfiredamage end, "OnFire", Panic(self.inst)),
+        BrainCommon.PanicTrigger(self.inst),
         --RunAway(self.inst, "scarytopr1ey", AVOID_PLAYER_DIST, AVOID_PLAYER_STOP),
 
         IfNode(function() return IsDangerClose(self.inst) and not self.inst.components.freezable:IsFrozen() end, "DangerClose", ActionNode(function() TryHide(self.inst) end), "Hide"),

@@ -51,7 +51,7 @@ local function BeginDegrade(inst)
 end
 
 local function RemoveChildOnRevert(bee)
-    if not inst:IsAsleep() and inst.components.health and not inst.components.health:IsDead() then
+    if not bee:IsAsleep() and bee.components.health and not bee.components.health:IsDead() then
         bee:RemoveComponent("lootdropper")
         bee:AddComponent("lootdropper") -- wipe the lootdropper component
         bee:RemoveComponent("workable")
@@ -63,7 +63,7 @@ local function RemoveChildOnRevert(bee)
 end
 
 local function Revert(inst)
-    local x,y,z = inst.Transform:GetWorldPosition()
+    local x, y, z = inst.Transform:GetWorldPosition()
     local hives = TheSim:FindEntities(x, y, z, 32, {"beehive"})
     if #hives < 3 and math.random() < .25 then
         SpawnPrefab("beehive").Transform:SetPosition(x, y, z)
