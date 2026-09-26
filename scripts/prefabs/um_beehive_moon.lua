@@ -51,7 +51,7 @@ local function BeginDegrade(inst)
 end
 
 local function RemoveChildOnRevert(bee)
-    if not inst:IsAsleep() and inst.components.health and not inst.components.health:IsDead() then
+    if not bee:IsAsleep() and bee.components.health and not bee.components.health:IsDead() then
         bee:RemoveComponent("lootdropper")
         bee:AddComponent("lootdropper") -- wipe the lootdropper component
         bee:RemoveComponent("workable")
