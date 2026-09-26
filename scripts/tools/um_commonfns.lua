@@ -88,8 +88,8 @@ UMCommonFns.DoAOEExplosion = function(inst, um_explodeparams) -- Modified copy o
         end
     end
 
-    if um_explodeparams.onexplodefn then
-        um_explodeparams.onexplodefn(inst)
+    if um_explodeparams.onexplodefn_pre then
+        um_explodeparams.onexplodefn_pre(inst)
     end
 
     local stacksize = inst.components.stackable and inst.components.stackable:StackSize() or 1
@@ -112,18 +112,21 @@ UMCommonFns.DoAOEExplosion = function(inst, um_explodeparams) -- Modified copy o
 
             if v.components.workable and v.components.workable:CanBeWorked() then
                 -- NOTES(JBK): Stackable inventory items can be placed down 1 by 1 making this a convenience to players to not have to drop them down 1 by 1 first for maximum potential output.
-                local workdamage = FunctionOrValue(um_explodeparams.buildingdamage, inst, v) * stacksize * damagetypemult
-                local dowork = true
-                if v.components.inventoryitem then
-                    if workablecount > 0 then
-                        workablecount = workablecount - 1
-                        workdamage = workdamage * (v.components.stackable and v.components.stackable:StackSize() or 1)
-                    else
-                        dowork = false
+                local buildingdamage = FunctionOrValue(um_explodeparams.buildingdamage, inst, v)
+                if buildingdamage then
+                    local workdamage = buildingdamage * stacksize * damagetypemult
+                    local dowork = true
+                    if v.components.inventoryitem then
+                        if workablecount > 0 then
+                            workablecount = workablecount - 1
+                            workdamage = workdamage * (v.components.stackable and v.components.stackable:StackSize() or 1)
+                        else
+                            dowork = false
+                        end
                     end
-                end
-                if dowork then
-                    v.components.workable:WorkedBy(inst, workdamage)
+                    if dowork then
+                        v.components.workable:WorkedBy(inst, workdamage)
+                    end
                 end
             end
 
@@ -164,6 +167,10 @@ UMCommonFns.DoAOEExplosion = function(inst, um_explodeparams) -- Modified copy o
                 v:PushEvent("explosion", { explosive = inst })
             end
         end
+    end
+
+    if um_explodeparams.onexplodefn_pst then
+        um_explodeparams.onexplodefn_pst(inst)
     end
 
     for i = 1, stacksize do
