@@ -63,7 +63,7 @@ local function RemoveChildOnRevert(bee)
 end
 
 local function Revert(inst)
-    local x,y,z = inst.Transform:GetWorldPosition()
+    local x, y, z = inst.Transform:GetWorldPosition()
     local hives = TheSim:FindEntities(x, y, z, 32, {"beehive"})
     if #hives < 3 and math.random() < .25 then
         SpawnPrefab("beehive").Transform:SetPosition(x, y, z)
