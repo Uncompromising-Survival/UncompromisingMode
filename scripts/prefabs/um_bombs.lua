@@ -40,6 +40,13 @@ local function OnHitFyre(inst, attacker, target)
     UMCommonFns.DoAOEExplosion(inst, um_explodeparams)
 end
 
+local SHADOW_TAGS = {"shadow", "shadowcreature", "nightmarecreature", "shadow_aligned", "player_shadow_aligned"}
+local LUNAR_TAGS = {"lunar_aligned", "player_lunar_aligned"}
+local function GetLunarAlignmentDamageMult(inst, target)
+    return target:HasAnyTag(SHADOW_TAGS) and 3 or (target:HasAnyTag(LUNAR_TAGS)
+        or target.components.halloweenmoonmutable) and .33 or 1
+end
+
 local function OnHitMutate(inst, attacker, target)
     local x, y, z = inst.Transform:GetWorldPosition()
     local fx = SpawnPrefab("um_lunar_explosion")
@@ -56,39 +63,33 @@ local function OnHitMutate(inst, attacker, target)
 
     fx:ListenForEvent("animover", fx.Remove)
 
-    local ents = TheSim:FindEntities(x, y, z, 5)
+    local mutated = false
     local mutation_count = 0
     local mutation_limit = 12
-    if #ents > 0 then
-        for i, v in pairs(ents) do
-            if (not v:HasTag("player") or v == attacker) then
-                local mutated = false
-                if v.components.halloweenmoonmutable and mutation_count < mutation_limit then
-                    mutated = true
-                    mutation_count = mutation_count + 1
-                    v.components.halloweenmoonmutable:Mutate()
-                end
-                if v.components.combat and v.components.health and not v.components.health:IsDead() and not mutated and not inst:HasAnyTag(shouldnt_hit) and v.components.combat:CanBeAttacked(attacker) then
-                    local mult = 1
-                    if v:HasAnyTag("shadow", "shadowcreature", "nightmarecreature", "shadow_aligned", "player_shadow_aligned") then
-                        mult = mult * 3 -- AXE Lunar bomb is exceptionally effective against shadow creatures
-                    end
-                    if v:HasAnyTag("lunar_aligned", "player_lunar_aligned") or v.components.halloweenmoonmutable then
-                        mult = mult * 0.33 -- AXE Lunar bomb is exceptionally less effective against lunar creatures, or those than can mutate
-                    end
-                    v.components.combat:GetAttacked(attacker, mult * 150)
-                end
-                if v.components.sanity then
-                    v.components.sanity:DoDelta(50)
-                end
+    local function MutateCreatures(_inst, target)
+        if target.components.halloweenmoonmutable and mutation_count < mutation_limit then
+            mutated = true
+            mutation_count = mutation_count + 1
+            target.components.halloweenmoonmutable:Mutate()
+        end
 
-                if v.components.werebeast ~= nil and not v.components.werebeast:IsInWereState() then
-                    v.components.werebeast:SetWere(1)
-                end
-            end
+        if target.components.sanity then
+            target.components.sanity:DoDelta(50)
+        end
+
+        if target.components.werebeast and not target.components.werebeast:IsInWereState() then
+            target.components.werebeast:SetWere(1)
         end
     end
 
+    local um_explodeparams = {explosiverange = 5, explosivedamage = 150, damagemult = GetLunarAlignmentDamageMult,
+        onexplodefn = MutateCreatures, shoulddamage = function() return not mutated end, ignoreexplosiveresist = true}
+    if inst.ispvp then
+        um_explodeparams.pvpattacker = attacker
+    else
+        um_explodeparams.attacker = attacker
+    end
+    UMCommonFns.DoAOEExplosion(inst, um_explodeparams)
     inst:Remove()
 end
 
