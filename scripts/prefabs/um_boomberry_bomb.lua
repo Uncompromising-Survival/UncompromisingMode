@@ -1,30 +1,25 @@
 local um_boomberry_bomb_assets =
 {
-	Asset("ANIM", "anim/um_boomberry_bomb.zip"),
+    Asset("ANIM", "anim/um_boomberry_bomb.zip"),
     Asset("ANIM", "anim/swap_um_boomberry_bomb.zip"),
 }
-local shouldnt_hit = { "FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost" }
-local function OnHitBoomBerry(inst, attacker, target)
-	local x,y,z = inst.Transform:GetWorldPosition()
-	SpawnPrefab("blueberryexplosion").Transform:SetPosition(x,y,z)
-	local puddle = SpawnPrefab("blueberrypuddle")
-	puddle.Transform:SetPosition(x,y,z)
-	puddle.playermade = true
 
-	puddle.SoundEmitter:PlaySound("turnoftides/creatures/together/starfishtrap/trap")
-	local ents = TheSim:FindEntities(x, y, z, 3, nil,shouldnt_hit)
-	if #ents > 0 then
-		for i, v in pairs(ents) do
-			if (not v:HasTag("player") or v == attacker) then
-				if v.components.combat and v.components.combat:CanBeAttacked(attacker) then
-					v.components.combat:GetAttacked(attacker,TUNING.DSTU.BOOMBERRYBOMB_DAMAGE)
-				end
-			end
-		end
-	end
-	inst:Hide()
-	inst.components.wateryprotection:SpreadProtection(inst)
-	inst:Remove()
+local function OnHitBoomBerry(inst, attacker, target)
+    local x, y, z = inst.Transform:GetWorldPosition()
+    SpawnPrefab("blueberryexplosion").Transform:SetPosition(x, y, z)
+    local puddle = SpawnPrefab("blueberrypuddle")
+    puddle.Transform:SetPosition(x, y, z)
+    puddle.playermade = true
+
+    puddle.SoundEmitter:PlaySound("turnoftides/creatures/together/starfishtrap/trap")
+    local um_explodeparams = {explosiverange = 3, explosivedamage = TUNING.DSTU.BOOMBERRYBOMB_DAMAGE,
+        onexplodefn_pst = function(_inst) _inst:Hide() inst.components.wateryprotection:SpreadProtection(_inst) end}
+    if inst.ispvp then
+        um_explodeparams.pvpattacker = attacker
+    else
+        um_explodeparams.attacker = attacker
+    end
+    UMCommonFns.DoAOEExplosion(inst, um_explodeparams)
 end
 
 local function common_fn(bank, build, anim, tag, isinventoryitem)
@@ -49,7 +44,7 @@ local function common_fn(bank, build, anim, tag, isinventoryitem)
         inst.Physics:SetDontRemoveOnSleep(true) -- so the object can land and put out the fire, also an optimization due to how this moves through the world
     end
 
-    if tag ~= nil then
+    if tag then
         inst:AddTag(tag)
     end
 
@@ -105,6 +100,8 @@ local function onthrown(inst)
     inst:AddTag("NOCLICK")
     inst.persists = false
 
+    inst.ispvp = attacker ~= nil and attacker:IsValid() and attacker:HasAnyTag("player", "possessedbody")
+
     inst.AnimState:PlayAnimation("spin_loop", true)
 
     inst.Physics:SetMass(1)
@@ -147,6 +144,7 @@ local function um_boomberry_bomb()
     inst:AddTag("watersource")
     inst:AddTag("show_spoilage")
     inst:AddTag("icebox_valid")
+
     if not TheWorld.ismastersim then
         return inst
     end
@@ -181,6 +179,5 @@ local function um_boomberry_bomb()
 
     return inst
 end
-
 
 return Prefab("um_boomberry_bomb", um_boomberry_bomb, um_boomberry_bomb_assets)

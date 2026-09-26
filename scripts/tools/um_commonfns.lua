@@ -66,6 +66,128 @@ UMCommonFns.IsNotFriendly = function(attacker, target) -- Is the target an ally 
         and (not leader or leadercombat and leadercombat:CanTarget(target) and not leadercombat:IsAlly(target)))
 end
 
+UMCommonFns.IsRangedWeapon = function(ent)
+    if UPDATE_CHECK and IsRangedWeapon then return IsRangedWeapon(ent) end
+    return ent ~= nil and
+        (    ent.components.projectile ~= nil or
+            (ent.components.weapon ~= nil and ent.components.weapon:CanRangedAttack()) or
+            ent:HasTag("pseudorangedweapon")
+        )
+end
+
+local SpDamageUtil = require("components/spdamageutil")
+local CANT_EXPLODE_TAGS = { "INLIMBO", "notarget" }
+UMCommonFns.DoAOEExplosion = function(inst, um_explodeparams) -- Modified copy of explosive:OnBurnt().
+    if not um_explodeparams then return end
+    if not um_explodeparams.skip_camera_flash then
+        for i, v in ipairs(AllPlayers) do
+            local distSq = v:GetDistanceSqToInst(inst)
+            local k = math.max(0, math.min(1, distSq / 400))
+            local intensity = k * 0.75 * (k - 2) + 0.75 --easing.outQuad(k, 1, -1, 1)
+            if intensity > 0 then
+                v:ScreenFlash(intensity)
+                v:ShakeCamera(CAMERASHAKE.FULL, .7, .02, intensity / 2)
+            end
+        end
+    end
+
+    if um_explodeparams.onexplodefn_pre then
+        um_explodeparams.onexplodefn_pre(inst)
+    end
+
+    local stacksize = inst.components.stackable and inst.components.stackable:StackSize() or 1
+    local totaldamage = um_explodeparams.explosivedamage * stacksize
+
+    local x, y, z = inst.Transform:GetWorldPosition()
+
+    local world = TheWorld
+    if um_explodeparams.damagedocks and world.components.dockmanager then
+        world.components.dockmanager:DamageDockAtPoint(x, y, z, totaldamage)
+    end
+
+    local attacker = um_explodeparams.attacker or um_explodeparams.pvpattacker
+
+    local workablecount = TUNING.EXPLOSIVE_MAX_WORKABLE_INVENTORYITEMS
+    for i, v in ipairs(TheSim:FindEntities(x, y, z, um_explodeparams.explosiverange, nil, CANT_EXPLODE_TAGS, um_explodeparams.oneoftags)) do
+        if v ~= inst and not v:IsInLimbo() and v:IsValid() and (not um_explodeparams.pvpattacker or v == um_explodeparams.pvpattacker or not v:HasTag("player")) then
+            local damagetypemult = inst.components.damagetypebonus and self.inst.components.damagetypebonus:GetBonus(v) or 1
+
+            if v.components.workable and v.components.workable:CanBeWorked() then
+                -- NOTES(JBK): Stackable inventory items can be placed down 1 by 1 making this a convenience to players to not have to drop them down 1 by 1 first for maximum potential output.
+                local buildingdamage = FunctionOrValue(um_explodeparams.buildingdamage, inst, v)
+                if buildingdamage then
+                    local workdamage = buildingdamage * stacksize * damagetypemult
+                    local dowork = true
+                    if v.components.inventoryitem then
+                        if workablecount > 0 then
+                            workablecount = workablecount - 1
+                            workdamage = workdamage * (v.components.stackable and v.components.stackable:StackSize() or 1)
+                        else
+                            dowork = false
+                        end
+                    end
+                    if dowork then
+                        v.components.workable:WorkedBy(inst, workdamage)
+                    end
+                end
+            end
+
+            --Recheck valid after work
+            if not v:IsInLimbo() and v:IsValid() then
+                if um_explodeparams.lightonexplode and not v.components.fueled
+                    and v.components.burnable and not v.components.burnable:IsBurning() and not v:HasTag("burnt") then
+                    v.components.burnable:Ignite()
+                end
+
+                if not (v.components.health and v.components.health:IsDead()) and
+                    v.components.combat and v.components.combat:CanBeAttacked()
+                then
+                    local dmg = totaldamage * damagetypemult
+                    if not um_explodeparams.ignoreexplosiveresist and v.components.explosiveresist ~= nil then
+                        dmg = dmg * (1 - v.components.explosiveresist:GetResistance())
+                        v.components.explosiveresist:OnExplosiveDamage(dmg, inst)
+                    end
+
+                    local spdmg = SpDamageUtil.CollectSpDamage(inst)
+                    if spdmg and damagetypemult ~= 1 then
+                        spdmg = SpDamageUtil.ApplyMult(spdmg, damagetypemult)
+                    end
+
+                    --V2C: still passing self.inst instead of attacker here, so we don't
+                    --     use attacker for calculating damage mods.
+                    v.components.combat:GetAttacked(inst, dmg, nil, nil, spdmg) -- NOTES(JBK): The component combat might remove itself in the GetAttacked callback!
+
+                    if attacker and v.components.combat and not (v.components.health and v.components.health:IsDead()) and v:IsValid() then
+                        if attacker:IsValid() then
+                            v.components.combat:SuggestTarget(attacker)
+                        else
+                            attacker = nil
+                        end
+                    end
+                end
+
+                v:PushEvent("explosion", { explosive = inst })
+            end
+        end
+    end
+
+    if um_explodeparams.onexplodefn_pst then
+        um_explodeparams.onexplodefn_pst(inst)
+    end
+
+    for i = 1, stacksize do
+        world:PushEvent("explosion", { damage = um_explodeparams.explosivedamage })
+    end
+
+    if inst.components.health ~= nil then
+        -- NOTES(JBK): Make sure to keep the events fired up to date with the health component.
+        world:PushEvent("entity_death", { inst = inst, explosive = true, })
+        inst:PushEvent("death")
+    end
+
+    inst:Remove()
+end
+
 UMCommonFns.VetcurseUnequip = function(inst, owner, slot)
     if owner.components.inventory.isloading then return end
     if owner:HasTag("player") then

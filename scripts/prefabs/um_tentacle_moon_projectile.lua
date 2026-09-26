@@ -5,8 +5,23 @@ local assets =
     Asset("ANIM", "anim/um_tentaclespike_moon.zip"),
 }
 
-local should_hit = { "_health","_combat"}
+local should_hit = { "_health", "_combat"}
 local shouldnt_hit = {"playerghost", "brightmare_gestalt", "nightmarecreature", "um_tentacle_moon"}
+
+local function ShouldBeAttacked(inst, target)
+    return inst.attacker and UMCommonFns.IsNotFriendly(inst.attacker, target) and not (inst.attacker_faction and target:HasTag(inst.attacker_faction))
+end
+
+local function DoAttackAndSuggestTarget(inst, target)
+    target.components.combat:GetAttacked(inst, 20)
+    if target.components.combat and not (target.components.health and target.components.health:IsDead()) and target:IsValid() then
+        if inst.attacker:IsValid() then
+            target.components.combat:SuggestTarget(inst.attacker)
+        else
+            inst.attacker = nil
+        end
+    end
+end
 
 local function OnLand(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
@@ -16,15 +31,13 @@ local function OnLand(inst)
             mine.attacker = inst.attacker
             mine.attacker_faction = inst.attacker_faction
         end
-        mine.SoundEmitter:PlaySound("dontstarve/impacts/impact_metal_armour_blunt")
         mine.components.mine:Reset()
         mine.Transform:SetPosition(x,y,z)
     end
 
-    local ents = TheSim:FindEntities(x, y, z, 1.5, should_hit, shouldnt_hit)
-    for i, v in ipairs(ents) do
-        if inst.attacker and v.prefab ~= inst.attacker.prefab and not (inst.attacker_faction and v:HasTag(inst.attacker_faction)) then
-            v.components.combat:GetAttacked(inst.attacker and inst.attacker:IsValid() and inst.attacker or nil, 20, inst)
+    for i, v in ipairs(TheSim:FindEntities(x, y, z, 1.5, should_hit, shouldnt_hit)) do
+        if inst.attacker and UMCommonFns.IsNotFriendly(inst.attacker, v) and not (inst.attacker_faction and v:HasTag(inst.attacker_faction)) then
+            DoAttackAndSuggestTarget(inst, v)
         end
     end
     inst:Remove()
@@ -138,7 +151,7 @@ local function DoDamageEffect(inst, target)
 
     if not plague then
         if target.components.combat and not target.components.health:IsDead() then
-            target.components.combat:GetAttacked(inst.attacker and inst.attacker:IsValid() and inst.attacker or nil, 20, inst)
+            DoAttackAndSuggestTarget(inst, target)
             DeathSpoil(target)
         end
         target:PushEvent("knockback", { knocker = inst, radius = 1.5, strengthmult = 1.5, forcelanded = true })
@@ -147,16 +160,12 @@ end
 
 local function OnExplode(inst, target)
     inst.DynamicShadow:Enable(false)
-    local x,y,z = inst.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, 3, should_hit, shouldnt_hit)
-    for i, v in ipairs(ents) do
-        if inst.attacker and v.prefab ~= inst.attacker.prefab and not (inst.attacker_faction and v:HasTag(inst.attacker_faction)) then
-            DoDamageEffect(inst, v)
-        end
+    local x, y, z = inst.Transform:GetWorldPosition()
+    for i, v in ipairs(TheSim:FindEntities(x, y, z, 3, should_hit, shouldnt_hit)) do
+        if ShouldBeAttacked(inst, v) then DoDamageEffect(inst, v) end
     end
-    local ents = TheSim:FindEntities(x, y, z, TUNING.TRAP_TEETH_RADIUS)
-    for i, v in ipairs(ents) do
-        if v.components.inventoryitem and v.components.perishable then
+    for i, v in ipairs(TheSim:FindEntities(x, y, z, TUNING.TRAP_TEETH_RADIUS)) do
+        if ShouldBeAttacked(inst, v) and v.components.inventoryitem and v.components.perishable then
             v.components.perishable:SetPercent(v.components.inventoryitem:IsHeld() and v.components.perishable:GetPercent() - .05 or 0)
         end
     end
@@ -164,9 +173,9 @@ local function OnExplode(inst, target)
     inst.components.umripples:OnNoLongerLandedServer()
     inst.AnimState:PlayAnimation("explode")
     local poof = SpawnPrefab("air_conditioner_smoke")
-    poof.AnimState:SetMultColour(1,1,0.2,1)
+    poof.AnimState:SetMultColour(1, 1, .2, 1)
     poof.Transform:SetPosition(x,y,z)
-    poof.Transform:SetScale(0.75,0.75,0.75)
+    poof.Transform:SetScale(.75, .75, .75)
     inst:ListenForEvent("animover",function(inst) inst:Remove() end)
 end
 

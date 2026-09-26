@@ -91,7 +91,7 @@ local function Flamethrower(inst, caster, pos)
             projectile.speed = 15
             projectile.scale = 1 + math.random(0, 10) / 100 -- scale up sometimes.
             projectile.damage = 3
-            projectile.damager = caster
+            projectile.um_damager = caster
         end
     end
 end

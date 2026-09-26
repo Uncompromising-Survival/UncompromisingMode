@@ -222,17 +222,9 @@ function MagmaManager:MeltMagmaTile(x, z)
             v:PushEvent("onmagmamelted")
             if ShouldEntitySink(v) and v.components.inventoryitem then
                 SinkEntity(v)
-            end
-
-            --redundant?
-            if v.components.burnable ~= nil then
-                v.components.burnable:Ignite(true)
-            end
-            if v.components.drownable ~= nil then
+            elseif v.components.drownable ~= nil then
                 v.components.drownable:CheckDrownable()
-            end
-
-            if v.components.workable ~= nil then
+            elseif v.components.workable ~= nil then
                 v.components.workable:Destroy(TheSim:FindFirstEntityWithTag("magma_tile"))
             end
             --health dmg handled by sg

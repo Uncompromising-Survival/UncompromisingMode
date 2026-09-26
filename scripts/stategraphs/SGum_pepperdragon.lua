@@ -101,7 +101,7 @@ local function ShootFire(inst, total_flame)
             projectile.speed = 15
             projectile.scale = 1 + math.random(0, 10) / 100 -- scale up sometimes.
             projectile.damage = 3
-            projectile.damager = inst
+            projectile.um_damager = inst
             if inst.coldfire then
                 projectile.chilly = true
             else

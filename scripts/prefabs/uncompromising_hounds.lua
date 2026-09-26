@@ -641,10 +641,10 @@ end
 
 local function OnLightningAttacked(inst, data)
     if not data then return end
-    local attacker, weapon = data.attacker, data.weapon
+    local attacker = data.attacker
     if inst.sg and inst.sg:HasStateTag("charging") and attacker and attacker.components.health and not attacker.components.health:IsDead() and data.stimuli ~= "soul"
-        and (not weapon or ((not weapon.components.weapon or not weapon.components.weapon.projectile) and not weapon.components.projectile))
-        and not (attacker.components.inventory and attacker.components.inventory:IsInsulated()) and not attacker:HasTag("catapult") then
+        and not UMCommonFns.IsRangedWeapon(data.weapon) and not (attacker.components.inventory and attacker.components.inventory:IsInsulated())
+        and not attacker:HasTag("catapult") then
         local damage_mult = 1
         if not IsEntityElectricImmune(attacker) then
             damage_mult = TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * attacker:GetWetMultiplier()
@@ -764,9 +764,9 @@ end
 
 local function OnGlacialAttacked(inst, data)
     if not data then return end
-    local attacker, weapon = data.attacker, data.weapon
+    local attacker = data.attacker
     if inst.sg and inst.sg:HasStateTag("charging") and attacker and attacker.components.health and not attacker.components.health:IsDead() and data.stimuli ~= "soul"
-        and (not weapon or ((not weapon.components.weapon or not weapon.components.weapon.projectile) and not weapon.components.projectile)) and not attacker:HasTag("catapult") then
+        and not UMCommonFns.IsRangedWeapon(data.weapon) and not attacker:HasTag("catapult") then
         if attacker.components.freezable then
             attacker.components.freezable:AddColdness(4)
             attacker.components.freezable:SpawnShatterFX()
@@ -1008,7 +1008,7 @@ local function MagmaCharging(inst)
     SpawnPrefab(chance >= .66 and "halloween_firepuff_1" or chance >= .33 and chance < .66 and "halloween_firepuff_2" or "halloween_firepuff_3").Transform:SetPosition(x1, y1, z1)
     local magmafire = SpawnPrefab("magmafire")
     magmafire.Transform:SetPosition(x1, 0, z1)
-    magmafire.damager = inst
+    magmafire.um_damager = inst
 end
 
 local function CancelMagmaCharge(inst)
@@ -1024,9 +1024,9 @@ end
 
 local function OnMagmaAttacked(inst, data)
     if not data then return end
-    local attacker, weapon = data.attacker, data.weapon
+    local attacker = data.attacker
     if inst.sg and inst.sg:HasStateTag("charging") and attacker and attacker.components.health and not attacker.components.health:IsDead() and data.stimuli ~= "soul"
-        and (not weapon or ((not weapon.components.weapon or not weapon.components.weapon.projectile) and not weapon.components.projectile)) and not attacker:HasTag("catapult") then
+        and not UMCommonFns.IsRangedWeapon(data.weapon) and not attacker:HasTag("catapult") then
         attacker.components.health:DoFireDamage(5, inst, true)
         if not attacker.components.fueled and attacker.components.burnable and not attacker.components.burnable:IsBurning() and not attacker:HasTag("burnt") then
             attacker.components.burnable:Ignite(true, inst, inst)
@@ -1075,7 +1075,7 @@ local function SetUpFire(inst, degrand, speed, scale, damage)
     projectile.speed = speed
     projectile.scale = scale -- scale up sometimes.
     projectile.damage = damage
-    projectile.damager = inst
+    projectile.um_damager = inst
 end
 
 local function ShootFireMagmaHound(inst, total_flame) --AXE obviously called by magmahound to perform its continuous fire breath attack
@@ -1095,7 +1095,7 @@ local function FirePoof(inst) --AXE Visual support for when the fire hound is br
     SpawnPrefab("halloween_firepuff_1").Transform:SetPosition(x1, y1, z1)
     local magmafire = SpawnPrefab("magmafire")
     magmafire.Transform:SetPosition(x1, 0, z1)
-    magmafire.damager = inst
+    magmafire.um_damager = inst
 end
 
 local function OnHitOtherBurn(inst, data)
