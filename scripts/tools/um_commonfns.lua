@@ -107,13 +107,18 @@ UMCommonFns.DoAOEExplosion = function(inst, um_explodeparams) -- Modified copy o
     local workablecount = TUNING.EXPLOSIVE_MAX_WORKABLE_INVENTORYITEMS
     for i, v in ipairs(TheSim:FindEntities(x, y, z, um_explodeparams.explosiverange, nil, CANT_EXPLODE_TAGS, um_explodeparams.oneoftags)) do
         if v ~= inst and not v:IsInLimbo() and v:IsValid() and (not um_explodeparams.pvpattacker or v == um_explodeparams.pvpattacker or not v:HasTag("player")) then
+            local damagemult = FunctionOrValue(um_explodeparams.damagemult, inst, v) or 1
             local damagetypemult = inst.components.damagetypebonus and self.inst.components.damagetypebonus:GetBonus(v) or 1
+
+            if um_explodeparams.onexplodefn then
+                um_explodeparams.onexplodefn(inst, v)
+            end
 
             if v.components.workable and v.components.workable:CanBeWorked() then
                 -- NOTES(JBK): Stackable inventory items can be placed down 1 by 1 making this a convenience to players to not have to drop them down 1 by 1 first for maximum potential output.
                 local buildingdamage = FunctionOrValue(um_explodeparams.buildingdamage, inst, v)
                 if buildingdamage then
-                    local workdamage = buildingdamage * stacksize * damagetypemult
+                    local workdamage = buildingdamage * stacksize * damagemult * damagetypemult
                     local dowork = true
                     if v.components.inventoryitem then
                         if workablecount > 0 then
@@ -136,10 +141,10 @@ UMCommonFns.DoAOEExplosion = function(inst, um_explodeparams) -- Modified copy o
                     v.components.burnable:Ignite()
                 end
 
-                if not (v.components.health and v.components.health:IsDead()) and
-                    v.components.combat and v.components.combat:CanBeAttacked()
-                then
-                    local dmg = totaldamage * damagetypemult
+                if not (v.components.health and v.components.health:IsDead())
+                    and v.components.combat and v.components.combat:CanBeAttacked()
+                    and (not um_explodeparams.shoulddamage or um_explodeparams.shoulddamage(inst, v)) then
+                    local dmg = totaldamage * damagemult * damagetypemult
                     if not um_explodeparams.ignoreexplosiveresist and v.components.explosiveresist ~= nil then
                         dmg = dmg * (1 - v.components.explosiveresist:GetResistance())
                         v.components.explosiveresist:OnExplosiveDamage(dmg, inst)
