@@ -209,9 +209,8 @@ local function ShockWormOnAttacked(inst, data)
     local attacker, weapon = data.attacker, data.weapon
     if attacker then
         if attacker.components.health and not attacker.components.health:IsDead() and data.stimuli ~= "soul"
-            and (not weapon or ((not weapon.components.weapon or not weapon.components.weapon.projectile) and not weapon.components.projectile))
-            and not (attacker.components.inventory and attacker.components.inventory:IsInsulated()) and not attacker:HasTag("catapult") 
-            and not (weapon and (weapon.components.complexprojectile or weapon:HasTag("trap"))) then
+            and not UMCommonFns.IsRangedWeapon(weapon) and not (attacker.components.inventory and attacker.components.inventory:IsInsulated())
+            and not attacker:HasTag("catapult") then
             local damage_mult = 1
             if not IsEntityElectricImmune(attacker) then
                 damage_mult = TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * attacker:GetWetMultiplier()

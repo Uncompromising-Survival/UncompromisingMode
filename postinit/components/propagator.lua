@@ -15,7 +15,7 @@ end
 env.AddComponentPostInit("propagator", function(self)
     local _OnUpdate = self.OnUpdate
     function self:OnUpdate(dt, ...)
-        local damager = self.inst.damager and self.inst.damager:IsValid() and self.inst.damager
+        local damager = self.inst.um_damager and self.inst.um_damager:IsValid() and self.inst.um_damager
         if damager and self.spreading and self.damages then
             UMSimTempOverride.data = {fn = PreventAllyFireDamage, inst = damager}
         end

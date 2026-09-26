@@ -81,6 +81,7 @@ local function fn()
     inst:AddTag("animal")
 	inst:AddTag("plantkin")
     inst:AddTag("smallcreature")
+    inst:AddTag("plantcreature")
 
     inst.entity:SetPristine()
 

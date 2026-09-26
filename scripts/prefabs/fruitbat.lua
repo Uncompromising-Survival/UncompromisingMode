@@ -194,6 +194,7 @@ local function fn()
     inst:AddTag("scarytoprey")
     inst:AddTag("flying")
     inst:AddTag("veggie")
+    inst:AddTag("plantcreature")
 
     inst.entity:SetPristine()
 

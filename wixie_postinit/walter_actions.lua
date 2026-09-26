@@ -275,53 +275,6 @@ end
 
 AddAction(wixie_slingshot)
 
-AddSimPostInit(function()
-    local COMPONENT_ACTIONS = UMUpvalueHacker.GetUpvalue(GLOBAL.EntityScript.CollectActions, "COMPONENT_ACTIONS")
-    if COMPONENT_ACTIONS then
-        local POINT, EQUIPPED = COMPONENT_ACTIONS.POINT, COMPONENT_ACTIONS.EQUIPPED
-        if POINT then
-            local _POINT_spellcaster_fn = POINT["spellcaster"]
-            if _POINT_spellcaster_fn then
-                POINT["spellcaster"] = function(inst, doer, pos, actions, right, target, ...)
-                    if inst:HasTag("wixie_weapon") then
-                        if not (right and doer:HasTag("troublemaker")) then return end
-                        local cast_on_water = inst:HasTag("castonpointwater")
-                        if inst:HasTag("castonpoint") then
-                            local px, py, pz = pos:Get()
-                            if GLOBAL.TheWorld.Map:IsAboveGroundAtPoint(px, py, pz, cast_on_water) and not GLOBAL.TheWorld.Map:IsGroundTargetBlocked(pos) and not doer:HasAnyTag("steeringboat", "rotatingboat") then
-                                table.insert(actions, GLOBAL.ACTIONS.WIXIE_SLINGSHOT)
-                            end
-                        elseif cast_on_water then
-                            local px, py, pz = pos:Get()
-                            if GLOBAL.TheWorld.Map:IsOceanAtPoint(px, py, pz, false) and not GLOBAL.TheWorld.Map:IsGroundTargetBlocked(pos) and not doer:HasAnyTag("steeringboat", "rotatingboat") then
-                                table.insert(actions, GLOBAL.ACTIONS.WIXIE_SLINGSHOT)
-                            end
-                        end
-                        return
-                    end
-                    return _POINT_spellcaster_fn(inst, doer, pos, actions, right, target, ...)
-                end
-            end
-        end
-        if EQUIPPED then
-            local _EQUIPPED_spellcaster_fn = EQUIPPED["spellcaster"]
-            if _EQUIPPED_spellcaster_fn then
-                EQUIPPED["spellcaster"] = function(inst, doer, target, actions, right, ...)
-                    if inst:HasTag("wixie_weapon") then
-                        if right and doer:HasTag("troublemaker") and (inst:HasTag("castontargets") or (target:HasTag("locomotor") and (inst:HasTag("castonlocomotors")
-                            or (inst:HasTag("castonlocomotorspvp") and (target == doer or GLOBAL.TheNet:GetPVPEnabled() or not (target:HasTag("player") and doer:HasTag("player"))))))
-                            or (inst:HasTag("castoncombat") and doer.replica.combat and doer.replica.combat:CanTarget(target))) then
-                            table.insert(actions, GLOBAL.ACTIONS.WIXIE_SLINGSHOT)
-                        end
-                        return
-                    end
-                    return _EQUIPPED_spellcaster_fn(inst, doer, target, actions, right, ...)
-                end
-            end
-        end
-    end
-end)
-
 local _OldWhistle = GLOBAL.ACTIONS.WHISTLE.fn
 GLOBAL.ACTIONS.WHISTLE.fn = function(act)
     --print("Whistle")

@@ -10,13 +10,18 @@ local assets =
     Asset("ANIM", "anim/um_trans_bomb_moon.zip"),
 }
 
-local should_hit = { "_combat", "CHOP_workable", "MINE_workable", "HAMMER_workable", "DIG_workable" }
-local shouldnt_hit = { "INLIMBO", "notarget", "noattack", "playerghost" }
+local should_hit = {"_combat", "CHOP_workable", "MINE_workable", "HAMMER_workable", "DIG_workable"}
+local shouldnt_hit = {"INLIMBO", "notarget", "noattack", "playerghost"}
 local ACTIONS_TO_WORK = {
     [ACTIONS.CHOP] = 15,
     [ACTIONS.HAMMER] = 4,
     [ACTIONS.DIG] = 1
 }
+
+local function SetBuildingDamage(inst, target)
+    return ACTIONS_TO_WORK[target.components.workable:GetWorkAction()] or 3
+end
+
 local function OnHitFyre(inst, attacker, target)
     local x, y, z = inst.Transform:GetWorldPosition()
     local fx = SpawnPrefab("explosivehit")
@@ -24,22 +29,15 @@ local function OnHitFyre(inst, attacker, target)
     fx.Transform:SetScale(1.25, 1.25, 1.25)
     fx.persists = false
     fx:DoTaskInTime(1, fx.Remove)
-    local ents = TheSim:FindEntities(x, y, z, 3, nil, shouldnt_hit, should_hit)
-    if #ents > 0 then
-        for i, v in pairs(ents) do
-            if (not v:HasTag("player") or v == attacker) then
-                if not v.components.fueled and v.components.burnable and not v.components.burnable:IsBurning() and not v:HasTag("burnt") then
-                    v.components.burnable:Ignite(true, inst, attacker)
-                end
-                if v.components.combat and v.components.combat:CanBeAttacked(attacker) then
-                    v.components.combat:GetAttacked(attacker, TUNING.DSTU.PYREBOMB_DAMAGE)
-                end
-            end
-            local workable = v.components.workable
-            if workable and not v.components.health and not v:HasTag("NET_workable") then workable:WorkedBy(attacker, ACTIONS_TO_WORK[workable.action] or 3) end
-        end
+
+    local um_explodeparams = {explosiverange = 3, explosivedamage = TUNING.DSTU.PYREBOMB_DAMAGE, oneoftags = should_hit,
+        buildingdamage = SetBuildingDamage, lightonexplode = true, ignoreexplosiveresist = true}
+    if inst.ispvp then
+        um_explodeparams.pvpattacker = attacker
+    else
+        um_explodeparams.attacker = attacker
     end
-    inst:Remove()
+    UMCommonFns.DoAOEExplosion(inst, um_explodeparams)
 end
 
 local function OnHitMutate(inst, attacker, target)
@@ -117,9 +115,11 @@ local function onunequip(inst, owner)
     owner.AnimState:Show("ARM_normal")
 end
 
-local function onthrown(inst)
+local function onthrown(inst, attacker)
     inst:AddTag("NOCLICK")
     inst.persists = false
+
+    inst.ispvp = attacker ~= nil and attacker:IsValid() and attacker:HasAnyTag("player", "possessedbody")
 
     inst.AnimState:PlayAnimation("spin_loop", true)
 
@@ -456,14 +456,12 @@ local function vortex_fn()
     inst.AnimState:SetFinalOffset(1)
     inst.SoundEmitter:PlaySound("meta3/willow_lighter/lighter_absorb_LP", "channel_loop")
 
-
     if not TheWorld.ismastersim then
         return inst
     end
 
     inst.thrower = nil
     inst.AnimState:PushAnimation("pst", false)
-
 
     --matching anim.
     inst:DoTaskInTime(FRAMES * 28, function(inst)
