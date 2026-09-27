@@ -681,7 +681,17 @@ local scrapbook_icons = {
     "viperling",
     "viperworm",
     "um_magmastone",
-    "um_magmastone_outcrop"
+    "um_magmastone_outcrop",
+    "riceplant",
+    "marsh_grass",
+    "um_bee_moon",
+    "um_tentacle_moon",
+    "um_mushroom_moon",
+    "shockworm",
+    "zaspberry_plant",
+    "um_reeds_lunar",
+    "cave_entrance_moon",
+    "um_beehive_moon"
 }
 
 for _, item in ipairs(scrapbook_icons) do

@@ -141,7 +141,7 @@ local function closed_fn()
     inst:ListenForEvent("migration_activate_other", activatebyother)
 
     inst:AddComponent("lootdropper")
-    inst.components.lootdropper:SetLoot({ "rocks", "rocks", "flint", "flint", "flint", "nitre"})
+    inst.components.lootdropper:SetLoot({ "rocks", "rocks", "flint", "flint", "flint", "nitre" })
 
     inst.components.inspectable.nameoverride = "CAVE_ENTRANCE"
 
@@ -150,6 +150,13 @@ end
 
 local function open_fn()
     local inst = fn("cave_entrance", "cave_entrance", "no_access", "cave_open.png", true)
+    inst.scrapbook_proxy = "cave_entrance_magmabiome"
+
+    if not TheNet:IsDedicated() then
+        inst:AddComponent("pointofinterest")
+        inst.components.pointofinterest:SetHeight(0)
+    end
+
 
     if not TheWorld.ismastersim then
         return inst
