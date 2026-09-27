@@ -4,6 +4,11 @@ local um_boomberry_bomb_assets =
     Asset("ANIM", "anim/swap_um_boomberry_bomb.zip"),
 }
 
+local function OnExplodePst(inst, data)
+    inst:Hide()
+    inst.components.wateryprotection:SpreadProtection(inst)
+end
+
 local function OnHitBoomBerry(inst, attacker, target)
     local x, y, z = inst.Transform:GetWorldPosition()
     SpawnPrefab("blueberryexplosion").Transform:SetPosition(x, y, z)
@@ -12,8 +17,7 @@ local function OnHitBoomBerry(inst, attacker, target)
     puddle.playermade = true
 
     puddle.SoundEmitter:PlaySound("turnoftides/creatures/together/starfishtrap/trap")
-    local um_explodeparams = {explosiverange = 3, explosivedamage = TUNING.DSTU.BOOMBERRYBOMB_DAMAGE,
-        onexplodefn_pst = function(_inst) _inst:Hide() inst.components.wateryprotection:SpreadProtection(_inst) end}
+    local um_explodeparams = {explosiverange = 3, explosivedamage = TUNING.DSTU.BOOMBERRYBOMB_DAMAGE, onexplodefn_pst = OnExplodePst}
     if inst.ispvp then
         um_explodeparams.pvpattacker = attacker
     else
@@ -96,11 +100,11 @@ local function onunequip(inst, owner)
     owner.AnimState:Show("ARM_normal")
 end
 
-local function onthrown(inst)
+local function onthrown(inst, attacker)
     inst:AddTag("NOCLICK")
     inst.persists = false
 
-    inst.ispvp = attacker ~= nil and attacker:IsValid() and attacker:HasAnyTag("player", "possessedbody")
+    inst.ispvp = attacker and attacker:IsValid() and attacker:HasAnyTag("player", "possessedbody")
 
     inst.AnimState:PlayAnimation("spin_loop", true)
 
