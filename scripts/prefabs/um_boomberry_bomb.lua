@@ -100,11 +100,11 @@ local function onunequip(inst, owner)
     owner.AnimState:Show("ARM_normal")
 end
 
-local function onthrown(inst)
+local function onthrown(inst, attacker)
     inst:AddTag("NOCLICK")
     inst.persists = false
 
-    inst.ispvp = attacker ~= nil and attacker:IsValid() and attacker:HasAnyTag("player", "possessedbody")
+    inst.ispvp = attacker and attacker:IsValid() and attacker:HasAnyTag("player", "possessedbody")
 
     inst.AnimState:PlayAnimation("spin_loop", true)
 

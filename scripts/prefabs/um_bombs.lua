@@ -78,7 +78,7 @@ local function OnHitMutate(inst, attacker, target)
     --fx.AnimState:PlayAnimation("impact3_special")
     --fx.hideanim:set(true)
     fx.SoundEmitter:PlaySound("meta4/winona_catapult/lunar_projectile_explode")
-    if inst:GetSkinBuild() ~= nil then
+    if inst:GetSkinBuild() then
         fx.AnimState:SetMultColour(math.random(), math.random(), math.random(), 1)
     end
 
@@ -100,9 +100,9 @@ local function onequip(inst, owner)
     local skin_build = inst:GetSkinBuild()
     if skin_build ~= nil then
         owner:PushEvent("equipskinneditem", inst:GetSkinName())
-        owner.AnimState:OverrideItemSkinSymbol("swap_object", "swap_" .. skin_build, "swap_um_trans_bomb_moon", inst.GUID, "swap_" .. inst.bank)
+        owner.AnimState:OverrideItemSkinSymbol("swap_object", "swap_"..skin_build, "swap_um_trans_bomb_moon", inst.GUID, "swap_"..inst.bank)
     else
-        owner.AnimState:OverrideSymbol("swap_object", "swap_" .. inst.bank, "swap_" .. inst.bank)
+        owner.AnimState:OverrideSymbol("swap_object", "swap_"..inst.bank, "swap_"..inst.bank)
     end
 
     owner.AnimState:Show("ARM_carry")
@@ -111,7 +111,7 @@ end
 
 local function onunequip(inst, owner)
     local skin_build = inst:GetSkinBuild()
-    if skin_build ~= nil then
+    if skin_build then
         owner:PushEvent("unequipskinneditem", inst:GetSkinName())
     end
 
@@ -123,7 +123,7 @@ local function onthrown(inst, attacker)
     inst:AddTag("NOCLICK")
     inst.persists = false
 
-    inst.ispvp = attacker ~= nil and attacker:IsValid() and attacker:HasAnyTag("player", "possessedbody")
+    inst.ispvp = attacker and attacker:IsValid() and attacker:HasAnyTag("player", "possessedbody")
 
     inst.AnimState:PlayAnimation("spin_loop", true)
 
@@ -294,10 +294,8 @@ local function OnHitVortex(inst, attacker, target)
             end
         end
     end
-
     inst:Remove()
 end
-
 
 local function moon_bomb_fn()
     --weapon (from weapon component) added to pristine state for optimization
@@ -375,7 +373,6 @@ local function sexplosionfn()
     return inst
 end
 
-
 local function vortex_bomb_fn()
     --TODO ASSETS
     local inst = common_fn("um_bomb_moon", "um_bomb_moon", "idle", "weapon", true)
@@ -433,6 +430,7 @@ local function DoVaccuum(inst)
         end
     end
 end
+
 local function vortex_fn()
     local inst = CreateEntity()
 
@@ -490,7 +488,6 @@ local function vortex_fn()
 
         inst:Remove()
     end)
-
 
     return inst
 end
