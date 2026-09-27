@@ -468,16 +468,14 @@ local function DoSympatheticBlooming(inst)
     end
 end
 
-local PLANT_DEFS = require("prefabs/farm_plant_defs").PLANT_DEFS
-
 env.AddSimPostInit(function()
     local _StartGrowing = UMUpvalueHacker.TryGetUpvalue(Prefabs.mushroom_farm.fn, "onacceptitem", "StartGrowing")
     if _StartGrowing then UMUpvalueHacker.SetUpvalue(Prefabs.mushroom_farm.fn, StartGrowing, "onacceptitem", "StartGrowing") end
 
     local _DoAOEeffect = UMUpvalueHacker.TryGetUpvalue(Prefabs.wormwood.fn, "master_postinit", "UpdateBloomStage", "EnableFullBloom", "DoAOEeffect")
     if _DoAOEeffect then
-        local function DoAOEeffect(inst, enable)
-            _DoAOEeffect(inst, enable)
+        local function DoAOEeffect(inst, enable, ...)
+            _DoAOEeffect(inst, enable, ...)
             local skilltreeupdater = inst.components.skilltreeupdater
             if skilltreeupdater and skilltreeupdater:IsActivated("wormwood_sympathetic_blooming") then
                 DoSympatheticBlooming(inst)
@@ -488,7 +486,7 @@ env.AddSimPostInit(function()
 
     local _EnableFullBloom = UMUpvalueHacker.TryGetUpvalue(Prefabs.wormwood.fn, "master_postinit", "UpdateBloomStage", "EnableFullBloom")
     if _EnableFullBloom then
-        local function EnableFullBloom(inst, enable)
+        local function EnableFullBloom(inst, enable, ...)
             if enable then
                 if not inst.fullbloom then
                     if inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated("wormwood_blooming_overheatprotection") then
@@ -500,24 +498,18 @@ env.AddSimPostInit(function()
                     inst.components.moisture.waterproofnessmodifiers:SetModifier(inst, 0)
                 end
             end
-            _EnableFullBloom(inst, enable)
+            _EnableFullBloom(inst, enable, ...)
         end
         UMUpvalueHacker.SetUpvalue(Prefabs.wormwood.fn, EnableFullBloom, "master_postinit", "UpdateBloomStage", "EnableFullBloom")
     end
 
-    for k, v in pairs(PLANT_DEFS) do
-        env.AddPrefabPostInit(v.prefab, function(inst)
-            inst:ListenForEvent("on_planted", on_planted)
-        end)
-    end
-
     local _OnBlocked = UMUpvalueHacker.TryGetUpvalue(Prefabs.armor_bramble.fn, "OnBlocked")
     if _OnBlocked then
-        local function OnBlocked(owner, data, inst)
-            _OnBlocked(owner, data, inst)
+        local function OnBlocked(owner, data, inst, ...)
+            _OnBlocked(owner, data, inst, ...)
             if data ~= nil and not data.redirected then
                 if owner.components.skilltreeupdater and owner.components.skilltreeupdater:IsActivated("wormwood_armor_bramble2") then
-                    owner:DoTaskInTime(0.6, function(owner) --AXE The capstone ability triggers the bramble effect a second time.
+                    owner:DoTaskInTime(.6, function(owner) --AXE The capstone ability triggers the bramble effect a second time.
                         if owner then
                             SpawnPrefab("bramblefx_armor"):SetFXOwner(owner)
                             if owner.SoundEmitter ~= nil then
@@ -533,12 +525,11 @@ env.AddSimPostInit(function()
 
     local _OnHuskBlocked = UMUpvalueHacker.TryGetUpvalue(Prefabs.armor_lunarplant_husk.fn, "husk_master_postinit", "OnHuskBlocked")
     if _OnHuskBlocked then
-        local function OnHuskBlocked(owner, data, inst)
-            _OnHuskBlocked(owner, data, inst)
-
+        local function OnHuskBlocked(owner, data, inst, ...)
+            _OnHuskBlocked(owner, data, inst, ...)
             if data ~= nil and not data.redirected then
                 if owner.components.skilltreeupdater and owner.components.skilltreeupdater:IsActivated("wormwood_armor_bramble2") then
-                    owner:DoTaskInTime(0.6, function(owner) --AXE The capstone ability triggers the bramble effect a second time.
+                    owner:DoTaskInTime(.6, function(owner) --AXE The capstone ability triggers the bramble effect a second time.
                         if owner then
                             SpawnPrefab("bramblefx_armor_upgrade"):SetFXOwner(owner)
                             if owner.SoundEmitter ~= nil then
@@ -604,30 +595,30 @@ local function on_planted(inst, data)
     end
 end
 
-
+local PLANT_DEFS = require("prefabs/farm_plant_defs").PLANT_DEFS
 for k, v in pairs(PLANT_DEFS) do
     env.AddPrefabPostInit(v.prefab, function(inst)
         inst:ListenForEvent("on_planted", on_planted)
 
         -- AXE This is our backdoor to make edits to all plants during the fn call
         local _UpdateResearchStage = inst.UpdateResearchStage
-        inst.UpdateResearchStage = function(inst, stage)
+        inst.UpdateResearchStage = function(_inst, stage, ...)
             -- AXE Resilient Crops II triggers here after the crops grow; if they're wild, then they tend themselves.
-            if inst.components.farmplanttendable and inst.components.farmplantstress and inst.components.farmplantstress.wormwood_res2 and not TheWorld.Map:IsFarmableSoilAtPoint(inst.Transform:GetWorldPosition()) then
-                inst.components.farmplanttendable:TendTo(TheWorld)
+            if _inst.components.farmplanttendable and _inst.components.farmplantstress and _inst.components.farmplantstress.wormwood_res2 and not TheWorld.Map:IsFarmableSoilAtPoint(_inst.Transform:GetWorldPosition()) then
+                _inst.components.farmplanttendable:TendTo(TheWorld)
             end
 
             -- AXE Impeccable Crops III makes crops unrot themselves
             --TheNet:Announce(stage)
-            if inst.components.growable and inst.components.farmplantstress and inst.components.farmplantstress.wormwood_res3 and not TheWorld.Map:IsFarmableSoilAtPoint(inst.Transform:GetWorldPosition()) and inst.components.growable.stage == 6 then
-                inst.components.growable:SetStage(4)
-                inst.components.growable:DoGrowth()
+            if _inst.components.growable and _inst.components.farmplantstress and _inst.components.farmplantstress.wormwood_res3 and not TheWorld.Map:IsFarmableSoilAtPoint(_inst.Transform:GetWorldPosition()) and _inst.components.growable.stage == 6 then
+                _inst.components.growable:SetStage(4)
+                _inst.components.growable:DoGrowth()
                 stage = stage - 1
-                inst.components.farmplantstress.depressed_forever = true
-                inst:DoTaskInTime(0, function(inst) inst.AnimState:PlayAnimation("crop_full", true) end)
+                _inst.components.farmplantstress.depressed_forever = true
+                _inst:DoTaskInTime(0, function(_inst) _inst.AnimState:PlayAnimation("crop_full", true) end)
             else
                 --AXE in this instance, we don't need to update the research stage, it's going to get called again....
-                _UpdateResearchStage(inst, stage)
+                _UpdateResearchStage(_inst, stage, ...)
             end
         end
     end)
