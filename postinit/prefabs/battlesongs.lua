@@ -154,7 +154,6 @@ end
 
 local function battlesong_healthgain_onapply(inst, target)
     if target.components.health then
-
         inst:ListenForEvent("onattackother", function(attacker, data)
             if CheckValidAttackData(attacker, data) then
                 --[[
@@ -184,7 +183,6 @@ local function battlesong_healthgain_onapply(inst, target)
         end
     end
 end
-
 
 local function battlesong_healthgain_ondetach(inst, target)
     if inst.battlesong_healthgain_task ~= nil then
@@ -394,5 +392,3 @@ env.AddPrefabPostInit("battlesong_shadowaligned", function(inst)
     inst.songdata.ONAPPLY = battlesong_shadowaligned_onapply
     -- vanilla function handles removing the buff
 end)
-
-
