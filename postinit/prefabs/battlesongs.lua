@@ -47,7 +47,7 @@ local function RemoveDurabilityMultArmor(inst, equip)
 end
 
 local function CheckValidAttackData(attacker, data)
-    local attackertarget = attacker and attacker.components.combat amd attacker.components.combat.target -- combat.target does not account for punching bag
+    local attackertarget = attacker and attacker.components.combat and attacker.components.combat.target -- combat.target does not account for punching bag
     if attackertarget then
         -- Most passive mobs don't have a default damage set, so it defaults to 0
         if attackertarget.components.combat and attackertarget.components.combat.defaultdamage <= 0 then
