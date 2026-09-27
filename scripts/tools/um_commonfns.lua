@@ -111,7 +111,7 @@ UMCommonFns.DoAOEExplosion = function(inst, um_explodeparams) -- Modified copy o
             local damagetypemult = inst.components.damagetypebonus and self.inst.components.damagetypebonus:GetBonus(v) or 1
 
             if um_explodeparams.onexplodefn then
-                um_explodeparams.onexplodefn(inst, v, um_explodeparams)
+                um_explodeparams.onexplodefn(inst, um_explodeparams, v)
             end
 
             if v.components.workable and v.components.workable:CanBeWorked() then
