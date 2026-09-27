@@ -18,7 +18,7 @@ local ACTIONS_TO_WORK = {
     [ACTIONS.DIG] = 1
 }
 
-local function SetBuildingDamage(inst, target)
+local function SetBuildingDamage(inst, data, target)
     return ACTIONS_TO_WORK[target.components.workable:GetWorkAction()] or 3
 end
 
@@ -31,7 +31,7 @@ local function OnHitFyre(inst, attacker, target)
     fx:DoTaskInTime(1, fx.Remove)
 
     local um_explodeparams = {explosiverange = 3, explosivedamage = TUNING.DSTU.PYREBOMB_DAMAGE, oneoftags = should_hit,
-        buildingdamage = SetBuildingDamage, lightonexplode = true, ignoreexplosiveresist = true}
+        buildingdamage = SetBuildingDamage, lightonexplode = true}
     if inst.ispvp then
         um_explodeparams.pvpattacker = attacker
     else
@@ -42,9 +42,30 @@ end
 
 local SHADOW_TAGS = {"shadow", "shadowcreature", "nightmarecreature", "shadow_aligned", "player_shadow_aligned"}
 local LUNAR_TAGS = {"lunar_aligned", "player_lunar_aligned"}
-local function GetLunarAlignmentDamageMult(inst, target)
+local function GetLunarAlignmentDamageMult(inst, data, target)
     return target:HasAnyTag(SHADOW_TAGS) and 3 or (target:HasAnyTag(LUNAR_TAGS)
         or target.components.halloweenmoonmutable) and .33 or 1
+end
+
+local mutation_limit = 12
+local function MutateCreatures(inst, data, target)
+    if target.components.halloweenmoonmutable and data.mutation_count < mutation_limit then
+        data.mutated = true
+        data.mutation_count = data.mutation_count + 1
+        target.components.halloweenmoonmutable:Mutate()
+    end
+
+    if target.components.sanity then
+        target.components.sanity:DoDelta(50)
+    end
+
+    if target.components.werebeast and not target.components.werebeast:IsInWereState() then
+        target.components.werebeast:SetWere(1)
+    end
+end
+
+local function LunarShouldDamage(inst, data, target)
+    return not data.mutated
 end
 
 local function OnHitMutate(inst, attacker, target)
@@ -63,27 +84,10 @@ local function OnHitMutate(inst, attacker, target)
 
     fx:ListenForEvent("animover", fx.Remove)
 
-    local mutated = false
     local mutation_count = 0
-    local mutation_limit = 12
-    local function MutateCreatures(_inst, target)
-        if target.components.halloweenmoonmutable and mutation_count < mutation_limit then
-            mutated = true
-            mutation_count = mutation_count + 1
-            target.components.halloweenmoonmutable:Mutate()
-        end
-
-        if target.components.sanity then
-            target.components.sanity:DoDelta(50)
-        end
-
-        if target.components.werebeast and not target.components.werebeast:IsInWereState() then
-            target.components.werebeast:SetWere(1)
-        end
-    end
 
     local um_explodeparams = {explosiverange = 5, explosivedamage = 150, damagemult = GetLunarAlignmentDamageMult,
-        onexplodefn = MutateCreatures, shoulddamage = function() return not mutated end, ignoreexplosiveresist = true}
+        mutation_count = 0, onexplodefn = MutateCreatures, shoulddamage = LunarShouldDamage}
     if inst.ispvp then
         um_explodeparams.pvpattacker = attacker
     else

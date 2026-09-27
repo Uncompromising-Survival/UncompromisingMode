@@ -89,7 +89,7 @@ UMCommonFns.DoAOEExplosion = function(inst, um_explodeparams) -- Modified copy o
     end
 
     if um_explodeparams.onexplodefn_pre then
-        um_explodeparams.onexplodefn_pre(inst)
+        um_explodeparams.onexplodefn_pre(inst, um_explodeparams)
     end
 
     local stacksize = inst.components.stackable and inst.components.stackable:StackSize() or 1
@@ -107,16 +107,16 @@ UMCommonFns.DoAOEExplosion = function(inst, um_explodeparams) -- Modified copy o
     local workablecount = TUNING.EXPLOSIVE_MAX_WORKABLE_INVENTORYITEMS
     for i, v in ipairs(TheSim:FindEntities(x, y, z, um_explodeparams.explosiverange, nil, CANT_EXPLODE_TAGS, um_explodeparams.oneoftags)) do
         if v ~= inst and not v:IsInLimbo() and v:IsValid() and (not um_explodeparams.pvpattacker or v == um_explodeparams.pvpattacker or not v:HasTag("player")) then
-            local damagemult = FunctionOrValue(um_explodeparams.damagemult, inst, v) or 1
+            local damagemult = FunctionOrValue(um_explodeparams.damagemult, inst, um_explodeparams, v) or 1
             local damagetypemult = inst.components.damagetypebonus and self.inst.components.damagetypebonus:GetBonus(v) or 1
 
             if um_explodeparams.onexplodefn then
-                um_explodeparams.onexplodefn(inst, v)
+                um_explodeparams.onexplodefn(inst, v, um_explodeparams)
             end
 
             if v.components.workable and v.components.workable:CanBeWorked() then
                 -- NOTES(JBK): Stackable inventory items can be placed down 1 by 1 making this a convenience to players to not have to drop them down 1 by 1 first for maximum potential output.
-                local buildingdamage = FunctionOrValue(um_explodeparams.buildingdamage, inst, v)
+                local buildingdamage = FunctionOrValue(um_explodeparams.buildingdamage, inst, um_explodeparams, v)
                 if buildingdamage then
                     local workdamage = buildingdamage * stacksize * damagemult * damagetypemult
                     local dowork = true
@@ -143,9 +143,9 @@ UMCommonFns.DoAOEExplosion = function(inst, um_explodeparams) -- Modified copy o
 
                 if not (v.components.health and v.components.health:IsDead())
                     and v.components.combat and v.components.combat:CanBeAttacked()
-                    and (not um_explodeparams.shoulddamage or um_explodeparams.shoulddamage(inst, v)) then
+                    and (not um_explodeparams.shoulddamage or um_explodeparams.shoulddamage(inst, um_explodeparams, v)) then
                     local dmg = totaldamage * damagemult * damagetypemult
-                    if not um_explodeparams.ignoreexplosiveresist and v.components.explosiveresist ~= nil then
+                    if not um_explodeparams.calcexplosiveresist and v.components.explosiveresist ~= nil then
                         dmg = dmg * (1 - v.components.explosiveresist:GetResistance())
                         v.components.explosiveresist:OnExplosiveDamage(dmg, inst)
                     end
@@ -168,22 +168,22 @@ UMCommonFns.DoAOEExplosion = function(inst, um_explodeparams) -- Modified copy o
                     end
                 end
 
-                v:PushEvent("explosion", { explosive = inst })
+                v:PushEvent("explosion", {explosive = inst})
             end
         end
     end
 
     if um_explodeparams.onexplodefn_pst then
-        um_explodeparams.onexplodefn_pst(inst)
+        um_explodeparams.onexplodefn_pst(inst, um_explodeparams)
     end
 
     for i = 1, stacksize do
-        world:PushEvent("explosion", { damage = um_explodeparams.explosivedamage })
+        world:PushEvent("explosion", {damage = um_explodeparams.explosivedamage})
     end
 
     if inst.components.health ~= nil then
         -- NOTES(JBK): Make sure to keep the events fired up to date with the health component.
-        world:PushEvent("entity_death", { inst = inst, explosive = true, })
+        world:PushEvent("entity_death", {inst = inst, explosive = true})
         inst:PushEvent("death")
     end
 
