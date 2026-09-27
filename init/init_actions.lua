@@ -828,6 +828,9 @@ UM_CALL_BEEF.fn = function(act)
             beefalo.components.combat:DropTarget()
         end
 
+        local sleeper = beefalo.components.sleeper
+        if sleeper and sleeper:IsAsleep() then sleeper:WakeUp() end
+
         if doer.components.talker ~= nil then
             doer.components.talker:Say(GetString(doer, "ANNOUNCE_CALL_BEEF"))
             doer.comment_data = nil
