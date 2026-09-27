@@ -235,7 +235,7 @@ local function OnAttacked(inst, data)
     end
 
     inst.defensive = false
-    if data.attacker:HasTag("fruitbat") then FruitBatRetreat(inst) end
+    if data.attacker and data.attacker:HasTag("fruitbat") then FruitBatRetreat(inst) end
     inst.components.combat:SetTarget(data.attacker)
 
     if inst:HasTag("shadowthrall_parasite_hosted") then
