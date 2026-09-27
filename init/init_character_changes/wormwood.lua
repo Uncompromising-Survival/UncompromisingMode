@@ -511,7 +511,9 @@ env.AddSimPostInit(function()
                 if owner.components.skilltreeupdater and owner.components.skilltreeupdater:IsActivated("wormwood_armor_bramble2") then
                     owner:DoTaskInTime(.6, function(owner) --AXE The capstone ability triggers the bramble effect a second time.
                         if owner then
-                            SpawnPrefab("bramblefx_armor"):SetFXOwner(owner)
+                            local fx = SpawnPrefab("bramblefx_armor")
+                            fx:SetFXOwner(owner)
+                            fx.owner = nil -- We don't want to spawn on retaliations as a result of us.
                             if owner.SoundEmitter ~= nil then
                                 owner.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
                             end
@@ -531,7 +533,9 @@ env.AddSimPostInit(function()
                 if owner.components.skilltreeupdater and owner.components.skilltreeupdater:IsActivated("wormwood_armor_bramble2") then
                     owner:DoTaskInTime(.6, function(owner) --AXE The capstone ability triggers the bramble effect a second time.
                         if owner then
-                            SpawnPrefab("bramblefx_armor_upgrade"):SetFXOwner(owner)
+                            local fx = SpawnPrefab("bramblefx_armor_upgrade")
+                            fx:SetFXOwner(owner)
+                            fx.owner = nil -- We don't want to spawn on retaliations as a result of us.
                             if owner.SoundEmitter ~= nil then
                                 owner.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
                             end
