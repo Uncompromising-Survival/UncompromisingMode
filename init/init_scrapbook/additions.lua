@@ -245,7 +245,8 @@ local specinfo = {
     UM_PYRITE_CEILING = "Rains down Pyrite during earthquakes.",
     UM_HAT_BEE_MOON = "Ocassionally releases Carrion Bees",
     UM_EYEBALM = "Heals 8 health.\n\nProvides protection against storms for 8 minutes.",
-    UM_BACKPACK_AMULETUSE = "Holds 9 items. Putting an amulet in the dedicated amulet slot equips and empowers them."
+    UM_BACKPACK_AMULETUSE = "Holds 9 items. Putting an amulet in the dedicated amulet slot equips and empowers them.",
+    UM_DETONATOR = "Can instantly detonate any item or thing within range."
 }
 
 

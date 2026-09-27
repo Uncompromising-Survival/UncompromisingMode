@@ -110,7 +110,7 @@ local function fn(bank, build, anim, minimap, isbackground)
         --On non-sharded servers we'll make these vanish for now, but still generate them
         --into the world so that they can magically appear in existing saves when sharded
         RemovePhysicsColliders(inst)
-        inst.AnimState:SetScale(0,0)
+        inst.AnimState:SetScale(0, 0)
         inst.MiniMapEntity:SetEnabled(false)
         inst:AddTag("NOCLICK")
         inst:AddTag("CLASSIFIED")
@@ -124,6 +124,12 @@ end
 
 local function closed_fn()
     local inst = fn("cave_entrance_moon", "cave_entrance_moon", "full", "cave_entrance_moon.tex", false)
+
+    if not TheNet:IsDedicated() then
+        inst:AddComponent("pointofinterest")
+        inst.components.pointofinterest:SetHeight(0)
+    end
+
 
     if not TheWorld.ismastersim then
         return inst
@@ -139,13 +145,20 @@ local function closed_fn()
     inst:ListenForEvent("migration_activate_other", activatebyother)
 
     inst:AddComponent("lootdropper")
-    inst.components.lootdropper:SetLoot({ "rocks", "rocks", "flint", "flint","moonrocknugget","moonrocknugget","moonrocknugget" })
+    inst.components.lootdropper:SetLoot({ "rocks", "rocks", "flint", "flint", "moonrocknugget", "moonrocknugget", "moonrocknugget" })
 
     return inst
 end
 
 local function open_fn()
     local inst = fn("cave_entrance", "cave_entrance", "no_access", "cave_open.png", true)
+
+    inst.scrapbook_proxy = "cave_entrance_moon"
+
+    if not TheNet:IsDedicated() then
+        inst:AddComponent("pointofinterest")
+        inst.components.pointofinterest:SetHeight(0)
+    end
 
     if not TheWorld.ismastersim then
         return inst
@@ -173,9 +186,9 @@ local function open_fn()
     --             -watch iscaveday world state
     OnIsDay(inst, TheWorld.state.isday)
     inst:WatchWorldState("isday", OnIsDay)
-    inst.AnimState:SetMultColour(0.6,0.8,1,1)
+    inst.AnimState:SetMultColour(0.6, 0.8, 1, 1)
     return inst
 end
 
-return Prefab("cave_entrance_moon", closed_fn,assets),
+return Prefab("cave_entrance_moon", closed_fn, assets),
     Prefab("cave_entrance_open_moon", open_fn)
