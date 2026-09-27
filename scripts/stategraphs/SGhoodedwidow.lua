@@ -74,7 +74,7 @@ local events =
             elseif inst.should_taunt_health_thresh then
                 inst.should_taunt_health_thresh = nil
                 inst.sg:GoToState("taunt")
-            elseif inst.sg:HasStateTag("charge") and (inst._bear_trap_speedmulttask or inst.components.sleeper.sleepiness > 0) then
+            elseif inst.sg:HasStateTag("charge") and (inst.um_bear_trapped or inst.components.sleeper.sleepiness > 0) then
                 inst.sg:GoToState("chargeover")
             elseif not inst.sg:HasStateTag("electrocute") then
                 if not inst.sg:HasStateTag("ability") and not inst.sg:HasStateTag("attack") and not RunningForAbility(inst) then
