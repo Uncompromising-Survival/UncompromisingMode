@@ -16,8 +16,11 @@ local function ToggleSlowDownDebuff(inst, trap, toggle) -- TODO: Rework this int
             end)
             if inst["um_caught_on_"..debuffkey] and inst["um_caught_on_"..debuffkey]:IsValid() then inst["um_caught_on_"..debuffkey].um_ignoredebuffremoval = true end
             inst["um_caught_on_"..debuffkey] = trap
-            if not inst.um_bear_trapped then inst.um_bear_trapped = {} end
-            if not inst.um_bear_trapped[traptype] then inst.um_bear_trapped[traptype] = true end
+            if not inst.um_bear_trapped then
+                inst.um_bear_trapped = {[traptype] = true}
+            else
+                if not inst.um_bear_trapped[traptype] then inst.um_bear_trapped[traptype] = true end
+            end
         end
     else
         if locomotor then locomotor:RemoveExternalSpeedMultiplier(inst, debuffkey) end
