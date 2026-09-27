@@ -18,52 +18,44 @@ local function IsNearLunarMelodist(target)
 end
 
 local function AddDurabilityMult(inst, equip, target)
-    if equip ~= nil and equip.components.weapon ~= nil then 
-        -- Check for armor component to account for the shields which do not have finiteuses 
-        if  equip.components.finiteuses ~= nil or equip.components.armor ~= nil then 
-            --local lunarMult = 1
-            --if IsNearLunarMelodist(target) then 
-                --lunarMult = TUNING.DSTU.BATTLESONG_LUNAR_DURABILITY_MULT_SINGER 
-            --end
-            --equip.components.weapon.attackwearmultipliers:SetModifier(inst, TUNING.BATTLESONG_DURABILITY_MOD * lunarMult)
-            equip.components.weapon.attackwearmultipliers:SetModifier(inst, TUNING.BATTLESONG_DURABILITY_MOD) 
-        end
+    if equip and equip.components.weapon and (equip.components.finiteuses or equip.components.armor) then  -- Check for armor component to account for the shields which do not have finiteuses 
+        --local lunarMult = 1
+        --if IsNearLunarMelodist(target) then 
+            --lunarMult = TUNING.DSTU.BATTLESONG_LUNAR_DURABILITY_MULT_SINGER 
+        --end
+        --equip.components.weapon.attackwearmultipliers:SetModifier(inst, TUNING.BATTLESONG_DURABILITY_MOD * lunarMult)
+        equip.components.weapon.attackwearmultipliers:SetModifier(inst, TUNING.BATTLESONG_DURABILITY_MOD) 
     end
 end
 
 local function RemoveDurabilityMult(inst, equip)
-   if equip ~= nil then
-        if equip.components.weapon ~= nil and (equip.components.finiteuses ~= nil or equip.components.armor ~= nil) then
-            equip.components.weapon.attackwearmultipliers:RemoveModifier(inst)
-        end 
+    if equip and equip.components.weapon ~= nil and (equip.components.finiteuses ~= nil or equip.components.armor ~= nil) then
+        equip.components.weapon.attackwearmultipliers:RemoveModifier(inst)
     end
 end
 
 local function AddDurabilityMultArmor(inst, equip, target)
-    if equip ~= nil and equip.components.armor ~= nil then
-
-            equip.components.armor.conditionlossmultipliers:SetModifier(inst, TUNING.DSTU.BATTLESONG_LUNAR_DURABILITY_MOD_ARMOR)
+    if equip and equip.components.armor then
+        equip.components.armor.conditionlossmultipliers:SetModifier(inst, TUNING.DSTU.BATTLESONG_LUNAR_DURABILITY_MOD_ARMOR)
     end
 end
 
 local function RemoveDurabilityMultArmor(inst, equip)
-   if equip ~= nil and equip.components.armor ~= nil then
+    if equip and equip.components.armor then
         equip.components.armor.conditionlossmultipliers:RemoveModifier(inst)
     end
 end
 
 local function CheckValidAttackData(attacker, data)
-    if attacker and attacker.components.combat and attacker.components.combat.target then
-        local target = attacker.components.combat.target
-        -- combat.target does not account for punching bag
-
+    local attackertarget = attacker and attacker.components.combat amd attacker.components.combat.target -- combat.target does not account for punching bag
+    if attackertarget then
         -- Most passive mobs don't have a default damage set, so it defaults to 0
-        if target.components.combat ~= nil and target.components.combat.defaultdamage <= 0 then
+        if attackertarget.components.combat and attackertarget.components.combat.defaultdamage <= 0 then
             return false
         end
 
         -- Additional checks for entities that manage to pass the damage check
-        if target:HasTag("eyeturret") then -- Houndious
+        if attackertarget:HasTag("eyeturret") then -- Houndious
             return false
         end
     end
@@ -76,7 +68,7 @@ local function CheckValidAttackData(attacker, data)
 			--fake "weapons" used for detached aoe dmg don't count (e.g. flamethrower_fx)
 			return false
 		end
-        
+
         -- Edge case where the target is not registered as a combat target
         -- If non-valid target is inside wigfrid's current weapon range, disable song effects
         local mustHaveTags = {"structure"}
@@ -89,15 +81,11 @@ local function CheckValidAttackData(attacker, data)
             if searchradius > 7 then searchradius = 7 end -- Don't account for long range weapons as it gets really messy
         end
 
-        local x,y,z = attacker.Transform:GetWorldPosition()
+        local x, y, z = attacker.Transform:GetWorldPosition()
 
         local ents = TheSim:FindEntities(x, y, z, searchradius, mustHaveTags, cantHaveTags, mustHaveOneOfTheseTags)
 
-        local next = next 
-        if next(ents) ~= nil then
-            return false
-        end
-        
+        if next(ents) then return false end
 	end
 
 	return true
@@ -106,7 +94,6 @@ end
 --------------------------------------------------------------------------
 -- BATTLESONG FNS
 --------------------------------------------------------------------------
-
 
 local function battlesong_durability_onapply(inst, target)
     if target.components.inventory then
@@ -292,7 +279,9 @@ local function battlesong_fireresistance_onapply(inst, target)
 end
 
 local function battlesong_fireresistance_ondetach(inst, target)
-    target.components.temperature:RemoveInsulationModifier(SEASONS.SUMMER, inst, "battlesong_fireres")
+    if target.components.temperature ~= nil then
+        target.components.temperature:RemoveInsulationModifier(SEASONS.SUMMER, inst, "battlesong_fireres")
+    end
     if target.components.health ~= nil then
         target.components.health.externalfiredamagemultipliers:RemoveModifier(inst)
     end
