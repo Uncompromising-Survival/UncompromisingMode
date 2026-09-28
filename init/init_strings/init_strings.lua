@@ -273,7 +273,7 @@ STRINGS.ACTIONS.UM_COOL_MAGMA = "Solidify"
 
 STRINGS.UI.APPLY_GEM = "Forge!"
 STRINGS.UI.HUD.UM_VETSKULL_PREFIX = "Veteran's Curse:\n"
-STRINGS.UI.HUD.UM_VETSKULL_GENERIC = " - Receive more damage when attacked.\n - Hunger drains faster.\n - Health and Sanity from foods is applied *slowly* over time."
+STRINGS.UI.HUD.UM_VETSKULL_GENERIC = " - Receive more damage when attacked.\n - Sanity drains faster.\n - Health and Sanity from foods is applied *slowly* over time."
 STRINGS.UI.HUD.UM_VETSKULL = {
     DEFAULT = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,      --WIP
     WILLOW = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,       --WilloWIP

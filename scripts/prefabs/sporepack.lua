@@ -55,7 +55,7 @@ end
 
 local function DoSporeRefresh(inst)
     for k, v in pairs(inst.components.container.slots) do
-        if v.components.perishable and v:HasAnyTag("spore", "spore_special") then
+        if v.components.perishable and v:HasAnyTag("spore", "spore_special", "mushroom") then
             v.components.perishable:ReducePercent(-.005)
         end
     end

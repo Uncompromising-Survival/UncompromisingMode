@@ -26,25 +26,47 @@ end
     end
 end]]
 
-UMVetCurse.ToggleHungerTakenModifier = function(inst, toggle)
-    local hunger = inst.components.hunger
-    if not hunger then return end
-    if toggle then
-        local _DoDelta = hunger.DoDelta
-        if not inst.OldHungerDoDelta then
-            inst.OldHungerDoDelta = _DoDelta
-        end
-        hunger.DoDelta = function(self, delta, overtime, ignore_invincible, ...)
-            if delta and overtime and delta < 0 then
+--UMVetCurse.ToggleHungerTakenModifier = function(inst, toggle)
+    --local hunger = inst.components.hunger
+    --if not hunger then return end
+    --if toggle then
+        --local _DoDelta = hunger.DoDelta
+        --if not inst.OldHungerDoDelta then
+            --inst.OldHungerDoDelta = _DoDelta
+        --end
+        --hunger.DoDelta = function(self, delta, overtime, ignore_invincible, ...)
+            --if delta and overtime and delta < 0 then
                 -- Take extra hunger
-                delta = delta * (1 + (2 / 10))
+                --delta = delta * (1 + (2 / 10))
+            --end
+            --return _DoDelta(self, delta, overtime, ignore_invincible, ...)
+        --end
+    --else
+        --if inst.OldHungerDoDelta then
+            --hunger.DoDelta = inst.OldHungerDoDelta
+            --inst.OldHungerDoDelta = nil
+        --end
+    --end
+--end
+
+UMVetCurse.ToggleSanityTakenModifier = function(inst, toggle)
+    local sanity = inst.components.sanity
+    if not sanity then return end
+    if toggle then
+        local _DoDelta = sanity.DoDelta
+        if not inst.OldSanityDoDelta then
+            inst.OldSanityDoDelta = _DoDelta
+        end
+        sanity.DoDelta = function(self, delta, overtime, ...)
+            if delta and overtime and delta < 0 then
+                delta = delta * 1.25
             end
-            return _DoDelta(self, delta, overtime, ignore_invincible, ...)
+            return _DoDelta(self, delta, overtime, ...)
         end
     else
-        if inst.OldHungerDoDelta then
-            hunger.DoDelta = inst.OldHungerDoDelta
-            inst.OldHungerDoDelta = nil
+        if inst.OldSanityDoDelta then
+            sanity.DoDelta = inst.OldSanityDoDelta
+            inst.OldSanityDoDelta = nil
         end
     end
 end
@@ -141,7 +163,8 @@ UMVetCurse.AttachCurse = function(inst)
     inst.vetcurse = true
     if not inst.UMToggleUniqueVetCurse then
         UMVetCurse.ToggleDamageTakenModifier(inst, true)
-        UMVetCurse.ToggleHungerTakenModifier(inst, true)
+        --UMVetCurse.ToggleHungerTakenModifier(inst, true)
+        UMVetCurse.ToggleSanityTakenModifier(inst, true)
     end
     UMVetCurse.ToggleFoodEffects(inst, true)
     inst:AddTag("vetcurse")
@@ -152,7 +175,8 @@ UMVetCurse.DetachCurse = function(inst)
     inst.vetcurse = nil
     if not inst.UMToggleUniqueVetCurse then
         UMVetCurse.ToggleDamageTakenModifier(inst)
-        UMVetCurse.ToggleHungerTakenModifier(inst)
+        --UMVetCurse.ToggleHungerTakenModifier(inst)
+        UMVetCurse.ToggleSanityTakenModifier(inst)
     end
     UMVetCurse.ToggleFoodEffects(inst)
     inst:RemoveTag("vetcurse")
