@@ -5,8 +5,7 @@ local um_flood_speed_immune_no_turfrunner_TAGS = {"swampbro", "playermerm", "woo
 local um_flood_speed_immune_TAGS = ConcatArrays({"turfrunner_279", "turfrunner_280", "turfrunner_281"}, um_flood_speed_immune_no_turfrunner_TAGS)
 
 local function IsSpeedImmune(inst, noturfrunner)
-    return inst:HasAnyTag(noturfrunner and um_flood_speed_immune_no_turfrunner_TAGS or um_flood_speed_immune_TAGS) or inst:HasTag("merm") and not inst:HasTag("mermdisguise") 
-    or inst.components.debuffable ~= nil and inst.components.debuffable:HasDebuff("buff_moistureimmunity")
+    return inst:HasAnyTag(noturfrunner and um_flood_speed_immune_no_turfrunner_TAGS or um_flood_speed_immune_TAGS) or inst:HasTag("merm") and not inst:HasTag("mermdisguise")
 end
 
 local function RobustFloodCheck(inst) -- For players, check to see if they're on the edge of a tile, you can walk on the "Void" to avoid the effects of the tile you're standing on, similar to spider webbings
