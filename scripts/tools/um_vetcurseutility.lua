@@ -50,29 +50,25 @@ end]]
 --end
 
 UMVetCurse.ToggleSanityTakenModifier = function(inst, toggle)
-	local sanity = inst.components.sanity
-	if not sanity then return end
-
-	if toggle then
-		local _DoDelta = sanity.DoDelta
-
-		if not inst.OldSanityDoDelta then
-			inst.OldSanityDoDelta = _DoDelta
-		end
-
-		sanity.DoDelta = function(self, delta, overtime, ...)
-			if delta and overtime and delta < 0 then
-				delta = delta * 1.25
-			end
-
-			return _DoDelta(self, delta, overtime, ...)
-		end
-	else
-		if inst.OldSanityDoDelta then
-			sanity.DoDelta = inst.OldSanityDoDelta
-			inst.OldSanityDoDelta = nil
-		end
-	end
+    local sanity = inst.components.sanity
+    if not sanity then return end
+    if toggle then
+        local _DoDelta = sanity.DoDelta
+        if not inst.OldSanityDoDelta then
+            inst.OldSanityDoDelta = _DoDelta
+        end
+        sanity.DoDelta = function(self, delta, overtime, ...)
+            if delta and overtime and delta < 0 then
+                delta = delta * 1.25
+            end
+            return _DoDelta(self, delta, overtime, ...)
+        end
+    else
+        if inst.OldSanityDoDelta then
+            sanity.DoDelta = inst.OldSanityDoDelta
+            inst.OldSanityDoDelta = nil
+        end
+    end
 end
 
 local function oneat(inst, data)
@@ -168,7 +164,7 @@ UMVetCurse.AttachCurse = function(inst)
     if not inst.UMToggleUniqueVetCurse then
         UMVetCurse.ToggleDamageTakenModifier(inst, true)
         --UMVetCurse.ToggleHungerTakenModifier(inst, true)
-		UMVetCurse.ToggleSanityTakenModifier(inst, true)
+        UMVetCurse.ToggleSanityTakenModifier(inst, true)
     end
     UMVetCurse.ToggleFoodEffects(inst, true)
     inst:AddTag("vetcurse")
@@ -180,7 +176,7 @@ UMVetCurse.DetachCurse = function(inst)
     if not inst.UMToggleUniqueVetCurse then
         UMVetCurse.ToggleDamageTakenModifier(inst)
         --UMVetCurse.ToggleHungerTakenModifier(inst)
-		UMVetCurse.ToggleSanityTakenModifier(inst)
+        UMVetCurse.ToggleSanityTakenModifier(inst)
     end
     UMVetCurse.ToggleFoodEffects(inst)
     inst:RemoveTag("vetcurse")
