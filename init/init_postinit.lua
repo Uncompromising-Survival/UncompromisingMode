@@ -349,7 +349,6 @@ if GetModConfigData("wixie_walter") then
         "wobysmall",
         "wobybig",
         "wormhole",      -- wixie loses more sanity from wormholes
-        "coconut",       -- shoot a coconut
         "sculptingtable" -- Sculpting table crashes if picker inventory is nil
     }
     local wixie_components = {
