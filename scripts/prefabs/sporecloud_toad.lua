@@ -9,7 +9,8 @@ local prefabs =
     "sporecloud_toad_overlay",
 }
 
-local AURA_EXCLUDE_TAGS = {"epic", "bird", "toad", "frog", "toadstool", "ghost", "shadow", "shadowminion", "toadling", "has_gasmask"}
+local AURA_EXCLUDE_TAGS = {"toadstool", "playerghost", "ghost", "shadow", "shadowminion", "noauradamage", "INLIMBO", "notarget", "noattack", "flight", "invisible",
+    "epic", "bird", "toad", "frog", "toadling", "has_gasmask"}
 
 local FADE_FRAMES = 5
 local FADE_INTENSITY = .8
@@ -60,19 +61,19 @@ local function FadeInImmediately(inst)
 end
 
 local function FadeOutImmediately(inst)
-    inst._fade:Set(FADE_FRAMES * 2 + 1)
+    inst._fade:set(FADE_FRAMES * 2 + 1)
     OnFadeDirty(inst)
 end
 
 local OVERLAY_COORDS =
 {
-    { 0,      0, 0,        1 },
-    { 5 / 2,  0, 0,        0.8,  0 },
-    { 2.5 / 2, 0, -4.330 / 2, 0.8, 5 / 3 * 180 },
-    { -2.5 / 2, 0, -4.330 / 2, 0.8, 4 / 3 * 180 },
-    { -5 / 2, 0, 0,        0.8,  3 / 3 * 180 },
-    { 2.5 / 2, 0, 4.330 / 2, 0.8, 1 / 3 * 180 },
-    { -2.5 / 2, 0, 4.330 / 2, 0.8, 2 / 3 * 180 },
+    { 0,0,0,               1 },
+    { 5/2,0,0,             0.8, 0 },
+    { 2.5/2,0,-4.330/2,    0.8 , 5/3*180 },
+    { -2.5/2,0,-4.330/2,   0.8, 4/3*180 },
+    { -5/2,0,0,            0.8, 3/3*180 },
+    { 2.5/2,0,4.330/2,     0.8, 1/3*180 },
+    { -2.5/2,0,4.330/2,    0.8, 2/3*180 },
 }
 
 local function SpawnOverlayFX(inst, i, set, isnew)
@@ -120,7 +121,7 @@ local function CreateBase(isnew)
     inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
     inst.AnimState:SetLayer(LAYER_BACKGROUND)
     inst.AnimState:SetSortOrder(3)
-    inst.AnimState:SetFinalOffset(-1)
+    inst.AnimState:SetFinalOffset(3)
 
     if isnew then
         inst.AnimState:PlayAnimation("sporecloud_base_pre")
