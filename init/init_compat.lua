@@ -6,7 +6,7 @@ local flaire_nature_equips = {
     "um_hat_leafwing",
 }
 
-if TUNING.FLAIRE_NATURE_EQUIPS then
+if rawget(TUNING, "FLAIRE_NATURE_EQUIPS") then
     for k, v in ipairs(flaire_nature_equips) do
         table.insert(TUNING.FLAIRE_NATURE_EQUIPS, v)
     end
