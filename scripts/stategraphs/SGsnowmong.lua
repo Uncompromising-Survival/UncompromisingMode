@@ -1,5 +1,22 @@
 require("stategraphs/commonstates")
 
+local AOE_TARGET_MUSTHAVE_TAGS = {"_combat"}
+local AOE_TARGET_CANT_TAGS = {"INLIMBO", "flight", "invisible", "notarget", "noattack", "snowish", "wall", "structure"}
+
+local function DoAOEAttack(inst)
+    inst.components.combat.ignorehitrange = true
+    local radius = inst.components.combat:GetHitRange()
+    local x, y, z = inst.Transform:GetWorldPosition()
+    for i, ent in ipairs(TheSim:FindEntities(x, y, z, radius + 3, AOE_TARGET_MUSTHAVE_TAGS, AOE_TARGET_CANT_TAGS)) do
+        local range = radius + ent:GetPhysicsRadius(0)
+        if ent ~= inst and ent:IsValid() and not (ent.components.health and ent.components.health:IsDead())
+            and inst.components.combat:CanTarget(ent) and inst:IsNear(ent, range) then
+            inst.components.combat:DoAttack(ent)
+        end
+    end
+    inst.components.combat.ignorehitrange = nil
+end
+
 local actionhandlers =
 {
     ActionHandler(ACTIONS.STEALMOLEBAIT, function(inst)
@@ -11,34 +28,34 @@ local events =
 {
     CommonHandlers.OnSleep(),
     EventHandler("death", function(inst) inst.sg:GoToState("death") end),
-    EventHandler("doattack",
-        function(inst, data)
-            if not inst.components.health:IsDead() and (inst.sg:HasStateTag("hit") or not inst.sg:HasStateTag("busy")) then
-                if inst.State == false then
-                    inst.sg:GoToState("attack", data.target)
-                else
-                    inst.sg:GoToState("enter", "attack")
-                end
-            end
-        end),
-    EventHandler("locomote", 
-        function(inst) 
-            if not inst.sg:HasStateTag("idle") and not inst.sg:HasStateTag("moving") then return end
-
-            if inst.components.locomotor:WantsToMoveForward() then
-                if inst.State then
-                    if not inst.sg:HasStateTag("moving") then
-                        inst.sg:GoToState("walk_pre")
-                    end
-                else
-                    inst.sg:GoToState("exit")
-                end
-            elseif inst.sg:HasStateTag("moving") then
-                inst.sg:GoToState("walk_pst")
+    EventHandler("doattack", function(inst, data)
+        if not inst.components.health:IsDead() and (inst.sg:HasStateTag("hit") or not inst.sg:HasStateTag("busy")) then
+            if inst.State == false then
+                inst.sg:GoToState("attack", data.target)
             else
+                inst.sg:GoToState("enter", "attack")
+            end
+        end
+    end),
+    EventHandler("locomote", function(inst)
+        if not inst.sg:HasStateTag("idle") and not inst.sg:HasStateTag("moving") then
+            return
+        elseif inst.components.locomotor:WantsToMoveForward() then
+            if inst.State then
+                if not inst.sg:HasStateTag("moving") then
+                    inst.sg:GoToState("walk_pre")
+                end
+            else
+                inst.sg:GoToState("exit")
+            end
+        elseif inst.sg:HasStateTag("moving") then
+            inst.sg:GoToState("walk_pst")
+        else
+            if not inst.sg:HasStateTag("idle") then
                 inst.sg:GoToState("idle")
             end
-        end),
+        end
+    end),
 }
 
 local states =
@@ -73,7 +90,7 @@ local states =
         
         timeline =
         {
-            TimeEvent(16* FRAMES,function (inst) inst.SoundEmitter:PlaySound("UCSounds/Grub/emerge") end),
+            TimeEvent(16 * FRAMES,function (inst) inst.SoundEmitter:PlaySound("UCSounds/Grub/emerge") end),
         },
 
     },
@@ -99,25 +116,13 @@ local states =
         timeline = 
         {
             
-            TimeEvent(1* FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/Grub/jump") end),
-            TimeEvent(22*FRAMES, function(inst) 
-                local x, y, z = inst:GetPosition():Get()
-                local ents = TheSim:FindEntities(x, y, z, inst.components.combat.hitrange, nil, {"snowish", "ghost", "playerghost", "shadow", "INLIMBO","structure","wall","companion"})
-                for i, v in ipairs(ents) do
-                    if v.components.combat ~= nil then
-                    v.components.combat:GetAttacked(inst, inst.components.combat.defaultdamage, nil)
-                    end
-                end 
-            end),
-            
-            TimeEvent(20* FRAMES, function(inst) 
-                inst.SoundEmitter:PlaySound("UCSounds/Grub/submerge") 
-            end),
-
-            TimeEvent(33* FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/Grub/dig") end),
-            TimeEvent(39* FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/Grub/dig") end),
-            TimeEvent(49* FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/Grub/dig") end),
-            TimeEvent(54* FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/Grub/dig") end),
+            TimeEvent(1 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/Grub/jump") end),
+            TimeEvent(22 * FRAMES, DoAOEAttack),
+            TimeEvent(20 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/Grub/submerge") end),
+            TimeEvent(33 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/Grub/dig") end),
+            TimeEvent(39 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/Grub/dig") end),
+            TimeEvent(49 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/Grub/dig") end),
+            TimeEvent(54 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/Grub/dig") end),
         },
     },
 

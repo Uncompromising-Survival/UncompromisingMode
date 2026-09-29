@@ -58,8 +58,10 @@ UMVetCurse.ToggleSanityTakenModifier = function(inst, toggle)
             inst.OldSanityDoDelta = _DoDelta
         end
         sanity.DoDelta = function(self, delta, overtime, ...)
-            if delta and overtime and delta < 0 then
-                delta = delta * 1.25
+            if delta and overtime then
+                local check = delta < 0
+                if self:IsLunacyMode() then check = delta > 0 end
+                if check then delta = delta * 1.25 end
             end
             return _DoDelta(self, delta, overtime, ...)
         end

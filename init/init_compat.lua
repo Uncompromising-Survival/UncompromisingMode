@@ -2,6 +2,16 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
+local flaire_nature_equips = {
+    "um_hat_leafwing",
+}
+
+if rawget(TUNING, "FLAIRE_NATURE_EQUIPS") then
+    for k, v in ipairs(flaire_nature_equips) do
+        table.insert(TUNING.FLAIRE_NATURE_EQUIPS, v)
+    end
+end
+
 env.AddPrefabPostInit("woose", function(inst)
     if not TheWorld.ismastersim then
         return

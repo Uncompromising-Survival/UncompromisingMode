@@ -1,15 +1,18 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-local STOMP_MUST_TAGS = {"_combat", "_health"}
-local STOMP_CANT_TAGS = {"INLIMBO", "notarget", "invisible", "noattack", "flight", "playerghost", "shadow", "shadowchesspiece", "shadowcreature", "bee", "beehive"}
+local STOMP_MUST_TAGS = {"_combat"}
+local STOMP_CANT_TAGS = {"INLIMBO", "flight", "invisible", "notarget", "noattack", "bee", "beehive"}
 
 local function DoStomp(inst)
     inst.components.combat.ignorehitrange = true
     inst.components.combat.externaldamagemultipliers:SetModifier(inst, TUNING.DSTU.BEEQUEEN_STOMP_DAMAGE_MULT, "um_beequeen_stomp")
+    local radius = TUNING.BEEQUEEN_HIT_RANGE
     local x, y, z = inst.Transform:GetWorldPosition()
-    for i, ent in ipairs(TheSim:FindEntities(x, y, z, TUNING.BEEQUEEN_HIT_RANGE + .5, STOMP_MUST_TAGS, STOMP_CANT_TAGS)) do
-        if ent:IsValid() and not ent.components.health:IsDead() and inst.components.combat:CanTarget(ent) then
+    for i, ent in ipairs(TheSim:FindEntities(x, y, z, radius + 3, STOMP_MUST_TAGS, STOMP_CANT_TAGS)) do
+        local range = radius + ent:GetPhysicsRadius(0)
+        if ent ~= inst and ent:IsValid() and not (ent.components.health and ent.components.health:IsDead())
+            and inst.components.combat:CanTarget(ent) and inst:IsNear(ent, range) then
             inst.components.combat:DoAttack(ent)
         end
     end
