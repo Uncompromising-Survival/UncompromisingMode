@@ -12,7 +12,7 @@ local function OnAttack(inst, attacker, target, skipsanity)
         return
     end
 
-    local drain = attacker:HasTag("Funny_Words_Magic_Man") and 0.5 or 1
+    local drain = attacker.um_Funny_Words_Magic_Man and 0.5 or 1
 
     if not skipsanity and attacker ~= nil then
         if attacker.components.staffsanity then

@@ -52,7 +52,7 @@ local function OnTakeDamage(inst, damage_amount)
         if sanity then
             local unsaneness = damage_amount * TUNING.ARMOR_SANITY_DMG_AS_SANITY
 			
-			if owner:HasTag("Funny_Words_Magic_Man") then
+			if owner.um_Funny_Words_Magic_Man then
 				unsaneness = unsaneness * .8
 			end
 			
@@ -68,7 +68,7 @@ local function CheckIfUnequipped(inst)
 end
 
 local function CalcDapperness(inst, owner)
-	if owner:HasTag("Funny_Words_Magic_Man") then
+	if owner.um_Funny_Words_Magic_Man then
 		return TUNING.CRAZINESS_SMALL * .8 -- This ends up being about -5/min + 3.3/min from the hat itself, willing to cut it more for this one
 	else
 		return TUNING.CRAZINESS_SMALL
