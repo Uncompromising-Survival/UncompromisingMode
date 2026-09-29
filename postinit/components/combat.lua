@@ -173,11 +173,13 @@ env.AddComponentPostInit("combat", function(self)
         if self.um_areahit and not self.um_ignoreareahit then
             self.ignorehitrange = true
             self.um_ignoreareahit = true
-            local range = FunctionOrValue(self.um_areahitrange, self)
+            local radius = FunctionOrValue(self.um_areahitrange, self)
             local x, y, z = self.inst.Transform:GetWorldPosition()
-            for i, ent in ipairs(TheSim:FindEntities(x, y, z, range + .5, AREAATTACK_MUST_TAGS, self.um_areahitexcludetags and JoinArrays(self.um_areahitexcludetags, AREA_EXCLUDE_TAGS) or AREA_EXCLUDE_TAGS)) do
-                if ent ~= self.inst and self:CanTarget(ent)
-                    and (self.um_areahitconecheck and not self.um_areahitconecheck(ent, self.inst) or self.inst:IsEntityInFrontConeSlice(ent, self.um_areahitconeangle or 160, range + ent:GetPhysicsRadius(0), self.um_areahitcircleradius and self.um_areahitcircleradius + ent:GetPhysicsRadius(0) or nil))
+            for i, ent in ipairs(TheSim:FindEntities(x, y, z, radius + 3, AREAATTACK_MUST_TAGS, self.um_areahitexcludetags and JoinArrays(self.um_areahitexcludetags, AREA_EXCLUDE_TAGS) or AREA_EXCLUDE_TAGS)) do
+                local range = radius + ent:GetPhysicsRadius(0)
+                if ent ~= self.inst and ent:IsValid() and not (ent.components.health and ent.components.health:IsDead()) and self:CanTarget(ent)
+                    and self.inst:IsNear(ent, range) and (self.um_areahitconecheck and not self.um_areahitconecheck(ent, self.inst)
+                    or self.inst:IsEntityInFrontConeSlice(ent, self.um_areahitconeangle or 160, range, self.um_areahitcircleradius and FunctionOrValue(self.um_areahitcircleradius, self) + ent:GetPhysicsRadius(0) or nil))
                     and (not self.um_areahitcheck or self.um_areahitcheck(ent, self.inst)) then
                     self:DoAttack(ent, weapon, projectile, stimuli, instancemult, instrangeoverride, instpos, ...)
                 end

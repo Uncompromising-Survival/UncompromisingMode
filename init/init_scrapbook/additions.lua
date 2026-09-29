@@ -219,7 +219,7 @@ local specinfo = {
     UM_MOONFLY_LANTERN = "Increase movement speed by 15% when held. Creates a light.\nCreates a trail of particles that create light and speed up survivors by an additional 15%.",
     SNAILDRAKEHAT = "Provides 75% resistance to fire.",
     SNAILDRAKEBUCKET = "Can hold water or lava.\nWater can be used to water crops in an area. Lava can be dumped to create a burning pool.",
-    BOULDER_CRAB = "Appears under boulders. Mine its boulder to be able to properly it.\nBoulder will regrow if left alive.",
+    BOULDER_CRAB = "Appears under boulders, which can be mined.\nBoulder will regrow if left alive.",
     UM_ASTRAL_PROJECTOR = "Projects your body to the nearest receptionator.",
     UM_ASTRAL_PROJECTOR_TARGET = "Returns your body back to the projectinator.",
     UM_SPONGEPLANT = "Must be shaved to harvest.",
@@ -245,7 +245,7 @@ local specinfo = {
     UM_PYRITE_CEILING = "Rains down Pyrite during earthquakes.",
     UM_HAT_BEE_MOON = "Ocassionally releases Carrion Bees",
     UM_EYEBALM = "Heals 8 health.\n\nProvides protection against storms for 8 minutes.",
-    UM_BACKPACK_AMULETUSE = "Holds 9 items. Putting an amulet in the dedicated amulet slot equips and empowers them.",
+    UM_BACKPACK_AMULETUSE = "Holds 9 items. Putting an amulet in the dedicated amulet slot makes it work as if it was equipped.",
     UM_DETONATOR = "Can instantly detonate any item or thing within range."
 }
 

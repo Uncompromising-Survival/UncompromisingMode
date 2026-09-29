@@ -1,11 +1,12 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-local um_flood_speed_immune_no_turfrunner_TAGS = {"swampbro", "playermerm", "woosegoose"}
+local um_flood_speed_immune_no_turfrunner_TAGS = {"swampbro", "playermerm", "woosegoose", "weregoose"}
 local um_flood_speed_immune_TAGS = ConcatArrays({"turfrunner_279", "turfrunner_280", "turfrunner_281"}, um_flood_speed_immune_no_turfrunner_TAGS)
 
 local function IsSpeedImmune(inst, noturfrunner)
     return inst:HasAnyTag(noturfrunner and um_flood_speed_immune_no_turfrunner_TAGS or um_flood_speed_immune_TAGS) or inst:HasTag("merm") and not inst:HasTag("mermdisguise")
+        or inst.components.moistureimmunity ~= nil
 end
 
 local function RobustFloodCheck(inst) -- For players, check to see if they're on the edge of a tile, you can walk on the "Void" to avoid the effects of the tile you're standing on, similar to spider webbings
@@ -413,8 +414,6 @@ local function GetBodyWetnessProtection(inst)
 end
 
 local function AdjustSpeed(inst)
-    if IsSpeedImmune(inst) then return end
-
     local body = GetBodyItem(inst)
 
     if body ~= nil and body.prefab == "armor_sharksuit_um" then
@@ -478,12 +477,30 @@ local function WormBubble(inst)
     SpawnPrefab("crab_king_bubble"..math.random(1, 3)).Transform:SetPosition(inst.Transform:GetWorldPosition())
 end
 
+local function ToggleSlowdown(inst, toggle)
+    if toggle and inst.um_floodslowdown or not toggle and not inst.um_floodslowdown then return end
+    if toggle then
+        inst:ListenForEvent("equip", AdjustSpeed)
+        inst:ListenForEvent("unequip", AdjustSpeed) -- may fire twice, but that shouldn't matter, it's not doing a huge amount of computational work
+        if not (inst.prefab == "mole" or inst:HasTag("worm")) then
+            AdjustSpeed(inst)
+        end
+        inst:PushEvent("carefulwalking", {careful = true})
+        inst.um_floodslowdown = true
+    else
+        inst:RemoveEventCallback("equip", AdjustSpeed)
+        inst:RemoveEventCallback("unequip", AdjustSpeed)
+        if inst.components.locomotor then
+            inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, "um_floodedwater")
+        end
+        inst:PushEvent("carefulwalking", {careful = false})
+        inst.um_floodslowdown = nil
+    end
+end
+
 local function ToggleFloodCheck(inst, toggle)
     if toggle then
         if not inst.um_floodchecked then
-            if not IsSpeedImmune(inst) then
-                inst:PushEvent("carefulwalking", {careful = true})
-            end
             if inst.components.umripples and not (inst:HasTag("worm") or inst.prefab == "mole") then --AXE check if should update ripples
                 inst.components.umripples:OnLandedServer(true)
             elseif inst.prefab == "mole" or inst:HasTag("worm") then
@@ -493,13 +510,9 @@ local function ToggleFloodCheck(inst, toggle)
             end
             FloodMoistureRamp(inst)
             inst.um_flood_moisture_ramp = inst:DoPeriodicTask(1, FloodMoistureRamp)
-            inst:ListenForEvent("equip", AdjustSpeed)
-            inst:ListenForEvent("unequip", AdjustSpeed) -- may fire twice, but that shouldn't matter, it's not doing a huge amount of computational work        
-            if not (inst.prefab == "mole" or inst:HasTag("worm")) then
-                AdjustSpeed(inst)
-            end
             inst.um_floodchecked = true
         end
+        ToggleSlowdown(inst, not IsSpeedImmune(inst))
     else
         if inst.um_floodchecked then
             if inst.um_flood_moisture_ramp then
@@ -515,16 +528,9 @@ local function ToggleFloodCheck(inst, toggle)
                     inst.um_worm_bubble_task = nil
                 end
             end
-            inst:RemoveEventCallback("equip", AdjustSpeed)
-            inst:RemoveEventCallback("unequip", AdjustSpeed)
-            if inst.components.locomotor then
-                inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, "um_floodedwater")
-            end
-            if not IsSpeedImmune(inst, true) then --Wurt's Swamp Pathfinder kinda bugs this out so can't use um_flood_speed_immune_TAGS
-                inst:PushEvent("carefulwalking", {careful = false})
-            end
             inst.um_floodchecked = nil
         end
+        ToggleSlowdown(inst)
     end
 end
 

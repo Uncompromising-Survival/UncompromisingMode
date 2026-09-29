@@ -68,7 +68,7 @@ function SnowMongBrain:OnStart()
 	local root = PriorityNode(
 	{
 		BrainCommon.PanicTrigger(self.inst),
-		BrainCommon.ElectricFencePanicTrigger(self.inst),
+		--BrainCommon.ElectricFencePanicTrigger(self.inst),
 		DoAction(self.inst, TakeBaitAction, "Take Bait", false),
 		ChaseAndAttack(self.inst, MAX_CHASE_TIME),
 		Wander(self.inst, function() return self.inst.components.knownlocations:GetLocation("home") end, MAX_WANDER_DIST)
