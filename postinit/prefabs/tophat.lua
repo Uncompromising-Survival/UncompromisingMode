@@ -246,7 +246,7 @@ env.AddComponentPostInit("equippable", function(self)
         local _dapperness
         local _dapperfn
         if owner and ShouldDoTophatHook(owner, self.inst) then
-            if self.dapperness then
+            if self.dapperness and self.dapperness < 0 then
                 _dapperness = self.dapperness
                 self.dapperness = _dapperness * GetTophatSanityMult(_dapperness)
             end
