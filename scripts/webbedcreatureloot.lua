@@ -903,17 +903,20 @@ for k, v in pairs(sw) do
     UMWebbedCreatureUtil.COCOON_DEFS.SHIPWRECKED[k] = v
 end
 
----@param modid string The mod id of the character's mod. You can see the modid in the end of the link of the workshop page.
+---@param modid table The mod id of the character's mod. You can see the modid in the end of the link of the workshop page.
 ---@param character string The character's prefab name.
 ---@param loot_pool table The loot pool for the character. See above and below for examples.
 UMWebbedCreatureUtil.AddCompatCharacterCocoon = function(modid, character, loot_pool)
-    assert(type(modid), "Bad argument #1 to AddCompatCharacterCocoon. Expected string, got " .. type(modid))
+    assert(type(modid) == "table", "Bad argument #1 to AddCompatCharacterCocoon. Expected string, got " .. type(modid))
     assert(type(character), "Bad argument #2 to AddCompatCharacterCocoon. Expected string, got " .. type(character))
     assert(type(loot_pool) == "table", "Bad argument #3 to AddCompatCharacterCocoon. Expected table, got " .. type(loot_pool))
 
-    if KnownModIndex:IsModEnabled("workshop-" .. modid) then
-        UMWebbedCreatureUtil.COCOON_DEFS.CHARACTER[string.upper(character)] = { loot = loot_pool }
+    for k, v in ipairs(modid) do
+        if KnownModIndex:IsModEnabled("workshop-" .. v) then
+            UMWebbedCreatureUtil.COCOON_DEFS.CHARACTER[string.upper(character)] = { loot = loot_pool }
+        end
     end
+    
 end
 
 ---@param creature string The creature prefab
@@ -953,7 +956,7 @@ UMWebbedCreatureUtil.AddCharacterCocoon = function(character, loot_pool)
     UMWebbedCreatureUtil.COCOON_DEFS.CHARACTER[string.upper(character)] = { loot = loot_pool }
 end
 
-UMWebbedCreatureUtil.AddCompatCharacterCocoon("3484995444", "wieneke", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon({"3484995444"}, "wieneke", {
     Item("koalefantcorpse", nil, nil, nil, function(inst)
         if TheWorld.state.iswinter then
             inst:SetAltBuild("koalefant_winter_build")
@@ -963,29 +966,39 @@ UMWebbedCreatureUtil.AddCompatCharacterCocoon("3484995444", "wieneke", {
             inst.sg:GoToState("corpse_idle")
         end
     end),
-    Item("glommerfuel", 2),
+    Item(function()
+                return TheWorld.state.iswinter and "trunk_winter" or "trunk_summer"
+            end, nil, nil, true),
+    Item("meat", 4, nil, true),
+    Item("meat", 4, .5, true),
+    Item("glommerfuel", 3),
     Item("glommerfuel", 2, .5),
     Item("trinket_9"),
-    Item("snotroast", nil, nil, true),
+    Item(RandomItem("snotroast", "koalefig_trunk"), nil, nil, true),
+    Item("pepperpopper", nil, nil, true),
+    Item("mashedpotatoes", nil, nil, true),
     Item("halloweencandy_8")
 })
 
-UMWebbedCreatureUtil.AddCompatCharacterCocoon("2496686961", "flaire", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon({"2496686961"}, "flaire", {
     Item("nightsword"),
     Item("flaire_bolsteredsword", nil, nil, true),
     Item("flaire_cleargem", 2),
     Item("flaire_cleargem", nil, .5),
-    Item("bluegem"),
-    Item("redgem"),
+    Item("bluegem", 2),
+    Item("bluegem", nil, .5),
+    Item("redgem", 2),
+    Item("redgem", nil, .5),
     Item("flaire_manaflask_potent", 2),
     Item("flaire_manaflask_potent", nil, .5),
-    Item("goldnugget", 2),
+    Item("goldnugget", 4),
     Item("goldnugget", 4, .5),
+    Item("cutstone"),
     Item("flaire_spellscroll")
 })
 
---reign of runts
-UMWebbedCreatureUtil.AddCompatCharacterCocoon("2010472942", "weerclops", {
+--Reign of Runts
+UMWebbedCreatureUtil.AddCompatCharacterCocoon({"2010472942"}, "weerclops", {
     Item("ice", 12),
     Item("ice", 12, .5),
     Item("snowball_item", 4, nil, true),
@@ -999,7 +1012,7 @@ UMWebbedCreatureUtil.AddCompatCharacterCocoon("2010472942", "weerclops", {
     Item(RandomItem("beakbasher", "hammer"), nil, .5)
 })
 
-UMWebbedCreatureUtil.AddCompatCharacterCocoon("2010472942", "woose", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon({"2010472942"}, "woose", {
     Item("tallbirdegg"),
     Item("dug_sapling"),
     Item("twigs", 6),
@@ -1016,7 +1029,7 @@ UMWebbedCreatureUtil.AddCompatCharacterCocoon("2010472942", "woose", {
     Item("featherfan", 3, .5, true)
 })
 
-UMWebbedCreatureUtil.AddCompatCharacterCocoon("2010472942", "wearger", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon({"2010472942"}, "wearger", {
     Item("honey", 4, nil, true),
     Item("honey", 4, .5, true),
     Item("honeycomb"),
@@ -1028,7 +1041,7 @@ UMWebbedCreatureUtil.AddCompatCharacterCocoon("2010472942", "wearger", {
     Item("furtuft", 30, .5)
 })
 
-UMWebbedCreatureUtil.AddCompatCharacterCocoon("2010472942", "wragonfly", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon({"2010472942"}, "wragonfly", {
     Item("ash", 6),
     Item("ash", 14, .5),
     Item("charcoal", 6),
@@ -1046,8 +1059,8 @@ UMWebbedCreatureUtil.AddCompatCharacterCocoon("2010472942", "wragonfly", {
     Item("lavae_cocoon")
 })
 
---island adventures
-UMWebbedCreatureUtil.AddCompatCharacterCocoon("3435352667", "wilbur", {
+--Island Adventures
+UMWebbedCreatureUtil.AddCompatCharacterCocoon({"3435352667"}, "wilbur", {
     Item("dug_monkeytail", 2),
     Item("dug_monkeytail", 2, .5),
     Item("dug_bananabush", 2, .1),
@@ -1061,7 +1074,7 @@ UMWebbedCreatureUtil.AddCompatCharacterCocoon("3435352667", "wilbur", {
     Item(RandomItem("cutlass", "cutless"), nil, .9, true)
 })
 
-UMWebbedCreatureUtil.AddCompatCharacterCocoon("3435352667", "walani", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon({"3435352667"}, "walani", {
     Item("seashell", 4),
     Item("seashell", 4, .5),
     Item("boards", 2),
@@ -1075,7 +1088,7 @@ UMWebbedCreatureUtil.AddCompatCharacterCocoon("3435352667", "walani", {
     Item(RandomItem("cutlass", "spear_launcher"), nil, .9, true)
 })
 
-UMWebbedCreatureUtil.AddCompatCharacterCocoon("3435352667", "woodlegs", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon({"3435352667"}, "woodlegs", {
     Item("woodlegshat", nil, nil, true),
     Item(RandomItem("supertelescope", "telescope"), nil, nil, true),
     Item("dubloon", 10),
@@ -1088,8 +1101,8 @@ UMWebbedCreatureUtil.AddCompatCharacterCocoon("3435352667", "woodlegs", {
     Item("cutlass", nil, .1, true)
 })
 
---cherry forest
-UMWebbedCreatureUtil.AddCompatCharacterCocoon("1289779251", "wirlywings", {
+--Cherry Forest
+UMWebbedCreatureUtil.AddCompatCharacterCocoon({"1289779251"}, "wirlywings", {
     Item("cherrytrinket_1"),
     Item("cherrytrinket_2"),
     Item("cherryscepter", nil, nil, true),
@@ -1104,8 +1117,8 @@ UMWebbedCreatureUtil.AddCompatCharacterCocoon("1289779251", "wirlywings", {
     Item("wirlycandy_goop", 3, .3)
 })
 
---black death
-UMWebbedCreatureUtil.AddCompatCharacterCocoon("1947892074", "wade", {
+--Black Death
+UMWebbedCreatureUtil.AddCompatCharacterCocoon({"1947892074"}, "wade", {
     Item("tiddlestick", nil, nil, true),
     Item("tiddle_detector", nil, nil, true),
     Item("tiddle_sponge", 3),
@@ -1119,7 +1132,7 @@ UMWebbedCreatureUtil.AddCompatCharacterCocoon("1947892074", "wade", {
 })
 
 --wonderwhy
-UMWebbedCreatureUtil.AddCompatCharacterCocoon("2879092392", "wonderwhy", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon({"2879092392"}, "wonderwhy", {
     Item("thulecite_pieces", 6),
     Item("thulecite_pieces", 6, .5),
     Item("nitre", 3),
@@ -1136,7 +1149,7 @@ UMWebbedCreatureUtil.AddCompatCharacterCocoon("2879092392", "wonderwhy", {
 })
 
 --wuzzy
-UMWebbedCreatureUtil.AddCompatCharacterCocoon("1836542884", "zeta", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon({"1836542884"}, "zeta", {
     Item("honey_splash"),
     Item("honey", 8, nil, true),
     Item("honey", 6, .5, true),
@@ -1150,7 +1163,7 @@ UMWebbedCreatureUtil.AddCompatCharacterCocoon("1836542884", "zeta", {
 })
 
 --whimsy
-UMWebbedCreatureUtil.AddCompatCharacterCocoon("2618885209", "whimsy", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon({"2618885209"}, "whimsy", {
     Item("purplegem"),
     Item(RandomItem("redgem", "bluegem"), 3, .75),
     Item(RandomItem("yellowgem", "orangegem"), 3, .15),
@@ -1168,7 +1181,7 @@ local seamaterial = TUNING.DSTU.ISLAND_ADVENTURES and "bamboo" or "driftwood_log
 local boatkit = TUNING.DSTU.ISLAND_ADVENTURES and "boatrepairkit" or "boatpatch_sludge"
 local sail = TUNING.DSTU.ISLAND_ADVENTURES and "ironwind" or "mast_malbatross_item"
 
-UMWebbedCreatureUtil.AddCompatCharacterCocoon("3118176896", "whiskey", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon({"3118176896"}, "whiskey", {
     Item("depthsword", nil, nil, true),
     Item("whiskeyhat", nil, nil, true),
     Item("whiskeysonar", nil, nil, true),
@@ -1180,7 +1193,7 @@ UMWebbedCreatureUtil.AddCompatCharacterCocoon("3118176896", "whiskey", {
 
 --swire
 -- will have better loot once the skilltree comes out. For now funny gold piñata
-UMWebbedCreatureUtil.AddCompatCharacterCocoon("2997213431", "swire", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon({"2997213431"}, "swire", {
     Item("goldnugget", 2),
     Item("goldnugget", 2, .5),
     Item("goldnugget", 2, .5),
@@ -1198,7 +1211,7 @@ UMWebbedCreatureUtil.AddCompatCharacterCocoon("2997213431", "swire", {
     Item("lungmendollars", 20, .5)
 })
 
-UMWebbedCreatureUtil.AddCompatCharacterCocoon("3583633595", "kris_m", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon({"3583633595"}, "kris_m", {
     Item("um_moss", 4),
     Item("um_moss", 3, .5),
     Item("nightsword", nil, nil, true),
@@ -1211,7 +1224,7 @@ UMWebbedCreatureUtil.AddCompatCharacterCocoon("3583633595", "kris_m", {
     Item("um_armor_pyre_nettles", nil, .5, true)
 })
 
-UMWebbedCreatureUtil.AddCompatCharacterCocoon("3583633595", "susie_m", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon({"3583633595"}, "susie_m", {
     Item(RandomItem("playing_card", "papyrus"), nil, nil, true),
     Item(RandomItem("beefalofeed", "beefalotreat", "um_moss"), 2, nil, true),
     Item(RandomItem("goldenaxe", "moonglassaxe", "jawed_scythe", "um_ice_sicle"), nil, nil, true),
@@ -1225,7 +1238,7 @@ UMWebbedCreatureUtil.AddCompatCharacterCocoon("3583633595", "susie_m", {
     Item("houndstooth", 4, .75)
 })
 
-UMWebbedCreatureUtil.AddCompatCharacterCocoon("3583633595", "ralsei_m", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon({"3583633595"}, "ralsei_m", {
     Item("carnival_vest_a", nil, nil, true),
     Item(RandomItem("ralsei_cake", "ralsei_butterscotch_cake"), nil, nil, true),
     Item("nightmarefuel", 4),
@@ -1239,7 +1252,7 @@ UMWebbedCreatureUtil.AddCompatCharacterCocoon("3583633595", "ralsei_m", {
     Item("lightninggoathorn", nil, .05)
 })
 
-UMWebbedCreatureUtil.AddCompatCharacterCocoon("2978133982", "whispy", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon({"2978133982"}, "whispy", {
     Item(RandomItem("vegiepick", "vegieaxe", "vegiebat", "vegie_sword"), nil, nil, true),
     Item(RandomItem("potato_hat", "vegie_amu", "vegie_amu2", "wateringcan"), nil, nil, true),
     Item(RandomItem("seed_forget", "seed_fire", "seed_till"), 8, .75, true),
@@ -1254,7 +1267,7 @@ UMWebbedCreatureUtil.AddCompatCharacterCocoon("2978133982", "whispy", {
     Item("slipper", nil, .25)
 })
 
-UMWebbedCreatureUtil.AddCompatCharacterCocoon("618785273", "womp", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon({"618785273"}, "womp", {
     Item(RandomItem("kelphat", "watermelonhat", "icehat"), nil, nil, true),
     Item("monstermeat", 6, nil, true),
     Item("waterballoon", 4),
@@ -1265,7 +1278,7 @@ UMWebbedCreatureUtil.AddCompatCharacterCocoon("618785273", "womp", {
     Item("tentaclespike", 2, .5, true)
 })
 
-UMWebbedCreatureUtil.AddCompatCharacterCocoon("3620352512", "weetie", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon({"3620352512"}, "weetie", {
     Item("taffy", 2, nil, true),
     Item("honey", 2, nil, true),
     Item("royal_jelly", 4, nil, true),
@@ -1275,7 +1288,7 @@ UMWebbedCreatureUtil.AddCompatCharacterCocoon("3620352512", "weetie", {
     Item("weetie_royalbee", 10, .1, true)
 })
 
-UMWebbedCreatureUtil.AddCompatCharacterCocoon("3221411434", "welina", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon({"3221411434"}, "welina", {
     Item(function()
         return RandomItem("rat_tail", "shroom_skin", "phlegm", "spoiled_fish", "spoiled_fish_small", "wetgoop", "rottenegg", "spoiled_food", "slurper_pelt",
             "yotpfood2", "wintersfeastfuel", "pigskin", "manrabbit_tail", "winter_food4")
@@ -1297,7 +1310,7 @@ UMWebbedCreatureUtil.AddCompatCharacterCocoon("3221411434", "welina", {
     Item("snowgoggles")
 })
 
-UMWebbedCreatureUtil.AddCompatCharacterCocoon("2858309592", "whisky", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon({"2858309592"}, "whisky", {
     Item(RandomItem("whiskysunhat", "whiskysunglasses", "whiskyribbon"), nil, nil, true),
     Item("whiskyyarn", 3),
     Item("whiskyyarn", 3, .5),
@@ -1313,7 +1326,7 @@ UMWebbedCreatureUtil.AddCompatCharacterCocoon("2858309592", "whisky", {
     end, 2)
 })
 
-UMWebbedCreatureUtil.AddCompatCharacterCocoon("3021568491", "wildcard", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon({"3021568491"}, "wildcard", {
     Item("nightmarefuel", 2),
     Item("nightmarefuel", 14, .5),
     Item("rabbit", 4, nil, true),
@@ -1325,18 +1338,43 @@ UMWebbedCreatureUtil.AddCompatCharacterCocoon("3021568491", "wildcard", {
     Item(RandomItem("feather_crow", "feather_robin", "feather_robin_winter", "feather_canary", "goose_feather", "malbatross_feather"), 6)
 })
 
---[[UMWebbedCreatureUtil.AddCompatCharacterCocoon("3385306425", "warrick", {
+--Wirra
+UMWebbedCreatureUtil.AddCompatCharacterCocoon({"2693391860", "3751878601"}, "wildchild", {
+    Item("reviver"),
+    Item("monstermeat", 2),
+    Item("monstermeat", nil, .5),
+    Item("houndstooth", 4, 1),
+    Item("houndstooth", 4, .75),
+    Item("beardhair", 2, 1),
+    Item("beardhair", 6, .5),
+    Item("boneshard", 4, 1),
+    Item("boneshard", 4, .5),
+    Item("goldnugget", 4, 1),
+    Item("goldnugget", 6, .25),
+    Item("shroom_skin_fragment", 4, .33),
+    Item(RandomItem("redgem", "bluegem"), 4),
+    Item(RandomItem("um_gemologygreengem2", "um_gemologyyellowgem2", "um_gemologybluegem1", "um_gemologyredgem2", "um_gemologypalegem1"), nil, nil, nil, GemologyRoll),
+    Item(RandomItem("um_gemologygreengem2", "um_gemologyyellowgem2", "um_gemologybluegem1", "um_gemologyredgem2", "um_gemologypalegem1"), nil, nil, nil, GemologyRoll),
+    Item(RandomItem("um_gemologygreengem2", "um_gemologyyellowgem2", "um_gemologybluegem1", "um_gemologyredgem2", "um_gemologypalegem1"), nil, nil, nil, GemologyRoll),
+    Item(RandomItem("um_pepperdragon_bladder", "um_rimeweed_itemflower"), nil, .5),
+    Item(RandomItem("um_rimeweed_itemvine", "um_fyrite"), 4),
+    Item(RandomItem("wirra_bone_whip", "wirra_icestaff", "wirra_firestaff"), nil, nil, true),
+    Item(RandomItem("wirra_whistle_whip", "wirra_rimeweed_whip"), nil, .15, true),
+    Item("armor_sharksuit_um", 1, 0.05, true),
+})
+
+--[[UMWebbedCreatureUtil.AddCompatCharacterCocoon({"3385306425"}, "warrick", {
     Item("feather_canary"),
     Item("silk", 5),
     Item("horn")
 })
 
 -- Wandering Drone -- Is crashing for some reason, sooo gonna have to keep this out
-UMWebbedCreatureUtil.AddCompatCharacterCocoon("3385306425", "tvheadguy", {
+UMWebbedCreatureUtil.AddCompatCharacterCocoon({"3385306425"}, "tvheadguy", {
     Item("cctrinket_freddo")
 })]]
 
---[[UMWebbedCreatureUtil.AddCompatCharacterCocoon("???", "warne", {
+--[[UMWebbedCreatureUtil.AddCompatCharacterCocoon({"???"}, "warne", {
     Item(RandomItem("warnebone_generic", "warnebone_arm", "warnebone_leg", "warnebone_ribcage", "warnebone_skull"), 4, nil, true),
     Item("boneshard", 6),
     Item("boneshard", 6, .5),
