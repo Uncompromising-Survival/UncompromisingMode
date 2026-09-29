@@ -53,12 +53,17 @@ local function onunequip(inst, owner)
     inst.components.container:Close(owner)
 end
 
+local ITEM_REFRESH_TAGS = {"spore", "spore_special", "mushroom"}
 local function DoSporeRefresh(inst)
     for k, v in pairs(inst.components.container.slots) do
-        if v.components.perishable and v:HasAnyTag("spore", "spore_special", "mushroom") then
+        if v.components.perishable and v:HasAnyTag(ITEM_REFRESH_TAGS) then
             v.components.perishable:ReducePercent(-.005)
         end
     end
+end
+
+local function PreserverRateFn(inst, item) -- Reason for above is that we want all items to refresh at the same time and rate.
+    return item:HasAnyTag(ITEM_REFRESH_TAGS) and 0 or 2
 end
 
 local function fn()
@@ -111,7 +116,7 @@ local function fn()
     container:WidgetSetup("piggyback")
 
     local preserver = inst:AddComponent("preserver")
-    preserver:SetPerishRateMultiplier(2)
+    preserver:SetPerishRateMultiplier(PreserverRateFn)
 
     MakeHauntableLaunchAndDropFirstItem(inst)
 
