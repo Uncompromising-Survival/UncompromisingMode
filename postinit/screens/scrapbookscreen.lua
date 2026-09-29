@@ -1216,7 +1216,7 @@ function ScrapbookScreen:PopulateInfoPanel(entry)
         end)
 
         local dep_imgsize = imagesize - imagebuffer
-        local needs_img_types = { "item", "food" }
+        local needs_img_types = { "item", "food", "gemology" }
 
         for i, dep in ipairs(depstoshow) do
             local xidx = i % cols
@@ -1786,7 +1786,7 @@ function ScrapbookScreen:BuildItemGrid()
                 widget.item_root.inv_image:Show()
                 widget.item_root.inv_image:SetTexture(GetScrapbookIconAtlas(data.tex) or GetScrapbookIconAtlas("cactus.tex"), data.tex or "cactus.tex")
                 widget.item_root.inv_image:ScaleToSize(imagesize - 6, imagesize - 6)
-            elseif data.type == "item" or data.type == "food" then
+            elseif data.type == "item" or data.type == "food" or data.type == "gemology" then
                 widget.item_root.image:SetTexture("images/scrapbook.xml", "inv_item_background.tex")
                 widget.item_root.image:ScaleToSize(imagesize, imagesize)
                 widget.item_root.inv_image:Show()
