@@ -6,8 +6,10 @@ local flaire_nature_equips = {
     "um_hat_leafwing",
 }
 
-for k, v in ipairs(flaire_nature_equips) do
-    table.insert(TUNING.FLAIRE_NATURE_EQUIPS, v)
+if TUNING.FLAIRE_NATURE_EQUIPS then
+    for k, v in ipairs(flaire_nature_equips) do
+        table.insert(TUNING.FLAIRE_NATURE_EQUIPS, v)
+    end
 end
 
 env.AddPrefabPostInit("woose", function(inst)
