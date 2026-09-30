@@ -31,7 +31,7 @@ local function CheckIfUnequipped(inst)
 end
 
 local function CalcDappernessNightSword(inst, owner)
-	if owner:HasTag("Funny_Words_Magic_Man") then
+	if owner.um_Funny_Words_Magic_Man then
 		return TUNING.CRAZINESS_MED * .8 -- This ends up blah blah blah shut up bro ur weird
 	else
 		return TUNING.CRAZINESS_MED

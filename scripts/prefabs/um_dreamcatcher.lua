@@ -12,7 +12,7 @@ local function PunishTheCoward(inst,channeler,RNEs) --Can tune this, this is a b
 		RNEs.punish = 0
 	end
 	if channeler.components.sanity then
-		if channeler:HasTag("Funny_Words_Magic_Man") then
+		if channeler.um_Funny_Words_Magic_Man then
 			channeler.components.sanity:DoDelta(-5)
 		else
 			channeler.components.sanity:DoDelta(-15)
