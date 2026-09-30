@@ -73,7 +73,7 @@ UMCommonFns.IsRangedWeapon = function(ent)
 end
 
 local SpDamageUtil = require("components/spdamageutil")
-local CANT_EXPLODE_TAGS = { "INLIMBO", "notarget" }
+local CANT_EXPLODE_TAGS = {"INLIMBO", "notarget"}
 UMCommonFns.DoAOEExplosion = function(inst, um_explodeparams) -- Modified copy of explosive:OnBurnt().
     if not um_explodeparams then return end
     if not um_explodeparams.skip_camera_flash then
