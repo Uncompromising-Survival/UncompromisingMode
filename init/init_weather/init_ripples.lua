@@ -365,6 +365,7 @@ env.AddComponentPostInit("blinkstaff", function(self)
             if caster.components.locomotor then
                 caster.components.locomotor:OnUpdate(0) --AXE call an update... get flooded tiles to work after teleporting
             end
+            caster.blinktask_ripples = nil
         end)
         return ret
     end
