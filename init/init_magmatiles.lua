@@ -149,7 +149,7 @@ local function DoMagmaCoolProjectile(inst)
     if inst.components.complexprojectile ~= nil then
         local _OnHit = inst.components.complexprojectile.onhitfn
 
-        inst.components.complexprojectile:SetOnHit(function(inst, attacker, target)
+        inst.components.complexprojectile:SetOnHit(function(inst, attacker, target, ...)
             local x, y, z = inst.Transform:GetWorldPosition()
             if TheWorld.components.um_magmamanager ~= nil then
                 local cooled = TheWorld.components.um_magmamanager:CoolDownMagmaTile(x, z, TUNING.DSTU.MAGMATILE_DEFAULT_COOL_TIME)
@@ -160,7 +160,7 @@ local function DoMagmaCoolProjectile(inst)
                 end
             end
 
-            _OnHit(inst, attacker, target)
+            _OnHit(inst, attacker, target, ...)
         end)
     end
 end
