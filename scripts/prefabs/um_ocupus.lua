@@ -164,7 +164,7 @@ local function FindPointEyeTentacle(inst, x, y, z, rot, stalkinggrounds) --Note 
     end
 end
 
-local function AddEyeTentacle(inst, x, y, z, rot, stalkinggrounds) -- Do it one at a time, we want to spread these in a way to give the illusion of a large creature on the bottom of the ocean
+local function AddOcupusEye(inst, x, y, z, rot, stalkinggrounds) -- Do it one at a time, we want to spread these in a way to give the illusion of a large creature on the bottom of the ocean
     local tent = SpawnPrefab("um_ocupus_eye")
     tent.core = inst
     local homex, homey, homez = FindPointEyeTentacle(inst, x, y, z, rot, stalkinggrounds)
@@ -190,7 +190,7 @@ local function Born(inst)
         z = z + math.random(-5, 5)
     end
     for i = 1, 5 + math.random(1, 5) do
-        AddEyeTentacle(inst, x, y, z, i, stalkinggrounds) --"Stalkinggrounds" just refers to the prefab the ocupus controller prefab is currently working around, be it itself or a rock, it's passed along so that if the ocupus wants to put some tentacles near other rocks it doesn't just choose the same rock over again.
+        AddOcupusEye(inst, x, y, z, i, stalkinggrounds) --"Stalkinggrounds" just refers to the prefab the ocupus controller prefab is currently working around, be it itself or a rock, it's passed along so that if the ocupus wants to put some tentacles near other rocks it doesn't just choose the same rock over again.
     end
 end
 
@@ -206,7 +206,7 @@ local function GetOffset(inst)
     end
 end
 
-local function AddEyeTentacle2(inst)
+local function AddOcupusEyeTentacle(inst)
     if inst.boatvictim and inst.boatvictim:IsValid() then
         local tent = SpawnPrefab("um_ocupus_eyetacle")
         tent.core = inst
@@ -358,7 +358,7 @@ local function EngageBoat(inst)
     inst.totaleyetents = 0
     local x, y, z = inst.boatvictim.Transform:GetWorldPosition()
     for i = 1, inst.availableeyes do
-        inst:DoTaskInTime(math.random(1, 5), AddEyeTentacle2)
+        inst:DoTaskInTime(math.random(1, 5), AddOcupusEyeTentacle)
     end
     inst:DoTaskInTime(15, Evaluate)
     inst.boatcheck = inst:DoPeriodicTask(1, BoatCheck)
@@ -437,7 +437,7 @@ local function fn()
     inst.EyeTentKilled = EyeTentKilled
     inst.notifycore = BoatVictimSpotted
     inst:DoTaskInTime(0, Born)
-    inst.AddEyeTentacle2 = AddEyeTentacle2
+    inst.AddOcupusEyeTentacle = AddOcupusEyeTentacle
 
     inst:Hide()
 

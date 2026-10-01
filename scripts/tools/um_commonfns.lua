@@ -1,12 +1,12 @@
 local UMCommonFns = {}
 UMCommonFns.GHOSTLIKE_TAGS = {"ghost", "playerghost", "shadow", "shadowcreature", "nightmarecreature", "shadowminion", "shadowthrall", "shadowchesspiece", "brightmare", "brightmareboss"}
 
-UMCommonFns.Say = function(inst, string)
+function UMCommonFns.Say(inst, string)
     local talker = inst.components.talker
     if talker then talker:Say(string) end
 end
 
-UMCommonFns.RestartTimer = function(inst, data)
+function UMCommonFns.RestartTimer(inst, data)
     local timer = inst.components.timer
     if not (timer and data) then return end
     local name, time, paused, initialtime_override = data.name, data.time, data.paused, data.initialtime_override
@@ -17,7 +17,7 @@ UMCommonFns.RestartTimer = function(inst, data)
     if time then timer:StartTimer(name, time, paused, initialtime_override) end
 end
 
-UMCommonFns.StartRechargeableCooldown = function(inst, data)
+function UMCommonFns.StartRechargeableCooldown(inst, data)
     if not data then return end
     local cooldown = data.cooldown or 5
     local x1, y1, z1 = inst.Transform:GetWorldPosition()
@@ -35,19 +35,19 @@ end
 
 UMCommonFns.KNOCKBACK_CANT_TAGS = {"fat_gang", "foodknockbackimmune", "heavybody"}
 UMCommonFns.KNOCKBACK_ARMOR_CANT_TAGS = {"heavyarmor", "knockback_protection"}
-UMCommonFns.ShouldKnockback = function(inst)
+function UMCommonFns.ShouldKnockback(inst)
     local inventory = inst.components.inventory
     local bodyslot = inventory and inventory:GetEquippedItem(EQUIPSLOTS.BODY)
     return not inst:HasAnyTag(UMCommonFns.KNOCKBACK_CANT_TAGS) and not (inst.sg and inst.sg:HasStateTag("shell")) and not (inst.components.rider and inst.components.rider:IsRiding())
         and (not bodyslot or not bodyslot:HasAnyTag(UMCommonFns.KNOCKBACK_ARMOR_CANT_TAGS))
 end
 
-UMCommonFns.IsAlly_GetLeader = function(inst)
+function UMCommonFns.IsAlly_GetLeader(inst)
     local follower = inst.replica.follower
     return follower and follower:GetLeader()
 end
 
-UMCommonFns.IsAlly = function(inst, guy, tags) -- Used for UMIsAlly on certain creatures.
+function UMCommonFns.IsAlly(inst, guy, tags) -- Used for UMIsAlly on certain creatures.
     local guy_combat = guy.replica.combat
     if not (tags and guy_combat) or not (inst.replica.combat:GetTarget() ~= guy and guy_combat and guy_combat:GetTarget() ~= inst) then return false end
     local myleader, guyleader = UMCommonFns.IsAlly_GetLeader(inst), UMCommonFns.IsAlly_GetLeader(guy)
@@ -57,7 +57,7 @@ UMCommonFns.IsAlly = function(inst, guy, tags) -- Used for UMIsAlly on certain c
     return guy:HasAnyTag(tags)
 end
 
-UMCommonFns.IsNotFriendly = function(attacker, target) -- Is the target an ally or my leader's ally?
+function UMCommonFns.IsNotFriendly(attacker, target) -- Is the target an ally or my leader's ally?
     local attackercombat = attacker and attacker:IsValid() and attacker.components.combat
     if not attackercombat or not target.components.health then return true end
     local leader = attacker and attacker.components.follower and attacker.components.follower:GetLeader()
@@ -66,7 +66,7 @@ UMCommonFns.IsNotFriendly = function(attacker, target) -- Is the target an ally 
         and (not leader or leadercombat and leadercombat:CanTarget(target) and not leadercombat:IsAlly(target)))
 end
 
-UMCommonFns.IsRangedWeapon = function(ent)
+function UMCommonFns.IsRangedWeapon(ent)
     if UPDATE_CHECK and IsRangedWeapon then return IsRangedWeapon(ent) end
     return ent ~= nil and
         (    ent.components.projectile ~= nil or
@@ -76,8 +76,8 @@ UMCommonFns.IsRangedWeapon = function(ent)
 end
 
 local SpDamageUtil = require("components/spdamageutil")
-local CANT_EXPLODE_TAGS = { "INLIMBO", "notarget" }
-UMCommonFns.DoAOEExplosion = function(inst, um_explodeparams) -- Modified copy of explosive:OnBurnt().
+local CANT_EXPLODE_TAGS = {"INLIMBO", "notarget"}
+function UMCommonFns.DoAOEExplosion(inst, um_explodeparams) -- Modified copy of explosive:OnBurnt().
     if not um_explodeparams then return end
     if not um_explodeparams.skip_camera_flash then
         for i, v in ipairs(AllPlayers) do
@@ -193,7 +193,7 @@ UMCommonFns.DoAOEExplosion = function(inst, um_explodeparams) -- Modified copy o
     inst:Remove()
 end
 
-UMCommonFns.VetcurseUnequip = function(inst, owner, slot)
+function UMCommonFns.VetcurseUnequip(inst, owner, slot)
     if owner.components.inventory.isloading then return end
     if owner:HasTag("player") then
         if not owner:HasTag("vetcurse") then
@@ -226,7 +226,7 @@ UMCommonFns.VetcurseUnequip = function(inst, owner, slot)
 end
 
 local ignoredactions = {ACTIONS.LOOKAT, ACTIONS.WALKTO}
-UMCommonFns.HasRightClickAction = function(inst, doer, pos, target)
+function UMCommonFns.HasRightClickAction(inst, doer, pos, target)
     if inst.um_checkingactions then return true end
     inst.um_checkingactions = true
     local _, rmb
@@ -237,11 +237,11 @@ UMCommonFns.HasRightClickAction = function(inst, doer, pos, target)
     return rmb and not table.contains(ignoredactions, rmb.action)
 end
 
-UMCommonFns.DefaultCanCastOnTarget = function(inst, doer, pos, target, actioncount)
+function UMCommonFns.DefaultCanCastOnTarget(inst, doer, pos, target, actioncount)
     return not actioncount
 end
 
-UMCommonFns.SpawnHoundLightning = function(inst, data)
+function UMCommonFns.SpawnHoundLightning(inst, data)
     if not data then return end
     local lightning = SpawnPrefab("hound_lightning")
     local pos = data.pos
@@ -252,7 +252,7 @@ UMCommonFns.SpawnHoundLightning = function(inst, data)
 end
 
 -- Unified megaflare timer reduction used by all seasonal boss spawners
-UMCommonFns.MegaFlareTimerReduction = function(time)
+function UMCommonFns.MegaFlareTimerReduction(time)
     if time > 480 * 8 then
         return time - 480 * math.random(4, 6)
     elseif time > 480 * 4 then

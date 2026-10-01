@@ -19,7 +19,7 @@ do
         if attacker and attacker.userid and not table.contains(inst.hitlist, attacker.userid) then
             table.insert(inst.hitlist, attacker.userid)
         end
-        --[[if inst.um_counterattack then
+        --[[if attacker and inst.um_counterattack then
             inst.um_counterattack = math.max(inst.um_counterattack - 1, 0)
             if inst.um_counterattack == 0 then
                 inst:PushEvent("um_counterattack", {target = attacker})

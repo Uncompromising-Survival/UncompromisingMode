@@ -1,6 +1,6 @@
 return Class(function(self, inst)
     self.inst = inst
-    assert(TheWorld.ismastersim, "um_ocupusappearinator should not exist on client")
+    assert(TheWorld.ismastersim, "um_pestilencecontroller should not exist on client")
     --Todo What if a tree is somehow added or removed?
 
     local function FindSmallOffset(x, z)
