@@ -65,14 +65,13 @@ local function clamp(inst)
         end
         inst._releaseclamp = function() inst:releaseclamp() end
         inst:ListenForEvent("onremove", inst._releaseclamp, inst.boat)
-        inst.clamptask = inst:DoTaskInTime(math.random()+3,function() inst.crunchboat(inst,inst.boat) end)
+        inst.clamptask = inst:DoTaskInTime(math.random()+3,function() inst:crunchboat(inst.boat) end)
     end
 end
 
 local function teleport_override_fn(inst)
     local pt = inst:GetPosition()
-    local offset = FindSwimmableOffset(pt, math.random() * 2 * PI, 3, 8, true, false) or
-					FindSwimmableOffset(pt, math.random() * 2 * PI, 8, 8, true, false)
+    local offset = FindSwimmableOffset(pt, math.random() * 2 * PI, 3, 8, true, false) or FindSwimmableOffset(pt, math.random() * 2 * PI, 8, 8, true, false)
     if offset ~= nil then
 		pt = pt + offset
     end
@@ -88,11 +87,11 @@ local function OnRemove(inst)
     if inst.shadow then
         inst.shadow:Remove()
     end
-    inst.releaseclamp(inst)
+    inst:releaseclamp()
 end
 
 local function OnDead(inst)
-    inst.releaseclamp(inst)
+    inst:releaseclamp()
 	local loot = SpawnPrefab("ocupus_tentacle")
 	loot.Transform:SetPosition(inst.Transform:GetWorldPosition())
 	loot.AnimState:PlayAnimation("tentacle_item_flop")
@@ -139,13 +138,17 @@ local function fn()
 
     inst.AnimState:SetBank("um_ocupus_tentacle")
     inst.AnimState:SetBuild("ocupus")
-	
+
     inst.AnimState:PlayAnimation("idle", true)
+
     local land_time = (POPULATING and math.random()*5*FRAMES) or 0
+
     inst:DoTaskInTime(land_time, function(inst)
         inst.components.floater:OnLandedServer()
-    end)	
+    end)
+
     inst.entity:SetPristine()
+
     if not TheWorld.ismastersim then
         return inst
 	end
@@ -226,6 +229,7 @@ local function fn()
 		splash.Transform:SetScale(1.5,1.5,1.5)
 		inst.sg:GoToState("appear")
 	end
+
 	inst.Leave = function(inst)
 		if inst.Transform:GetWorldPosition() then
 			local splash = SpawnPrefab("splash_ocean")
@@ -234,6 +238,7 @@ local function fn()
 			inst:Remove() --CK claw doesn't appear to have a state where it leaves...?
 		end
 	end
+
 	inst.KillSelf = function(inst)
 		if inst.Transform:GetWorldPosition() then
 			local splash = SpawnPrefab("splash_ocean")
@@ -243,9 +248,11 @@ local function fn()
 				inst.components.health:Kill()
 			end
 		end
-	end	
+	end
+
 	inst.persists = false
+
     return inst
 end
 
-return Prefab("um_ocupus_tentacle",fn)
+return Prefab("um_ocupus_tentacle", fn)

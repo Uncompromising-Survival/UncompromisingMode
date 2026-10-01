@@ -3,17 +3,15 @@ local assets =
     Asset("ANIM", "anim/ocupus.zip"),
 }
 
-SetSharedLootTable( 'um_ocupus_eyetacle',
+SetSharedLootTable('um_ocupus_eyetacle',
 {
-    {'um_ocupus_eyetacle_item',  1.00},
+    {'um_ocupus_eyetacle_item', 1.00},
 })
 
 local brain = require "brains/um_ocupus_eyetaclebrain"
 
 local function OnDeath(inst)
-    if inst.core then
-        inst.core:EyeTentKilled(inst.core)
-    end
+    if inst.core then inst.core:EyeTentKilled() end
     local loot = SpawnPrefab("ocupus_tentacle_eye")
     loot.Transform:SetPosition(inst.Transform:GetWorldPosition())
     loot.AnimState:PlayAnimation("eyetacle_item_flop")
@@ -39,7 +37,7 @@ local function CheckForBoatsShort(inst)
     local boat = CheckForBoats(inst,10) --Seems like it looks for the center of the boat entity, so the search radius may seem a bit large without knowing that.
     --Tell The Ocupus Core that we've got dinner ready, those poor souls won't know what hit em.
     if inst.core and boat and not inst.core.boatvictim then
-        inst.core.notifycore(inst.core,boat)
+        inst.core:OnBoatSpotted(boat)
     end
 end
 
@@ -99,22 +97,29 @@ local function Investigate(inst)
     end
 end
 
+local function GetBoatVictim(boat, ignorehealth)
+    return boat and boat:IsValid() and (ignorehealth or boat.components.health and not boat.components.health:IsDead()) and boat or nil
+end
+
+local function SpawnNewEyeTentacle(inst)
+    local splash = SpawnPrefab("splash_ocean")
+    splash.Transform:SetPosition(inst.Transform:GetWorldPosition())
+    splash.Transform:SetScale(1.5,1.5,1.5)
+    inst.core:DoTaskInTime(math.random(3,5), function(inst) if inst.boatvictim then inst:AddOcupusEyeTentacle() end end)
+    inst:Remove() -- Replace with submerging
+end
+
 local function EvaluateDistanceToBoat(inst)
     if inst.components.health and not inst.components.health:IsDead() then
-        if inst.boatvictim and inst.boatvictim:IsValid() and inst:GetDistanceSqToInst(inst.boatvictim)^0.5 > 10 then
+        local boatvictim = GetBoatVictim(inst.boatvictim)
+        if boatvictim and inst:GetDistanceSqToInst(inst.boatvictim) ^ 0.5 > 10 then
+            if inst:IsAsleep() then SpawnNewEyeTentacle(inst) return end
             inst.AnimState:PlayAnimation("eyetacle_leave")
-            inst:ListenForEvent("animover",function(inst)
-                local splash = SpawnPrefab("splash_ocean")
-                splash.Transform:SetPosition(inst.Transform:GetWorldPosition())
-                splash.Transform:SetScale(1.5,1.5,1.5)
-                inst.core:DoTaskInTime(math.random(3,5),function(inst) if inst.boatvictim then inst:AddOcupusEyeTentacle() end end)
-                inst:Remove() --Replace with submerging
-            end)
-        elseif not inst.boatvictim then	
+            inst:ListenForEvent("animover", SpawnNewEyeTentacle)
+        elseif not boatvictim then
+            if inst:IsAsleep() then inst:Remove() return end
             inst.AnimState:PlayAnimation("eyetacle_leave")
-            inst:ListenForEvent("animover",function(inst)
-                inst:Remove() --Replace with submerging
-            end)
+            inst:ListenForEvent("animover", function(inst) inst:Remove() end) -- Replace with submerging
         end
     end
 end
@@ -188,21 +193,20 @@ local function fn()
     inst:ListenForEvent("death", OnDeath)
     inst:ListenForEvent("attacked", OnAttacked)
     inst:Hide()
-    inst:DoTaskInTime(0,function(inst)
+    inst:DoTaskInTime(0, function(inst)
         inst:Appear()
-        inst:DoPeriodicTask(math.random(5,7),EvaluateDistanceToBoat)
+        inst:DoPeriodicTask(math.random(5,7), EvaluateDistanceToBoat)
     end)
 
-    inst:DoPeriodicTask(10,CheckForVictimsLong)
+    inst:DoPeriodicTask(10, CheckForVictimsLong)
 
     inst:AddComponent("teleportedoverride")
     inst.components.teleportedoverride:SetDestPositionFn(teleport_override_fn)
 
     inst.Leave = function(inst)
+        if inst:IsAsleep() then inst:Remove() return end
         inst.AnimState:PlayAnimation("eyetacle_leave")
-        inst:ListenForEvent("animover",function(inst)
-            inst:Remove() --Replace with submerging
-        end)
+        inst:ListenForEvent("animover", function(inst) inst:Remove() end) -- Replace with submerging
     end
 
     inst.Appear = function(inst)
@@ -216,7 +220,7 @@ local function fn()
         inst.AnimState:PlayAnimation("eyetacle_appear")
         inst.AnimState:PushAnimation("eyetacle_idle",true)
         inst.AnimState:SetDeltaTimeMultiplier(math.random(-5,5)*0.01+1)
-        inst:DoPeriodicTask(1,function(inst) --Keep the eyetacle looking at the boat
+        inst:DoPeriodicTask(1, function(inst) --Keep the eyetacle looking at the boat
             if inst.boatvictim and inst.boatvictim:IsValid() then
                 inst:ForceFacePoint(inst.boatvictim.Transform:GetWorldPosition())
             end
@@ -268,8 +272,8 @@ local function Hide(inst)
 end
 
 local function Appear(inst)
-    local x,z = inst.homex,inst.homez
-    
+    local x,z = inst.homex, inst.homez
+
     if x ~= nil and z ~= nil then
         x = x + math.random(-4,4)
         z = z + math.random(-4,4)
@@ -325,6 +329,7 @@ local function fneye()
     if not TheWorld.ismastersim then
         return inst
     end
+
     --inst.AnimState:SetMultColour(1, 1, 1, 0.2)
     inst:AddComponent("stackable")
 
@@ -343,8 +348,9 @@ local function fneye()
     inst:DoTaskInTime(0,EvaluateTime)
 
     inst.Hide = function(inst)
+        if inst:IsAsleep() then inst:Remove() return end
         inst.AnimState:PlayAnimation("eye_retract")
-        inst:ListenForEvent("animover",function(inst) inst:Remove() end)
+        inst:ListenForEvent("animover", function(inst) inst:Remove() end)
     end
 
     MakeHauntableLaunch(inst)
@@ -355,7 +361,7 @@ local function fneye()
 end
 
 local function PullFish(inst)
-    inst:RemoveEventCallback("animover",PullFish)
+    inst:RemoveEventCallback("animover", PullFish)
     if inst.fish then
         local x,y,z = inst.fish.Transform:GetWorldPosition()
         inst.fish:RemoveChild(inst)
@@ -365,7 +371,7 @@ local function PullFish(inst)
         inst.AnimState:PlayAnimation("snatch_pst")
         inst:ListenForEvent("animover", function(inst)
             inst.fish:Remove()
-            inst:DoTaskInTime(0,function(inst) inst:Remove() end)
+            inst:DoTaskInTime(0, function(inst) inst:Remove() end)
         end)
     else
         inst:Remove()
@@ -382,11 +388,9 @@ local function PullBig(inst)
         splash.Transform:SetPosition(x,y,z)
         splash.Transform:SetScale(1.5,1.5,1.5)
         inst.AnimState:PlayAnimation("snatchbig_pst")
-        inst:DoTaskInTime(0,function(inst) --requires a delay for some reason before moving on
+        inst:DoTaskInTime(0, function(inst) --requires a delay for some reason before moving on
             inst.fish:Remove()
-            inst:ListenForEvent("animover", function(inst)
-                inst:Remove()
-            end)
+            inst:ListenForEvent("animover", function(inst) inst:Remove() end)
         end)
     else
         inst:Remove()
@@ -399,11 +403,11 @@ local function GrabFish(inst)
         inst.fish:AddTag("doomed")
         if inst.fish:HasTag("oceanfish") then
             inst.AnimState:PlayAnimation("snatch_pre")
-            inst:ListenForEvent("animover",PullFish)
+            inst:ListenForEvent("animover", PullFish)
         else
-            inst.Transform:SetScale(1.5,1.5,1.5)
+            inst.Transform:SetScale(1.5, 1.5, 1.5)
             inst.AnimState:PlayAnimation("snatchbig_pre")
-            inst:ListenForEvent("animover",PullBig)
+            inst:ListenForEvent("animover", PullBig)
         end
     else
         inst:Remove()
@@ -489,6 +493,7 @@ local function fnreapertentacle() --Reaper Tentacle is scrapped/shelved. It was 
     if not TheWorld.ismastersim then
         return inst
     end
+
     --inst.AnimState:SetMultColour(1, 1, 1, 0.2)
     
     inst:AddComponent("inspectable")
@@ -532,27 +537,14 @@ local function fneyetacleunder()
     end
 
     inst.Appear = function(inst) --A tentacle is coming!
-        if inst.noeyes then
-            --TheNet:Announce("no eyes!")
-            inst.AnimState:PlayAnimation("tentacle_under_appear")
-        else
-            --TheNet:Announce("eyes!")
-            inst.AnimState:PlayAnimation("eyetacle_under_appear")
-        end
-        inst:ListenForEvent("animover",UpperTentAppear)
+        inst.AnimState:PlayAnimation(inst.noeyes and "tentacle_under_appear" or "eyetacle_under_appear")
+        inst:ListenForEvent("animover", UpperTentAppear)
     end
     
-    inst.Leave = function(inst,death) --The undertentacle is leaving, remove it afterwards
-        if death then
-            inst.AnimState:PlayAnimation("eyetacle_under_death")
-        else
-            if inst.noeyes then
-                inst.AnimState:PlayAnimation("tentacle_under_leave")
-            else
-                inst.AnimState:PlayAnimation("eyetacle_under_leave")
-            end
-        end
-        inst:ListenForEvent("animover",function(inst) inst:Remove() end)
+    inst.Leave = function(inst, death) --The undertentacle is leaving, remove it afterwards
+        if inst:IsAsleep() then inst:Remove() return end
+        inst.AnimState:PlayAnimation(death and "eyetacle_under_death" or (inst.noeyes and "tentacle_under_leave" or "eyetacle_under_leave"))
+        inst:ListenForEvent("animover", function(inst) inst:Remove() end)
     end
 
     MakeHauntableLaunch(inst)

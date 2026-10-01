@@ -60,19 +60,16 @@ local function OnAttackBeakKilled(beak_inst)
 	end)
 end
 
-
-
 local function isnotocupus(ent)
 	if ent ~= nil and not ent:HasTag("ocupus") then -- fix to friendly AOE: refer for later AOE mobs -Axe
 		return true
 	end
 end
 
-
 local function AfterScreech(inst)
 	inst:RemoveTag("attacking")
 	inst:DoTaskInTime(inst.screechmod*math.random(5,8),function(inst)
-		inst.Screeeeeeech(inst) 
+		inst:Screeeeeeech() 
 	end)
 end
 
@@ -120,7 +117,6 @@ local function Leave(inst)
 	end
 end
 
-
 local function AppearanceStuff(beak_inst) -- Do this stuff once the beak appears!
 	local boat = beak_inst:GetCurrentPlatform()
 	if boat then
@@ -148,7 +144,7 @@ local function WatchBoatState(beak_inst)
 		local players = FindPlayersInRangeSq(x, y, z, 4^2, true)
 		if players and #players > 0 then
 			if boat.components.health:IsDead() then
-				beak_inst.retract(beak_inst)
+				beak_inst:retract()
 			end
 		else
 			if not beak_inst.components.health:IsDead() and not beak_inst:HasTag("leaving") and not beak_inst:HasTag("attacking") then
@@ -160,14 +156,14 @@ local function WatchBoatState(beak_inst)
 						YellRing(beak_inst)
 						boat.components.health:DoDelta(-60)
 						if boat.components.health:IsDead() then
-							beak_inst.retract(beak_inst)
+							beak_inst:retract()
 						end
 					end
 				end)
 			end
 		end
 	else
-		beak_inst.retract(beak_inst)
+		beak_inst:retract()
 	end
 end
 
@@ -188,6 +184,7 @@ local function fn()
     beak_inst:AddTag("noember")
 
     beak_inst.entity:SetPristine()
+
     if not TheWorld.ismastersim then
         return beak_inst
     end
@@ -202,18 +199,19 @@ local function fn()
 
     beak_inst:AddComponent("inspectable")
 
-
     beak_inst:AddComponent("hauntable")
     beak_inst.components.hauntable:SetHauntValue(TUNING.HAUNT_SMALL)
+
 	beak_inst.screechmod = 1 -- The ocupus can screech faster if needed...
 	beak_inst.Transform:SetScale(1.2,1.2,1.2) --Scale er up a bit... beak looks a bit small
-	beak_inst:DoTaskInTime(0,AppearanceStuff)
+	beak_inst:DoTaskInTime(0, AppearanceStuff)
     beak_inst._beak_attack_ending = false
 	beak_inst.Screeeeeeech = Screeeeeeech
 	beak_inst.retract = EndbeakAttack
-	beak_inst:DoPeriodicTask(3,WatchBoatState)
+
+	beak_inst:DoPeriodicTask(3, WatchBoatState)
+
     return beak_inst
 end
 
-return Prefab("um_ocupus_beak",fn)
-
+return Prefab("um_ocupus_beak", fn)
