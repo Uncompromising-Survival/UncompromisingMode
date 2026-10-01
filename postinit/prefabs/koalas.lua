@@ -7,7 +7,7 @@ GLOBAL.setfenv(1, GLOBAL)
 
 local function OnAttacked(inst, data)
     local attacker = data.attacker
-    if inst.um_counterattack then
+    if attacker and inst.um_counterattack then
         inst.um_counterattack = math.max(inst.um_counterattack - 1, 0)
         if inst.um_counterattack == 0 then
             inst:PushEvent("um_counterattack", {target = attacker})
