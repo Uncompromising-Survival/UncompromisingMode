@@ -4,27 +4,13 @@ return Class(function(self, inst)
 
     self.ocupi = {}
 
-    function self:CountOcupi()
-        --can't use #self.ocupi because it's a map, doesn't have a numerical idx
-        local count = 0
-        for k, v in pairs(self.ocupi) do
-            count = count + 1
-        end
-
-        return count
-    end
-
     local function CheckForOtherOcupi(pos)
-        if self:CountOcupi() > 0 then
-            for guid, ent in pairs(self.ocupi) do
-                if ent ~= nil and ent:IsValid() and ent:GetDistanceSqToPoint(pos.x, 0, pos.z) <= 250 * 250 then
-                    return false
-                end
+        for guid, ent in pairs(self.ocupi) do
+            if ent and ent:IsValid() and ent:GetDistanceSqToPoint(pos.x, 0, pos.z) <= 250 * 250 then
+                return false
             end
-            return true
-        else
-            return true
         end
+        return true
     end
 
     local function IterateThroughTiles(tiles)
@@ -47,9 +33,9 @@ return Class(function(self, inst)
     end
 
     local function FindLocation()
-        if TheWorld.components.um_tilelogger and TheWorld.components.um_tilelogger.Hazardous then
-            return IterateThroughTiles(deepcopy(TheWorld.components.um_tilelogger.Hazardous))
-        end
+        local um_tilelogger = TheWorld.components.um_tilelogger
+        local Hazardous = um_tilelogger and um_tilelogger.Hazardous
+        if Hazardous then return IterateThroughTiles(deepcopy(Hazardous)) end
     end
 
     function self:SpawnOcupi()
@@ -60,27 +46,29 @@ return Class(function(self, inst)
     end
 
     local function OnSeasonTick(src, data)
-        local Ocupus = self:CountOcupi()
-        if Ocupus and Ocupus < 1 then
+        local ocupus = GetTableSize(self.ocupi)
+        local rand = math.random()
+        if ocupus < 1 then
+            for i = 1, 2 do
+                self:SpawnOcupi()
+            end
+        elseif ocupus < 3 then
             self:SpawnOcupi()
-            self:SpawnOcupi()
-        elseif Ocupus < 3 then
-            self:SpawnOcupi()
-        elseif Ocupus < 4 and math.random() > 0.5 then
-            self:SpawnOcupi()
-        elseif Ocupus < 6 and math.random() > 0.75 then
-            self:SpawnOcupi()
+        elseif ocupus < 4 then
+            if rand > .5 then self:SpawnOcupi() end
+        elseif ocupus < 6 then
+            if rand > .75 then self:SpawnOcupi() end
         end
     end
 
     function self:FirstRun()
-        self:SpawnOcupi()
-        self:SpawnOcupi()
-        self:SpawnOcupi()
+        for i = 1, 3 do 
+            self:SpawnOcupi()
+        end
     end
 
     function self:RegisterOcupus(ent)
-        if ent ~= nil and ent:IsValid() and self.ocupi[ent.GUID] == nil then
+        if ent and ent:IsValid() and not self.ocupi[ent.GUID] then
             self.ocupi[ent.GUID] = ent
         end
     end
@@ -90,9 +78,7 @@ return Class(function(self, inst)
         local new_ocupi = {}
 
         for guid, ent in pairs(self.ocupi) do
-            if ent ~= nil then
-                new_ocupi[guid] = ent
-            end
+            if ent then new_ocupi[guid] = ent end
         end
 
         self.ocupi = new_ocupi
@@ -107,7 +93,6 @@ return Class(function(self, inst)
     end
 
     function self:OnLoad(data)
-
         if data then
             if data.firstrun then
                 self.firstrun = data.firstrun
@@ -119,7 +104,7 @@ return Class(function(self, inst)
         --need to wait for um_tilelogger to register tiles.
         self.inst:DoTaskInTime(1, function(inst)
             if not self.firstrun then
-                inst.components.um_ocupusappearinator:FirstRun()
+                self:FirstRun()
                 self.firstrun = true
             end
         end)
