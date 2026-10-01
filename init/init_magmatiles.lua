@@ -86,9 +86,61 @@ env.AddPlayerPostInit(function(inst)
     end
 end)
 
+--playeractionpicker hell and agony
+env.AddComponentPostInit("playeractionpicker", function(self)
+    local _GetRightClickActions = self.GetRightClickActions
+
+    function self:GetRightClickActions(position, target, spellbook, ...)
+        local equipitem = self.inst.replica.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+
+        local actions = _GetRightClickActions(self, position, target, spellbook)
+
+        if target ~= nil and not target:HasTag("walkableplatform") then
+            if actions == nil or #actions == 0 then
+                actions = self:GetSceneActions(target, true)
+                if (#actions == 0 or (#actions == 1 and actions[1].action == ACTIONS.LOOKAT)) and target:HasTag("walkableperipheral") then
+                    if equipitem ~= nil and equipitem:IsValid() then
+                        local alwayspassable, allowwater --, deployradius
+                        local aoetargeting = equipitem.components.aoetargeting
+                        if aoetargeting ~= nil and aoetargeting:IsEnabled() then
+                            alwayspassable = aoetargeting.alwaysvalid
+                            allowwater = aoetargeting.allowwater
+                            --deployradius = aoetargeting.deployradius
+                        end
+                        --V2C: just do passable check here, componentactions tends to redo the full check
+                        --if self.map:CanCastAtPoint(position, alwayspassable, allowwater, deployradius) then
+                        if alwayspassable or equipitem:HasTag("allow_action_on_lava") and self.map:GetTileAtPoint(position:Get()) == WORLD_TILES.UM_MAGMA_LAVAMOLTEN then
+                            actions = self:GetPointActions(position, equipitem, true, target)
+                        end
+                    end
+                end
+            end
+        else
+            local item = spellbook or equipitem
+            if item ~= nil and item:IsValid() then
+                local alwayspassable, allowwater --, deployradius
+                local aoetargeting = item.components.aoetargeting
+                if aoetargeting ~= nil and aoetargeting:IsEnabled() then
+                    alwayspassable = item.components.aoetargeting.alwaysvalid
+                    allowwater = item.components.aoetargeting.allowwater
+                    --deployradius = item.components.aoetargeting.deployradius
+                end
+                alwayspassable = alwayspassable
+                --V2C: just do passable check here, componentactions tends to redo the full check
+                --if self.map:CanCastAtPoint(position, alwayspassable, allowwater, deployradius) then
+                if alwayspassable or item:HasTag("allow_action_on_lava") and self.map:GetTileAtPoint(position:Get()) == WORLD_TILES.UM_MAGMA_LAVAMOLTEN then
+                    actions = self:GetPointActions(position, item, true, target)
+                end
+            end
+        end
+
+        return actions
+    end
+end)
 
 local function DoMagmaCoolProjectile(inst)
-    inst:AddTag("allow_action_on_impassable")
+    --we don't want you to be able to throw these on the void or other impassible tiles, only lava.
+    inst:AddTag("allow_action_on_lava")
 
     if not TheWorld.ismastersim then
         return
@@ -98,7 +150,6 @@ local function DoMagmaCoolProjectile(inst)
         local _OnHit = inst.components.complexprojectile.onhitfn
 
         inst.components.complexprojectile:SetOnHit(function(inst, attacker, target)
-            _OnHit(inst, attacker, target)
             local x, y, z = inst.Transform:GetWorldPosition()
             if TheWorld.components.um_magmamanager ~= nil then
                 local cooled = TheWorld.components.um_magmamanager:CoolDownMagmaTile(x, z, TUNING.DSTU.MAGMATILE_DEFAULT_COOL_TIME)
@@ -108,6 +159,8 @@ local function DoMagmaCoolProjectile(inst)
                     end
                 end
             end
+
+            _OnHit(inst, attacker, target)
         end)
     end
 end
@@ -115,6 +168,7 @@ end
 --chilling down tiles
 env.AddPrefabPostInit("waterballoon", DoMagmaCoolProjectile)
 env.AddPrefabPostInit("snowball", DoMagmaCoolProjectile)
+env.AddPrefabPostInit("um_boomberry_bomb", DoMagmaCoolProjectile)
 
 local ice_staves = {
     ["icestaff"] = 0.25,
@@ -125,7 +179,7 @@ local ice_staves = {
 for staff, uses in pairs(ice_staves) do
     env.AddPrefabPostInit(staff, function(inst)
         inst:AddTag("magma_cooler")
-        inst:AddTag("allow_action_on_impassable")
+        inst:AddTag("allow_action_on_lava")
 
         if not TheWorld.ismastersim then
             return
@@ -144,7 +198,7 @@ end
 env.AddPrefabPostInitAny(function(inst)
     if inst:HasTag("wateringcan") then
         inst:AddTag("magma_cooler")
-        inst:AddTag("allow_action_on_impassable")
+        inst:AddTag("allow_action_on_lava")
 
         if not TheWorld.ismastersim then
             return

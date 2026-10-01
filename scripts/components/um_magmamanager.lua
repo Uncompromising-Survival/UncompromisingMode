@@ -1,6 +1,8 @@
 local tile_radius_plus_overhang = ((TILE_SCALE / 2) + 1.0) * 1.4142 -- from componentutil
 local CRACK_MUST_TAGS = { "lava_crack_fx" }
 
+--saving this for later
+--for k,v in pairs(TheWorld.components.um_magmamanager.temp_tiles) do v.duration = 100 end
 
 local MagmaManager = Class(function(self, inst)
     self.inst = inst
@@ -231,6 +233,10 @@ function MagmaManager:MeltMagmaTile(x, z)
 
             local fx = SpawnPrefab("deer_fire_burst")
             fx.Transform:SetPosition(v.Transform:GetWorldPosition())
+
+            if v:HasTag("can_sink_in_lava") then
+                v:Remove()
+            end
         end
     end
 
