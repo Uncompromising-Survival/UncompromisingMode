@@ -23,7 +23,7 @@ function MagmaManager:Init(tiles)
     for k, pos in pairs(tiles) do
         local node, index = TheWorld.Map:FindVisualNodeAtPoint(pos.x, 0, pos.z)
         if node and node.tags and table.contains(node.tags, "UM_ActiveLavaZone") then
-            table.insert(self.magma_tiles, { x = pos.x, z = pos.z }) --we really don't need to be saving this. Its used once.
+            table.insert(self.magma_tiles, { x = pos.x, z = pos.z })
         end
     end
 

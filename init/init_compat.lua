@@ -241,46 +241,24 @@ end)
 
 env.AddPrefabPostInit("rock_obsidian", function(inst)
     SetSharedLootTable("rock_obsidian", {
-        { "obsidian",              1.0 },
-        { "obsidian",              1.0 },
-        { "obsidian",              0.5 },
-        { "obsidian",              0.25 },
-        { "obsidian",              0.25 },
-        { "um_gemologyredgem1",    0.005 },
-        { "um_gemologyredgem2",    0.005 },
-        { "um_gemologybluegem1",   0.005 },
-        { "um_gemologybluegem2",   0.005 },
-        { "um_gemologygreengem1",  0.005 },
-        { "um_gemologygreengem2",  0.005 },
-        { "um_gemologyorangegem1", 0.005 },
-        { "um_gemologyorangegem2", 0.005 },
-        { "um_gemologypalegem1",   0.005 },
-        { "um_gemologypalegem2",   0.005 },
+        { "obsidian",                1.0 },
+        { "obsidian",                1.0 },
+        { "obsidian",                0.5 },
+        { "obsidian",                0.25 },
+        { "obsidian",                0.25 },
+        { "um_gemology_geode_magma", 0.1 },
     })
 end)
 
 env.AddPrefabPostInit("rock_charcoal", function(inst)
     SetSharedLootTable("rock_charcoal", {
-        { "charcoal",              1.0 },
-        { "charcoal",              1.0 },
-        { "charcoal",              0.5 },
-        { "charcoal",              0.25 },
-        { "charcoal",              0.25 },
-        { "flint",                 0.5 },
-        { "um_gemologyredgem1",    0.005 },
-        { "um_gemologyredgem2",    0.005 },
-        { "um_gemologybluegem1",   0.005 },
-        { "um_gemologybluegem2",   0.005 },
-        { "um_gemologypurplegem1", 0.005 },
-        { "um_gemologypurplegem2", 0.005 },
-        { "um_gemologygreengem1",  0.005 },
-        { "um_gemologygreengem2",  0.005 },
-        { "um_gemologyorangegem1", 0.005 },
-        { "um_gemologyorangegem2", 0.005 },
-        { "um_gemologyyellowgem1", 0.005 },
-        { "um_gemologyyellowgem2", 0.005 },
-        { "um_gemologypalegem1",   0.005 },
-        { "um_gemologypalegem2",   0.005 },
+        { "charcoal",               1.0 },
+        { "charcoal",               1.0 },
+        { "charcoal",               0.5 },
+        { "charcoal",               0.25 },
+        { "charcoal",               0.25 },
+        { "flint",                  0.5 },
+        { "um_gemology_geode_vent", 0.1 },
     })
 end)
 
@@ -288,27 +266,14 @@ end)
 env.AddPrefabPostInit("dragoonegg", function(inst)
     SetSharedLootTable('dragoonegg',
         {
-            { 'flint',                 1.0 },
-            { 'flint',                 0.5 },
-            { 'rocks',                 1.0 },
-            { 'rocks',                 0.5 },
-            { 'rocks',                 0.3 },
-            { 'obsidian',              0.5 },
-            { 'obsidian',              0.5 },
-            { "um_gemologyredgem1",    0.005 },
-            { "um_gemologyredgem2",    0.005 },
-            { "um_gemologybluegem1",   0.005 },
-            { "um_gemologybluegem2",   0.005 },
-            { "um_gemologygreengem1",  0.005 },
-            { "um_gemologygreengem2",  0.005 },
-            { "um_gemologyorangegem1", 0.005 },
-            { "um_gemologyorangegem2", 0.005 },
-            { "um_gemologypurplegem1", 0.005 },
-            { "um_gemologypurplegem2", 0.005 },
-            { "um_gemologyyellowgem1", 0.005 },
-            { "um_gemologyyellowgem2", 0.005 },
-            { "um_gemologypalegem1",   0.005 },
-            { "um_gemologypalegem2",   0.005 },
+            { 'flint',                   1.0 },
+            { 'flint',                   0.5 },
+            { 'rocks',                   1.0 },
+            { 'rocks',                   0.5 },
+            { 'rocks',                   0.3 },
+            { 'obsidian',                0.5 },
+            { 'obsidian',                0.5 },
+            { "um_gemology_geode_magma", 0.1 },
         })
 end)
 
@@ -432,3 +397,79 @@ if IsSWEnabled() or IsHAMEnabled() then
         TreasureLootList["slot_obsidian"].loot.um_fyrite = 3
     end
 end
+
+--magma outcrops growing on eruptions
+env.AddPrefabPostInit("world", function(inst)
+    if not TheWorld.ismastersim or not TheWorld:HasTag("volcano") then return end
+
+    TheWorld:AddComponent("um_tilelogger")
+
+    inst:DoTaskInTime(0.05, function(inst)
+        TheWorld.components.um_tilelogger.ValidMagmastone = TheWorld.components.um_tilelogger:AnalyzeWorld(WORLD_TILES["UM_GRASSMAGMA"])
+
+        for k, v in pairs(TheWorld.components.um_tilelogger.Magma) do
+            table.insert(TheWorld.components.um_tilelogger.ValidMagmastone, v)
+        end
+    end)
+
+    TheWorld:ListenForEvent("eruptionchanged", function(inst, data)
+        if not data then return end
+
+        local count = 0
+
+        if TheWorld.magma_outcrops ~= nil then
+            for k, v in pairs(TheWorld.magma_outcrops) do
+                if v ~= nil and v.StartGrowing ~= nil and v.components.timer ~= nil and not v.components.timer:TimerExists("grow") then
+                    count = count + 1
+                    v:DoTaskInTime(math.random(5, 10), function(inst)
+                        inst:StartGrowing()
+                    end)
+                end
+            end
+        else
+            inst.magma_outcrops = {}
+        end
+
+        local valid_tiles = TheWorld.components.um_tilelogger.ValidMagmastone
+        if count < 10 and valid_tiles and next(valid_tiles) then
+            local tries = 0
+            for i = 1, math.random(1, 3) do
+                tries = tries + 1
+                if tries > 10 then
+                    break
+                end
+
+                local valid = true
+                local point = valid_tiles[math.random(#valid_tiles)]
+                local x, z = point.x, point.z
+                local pt = FindNearbyLand(Vector3(x, 0, z), 20)
+
+                if not pt then
+                    valid = false
+                else
+                    local nearby_ents = TheSim:FindEntities(x, 0, z, 1, nil, { "FX", "INLIMBO", "DECOR", "NOCLICK", "NOBLOCK" })
+                    local S = TheWorld.Map:IsLandTileAtPoint(pt.x + 2, 0, pt.z)
+                    local N = TheWorld.Map:IsLandTileAtPoint(pt.x - 2, 0, pt.z)
+                    local E = TheWorld.Map:IsLandTileAtPoint(pt.x, 0, pt.z + 2)
+                    local W = TheWorld.Map:IsLandTileAtPoint(pt.x, 0, pt.z - 2)
+
+                    if pt.x == 0 and pt.z == 0 or #nearby_ents > 0 or not (S and N and E and W) then
+                        valid = false
+                    end
+                end
+
+                if valid then
+                    TheWorld:DoTaskInTime(math.random(5, 10), function(inst)
+                        local new_outcrop = SpawnPrefab("um_magmastone_outcrop")
+                        new_outcrop.Transform:SetPosition(pt.x, 0, pt.z)
+                        new_outcrop.AnimState:PlayAnimation("outcrop_grow")
+                        new_outcrop.AnimState:PushAnimation("outcrop_idle", true)
+                    end)
+                else
+                    -- retry.
+                    i = i - 1
+                end
+            end
+        end
+    end)
+end)

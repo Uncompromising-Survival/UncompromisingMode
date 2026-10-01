@@ -64,7 +64,7 @@ return Class(function(self, inst)
             end)
         end
 
-        if not self.Magma and TheWorld:HasTag("cave") then
+        if not self.Magma and (TheWorld:HasTag("cave") or TheWorld:HasTag("volcano")) then
             self.inst:DoTaskInTime(0, function()
                 self.Magma = self:AnalyzeWorld(WORLD_TILES["UM_MAGMA"])
             end)
