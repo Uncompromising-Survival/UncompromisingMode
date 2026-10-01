@@ -57,8 +57,8 @@ env.AddPrefabPostInit("cave", function(inst)
     if not TheWorld.ismastersim then
         return
     end
-
     inst:AddComponent("um_guano_rain")
+    inst:AddComponent("um_tilelogger")
     inst:AddComponent("um_tentacle_repopulator")
     --inst:AddComponent("um_poofshroom_repopulator")
     -- if TUNING.DSTU.CAVECLOPS then
@@ -76,6 +76,16 @@ env.AddPrefabPostInit("cave", function(inst)
     -- inst:RemoveComponent("ratacombs_junk_manager")
     -- end
     -- end)
+    inst:AddComponent("um_magmamanager")
+
+    inst:DoTaskInTime(.1, function(inst)
+        inst.components.um_magmamanager:Init(inst.components.um_tilelogger.Magma)
+
+        for _, pos in ipairs(inst.components.um_tilelogger.OceanCoastal) do
+            local tile_x, tile_z = TheWorld.Map:GetTileCoordsAtPoint(pos.x, 0, pos.z)
+            TheWorld.Map:SetTile(tile_x, tile_z, WORLD_TILES.IMPASSABLE)
+        end
+    end)
 end)
 
 env.AddPrefabPostInit("forest", function(inst)
@@ -97,6 +107,7 @@ env.AddPrefabPostInit("forest", function(inst)
 
     inst:AddComponent("um_areahandler")
     --inst:AddComponent("horriblenightmanager")
+    inst:AddComponent("um_tilelogger")
     inst:AddComponent("um_ocupusappearinator")
     inst:AddComponent("um_tentacle_repopulator")
     --inst:AddComponent("um_pestilencecontroller")

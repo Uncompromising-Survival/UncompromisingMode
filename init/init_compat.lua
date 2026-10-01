@@ -400,30 +400,21 @@ end
 
 --magma outcrops growing on eruptions
 env.AddPrefabPostInit("world", function(inst)
-    if not inst.ismastersim or not inst:HasTag("volcano") then return end
+    if not TheWorld.ismastersim or not TheWorld:HasTag("volcano") then return end
 
-    inst:AddComponent("um_tilelogger")
-
-    inst:AddComponent("um_magmamanager")
-
-    inst:DoTaskInTime(.1, function(inst)
-        inst.components.um_magmamanager:Init(inst.components.um_tilelogger.Magma)
-
-        for _, pos in ipairs(inst.components.um_tilelogger.OceanCoastal) do
-            local tile_x, tile_z = TheWorld.Map:GetTileCoordsAtPoint(pos.x, 0, pos.z)
-            TheWorld.Map:SetTile(tile_x, tile_z, WORLD_TILES.IMPASSABLE)
-        end
-    end)
+    if not TheWorld.components.um_tilelogger then
+        TheWorld:AddComponent("um_tilelogger")
+    end
 
     inst:DoTaskInTime(.05, function(inst)
-        inst.components.um_tilelogger.ValidMagmastone = inst.components.um_tilelogger:AnalyzeWorld(WORLD_TILES["UM_GRASSMAGMA"])
+        TheWorld.components.um_tilelogger.ValidMagmastone = TheWorld.components.um_tilelogger:AnalyzeWorld(WORLD_TILES["UM_GRASSMAGMA"])
 
-        for k, v in pairs(inst.components.um_tilelogger.Magma) do
-            table.insert(inst.components.um_tilelogger.ValidMagmastone, v)
+        for k, v in pairs(TheWorld.components.um_tilelogger.Magma) do
+            table.insert(TheWorld.components.um_tilelogger.ValidMagmastone, v)
         end
     end)
 
-    inst:ListenForEvent("eruptionchanged", function(inst, data)
+    TheWorld:ListenForEvent("eruptionchanged", function(inst, data)
         if not data then return end
 
         local count = 0
