@@ -402,6 +402,8 @@ end
 env.AddPrefabPostInit("world", function(inst)
     if not inst.ismastersim or not inst:HasTag("volcano") then return end
 
+    inst:AddComponent("um_tilelogger")
+
     inst:DoTaskInTime(0.05, function(inst)
         inst.components.um_tilelogger.ValidMagmastone = inst.components.um_tilelogger:AnalyzeWorld(WORLD_TILES["UM_GRASSMAGMA"])
 

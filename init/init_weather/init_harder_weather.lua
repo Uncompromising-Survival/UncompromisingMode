@@ -57,8 +57,8 @@ env.AddPrefabPostInit("cave", function(inst)
     if not TheWorld.ismastersim then
         return
     end
+
     inst:AddComponent("um_guano_rain")
-    inst:AddComponent("um_tilelogger")
     inst:AddComponent("um_tentacle_repopulator")
     --inst:AddComponent("um_poofshroom_repopulator")
     -- if TUNING.DSTU.CAVECLOPS then
@@ -107,7 +107,6 @@ env.AddPrefabPostInit("forest", function(inst)
 
     inst:AddComponent("um_areahandler")
     --inst:AddComponent("horriblenightmanager")
-    inst:AddComponent("um_tilelogger")
     inst:AddComponent("um_ocupusappearinator")
     inst:AddComponent("um_tentacle_repopulator")
     --inst:AddComponent("um_pestilencecontroller")
