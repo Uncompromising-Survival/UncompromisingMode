@@ -107,7 +107,7 @@ local function EvaluateDistanceToBoat(inst)
                 local splash = SpawnPrefab("splash_ocean")
                 splash.Transform:SetPosition(inst.Transform:GetWorldPosition())
                 splash.Transform:SetScale(1.5,1.5,1.5)
-                inst.core:DoTaskInTime(math.random(3,5),function(inst) if inst.boatvictim then inst.AddEyeTentacle2(inst) end end)
+                inst.core:DoTaskInTime(math.random(3,5),function(inst) if inst.boatvictim then inst:AddOcupusEyeTentacle() end end)
                 inst:Remove() --Replace with submerging
             end)
         elseif not inst.boatvictim then	
@@ -121,7 +121,7 @@ end
 
 local function teleport_override_fn(inst)
     local pt = inst:GetPosition()
-    local offset = FindSwimmableOffset(pt, math.random() * 2 * PI, 3, 8, true, false) or (pt, math.random() * 2 * PI, 8, 8, true, false)
+    local offset = FindSwimmableOffset(pt, math.random() * 2 * PI, 3, 8, true, false) or FindSwimmableOffset(pt, math.random() * 2 * PI, 8, 8, true, false)
     if offset ~= nil then
         pt = pt + offset
     end
