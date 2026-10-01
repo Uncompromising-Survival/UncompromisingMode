@@ -51,7 +51,7 @@ end
 local SLEEPREPEL_MUST_TAGS = { "locomotor" }
 local SLEEPREPEL_CANT_TAGS = { "fossil", "shadow", "playerghost", "INLIMBO" }
 
-UMShove.ShoveSingle = function(inst, target)
+function UMShove.ShoveSingle(inst, target)
     local x, y, z = inst.Transform:GetWorldPosition()
     local creatures = {}
     if target.components.combat then
@@ -65,7 +65,7 @@ UMShove.ShoveSingle = function(inst, target)
     end
 end
 
-UMShove.Shove = function(inst)
+function UMShove.Shove(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
     local creatures = {}
     for i, v in ipairs(TheSim:FindEntities(x, y, z, REPEL_RADIUS, SLEEPREPEL_MUST_TAGS, SLEEPREPEL_CANT_TAGS)) do

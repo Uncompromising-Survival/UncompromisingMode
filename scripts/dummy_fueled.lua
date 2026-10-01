@@ -1,4 +1,4 @@
-local DummyFn = function() end
+local function DummyFn() end
 -- May move these dummy functions outside of the component and somewherer else to improve readability, if anyone wants to do that they can, but it's not necessary.
 
 -- Set up the dummy fueled class
@@ -29,23 +29,23 @@ DummyFueledClass.OnSave = DummyFn
 DummyFueledClass.OnLoad = DummyFn
 DummyFueledClass.SetSectionCallback = DummyFn
 DummyFueledClass.SetDepletedFn = DummyFn
-DummyFueledClass.IsEmpty = function() return false end -- hook this up to an actual return, some items need to know if it's empty, there's no empty state for a chilled item, so it's always full
-DummyFueledClass.IsFull = function() return true end   -- same logic, hook up, always true
+function DummyFueledClass:IsEmpty() return false end -- hook this up to an actual return, some items need to know if it's empty, there's no empty state for a chilled item, so it's always full
+function DummyFueledClass:IsFull() return true end   -- same logic, hook up, always true
 DummyFueledClass.SetSections = DummyFn
 DummyFueledClass.SetMultiplierFn = DummyFn
-DummyFueledClass.CanAcceptFuelItem = function() return false end -- No, any chilled item is no longer refuelable, with the exception of the watering can which is slightly different since it uses fillable class
+function DummyFueledClass:CanAcceptFuelItem() return false end -- No, any chilled item is no longer refuelable, with the exception of the watering can which is slightly different since it uses fillable class
 DummyFueledClass.SetMultiplierFn = DummyFn
-DummyFueledClass.GetCurrentSection = function() return 1 end     -- should always appear as if it's full
+function DummyFueledClass:GetCurrentSection() return 1 end     -- should always appear as if it's full
 DummyFueledClass.ChangeSection = DummyFn
 DummyFueledClass.SetCanTakeFuelItemFn = DummyFn
 DummyFueledClass.SetTakeFuelItemFn = DummyFn
 DummyFueledClass.SetTakeFuelFn = DummyFn
 DummyFueledClass.TakeFuelItem = DummyFn
 DummyFueledClass.SetUpdateFn = DummyFn
-DummyFueledClass.GetDebugString = function() return "This entity's fueled component is now a dummy class to prevent nil crashes from referencing. It does not provide any function anymore. Trying to adjust durability of perishable through this class will not work." end
+function DummyFueledClass:GetDebugString() return "This entity's fueled component is now a dummy class to prevent nil crashes from referencing. It does not provide any function anymore. Trying to adjust durability of perishable through this class will not work." end
 DummyFueledClass.AddThreshold = DummyFn
-DummyFueledClass.GetSectionPercent = function() return 1 end
-DummyFueledClass.GetPercent = function(self) return self.inst.components.perishable:GetPercent() end
+function DummyFueledClass:GetSectionPercent() return 1 end
+function DummyFueledClass:GetPercent() return self.inst.components.perishable:GetPercent() end
 DummyFueledClass.SetPercent = DummyFn
 DummyFueledClass.SetFirstPeriod = DummyFn
 DummyFueledClass.StartConsuming = DummyFn

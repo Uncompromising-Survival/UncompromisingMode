@@ -41,7 +41,7 @@ This is so we can save some gem-specific data so it can probably revert when rem
 local UMGemologyFns = {}
 UMGemologyFns.GEM_DEFS = {}
 UMGemologyFns.GEM_LOOKUP = {}
-UMGemologyFns.AddGemDef = function(name, def)
+function UMGemologyFns.AddGemDef(name, def)
     UMGemologyFns.GEM_LOOKUP[#UMGemologyFns.GEM_LOOKUP + 1] = name
     UMGemologyFns.GEM_DEFS[name] = def
 end
@@ -62,11 +62,11 @@ local function AddUMGemDef(name, def) --helper function to just skip some re-use
 end
 
 
-UMGemologyFns.IsEnchantValid = function(gem)
+function UMGemologyFns.IsEnchantValid(gem)
     return UMGemologyFns.GEM_DEFS[gem] ~= nil
 end
 
-UMGemologyFns.DamageGem = function(enchant, item, value)
+function UMGemologyFns.DamageGem(enchant, item, value)
     item = item.um_projectile_owner or item
     local gem_enchantable = item:IsValid() and item.components.gem_enchantable
     if gem_enchantable and gem_enchantable:HasEnchantment("um_gemology" .. enchant) and gem_enchantable:HasDurabilityEnabled("um_gemology" .. enchant) then
@@ -74,7 +74,7 @@ UMGemologyFns.DamageGem = function(enchant, item, value)
     end
 end
 
-UMGemologyFns.GetEnchantsAndDoFn = function(self, fntype, fn, ...)
+function  UMGemologyFns.GetEnchantsAndDoFn(self, fntype, fn, ...)
     local item = self.inst or self
     local weapon = item.um_projectile_owner or item
     local gem_enchantable = weapon.components.gem_enchantable
