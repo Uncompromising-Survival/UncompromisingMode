@@ -404,7 +404,18 @@ env.AddPrefabPostInit("world", function(inst)
 
     inst:AddComponent("um_tilelogger")
 
-    inst:DoTaskInTime(0.05, function(inst)
+    inst:AddComponent("um_magmamanager")
+
+    inst:DoTaskInTime(.1, function(inst)
+        inst.components.um_magmamanager:Init(inst.components.um_tilelogger.Magma)
+
+        for _, pos in ipairs(inst.components.um_tilelogger.OceanCoastal) do
+            local tile_x, tile_z = TheWorld.Map:GetTileCoordsAtPoint(pos.x, 0, pos.z)
+            TheWorld.Map:SetTile(tile_x, tile_z, WORLD_TILES.IMPASSABLE)
+        end
+    end)
+
+    inst:DoTaskInTime(.05, function(inst)
         inst.components.um_tilelogger.ValidMagmastone = inst.components.um_tilelogger:AnalyzeWorld(WORLD_TILES["UM_GRASSMAGMA"])
 
         for k, v in pairs(inst.components.um_tilelogger.Magma) do
