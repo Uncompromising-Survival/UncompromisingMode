@@ -96,7 +96,7 @@ env.AddStategraphPostInit("spider", function(inst)
                     and not (inst.sg:HasAnyStateTag("caninterrupt", "electrocute") or inst:HasTag("forcestunned")) then
                     if not inst.sg:HasAnyStateTag("attack", "evade") then
                         if not inst.sg:HasStateTag("moving") then inst.sg:GoToState("hit") end
-                        inst:PushEvent("um_counterattack", {target = data.attacker})
+                        if data.attacker then inst:PushEvent("um_counterattack", {target = data.attacker}) end
                     end
                     return
                 end
