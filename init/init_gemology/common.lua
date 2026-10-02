@@ -16,25 +16,6 @@ env.AddPrefabPostInitAny(function(inst)
 
     if inst.components.equippable and inst.components.equippable.equipslot == EQUIPSLOTS.HANDS and (inst.components.tool or inst.components.weapon) and not inst.components.stackable and not inst.components.gem_enchantable then
         inst:AddComponent("gem_enchantable")
-
-        local _OnSave = inst.OnSave
-        local function OnSave(inst, data, ...)
-            local ret = _OnSave and _OnSave(inst, data, ...)
-            data.repair_count = inst.repair_count
-            return ret
-        end
-
-        local _OnLoad = inst.OnLoad
-        local function OnLoad(inst, data, ...)
-            local ret = _OnLoad and _OnLoad(inst, data, ...)
-            if data and data.repair_count then
-                inst.repair_count = data.repair_count
-            end
-            return ret
-        end
-
-        inst.OnSave = OnSave
-        inst.OnLoad = OnLoad
     end
 end)
 
