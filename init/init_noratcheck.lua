@@ -38,7 +38,6 @@ for k, v in ipairs(TUNING.DSTU.NORATCHECK) do
     end)
 end
 
-
 --idfc i'm putting this here
 env.AddPrefabPostInit("friendlyfruitfly", function(inst)
     inst:AddTag("NOBLOCK")
