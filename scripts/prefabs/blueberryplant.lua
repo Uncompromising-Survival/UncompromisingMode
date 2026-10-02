@@ -571,6 +571,8 @@ local function blueberrypuddle()
         return inst
     end
 
+    inst:AddTag("can_sink_in_lava")
+
     inst:ListenForEvent("animover", function(inst) inst.AnimState:SetDeltaTimeMultiplier(.2) end)
     inst:ListenForEvent("animqueueover", function(inst) inst:Remove() end)
 

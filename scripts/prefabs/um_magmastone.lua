@@ -97,8 +97,7 @@ local function SetState(inst, state)
 end
 
 local function UpdateState(inst)
-    local node = TheWorld.Map:FindNodeAtPoint(inst.Transform:GetWorldPosition())
-    if node ~= nil and table.contains(node.tags, "UM_ActiveLavaZone") then
+    if IsValidForMagmaOutcropRegrowth(inst) then
         SetState(inst, "gemlessfire")
     end
 end
@@ -211,7 +210,6 @@ local function baserock_fn()
 end
 
 local function StartGrowingOutcrop(inst)
-    print("started actually growing")
     inst.components.timer:StartTimer("grow", TUNING.TOTAL_DAY_TIME * 4)
     inst.fire_ring = SpawnPrefab("deer_fire_circle")
     --we don't make the ring a child of inst because it needs to be removed a little after inst is.

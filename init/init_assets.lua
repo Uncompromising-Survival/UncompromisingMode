@@ -2062,6 +2062,8 @@ Assets = {
     Asset("ANIM", "anim/ui_krampusbag_2x5.zip"),
 
     Asset("ANIM", "anim/um_magmastone.zip"),
+
+    Asset("ANIM", "anim/um_lava_bubble_fx.zip")
 }
 
 for _, asset in pairs(inventoryitems) do

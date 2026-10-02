@@ -339,6 +339,7 @@ AddRoom("MagmaVolcano_IA", {
             lava_pond_cave = 0.05,
             fyriterock_spawner = 0.1,
             pyrethicket_builder = 0.25,
+            um_magmastone = 0.05
         }
     }
 })
