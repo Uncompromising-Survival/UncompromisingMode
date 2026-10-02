@@ -6,7 +6,7 @@ local UMVetCurse = {}
 ----------------------------------ATTACH---------------------------------
 --local TARGET_MUST_TAGS = {"mime", "pinetreepioneer", "plantkin", "wathom", "shadowmagic", "winky"}
 
-UMVetCurse.ToggleDamageTakenModifier = function(inst, toggle)
+function UMVetCurse.ToggleDamageTakenModifier(inst, toggle)
     local combat = inst.components.combat
     if not combat then return end
     if toggle then
@@ -16,7 +16,7 @@ UMVetCurse.ToggleDamageTakenModifier = function(inst, toggle)
     end
 end
 
---[[UMVetCurse.ToggleHungerRateModifier = function(inst, toggle)
+--[[function UMVetCurse.ToggleHungerRateModifier(inst, toggle)
     local hunger = inst.components.hunger
     if not hunger then return end
     if toggle then
@@ -26,30 +26,30 @@ end
     end
 end]]
 
---UMVetCurse.ToggleHungerTakenModifier = function(inst, toggle)
-    --local hunger = inst.components.hunger
-    --if not hunger then return end
-    --if toggle then
-        --local _DoDelta = hunger.DoDelta
+--[[function UMVetCurse.ToggleHungerTakenModifier(inst, toggle)
+    local hunger = inst.components.hunger
+    if not hunger then return end
+    if toggle then
+        local _DoDelta = hunger.DoDelta
         --if not inst.OldHungerDoDelta then
-            --inst.OldHungerDoDelta = _DoDelta
-        --end
-        --hunger.DoDelta = function(self, delta, overtime, ignore_invincible, ...)
-            --if delta and overtime and delta < 0 then
+            inst.OldHungerDoDelta = _DoDelta
+        end
+        hunger.DoDelta = function(self, delta, overtime, ignore_invincible, ...)
+            if delta and overtime and delta < 0 then
                 -- Take extra hunger
-                --delta = delta * (1 + (2 / 10))
-            --end
-            --return _DoDelta(self, delta, overtime, ignore_invincible, ...)
-        --end
-    --else
-        --if inst.OldHungerDoDelta then
-            --hunger.DoDelta = inst.OldHungerDoDelta
-            --inst.OldHungerDoDelta = nil
-        --end
-    --end
---end
+                delta = delta * (1 + (2 / 10))
+            end
+            return _DoDelta(self, delta, overtime, ignore_invincible, ...)
+        -nd
+    else
+        if inst.OldHungerDoDelta then
+            hunger.DoDelta = inst.OldHungerDoDelta
+            inst.OldHungerDoDelta = nil
+        end
+    end
+end]]
 
-UMVetCurse.ToggleSanityTakenModifier = function(inst, toggle)
+function UMVetCurse.ToggleSanityTakenModifier(inst, toggle)
     local sanity = inst.components.sanity
     if not sanity then return end
     if toggle then
@@ -135,7 +135,7 @@ local function oneat(inst, data)
     end
 end
 
-UMVetCurse.ToggleFoodEffects = function(inst, toggle)
+function UMVetCurse.ToggleFoodEffects(inst, toggle)
     local eater = inst.components.eater
     if not eater then return end
     if toggle then
@@ -161,7 +161,7 @@ UMVetCurse.ToggleFoodEffects = function(inst, toggle)
     end
 end
 
-UMVetCurse.AttachCurse = function(inst)
+function UMVetCurse.AttachCurse(inst)
     inst.vetcurse = true
     if not inst.UMToggleUniqueVetCurse then
         UMVetCurse.ToggleDamageTakenModifier(inst, true)
@@ -173,7 +173,7 @@ UMVetCurse.AttachCurse = function(inst)
     inst:PushEvent("vetcurse_added")
 end
 
-UMVetCurse.DetachCurse = function(inst)
+function UMVetCurse.DetachCurse(inst)
     inst.vetcurse = nil
     if not inst.UMToggleUniqueVetCurse then
         UMVetCurse.ToggleDamageTakenModifier(inst)
@@ -185,7 +185,7 @@ UMVetCurse.DetachCurse = function(inst)
     inst:PushEvent("vetcurse_removed")
 end
 
-UMVetCurse.ToggleVetCurse = function(inst, toggle)
+function UMVetCurse.ToggleVetCurse(inst, toggle)
     if toggle and inst.vetcurse or not toggle and not inst.vetcurse then return end
     if toggle then
         UMVetCurse.AttachCurse(inst)
@@ -196,7 +196,7 @@ UMVetCurse.ToggleVetCurse = function(inst, toggle)
     if inst.UMToggleUniqueVetCurse then inst:UMToggleUniqueVetCurse(toggle) end
 end
 
-UMVetCurse.ApplyCurse = function(old, new)
+function UMVetCurse.ApplyCurse(old, new)
     if TUNING.DSTU.VETCURSE == "default" and old:HasTag("vetcurse") then
         if new.UMToggleVetCurse then new:UMToggleVetCurse(true) end
     end

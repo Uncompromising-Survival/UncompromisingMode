@@ -5,8 +5,12 @@ local assets =
 
 SetSharedLootTable('um_ocupus_eyetacle',
 {
-    { 'um_ocupus_eyetacle_item', 1.00 },
+    {'um_ocupus_eyetacle_item', 1.00},
 })
+
+local function GetBoatVictim(boat, ignorehealth)
+    return boat and boat:IsValid() and (ignorehealth or boat.components.health and not boat.components.health:IsDead()) and boat or nil
+end
 
 local function RemoveAllTentacles(inst) --This is mainly meant to catch any stragglers, usually the boat itself is saved in the tentacles, so it shouldn't miss em
     --TheNet:Announce("toldtoremove")
@@ -27,7 +31,10 @@ local function RemoveAllTentacles(inst) --This is mainly meant to catch any stra
     if inst.beak and inst.beak:IsValid() then
         inst.beak.boat = nil
         inst.beak:AddTag("notarget")
+        inst.beak:Remove()
     end
+    local boatvictim = GetBoatVictim(inst.boatvictim, true)
+    if boatvictim then boatvictim.components.boatphysics:RemoveBoatDrag(inst) end
     inst.boatvictim = nil
 end
 
@@ -89,13 +96,10 @@ end
 
 local function OcupusKilled(inst) --The ocupus sustained enough damage to be killed, likely due to the beak being beaten up
     RemoveAllTentacles(inst)
-    if inst.beak then
-        inst.beak.retract(inst.beak)
-    end
+    if inst.beak then inst.beak:retract() end
     local x, y, z = inst.Transform:GetWorldPosition()
 
     inst:DoTaskInTime(math.random(3, 5), function(inst) --Loot Time
-        local boat = inst.boatvictim
         if inst.beakkilled then                         --AXE If you broke the beak, you'll get it as a drop
             SpawnLoot(inst, x, y, z, "ocupus_beak")
         end
@@ -164,7 +168,7 @@ local function FindPointEyeTentacle(inst, x, y, z, rot, stalkinggrounds) --Note 
     end
 end
 
-local function AddEyeTentacle(inst, x, y, z, rot, stalkinggrounds) -- Do it one at a time, we want to spread these in a way to give the illusion of a large creature on the bottom of the ocean
+local function AddOcupusEye(inst, x, y, z, rot, stalkinggrounds) -- Do it one at a time, we want to spread these in a way to give the illusion of a large creature on the bottom of the ocean
     local tent = SpawnPrefab("um_ocupus_eye")
     tent.core = inst
     local homex, homey, homez = FindPointEyeTentacle(inst, x, y, z, rot, stalkinggrounds)
@@ -190,8 +194,17 @@ local function Born(inst)
         z = z + math.random(-5, 5)
     end
     for i = 1, 5 + math.random(1, 5) do
-        AddEyeTentacle(inst, x, y, z, i, stalkinggrounds) --"Stalkinggrounds" just refers to the prefab the ocupus controller prefab is currently working around, be it itself or a rock, it's passed along so that if the ocupus wants to put some tentacles near other rocks it doesn't just choose the same rock over again.
+        AddOcupusEye(inst, x, y, z, i, stalkinggrounds) --"Stalkinggrounds" just refers to the prefab the ocupus controller prefab is currently working around, be it itself or a rock, it's passed along so that if the ocupus wants to put some tentacles near other rocks it doesn't just choose the same rock over again.
     end
+end
+
+local function PullOut(inst, dontcancelevaluate)
+    RemoveAllTentacles(inst)
+    if not dontcancelevaluate and inst.Evaluate then
+        inst.Evaluate:Cancel()
+        inst.Evaluate = nil
+    end
+    inst:DoTaskInTime(math.random(10, 20), Born)
 end
 
 local function GetOffset(inst)
@@ -201,20 +214,20 @@ local function GetOffset(inst)
         --elseif inst.boatvictim then
         --GetOffset(inst)
     else
-        RemoveAllTentacles(inst)
-        inst:DoTaskInTime(math.random(10, 20), Born)
+        PullOut(inst, true)
     end
 end
 
-local function AddEyeTentacle2(inst)
-    if inst.boatvictim and inst.boatvictim:IsValid() then
+local function AddOcupusEyeTentacle(inst)
+    local boatvictim = GetBoatVictim(inst.boatvictim)
+    if boatvictim then
         local tent = SpawnPrefab("um_ocupus_eyetacle")
         tent.core = inst
-        local x, y, z = inst.boatvictim.Transform:GetWorldPosition()
+        local x, y, z = boatvictim.Transform:GetWorldPosition()
         local offset = GetOffset(inst) --For this case, will need to make sure we don't accidentally spawn under a boat, using this nifty function gnarwails use.
         if offset then
             tent.Transform:SetPosition(x + offset.x, y + offset.y, z + offset.z)
-            tent.boatvictim = inst.boatvictim
+            tent.boatvictim = boatvictim
             if not inst.surfacetents then
                 inst.surfacetents = {}
             end
@@ -233,10 +246,6 @@ local function EyeTentKilled(inst)
     --TheNet:Announce(newdrag)
     inst.components.boatdrag.drag = newdrag
     if inst.availableeyes == 0 then
-        newdrag = 0
-        if inst.boatvictim and inst.boatvictim:IsValid() then
-            inst.boatvictim.components.boatphysics:RemoveBoatDrag(inst)
-        end
         OcupusKilled(inst)
     end
 end
@@ -255,51 +264,33 @@ local function SpawnTentacle(inst)
     tent.boat = inst.boatvictim
 end
 
-local function PullOut(inst)
-    RemoveAllTentacles(inst)
-    if inst.Evaluate then
-        inst.Evaluate:Cancel()
-        inst.Evaluate = nil
-    end
-    inst:DoTaskInTime(math.random(10, 20), Born)
-end
-
 local function Evaluate(inst) -- This is the psuedo brain for the ocupus, this triggers while it's attacking a boat on an interval. It spawns more tentacles, checks to see if the boat's still there, and adjusts the beak.
     --TheNet:Announce("evaluating")
     if inst.Evaluate then
         inst.Evaluate:Cancel()
         inst.Evaluate = nil
     end
-    if inst.boatvictim and inst.boatvictim:IsValid() then
+    local boatvictim = GetBoatVictim(inst.boatvictim)
+    if boatvictim then
         --TheNet:Announce("Boat was found.")
         local x, y, z = inst.boatvictim.Transform:GetWorldPosition()
         local tentacles = TheSim:FindEntities(x, y, z, 20, { "um_ocupus_tentacle" })
         local players = TheSim:FindEntities(x, y, z, 20, { "player" })
-        local playerval, tentaclesval
-        if not players then
-            playerval = 0
-        else
-            playerval = #players
-        end
-        if not tentacles then
-            tentaclesval = 0
-        else
-            tentaclesval = #tentacles
-        end
+        local playerval, tentaclesval = players and #players or 0, tentacles and #tentacles or 0
         if tentaclesval < 3 then
             SpawnTentacle(inst)
             --SpawnTentacle(inst)
         else
-            if math.random() > 0.6 then --Don't always proc the tentacle to spawn, especially if there already is one
+            if math.random() > .6 then --Don't always proc the tentacle to spawn, especially if there already is one
                 SpawnTentacle(inst)
             end
         end
         if inst.beak and inst.beak:IsValid() then --It shouldn't always remove the beak...
-            if math.random() > 0.5 then
+            if math.random() > .5 then
                 if inst.beak.components.health then
                     inst.beakhealth = inst.beak.components.health:GetPercent()
                 end
-                inst.beak.retract(inst.beak)
+                inst.beak:retract()
             end
         elseif not inst.beakkilled then
             inst.beak = SpawnPrefab("um_ocupus_beak")
@@ -311,9 +302,9 @@ local function Evaluate(inst) -- This is the psuedo brain for the ocupus, this t
                 inst.beak.components.health:SetPercent(inst.beakhealth)
             end
             -- Also damage the boat we just pierced.
-            if inst.boatvictim ~= nil and inst.boatvictim:IsValid()
-                and inst.boatvictim.components.hullhealth ~= nil and inst.boatvictim.components.health ~= nil then
-                inst.boatvictim.components.health:DoDelta(-TUNING.GNARWAIL.HORN_BOAT_DAMAGE)
+            boatvictim = GetBoatVictim(inst.boatvictim)
+            if boatvictim then
+                boatvictim.components.health:DoDelta(-TUNING.GNARWAIL.HORN_BOAT_DAMAGE)
             end
 
             inst.beak.SoundEmitter:PlaySoundWithParams("turnoftides/common/together/boat/damage", { intensity = 0.8 })
@@ -332,7 +323,7 @@ local function Evaluate(inst) -- This is the psuedo brain for the ocupus, this t
 end
 
 local function BoatCheck(inst)
-    if not inst.boatvictim or (inst.boatvictim and inst.boatvictim.components.health and inst.boatvictim.components.health:IsDead()) then
+    if inst:IsAsleep() or not GetBoatVictim(inst.boatvictim) then
         inst.boatcheck:Cancel()
         inst.boatcheck = nil
         PullOut(inst)
@@ -352,13 +343,13 @@ local function WarnThePassengers(inst)
 end
 
 local function EngageBoat(inst)
-    if not (inst.boatvictim and inst.boatvictim:IsValid()) then return end
+    local boatvictim = GetBoatVictim(inst.boatvictim)
+    if not boatvictim then PullOut(inst) return end
     inst.components.boatdrag.drag = TUNING.BOAT.ANCHOR.BASIC.ANCHOR_DRAG
-    inst.boatvictim.components.boatphysics:AddBoatDrag(inst)
-    inst.totaleyetents = 0
-    local x, y, z = inst.boatvictim.Transform:GetWorldPosition()
+    boatvictim.components.boatphysics:AddBoatDrag(inst)
+    local x, y, z = boatvictim.Transform:GetWorldPosition()
     for i = 1, inst.availableeyes do
-        inst:DoTaskInTime(math.random(1, 5), AddEyeTentacle2)
+        inst:DoTaskInTime(math.random(1, 5), AddOcupusEyeTentacle)
     end
     inst:DoTaskInTime(15, Evaluate)
     inst.boatcheck = inst:DoPeriodicTask(1, BoatCheck)
@@ -366,10 +357,11 @@ local function EngageBoat(inst)
 end
 
 local function BoatVictimSpotted(inst, boat)
-    if not (inst.boatvictim and inst.boatvictim:IsValid()) then
-        inst.boatvictim = boat
+    local validboat = not GetBoatVictim(inst.boatvictim) and GetBoatVictim(boat)
+    if validboat then
+        inst.boatvictim = validboat
         for i, tent in ipairs(inst.undertents) do
-            tent.Hide(tent)
+            tent:Hide()
         end
 
         inst:DoTaskInTime(3, EngageBoat)
@@ -435,9 +427,9 @@ local function fn()
 
     ------------------
     inst.EyeTentKilled = EyeTentKilled
-    inst.notifycore = BoatVictimSpotted
+    inst.OnBoatSpotted = BoatVictimSpotted
     inst:DoTaskInTime(0, Born)
-    inst.AddEyeTentacle2 = AddEyeTentacle2
+    inst.AddOcupusEyeTentacle = AddOcupusEyeTentacle
 
     inst:Hide()
 

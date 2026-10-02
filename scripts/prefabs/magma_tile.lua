@@ -22,6 +22,34 @@ local function OnLoad(inst, data)
     end
 end
 
+local function SpawnFX(inst)
+    --client doesn't have synced access to is_lit so we instead check the tile it's on. basically the same thing.
+    local is_lit = TheWorld.Map:GetTileAtPoint(inst.Transform:GetWorldPosition()) == WORLD_TILES.UM_MAGMA_LAVAMOLTEN
+
+    local t = GetRandomWithVariance(4, 2)
+    if TheWorld.net ~= nil and TheWorld.net.components.quaker ~= nil and TheWorld.net.components.quaker:IsQuaking() then
+        t = GetRandomWithVariance(0.75, 0.25)
+    end
+
+    if inst:IsAsleep() or TheWorld.ismastersim or not is_lit then
+        inst:DoTaskInTime(t, SpawnFX)
+        return
+    end
+
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local px, py, pz = x + GetRandomWithVariance(0, 2), 0, z + GetRandomWithVariance(0, 2)
+
+    if TheWorld.Map:IsVisualGroundAtPoint(px, py, pz) then
+        inst:DoTaskInTime(t, SpawnFX)
+        return
+    end
+
+    local fx = SpawnPrefab("um_lava_bubble_fx")
+    fx.Transform:SetPosition(px, py, pz)
+
+    inst:DoTaskInTime(t, SpawnFX)
+end
+
 local function fn()
     local inst = CreateEntity()
 
@@ -42,6 +70,16 @@ local function fn()
     inst:AddTag("NOBLOCK")
     --inst:AddTag("NOCLICK") --can'ty have those tags or else flingos wont target
     inst:AddTag("ignorewalkableplatforms")
+
+
+    --Dedicated server does not need to spawn the fx
+    if not TheNet:IsDedicated() then
+        local quaking = TheWorld.net ~= nil and TheWorld.net.components.quaker ~= nil and TheWorld.net.components.quaker:IsQuaking() or false
+
+        if math.random() > (quaking and 0.5 or 0.9) then
+            inst:DoTaskInTime(GetRandomWithVariance(0.75, 0.25), SpawnFX)
+        end
+    end
 
     inst.entity:SetPristine()
 
@@ -96,11 +134,48 @@ local function fx_fn()
         return inst
     end
 
-
     inst.persists = false
 
     return inst
 end
 
+local function bubble_fx_fn()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+
+    inst.AnimState:SetBuild("um_lava_bubble_fx")
+    inst.AnimState:SetBank("um_lava_bubble_fx")
+
+    inst.AnimState:PlayAnimation("bubbles_" .. math.random(1, 3), false)
+
+    if math.random() > 0.5 and TheWorld.net ~= nil and TheWorld.net.components.quaker ~= nil and TheWorld.net.components.quaker:IsQuaking() then
+        inst.AnimState:PushAnimation("waterspout", false)
+        inst:ListenForEvent("animqueueover", inst.Remove)
+    else
+        inst:ListenForEvent("animover", inst.Remove)
+    end
+
+    inst.AnimState:SetLightOverride(1)
+
+    inst:AddTag("NOCLICK")
+    inst:AddTag("NOBLOCK")
+    inst:AddTag("FX")
+    inst:AddTag("lava_bubble_fx")
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst.persists = false
+    inst:DoTaskInTime(1, inst.Remove)
+
+    return inst
+end
+
 return Prefab("magma_tile", fn),
-    Prefab("magma_tile_crack_grid_fx", fx_fn)
+    Prefab("magma_tile_crack_grid_fx", fx_fn),
+    Prefab("um_lava_bubble_fx", bubble_fx_fn)

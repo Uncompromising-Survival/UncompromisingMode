@@ -66,6 +66,11 @@ function Um_CustomLightCheck(inst, dark_val, light_val)
     end
 end
 
+function IsValidForMagmaOutcropRegrowth(inst)
+    local node = TheWorld.Map:FindNodeAtPoint(inst.Transform:GetWorldPosition())
+    return node ~= nil and table.contains(node.tags, "UM_ActiveLavaZone") or TheWorld:HasTag("volcano")
+end
+
 local THE_LUA_REGISTRY = debug.getregistry()
 function UpdateLuaRegistry(old, new)
     for k, v in pairs(THE_LUA_REGISTRY) do

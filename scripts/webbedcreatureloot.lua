@@ -6,7 +6,7 @@ UMWebbedCreatureUtil = {}
 ---@param use_durability? boolean Whether to set the durability of the item, if any durability-esque component is present
 ---@param lootfn? function A function that gets called when the item is dropped, with the spawned item prefab as an argument.
 ---@return table loot_table
-UMWebbedCreatureUtil.Item = function(item, count, chance, use_durability, lootfn)
+function UMWebbedCreatureUtil.Item(item, count, chance, use_durability, lootfn)
     return {
         prefab = item,
         amount = count or 1,
@@ -18,7 +18,7 @@ end
 
 ---@param ... string number of item prefabs - NOT A TABLE! var-arg!
 ---@return function item a function that returns a random str from the provided strings.
-UMWebbedCreatureUtil.RandomItem = function(...)
+function UMWebbedCreatureUtil.RandomItem(...)
     return function() return arg[math.random(#arg)] end
 end
 
@@ -903,7 +903,7 @@ for k, v in pairs(sw) do
     UMWebbedCreatureUtil.COCOON_DEFS.SHIPWRECKED[k] = v
 end
 
-UMWebbedCreatureUtil.AddCompatCharacterCocoon_Internal = function(modid, character, loot_pool)
+function UMWebbedCreatureUtil.AddCompatCharacterCocoon_Internal(modid, character, loot_pool)
     if KnownModIndex:IsModEnabled("workshop-"..modid) then
         UMWebbedCreatureUtil.COCOON_DEFS.CHARACTER[string.upper(character)] = {loot = loot_pool}
         return true
@@ -913,7 +913,7 @@ end
 ---@param modid string or table The mod id of the character's mod. You can see the modid in the end of the link of the workshop page.
 ---@param character string The character's prefab name.
 ---@param loot_pool table The loot pool for the character. See above and below for examples.
-UMWebbedCreatureUtil.AddCompatCharacterCocoon = function(modid, character, loot_pool)
+function UMWebbedCreatureUtil.AddCompatCharacterCocoon(modid, character, loot_pool)
     local type_modid = type(modid)
     assert(type_modid, "Bad argument #1 to AddCompatCharacterCocoon. Expected string or table, got " .. type(modid))
     assert(type(character), "Bad argument #2 to AddCompatCharacterCocoon. Expected string, got " .. type(character))
@@ -933,7 +933,7 @@ end
 ---@param prefix string the cocoon prefix
 ---@param loot_pool table the loot table.
 ---@param sw? boolean whether it's a shipwrecked cocoon
-UMWebbedCreatureUtil.AddCocoon = function(creature, size, prefix, loot_pool, sw)
+function UMWebbedCreatureUtil.AddCocoon(creature, size, prefix, loot_pool, sw)
     assert(type(creature), "Bad argument #1 to AddCocoon. Expected string, got " .. type(creature))
     assert(type(size), "Bad argument #2 to AddCocoon. Expected number, got " .. type(size))
     assert(type(prefix), "Bad argument #3 to AddCocoon. Expected string, got " .. type(prefix))
@@ -958,7 +958,7 @@ end
 
 ---@param character string The character's prefab name.
 ---@param loot_pool table The loot pool for the character. See above and below for examples.
-UMWebbedCreatureUtil.AddCharacterCocoon = function(character, loot_pool)
+function UMWebbedCreatureUtil.AddCharacterCocoon(character, loot_pool)
     assert(type(character), "Bad argument #1 to AddCharacterCocoon. Expected string, got " .. type(character))
     assert(type(loot_pool) == "table", "Bad argument #2 to AddCharacterCocoon. Expected table, got " .. type(loot_pool))
 
