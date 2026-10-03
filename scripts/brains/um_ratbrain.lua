@@ -29,7 +29,7 @@ local TOOCLOSE = 3
 local SEE_BAIT_DIST = 15
 local MAX_WANDER_DIST = 5
 
-local Uncompromising_RatBrain = Class(Brain, function(self, inst)
+local UM_RatBrain = Class(Brain, function(self, inst)
     Brain._ctor(self, inst)
 end)
 
