@@ -27,6 +27,7 @@ TUNING.DSTU.NORATCHECK = --defining it here for simplicity's sake.
     "green_mushed_room",
     "red_mushed_room",
     "ancientfruit_gem",
+    "flowerhat",
 }
 
 for k, v in ipairs(TUNING.DSTU.NORATCHECK) do
@@ -36,7 +37,6 @@ for k, v in ipairs(TUNING.DSTU.NORATCHECK) do
         end
     end)
 end
-
 
 --idfc i'm putting this here
 env.AddPrefabPostInit("friendlyfruitfly", function(inst)

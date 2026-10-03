@@ -6,43 +6,49 @@ local GemRepairer = Class(function(self, inst)
     inst:AddTag("gemrepairer")
 end)
 
-function GemRepairer:OnRemoveFromEntity() self.inst:RemoveTag("gemrepairer") end
+function GemRepairer:OnRemoveFromEntity()
+    self.inst:RemoveTag("gemrepairer")
+end
 
-function GemRepairer:SetOnUsedFn(fn) self.on_used_fn = fn end
+function GemRepairer:SetOnUsedFn(fn)
+    self.on_used_fn = fn
+end
 
 function GemRepairer:OnUsed(target, doer)
-    if target == nil or not target:IsValid() then return end
-
-    local repair_value = TUNING.DSTU.GEM_REPAIRER_REPAIR_VALUE[math.clamp(target.repair_count, 1, #TUNING.DSTU.GEM_REPAIRER_REPAIR_VALUE)]
+    local repaircount = target.um_repaircount or 1
+    local repair_value = TUNING.DSTU.GEM_REPAIRER_REPAIR_VALUE[math.clamp(repaircount, 1, #TUNING.DSTU.GEM_REPAIRER_REPAIR_VALUE)]
     local success = false
 
-    if target.components.gem_enchantable ~= nil and target.components.gem_enchantable:IsEnchanted() then
-        for k, v in pairs(target.components.gem_enchantable.enchants) do
-            if target.components.gem_enchantable:HasDurabilityEnabled(k) and target.components.gem_enchantable:GetDurability(k) < 1 then
-                target.components.gem_enchantable:DoDurabilityDelta(k, math.clamp(repair_value - (target.repair_count / 10), 0, 1)) --less effective.
+    local gem_enchantable = target.components.gem_enchantable
+    if gem_enchantable and gem_enchantable:IsEnchanted() then
+        for k, v in pairs(gem_enchantable.enchants) do
+            if gem_enchantable:HasDurabilityEnabled(k) and gem_enchantable:GetDurability(k) < 1 then
+                gem_enchantable:DoDurabilityDelta(k, math.clamp(repair_value - (repaircount / 10), 0, 1)) --less effective.
                 success = true
             end
         end
     end
 
-    if target.components.finiteuses ~= nil and target.components.finiteuses:GetPercent() < 1 then
-        target.components.finiteuses:SetPercent(math.clamp(target.components.finiteuses:GetPercent() + repair_value), 0, 1)
+    local finiteuses = target.components.finiteuses
+    if finiteuses and finiteuses:GetPercent() < 1 then
+        finiteuses:SetPercent(math.clamp(finiteuses:GetPercent() + repair_value, 0, 1))
         success = true
     end
 
-    if target.components.armor ~= nil and not target.components.armor.indestructible and target.components.armor:GetPercent() < 1 then
-        target.components.armor:SetPercent(target.components.armor:GetPercent() + repair_value)
+    local armor = target.components.armor
+    if armor and not armor.indestructible and armor:GetPercent() < 1 then
+        armor:SetPercent(armor:GetPercent() + repair_value)
         success = true
     end
 
     if success then
-        if target.repair_count >= #TUNING.DSTU.GEM_REPAIRER_REPAIR_VALUE and doer ~= nil and doer.components.talker ~= nil then
+        if repaircount >= #TUNING.DSTU.GEM_REPAIRER_REPAIR_VALUE and doer.components.talker then
             doer.components.talker:Say(GetString(doer, "ANNOUNCE_GEM_REPAIR_MAXED"))
         end
 
         target:PushEvent("repair")
 
-        target.repair_count = target.repair_count + 1
+        target.um_repaircount = repaircount + 1
     end
 
     if self.on_used_fn then
