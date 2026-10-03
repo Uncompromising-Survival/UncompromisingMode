@@ -95,7 +95,7 @@ local function OnAttacked(inst, data)
     local attacker = data.attacker
     if not inst:HasTag("packrat") then inst.components.combat:SetTarget(attacker) end
 
-    if inst:HasTag("winky_rat") and attacker and attacker:HasTag("ratwhisperer") and inst.components.follower.leader == attacker then -- meanie :(
+    if inst:HasTag("winky_rat") and attacker and attacker:HasTag("ratwhisperer") and inst.components.follower:GetLeader() == attacker then -- meanie :(
         inst.components.follower:SetLeader(nil)
     end
 
