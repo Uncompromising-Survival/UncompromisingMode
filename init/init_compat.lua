@@ -4,6 +4,8 @@ GLOBAL.setfenv(1, GLOBAL)
 
 local flaire_nature_equips = {
     "um_hat_leafwing",
+    "um_armor_pyre_nettles",
+    "um_hat_rime",
 }
 
 if rawget(TUNING, "FLAIRE_NATURE_EQUIPS") then

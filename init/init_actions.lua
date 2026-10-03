@@ -722,27 +722,22 @@ env.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.SCAN_GEMOLOGY_GEM
 local UM_GEM_REPAIR = Action({ mound_valid = true, priority = 10, rmb = true })
 UM_GEM_REPAIR.id = "UM_GEM_REPAIR"
 UM_GEM_REPAIR.str = "Repair"
-env.AddAction(UM_GEM_REPAIR)
-
 UM_GEM_REPAIR.fn = function(act)
-    local target = act.target
-    local repairtool = act.invobject
-
-    if repairtool ~= nil and repairtool.components.gemrepairer ~= nil and target ~= nil and target.um_cangemrepair ~= nil and target.um_cangemrepair:value() then
-        local success, reason = repairtool.components.gemrepairer:OnUsed(target, act.doer)
-
-        if not success then
-            if act.doer ~= nil and act.doer.components.talker ~= nil then
-                act.doer.components.talker:Say(GetActionFailString(act.doer, UM_GEM_REPAIR.id, reason))
-            end
+    local target, repairtool, doer = act.target, act.invobject, act.doer
+    if target and target:IsValid() and target.um_cangemrepair and target.um_cangemrepair:value() and repairtool and repairtool.components.gemrepairer then
+        local success, reason = repairtool.components.gemrepairer:OnUsed(target, doer)
+        if not success and doer then
+            local talker = doer and doer.components.talker
+            if talker then talker:Say(GetActionFailString(doer, UM_GEM_REPAIR.id, reason)) end
         end
-
         return success, reason
     end
 end
 
+env.AddAction(UM_GEM_REPAIR)
+
 env.AddComponentAction("USEITEM", "gemrepairer", function(inst, doer, target, actions, right)
-    if inst ~= nil and inst:HasTag("gemrepairer") and target ~= nil and target.um_cangemrepair ~= nil and target.um_cangemrepair:value() and right then
+    if inst:HasTag("gemrepairer") and target.um_cangemrepair and target.um_cangemrepair:value() and right then
         table.insert(actions, ACTIONS.UM_GEM_REPAIR)
     end
 end)

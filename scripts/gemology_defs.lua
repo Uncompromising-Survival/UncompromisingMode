@@ -67,17 +67,15 @@ function UMGemologyFns.IsEnchantValid(gem)
 end
 
 function UMGemologyFns.DamageGem(enchant, item, value)
-    item = item.um_projectile_owner or item
     local gem_enchantable = item:IsValid() and item.components.gem_enchantable
     if gem_enchantable and gem_enchantable:HasEnchantment("um_gemology" .. enchant) and gem_enchantable:HasDurabilityEnabled("um_gemology" .. enchant) then
         gem_enchantable:DoDurabilityDelta("um_gemology" .. enchant, -value)
     end
 end
 
-function  UMGemologyFns.GetEnchantsAndDoFn(self, fntype, fn, ...)
+function UMGemologyFns.GetEnchantsAndDoFn(self, fntype, fn, ...)
     local item = self.inst or self
-    local weapon = item.um_projectile_owner or item
-    local gem_enchantable = weapon.components.gem_enchantable
+    local gem_enchantable = item.components.gem_enchantable
     if gem_enchantable then
         for enchant, tier in pairs(gem_enchantable.enchants) do
             local gemfn = UMGemologyFns.GEM_DEFS[enchant].fns[fntype]
@@ -348,28 +346,19 @@ AddUMGemDef("greengem2", {
 -----------------------------------------------------------------------------------
 ---Yellow1
 
+local function YellowGemDapperness(inst, tier, dapperness, gemtable)
+    return dapperness + TUNING.DSTU.YELLOWGEM1_SANITY[tier]
+end
+
 AddUMGemDef("yellowgem1", {
     color = RGB(255, 228, 153),
     fns = {
         onapply = function(item, tier)
-            if item.components.equippable then
-                item.volatile_gemology_data.um_gemologyyellowgem1.old_dapperness = item.components.equippable.dapperness
-
-                if item.components.equippable.dapperness then
-                    item.components.equippable.dapperness = item.components.equippable.dapperness + TUNING.DSTU.YELLOWGEM1_SANITY[tier]
-                else
-                    item.components.equippable.dapperness = TUNING.DSTU.YELLOWGEM1_SANITY[tier]
-                end
-            end
+            item.volatile_gemology_data.um_gemologyyellowgem1.dapperness = {fn = YellowGemDapperness}
         end,
         onupdate = function(item, tier)
             if item.components.equippable and item.components.equippable:IsEquipped() then
                 UMGemologyFns.DamageGem("yellowgem1", item, 1 / TUNING.DSTU.YELLOWGEM1_DURATION[tier])
-            end
-        end,
-        onremove = function(item, tier)
-            if item.components.equippable then
-                item.components.equippable.dapperness = item.volatile_gemology_data.um_gemologyyellowgem1.old_dapperness
             end
         end
     }
@@ -381,61 +370,54 @@ AddUMGemDef("yellowgem1", {
 local arc_cantarget = { "_health", "_combat" }
 local arc_canttarget = { "player", "playerghost", "arcgrounded", "wall", "INLIMBO", "companion", "abigail", "invisible", "hiding", "notarget", "noattack" }
 
-local function ShockChain(inst, attacker, target, ShockAgain, tier, original_inst)
-    local x, y, z = target.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, TUNING.DSTU.YELLOWGEM2_SHOCK_RANGE, arc_cantarget, arc_canttarget)
-
-    for i, v in ipairs(ents) do
-        if v ~= target and v.components.health ~= nil and not v.components.health:IsDead() and attacker.components.combat ~= nil and not attacker.components.combat:IsAlly(v) and attacker.components.combat:CanTarget(v) then
-            local dist = math.sqrt(target:GetDistanceSqToInst(v))
-            v.um_shockdamage_table = v.um_shockdamage_table or {damage = inst.components.weapon:GetDamage(attacker, v) * math.clamp(TUNING.DSTU.YELLOWGEM2_SHOCK_DIST_FACTOR - dist, TUNING.DSTU.YELLOWGEM2_SHOCK_MULT_RANGES[tier][1], TUNING.DSTU.YELLOWGEM2_SHOCK_MULT_RANGES[tier][2])}
-            v:DoTaskInTime(dist / TUNING.DSTU.YELLOWGEM2_ATTACK_TIME_FACTOR, function(_inst, _attacker, weapon, projectile_owner)
-                if _attacker:IsValid() and _inst:IsValid() and _inst.components.health ~= nil and not _inst.components.health:IsDead() and not _inst:HasTag("arcgrounded") then
-                    _inst:AddTag("arcgrounded")
-                    _inst.components.combat:GetAttacked(_attacker, _inst.um_shockdamage_table and _inst.um_shockdamage_table.damage or 0, weapon, "electric")
-                    ShockAgain(weapon, _attacker, _inst, tier, projectile_owner)
-
-                    SpawnPrefab("electricchargedfx").Transform:SetPosition(_inst.Transform:GetWorldPosition())
-
-                    _inst:DoTaskInTime(TUNING.DSTU.YELLOWGEM2_SHOCK_COOLDOWN, function()
-                        if _inst:IsValid() then
-                            _inst:RemoveTag("arcgrounded")
-                        end
-                    end)
-                    _inst.um_shockdamage_table = nil
-                end
-            end, attacker, inst, original_inst)
-        end
-    end
-end
-
-local function WetCheck(target)
-    return target ~= nil and target:IsValid() and target.GetWetMultiplier ~= nil and target:GetWetMultiplier() > 0
-end
-
 local function ForceElectrocute(target, attacker)
-    if target ~= nil and target:IsValid() and target.components.health ~= nil and not target.components.health:IsDead() then
+    if target and target:IsValid() and target.components.health and not target.components.health:IsDead() then
         target:PushEventImmediate("electrocute", { attacker = attacker, stimuli = "electric", numforks = 0, noresist = true, })
     end
 end
 
-local function ElectricAttack(inst, attacker, target, tier, original_inst)
-    if target == nil or not target:IsValid() then return end
+local function ShockChain(inst, attacker, target, tier)
+    local x, y, z = target.Transform:GetWorldPosition()
+    for i, v in ipairs(TheSim:FindEntities(x, y, z, TUNING.DSTU.YELLOWGEM2_SHOCK_RANGE, arc_cantarget, arc_canttarget)) do
+        if v ~= target and v.components.health and not v.components.health:IsDead() and attacker.components.combat
+            and not attacker.components.combat:IsAlly(v) and attacker.components.combat:CanTarget(v) then
+            local dist = math.sqrt(target:GetDistanceSqToInst(v))
+            local damage = inst.components.weapon:GetDamage(attacker, v) * math.clamp(TUNING.DSTU.YELLOWGEM2_SHOCK_DIST_FACTOR - dist, TUNING.DSTU.YELLOWGEM2_SHOCK_MULT_RANGES[tier][1], TUNING.DSTU.YELLOWGEM2_SHOCK_MULT_RANGES[tier][2])
+            v:DoTaskInTime(dist / TUNING.DSTU.YELLOWGEM2_ATTACK_TIME_FACTOR, function(_inst, _attacker, weapon, _damage)
+                if _attacker:IsValid() and _inst:IsValid() and _inst.components.health
+                    and not _inst.components.health:IsDead() and _inst.components.combat and not _inst:HasTag("arcgrounded") then
+                    _inst:AddTag("arcgrounded")
+                    _inst:DoTaskInTime(TUNING.DSTU.YELLOWGEM2_SHOCK_COOLDOWN, function()
+                        if _inst:IsValid() then _inst:RemoveTag("arcgrounded") end
+                    end)
 
+                    SpawnElectricHitSparks(_attacker, _inst, true)
+
+                    SpawnPrefab("electricchargedfx").Transform:SetPosition(_inst.Transform:GetWorldPosition())
+
+                    ForceElectrocute(_inst, _attacker)
+
+                    _inst.components.combat:GetAttacked(_attacker, _damage, weapon, "electric")
+                end
+            end, attacker, inst, damage)
+        end
+    end
+end
+
+local function ElectricAttack(inst, attacker, target, tier)
     SpawnElectricHitSparks(attacker, target, true)
 
     if tier ~= 1 then
-        ShockChain(inst, attacker, target, ElectricAttack, tier, inst.um_projectile_owner)
-
-        target:AddTag("arcgrounded")
-        target:DoTaskInTime(TUNING.DSTU.YELLOWGEM2_SHOCK_COOLDOWN, function(target)
-            if target:IsValid() then target:RemoveTag("arcgrounded") end
-        end)
+        ShockChain(inst, attacker, target, tier)
     end
 
     ForceElectrocute(target, attacker)
 
-    UMGemologyFns.DamageGem("yellowgem2", original_inst or inst, GEM_USES[tier])
+    UMGemologyFns.DamageGem("yellowgem2", inst, GEM_USES[tier])
+end
+
+local function WetCheck(target)
+    return target and target:IsValid() and target.GetWetMultiplier ~= nil and target:GetWetMultiplier() > 0
 end
 
 AddUMGemDef("yellowgem2", {
@@ -446,23 +428,16 @@ AddUMGemDef("yellowgem2", {
             if item.prefab == "hambat" then
                 item.new_max_damage = TUNING.HAMBAT_DAMAGE + TUNING.DSTU.YELLOWGEM2_SHOCK_DAMAGE[tier]
             end
-
-            item.volatile_gemology_data.um_gemologyyellowgem2.old_stimuli = item.components.weapon.stimuli
         end,
 
         onadjustdamage = function(item, damage, attacker, target, tier, calcnum)
             return damage + (calcnum == 3 and TUNING.DSTU.YELLOWGEM2_SHOCK_DAMAGE[tier] * (target and WetCheck(target) and TUNING.DSTU.YELLOWGEM2_SHOCK_WET_MULT or 1) or 0)
         end,
 
-        onattack = function(inst, attacker, target, tier) ElectricAttack(inst, attacker, target, tier) end,
+        onattack = ElectricAttack,
 
         onremove = function(item, tier)
             item.new_max_damage = nil
-
-            if item.components.weapon ~= nil then
-                item.components.weapon.stimuli =
-                    item.volatile_gemology_data.um_gemologyyellowgem2.old_stimuli
-            end
         end,
 
         canapply = function(item, tier)
@@ -715,6 +690,9 @@ end
 AddUMGemDef("orangegem1", {
     color = RGB(249, 203, 156),
     fns = {
+        onapply = function(item, tier)
+            inst.um_structurebonus = 0
+        end,
         onadjustdamage = function(item, damage, attacker, target, tier, calcnum)
             if tier ~= 1 and calcnum == 1 then return damage + damage * item.um_structurebonus end
             return damage
@@ -733,11 +711,12 @@ AddUMGemDef("orangegem1", {
 -----------------------------------------------------------------------------------
 ---Orange2
 
-local function UpdateSanityStat(inst, count, tier)
-    if inst.volatile_gemology_data.um_gemologyorangegem2.old_dapperness then
-        inst.components.equippable.dapperness = inst.volatile_gemology_data.um_gemologyorangegem2.old_dapperness + count * tier * TUNING.DSTU.ORANGEGEM2_OLD_DAPPERNESS_PER_TIER
+local function UpdateSanityStat(inst, tier, dapperness, gemtable)
+    local count = gemtable.count or 0
+    if dapperness ~= 0 then
+        return dapperness + count * tier * TUNING.DSTU.ORANGEGEM2_OLD_DAPPERNESS_PER_TIER
     else
-        inst.components.equippable.dapperness = count * tier * TUNING.DSTU.ORANGEGEM2_DAPPERNESS_PER_TIER 
+        return count * tier * TUNING.DSTU.ORANGEGEM2_DAPPERNESS_PER_TIER 
     end
 end
 
@@ -747,7 +726,8 @@ local function OnInventoryStateChanged(inst, owner, tier)
         owner.components.inventory:ForEachItemSlot(function(item)
             count = count + 1
         end)
-        UpdateSanityStat(inst, count, tier)
+        local dapperness = inst.volatile_gemology_data.um_gemologyorangegem2.dapperness
+        if dapperness then dapperness.count = count end
     end
 end
 
@@ -773,12 +753,11 @@ local function HoardingHarvest(inst, ent, doer) -- they don't return the "loot" 
     end
 end
 
-
 AddUMGemDef("orangegem2", {
     color = RGB(249, 203, 156),
     fns = {
         onapply = function(item, tier)
-            item.volatile_gemology_data.um_gemologyorangegem2.old_dapperness = item.components.equippable.dapperness
+            item.volatile_gemology_data.um_gemologyorangegem2.dapperness = {fn = UpdateSanityStat, count = 0}
 
             if item.HarvestPickable and tier ~= 1 then
                 item.volatile_gemology_data.um_gemologyorangegem2.old_harvest_pickable_fn = item.HarvestPickable
