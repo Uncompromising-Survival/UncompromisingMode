@@ -128,7 +128,7 @@ local function onthrown(inst, attacker)
     inst.AnimState:PlayAnimation("spin_loop", true)
 
     inst.Physics:SetMass(1)
-    inst.Physics:SetCapsule(0.2, 0.2)
+    inst.Physics:SetCapsule(.2, .2)
     inst.Physics:SetFriction(0)
     inst.Physics:SetDamping(0)
     inst.Physics:SetCollisionGroup(COLLISION.CHARACTERS)
@@ -175,22 +175,6 @@ local function common_fn(bank, build, anim, tag, isinventoryitem)
         inst.Physics:SetDontRemoveOnSleep(true) -- so the object can land and put out the fire, also an optimization due to how this moves through the world
     end
 
-    if tag ~= nil then
-        inst:AddTag(tag)
-    end
-
-    inst:AddComponent("reticule")
-    inst.components.reticule.targetfn = ReticuleTargetFn
-    inst.components.reticule.ease = true
-    inst.components.reticule.ispassableatallpoints = true
-    inst.components.reticule.validfn = function(inst) return true end
-    MakeInventoryFloatable(inst, "med", 0.05, 0.65)
-    inst:AddTag("allow_action_on_impassable")
-
-    --projectile (from complexprojectile component) added to pristine state for optimization
-    inst:AddTag("projectile")
-    inst:AddTag("complexprojectile")
-
     inst.AnimState:SetBank(bank)
     inst.AnimState:SetBuild(build)
     inst.bank = bank
@@ -210,6 +194,23 @@ local function common_fn(bank, build, anim, tag, isinventoryitem)
             end
         end
     end
+
+    inst:AddTag("allow_action_on_impassable")
+    --projectile (from complexprojectile component) added to pristine state for optimization
+    inst:AddTag("projectile")
+    inst:AddTag("complexprojectile")
+
+    if tag ~= nil then
+        inst:AddTag(tag)
+    end
+
+    inst:AddComponent("reticule")
+    inst.components.reticule.targetfn = ReticuleTargetFn
+    inst.components.reticule.ease = true
+    inst.components.reticule.ispassableatallpoints = true
+    inst.components.reticule.validfn = function(inst) return true end
+
+    MakeInventoryFloatable(inst, "med", .05, .65)
 
     inst.entity:SetPristine()
 
@@ -270,6 +271,7 @@ local function OnHitVortex(inst, attacker, target)
     fx:ListenForEvent("animover", fx.Remove)
 
     local vortex = SpawnPrefab("um_bomb_vortex")
+    vortex.SoundEmitter:PlaySound("meta3/willow_lighter/lighter_absorb_LP", "channel_loop")
     vortex.Transform:SetPosition(x, y, z)
     vortex.thrower = attacker
     local ents = TheSim:FindEntities(x, y, z, 5)
@@ -321,19 +323,21 @@ local function explosionfn()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
     inst.entity:AddLight()
+
     inst.Light:SetIntensity(.6)
     inst.Light:SetRadius(2)
     inst.Light:SetFalloff(1)
     inst.Light:SetColour(1, 1, 1)
 
-    inst.entity:SetPristine()
-
     inst:AddTag("NOCLICK")
     inst:AddTag("FX")
+
+    inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
         return inst
     end
+
     inst.AnimState:SetBuild("um_lunar_explosion")
     inst.AnimState:SetBank("um_lunar_explosion")
     inst.AnimState:PlayAnimation("impact3_special")
@@ -352,10 +356,10 @@ local function sexplosionfn()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
 
-    inst.entity:SetPristine()
-
     inst:AddTag("NOCLICK")
     inst:AddTag("FX")
+
+    inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
         return inst
@@ -417,7 +421,7 @@ local function DoVaccuum(inst)
             end
             --inst will be nil by the time the debuff run out so we save a copy of thrower to memory.
             local thrower = inst.thrower
-            v.components.locomotor:SetExternalSpeedMultiplier(thrower, "vortex", 0.35)
+            v.components.locomotor:SetExternalSpeedMultiplier(thrower, "vortex", .35)
 
             if v.vortex_speed_task ~= nil then
                 v.vortex_speed_task:Cancel()
@@ -439,24 +443,23 @@ local function vortex_fn()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
 
-    inst.entity:SetPristine()
-
-    inst:AddTag("NOCLICK")
-    inst:AddTag("FX")
-
     inst.AnimState:SetBank("um_bomb_vortex")
     inst.AnimState:SetBuild("um_bomb_vortex")
     inst.AnimState:PlayAnimation("pre")
     inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
     inst.AnimState:OverrideMultColour(1, 1, 1, .8)
     inst.AnimState:SetScale(2.2, 2.2, 2.2)
-    inst.AnimState:SetSymbolMultColour("black", 1, 1, 1, 0.5)
-    inst.AnimState:SetSymbolMultColour("vortex2_loop", 0.5, 0.5, 0.5, 1)
+    inst.AnimState:SetSymbolMultColour("black", 1, 1, 1, .5)
+    inst.AnimState:SetSymbolMultColour("vortex2_loop", .5, .5, .5, 1)
 
     inst.AnimState:SetLayer(LAYER_BACKGROUND)
     inst.AnimState:SetSortOrder(1)
     inst.AnimState:SetFinalOffset(1)
-    inst.SoundEmitter:PlaySound("meta3/willow_lighter/lighter_absorb_LP", "channel_loop")
+
+    inst:AddTag("NOCLICK")
+    inst:AddTag("FX")
+
+    inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
         return inst
