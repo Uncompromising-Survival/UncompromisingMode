@@ -242,9 +242,29 @@ env.AddPrefabPostInitAny(function(inst)
 
     if not TheWorld.ismastersim then return end
 
-    if (inst.components.armor and not inst.components.armor:IsIndestructible())
+    if inst.components.armor and not inst.components.armor:IsIndestructible()
         or inst.components.finiteuses or inst.components.gem_enchantable then
-	    inst.repair_count = 1
+	    inst.um_repaircount = 1
+    
+        local _OnSave = inst.OnSave
+        local function OnSave(inst, data, ...)
+            local ret = _OnSave and _OnSave(inst, data, ...)
+            data.um_repaircount = inst.um_repaircount
+            return ret
+        end
+
+        local _OnLoad = inst.OnLoad
+        local function OnLoad(inst, data, ...)
+            local ret = _OnLoad and _OnLoad(inst, data, ...)
+            if data and data.um_repaircount then
+                inst.um_repaircount = data.um_repaircount
+            end
+            return ret
+        end
+
+        inst.OnSave = OnSave
+        inst.OnLoad = OnLoad
+
         inst.um_cangemrepair:set(true)
     end
 end)

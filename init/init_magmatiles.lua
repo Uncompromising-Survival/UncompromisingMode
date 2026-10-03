@@ -186,7 +186,7 @@ for staff, uses in pairs(ice_staves) do
         end
 
         if inst.components.finiteuses ~= nil and uses ~= nil then
-            inst.components.finiteuses:SetConsumption(ACTIONS.UM_COOL_MAGMA, uses)
+            inst.components.finiteuses:SetConsumption(ACTIONS.UM_COOL_MAGMA_STAFF, uses)
         end
 
 

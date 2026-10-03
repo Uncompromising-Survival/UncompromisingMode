@@ -722,27 +722,22 @@ env.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.SCAN_GEMOLOGY_GEM
 local UM_GEM_REPAIR = Action({ mound_valid = true, priority = 10, rmb = true })
 UM_GEM_REPAIR.id = "UM_GEM_REPAIR"
 UM_GEM_REPAIR.str = "Repair"
-env.AddAction(UM_GEM_REPAIR)
-
 UM_GEM_REPAIR.fn = function(act)
-    local target = act.target
-    local repairtool = act.invobject
-
-    if repairtool ~= nil and repairtool.components.gemrepairer ~= nil and target ~= nil and target.um_cangemrepair ~= nil and target.um_cangemrepair:value() then
-        local success, reason = repairtool.components.gemrepairer:OnUsed(target, act.doer)
-
-        if not success then
-            if act.doer ~= nil and act.doer.components.talker ~= nil then
-                act.doer.components.talker:Say(GetActionFailString(act.doer, UM_GEM_REPAIR.id, reason))
-            end
+    local target, repairtool, doer = act.target, act.invobject, act.doer
+    if target and target:IsValid() and target.um_cangemrepair and target.um_cangemrepair:value() and repairtool and repairtool.components.gemrepairer then
+        local success, reason = repairtool.components.gemrepairer:OnUsed(target, doer)
+        if not success and doer then
+            local talker = doer and doer.components.talker
+            if talker then talker:Say(GetActionFailString(doer, UM_GEM_REPAIR.id, reason)) end
         end
-
         return success, reason
     end
 end
 
+env.AddAction(UM_GEM_REPAIR)
+
 env.AddComponentAction("USEITEM", "gemrepairer", function(inst, doer, target, actions, right)
-    if inst ~= nil and inst:HasTag("gemrepairer") and target ~= nil and target.um_cangemrepair ~= nil and target.um_cangemrepair:value() and right then
+    if inst:HasTag("gemrepairer") and target.um_cangemrepair and target.um_cangemrepair:value() and right then
         table.insert(actions, ACTIONS.UM_GEM_REPAIR)
     end
 end)
@@ -877,19 +872,19 @@ env.AddSimPostInit(function()
 end)
 
 --magma cooling
-local UM_COOL_MAGMA = Action({ priority = 100, rmb = true, tile_placer = "gridplacer", invalid_hold_action = true, })
-UM_COOL_MAGMA.id = "UM_COOL_MAGMA"
-UM_COOL_MAGMA.str = STRINGS.ACTIONS.UM_COOL_MAGMA
-UM_COOL_MAGMA.distance = 20
-UM_COOL_MAGMA.mount_valid = true
-UM_COOL_MAGMA.rmb = true
+local UM_COOL_MAGMA_STAFF = Action({ priority = 100, rmb = true, tile_placer = "gridplacer", invalid_hold_action = true, })
+UM_COOL_MAGMA_STAFF.id = "UM_COOL_MAGMA_STAFF"
+UM_COOL_MAGMA_STAFF.str = STRINGS.ACTIONS.UM_COOL_MAGMA_STAFF
+UM_COOL_MAGMA_STAFF.distance = 20
+UM_COOL_MAGMA_STAFF.mount_valid = true
+UM_COOL_MAGMA_STAFF.rmb = true
 local function DamageItem(inst, doer)
     if inst.components.finiteuses ~= nil then
-        inst.components.finiteuses:OnUsedAsItem(ACTIONS.UM_COOL_MAGMA, doer)
+        inst.components.finiteuses:OnUsedAsItem(ACTIONS.UM_COOL_MAGMA_STAFF, doer)
     end
 end
 
-UM_COOL_MAGMA.fn = function(act)
+UM_COOL_MAGMA_STAFF.fn = function(act)
     if not act.invobject:HasTag("magma_cooler") then return end
 
     if ShouldItemMimicBeRevealedFor(act.invobject, act.doer) then
@@ -899,7 +894,7 @@ UM_COOL_MAGMA.fn = function(act)
     local magma_manager = TheWorld.components.um_magmamanager
     if magma_manager ~= nil then
         local pos = act:GetActionPoint()
-        local cooled = magma_manager:CoolDownMagmaTile(pos.x, pos.z, TUNING.DSTU.MAGMATILE_DEFAULT_COOL_TIME)
+        local cooled = magma_manager:CoolDownMagmaTile(pos.x, pos.z, TUNING.DSTU.MAGMATILE_ICE_STAFF_COOL_TIME)
         if cooled then
             local fx = SpawnPrefab("sharkboi_iceimpact_fx")
             local fx2 = SpawnPrefab("crab_king_icefx")
@@ -915,13 +910,13 @@ UM_COOL_MAGMA.fn = function(act)
     end
 end
 
-env.AddAction(UM_COOL_MAGMA)
+env.AddAction(UM_COOL_MAGMA_STAFF)
 
 
 --watering can cooling
 local UM_COOL_MAGMA_WATER = Action({ priority = 100, rmb = true, tile_placer = "gridplacer", invalid_hold_action = true, })
 UM_COOL_MAGMA_WATER.id = "UM_COOL_MAGMA_WATER"
-UM_COOL_MAGMA_WATER.str = STRINGS.ACTIONS.UM_COOL_MAGMA
+UM_COOL_MAGMA_WATER.str = STRINGS.ACTIONS.UM_COOL_MAGMA_STAFF
 UM_COOL_MAGMA_WATER.distance = 4
 UM_COOL_MAGMA_WATER.mount_valid = false
 UM_COOL_MAGMA_WATER.rmb = true
@@ -940,7 +935,7 @@ UM_COOL_MAGMA_WATER.fn = function(act)
     local magma_manager = TheWorld.components.um_magmamanager
     if magma_manager ~= nil then
         local pos = act:GetActionPoint()
-        local cooled = magma_manager:CoolDownMagmaTile(pos.x, pos.z, TUNING.DSTU.MAGMATILE_ICE_STAFF_COOL_TIME)
+        local cooled = magma_manager:CoolDownMagmaTile(pos.x, pos.z, TUNING.DSTU.MAGMATILE_DEFAULT_COOL_TIME)
         if cooled then
             local tx, ty, tz = TheWorld.Map:GetTileCenterPoint(pos:Get())
 
@@ -966,13 +961,13 @@ env.AddComponentAction("POINT", "magma_cooler", function(inst, doer, pos, action
         if inst:HasTag("wateringcan") then
             table.insert(actions, ACTIONS.UM_COOL_MAGMA_WATER)
         else
-            table.insert(actions, ACTIONS.UM_COOL_MAGMA)
+            table.insert(actions, ACTIONS.UM_COOL_MAGMA_STAFF)
         end
     end
 end)
 
-env.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.UM_COOL_MAGMA, "castspell"))
-env.AddStategraphActionHandler("wilson_client", ActionHandler(ACTIONS.UM_COOL_MAGMA, "castspell"))
+env.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.UM_COOL_MAGMA_STAFF, "castspell"))
+env.AddStategraphActionHandler("wilson_client", ActionHandler(ACTIONS.UM_COOL_MAGMA_STAFF, "castspell"))
 
 env.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.UM_COOL_MAGMA_WATER, "pour"))
 env.AddStategraphActionHandler("wilson_client", ActionHandler(ACTIONS.UM_COOL_MAGMA_WATER, "pour"))
