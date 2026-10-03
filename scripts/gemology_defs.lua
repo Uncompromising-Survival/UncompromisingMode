@@ -691,7 +691,7 @@ AddUMGemDef("orangegem1", {
     color = RGB(249, 203, 156),
     fns = {
         onapply = function(item, tier)
-            inst.um_structurebonus = 0
+            item.um_structurebonus = 0
         end,
         onadjustdamage = function(item, damage, attacker, target, tier, calcnum)
             if tier ~= 1 and calcnum == 1 then return damage + damage * item.um_structurebonus end
@@ -711,23 +711,13 @@ AddUMGemDef("orangegem1", {
 -----------------------------------------------------------------------------------
 ---Orange2
 
-local function UpdateSanityStat(inst, tier, dapperness, gemtable)
-    local count = gemtable.count or 0
+local function UpdateSanityStat(inst, tier, dapperness, owner, gemtable)
+    local inventory = owner and owner.components.inventory
+    local count = inventory and #inventory.itemslots or 0
     if dapperness ~= 0 then
         return dapperness + count * tier * TUNING.DSTU.ORANGEGEM2_OLD_DAPPERNESS_PER_TIER
     else
         return count * tier * TUNING.DSTU.ORANGEGEM2_DAPPERNESS_PER_TIER 
-    end
-end
-
-local function OnInventoryStateChanged(inst, owner, tier)
-    local count = 0
-    if owner.components.inventory then
-        owner.components.inventory:ForEachItemSlot(function(item)
-            count = count + 1
-        end)
-        local dapperness = inst.volatile_gemology_data.um_gemologyorangegem2.dapperness
-        if dapperness then dapperness.count = count end
     end
 end
 
@@ -757,7 +747,7 @@ AddUMGemDef("orangegem2", {
     color = RGB(249, 203, 156),
     fns = {
         onapply = function(item, tier)
-            item.volatile_gemology_data.um_gemologyorangegem2.dapperness = {fn = UpdateSanityStat, count = 0}
+            item.volatile_gemology_data.um_gemologyorangegem2.dapperness = {fn = UpdateSanityStat}
 
             if item.HarvestPickable and tier ~= 1 then
                 item.volatile_gemology_data.um_gemologyorangegem2.old_harvest_pickable_fn = item.HarvestPickable
@@ -779,13 +769,6 @@ AddUMGemDef("orangegem2", {
         onremove = function(item, tier)
             if item.HarvestPickable then
                 item.HarvestPickable = item.volatile_gemology_data.um_gemologyorangegem2.old_harvest_pickable_fn
-            end
-        end,
-        onupdate = function(item, tier)
-            local owner = item.components.inventoryitem:GetGrandOwner()
-
-            if owner ~= nil then
-                OnInventoryStateChanged(item, owner, tier)
             end
         end
     }

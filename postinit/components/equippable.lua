@@ -17,7 +17,7 @@ env.AddComponentPostInit("equippable", function(self)
     function self:GetDapperness(owner, ignore_wetness, ...)
         local _dapperness
         local _dapperfn
-        GetVolatileGemologyData(self, "dapperness", function(enchant, tier, gemtable, _self)
+        GetVolatileGemologyData(self, "dapperness", function(enchant, tier, gemtable, _self, _owner)
             if _self.dapperfn and not _dapperfn then
                 _dapperfn = _self.dapperfn
             elseif not _dapperness then
@@ -25,14 +25,14 @@ env.AddComponentPostInit("equippable", function(self)
             end
             if _dapperfn then
                 local _dapperfnchanged = _self.dapperfn
-                _self.dapperfn = function(inst, owner, ...)
-                    return gemtable.fn(inst, tier, _dapperfnchanged(inst, owner, ...), gemtable)
+                _self.dapperfn = function(inst, __owner, ...)
+                    return gemtable.fn(inst, tier, _dapperfnchanged(inst, __owner, ...), __owner, gemtable)
                 end
             else
                 local _dappernesschanged = _self.dapperness
-                _self.dapperness = gemtable.fn(_self.inst, tier, _dappernesschanged, gemtable)
+                _self.dapperness = gemtable.fn(_self.inst, tier, _dappernesschanged, _owner, gemtable)
             end
-        end)
+        end, owner)
         local ret = {_GetDapperness(self, owner, ignore_wetness, ...)}
         if _dapperfn then self.dapperfn = _dapperfn end
         if _dapperness then self.dapperness = _dapperness end
