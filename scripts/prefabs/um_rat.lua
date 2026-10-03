@@ -1007,7 +1007,7 @@ local function EndRaid(inst, announce)
 
     inst.components.periodicspawner:Start()
 
-    inst.components.lootdropper:SetChanceLootTable("ratburrow_small")
+    inst.components.lootdropper:SetChanceLootTable("um_ratburrow_small")
 
     inst.components.workable:SetWorkable(true)
 
@@ -1054,7 +1054,7 @@ local function BecomeRaidBurrow(inst, dospawns, announce)
 
         inst.components.periodicspawner:Stop()
 
-        inst.components.lootdropper:SetChanceLootTable("ratburrow")
+        inst.components.lootdropper:SetChanceLootTable("um_ratburrow")
 
         inst.components.workable:SetWorkable(false)
 
@@ -1183,7 +1183,7 @@ local function CreateBurrow(data)
     inventory.maxslots = 100
 
     local lootdropper = inst:AddComponent("lootdropper")
-    lootdropper:SetChanceLootTable(data.loottable or "ratburrow")
+    lootdropper:SetChanceLootTable(data.loottable or "um_ratburrow")
 
     local workable = inst:AddComponent("workable")
     workable:SetOnFinishCallback(onfinishcallback)
@@ -1232,7 +1232,7 @@ end
 end]]
 
 local function fn_burrow()
-    local inst = CreateBurrow({tags = {"ratburrow"}, loottable = "ratburrow_small"})
+    local inst = CreateBurrow({tags = {"ratburrow"}, loottable = "um_ratburrow_small"})
 
     if not TheWorld.ismastersim then return inst end
 
