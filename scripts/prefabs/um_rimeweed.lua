@@ -59,7 +59,7 @@ end
 
 local function TellToBuzzOff(v) -- Tell hounds and deerclops they should probably be bothering something else, biting thorns hurts.
     if v.components.combat and v:HasAnyTag("hound", "epic") then
-        local player = FindEntity(v, 36, nil, { "player" }, { "playerghost" })
+        local player = FindEntity(v, 36, nil, {"player"}, {"playerghost"})
         if player then
             v.components.combat:SuggestTarget(player)
         end
@@ -67,9 +67,9 @@ local function TellToBuzzOff(v) -- Tell hounds and deerclops they should probabl
 end
 
 local MAXRANGE = 4
-local NO_TAGS_NO_PLAYERS = { "bramble_resistant", "INLIMBO", "notarget", "noattack", "flight", "invisible", "wall", "player", "companion" }
-local NO_TAGS = { "bramble_resistant", "INLIMBO", "notarget", "noattack", "flight", "invisible", "wall", "playerghost", "rimeweed" }
-local COMBAT_TARGET_TAGS = { "_combat" }
+local NO_TAGS_NO_PLAYERS = {"bramble_resistant", "INLIMBO", "notarget", "noattack", "flight", "invisible", "wall", "player", "companion"}
+local NO_TAGS = {"bramble_resistant", "INLIMBO", "notarget", "noattack", "flight", "invisible", "wall", "playerghost", "rimeweed"}
+local COMBAT_TARGET_TAGS = {"_combat"}
 
 local function OnUpdateThorns(inst)
     inst.range = inst.range + 1
@@ -221,10 +221,10 @@ local function BarrierRemove(inst)
     RemoveFromBrambleTable(inst.rimeweed_main, inst)
     if not inst.nospread then
         local x, y, z = inst.Transform:GetWorldPosition()
-        local ents = TheSim:FindEntities(x, y, z, 5, { "rimeweed" })
+        local ents = TheSim:FindEntities(x, y, z, 5, {"rimeweed_barrier"})
         for i = 1, #ents do
             local v = ents[i]
-            if v and v:IsValid() and v ~= inst and v.prefab == "rimeweed_barrier" then
+            if v and v:IsValid() and v ~= inst and v.rimeweed_main == inst.rimeweed_main then
                 v.nospread = true
                 v:DoTaskInTime(.5 * inst:GetDistanceSqToInst(v) ^ .5, KillOrRemove)
             end
@@ -247,8 +247,8 @@ local function BarrierDie(inst)
     end
     if not inst.nospread then
         local x, y, z = inst.Transform:GetWorldPosition()
-        for i, v in ipairs(TheSim:FindEntities(x, y, z, 5, { "rimeweed" })) do
-            if v ~= inst and v.prefab == "rimeweed_barrier" then
+        for i, v in ipairs(TheSim:FindEntities(x, y, z, 5, {"rimeweed_barrier"})) do
+            if v ~= inst and v.rimeweed_main == inst.rimeweed_main then
                 v.nospread = true
                 v:DoTaskInTime(.5 * inst:GetDistanceSqToInst(v) ^ .5, KillOrRemove)
             end
@@ -276,7 +276,7 @@ local function KillOffRimeweed(inst, toggle)
     if inst.killrimeweedtask then return end
     inst.killrimeweedtask = inst:DoTaskInTime(math.min(math.random() * .5, .5), function(_inst)
         if not TheWorld.state.iswinter then
-            _inst.nospread = true
+            if _inst:HasTag("rimeweed_barrier") then _inst.nospread = true end
             KillOrRemove(_inst, true)
         else
             _inst.killrimeweedtask = nil
@@ -350,6 +350,7 @@ local function barrierweed()
 
     inst:AddTag("plant")
     inst:AddTag("rimeweed")
+    inst:AddTag("rimeweed_barrier")
     inst:AddTag("soulless")
     inst:AddTag("no_epichealth_proxy")
     inst:AddTag("plantcreature")
@@ -448,13 +449,13 @@ end
 
 local function MainRemove(inst)
     if inst.fx and inst.fx:IsValid() then inst.fx:Remove() end
-    if #inst.bramble > 0 and not inst.nospread then
-        --[[for i, v in ipairs(inst.bramble) do
-            if v:IsValid() then KillOrRemove(v, inst.noloot) end
-        end]]
+    if #inst.bramble > 0 then
         for i = #inst.bramble, 1, -1 do
             local v = inst.bramble[i]
-            if v:IsValid() then KillOrRemove(v, inst.noloot) end
+            if v:IsValid() then
+                v.nospread = true
+                KillOrRemove(v, inst.noloot)
+            end
         end
     end
 end
@@ -522,14 +523,14 @@ end
 
 local function FindPlant(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    local plants = TheSim:FindEntities(x, y, z, 32, { "plant" }, { "kelp", "riceplant", "briar_plants" })
+    local plants = TheSim:FindEntities(x, y, z, 32, {"plant"}, {"kelp", "riceplant", "briar_plants"})
     for i, plant in ipairs(plants) do
-        if plant.components.pickable and plant.components.pickable:CanBePicked() and not FindEntity(plant, 3, nil, { "rimeweed" }) then
+        if plant.components.pickable and plant.components.pickable:CanBePicked() and not FindEntity(plant, 3, nil, {"rimeweed"}) then
             return plant
         end
     end
     for i, plant in ipairs(plants) do
-        if plant.components.pickable and not FindEntity(plant, 6, nil, { "rimeweed" }) then
+        if plant.components.pickable and not FindEntity(plant, 6, nil, {"rimeweed"}) then
             return plant
         end
     end
@@ -548,7 +549,7 @@ local function TryGrowPoint(inst, x, z)
 end
 
 local function GetNearestRimeweed(growpoint) -- Make Weeds grow from other weeds first.
-    local weeds = TheSim:FindEntities(growpoint.x, growpoint.y, growpoint.z, 16, { "rimeweed" })
+    local weeds = TheSim:FindEntities(growpoint.x, growpoint.y, growpoint.z, 16, {"rimeweed"})
     local mindist = 99999
     local minweed
     for i, weed in ipairs(weeds) do
@@ -699,6 +700,7 @@ local function mainweed()
     inst:AddTag("plant")
     --inst:AddTag("lunarplant_target")
     inst:AddTag("rimeweed")
+    inst:AddTag("rimeweed_main")
     inst:AddTag("soulless")
     inst:AddTag("plantcreature")
 
