@@ -119,7 +119,7 @@ local function eat_food_action(inst)
     end
 end
 
-function Uncompromising_JunkRatBrain:OnStart()
+function UM_JunkRatBrain:OnStart()
     local root = PriorityNode({    
         WhileNode(function() return not self.inst.sg:HasStateTag("jumping") end, "NotJumpingBehaviour",
             PriorityNode({
@@ -142,4 +142,4 @@ function Uncompromising_JunkRatBrain:OnStart()
     self.bt = BT(self.inst, root)
 end
 
-return Uncompromising_JunkRatBrain
+return UM_JunkRatBrain

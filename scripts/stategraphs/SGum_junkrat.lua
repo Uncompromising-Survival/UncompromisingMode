@@ -217,4 +217,4 @@ CommonStates.AddAmphibiousCreatureHopStates(states,
 	}
 })
 
-return StateGraph("uncompromising_junkrat", states, events, "idle", actionhandlers)
+return StateGraph("um_junkrat", states, events, "idle", actionhandlers)

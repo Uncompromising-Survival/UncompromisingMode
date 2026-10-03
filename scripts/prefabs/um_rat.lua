@@ -22,10 +22,10 @@ local carratsounds = {
 }
 
 --[[
-SetSharedLootTable("raidrat",
+SetSharedLootTable("um_raidrat",
 {
 })]]
-SetSharedLootTable("ratburrow",
+SetSharedLootTable("um_ratburrow",
 {
     {"redgem", .10},
     {"bluegem", .10},
@@ -37,7 +37,7 @@ SetSharedLootTable("ratburrow",
     {"boneshard", .10}
 })
 
-SetSharedLootTable("ratburrow_small",
+SetSharedLootTable("um_ratburrow_small",
 {
     {"redgem", .10},
     {"bluegem", .10},
@@ -47,7 +47,7 @@ SetSharedLootTable("ratburrow_small",
     {"boneshard", .25}
 })
 
-SetSharedLootTable("packrat",
+SetSharedLootTable("um_packrat",
 {
     {"redgem", .10},
     {"bluegem", .10},
@@ -58,9 +58,6 @@ SetSharedLootTable("packrat",
     {"boneshard", .25},
     {"boneshard", .10}
 })
-
-local brain = require "brains/uncompromising_ratbrain"
-local junkbrain = require "brains/uncompromising_junkratbrain"
 
 local function OnRemoved(inst)
     TheWorld:PushEvent("DenRemoved")
@@ -361,7 +358,7 @@ local function onnear(inst, target)
 end
 
 local function OnEnterWater(inst)
-    inst.AnimState:SetBuild("uncompromising_rat_water")
+    inst.AnimState:SetBuild("uncompromising_"..(inst.um_ratamphibiousdatatype or "rat").."_water")
     inst.landspeed = inst.components.locomotor.runspeed
     inst.components.locomotor.runspeed = TUNING.HOUND_SWIM_SPEED
     inst.hop_distance = inst.components.locomotor.hop_distance
@@ -369,7 +366,7 @@ local function OnEnterWater(inst)
 end
 
 local function OnExitWater(inst)
-    inst.AnimState:SetBuild("uncompromising_rat")
+    inst.AnimState:SetBuild("uncompromising_"..(inst.um_ratamphibiousdatatype or "rat"))
     if inst.landspeed then inst.components.locomotor.runspeed = inst.landspeed end
     if inst.hop_distance then inst.components.locomotor.hop_distance = inst.hop_distance end
 end
@@ -382,24 +379,28 @@ local function OnEntitySleep(inst)
     end
 end
 
+local brain = require("brains/um_ratbrain")
+local junkbrain = require("brains/um_junkratbrain")
+local DIET = {FOODTYPE.MEAT, FOODTYPE.VEGGIE, FOODTYPE.HORRIBLE, FOODTYPE.RAW}
+
 local function CreateRat(data)
     local inst = CreateEntity()
 
-    inst.entity:AddTransform()
-    inst.entity:AddAnimState()
+    local trans = inst.entity:AddTransform()
+    local anim = inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
-    inst.entity:AddDynamicShadow()
+    local shadow = inst.entity:AddDynamicShadow()
     inst.entity:AddNetwork()
 
     MakeCharacterPhysics(inst, 1, .5)
 
-    inst.DynamicShadow:SetSize(1, .75)
-    inst.DynamicShadow:Enable(false)
-    inst.Transform:SetSixFaced()
+    shadow:SetSize(1, .75)
+    shadow:Enable(false)
+    trans:SetSixFaced()
 
-    inst.AnimState:SetBank("carrat")
-    inst.AnimState:SetBuild(data.build or "uncompromising_rat")
-    inst.AnimState:PlayAnimation(data.anim or "planted")
+    anim:SetBank(data.bank or "carrat")
+    anim:SetBuild(data.build or "uncompromising_rat")
+    anim:PlayAnimation(data.anim or "planted")
 
     inst:AddTag("raidrat")
     inst:AddTag("animal")
@@ -425,37 +426,36 @@ local function CreateRat(data)
     local playerprox = inst:AddComponent("playerprox")
     playerprox:SetDist(6, 8) -- set specific values
     playerprox:SetOnPlayerNear(onnear)
-    playerprox:SetPlayerAliveMode(inst.components.playerprox.AliveModes.AliveOnly)
+    playerprox:SetPlayerAliveMode(playerprox.AliveModes.AliveOnly)
 
     inst.sounds = carratsounds
 
     local locomotor = inst:AddComponent("locomotor")
-    locomotor.walkspeed = TUNING.DSTU.RAIDRAT_WALKSPEED
-    locomotor.runspeed = TUNING.DSTU.RAIDRAT_RUNSPEED
     locomotor:EnableGroundSpeedMultiplier(false)
     locomotor:SetTriggersCreep(false)
 
-    inst:SetStateGraph("SGuncompromising_rat")
+    inst:SetStateGraph(data.stategraph or "SGum_rat")
 
-    inst:SetBrain(brain)
+    inst:SetBrain(data.brain or brain)
 
-    if TheWorld ~= nil and TheWorld.ismastershard then
+    if TheWorld and TheWorld.ismastershard then
         local embarker = inst:AddComponent("embarker")
-        embarker.embark_speed = inst.components.locomotor.walkspeed
+        embarker.embark_speed = locomotor.walkspeed
         embarker.antic = true
 
         locomotor:SetAllowPlatformHopping(true)
         locomotor.pathcaps = {allowocean = true}
 
         local amphibiouscreature = inst:AddComponent("amphibiouscreature")
-        amphibiouscreature:SetBanks("carrat", "uncompromising_rat_water")
+        local amphibiousdata = data.amphibiousdata or {}
+        amphibiouscreature:SetBanks(amphibiousdata.landbank or "carrat", amphibiousdata.oceanbank or "uncompromising_rat_water")
+        inst.um_ratamphibiousdatatype = amphibiousdata.type
         amphibiouscreature:SetEnterWaterFn(OnEnterWater)
         amphibiouscreature:SetExitWaterFn(OnExitWater)
     end
 
     local eater = inst:AddComponent("eater")
-    eater:SetDiet({FOODTYPE.MEAT, FOODTYPE.VEGGIE, FOODTYPE.RAW}, {FOODTYPE.MEAT, FOODTYPE.VEGGIE, FOODTYPE.RAW})
-    --eater:SetCanEatHorrible()
+    eater:SetDiet(DIET, DIET)
     eater:SetStrongStomach(true) -- can eat monster meat!
 
     local workmultiplier = inst:AddComponent("workmultiplier")
@@ -473,8 +473,7 @@ local function CreateRat(data)
     local thief = inst:AddComponent("thief")
     --thief:SetOnStolenFn(StealItem)
 
-    local health = inst:AddComponent("health")
-    health:SetMaxHealth(TUNING.DSTU.RAIDRAT_HEALTH)
+    inst:AddComponent("health")
 
     local lootdropper = inst:AddComponent("lootdropper")
     lootdropper:AddRandomLoot("monstersmallmeat", .34)
@@ -494,7 +493,6 @@ local function CreateRat(data)
     inventoryitem.cangoincontainer = false
     inventoryitem:SetSinks(false)
 
-    inst:AddComponent("follower")
     inst:AddComponent("herdmember")
 
     inst:AddComponent("knownlocations")
@@ -514,17 +512,9 @@ local function CreateRat(data)
     periodicspawner:Start()
     --periodicspawner.spawnoffscreen = true]]
 
-    local trader = inst:AddComponent("trader")
-    trader:SetAcceptTest(ShouldAcceptItem_Winky)
-    trader:SetAbleToAcceptTest(ShouldAcceptItem_Winky)
-    trader.onaccept = OnGetItemFromPlayer_Winky
-    trader.onrefuse = OnRefuseItem_Winky
-    trader.deleteitemonaccept = false
-
     inst:ListenForEvent("onhitother", OnHitOther)
     inst:ListenForEvent("attacked", OnAttacked)
     inst:ListenForEvent("death", OnDeath)
-    inst:ListenForEvent("onpickupitem", OnPickup)
     --inst:ListenForEvent("trapped", Trapped)
 
     MakeHauntablePanic(inst)
@@ -533,8 +523,6 @@ local function CreateRat(data)
 
     MakeSmallBurnableCharacter(inst, "carrat_body")
     MakeSmallFreezableCharacter(inst, "carrat_body")
-
-    inst.PiedPiperBuff = PiedPiperBuff
 
     inst.OnSave = onsave_rat
     inst.OnLoad = onload_rat
@@ -545,7 +533,30 @@ local function CreateRat(data)
 end
 
 local function fn()
-    return CreateRat({tags = {"hostile", "NOBLOCK"}}) -- mainly for winky, too lazy to make it for only allied rats.
+    local inst = CreateRat({tags = {"hostile", "NOBLOCK"}}) -- mainly for winky, too lazy to make it for only allied rats.
+
+    if not TheWorld.ismastersim then return inst end
+
+    local locomotor = inst.components.locomotor
+    locomotor.walkspeed = TUNING.DSTU.RAIDRAT_WALKSPEED
+    locomotor.runspeed = TUNING.DSTU.RAIDRAT_RUNSPEED
+
+    inst.components.health:SetMaxHealth(TUNING.DSTU.RAIDRAT_HEALTH)
+
+    inst:AddComponent("follower")
+
+    local trader = inst:AddComponent("trader")
+    trader:SetAcceptTest(ShouldAcceptItem_Winky)
+    trader:SetAbleToAcceptTest(ShouldAcceptItem_Winky)
+    trader.onaccept = OnGetItemFromPlayer_Winky
+    trader.onrefuse = OnRefuseItem_Winky
+    trader.deleteitemonaccept = false
+
+    inst:ListenForEvent("onpickupitem", OnPickup)
+
+    inst.PiedPiperBuff = PiedPiperBuff
+
+    return inst
 end
 
 local function junkretargetfn(inst)
@@ -691,7 +702,7 @@ local function junkfn()
     inst.components.locomotor.runspeed = TUNING.DSTU.RAIDRAT_RUNSPEED / 1.5
     inst.components.locomotor:EnableGroundSpeedMultiplier(false)
     inst.components.locomotor:SetTriggersCreep(false)
-    inst:SetStateGraph("SGuncompromising_junkrat")
+    inst:SetStateGraph("SGum_junkrat")
 
     inst:SetBrain(junkbrain)
 
@@ -770,161 +781,23 @@ local function junkfn()
     return inst
 end
 
---[[local function packfn()
-    local inst = CreateRat("uncompromising_packrat")
-    return inst
-end]]
-
 local function packfn()
-    local inst = CreateEntity()
-
-    inst.entity:AddTransform()
-    inst.entity:AddAnimState()
-    inst.entity:AddSoundEmitter()
-    inst.entity:AddDynamicShadow()
-    inst.entity:AddNetwork()
-
-    MakeCharacterPhysics(inst, 1, .5)
-
-    inst.DynamicShadow:SetSize(1, .75)
-    inst.DynamicShadow:Enable(false)
-    inst.Transform:SetSixFaced()
-
-    inst.AnimState:SetBank("packrat")
-    inst.AnimState:SetBuild("uncompromising_packrat")
-    inst.AnimState:PlayAnimation("planted")
-
-    inst:AddTag("raidrat")
-    inst:AddTag("packrat")
-    inst:AddTag("animal")
-    -- inst:AddTag("hostile")
-    inst:AddTag("herdmember")
-    inst:AddTag("smallcreature")
-    inst:AddTag("canbetrapped")
-    inst:AddTag("cattoy")
-    inst:AddTag("catfood")
-    inst:AddTag("cookable")
-
-    -- inst.entity:SetCanSleep(false)
-    inst.entity:SetPristine()
+    local inst = CreateRat({bank = "packrat", build ="uncompromising_packrat", tags = {"packrat"},
+        amphibiousdata = {landbank = "packrat", oceanbank = "packrat_water", type = "packrat"}})
 
     if not TheWorld.ismastersim then return inst end
 
-    if inst.gooserippletask == nil then inst.gooserippletask = inst:DoPeriodicTask(.25, DoRipple, FRAMES, TheWorld.Map) end
+    local locomotor = inst.components.locomotor
+    locomotor.walkspeed = TUNING.DSTU.RAIDRAT_WALKSPEED / 1.25
+    locomotor.runspeed = TUNING.DSTU.RAIDRAT_RUNSPEED / 1.25
 
-    inst.sounds = carratsounds
-
-    inst:AddComponent("locomotor")
-    inst.components.locomotor.walkspeed = TUNING.DSTU.RAIDRAT_WALKSPEED / 1.25
-    inst.components.locomotor.runspeed = TUNING.DSTU.RAIDRAT_RUNSPEED / 1.25
-    inst.components.locomotor:EnableGroundSpeedMultiplier(false)
-    inst.components.locomotor:SetTriggersCreep(false)
-    inst:SetStateGraph("SGuncompromising_rat")
-
-    inst:SetBrain(brain)
-
-    ----------------------------
-    if TheWorld ~= nil and TheWorld.ismastershard then
-        inst:AddComponent("embarker")
-        inst.components.embarker.embark_speed = inst.components.locomotor.walkspeed
-        inst.components.embarker.antic = true
-
-        inst.components.locomotor:SetAllowPlatformHopping(true)
-        inst:AddComponent("amphibiouscreature")
-        inst.components.amphibiouscreature:SetBanks("packrat", "packrat_water")
-        inst.components.amphibiouscreature:SetEnterWaterFn(function(inst)
-            inst.AnimState:SetBuild("uncompromising_packrat_water")
-            inst.landspeed = inst.components.locomotor.runspeed
-            inst.components.locomotor.runspeed = TUNING.HOUND_SWIM_SPEED
-            inst.hop_distance = inst.components.locomotor.hop_distance
-            inst.components.locomotor.hop_distance = 4
-        end)
-        inst.components.amphibiouscreature:SetExitWaterFn(function(inst)
-            inst.AnimState:SetBuild("uncompromising_packrat")
-            if inst.landspeed then inst.components.locomotor.runspeed = inst.landspeed end
-            if inst.hop_distance then inst.components.locomotor.hop_distance = inst.hop_distance end
-        end)
-        -------------------------
-
-        inst.components.locomotor.pathcaps = { allowocean = true }
-    end
-
-    inst:AddComponent("eater")
-    inst.components.eater:SetDiet({ FOODTYPE.MEAT, FOODTYPE.VEGGIE }, { FOODTYPE.MEAT, FOODTYPE.VEGGIE })
-    inst.components.eater:SetCanEatHorrible()
-    inst.components.eater:SetCanEatRaw()
-    inst.components.eater:SetStrongStomach(true) -- can eat monster meat!
-
-    inst:AddComponent("workmultiplier")
-    inst.components.workmultiplier:AddMultiplier(ACTIONS.HAMMER, -.8, inst)
-
-    inst:AddComponent("combat")
-    inst.components.combat:SetDefaultDamage(TUNING.DSTU.RAIDRAT_DAMAGE)
-    inst.components.combat:SetAttackPeriod(TUNING.DSTU.RAIDRAT_ATTACK_PERIOD)
-    inst.components.combat:SetRange(TUNING.DSTU.RAIDRAT_ATTACK_RANGE)
-    inst.components.combat.hiteffectsymbol = "carrat_body"
-    inst.components.combat:SetPlayerStunlock(PLAYERSTUNLOCK.RARELY)
     inst.components.combat.canattack = false
 
-    inst:AddComponent("health")
     inst.components.health:SetMaxHealth(TUNING.DSTU.RAIDRAT_HEALTH * 1.5)
 
-    inst:AddComponent("lootdropper")
-    inst.components.lootdropper:SetChanceLootTable('packrat')
-    inst.components.lootdropper:AddRandomLoot("monstersmallmeat", .34)
-    inst.components.lootdropper:AddRandomLoot("disease_puff", .34)
-    inst.components.lootdropper:AddRandomLoot("rat_tail", .34)
-    inst.components.lootdropper.numrandomloot = 1
+    inst.components.lootdropper:SetChanceLootTable("um_packrat")
 
-    inst:AddComponent("sleeper")
-    inst.components.sleeper:SetSleepTest(ShouldSleep)
-    inst.components.sleeper:SetWakeTest(ShouldWake)
-    inst.components.sleeper:SetResistance(1)
-
-    inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.trappable = true
-    inst.components.inventoryitem.nobounce = true
-    inst.components.inventoryitem.canbepickedup = false
-    inst.components.inventoryitem.cangoincontainer = false
-    inst.components.inventoryitem:SetSinks(false)
-
-    inst:AddComponent("herdmember")
-
-    inst:AddComponent("knownlocations")
-
-    inst:AddComponent("cookable")
-    inst.components.cookable.product = "cookedmonstersmallmeat"
-    inst.components.cookable:SetOnCookedFn(on_cooked_fn)
-
-    inst:AddComponent("inventory")
     inst.components.inventory.maxslots = 5
-
-    inst:AddComponent("inspectable")
-
-    --[[inst:AddComponent("periodicspawner")
-    inst.components.periodicspawner:SetPrefab("ratdroppings")
-    inst.components.periodicspawner:SetRandomTimes(5, 15)
-    -- inst.components.periodicspawner:SetDensityInRange(20, 2)
-    inst.components.periodicspawner:SetMinimumSpacing(10)
-    inst.components.periodicspawner:Start()
-    -- inst.components.periodicspawner.spawnoffscreen = true]]
-
-    inst:ListenForEvent("onhitother", OnHitOther)
-    inst:ListenForEvent("attacked", OnAttacked)
-    inst:ListenForEvent("death", OnDeath)
-    -- inst:ListenForEvent("trapped", Trapped)
-
-    MakeHauntablePanic(inst)
-
-    -- MakeFeedableSmallLivestock(inst, TUNING.CARRAT.PERISH_TIME, nil, on_dropped)
-
-    MakeSmallBurnableCharacter(inst, "carrat_body")
-    MakeSmallFreezableCharacter(inst, "carrat_body")
-
-    inst.OnSave = onsave_rat
-    inst.OnLoad = onload_rat
-
-    inst.OnEntitySleep = OnEntitySleep
 
     return inst
 end
@@ -1260,14 +1133,14 @@ local function CreateBurrow(data)
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
-    inst.entity:AddAnimState()
+    local anim = inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
     inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
 
-    inst.AnimState:SetBank("uncompromising_rat_burrow")
-    inst.AnimState:SetBuild("uncompromising_rat_burrow")
-    inst.AnimState:PlayAnimation("idle", true)
+    anim:SetBank("uncompromising_rat_burrow")
+    anim:SetBuild("uncompromising_rat_burrow")
+    anim:PlayAnimation("idle", true)
 
     inst:AddTag("ratburrow")
     inst:AddTag("herd")

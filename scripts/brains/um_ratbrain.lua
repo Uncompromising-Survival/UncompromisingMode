@@ -361,7 +361,7 @@ local function ShouldRunAway(target, inst)
     return not leader or leader.components.combat and not leader.components.combat:IsAlly(target)
 end
 
-function Uncompromising_RatBrain:OnStart()
+function UM_RatBrain:OnStart()
     --[[local leader = GetLeader(self.inst)
     local ignorethese = nil
     if leader then
@@ -424,4 +424,4 @@ function Uncompromising_RatBrain:OnStart()
     self.bt = BT(self.inst, root)
 end
 
-return Uncompromising_RatBrain
+return UM_RatBrain

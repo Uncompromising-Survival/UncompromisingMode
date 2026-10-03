@@ -640,4 +640,4 @@ CommonStates.AddAmphibiousCreatureHopStates(states,
     }
 })
 
-return StateGraph("uncompromising_rat", states, events, "emerge_fast", actionhandlers)
+return StateGraph("um_rat", states, events, "emerge_fast", actionhandlers)

@@ -517,5 +517,5 @@ CommonStates.AddSleepStates(states,
 	},
 })
 
-return StateGraph("SGuncompromising_buffrat", states, events, "idle", actionhandlers)
+return StateGraph("SGum_buffrat", states, events, "idle", actionhandlers)
 

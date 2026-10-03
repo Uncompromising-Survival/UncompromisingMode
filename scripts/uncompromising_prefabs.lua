@@ -248,7 +248,7 @@ local prefabs = {
     "ratacombslock",
     "ratacombskey",
     "ratacombslock_rock",
-    "uncompromising_buffrat",
+    "um_buffrat",
     "garbagespring",
     "uncompromising_bundles",
     "ratacombs_cleanair",
