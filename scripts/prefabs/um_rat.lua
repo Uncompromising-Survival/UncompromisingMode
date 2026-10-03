@@ -5,6 +5,7 @@ local assets = {
     Asset("ANIM", "anim/uncompromising_rat_water.zip"),
     Asset("ANIM", "anim/uncompromising_rat_burrow.zip"),
     Asset("ANIM", "anim/uncompromising_junkrat.zip"),
+    Asset("ANIM", "anim/um_proxyitem.zip"),
     Asset("ANIM", "anim/ratdroppings.zip")
 }
 
@@ -68,6 +69,73 @@ local function OnInit(inst)
     inst:ListenForEvent("onremove", OnRemoved)
 end
 
+local function DropEverything(inst)
+    inst.components.inventory:DropEverything()
+    inst:RemoveTag("carrying")
+    if inst._item then
+        if inst._item:IsValid() then inst._item:Remove() end
+        inst._item = nil
+    end
+end
+
+local function OnPicked(inst, picker, loot)
+    if inst.um_proxyparent then DropEverything(inst.um_proxyparent) end
+end
+
+local function DrawIcon(inst, target)
+    local atlas
+    local image = FunctionOrValue(target.drawimageoverride, target, inst, inst) or (#(target.components.inventoryitem.imagename or "") > 0 and target.components.inventoryitem.imagename) or target.prefab or nil
+    if image then
+        atlas = FunctionOrValue(target.drawatlasoverride, target, inst, inst) or (#(target.components.inventoryitem.atlasname or "") > 0 and target.components.inventoryitem.atlasname) or nil
+    end
+    if image and image ~= "" then
+        inst.AnimState:OverrideSymbol("swap_icon", atlas and atlas ~= "" and atlas or GetInventoryItemAtlas(image..".tex"), image..".tex")
+    end
+end
+
+local function proxyitem()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    local anim = inst.entity:AddAnimState()
+    inst.entity:AddNetwork()
+    inst.entity:AddFollower()
+
+    anim:SetBank("um_proxyitem")
+    anim:SetBuild("um_proxyitem")
+    anim:PlayAnimation("idle")
+    anim:Hide("mouseover")
+    anim:SetScale(1.75, 1.75)
+    anim:SetFinalOffset(-1)
+
+    inst:AddTag("um_ratproxyitem")
+    inst:AddTag("NOBLOCK")
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then return inst end
+
+    local pickable = inst:AddComponent("pickable")
+    pickable.quickpick = true
+    pickable.canbepicked = true
+    pickable:SetOnPickedFn(OnPicked)
+
+    inst.DrawIcon = DrawIcon
+
+    inst.persists = false
+
+    return inst
+end
+
+local function DropEverything(inst)
+    inst.components.inventory:DropEverything()
+    inst:RemoveTag("carrying")
+    if inst._item then
+        if inst._item:IsValid() then inst._item:Remove() end
+        inst._item = nil
+    end
+end
+
 local function on_cooked_fn(inst, cooker, chef)
     inst.SoundEmitter:PlaySound(inst.sounds.hit)
 end
@@ -108,47 +176,16 @@ end
 
 local function OnPickup(inst, data)
     if inst._item and inst._item:IsValid() then inst._item:Remove() end
-    if data.item.components.explosive and inst:HasTag("hostile") then data.item.components.explosive:OnBurnt() return end
+    local item = data.item
+    if item.components.explosive and inst:HasTag("hostile") then item.components.explosive:OnBurnt() return end
     inst:AddTag("carrying")
-    data.item:AddTag("raided")
-    local item = string.lower(data.item.prefab) ~= nil and string.lower(data.item.prefab)
-    local skin_build = data.item:GetSkinBuild()
-    inst._item = SpawnPrefab(item)
-
-    if inst._item ~= nil then
-        --if not inst:HasTag("winky_rat") then
-            inst._item.components.inventoryitem.canbepickedup = false
-        --end
+    item:AddTag("raided")
+    inst._item = SpawnPrefab("um_ratproxyitem")
+    if inst._item then
         inst._item.entity:SetParent(inst.entity)
-        inst._item.entity:AddFollower()
         inst._item.Follower:FollowSymbol(inst.GUID, "carrat_body", 0, -60, 0)
-        inst._item.Transform:SetScale(.8, .8, .8)
-        if skin_build ~= nil then
-            -- TODO : Need to match the item skin here
-        end
-        inst._item:AddComponent("pickable")
-        inst._item.components.pickable.quickpick = true
-        inst._item.components.pickable.canbepicked = true
-        inst._item.components.pickable.onpickedfn = function()
-            inst.components.inventory:DropEverything()
-            inst:RemoveTag("carrying")
-            inst._item:Remove()
-            inst._item = nil
-        end
-
-        --[[local function DeleteBackItem(inst)
-            if inst._item then
-                for i = 1, inst.components.inventory.maxslots do
-                    local v = inst.components.inventory:FindItem(function(item) return not item:HasTag("nosteal") end)
-                    if v ~= nil then
-                        inst.components.inventory:DropItem(v, true, true)
-                        v:Remove()
-                    end
-                end
-            end
-        end
-
-        inst:ListenForEvent("onremove", DeleteBackItem, inst._item)]]
+        inst._item:DrawIcon(item)
+        inst._item.um_proxyparent = inst
     end
 end
 
@@ -331,10 +368,14 @@ end
 local function OnStartLeashing(inst)
     inst:AddTag("NOBLOCK")
     local leader = inst.components.follower:GetLeader()
-    if leader and leader:HasTag("ratwhisperer") then
-        inst:AddTag("winky_rat")
-        inst:AddTag("companion")
-        inst:AddTag("notraptrigger")
+    if leader then
+        if leader:HasTag("ratwhisperer") then
+            inst:AddTag("winky_rat")
+            inst:AddTag("companion")
+            inst:AddTag("notraptrigger")
+        else
+            DropEverything(inst)
+        end
     end
     inst:RemoveTag("hostile")
     inst:RemoveTag("canbetrapped")
@@ -1089,32 +1130,19 @@ end
 
 local function MakeScoutBurrow(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-
     for i = 1, 8 do
         inst.x1, inst.z1 = x + math.random(-200, 200), z + math.random(-200, 200)
-
         if IsValidRatBurrowPosition(inst.x1, inst.z1) then
-            local ratcrew = SpawnPrefab("um_rat")
-            ratcrew.Transform:SetPosition(x, 0, z)
-            ratcrew:AddTag("ratscout")
-
-            local ratcrew2 = SpawnPrefab("um_rat")
-            ratcrew2.Transform:SetPosition(x, 0, z)
-            ratcrew2:AddTag("ratscout")
-
-            local ratcrew3 = SpawnPrefab("um_rat")
-            ratcrew3.Transform:SetPosition(x, 0, z)
-            ratcrew3:AddTag("ratscout")
-
             local burrow = SpawnPrefab("um_scoutburrow")
             burrow.Transform:SetPosition(inst.x1, 0, inst.z1)
-            burrow.components.herd:AddMember(ratcrew)
-            burrow.components.herd:AddMember(ratcrew2)
-            burrow.components.herd:AddMember(ratcrew3)
-
+            for i = 1, 3 do
+                local ratcrew = SpawnPrefab("um_rat")
+                ratcrew.Transform:SetPosition(x, 0, z)
+                ratcrew:AddTag("ratscout")
+                burrow.components.herd:AddMember(ratcrew)
+            end
             break
         end
-
         if i >= 8 then
             UMCommonFns.RestartTimer(inst, {name = "scoutingparty", time = 1920 + math.random(480), keepexisting = true})
         end
@@ -2154,4 +2182,5 @@ return Prefab("um_rat", fn, assets, prefabs),
     Prefab("um_ratmask_icon", ratmask_iconfn, iconassets),
     Prefab("um_ratmask_stinklines", ratmask_stinkfn),
     Prefab("hat_ratmask", ratfn),
-    Prefab("um_ratring_fx", ratringfn)
+    Prefab("um_ratring_fx", ratringfn),
+    Prefab("um_ratproxyitem", proxyitem, assets)

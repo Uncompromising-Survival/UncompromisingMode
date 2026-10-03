@@ -13,28 +13,18 @@ local function TryAddFollower(leader, follower)
 		follower:PiedPiperBuff(buffduration)
         --[[leader.components.leader:AddFollower(follower)
         follower.components.follower:AddLoyaltyTime(60 + math.random())]]
-        if follower.components.combat ~= nil and follower.components.combat:TargetIs(leader) then
-            follower.components.combat:SetTarget(nil)
-        end
-        if not leader:HasTag("ratwhisperer") and follower.components.inventory and follower:HasTag("carrying") and follower._item then
-            follower.components.inventory:DropEverything()
-            follower:RemoveTag("carrying")
-            follower._item:Remove()
-            follower._item = nil
-        end
     end
 end
 
 local function HearHorn(inst, musician, instrument)
-    if musician.components.leader ~= nil and
-        inst.prefab == "um_rat" then
-        if inst.components.combat ~= nil and inst.components.combat:HasTarget() then
-            inst.components.combat:GiveUp()
+    if musician.components.leader and inst.prefab == "um_rat" then
+        if inst.components.combat and inst.components.combat:HasTarget() then
+            inst.components.combat:SetTarget(nil)
         end
         TryAddFollower(musician, inst)
     end
 
-	if inst.components.farmplanttendable ~= nil then
+	if inst.components.farmplanttendable then
 		inst.components.farmplanttendable:TendTo(musician)
     end
 end
@@ -43,22 +33,19 @@ local function fn()
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
-    inst.entity:AddAnimState()
+    local anim = inst.entity:AddAnimState()
     inst.entity:AddNetwork()
 
     MakeInventoryPhysics(inst)
+    
+    anim:SetBank("pied_piper_flute")
+    anim:SetBuild("pied_piper_flute")
+    anim:PlayAnimation("idle")
 
     inst:AddTag("pied_piper_flute")
-
-    --tool (from tool component) added to pristine state for optimization
     inst:AddTag("tool")
-    inst:AddTag("donotautopick")
-    
-    inst.AnimState:SetBank("pied_piper_flute")
-    inst.AnimState:SetBuild("pied_piper_flute")
-    inst.AnimState:PlayAnimation("idle")
 
-    MakeInventoryFloatable(inst, "med", 0.25)
+    MakeInventoryFloatable(inst, "med", .25)
 
     inst.entity:SetPristine()
 
@@ -67,18 +54,19 @@ local function fn()
     end
 
     inst:AddComponent("inspectable")
-    inst:AddComponent("instrument")
-    inst.components.instrument.range = TUNING.HORN_RANGE
-    inst.components.instrument:SetOnHeardFn(HearHorn)
 
-    inst:AddComponent("tool")
-    inst.components.tool:SetAction(ACTIONS.PLAY)
+    local instrument = inst:AddComponent("instrument")
+    instrument.range = TUNING.HORN_RANGE
+    instrument:SetOnHeardFn(HearHorn)
 
-    inst:AddComponent("finiteuses")
-    inst.components.finiteuses:SetMaxUses(3)
-    inst.components.finiteuses:SetUses(3)
-    inst.components.finiteuses:SetOnFinished(inst.Remove)
-    inst.components.finiteuses:SetConsumption(ACTIONS.PLAY, 1)
+    local tool = inst:AddComponent("tool")
+    tool:SetAction(ACTIONS.PLAY)
+
+    local finiteuses = inst:AddComponent("finiteuses")
+    finiteuses:SetMaxUses(3)
+    finiteuses:SetUses(3)
+    finiteuses:SetOnFinished(inst.Remove)
+    finiteuses:SetConsumption(ACTIONS.PLAY, 1)
 
     inst:AddComponent("inventoryitem")
 

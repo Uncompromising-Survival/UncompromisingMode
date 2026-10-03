@@ -35,10 +35,7 @@ local function NormalRetarget(inst)
 end
 
 local function keeptargetfn(inst, target)
-return target
-        and target.components.combat
-        and target.components.health
-        and not target.components.health:IsDead()
+    return target and target.components.combat and target.components.health and not target.components.health:IsDead()
 end
 
 local function OnAttacked(inst, data)
@@ -102,42 +99,39 @@ local function fn(Sim)
 
     inst:AddComponent("inspectable")
 
-    -- locomotor must be constructed before the stategraph!
-    inst:AddComponent("locomotor")
-    inst.components.locomotor.walkspeed = 3
-    inst.components.locomotor.runspeed = 6
+    local locomotor = inst:AddComponent("locomotor")
+    locomotor.walkspeed = 3
+    locomotor.runspeed = 6
 
     inst:SetStateGraph("SGum_buffrat")
 
-    inst:AddComponent("lootdropper")
-    inst.components.lootdropper:SetChanceLootTable('um_buffrat')
+    local lootdropper = inst:AddComponent("lootdropper")
+    lootdropper:SetChanceLootTable('um_buffrat')
 
-    ------------------
-    inst:AddComponent("health")
-    inst.components.health:SetMaxHealth(2000)
-    inst.components.health:SetAbsorptionAmount(0)
-    ------------------
+    local health = inst:AddComponent("health")
+    health:SetMaxHealth(2000)
+
     inst:SetBrain(brain)
 
-    inst:AddComponent("combat")
-    inst.components.combat.hiteffectsymbol = "torso"
-    inst.components.combat:SetKeepTargetFunction(keeptargetfn)
-    inst.components.combat:SetDefaultDamage(34)
-    inst.components.combat:SetAttackPeriod(3)
-    inst.components.combat:SetRetargetFunction(1, NormalRetarget)
-    inst.components.combat:SetHurtSound("dontstarve/sanity/creature1/death")
-    inst.components.combat:SetRange(4, 4)
+    local combat = inst:AddComponent("combat")
+    combat.hiteffectsymbol = "torso"
+    combat:SetKeepTargetFunction(keeptargetfn)
+    combat:SetDefaultDamage(34)
+    combat:SetAttackPeriod(3)
+    combat:SetRetargetFunction(1, NormalRetarget)
+    combat:SetHurtSound("dontstarve/sanity/creature1/death")
+    combat:SetRange(4, 4)
     inst:ListenForEvent("attacked", OnAttacked)
-    ------------------
-    inst:AddComponent("sleeper")
-    inst.components.sleeper:SetSleepTest(ShouldSleep)
-    inst.components.sleeper:SetWakeTest(ShouldWake)
-    inst.components.sleeper:SetResistance(5)   
-    ------------------
+
+    local sleeper = inst:AddComponent("sleeper")
+    sleeper:SetSleepTest(ShouldSleep)
+    sleeper:SetWakeTest(ShouldWake)
+    sleeper:SetResistance(5)   
+
     inst:AddComponent("knownlocations")
-    ------------------
+
     --inst.Transform:SetScale(0.75,0.75,0.75)
-    ------------------
+
     inst.punchcount = 0
     inst.damage = 0
     inst.mode = "offense"
