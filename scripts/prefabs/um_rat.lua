@@ -92,18 +92,14 @@ local function OnHitOther(inst, data)
 end
 
 local function OnAttacked(inst, data)
-    if not inst:HasTag("packrat") then inst.components.combat:SetTarget(data.attacker) end
+    local attacker = data.attacker
+    if not inst:HasTag("packrat") then inst.components.combat:SetTarget(attacker) end
 
-    if inst:HasTag("winky_rat") and data.attacker ~= nil and data.attacker:HasTag("ratwhisperer") then -- meanie :(
-        inst:RemoveTag("winky_rat")
-        inst:RemoveTag("companion")
-        inst:RemoveTag("notraptrigger")
-        inst:AddTag("canbetrapped")
-        inst:AddTag("hostile")
-        inst.components.follower.leader = nil
+    if inst:HasTag("winky_rat") and attacker and attacker:HasTag("ratwhisperer") and inst.components.follower.leader == attacker then -- meanie :(
+        inst.components.follower:SetLeader(nil)
     end
 
-    inst.components.combat:ShareTarget(data.attacker, 30, function(dude) return dude:HasTag("raidrat") and not dude.components.health:IsDead() and not dude:HasTag("packrat") end, 10)
+    inst.components.combat:ShareTarget(attacker, 30, function(dude) return dude:HasTag("raidrat") and not dude.components.health:IsDead() and not dude:HasTag("packrat") end, 10)
 end
 
 local function OnDeath(inst)
@@ -163,8 +159,6 @@ local function ShouldWake(inst) return true end
 local function onsave_rat(inst, data)
     if inst:HasTag("carrying") then data.carrying = true end
     if inst:HasTag("ratscout") then data.scouting = true end
-    if inst:HasTag("winky_rat") then data.iswinkyfollower = true end
-    if not inst:HasTag("hostile") then data.isfollower = true end
     --or inst.components.follower and inst.components.follower.leader and inst.components.follower.leader.prefab == "winky"
 end
 
@@ -172,15 +166,6 @@ local function onload_rat(inst, data)
     if data ~= nil then
         if data.carrying then inst.components.inventory:DropEverything() end
         if data.scouting then inst:AddTag("ratscout") end
-        if data.isfollower then
-            inst:AddTag("notraptrigger")
-            inst:RemoveTag("canbetrapped")
-            inst:RemoveTag("hostile")
-        end
-        if data.iswinkyfollower then
-            inst:AddTag("companion")
-            inst:AddTag("winky_rat")
-        end
     end
 end
 
@@ -291,12 +276,11 @@ local function OnGetItemFromPlayer_Winky(inst, giver, item)
         local playedfriendsfx = false
         if inst.components.combat.target == giver then
             inst.components.combat:SetTarget(nil)
-        elseif giver.components.leader ~= nil and inst.components.follower ~= nil then
+        elseif giver.components.leader and inst.components.follower then
             if giver.components.minigame_participator == nil then
                 giver:PushEvent("makefriend")
                 giver.components.leader:AddFollower(inst)
                 playedfriendsfx = true
-                inst:RemoveTag("hostile")
             end
         end
 
@@ -344,14 +328,35 @@ local function OnRefuseItem_Winky(inst, item)
     if inst.components.sleeper:IsAsleep() then inst.components.sleeper:WakeUp() end
 end
 
-local function CalcSanityAura(inst, observer)
-    if observer:HasTag("ratwhisperer") or (inst.components.follower.leader ~= nil and inst.components.follower.leader:HasTag("ratwhisperer")) then return 0 end
+local function OnStartLeashing(inst)
+    inst:AddTag("NOBLOCK")
+    local leader = inst.components.follower:GetLeader()
+    if leader and leader:HasTag("ratwhisperer") then
+        inst:AddTag("winky_rat")
+        inst:AddTag("companion")
+        inst:AddTag("notraptrigger")
+    end
+    inst:RemoveTag("hostile")
+    inst:RemoveTag("canbetrapped")
+end
 
+local function OnStopLeashing(inst)
+    inst:RemoveTag("NOBLOCK")
+    inst:RemoveTag("winky_rat")
+    inst:RemoveTag("companion")
+    inst:RemoveTag("notraptrigger")
+    inst:AddTag("hostile")
+    inst:AddTag("canbetrapped")
+end
+
+local function CalcSanityAura(inst, observer)
+    local leader = inst.components.follower:GetLeader()
+    if observer:HasTag("ratwhisperer") or leader and leader:HasTag("ratwhisperer") then return 0 end
     return inst.components.sanityaura.aura
 end
 
 local function onnear(inst, target)
-    if inst:HasTag("winky_rat") and inst.components.follower.leader == nil and target:HasTag("ratwhisperer") and target.components.leader ~= nil then
+    if inst:HasTag("winky_rat") and not inst.components.follower.leader and target:HasTag("ratwhisperer") and target.components.leader then
         target.components.leader:AddFollower(inst)
         inst.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/reaction")
     end
@@ -533,7 +538,7 @@ local function CreateRat(data)
 end
 
 local function fn()
-    local inst = CreateRat({tags = {"hostile", "NOBLOCK"}}) -- mainly for winky, too lazy to make it for only allied rats.
+    local inst = CreateRat({tags = {"hostile"}})
 
     if not TheWorld.ismastersim then return inst end
 
@@ -552,6 +557,8 @@ local function fn()
     trader.onrefuse = OnRefuseItem_Winky
     trader.deleteitemonaccept = false
 
+    inst:ListenForEvent("startleashing", OnStartLeashing)
+    inst:ListenForEvent("stopleashing", OnStopLeashing)
     inst:ListenForEvent("onpickupitem", OnPickup)
 
     inst.PiedPiperBuff = PiedPiperBuff
@@ -1251,12 +1258,6 @@ local function WinkyInteract(inst, doer)
                 newrat.Transform:SetPosition(inst.Transform:GetWorldPosition())
                 doer.components.leader:AddFollower(newrat)
 
-                newrat:AddTag("notraptrigger")
-                newrat:RemoveTag("canbetrapped")
-                newrat:AddTag("companion")
-                newrat:AddTag("winky_rat")
-                newrat:RemoveTag("hostile")
-
                 inst.AnimState:PlayAnimation("dig")
                 inst.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/submerge")
                 --[[if inst.ratcount == 3 then
@@ -1282,12 +1283,6 @@ local function WinkyHomeInteract(inst, doer)
 
             newrat.Transform:SetPosition(inst.Transform:GetWorldPosition())
             doer.components.leader:AddFollower(newrat)
-
-            newrat:AddTag("notraptrigger")
-            newrat:RemoveTag("canbetrapped")
-            newrat:AddTag("companion")
-            newrat:AddTag("winky_rat")
-            newrat:RemoveTag("hostile")
 
             inst.AnimState:PlayAnimation("dig")
             inst.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/submerge")
