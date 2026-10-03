@@ -1135,7 +1135,7 @@ local function CreateBurrow(data)
     inst.entity:AddTransform()
     local anim = inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
-    inst.entity:AddMiniMapEntity()
+    local minimap = inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
 
     anim:SetBank("uncompromising_rat_burrow")
@@ -1149,7 +1149,7 @@ local function CreateBurrow(data)
     local tags = data.tags
     if tags then for _, tag in pairs(tags) do inst:AddTag(tag) end end
 
-    inst.MiniMapEntity:SetIcon("um_ratburrow.tex")
+    minimap:SetIcon("um_ratburrow.tex")
 
     inst.entity:SetPristine()
 
