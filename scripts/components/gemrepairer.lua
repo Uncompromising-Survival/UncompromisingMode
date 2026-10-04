@@ -30,14 +30,16 @@ function GemRepairer:OnUsed(target, doer)
     end
 
     local finiteuses = target.components.finiteuses
-    if finiteuses and finiteuses:GetPercent() < 1 then
-        finiteuses:SetPercent(math.clamp(finiteuses:GetPercent() + repair_value, 0, 1))
+    local finiteuses_pct = finiteuses and finiteuses:GetPercent()
+    if finiteuses_pct and finiteuses_pct < 1 then
+        finiteuses:SetPercent(math.clamp(finiteuses_pct + repair_value, 0, 1))
         success = true
     end
 
     local armor = target.components.armor
-    if armor and not armor.indestructible and armor:GetPercent() < 1 then
-        armor:SetPercent(armor:GetPercent() + repair_value)
+    local armor_pct = armor and not armor:IsIndestructible() and armor:GetPercent()
+    if armor_pct and armor_pct < 1 then
+        armor:SetPercent(math.clamp(armor_pct + repair_value, 0, 1))
         success = true
     end
 
@@ -45,9 +47,7 @@ function GemRepairer:OnUsed(target, doer)
         if repaircount >= #TUNING.DSTU.GEM_REPAIRER_REPAIR_VALUE and doer.components.talker then
             doer.components.talker:Say(GetString(doer, "ANNOUNCE_GEM_REPAIR_MAXED"))
         end
-
         target:PushEvent("repair")
-
         target.um_repaircount = repaircount + 1
     end
 
