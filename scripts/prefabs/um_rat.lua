@@ -87,7 +87,7 @@ local function GetIconFromTarget(inst, target)
 end
 
 local function UpdateIcon(inst, target)
-    if not target:IsValid() then inst.updateicontask:Cancel() inst.updateicontask = nil return end
+    if not target:IsValid() then if inst.updateicontask then inst.updateicontask:Cancel() inst.updateicontask = nil end return end
     local image, atlas = inst:GetIconFromTarget(target)
     local icondata = inst.icondata
     if image and (not icondata or icondata.image ~= image or icondata.atlas ~= atlas) then
