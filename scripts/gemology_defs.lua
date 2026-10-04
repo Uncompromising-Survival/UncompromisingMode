@@ -417,7 +417,7 @@ local function ElectricAttack(inst, attacker, target, tier)
 end
 
 local function WetCheck(target)
-    return target and target:IsValid() and target.GetWetMultiplier ~= nil and target:GetWetMultiplier() > 0
+    return target and target:IsValid() and target.GetWetMultiplier and target:GetWetMultiplier() > 0
 end
 
 AddUMGemDef("yellowgem2", {
@@ -666,7 +666,7 @@ AddUMGemDef("purplegem2", {
 local function FindUniqueBaseStructures(inst, tier)
     if not inst:IsAsleep() then
         local x, y, z = inst.Transform:GetWorldPosition()
-        local ents = TheSim:FindEntities(x, y, z, TUNING.DSTU.ORANGEGEM1_STRUCTURE_RANGE, { "structure" })
+        local ents = TheSim:FindEntities(x, y, z, TUNING.DSTU.ORANGEGEM1_STRUCTURE_RANGE, {"structure"})
         local uniquestructures = {}
         for i, v in ipairs(ents) do
             if not table.contains(uniquestructures, v.prefab) then
@@ -683,18 +683,16 @@ local function BaseSitterAttack(item, attacker, target, tier)
     if tier ~= 1 then
         local fx = SpawnPrefab("sand_puff")
         fx.Transform:SetPosition(target.Transform:GetWorldPosition())
-        fx.Transform:SetScale(0.05 + 2 * item.um_structurebonus, 0.05 + 2 * item.um_structurebonus, 0.05 + 2 * item.um_structurebonus)
+        local fxscale = .05 + 2 * (item.um_structurebonus or 0)
+        fx.Transform:SetScale(fxscale, fxscale, fxscale)
     end
 end
 
 AddUMGemDef("orangegem1", {
     color = RGB(249, 203, 156),
     fns = {
-        onapply = function(item, tier)
-            item.um_structurebonus = 0
-        end,
         onadjustdamage = function(item, damage, attacker, target, tier, calcnum)
-            if tier ~= 1 and calcnum == 1 then return damage + damage * item.um_structurebonus end
+            if tier ~= 1 and calcnum == 1 then return damage + damage * (item.um_structurebonus or 0) end
             return damage
         end,
         onattack = BaseSitterAttack,
