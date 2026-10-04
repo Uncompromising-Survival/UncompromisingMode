@@ -69,27 +69,43 @@ local function OnInit(inst)
     inst:ListenForEvent("onremove", OnRemoved)
 end
 
-local function DropEverything(inst)
-    inst.components.inventory:DropEverything()
-    inst:RemoveTag("carrying")
-    if inst._item then
-        if inst._item:IsValid() then inst._item:Remove() end
-        inst._item = nil
+local function OnPicked(inst, picker, loot)
+    local parent = inst.um_proxyparent
+    local inventory = parent and parent.components.inventory
+    if inventory then inventory:DropEverything() return end
+    inst:Remove()
+end
+
+local function GetIconFromTarget(inst, target)
+    local inventoryitem = target.components.inventoryitem
+    local atlas
+    local image = FunctionOrValue(target.drawimageoverride, target, inst, inst) or (#(inventoryitem.imagename or "") > 0 and inventoryitem.imagename) or target.prefab or nil
+    if image then
+        atlas = FunctionOrValue(target.drawatlasoverride, target, inst, inst) or (#(inventoryitem.atlasname or "") > 0 and inventoryitem.atlasname) or nil
+    end
+    return image and image ~= "" and image, atlas and atlas ~= "" and atlas
+end
+
+local function UpdateIcon(inst, target)
+    if not target:IsValid() then inst.updateicontask:Cancel() inst.updateicontask = nil return end
+    local image, atlas = inst:GetIconFromTarget(target)
+    local icondata = inst.icondata
+    if image and (not icondata or icondata.image ~= image or icondata.atlas ~= atlas) then
+        inst:DrawIcon_Internal(image, atlas)
     end
 end
 
-local function OnPicked(inst, picker, loot)
-    if inst.um_proxyparent then DropEverything(inst.um_proxyparent) end
+local function DrawIcon_Internal(inst, image, atlas)
+    inst.AnimState:OverrideSymbol("swap_icon", atlas or GetInventoryItemAtlas(image..".tex"), image..".tex")
+    inst.icondata = {image = image, atlas = atlas}
 end
 
 local function DrawIcon(inst, target)
-    local atlas
-    local image = FunctionOrValue(target.drawimageoverride, target, inst, inst) or (#(target.components.inventoryitem.imagename or "") > 0 and target.components.inventoryitem.imagename) or target.prefab or nil
+    local image, atlas = inst:GetIconFromTarget(target)
     if image then
-        atlas = FunctionOrValue(target.drawatlasoverride, target, inst, inst) or (#(target.components.inventoryitem.atlasname or "") > 0 and target.components.inventoryitem.atlasname) or nil
-    end
-    if image and image ~= "" then
-        inst.AnimState:OverrideSymbol("swap_icon", atlas and atlas ~= "" and atlas or GetInventoryItemAtlas(image..".tex"), image..".tex")
+        inst:DrawIcon_Internal(image, atlas)
+        if inst.updateicontask then inst.updateicontask:Cancel() end
+        inst.updateicontask = inst:DoPeriodicTask(0, inst.UpdateIcon, nil, target)
     end
 end
 
@@ -120,20 +136,14 @@ local function proxyitem()
     pickable.canbepicked = true
     pickable:SetOnPickedFn(OnPicked)
 
+    inst.GetIconFromTarget = GetIconFromTarget
+    inst.UpdateIcon = UpdateIcon
+    inst.DrawIcon_Internal = DrawIcon_Internal
     inst.DrawIcon = DrawIcon
 
     inst.persists = false
 
     return inst
-end
-
-local function DropEverything(inst)
-    inst.components.inventory:DropEverything()
-    inst:RemoveTag("carrying")
-    if inst._item then
-        if inst._item:IsValid() then inst._item:Remove() end
-        inst._item = nil
-    end
 end
 
 local function on_cooked_fn(inst, cooker, chef)
@@ -170,28 +180,49 @@ local function OnAttacked(inst, data)
     inst.components.combat:ShareTarget(attacker, 30, function(dude) return dude:HasTag("raidrat") and not dude.components.health:IsDead() and not dude:HasTag("packrat") end, 10)
 end
 
-local function OnDeath(inst)
+local function CreateProxyItem(inst, item)
     if inst._item and inst._item:IsValid() then inst._item:Remove() end
-end
-
-local function OnPickup(inst, data)
-    if inst._item and inst._item:IsValid() then inst._item:Remove() end
-    local item = data.item
-    if item.components.explosive and inst:HasTag("hostile") then item.components.explosive:OnBurnt() return end
-    inst:AddTag("carrying")
-    item:AddTag("raided")
     inst._item = SpawnPrefab("um_ratproxyitem")
     if inst._item then
         inst._item.entity:SetParent(inst.entity)
         inst._item.Follower:FollowSymbol(inst.GUID, "carrat_body", 0, -60, 0)
-        inst._item:DrawIcon(item)
         inst._item.um_proxyparent = inst
+        inst._item:DrawIcon(item)
     end
 end
 
-local function ShouldSleep(inst) return false end
+local function OnGetItem(inst, data)
+    local item = data and data.item
+    if item then
+        if item.components.explosive and inst:HasTag("hostile") then item.components.explosive:OnBurnt() return end
+        item:AddTag("raided")
+        inst:AddTag("carrying")
+        inst:CreateProxyItem(item)
+    end
+end
 
-local function ShouldWake(inst) return true end
+local function OnLoseItem(inst, data)
+    local item = data and (data.prev_item or data.item)
+    if item and item:IsValid() then item:RemoveTag("raided") end
+    local itemslots = inst.components.inventory.itemslots
+    if next(itemslots) then
+        for _, item in pairs(itemslots) do
+            inst:CreateProxyItem(item)
+            break
+        end
+    else
+        if inst._item and inst._item:IsValid() then inst._item:Remove() end
+        inst:RemoveTag("carrying")
+    end
+end
+
+local function ShouldSleep(inst)
+    return false
+end
+
+local function ShouldWake(inst)
+    return true
+end
 
 local function onsave_rat(inst, data)
     if inst:HasTag("carrying") then data.carrying = true end
@@ -201,7 +232,7 @@ end
 
 local function onload_rat(inst, data)
     if data ~= nil then
-        if data.carrying then inst.components.inventory:DropEverything() end
+        if data.carrying then inst:AddTag("carrying") end
         if data.scouting then inst:AddTag("ratscout") end
     end
 end
@@ -213,7 +244,7 @@ local function DoRipple(inst, map)
     end
 end
 
-local function Trapped(inst)
+--[[local function Trapped(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
 
     local ents = TheSim:FindEntities(x, y, z, 2, { "trap" })
@@ -223,7 +254,7 @@ local function Trapped(inst)
             v:PushEvent("harvesttrap") -- .components.trap:Disarm()
         end)
     end
-end
+end]]
 
 local RETARGET_CANT_TAGS = { "wall", "raidrat", "ratfriend" }
 local function rattargetfn(inst)
@@ -239,9 +270,9 @@ local function KeepTargetFn(inst, target)
     return not inst:HasTag("carrying") and validitem ~= nil and inst.components.combat:CanTarget(target) and inst:IsNear(target, TUNING.HOUND_TARGET_DIST)
 end
 
-local function StealItem(inst, victim, stolenitem)
+--[[local function StealItem(inst, victim, stolenitem)
     inst:PushEvent("onpickupitem", { item = stolenitem })
-end
+end]]
 
 local function CancelBuff(inst)
     inst.components.locomotor.walkspeed = TUNING.DSTU.RAIDRAT_WALKSPEED
@@ -560,7 +591,6 @@ local function CreateRat(data)
 
     inst:ListenForEvent("onhitother", OnHitOther)
     inst:ListenForEvent("attacked", OnAttacked)
-    inst:ListenForEvent("death", OnDeath)
     --inst:ListenForEvent("trapped", Trapped)
 
     MakeHauntablePanic(inst)
@@ -600,9 +630,11 @@ local function fn()
 
     inst:ListenForEvent("startleashing", OnStartLeashing)
     inst:ListenForEvent("stopleashing", OnStopLeashing)
-    inst:ListenForEvent("onpickupitem", OnPickup)
+    inst:ListenForEvent("itemget", OnGetItem)
+    inst:ListenForEvent("itemlose", OnLoseItem)
 
     inst.PiedPiperBuff = PiedPiperBuff
+    inst.CreateProxyItem = CreateProxyItem
 
     return inst
 end
@@ -809,7 +841,6 @@ local function junkfn()
 
     inst:ListenForEvent("onhitother", OnHitOther)
     inst:ListenForEvent("attacked", OnJunkAttacked)
-    inst:ListenForEvent("death", OnDeath)
     MakeHauntablePanic(inst)
 
     -- MakeFeedableSmallLivestock(inst, TUNING.CARRAT.PERISH_TIME, nil, on_dropped)
