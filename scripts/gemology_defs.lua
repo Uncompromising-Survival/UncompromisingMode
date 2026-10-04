@@ -666,7 +666,7 @@ AddUMGemDef("purplegem2", {
 local function FindUniqueBaseStructures(inst, tier)
     if not inst:IsAsleep() then
         local x, y, z = inst.Transform:GetWorldPosition()
-        local ents = TheSim:FindEntities(x, y, z, TUNING.DSTU.ORANGEGEM1_STRUCTURE_RANGE, { "structure" })
+        local ents = TheSim:FindEntities(x, y, z, TUNING.DSTU.ORANGEGEM1_STRUCTURE_RANGE, {"structure"})
         local uniquestructures = {}
         for i, v in ipairs(ents) do
             if not table.contains(uniquestructures, v.prefab) then
