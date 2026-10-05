@@ -387,7 +387,7 @@ local function ShockChain(inst, attacker, target, tier)
                 if _attacker:IsValid() and _inst:IsValid() and _inst.components.health
                     and not _inst.components.health:IsDead() and _inst.components.combat and not _inst:HasTag("arcgrounded") then
                     _inst:AddTag("arcgrounded")
-                    _inst:DoTaskInTime(TUNING.DSTU.YELLOWGEM2_SHOCK_COOLDOWN, function(__inst) __inst:RemoveTag("arcgrounded") end)
+                    _inst:DoTaskInTime(TUNING.DSTU.YELLOWGEM2_SHOCK_COOLDOWN, function(_inst) _inst:RemoveTag("arcgrounded") end)
 
                     SpawnElectricHitSparks(_attacker, _inst, true)
 
