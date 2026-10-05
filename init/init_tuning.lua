@@ -20,7 +20,7 @@ local ia_check = GLOBAL.KnownModIndex:IsModEnabled("workshop-1467214795")
 -- IsModEnabled is host only. This will work on clients connected to another player or a dedicated server
 local ia_check_client = GLOBAL.AllRecipes["obsidianmachete"] and GLOBAL.AllRecipes["boat_encrusted"]
 local tfw_check = GLOBAL.KnownModIndex:IsModEnabled("workshop-1171138081")
-local bcr_check = GLOBAL.KnownModIndex:IsModEnabled("workshop-3667524475")
+local bcr_check = GLOBAL.rawget(GLOBAL, "BETTERCLOCKWORK_FNS") ~= nil
 
 --day/month > month/day
 local function Date(day, month)
