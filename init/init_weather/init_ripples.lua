@@ -347,7 +347,7 @@ end
 local _LandFlyingCreature = LandFlyingCreature
 function LandFlyingCreature(inst, ...)
     _LandFlyingCreature(inst, ...)
-    if inst.components.umripples and RobustFloodCheck(inst) and not inst.components.umripples.showing_effect then
+    if inst.components.umripples and RobustFloodCheck(inst) then
         inst.components.umripples:OnLandedServer(true)
     end
 end
