@@ -1,14 +1,13 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-local SEE_FOOD_DIST = 15
-local NO_TAGS = {"FX", "NOCLICK", "DECOR","INLIMBO"}
-local FINDFOOD_CANT_TAGS = { "outofreach" }
-
 local MIN_FOLLOW_LEADER = 5
 local MAX_FOLLOW_LEADER = 12
 local TARGET_FOLLOW_LEADER = (MAX_FOLLOW_LEADER + MIN_FOLLOW_LEADER) / 2
 
+--[[local SEE_FOOD_DIST = 15
+local NO_TAGS = {"FX", "NOCLICK", "DECOR","INLIMBO"}
+local FINDFOOD_CANT_TAGS = { "outofreach" }
 
 local function TargetNotClaimed(inst, target)
 	local herd = inst.components.herdmember.herd
@@ -26,7 +25,6 @@ local function TargetNotClaimed(inst, target)
 end
 
 local function EatFoodAction_UM(inst)	--Look for food to eat
-
 	local target = nil
 	local action = nil
 
@@ -61,10 +59,10 @@ local function EatFoodAction_UM(inst)	--Look for food to eat
 		local action = BufferedAction(inst,target,ACTIONS.PICKUP)
 		return action
 	end
-end
+end]]
 
 local function GetLeader(inst)
-    return inst.components.follower ~= nil and inst.components.follower.leader or nil
+    return inst.components.follower and inst.components.follower:GetLeader()
 end
 
 local function GosFindFood(self)

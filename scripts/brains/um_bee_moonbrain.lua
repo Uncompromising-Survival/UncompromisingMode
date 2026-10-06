@@ -18,10 +18,9 @@ local MAX_FOLLOW_LEADER = 6
 local TARGET_FOLLOW_LEADER = (MAX_FOLLOW_LEADER + MIN_FOLLOW_LEADER) / 2
 
 local function GetLeader(inst)
-	return inst.components.follower ~= nil and inst.components.follower.leader or nil
+	return inst.components.follower and inst.components.follower:GetLeader()
 end
 	
-
 local Um_Bee_MoonBrain = Class(Brain, function(self, inst)
     Brain._ctor(self, inst)
 end)
@@ -29,14 +28,13 @@ end)
 function Um_Bee_MoonBrain:OnStart()
     local root = PriorityNode(
     {
-		BrainCommon.PanicTrigger(self.inst),
-    BrainCommon.ElectricFencePanicTrigger(self.inst),
-
-		ChaseAndAttack(self.inst, MAX_CHASE_TIME),
-		WhileNode(function() return GetLeader(self.inst) end, "HasLeader",
+        BrainCommon.PanicTrigger(self.inst),
+        BrainCommon.ElectricFencePanicTrigger(self.inst),
+        ChaseAndAttack(self.inst, MAX_CHASE_TIME),
+        WhileNode(function() return GetLeader(self.inst) end, "HasLeader",
             Follow(self.inst, GetLeader, MIN_FOLLOW_LEADER, TARGET_FOLLOW_LEADER, MAX_FOLLOW_LEADER)),
-		Wander(self.inst, function() return self.inst.components.knownlocations:GetLocation("home") end, MAX_WANDER_DIST),
-		StandStill(self.inst, function() return self.inst.sg:HasStateTag("idle") end, nil),
+        Wander(self.inst, function() return self.inst.components.knownlocations:GetLocation("home") end, MAX_WANDER_DIST),
+        StandStill(self.inst, function() return self.inst.sg:HasStateTag("idle") end, nil),
     }, .25)
 
     self.bt = BT(self.inst, root)

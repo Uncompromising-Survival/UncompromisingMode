@@ -66,7 +66,7 @@ local function BountyOnYourHead(inst, range, BountyFn)
             local leader = nil
 
             if target.components.follower then
-                leader = target.components.follower.leader
+                leader = target.components.follower:GetLeader()
             end
 
             if leader and leader:HasAnyTag("player", "bell") then
@@ -78,7 +78,7 @@ local function BountyOnYourHead(inst, range, BountyFn)
 
             local my_target_is_targeting_followers = false
             if what_my_target_is_targeting and what_my_target_is_targeting.components.follower then
-                local him = what_my_target_is_targeting.components.follower.leader
+                local him = what_my_target_is_targeting.components.follower:GetLeader()
                 if him and him:HasAnyTag("player", "bell") then
                     my_target_is_targeting_followers = true
                 end

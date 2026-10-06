@@ -18,11 +18,11 @@ local PLATFORM_WANDER_DIST = 4
 local WANDER_DIST = 12
 
 local function GetOwner(inst)
-    return inst.components.follower.leader
+    return inst.components.follower and inst.components.follower:GetLeader()
 end
 
 local function KeepFaceOwnerFn(inst, target)
-    return inst.components.follower.leader == target
+    return GetOwner(inst) == target
 end
 
 local function IsTryingToPerformAction(inst, performer, action)
@@ -46,8 +46,8 @@ local function TryingToInteractWithWoby(inst, performer)
 end
 
 local function GetRiderFn(inst)
-    local leader = inst.components.follower ~= nil and inst.components.follower.leader
-    if leader ~= nil and WobyBrainCommon.IsTryingToPerformAction(inst, leader, ACTIONS.MOUNT) then
+    local leader = GetOwner(inst)
+    if leader and WobyBrainCommon.IsTryingToPerformAction(inst, leader, ACTIONS.MOUNT) then
         return leader
     end
 
@@ -59,8 +59,8 @@ local function KeepRiderFn(inst, target)
 end
 
 local function GetWalterInteractionFn(inst)
-   local leader = inst.components.follower ~= nil and inst.components.follower.leader
-    if leader ~= nil and TryingToInteractWithWoby(inst, leader) then
+    local leader = GetOwner(inst)
+    if leader and TryingToInteractWithWoby(inst, leader) then
         return leader
     end
 
@@ -70,7 +70,7 @@ end
 local function GetGenericInteractionFn(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
     local players = FindPlayersInRange(x, y, z, SIT_DOWN_DISTANCE, true)
-    for k,player in pairs(players) do
+    for k, player in pairs(players) do
         if WobyBrainCommon.TryingToInteractWithWoby(inst, player) then
             return player
         end
@@ -121,8 +121,8 @@ local function _avoidtargetfn(self, target)
         return false
     end
 
-    local owner = self.inst.components.follower.leader
-    local owner_combat = owner ~= nil and owner.components.combat or nil
+    local owner = GetOwner(self.inst)
+    local owner_combat = owner and owner.components.combat or nil
     local target_combat = target.components.combat
     if owner_combat == nil or target_combat == nil or not self.inst:IsNear(owner, 20) then
         return false
@@ -165,10 +165,10 @@ local function CombatAvoidanceFindEntityCheck(self)
 end
 
 local function ValidateCombatAvoidance(self)
-    if self.runawayfrom == nil or 
-		self.inst:GetCurrentPlatform() ~= nil or 
-		self.inst.components.follower.leader ~= nil and not 
-		self.inst:IsNear(self.inst.components.follower.leader, 20) then
+    local leader = GetOwner(self.inst)
+    if self.runawayfrom == nil
+        or self.inst:GetCurrentPlatform() ~= nil
+        or leader and not self.inst:IsNear(leader, 20) then
         return false
     end
 
@@ -256,6 +256,7 @@ end
 -- CUSTOM FUNCTIONS FOR WOBY ACTIONS
 
 local function HasWobyTarget(inst)
+    local leader = GetOwner(inst)
     return inst.wobytarget ~= nil and
 			inst.wobytarget:IsValid() and not
 			inst.wobytarget:HasTag("outofreach") and not
@@ -273,8 +274,7 @@ local function HasWobyTarget(inst)
 			-- Bark Bark! Attack me you dink!
 			(inst.wobytarget.components.combat ~= nil and 
 			-- is my pal walter near?
-			(inst.components.follower.leader ~= nil and
-            inst:IsNear(inst.components.follower.leader, 20)) and
+			(leader and inst:IsNear(leader, 20)) and
 			inst.wobytarget.components.combat:CanTarget(inst) and not
 			(inst.wobytarget.components.combat:TargetIs(inst) or inst.wobytarget.components.grouptargeter ~= nil and inst.wobytarget.components.grouptargeter:IsTargeting(inst)) and not
 			(inst.wobytarget.sg ~= nil and inst.wobytarget.sg:HasStateTag("attack")))
@@ -283,6 +283,7 @@ local function HasWobyTarget(inst)
 end
 
 local function DoTargetAction(inst)
+    local leader = GetOwner(inst)
     return inst.wobytarget ~= nil and
 			inst.wobytarget:IsValid() and not
 			inst.wobytarget:HasTag("outofreach") and not
@@ -304,8 +305,7 @@ local function DoTargetAction(inst)
 			-- Bark Bark! Attack me you dink!
 			(inst.wobytarget.components.combat ~= nil and 
 			-- is my pal walter near?
-			(inst.components.follower.leader ~= nil and
-            inst:IsNear(inst.components.follower.leader, 20)) and
+			(leader and inst:IsNear(leader, 20)) and
 			inst.wobytarget.components.combat:CanTarget(inst) and not
 			(inst.wobytarget.components.combat:TargetIs(inst) or inst.wobytarget.components.grouptargeter ~= nil and inst.wobytarget.components.grouptargeter:IsTargeting(inst)) and not
 			(inst.wobytarget.sg ~= nil and inst.wobytarget.sg:HasStateTag("attack")) and
@@ -379,7 +379,7 @@ function WobyBigBrain:OnStart()
 
 		--When recalling Woby, temporarily block helper actions until she's fully returned to you.
 		WobyBrainCommon.RecallNode(self.inst,
-			Follow(self.inst, function() return self.inst.components.follower.leader end, MIN_FOLLOW_DIST, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST, true)),
+			Follow(self.inst, GetOwner, MIN_FOLLOW_DIST, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST, true)),
 
         WhileNode(function() return HasTaskAidBehavior(self.inst) and IsAllowedToWorkThings(self.inst) end, "HasTaskAidBehavior",
             PriorityNode({
@@ -393,16 +393,13 @@ function WobyBigBrain:OnStart()
         WobyBrainCommon.FetchingActionNode(self.inst),
 		
 		WhileNode(function() return TheWorld.state.isnight end, "NightFollow",
-			Follow(self.inst, function() return self.inst.components.follower.leader end,
-                     MIN_FOLLOW_DIST, TARGET_FOLLOW_DIST / 1.5, MAX_FOLLOW_DIST / 1.5, true)
+			Follow(self.inst, GetOwner, MIN_FOLLOW_DIST, TARGET_FOLLOW_DIST / 1.5, MAX_FOLLOW_DIST / 1.5, true)
 		),
-		
-        Follow(self.inst, function() return self.inst.components.follower.leader end,
-                     MIN_FOLLOW_DIST, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST, true),
+
+        Follow(self.inst, GetOwner, MIN_FOLLOW_DIST, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST, true),
 
         -- Kept down here because woby should prioritize following walter over storage and food by other players
         FaceEntity(self.inst, GetGenericInteractionFn, KeepGenericInteractionFn, nil, "sit_alert"),
-
 
         Wander(self.inst, GetHomePos, GetWanderDist, {minwaittime = 6, randwaittime = 6}),
     }, .25)

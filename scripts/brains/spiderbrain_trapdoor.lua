@@ -18,6 +18,7 @@ local TARGET_FOLLOW_DIST = 3
 local MAX_FOLLOW_DIST = 8
 
 local TRADE_DIST = 20
+local TRADE_DIST_SQ = TRADE_DIST * TRADE_DIST
 
 local MAX_CHASE_DIST = 7 * .8
 local MAX_CHASE_TIME = 4
@@ -36,9 +37,15 @@ local SpiderBrain_TrapDoor = Class(Brain, function(self, inst)
 end)
 
 local function GetTraderFn(inst)
-    return inst.components.trader ~= nil
-        and FindEntity(inst, TRADE_DIST, function(target) return inst.components.trader:IsTryingToTradeWithMe(target) end, { "player" })
-        or nil
+    if inst.components.trader ~= nil then
+        local x, y, z = inst.Transform:GetWorldPosition()
+        local players = FindPlayersInRangeSq(x, y, z, TRADE_DIST_SQ, true)
+        for _, player in ipairs(players) do
+            if inst.components.trader:IsTryingToTradeWithMe(player) then
+                return player
+            end
+        end
+    end
 end
 
 local function KeepTraderFn(inst, target)
@@ -46,17 +53,15 @@ local function KeepTraderFn(inst, target)
         and inst.components.trader:IsTryingToTradeWithMe(target)
 end
 
+local EATFOOD_CANT_TAGS = { "INLIMBO", "outofreach" }
+local function IsFoodValid(item, inst)
+    return inst.components.eater:CanEat(item)
+        and item:IsOnValidGround()
+        and item:GetTimeAlive() > TUNING.SPIDER_EAT_DELAY
+end
+
 local function EatFoodAction(inst)
-    local target = FindEntity(inst,
-        SEE_FOOD_DIST,
-        function(item)
-            return inst.components.eater:CanEat(item)
-                and item:IsOnValidGround()
-                and item:GetTimeAlive() > TUNING.SPIDER_EAT_DELAY
-        end,
-        nil,
-        { "outofreach" }
-    )
+    local target = FindEntity(inst, SEE_FOOD_DIST, IsFoodValid, nil, EATFOOD_CANT_TAGS, inst.components.eater:GetEdibleTags())
     return target ~= nil and BufferedAction(inst, target, ACTIONS.EAT) or nil
 end
 
@@ -76,12 +81,16 @@ local function InvestigateAction(inst)
     return investigatePos ~= nil and BufferedAction(inst, nil, ACTIONS.INVESTIGATE, nil, investigatePos, nil, 1) or nil
 end
 
+local function GetLeader(inst)
+    return inst.components.follower and inst.components.follower:GetLeader()
+end
+
 local function GetFaceTargetFn(inst)
-    return inst.components.follower.leader
+    return GetLeader(inst)
 end
 
 local function KeepFaceTargetFn(inst, target)
-    return inst.components.follower.leader == target
+    return GetLeader(inst) == target
 end
 
 local function CanAttackNow(inst)
@@ -124,26 +133,25 @@ function SpiderBrain_TrapDoor:OnStart()
             BrainCommon.PanicWhenScared(self.inst, .3),
             BrainCommon.PanicTrigger(self.inst),
 		    BrainCommon.ElectricFencePanicTrigger(self.inst),
-			
-			
+
 			-- If being mauled by fruit bats, retreat! 
 			WhileNode(function() return self.inst.fruitbat_panic end, "OhShitBats",
                     DoAction(self.inst, function() return GoHomeAction(self.inst) end ) ),
-            
-			IfNode(function() return not self.inst.bedazzled and self.inst.components.follower.leader == nil end, "AttackWall",
+
+			IfNode(function() return not self.inst.bedazzled and GetLeader(self.inst) == nil end, "AttackWall",
 				AttackWall(self.inst)),
-			
+
 			WhileNode(function() return CanAttackNow(self.inst) end, "AttackMomentarily", ChaseAndAttack(self.inst, MAX_CHASE_TIME)),
 			WhileNode(function() return CheckForWebber(self.inst) and not Attacking(self.inst) and not Taunting(self.inst) end, "AmIBusyAttacking", RunAway(self.inst, "scarytoprey", 4, 8)),
 			WhileNode(function() return HasTarget(self.inst) and not Attacking(self.inst) and not Taunting(self.inst) end, "AmIBusyAttacking", RunAway(self.inst, RUN_AWAY_PARAMS, 8, 12)),
 			--WhileNode(function() return CanAttackNow(self.inst) end, "ReadyToAttack", ChaseAndAttack(self.inst, MAX_CHASE_TIME)),
-			
+
             DoAction(self.inst, function() return EatFoodAction(self.inst) end ),
-            Follow(self.inst, function() return self.inst.components.follower.leader end, MIN_FOLLOW_DIST, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST),
-            IfNode(function() return self.inst.components.follower.leader ~= nil end, "HasLeader",
+            Follow(self.inst, GetLeader, MIN_FOLLOW_DIST, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST),
+            IfNode(function() return GetLeader(self.inst) end, "HasLeader",
                 FaceEntity(self.inst, GetFaceTargetFn, KeepFaceTargetFn )),
             DoAction(self.inst, function() return InvestigateAction(self.inst) end ),
-            WhileNode(function() return TheWorld.state.iscaveday and not (self.inst.components.combat and self.inst.components.combat.target) end, "IsDay",
+            WhileNode(function() return (TheWorld.state.iscaveday or self.inst._quaking) and not self.inst.summoned and not (self.inst.components.combat and self.inst.components.combat.target) end, "IsDay",
                     DoAction(self.inst, function() return GoHomeAction(self.inst) end ) ),
             FaceEntity(self.inst, GetTraderFn, KeepTraderFn),
             Wander(self.inst, function() return self.inst.components.knownlocations:GetLocation("home") end, MAX_WANDER_DIST)

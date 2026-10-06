@@ -11,9 +11,11 @@ local function RetargetSnaildrakeFn(inst)
         return inst.components.combat:CanTarget(ent)
     end, nil, { "snaildrake", "player" })                                                                    -- AXE They like people now
 
-    local follower = new_target and new_target.components.follower or nil -- AXE Make them not aggro on your followers
-    if new_target and not (follower and follower.leader and follower.leader:HasTag("player")) then
-        inst.components.combat:SuggestTarget(new_target)
+    if newtarget then
+        local leader = new_target.components.follower and new_target.components.follower:GetLeader() -- AXE Make them not aggro on your followers
+        if not (leader and leader:HasTag("player")) then
+            inst.components.combat:SuggestTarget(new_target)
+        end
     end
 end
 
@@ -34,9 +36,9 @@ end
 
 local function IfPlayerThenLoseFaithInHumanity(inst, data, override)
     local attacker = data and data.attacker or nil
-    local follower = attacker and attacker.components.follower or nil
+    local leader = attacker and attacker.components.follower and attacker.components.follower:GetLeader()
 
-    if (attacker and attacker:HasTag("player") or (follower and follower.leader and follower.leader:HasTag("player"))) or override then
+    if (attacker and attacker:HasTag("player") or leader and leader:HasTag("player")) or override then
         local self = inst.components.combat
         inst.components.combat:SetRetargetFunction(self._retargetperiod, self._targetfn)
     end

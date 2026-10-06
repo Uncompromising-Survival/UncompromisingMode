@@ -16,7 +16,7 @@ local TARGET_FOLLOW_DIST = 5
 local MAX_FOLLOW_DIST = 9
 
 local function GetLeader(inst)
-    return inst.components.follower.leader
+    return inst.components.follower:GetLeader()
 end
 
 local function ispanichaunted(inst)

@@ -13,7 +13,7 @@ local TARGET_FOLLOW_DIST = 5
 local MAX_FOLLOW_DIST = 9
 
 local function GetLeader(inst)
-    return inst.components.follower.leader
+    return inst.components.follower and inst.components.follower:GetLeader()
 end
 
 function Oculet_PetsBrain:OnStart()

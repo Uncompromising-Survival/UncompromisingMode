@@ -34,7 +34,7 @@ local UM_RatBrain = Class(Brain, function(self, inst)
 end)
 
 local function GetLeader(inst)
-    return inst.components.follower ~= nil and inst.components.follower.leader or nil
+    return inst.components.follower and inst.components.follower:GetLeader()
 end
 
 local function CanSpringTrap(item)
@@ -77,7 +77,8 @@ end
 local NO_TAGS = { "ratimmune", "FX", "NOCLICK", "DECOR", "INLIMBO", "planted", "trap", "raidrat", "spider", "catchable", "fire", "irreplaceable", "heavy", "prey", "bird", "outofreach", "_container" }
 
 local function StealAction(inst)
-    if inst.components.follower ~= nil and inst.components.follower:GetLeader() ~= nil and inst.components.follower:GetLeader():HasTag("ratwhisperer") then
+    local leader = GetLeader(inst)
+    if leader and leader:HasTag("ratwhisperer") then
         return
     end
 
@@ -334,7 +335,7 @@ local function closetoleader(inst)
     if inst.sg:HasStateTag("busy") then
         return nil
     end
-    local leader = inst.components.follower and inst.components.follower.leader or nil
+    local leader = GetLeader(inst)
     if leader and leader:GetDistanceSqToInst(inst) < TUNING.POLLY_ROGERS_RANGE * TUNING.POLLY_ROGERS_RANGE then
         return true
     end

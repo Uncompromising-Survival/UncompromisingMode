@@ -157,16 +157,14 @@ end
 
 
 local function HasFriendlyLeader(inst, target)
-    local target_leader = (target.components.follower ~= nil) and target.components.follower.leader or nil
+    local target_leader = target.components.follower and target.components.follower:GetLeader()
     
-    if target_leader ~= nil then
-
+    if target_leader then
         if target_leader.components.inventoryitem then
             target_leader = target_leader.components.inventoryitem:GetGrandOwner()
         end
-
         local PVP_enabled = TheNet:GetPVPEnabled()
-        return (target_leader ~= nil 
+        return (target_leader
                 and (target_leader:HasTag("player") 
                 and not PVP_enabled)) or
                 (target.components.domesticatable and target.components.domesticatable:IsDomesticated() 
@@ -191,9 +189,9 @@ local function CanDamage(inst, target)
         return false
     end
 
+    local leader = target.components.follower and target.components.follower:GetLeader()
     if target:HasTag("monster") and not TheNet:GetPVPEnabled() and 
-       ((target.components.follower and target.components.follower.leader ~= nil and 
-         target.components.follower.leader:HasTag("player")) or target.bedazzled) then
+       ((leader and leader:HasTag("player")) or target.bedazzled) then
         return false
     end
 
