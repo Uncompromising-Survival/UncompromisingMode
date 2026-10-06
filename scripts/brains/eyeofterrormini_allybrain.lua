@@ -28,7 +28,7 @@ local MAX_FOLLOW_LEADER = 6
 local TARGET_FOLLOW_LEADER = (MAX_FOLLOW_LEADER + MIN_FOLLOW_LEADER) / 2
 
 local function GetLeader(inst)
-    return inst.components.follower ~= nil and inst.components.follower.leader or nil
+    return inst.components.follower and inst.components.follower:GetLeader()
 end
 
 function EyeOfTerrorMini_AllyBrain:OnStart()
@@ -48,9 +48,9 @@ function EyeOfTerrorMini_AllyBrain:OnStart()
                 ChaseAndAttack(self.inst),
                 --DoAction(self.inst, EatFoodAction, "Find And Eat Food"),--no eat!!!
 				Follow(self.inst, GetLeader, MIN_FOLLOW_LEADER, TARGET_FOLLOW_LEADER, MAX_FOLLOW_LEADER),
-            }, 0.5)
+            }, .5)
         ),
-    }, 0.5)
+    }, .5)
 
     self.bt = BT(self.inst, root)
 end

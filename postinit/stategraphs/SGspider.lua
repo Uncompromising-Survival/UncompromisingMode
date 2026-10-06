@@ -11,27 +11,24 @@ env.AddStategraphPostInit("spider", function(inst)
         end
     end
 
-    local function WebMortar(inst,angle) -- Same function as Hooded Widow, want to each new players about the attack w/out having to previously fight Hooded Widow
-        if inst.components.combat.target ~= nil then
-            local target = inst.components.combat.target
+    local function WebMortar(inst, angle) -- Same function as Hooded Widow, want to each new players about the attack w/out having to previously fight Hooded Widow
+        local target = inst.components.combat.target
+        if target then
             local x, y, z = inst.Transform:GetWorldPosition()
             local projectile = SpawnPrefab("web_mortar")
-            projectile.Transform:SetPosition(x,y,z)
+            projectile.Transform:SetPosition(x, y, z)
             local scaleFactor = Lerp(.5, 1.5, 1)
             projectile.shadow = SpawnPrefab("warningshadow")
             projectile.shadow.scaleFactor = scaleFactor
             projectile.shadow.Transform:SetScale(scaleFactor, scaleFactor, scaleFactor)
-            projectile.shadow = projectile.shadow:DoPeriodicTask(FRAMES, ShadowFade, nil, 5)  
-            if inst.components.follower and inst.components.follower.leader then
-                projectile.leader = inst.components.follower.leader
-            end
+            projectile.shadow = projectile.shadow:DoPeriodicTask(FRAMES, ShadowFade, nil, 5)
+            local leader = inst.components.follower and inst.components.follower:GetLeader()
+            if leader then projectile.leader = leader end
             local a, b, c = target.Transform:GetWorldPosition()
             local targetpos = target:GetPosition()
-            if not angle then
-                angle = 0
-            end
+            if not angle then angle = 0 end
             local theta = inst.Transform:GetRotation() + angle
-            theta = theta*DEGREES
+            theta = theta * DEGREES
             targetpos.x = targetpos.x + 15 * math.cos(theta)
             targetpos.z = targetpos.z - 15 * math.sin(theta)
             

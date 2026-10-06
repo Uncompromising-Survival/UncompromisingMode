@@ -70,7 +70,7 @@ end
 
 function WobyDance:Visit()
     if self.status == READY then
-        self.hunter = self.inst.components.follower.leader
+        self.hunter = self.inst.components.follower:GetLeader()
 
         self.status = self.hunter ~= nil and RUNNING or FAILED
     end

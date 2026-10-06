@@ -731,7 +731,7 @@ if TUNING.DSTU.WORTOXCHANGES then
     local TARGET_FOLLOW_LEADER = (MAX_FOLLOW_LEADER + MIN_FOLLOW_LEADER) / 2
     -- make woven shadow creatures follow wortox
     local function GetLeader(inst)
-        return inst.components.follower ~= nil and inst.components.follower.leader or nil
+        return inst.components.follower and inst.components.follower:GetLeader()
     end
 
     local function ShadowCreatureFollow(self)
@@ -1000,11 +1000,11 @@ if TUNING.DSTU.WORTOXCHANGES then
     require "behaviours/faceentity"
     require "behaviours/doaction"
     local function GetFaceTargetFn(inst)
-        return inst.components.follower.leader
+        return inst.components.follower:GetLeader()
     end    
     
     local function KeepFaceTargetFn(inst, target)
-        return inst.components.follower.leader == target
+        return inst.components.follower:GetLeader() == target
     end
 
 

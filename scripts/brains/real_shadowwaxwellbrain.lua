@@ -31,8 +31,12 @@ local AVOID_EXPLOSIVE_DIST = 5
 
 local SHADOW_MAX_FOLLOW_DSQ = math.pow(TUNING.ABIGAIL_COMBAT_TARGET_DISTANCE + 2, 2)
 
+local function GetLeader(inst)
+    return inst.components.follower and inst.components.follower:GetLeader()
+end
+
 local function GetLeaderPos(inst)
-    return inst.components.follower.leader:GetPosition()
+    return GetLeader(inst):GetPosition()
 end
 
 local function HasStateTags(inst, tags)
@@ -44,28 +48,25 @@ local function HasStateTags(inst, tags)
 end
 
 local function KeepWorkingAction(inst, actiontags)
-    return inst.components.follower.leader and inst.components.follower.leader:GetDistanceSqToInst(inst) <= KEEP_WORKING_DIST*KEEP_WORKING_DIST and 
-    HasStateTags(inst.components.follower.leader, actiontags)
+    local leader = GetLeader(inst)
+    return leader and leader:GetDistanceSqToInst(inst) <= KEEP_WORKING_DIST * KEEP_WORKING_DIST and HasStateTags(leader, actiontags)
 end
 
 local function StartWorkingCondition(inst, actiontags)
-    return inst.components.follower.leader and HasStateTags(inst.components.follower.leader, actiontags) and not HasStateTags(inst, actiontags)
+    local leader = GetLeader(inst)
+    return leader and HasStateTags(leader, actiontags) and not HasStateTags(inst, actiontags)
 end
 
 local function FindObjectToWorkAction(inst, action)
     if inst.sg:HasStateTag("working") then
         return 
     end
-	
-    local target = FindEntity(inst.components.follower.leader, SEE_WORK_DIST, function(item) return item.components.workable and item.components.workable.action == action end)
+	local leader = GetLeader(inst)
+    local target = FindEntity(leader, SEE_WORK_DIST, function(item) return item.components.workable and item.components.workable.action == action end)
     
 	if target then
         return BufferedAction(inst, target, action)
     end
-end
-
-local function GetLeader(inst)
-    return inst.components.follower.leader 
 end
 
 local function DanceParty(inst)
@@ -95,7 +96,8 @@ local function KeepFaceTargetFn(inst, target)
 end
 
 local function ShouldWatchMinigame(inst)
-	if inst.components.follower.leader ~= nil and inst.components.follower.leader.components.minigame_participator ~= nil then
+    local leader = GetLeader(inst)
+	if leader ~= nil and leader.components.minigame_participator ~= nil then
 		if inst.components.combat.target == nil or inst.components.combat.target.components.minigame_participator ~= nil then
 			return true
 		end
@@ -104,7 +106,8 @@ local function ShouldWatchMinigame(inst)
 end
 
 local function WatchingMinigame(inst)
-	return (inst.components.follower.leader ~= nil and inst.components.follower.leader.components.minigame_participator ~= nil) and inst.components.follower.leader.components.minigame_participator:GetMinigame() or nil
+    local leader = GetLeader(inst)
+	return (leader ~= nil and leader.components.minigame_participator ~= nil) and leader.components.minigame_participator:GetMinigame() or nil
 end
 
 local function CanFight(inst)

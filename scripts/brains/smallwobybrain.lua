@@ -26,16 +26,16 @@ local MAX_DOMINANTTRAIT_PLAYFUL_KEEP_DIST_FROM_OWNER = 9
 local PLAYFUL_OFFSET = 2
 
 local function GetOwner(inst)
-    return inst.components.follower.leader
+    return inst.components.follower and inst.components.follower:GetLeader()
 end
 
-local function KeepFaceTargetFn(inst, target)
-    return inst.components.follower.leader == target
+local function KeepFaceOwnerFn(inst, target)
+    return GetOwner(inst) == target
 end
 
 local function OwnerIsClose(inst)
     local owner = GetOwner(inst)
-    return owner ~= nil and owner:IsNear(inst, MAX_FOLLOW_DIST)
+    return owner and owner:IsNear(inst, MAX_FOLLOW_DIST)
 end
 
 local function LoveOwner(inst)
@@ -102,8 +102,8 @@ local function _avoidtargetfn(self, target)
         return false
     end
 
-    local owner = self.inst.components.follower.leader
-    local owner_combat = owner ~= nil and owner.components.combat or nil
+    local owner = GetOwner(self.inst)
+    local owner_combat = owner and owner.components.combat or nil
     local target_combat = target.components.combat
     if owner_combat == nil or target_combat == nil or not self.inst:IsNear(owner, 20) then
         return false
@@ -146,10 +146,10 @@ local function CombatAvoidanceFindEntityCheck(self)
 end
 
 local function ValidateCombatAvoidance(self)
-    if self.runawayfrom == nil or 
-		self.inst:GetCurrentPlatform() ~= nil or 
-		self.inst.components.follower.leader ~= nil and not 
-		self.inst:IsNear(self.inst.components.follower.leader, 20) then
+    local leader = GetOwner(self.inst)
+    if self.runawayfrom == nil
+        or self.inst:GetCurrentPlatform() ~= nil
+        or leader and not self.inst:IsNear(leader, 20) then
         return false
     end
 
@@ -176,6 +176,7 @@ end
 -- CUSTOM FUNCTIONS FOR WOBY ACTIONS
 
 local function HasWobyTarget(inst)
+    local leader = GetOwner(inst)
     return inst.wobytarget ~= nil and
 			inst.wobytarget:IsValid() and not
 			inst.wobytarget:HasTag("outofreach") and not
@@ -191,8 +192,7 @@ local function HasWobyTarget(inst)
 			-- Bark Bark! Attack me you dink!
 			(inst.wobytarget.components.combat ~= nil and 
 			-- is my pal walter near?
-			(inst.components.follower.leader ~= nil and
-            inst:IsNear(inst.components.follower.leader, 25)) and
+			(leader and inst:IsNear(leader, 25)) and
 			inst.wobytarget.components.combat:CanTarget(inst) and not
 			(inst.wobytarget.components.combat:TargetIs(inst) or inst.wobytarget.components.grouptargeter ~= nil and inst.wobytarget.components.grouptargeter:IsTargeting(inst)) and not
 			(inst.wobytarget.sg ~= nil and inst.wobytarget.sg:HasStateTag("attack")))
@@ -201,6 +201,7 @@ local function HasWobyTarget(inst)
 end
 
 local function DoTargetAction(inst)
+    local leader = GetOwner(inst)
     return inst.wobytarget ~= nil and
 			inst.wobytarget:IsValid() and not
 			inst.wobytarget:HasTag("outofreach") and not
@@ -219,8 +220,7 @@ local function DoTargetAction(inst)
 			-- Bark Bark! Attack me you dink!
 			(inst.wobytarget.components.combat ~= nil and 
 			-- is my pal walter near?
-			(inst.components.follower.leader ~= nil and
-            inst:IsNear(inst.components.follower.leader, 25)) and
+			(leader and inst:IsNear(leader, 25)) and
 			inst.wobytarget.components.combat:CanTarget(inst) and not
 			(inst.wobytarget.components.combat:TargetIs(inst) or inst.wobytarget.components.grouptargeter ~= nil and inst.wobytarget.components.grouptargeter:IsTargeting(inst)) and not
 			(inst.wobytarget.sg ~= nil and inst.wobytarget.sg:HasStateTag("attack")) and
@@ -245,14 +245,13 @@ local function GoSitAction(inst)
 end
 
 local function ShouldWobyRun(inst)
-    return inst:GetCurrentPlatform() == nil or 
-		inst.components.follower.leader ~= nil and
-		inst:IsNear(inst.components.follower.leader, 25)
+    local leader = GetOwner(inst)
+    return inst:GetCurrentPlatform() == nil or leader ~= nil and inst:IsNear(leader, 25)
 end
 
 local function ShouldDanceParty(inst)
-    local leader = inst.components.follower.leader
-    return leader ~= nil and leader.sg:HasStateTag("dancing")
+    local leader = GetOwner(inst)
+    return leader and leader.sg:HasStateTag("dancing")
 end
 
 -------------------------------------------------------------------------------
@@ -264,7 +263,7 @@ end)
 
 function SmallWobyBrain:OnStart()
     local main_nodes = PriorityNode({
-        WhileNode( function() return self.inst.components.follower.leader end, "Has Owner",
+        WhileNode(function() return GetOwner(self.inst) end, "Has Owner",
             PriorityNode{
 				WobyBrainCommon.CourierNode(self.inst),
 				WobyBrainCommon.SitStillNode(self.inst),
@@ -299,7 +298,7 @@ function SmallWobyBrain:OnStart()
 				
 				--When recalling Woby, temporarily block helper actions until she's fully returned to you.
 				WobyBrainCommon.RecallNode(self.inst,
-					Follow(self.inst, function() return self.inst.components.follower:GetLeader() end, 0, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST)),
+					Follow(self.inst, GetOwner, 0, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST)),
 
 				WobyBrainCommon.ForagerNode(self.inst),
 				WobyBrainCommon.RetrieveAmmoNode(self.inst),
@@ -321,10 +320,10 @@ function SmallWobyBrain:OnStart()
                     }),
 					
                 WhileNode(function() return TheWorld.state.isnight end, "NightFollow",
-					Follow(self.inst, function() return self.inst.components.follower.leader end, 0, TARGET_FOLLOW_DIST / 1.5, MAX_FOLLOW_DIST / 1.5)
+					Follow(self.inst, GetOwner, 0, TARGET_FOLLOW_DIST / 1.5, MAX_FOLLOW_DIST / 1.5)
 				),
                 
-				Follow(self.inst, function() return self.inst.components.follower.leader end, 0, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST),
+				Follow(self.inst, GetOwner, 0, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST),
 				FailIfRunningDecorator(FaceEntity(self.inst, GetOwner, KeepFaceTargetFn)),
                 WhileNode(function() return OwnerIsClose(self.inst) and self.inst:IsAffectionate() end, "Affection",
                     SequenceNode{
@@ -344,7 +343,7 @@ function SmallWobyBrain:OnStart()
             end,
             "<busy state guard>",
             PriorityNode({
-                WhileNode(function() return GetOwner(self.inst) ~= nil end, "Has Owner", main_nodes),
+                WhileNode(function() return GetOwner(self.inst) end, "Has Owner", main_nodes),
                 StandStill(self.inst),
             }, .25)
         ),

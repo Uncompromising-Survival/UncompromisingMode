@@ -103,7 +103,7 @@ local function EatFoodAction(inst)
     end]]
 end
 local function GetLeader(inst)
-    return inst.components.follower.leader
+    return inst.components.follower:GetLeader()
 end
 
 local MIN_FOLLOW_DIST = 2

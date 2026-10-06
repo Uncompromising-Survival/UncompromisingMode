@@ -26,7 +26,7 @@ local function InvestigateAction(inst)
 end
 
 local function GetLeader(inst)
-    return inst.components.follower ~= nil and inst.components.follower.leader or nil
+    return inst.components.follower and inst.components.follower:GetLeader()
 end
 
 function Moonmaw_lavaeBrain:OnStart()

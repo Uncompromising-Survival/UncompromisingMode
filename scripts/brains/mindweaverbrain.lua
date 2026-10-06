@@ -14,11 +14,15 @@ local function ShouldWalkToLeader(self)
     return not self.inst.sg:HasStateTag("grabbing")
 end
 
+local function GetLeader(inst)
+    return inst.components.follower and inst.components.follower:GetLeader()
+end
+
 function MindWeaverBrain:OnStart()
     local root = PriorityNode(
 	{
 	WhileNode(function() return ShouldWalkToLeader(self) end, "Walk Follow",
-		Follow(self.inst, function() return self.inst.components.follower.leader end, MIN_FOLLOW_DIST, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST, false)),
+		Follow(self.inst, GetLeader, MIN_FOLLOW_DIST, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST, false)),
 	WhileNode(function() return not self.inst.sg:HasStateTag("grabbing") end, "Wander",
 		Wander(self.inst, function() return self.inst.components.knownlocations:GetLocation("spawnpoint") end, MAX_WANDER_DIST)),
     }, .05--[[.25]])

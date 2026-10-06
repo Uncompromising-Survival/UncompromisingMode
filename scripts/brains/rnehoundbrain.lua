@@ -31,7 +31,7 @@ local SIT_BOY_DIST = 10
 local MAX_JUMP_ATTACK_RANGE = 9
 
 local function GetLeader(inst)
-    return inst.components.follower ~= nil and inst.components.follower.leader or nil
+    return inst.components.follower and inst.components.follower:GetLeader()
 end
 
 local function GetHome(inst)
@@ -44,12 +44,12 @@ local function GetHomePos(inst)
 end
 
 local function GetNoLeaderLeashPos(inst)
-    return GetLeader(inst) == nil and GetHomePos(inst) or nil
+    return not GetLeader(inst) and GetHomePos(inst) or nil
 end
 
 local function GetWanderPoint(inst)
     local target = GetLeader(inst) or inst:GetNearestPlayer(true)
-    return target ~= nil and target:GetPosition() or nil
+    return target and target:GetPosition() or nil
 end
 
 local function ShouldStandStill(inst)
@@ -84,12 +84,12 @@ end
 
 local function ShouldBecomeStatue(inst)
     local leader = GetLeader(inst)
-    return leader ~= nil and leader.sg ~= nil and leader.sg:HasStateTag("statue") and inst:IsNear(leader, 10)
+    return leader and leader.sg and leader.sg:HasStateTag("statue") and inst:IsNear(leader, 10)
 end
 
 local function GetClayLeaderLeashPos(inst)
     local leader = GetLeader(inst)
-    if leader == nil or inst.leader_offset == nil then
+    if not leader or not inst.leader_offset then
         return
     end
     local x, y, z = leader.Transform:GetWorldPosition()
@@ -99,7 +99,7 @@ end
 local function FaceFormation(inst)
     if inst.sg:HasStateTag("canrotate") then
         local leader = GetLeader(inst)
-        if leader ~= nil then
+        if leader then
             inst.Transform:SetRotation(leader.Transform:GetRotation())
         end
     end

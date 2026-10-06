@@ -39,7 +39,7 @@ local function EatFoodAction(inst)
 end
 
 local function GetLeader(inst)
-    return inst.components.follower ~= nil and inst.components.follower.leader or nil
+    return inst.components.follower and inst.components.follower:GetLeader()
 end
 
 local function GetHome(inst)
@@ -52,12 +52,12 @@ local function GetHomePos(inst)
 end
 
 local function GetNoLeaderLeashPos(inst)
-    return GetLeader(inst) == nil and GetHomePos(inst) or nil
+    return not GetLeader(inst) and GetHomePos(inst) or nil
 end
 
 local function GetWanderPoint(inst)
     local target = GetLeader(inst) or inst:GetNearestPlayer(true)
-    return target ~= nil and target:GetPosition() or nil
+    return target and target:GetPosition() or nil
 end
 
 local function ShouldStandStill(inst)
@@ -83,7 +83,6 @@ local function DefendHomeAction(inst)
     end
 end
 
-
 function SnapperturtleBrain:OnStart()
     local root = PriorityNode(
         {
@@ -92,7 +91,7 @@ function SnapperturtleBrain:OnStart()
 					UseShield(self.inst, DAMAGE_UNTIL_SHIELD, SHIELD_TIME, AVOID_PROJECTILE_ATTACKS, HIDE_WHEN_SCARED),
                     WhileNode(function() return self.inst.components.hauntable and self.inst.components.hauntable.panic end, "PanicHaunted", Panic(self.inst)),
                     WhileNode(function() return self.inst.components.health.takingfiredamage end, "OnFire", Panic(self.inst)),
-                    WhileNode(function() return GetLeader(self.inst) == nil end, "NoLeader", AttackWall(self.inst)),
+                    WhileNode(function() return not GetLeader(self.inst) end, "NoLeader", AttackWall(self.inst)),
 
 					ChaseAndAttack(self.inst, 10),
 
