@@ -340,7 +340,6 @@ local _RaiseFlyingCreature = RaiseFlyingCreature
 function RaiseFlyingCreature(inst, ...)
     _RaiseFlyingCreature(inst, ...)
     if inst.components.umripples then
-        inst.components.umripples.showing_effect = false
         inst.components.umripples:OnNoLongerLandedServer()
     end
 end
@@ -349,7 +348,6 @@ local _LandFlyingCreature = LandFlyingCreature
 function LandFlyingCreature(inst, ...)
     _LandFlyingCreature(inst, ...)
     if inst.components.umripples and RobustFloodCheck(inst) and not inst.components.umripples.showing_effect then
-        inst.components.umripples.showing_effect = true
         inst.components.umripples:OnLandedServer(true)
     end
 end
@@ -406,12 +404,8 @@ end
 
 local function GetBodyWetnessProtection(inst)
     local body = GetBodyItem(inst)
-
-    if body ~= nil and body.components.waterproofer ~= nil then
-        return body.components.waterproofer:GetEffectiveness()
-    end
-
-    return 0
+    local waterproofer = body and body.components.waterproofer
+    return waterproofer and waterproofed:GetEffectiveness() or 0
 end
 
 local function AdjustSpeed(inst)
@@ -448,23 +442,14 @@ local function IsFloodWater(inst)
 end
 
 local function FloodMoistureRamp(inst)
-    if inst.components.moisture ~= nil then
-        local body = GetBodyItem(inst)
-
-        local mod
-
-        if body ~= nil and body.prefab == "armor_sharksuit_um" then
-            mod = 1
-        else
-            mod = GetBodyWetnessProtection(inst)
-        end
-
-        if inst.components.burnable ~= nil and inst.components.burnable:IsBurning() then
+    if inst.components.moisture then
+        if inst.components.burnable and inst.components.burnable:IsBurning() then
             inst.components.burnable:Extinguish()
         end
 
+        local body = GetBodyItem(inst)
+        local mod = body and body.prefab == "armor_sharksuit_um" and 1 or GetBodyWetnessProtection(inst)
         local wetness_gain = 3 * (1 - mod)
-
         if inst.components.rider and inst.components.rider:IsRiding() then
             wetness_gain = wetness_gain * .5
         end
