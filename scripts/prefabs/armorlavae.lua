@@ -2,8 +2,9 @@ local brain = require("brains/armorlavaebrain")
 
 local function OnAttackOther(inst, data)
     if data.target ~= nil and data.target.components.combat ~= nil and data.target.components.combat.target == nil then
-        if inst.components.follower.leader ~= nil then
-            data.target.components.combat:SuggestTarget(inst.components.follower.leader)
+        local leader = inst.components.follower:GetLeader()
+        if leader then
+            data.target.components.combat:SuggestTarget(leader)
         end
     end
     inst:DoTaskInTime(1, function(inst) inst.components.combat.target = nil end)
@@ -73,7 +74,7 @@ local function fn()
     inst:AddComponent("lootdropper")
     MakeHauntablePanic(inst)
     inst.persists = false
-    inst:DoTaskInTime(0, function(inst) if inst.components.follower.leader == nil then inst:Remove() end end)
+    inst:DoTaskInTime(0, function(inst) if not inst.components.follower:GetLeader() then inst:Remove() end end)
 
     inst:ListenForEvent("onattackother", OnAttackOther)
 

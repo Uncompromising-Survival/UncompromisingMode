@@ -28,7 +28,7 @@ local function OnAttacked(inst, data)
 end
 
 local function onnear(inst, target)
-    if inst.components.follower.leader == nil then
+    if not inst.components.follower:GetLeader() then
         target.components.leader:AddFollower(inst)
     end
 end

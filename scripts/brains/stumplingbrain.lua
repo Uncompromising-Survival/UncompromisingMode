@@ -44,7 +44,7 @@ local function EatFoodAction(inst)
 end
 
 local function GetLeader(inst)
-    return inst.components.follower ~= nil and inst.components.follower.leader or nil
+    return inst.components.follower and inst.components.follower:GetLeader()
 end
 
 local function GetHome(inst)
@@ -57,10 +57,8 @@ local function GetHomePos(inst)
 end
 
 local function GetNoLeaderLeashPos(inst)
-    return GetLeader(inst) == nil and GetHomePos(inst) or nil
+    return not GetLeader(inst) and GetHomePos(inst) or nil
 end
-
-
 
 local FIND_WALL_TAGS = {"wall"}
 local function findwall(inst)
@@ -73,6 +71,7 @@ local function getdirectionFn(inst)
     local r = math.random() * 2 - 1
     return (inst.Transform:GetRotation() + r*r*r * 60) * DEGREES
 end
+
 function StumplingBrain:OnStart()
     local root = PriorityNode(
         {
@@ -83,13 +82,11 @@ function StumplingBrain:OnStart()
 
                     IfNode(function() return findwall(self.inst) end, "nearwall", AttackWall(self.inst)),
 
-
                     WhileNode( function() return self.inst.components.combat.target end, "combat actions",
                         PriorityNode({
                             ChaseAndAttack(self.inst),
                         })
                     ),
-                 
 
                     WhileNode(function() return GetHome(self.inst) end, "HasHome", Wander(self.inst, GetHomePos, 8)),
 

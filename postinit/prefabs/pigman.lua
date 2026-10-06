@@ -69,7 +69,7 @@ env.AddPrefabPostInit("pigman", function(inst)
 
             local RETARGET_MUST_TAGS = { "_combat" }
             local exclude_tags = { "playerghost", "INLIMBO", "NPC_contestant" }
-            if inst.components.follower.leader ~= nil then
+            if inst.components.follower:GetLeader() then
                 table.insert(exclude_tags, "abigail")
             end
             if inst.components.minigame_spectator ~= nil then

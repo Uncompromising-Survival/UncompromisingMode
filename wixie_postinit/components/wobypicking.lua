@@ -220,8 +220,9 @@ ACTIONS.PICKUP.fn = function(act)
 			return false, "NO_HEAVY_LIFTING"
         end
 
+		local leader = act.target.components.follower and act.target.components.follower:GetLeader()
         if (act.target:HasTag("spider") and act.doer:HasTag("spiderwhisperer")) and 
-           (act.target.components.follower.leader ~= nil and act.target.components.follower.leader ~= act.doer) then
+           (leader and leader ~= act.doer) then
             return false, "NOTMINE_SPIDER"
         end
 

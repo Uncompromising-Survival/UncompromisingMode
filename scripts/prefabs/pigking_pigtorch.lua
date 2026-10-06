@@ -215,7 +215,7 @@ end
 
 local function NormalRetargetFn(inst)
     local exclude_tags = { "playerghost", "INLIMBO" }
-    if inst.components.follower.leader ~= nil then
+    if inst.components.follower:GetLeader() then
         table.insert(exclude_tags, "abigail")
     end
     if inst.components.minigame_spectator ~= nil then
@@ -332,14 +332,14 @@ end
 local function CalcSanityAura(inst, observer)
     return (inst.prefab == "moonpig" and -TUNING.SANITYAURA_LARGE)
         or (inst.components.werebeast ~= nil and inst.components.werebeast:IsInWereState() and -TUNING.SANITYAURA_LARGE)
-        or (inst.components.follower ~= nil and inst.components.follower.leader == observer and TUNING.SANITYAURA_SMALL)
+        or (inst.components.follower and inst.components.follower:GetLeader() == observer and TUNING.SANITYAURA_SMALL)
         or 0
 end
 
 local function GetStatus(inst)
     return (inst:HasTag("werepig") and "WEREPIG")
         or (inst:HasTag("guard") and "GUARD")
-        or (inst.components.follower.leader ~= nil and "FOLLOWER")
+        or (inst.components.follower:GetLeader() and "FOLLOWER")
         or nil
 end
 

@@ -27,8 +27,7 @@ if TUNING.DSTU.PK_GUARDS then
         end)
 
         local function IsGuard(guy)
-            return guy.prefab == "pigking_pigguard" and
-                not (guy.components.follower ~= nil and guy.components.follower.leader ~= nil)
+            return guy.prefab == "pigking_pigguard" and not (guy.components.follower and guy.components.follower:GetLeader())
         end
 
         local function FindRecruit(inst)
@@ -55,11 +54,8 @@ if TUNING.DSTU.PK_GUARDS then
         local function SendRecruit(inst, hunger, guard, giver)
             giver:PushEvent("makefriend")
             giver.components.leader:AddFollower(guard)
-            guard.components.follower.leader = giver
             guard.components.follower:AddLoyaltyTime(hunger * TUNING.PIG_LOYALTY_PER_HUNGER)
-            guard.components.follower.maxfollowtime =
-            giver:HasTag("polite")
-                and TUNING.PIG_LOYALTY_MAXTIME + TUNING.PIG_LOYALTY_POLITENESS_MAXTIME_BONUS
+            guard.components.follower.maxfollowtime = giver:HasTag("polite") and TUNING.PIG_LOYALTY_MAXTIME + TUNING.PIG_LOYALTY_POLITENESS_MAXTIME_BONUS
                 or TUNING.PIG_LOYALTY_MAXTIME
         end
 
