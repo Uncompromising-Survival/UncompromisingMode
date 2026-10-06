@@ -114,16 +114,16 @@ function Umripples:OnLandedClient()
     if self.front_fx == nil then
         self.front_fx = SpawnPrefab("float_fx_front")
         self:AttachEffect(self.front_fx)
-        self.front_fx.AnimState:PlayAnimation("idle_front_" .. (self.size and self.size:value() or "small"), true)
+        self.front_fx.AnimState:PlayAnimation("idle_front_"..(self.size and self.size:value() or "small"), true)
     end
 
     if self.back_fx == nil then
         self.back_fx = SpawnPrefab("float_fx_back")
         self:AttachEffect(self.back_fx)
-        self.back_fx.AnimState:PlayAnimation("idle_back_" .. (self.size and self.size:value() or "small"), true)
+        self.back_fx.AnimState:PlayAnimation("idle_back_"..(self.size and self.size:value() or "small"), true)
     end
 
-    self.inst.AnimState:SetFloatParams(-.05, 1.0, self.bob_percent and self.bob_percent:value() and tonumber(self.bob_percent:value()) or 0)
+    self.inst.AnimState:SetFloatParams(-.05, 1, self.bob_percent and self.bob_percent:value() and tonumber(self.bob_percent:value()) or 0)
 end
 
 function Umripples:OnNoLongerLandedClient()
