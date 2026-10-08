@@ -99,7 +99,7 @@ local function GetAttackedPostInit(self, fn)
             self.inst.um_marked_for_hoarding = nil
         end
 
-        local damageredirecttarget = self.redirectdamagefn and self.redirectdamagefn(self.inst, attacker, damage, weapon, stimuli)
+        local damageredirecttarget = self.redirectdamagefn and self.redirectdamagefn(self.inst, attacker, damage, weapon, stimuli, spdamage)
         if TUNING.DSTU.BEEFALO_NERF and damageredirecttarget and damageredirecttarget.components.rideable then
             local redirect_combat = damageredirecttarget.components.combat
             if redirect_combat then
