@@ -8,7 +8,7 @@ env.AddComponentPostInit("rider", function(self)
         local hadredirectdamagefn = combat.redirectdamagefn ~= nil
         local ret = _Mount(self, target, instant, ...)
         local _redirectdamagefn = combat.redirectdamagefn
-        if not hadredirectdamagefn and _redirectdamagefn then
+        if TUNING.DSTU.BEEFALO_NERF and not hadredirectdamagefn and _redirectdamagefn then
             combat.redirectdamagefn = function(inst, attacker, damage, weapon, stimuli, ...)
                 return stimuli ~= "beefalo_half_damage" and _redirectdamagefn(inst, attacker, damage, weapon, stimuli, ...) or nil
             end

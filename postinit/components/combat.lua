@@ -43,19 +43,6 @@ local function GetAttackedPostInit(self, fn)
             damage = damage * self.inst.components.health:GetFireDamageScale()
         end
 
-        local damageredirecttarget = self.redirectdamagefn and self.redirectdamagefn(self.inst, attacker, damage, weapon, stimuli)
-        local redirect_combat = damageredirecttarget and damageredirecttarget.components.combat
-        if TUNING.DSTU.BEEFALO_NERF and damageredirecttarget and damageredirecttarget.components.rideable and redirect_combat then
-            if fn == "GetAttacked_Internal" then
-                redirect_combat:GetAttacked_Internal(attacker, damage, weapon, stimuli, spdamage, ...)
-            else
-                redirect_combat:GetAttacked(attacker, damage, weapon, stimuli, spdamage, ...)
-            end
-            if self.inst.components.health and not self.inst.components.health:IsDead() then
-                return _GetAttackedOrInternal(self, attacker, damage / 2, weapon, "beefalo_half_damage", spdamage, ...) -- added new stimuli to prevent Stackoverflow
-            end
-        end
-
         if self.inst and self.inst:HasTag("wathom") and self.inst.AmpDamageTakenModifier and damage and (not self.inst.components.rider or not self.inst.components.rider:IsRiding()) and TUNING.DSTU.WATHOM_ARMOR_DAMAGE then
             -- Take extra damage
             -- if HasSkill(self.inst,"ancient_terror_3") and self.inst:HasTag("amped") and not self.inst:HasTag("deathamp") then
@@ -110,6 +97,18 @@ local function GetAttackedPostInit(self, fn)
             end
         elseif self.inst.um_marked_for_hoarding then
             self.inst.um_marked_for_hoarding = nil
+        end
+
+        local damageredirecttarget = self.redirectdamagefn and self.redirectdamagefn(self.inst, attacker, damage, weapon, stimuli)
+        local redirect_combat = damageredirecttarget and damageredirecttarget.components.combat
+        if TUNING.DSTU.BEEFALO_NERF and damageredirecttarget and damageredirecttarget.components.rideable and redirect_combat then
+            if fn == "GetAttacked_Internal" then
+                redirect_combat:GetAttacked_Internal(attacker, damage, weapon, stimuli, spdamage, ...)
+            else
+                redirect_combat:GetAttacked(attacker, damage, weapon, stimuli, spdamage, ...)
+            end
+            damage = damage / 2
+            stimuli = "beefalo_half_damage" -- added new stimuli to prevent Stackoverflow
         end
 
         local ret = {_GetAttackedOrInternal(self, attacker, damage, weapon, stimuli, spdamage, ...)}
