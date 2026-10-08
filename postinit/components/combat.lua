@@ -100,15 +100,17 @@ local function GetAttackedPostInit(self, fn)
         end
 
         local damageredirecttarget = self.redirectdamagefn and self.redirectdamagefn(self.inst, attacker, damage, weapon, stimuli)
-        local redirect_combat = damageredirecttarget and damageredirecttarget.components.combat
-        if TUNING.DSTU.BEEFALO_NERF and damageredirecttarget and damageredirecttarget.components.rideable and redirect_combat then
-            if fn == "GetAttacked_Internal" then
-                redirect_combat:GetAttacked_Internal(attacker, damage, weapon, stimuli, spdamage, ...)
-            else
-                redirect_combat:GetAttacked(attacker, damage, weapon, stimuli, spdamage, ...)
+        if TUNING.DSTU.BEEFALO_NERF and damageredirecttarget and damageredirecttarget.components.rideable then
+            local redirect_combat = damageredirecttarget.components.combat
+            if redirect_combat then
+                if fn == "GetAttacked_Internal" then
+                    redirect_combat:GetAttacked_Internal(attacker, damage, weapon, stimuli, spdamage, ...)
+                else
+                    redirect_combat:GetAttacked(attacker, damage, weapon, stimuli, spdamage, ...)
+                end
+                damage = damage / 2
+                stimuli = "beefalo_half_damage" -- added new stimuli to prevent Stackoverflow
             end
-            damage = damage / 2
-            stimuli = "beefalo_half_damage" -- added new stimuli to prevent Stackoverflow
         end
 
         local ret = {_GetAttackedOrInternal(self, attacker, damage, weapon, stimuli, spdamage, ...)}
