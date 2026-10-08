@@ -108,8 +108,7 @@ local function GetAttackedPostInit(self, fn)
                 else
                     redirect_combat:GetAttacked(attacker, damage, weapon, stimuli, spdamage, ...)
                 end
-                damage = damage / 2
-                stimuli = "beefalo_half_damage" -- added new stimuli to prevent Stackoverflow
+                damage, stimuli = damage / 2, "beefalo_half_damage" -- added new stimuli to prevent Stackoverflow
             end
         end
 
