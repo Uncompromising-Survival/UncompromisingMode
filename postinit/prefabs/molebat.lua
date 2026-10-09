@@ -1,16 +1,16 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
-
+-----------------------------------------------------------------
 local _ShouldSummonAllies
 local function ShouldSummonAllies(inst, ...)
     if inst.um_cantsummonallies then return false end
-    if _ShouldSummonAllies then return _ShouldSummonAllies(inst, ...) end
+    return _ShouldSummonAllies and  _ShouldSummonAllies(inst, ...)
 end
 
 local _OnSave
 local function OnSave(inst, data, ...)
     data.um_cantsummonallies = inst.um_cantsummonallies
-    if _OnSave then return _OnSave(inst, data, ...) end
+    return _OnSave and _OnSave(inst, data, ...)
 end
 
 local _OnLoad
@@ -21,19 +21,26 @@ local function OnLoad(inst, data, ...)
         -- Stop the constructer-started timer. We shouldn't have loaded one.
         inst.components.timer:StopTimer("resetallysummon")
     end
-    if _OnLoad then return _OnLoad(inst, data, ...) end
+    return _OnLoad and _OnLoad(inst, data, ...)
 end
 
 env.AddPrefabPostInit("molebat", function(inst)
     if not TheWorld.ismastersim then return end
 
-    _ShouldSummonAllies = inst.ShouldSummonAllies
+    if not _ShouldSummonAllies then
+        _ShouldSummonAllies = inst.ShouldSummonAllies
+    end
     inst.ShouldSummonAllies = ShouldSummonAllies
 
-    _OnSave = inst.OnSave
+    if not _OnSave then
+        _OnSave = inst.OnSave
+    end
     inst.OnSave = OnSave
-    _OnLoad = inst.OnLoad
+    if not _OnLoad then
+        _OnLoad = inst.OnLoad
+    end
     inst.OnLoad = OnLoad
+
     if inst.components.lootdropper then
         inst.components.lootdropper:SetLoot({"batnose", "monstersmallmeat"})
     end

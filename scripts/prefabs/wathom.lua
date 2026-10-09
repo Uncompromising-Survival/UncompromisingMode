@@ -168,7 +168,7 @@ local function Amp(inst)
             inst.components.health:DoDelta(1.5)
         end
     end)]]
-    if not (inst.components.health and inst.components.health:IsDead()) then
+    if inst.components.health and not inst.components.health:IsDead() then
         --inst.sg:GoToState("wathombark")
         inst.components.health.invincible = true
         inst:DoTaskInTime(1, function() inst.components.health.invincible = false end)
