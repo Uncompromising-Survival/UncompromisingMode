@@ -36,34 +36,219 @@ local function OnMountedDismounted(inst, data)
     inst.components.umripples:ShouldChangeToRiding(inst.components.rider:IsRiding())
 end
 
+---------------------------
+-- [ Flooded Tile Handling] -- AXE
+---------------------------
+
+--local flood_equipment_verylow = { "trunkvest_summer", "reflectivevest" }
+--local flood_equipment_low = { "armor_reed_um", "armor_windbreaker", "armor_snakeskin" }
+--local flood_equipment_med = { "raincoat", "blubbersuit", "tarsuit" }
+--local flood_equipment_high = { "armor_sharksuit_um" }
+
+--local function CheckClothing(inst, table_check)
+    --local body
+    --if inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) then
+        --body = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY).prefab
+    --end
+    --return (body and table.contains(table_check, body))
+--end
+
+local um_flood_speed_immune_no_turfrunner_TAGS = {"swampbro", "playermerm", "woosegoose", "weregoose"}
+local um_flood_speed_immune_TAGS = ConcatArrays({"turfrunner_279", "turfrunner_280", "turfrunner_281"}, um_flood_speed_immune_no_turfrunner_TAGS)
+
+local function IsSpeedImmune(inst, noturfrunner)
+    return inst:HasAnyTag(noturfrunner and um_flood_speed_immune_no_turfrunner_TAGS or um_flood_speed_immune_TAGS) or inst:HasTag("merm") and not inst:HasTag("mermdisguise")
+        or inst.components.moistureimmunity ~= nil or inst.components.umripples.speed_immune ~= nil
+end
+
+local function RobustFloodCheck(inst) -- For players, check to see if they're on the edge of a tile, you can walk on the "Void" to avoid the effects of the tile you're standing on, similar to spider webbings
+    --IsVisualGroundAtPoint(x,y,z)... not sure how this can help?
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local md = 1.5 --maxdist
+    for i = -md, md, 3 do
+        for j = -md, md, 3 do
+            local current_tile = TheWorld.Map:GetTileAtPoint(x + i, y, z + j)
+            if current_tile == WORLD_TILES.UM_FLOODWATER or current_tile == WORLD_TILES.UM_FLOODWATER_GROTTO or current_tile == WORLD_TILES.UM_FLOODWATER_BROILING then
+                return true
+            end
+        end
+    end
+end
+
+local function GetBodyItem(inst)
+    return inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
+end
+
+local function GetBodyWetnessProtection(inst)
+    local body = GetBodyItem(inst)
+    local waterproofer = body and body.components.waterproofer
+    return waterproofer and waterproofed:GetEffectiveness() or 0
+end
+
+local function AdjustSpeed(inst)
+    local body = GetBodyItem(inst)
+
+    if body and body.prefab == "armor_sharksuit_um" then
+        inst.components.locomotor:SetExternalSpeedMultiplier(inst, "um_floodedwater", 1.2)
+        return
+    end
+    
+    local waterproofness = GetBodyWetnessProtection(inst)
+
+    local mod = .5
+    if waterproofness >= .7 then
+        mod = .9
+    elseif waterproofness >= .35 then
+        mod = .75
+    elseif waterproofness > 0 then
+        mod = .6
+    end
+    
+    if inst.components.rider and inst.components.rider:IsRiding() and mod < 1 then
+        mod = (mod + 1) / 2
+    end
+
+    inst.components.locomotor:SetExternalSpeedMultiplier(inst, "um_floodedwater", mod)
+end
+
+local no_water = { "flying", "shadow", "worm", "playerghost", "brightmare", "brightmare_gestalt" }
+
+local function IsFloodWater(inst)
+    local current_tile = TheWorld.Map:GetTileAtPoint(inst.Transform:GetWorldPosition())
+    return current_tile == WORLD_TILES.UM_FLOODWATER or current_tile == WORLD_TILES.UM_FLOODWATER_GROTTO
+end
+
+local function FloodMoistureRamp(inst)
+    local moisture = inst.components.moisture
+    if moisture then
+        local burnable = inst.components.burnable
+        if burnable and burnable:IsBurning() then
+            burnable:Extinguish()
+        end
+
+        local body = GetBodyItem(inst)
+        local mod = body and body.prefab == "armor_sharksuit_um" and 1 or GetBodyWetnessProtection(inst)
+        local wetness_gain = 3 * (1 - mod) * (inst.components.rider and inst.components.rider:IsRiding() and .5 or 1)
+
+        moisture:DoDelta(wetness_gain, true)
+        --DoDeltaMoistureToEntity(inst, wetness_gain, nil, nil, true)
+    end
+end
+
+local function WormBubble(inst)
+    SpawnPrefab("crab_king_bubble"..math.random(1, 3)).Transform:SetPosition(inst.Transform:GetWorldPosition())
+end
+
+local function ToggleSlowdown(inst, toggle)
+    if toggle and inst.um_floodslowdown or not toggle and not inst.um_floodslowdown then return end
+    if toggle then
+        inst:ListenForEvent("equip", AdjustSpeed)
+        inst:ListenForEvent("unequip", AdjustSpeed) -- may fire twice, but that shouldn't matter, it's not doing a huge amount of computational work
+        if not (inst.prefab == "mole" or inst:HasTag("worm")) then
+            AdjustSpeed(inst)
+        end
+        inst:PushEvent("carefulwalking", {careful = true})
+        inst.um_floodslowdown = true
+    else
+        inst:RemoveEventCallback("equip", AdjustSpeed)
+        inst:RemoveEventCallback("unequip", AdjustSpeed)
+        if inst.components.locomotor then
+            inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, "um_floodedwater")
+        end
+        inst:PushEvent("carefulwalking", {careful = false})
+        inst.um_floodslowdown = nil
+    end
+end
+
+local function ToggleFloodCheck(inst, toggle)
+    local wormormole = inst:HasTag("worm") or inst.prefab == "mole"
+    if toggle then
+        if not inst.um_floodchecked then
+            if inst.components.umripples and not wormormole then --AXE check if should update ripples
+                inst.components.umripples:OnLandedServer(true)
+            elseif wormormole then
+                inst:Hide()
+                SpawnPrefab("splash_green").Transform:SetPosition(inst.Transform:GetWorldPosition())
+                inst.um_worm_bubble_task = inst:DoPeriodicTask(.5, WormBubble)
+            end
+            FloodMoistureRamp(inst)
+            inst.um_flood_moisture_ramp = inst:DoPeriodicTask(1, FloodMoistureRamp)
+            inst.um_floodchecked = true
+        end
+        ToggleSlowdown(inst, not IsSpeedImmune(inst))
+    else
+        if inst.um_floodchecked then
+            if inst.um_flood_moisture_ramp then
+                inst.um_flood_moisture_ramp:Cancel()
+                inst.um_flood_moisture_ramp = nil
+            end
+            if inst.components.umripples and not wormormole then --AXE check if should update ripples
+                inst.components.umripples:OnNoLongerLandedServer()
+            elseif wormormole then
+                inst:Show()
+                if inst.um_worm_bubble_task then
+                    inst.um_worm_bubble_task:Cancel()
+                    inst.um_worm_bubble_task = nil
+                end
+            end
+            inst.um_floodchecked = nil
+        end
+        ToggleSlowdown(inst)
+    end
+end
+
+local function ToggleFloodCheckUpdating(inst, toggle)
+    local umripples = inst.components.umripples
+    if toggle then
+        inst:StartUpdatingComponent(umripples)
+    else
+        inst:StopUpdatingComponent(umripples)
+        ToggleFloodCheck(inst)
+    end
+end
+
+local function RemoveFloodCheck(inst)
+    ToggleFloodCheckUpdating(inst)
+end
+
+local function OnRespawnedFromGhost(inst)
+    ToggleFloodCheckUpdating(inst, true)
+end
+
 local Umripples = Class(function(self, inst)
     self.inst = inst
 
     self.ismastersim = TheNet:GetIsMasterSimulation()
     if self.ismastersim then
         -- Calls from elsewhere
-        self.inst:ListenForEvent("on_landed", function() self:OnLandedServer() end)
-        self.inst:ListenForEvent("on_no_longer_landed", function() self:OnNoLongerLandedServer() end)
-        --self.inst:ListenForEvent("ondropped", function() self:OnLandedServer() end)
         self.inst:ListenForEvent("onremove", function() self:OnNoLongerLandedServer() end)
         if self.inst:HasTag("player") then
             self.inst:ListenForEvent("mounted", OnMountedDismounted)
             self.inst:ListenForEvent("dismounted", OnMountedDismounted)
+            self.inst:ListenForEvent("ms_becameghost", RemoveFloodCheck)
+            self.inst:ListenForEvent("ms_respawnedfromghost", OnRespawnedFromGhost)
         end
 
-        -- On server load, check to see if I should be showing effect
-        self.inst:DoTaskInTime(0,function(inst)
-            if not self.inst:IsInLimbo() and self:ShouldShowEffect() then
-                self:OnLandedServer()
+        local locomotor = self.inst.components.locomotor
+        if not locomotor then
+            if not self.inst.components.inventoryitem then
+                -- On server load, check to see if I should be showing effect
+                self.inst:DoTaskInTime(0, function() if self:ShouldShowEffect() then self:OnLandedServer() end end)
+            else
+                self.inst:ListenForEvent("on_landed", function() self:OnLandedServer() end)
+                self.inst:ListenForEvent("on_no_longer_landed", function() self:OnNoLongerLandedServer() end)
+                --self.inst:ListenForEvent("ondropped", function() self:OnLandedServer() end)
             end
-        end)
+        else
+            self.inst:StartUpdatingComponent(self)
+        end
     end
-    
+
     self.size = "small"
     self.vert_offset = nil
-    self.xscale = 1.0
-    self.yscale = 1.0
-    self.zscale = 1.0
+    self.xscale = 1
+    self.yscale = 1
+    self.zscale = 1
     self.should_parent_effect = true
     self.do_bank_swap = false
     self.float_index = 1
@@ -90,11 +275,11 @@ function Umripples:ShouldChangeToRiding(riding)
         self.xscale = 3
         self.yscale = 3
         self.zscale = 3
-        self.vert_offset = 0.5
+        self.vert_offset = .5
     else -- Player gets player FX
-        self.vert_offset = 0.2
-        self.xscale = 0.75
-        self.zscale = 0.75
+        self.vert_offset = .2
+        self.xscale = .75
+        self.zscale = .75
         self.yscale = 1
     end
 end
@@ -124,7 +309,7 @@ function Umripples:SetVerticalOffset(offset)
 end
 
 function Umripples:SetScale(scale)
-    if scale ~= nil then
+    if scale then
         if type(scale) == "table" then
             self.xscale = scale[1]
             self.yscale = scale[2]
@@ -168,7 +353,7 @@ end]]
 
 function Umripples:ShouldShowEffect()
     local x,y,z = self.inst.Transform:GetWorldPosition()
-    if TheWorld.Map:GetTileAtPoint(x,0,z) == WORLD_TILES.UM_FLOODWATER_GROTTO and not (self.inst.sg and self.inst.sg:HasStateTag("flying")) then
+    if TheWorld.Map:GetTileAtPoint(x, 0, z) == WORLD_TILES.UM_FLOODWATER_GROTTO and not (self.inst.sg and self.inst.sg:HasStateTag("flying")) then
         --[[if y > 0 and self.inst.components.inventoryitem then
             if not self.inst.umripples_falling then
                 self.inst.umripples_falling = self.inst:DoPeriodicTask(FRAMES, CheckForY0)
@@ -251,16 +436,28 @@ function Umripples:SwitchToDefaultAnim(force_switch)
 end
 
 function Umripples:OnNoLongerLandedServer()
-    if self.inst.umripples_falling then
+    --[[if self.inst.umripples_falling then
         self.inst.umripples_falling:Cancel()
         self.inst.umripples_falling = nil
-    end
+    end]]
     if self.showing_effect then
         self.is_landed = false
         self.showing_effect = false
 
         self:SwitchToDefaultAnim()
     end
+end
+
+function Umripples:OnEntitySleep()
+    if self.inst.components.locomotor then self.inst:StopUpdatingComponent(self) end
+end
+
+function Umripples:OnEntityWake()
+    if self.inst.components.locomotor then self.inst:StartUpdatingComponent(self) end
+end
+
+function Umripples:OnUpdate(dt)
+    ToggleFloodCheck(self.inst, not self.inst:IsInLimbo() and RobustFloodCheck(self.inst))
 end
 
 return Umripples
