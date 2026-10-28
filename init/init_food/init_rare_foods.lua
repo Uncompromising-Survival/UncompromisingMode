@@ -82,54 +82,45 @@ GLOBAL.TUNING.ROCK_FRUIT_REGROW = {
 -----------------------------------------------------------------
 -- Relevant: MakeNoGrowInWinter in standardcomponents.lua
 
-local function ToggleGrowable(growable, iswinter)
-    if iswinter then
-        growable:Pause("um_winter")
-    else
-        growable:Resume("um_winter")
-    end
-end
-
-local function ToggleHarvestable(harvestable, iswinter)
-    if iswinter then
-        harvestable:PauseGrowing()
-    else
-        if harvestable.produce < harvestable.maxproduce then
-            harvestable:StartGrowing()
+if GetModConfigData("no_winter_growing_") then
+    local function ToggleGrowable(growable, iswinter)
+        if iswinter then
+            growable.um_winternogrowcheck = true
+            growable:Pause("um_winter")
+            growable.um_winternogrowcheck = nil
+        else
+            growable:Resume("um_winter")
         end
     end
-end
 
-local _MakeNoGrowInWinter = GLOBAL.MakeNoGrowInWinter
-function GLOBAL.MakeNoGrowInWinter(inst, ...)
-    if inst.components.pickable then
-        _MakeNoGrowInWinter(inst, ...)
-    end --making this not an elseif to do BOTH if something has both pickable and growable
-    local growable = inst.components.growable
-    if growable then
-        growable:WatchWorldState("iswinter", ToggleGrowable)
-        ToggleGrowable(growable, TheWorld.state.iswinter)
+    local function ToggleHarvestable(harvestable, iswinter)
+        if iswinter then
+            harvestable:PauseGrowing()
+        else
+            if harvestable.produce < harvestable.maxproduce then
+                harvestable:StartGrowing()
+            end
+        end
     end
-    local harvestable = inst.components.harvestable
-    if harvestable then
-        harvestable:WatchWorldState("iswinter", ToggleHarvestable)
-        ToggleHarvestable(harvestable, TheWorld.state.iswinter)
+
+    local _MakeNoGrowInWinter = GLOBAL.MakeNoGrowInWinter
+    function GLOBAL.MakeNoGrowInWinter(inst, ...)
+        if inst.components.pickable then
+            _MakeNoGrowInWinter(inst, ...)
+        end --making this not an elseif to do BOTH if something has both pickable and growable
+        local growable = inst.components.growable
+        if growable then
+            growable:WatchWorldState("iswinter", ToggleGrowable)
+            ToggleGrowable(growable, TheWorld.state.iswinter)
+        end
+        local harvestable = inst.components.harvestable
+        if harvestable then
+            harvestable:WatchWorldState("iswinter", ToggleHarvestable)
+            ToggleHarvestable(harvestable, TheWorld.state.iswinter)
+        end
+        inst.um_nogrow_winter = true
     end
-    inst.um_nogrow_winter = true
-end
 
--- TODO: Config
-GLOBAL.TUNING.ROCK_FRUIT_LOOT =
-{
-    ANGLE = 65,
-    SPEED = -1.8,
-    HEIGHT = 0.5,
-    RIPE_CHANCE = 0.32,
-    SEED_CHANCE = 0.01,
-    MAX_SPAWNS = 10,
-}
-
-if GetModConfigData("no_winter_growing_") then
     local nowintergrowing = {
         "rock_avocado_bush",
         "cherrytomato_planted",
@@ -162,83 +153,110 @@ if GetModConfigData("no_winter_growing_") then
         MakeNotGrowInWinter(v.prefab)
     end
 
+    local function IsWinterAndCantGrow(inst, bypass)
+        return inst.um_nogrow_winter and TheWorld.state.iswinter and not bypass
+    end
+
     -- Extra check for Farm Crops, Banana Bushes, and Stone Fruit
     AddComponentPostInit("simplemagicgrower", function(self)
         local _StartGrowing = self.StartGrowing
         function self:StartGrowing(...)
-            if self.inst.um_nogrow_winter and TheWorld.state.iswinter then return end
+            if IsWinterAndCantGrow(self.inst) then return end
             return _StartGrowing(self, ...)
         end
     end)
 
-    AddComponentPostInit("growable", function(self)
-        local _StartGrowing = self.StartGrowing
-        function self:StartGrowing(time, ...)
-            if self.inst.um_nogrow_winter and TheWorld.state.iswinter then return false end
+    do
+        local Growable = require("components/growable")
+        local _StartGrowing = Growable.StartGrowing
+        function Growable:StartGrowing(time, ...)
+            if IsWinterAndCantGrow(self.inst, self.um_winternogrowcheck) then return end
             return _StartGrowing(self, time, ...)
         end
 
-        local _DoMagicGrowth = self.DoMagicGrowth
-        function self:DoMagicGrowth(doer, ...)
-            if self.inst.um_nogrow_winter and TheWorld.state.iswinter then return false end
+        local _DoMagicGrowth = Growable.DoMagicGrowth
+        function Growable:DoMagicGrowth(doer, ...)
+            if IsWinterAndCantGrow(self.inst) then return false end
             return _DoMagicGrowth(self, doer, ...)
         end
 
-        local _DoGrowth = self.DoGrowth
-        function self:DoGrowth(skipgrownfn, ...)
-            if self.inst.um_nogrow_winter and TheWorld.state.iswinter then return false end
+        local _DoGrowth = Growable.DoGrowth
+        function Growable:DoGrowth(skipgrownfn, ...)
+            if IsWinterAndCantGrow(self.inst, self.um_winternogrowcheck) then return false end
             return _DoGrowth(self, skipgrownfn, ...)
         end
-    end)
+
+        local _OnLoad = Growable.OnLoad
+        function Growable:OnLoad(data, ...)
+            self.um_winternogrowcheck = true
+            local ret = _OnLoad(self, data, ...)
+            if IsWinterAndCantGrow(self.inst) then self:Pause("um_winter") end
+            self.um_winternogrowcheck = nil
+            return ret
+        end
+    end
 
     AddComponentPostInit("pickable", function(self)
         local _Resume = self.Resume
         function self:Resume(...)
-            if self.inst.um_nogrow_winter and TheWorld.state.iswinter then return false end
+            if IsWinterAndCantGrow(self.inst) then return end
             return _Resume(self, ...)
         end
     end)
 
-    AddComponentPostInit("harvestable", function(self)
-        local _DoMagicGrowth = self.DoMagicGrowth
-        function self:DoMagicGrowth(doer, ...)
-            if self.inst.um_nogrow_winter and TheWorld.state.iswinter then return false end
+    do
+        local Harvestable = require("components/harvestable")
+        local _DoMagicGrowth = Harvestable.DoMagicGrowth
+        function Harvestable:DoMagicGrowth(doer, ...)
+            if IsWinterAndCantGrow(self.inst) then return end
             return _DoMagicGrowth(self, doer, ...)
         end
 
-        local _SetGrowTime = self.SetGrowTime
-        function self:SetGrowTime(time, ...)
+        local _SetGrowTime = Harvestable.SetGrowTime
+        function Harvestable:SetGrowTime(time, ...)
             local ret = _SetGrowTime(self, time, ...)
-            if self.inst.um_nogrow_winter and not self.growtime then self.pausetime = nil end
+            if IsWinterAndCantGrow(self.inst) and not self.growtime then self.pausetime = nil end
             return ret
         end
 
-        local _Grow = self.Grow
-        function self:Grow(...)
-            if self.inst.um_nogrow_winter and (not self.inst:HasTag("mushroom_farm") or self.produce >= 1) and TheWorld.state.iswinter then return end
+        local _Grow = Harvestable.Grow
+        function Harvestable:Grow(...)
+            if IsWinterAndCantGrow(self.inst) and (not self.inst:HasTag("mushroom_farm") or self.produce >= 1) then return false end
             return _Grow(self, ...)
         end
 
-        local _StartGrowing = self.StartGrowing
-        function self:StartGrowing(time, ...)
-            if self.inst.um_nogrow_winter and TheWorld.state.iswinter then return end
+        local _StartGrowing = Harvestable.StartGrowing
+        function Harvestable:StartGrowing(time, ...)
+            if IsWinterAndCantGrow(self.inst) then return end
             return _StartGrowing(self, time, ...)
         end
 
-        local _StopGrowing = self.StopGrowing
-        function self:StopGrowing(...)
+        local _StopGrowing = Harvestable.StopGrowing
+        function Harvestable:StopGrowing(...)
             local taskexisted = self.task
             local ret = _StopGrowing(self, ...)
-            if self.inst.um_nogrow_winter and taskexisted and not self.task then self.pausetime = nil end
+            if IsWinterAndCantGrow(self.inst) and taskexisted and not self.task then self.pausetime = nil end
             return ret
         end
-    end)
+    end
 
     PLANT_DEFS.potato.good_seasons = { autumn = true, spring = true }
     PLANT_DEFS.carrot.good_seasons = { autumn = true, spring = true, summer = true }
     PLANT_DEFS.pumpkin.good_seasons = { autumn = true, summer = true }
     PLANT_DEFS.asparagus.good_seasons = { spring = true, autumn = true }
 end
+
+-- TODO: Config
+GLOBAL.TUNING.ROCK_FRUIT_LOOT =
+{
+    ANGLE = 65,
+    SPEED = -1.8,
+    HEIGHT = 0.5,
+    RIPE_CHANCE = 0.32,
+    SEED_CHANCE = 0.01,
+    MAX_SPAWNS = 10,
+}
+
 -----------------------------------------------------------------
 -- Bunnies don't drop carrots anymore
 -----------------------------------------------------------------
