@@ -124,7 +124,7 @@ env.AddComponentPostInit("lootdropper", function(self)
                     local item = TUNING.BURNED_LOOT_OVERRIDES[v]
                         or PrefabExists(v.."_cooked") and v.."_cooked"
                         or PrefabExists("cooked"..v) and "cooked"..v
-                        or "ash"
+                        or nil
                     if item then
                         prefabs[k] = item
                     else
