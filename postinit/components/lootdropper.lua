@@ -121,10 +121,15 @@ env.AddComponentPostInit("lootdropper", function(self)
             if burnable and not burnable:IsControlledBurn() and burnable:IsBurning()
                 and (not self.inst.components.fueled or burnable.ignorefuel) and not self.inst:HasAnyTag(DONT_FIRELOOT_LOOT_TAGS) then
                 for k, v in pairs(prefabs) do
-                    prefabs[k] = TUNING.BURNED_LOOT_OVERRIDES[v]
+                    local item = TUNING.BURNED_LOOT_OVERRIDES[v]
                         or PrefabExists(v.."_cooked") and v.."_cooked"
                         or PrefabExists("cooked"..v) and "cooked"..v
                         or "ash"
+                    if item then
+                        prefabs[k] = item
+                    else
+                        self:SpawnLootPrefab("ash", pt)
+                    end
                 end
 
                 for k, v in pairs(prefabs) do
