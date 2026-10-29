@@ -13,28 +13,29 @@ local function DoCounterAttack(inst)
 end
 
 env.AddStategraphPostInit("pig", function(inst)
-    local events =
+    --[[local events =
     {
-        EventHandler("doattack", function(inst, data)
-            if inst:HasTag("pigattacker") and data.target:HasTag("pigattacker") and not data.target:HasTag("werepig") or inst:HasTag("manrabbit") and data.target:HasTag("manrabbit") then
-                inst.sg:GoToState("refuse", data.target)
-                inst.components.combat:SetTarget(nil)
-            else
-                local nstate = "attack"
-                if inst.sg:HasStateTag("charging") then
-                    nstate = "charge_attack"
-                elseif inst.sg.mem.wantstocounter then
-                    inst.sg.mem.wantstocounter = nil
-                    nstate = "counterattack_pre"
-                end
-                if not (inst.components.health and inst.components.health:IsDead())
-                    and (not inst.sg:HasStateTag("busy") or inst.sg:HasStateTag("hit") and not inst.sg:HasStateTag("electrocute")) then
+    }]]
+
+    local doattackeventhandler = inst.events["doattack"]
+    if doattackeventhandler then
+        local doattackeventhandler_fn = doattackeventhandler.fn
+        doattackeventhandler.fn = function(inst, data, ...)
+            if not inst.franken and inst.components.health and not inst.components.health:IsDead() and (not inst.sg:HasStateTag("busy") or inst.sg:HasStateTag("hit") and not inst.sg:HasStateTag("electrocute")) then
+                if inst:HasTag("pigattacker") and data.target:HasTag("pigattacker") and not data.target:HasTag("werepig") or inst:HasTag("manrabbit") and data.target:HasTag("manrabbit") then
+                    inst.sg:GoToState("refuse", data.target)
+                    inst.components.combat:SetTarget(nil)
+                else
+                    local nstate = inst.sg:HasStateTag("charging") and "charge_attack"
+                        or inst.sg.mem.wantstocounter and "counterattack_pre"
+                        or "attack"
                     inst.sg:GoToState(nstate)
                 end
-                --inst.sg:GoToState("attack", data.target)
+                return
             end
-        end),
-    }
+            return doattackeventhandler_fn(inst, data, ...)
+        end
+    end
 
     local attackedeventhandler = inst.events["attacked"]
     if attackedeventhandler then
@@ -83,6 +84,7 @@ env.AddStategraphPostInit("pig", function(inst)
             tags = {"attack", "busy", "counter"},
 
             onenter = function(inst)
+                inst.sg.mem.wantstocounter = nil
                 inst.SoundEmitter:PlaySound("dontstarve/pig/attack")
                 inst.components.combat:StartAttack()
                 inst.Physics:Stop()
@@ -236,10 +238,10 @@ env.AddStategraphPostInit("pig", function(inst)
         }
     }
 
-    for k, v in pairs(events) do
+    --[[for k, v in pairs(events) do
         assert(v:is_a(EventHandler), "Non-event added in mod events table!")
         inst.events[v.name] = v
-    end
+    end]]
 
     for k, v in pairs(states) do
         assert(v:is_a(State), "Non-state added in mod state table!")
