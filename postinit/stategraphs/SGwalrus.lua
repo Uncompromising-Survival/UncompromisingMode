@@ -11,7 +11,7 @@ env.AddStategraphPostInit("walrus", function(inst)
     if doattackeventhandler then
         local doattackeventhandler_fn = doattackeventhandler.fn
         doattackeventhandler.fn = function(inst, data, ...)
-            if not (inst.components.health and inst.components.health:IsDead() or inst.sg:HasStateTag("electrocute")) and inst.sg.mem.wantstocounter then
+            if not (inst.components.health and inst.components.health:IsDead() or inst.sg:HasAnyStateTag("electrocute", "knockback")) and inst.sg.mem.wantstocounter then
                 inst.sg.mem.wantstocounter = nil
                 inst.sg:GoToState("counterattack")
 				return
@@ -27,7 +27,7 @@ env.AddStategraphPostInit("walrus", function(inst)
             if not (inst.components.health and inst.components.health:IsDead()) then
                 if CommonHandlers.TryElectrocuteOnAttacked(inst, data) then
                     return
-                elseif not inst.sg:HasAnyStateTag("attack", "electrocute") then
+                elseif not inst.sg:HasAnyStateTag("attack", "electrocute", "knockback") or inst.sg:HasStateTag("caninterrupt") then
                     if inst.sg.mem.wantstocounter then
                         inst.components.combat:ResetCooldown()
                         return

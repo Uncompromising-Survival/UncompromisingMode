@@ -2,18 +2,21 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 env.AddStategraphPostInit("perd", function(inst)
-    local _OldAttackedEvent = inst.events["attacked"].fn
-    inst.events["attacked"].fn = function(inst, data, ...)
-        if not (inst.components.health and inst.components.health:IsDead()) then
-            if CommonHandlers.TryElectrocuteOnAttacked(inst, data) then
-                return
-            elseif not inst.sg:HasStateTag("busy", "electrocute") then
-                if inst.attacked then
-                    inst.sg:GoToState("hitshort")
-                else
-                    _OldAttackedEvent(inst, data, ...)
+    local attackedeventhandler = inst.events["attacked"]
+    if attackedeventhandler then
+        local attackedeventhandler_fn = attackedeventhandler.fn
+        attackedeventhandler.fn = function(inst, data, ...)
+            if not (inst.components.health and inst.components.health:IsDead()) then
+                if CommonHandlers.TryElectrocuteOnAttacked(inst, data) then
+                    return
+                elseif not inst.sg:HasAnyStateTag("electrocute", "knockback") or inst.sg:HasStateTag("caninterrupt") then
+                    if inst.attacked then
+                        inst.sg:GoToState("hitshort")
+                        return
+                    end
                 end
             end
+            return attackedeventhandler_fn(inst, data, ...)
         end
     end
 

@@ -90,9 +90,10 @@ env.AddStategraphPostInit("spider", function(inst)
                 if CommonHandlers.TryElectrocuteOnAttacked(inst, data) then
                     return
                 elseif TUNING.DSTU.SPIDERWARRIORCOUNTER and inst:HasTag("spider_warrior") and not inst:HasTag("trapdoorspider")
-                    and not (inst.sg:HasAnyStateTag("caninterrupt", "electrocute") or inst:HasTag("forcestunned")) then
-                    if not inst.sg:HasAnyStateTag("attack", "evade") then
-                        if not inst.sg:HasStateTag("moving") then inst.sg:GoToState("hit") end
+                    and not (inst.sg:HasStateTag("electrocute") or inst:HasTag("forcestunned")) then
+                    local caninterrupt = inst.sg:HasStateTag("caninterrupt")
+                    if not inst.sg:HasAnyStateTag("attack", "evade", "knockback") or caninterrupt then
+                        if not inst.sg:HasStateTag("moving") or caninterrupt then inst.sg:GoToState("hit") end
                         local attacker = data.attacker
                         if attacker then inst:PushEvent("um_counterattack", {target = attacker}) end
                     end
