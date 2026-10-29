@@ -7,7 +7,7 @@ local function MakeCooker(inst)
 	local x,y,z = inst.Transform:GetWorldPosition()
 	
 
-	local offset = FindWalkableOffset(inst:GetPosition(), math.random() * 2 * PI, 23, 30, true,true)
+	local offset = FindWalkableOffset(inst:GetPosition(), math.random() * 2 * PI, 23, 30, true, true)
 
 	local spawner = SpawnPrefab("umss_general")
     spawner.DefineTable(spawner, "wagstaffcooker")

@@ -98,9 +98,6 @@ local function FeatherEffects(owner, totem)
         owner.SoundEmitter:PlaySound("saltydog/creatures/boss/malbatross/attack_call")
     end
 
-    local boss_feathers = malbatross_feather + goose_feather
-    local basic_feathers = feathertotal - boss_feathers
-    owner.components.health:DeltaPenalty((-0.25 / 3) * basic_feathers + (-0.50 / 3) * boss_feathers)
     owner:ListenForEvent("timerdone", OnTimerDone)
     totem.components.container:RemoveAllItems()
 

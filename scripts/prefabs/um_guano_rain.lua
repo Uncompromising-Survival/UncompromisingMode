@@ -5,8 +5,8 @@ local function CheckGuanoStatus(x, y, z)
     local impacted_rock
     local impacted_guano
     local gems = 0
-    local fertilizers = TheSim:FindEntities(x, y, z, 24, { "fertilizerresearchable" }) --#AXE technically any rock counts
-    local guano_rocks = TheSim:FindEntities(x, y, z, 36, { "guano_rock" })
+    local fertilizers = TheSim:FindEntities(x, y, z, 24, {"fertilizerresearchable"}) --#AXE technically any rock counts
+    local guano_rocks = TheSim:FindEntities(x, y, z, 36, {"guano_rock"})
     local too_close
 
     local guanos = {}
@@ -48,25 +48,22 @@ local DAMAGE_ONEOF_TAGS = {"NPC_workable", "CHOP_workable", "HAMMER_workable", "
 
 local function ContributeToPoopSociety(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    if math.random() > 0.75 then
+    if math.random() > .75 then
         local high, med, low, gems, impacted_rock, impacted_guano, too_close, guanos, guano_rocks = CheckGuanoStatus(x, y, z)
 
         if impacted_rock then
-            if impacted_rock.tier == 2 and high < (med + 1) then
+            if impacted_rock.tier == 2 and high < med + 1 then
                 impacted_rock.UpgradeTier(impacted_rock, 3)
             end
-            if impacted_rock.tier == 1 and med < (low + 2) then
+            if impacted_rock.tier == 1 and med < low + 2 then
                 impacted_rock.UpgradeTier(impacted_rock, 2)
             end
         else
             if impacted_guano then
-                local prefab = "um_guano_rock_gemless"
-                if math.random() > 0.75 then
-                    prefab = "um_guano_rock"
-                end
+                local prefab = math.random() > .75 and "um_guano_rock" or "um_guano_rock_gemless"
                 local rock = SpawnPrefab(prefab)
                 rock.tier = 1
-                rock:DoTaskInTime(0.1, function(rock)
+                rock:DoTaskInTime(.1, function(rock)
                     rock.AnimState:PlayAnimation("low_grow_0")
                     rock.AnimState:PushAnimation("low_0")
                 end)
@@ -88,7 +85,7 @@ local function ContributeToPoopSociety(inst)
         end
     end
     --AXE hit players in the head
-    for i, v in ipairs(TheSim:FindEntities(x, 0, z, 2, { "_sanity" })) do
+    for i, v in ipairs(TheSim:FindEntities(x, 0, z, 2, {"_sanity"})) do
         if v:IsValid() then
             v.components.sanity:DoDelta(v.prefab == "wormwood" and 5 or -10)
             v:PushEvent("attacked", {attacker = inst, damage = 0})
@@ -110,15 +107,13 @@ local function FreeFallin(inst)
         inst.updatetask = nil
 
         inst:Hide()
-        inst:DoTaskInTime(2, function(inst) --AXE need to give it some time to emit the sound
-            inst:Remove()
-        end)
+        inst:DoTaskInTime(2, inst.Remove) --AXE need to give it some time to emit the sound
     end
 end
 
 local function BeginFreeFallin(inst)
-    if math.random() > 0.5 then
-        inst.SoundEmitter:PlaySound("dontstarve/creatures/bat/" .. (math.random() > 0.75 and "taunt" or "flap"))
+    if math.random() > .5 then
+        inst.SoundEmitter:PlaySound("dontstarve/creatures/bat/"..(math.random() > .75 and "taunt" or "flap"))
     end
     if inst.entity:IsAwake() then --AXE if this prefab spawns whenever there's no player nearby, it must be removed immediately so it doesn't set up the Periodic Task below.
         inst.AnimState:SetDeltaTimeMultiplier(.1)
@@ -141,11 +136,11 @@ local function fnparticle()
     inst.entity:AddAnimState()
     inst.entity:AddNetwork()
     inst.entity:AddSoundEmitter()
+
     MakeInventoryPhysics(inst)
 
     inst.AnimState:SetBank("guano")
     inst.AnimState:SetBuild("guano")
-
 
     inst.entity:SetPristine()
 
@@ -153,14 +148,11 @@ local function fnparticle()
         return inst
     end
 
-
     inst:DoTaskInTime(0, BeginFreeFallin)
 
     inst.persists = false
     return inst
 end
-
-
 
 local function GenerateSomeGuanoStuffsOffScreen(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
@@ -176,23 +168,20 @@ local function GenerateSomeGuanoStuffsOffScreen(inst)
             if high < 3 and med > 0 then
                 for i, v in ipairs(guano_rocks) do
                     if v.tier == 2 then
-                        v.UpgradeTier(v, 3)
+                        v:UpgradeTier(3)
                         break
                     end
                 end
             elseif med < 7 and low > 0 then
                 for i, v in ipairs(guano_rocks) do
                     if v.tier == 1 then
-                        v.UpgradeTier(v, 2)
+                        v:UpgradeTier(2)
                         break
                     end
                 end
             else
                 local offset = FindWalkableOffset(inst:GetPosition(), TWOPI * math.random(), math.random(4, 32), 64)
-                local prefab = "um_guano_rock_gemless"
-                if math.random() > 0.8 then
-                    prefab = "um_guano_rock"
-                end
+                local prefab = math.random() > .8 and "um_guano_rock" or "um_guano_rock_gemless"
                 local rock = SpawnPrefab(prefab)
                 rock.Transform:SetPosition(x + offset.x, y, z + offset.z)
                 rock.tier = math.random(1, 2)
@@ -261,8 +250,7 @@ local function Deactivate(inst)
     inst.woke = nil
 end
 
-local function OnSave(inst)
-    local data = {}
+local function OnSave(inst, data)
     data.active = inst.active
     data.woke = inst.woke
 end
@@ -301,6 +289,7 @@ local function fnnode()
 
     inst.OnSave = OnSave
     inst.OnLoad = OnLoad
+
     inst:DoTaskInTime(0, function(inst)
         local guano_rain_component = TheWorld.components.um_guano_rain
         if guano_rain_component then
@@ -309,6 +298,7 @@ local function fnnode()
             inst:Remove()
         end
     end)
+
     return inst
 end
 

@@ -155,10 +155,10 @@ local function fndormant()
     ---------------------------------------------------------------------
 
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/dormant_rain_horn.xml"
     ---------------------------------------------------------------------
 
     return inst
 end
+
 return Prefab("rain_horn", fn, assets, prefabs),
-Prefab("dormant_rain_horn", fndormant)
+    Prefab("dormant_rain_horn", fndormant)

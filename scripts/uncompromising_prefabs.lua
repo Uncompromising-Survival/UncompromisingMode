@@ -451,7 +451,6 @@ local prefabs = {
     "wixie_reticuleline",
     "wixiegun",
 
-    "winona_structure_item",
     "boiling_water",
     "crabking_geyser_single",
     "staff_starfall",

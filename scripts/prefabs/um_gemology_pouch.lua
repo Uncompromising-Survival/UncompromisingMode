@@ -23,6 +23,7 @@ local SOUNDS =
 local function OnOpen(inst)
     inst.AnimState:PlayAnimation("idle_opened")
 
+    inst.components.inventoryitem.atlasname = resolvefilepath("images/inventoryimages/um_gemology_pouch.xml")
     inst.components.inventoryitem:ChangeImageName("um_gemology_pouch_open")
     inst.SoundEmitter:PlaySound(inst._sounds.open)
 end
@@ -34,7 +35,8 @@ local function OnClose(inst)
         inst.AnimState:PlayAnimation("idle_closed", false)
     end
 
-    inst.components.inventoryitem:ChangeImageName("um_gemology_pouch")
+    inst.components.inventoryitem.atlasname = nil
+    inst.components.inventoryitem:ChangeImageName(nil)
     inst.SoundEmitter:PlaySound(inst._sounds.close)
 end
 
@@ -90,8 +92,6 @@ local function fn()
 
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem:SetOnPutInInventoryFn(OnPutInInventory)
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/um_gemology_pouch.xml"
-    inst.components.inventoryitem:ChangeImageName("um_gemology_pouch")
 
     MakeHauntableLaunchAndDropFirstItem(inst)
 

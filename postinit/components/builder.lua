@@ -1,9 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
-
 local TechTree = require("techtree")
-
 local PROTOTYPER_TAGS = {"prototyper"}
 
 --[[local BLOCKCRAFTING_FNNAMES = {"MakeRecipeFromMenu", "MakeRecipeAtPoint", "BufferBuild"}

@@ -57,13 +57,33 @@ function UMCommonFns.IsAlly(inst, guy, tags) -- Used for UMIsAlly on certain cre
     return guy:HasAnyTag(tags)
 end
 
+local function BrieflyRemovePeacefulMountTag(mount, toggle)
+    if mount then
+        if toggle then
+            if mount:HasTag("peacefulmount") then
+                mount:RemoveTag("peacefulmount")
+                return true
+            end
+        else
+            mount:AddTag("peacefulmount")
+        end
+    end
+end
+
 function UMCommonFns.IsNotFriendly(attacker, target) -- Is the target an ally or my leader's ally?
     local attackercombat = attacker and attacker:IsValid() and attacker.components.combat
     if not attackercombat or not target.components.health then return true end
-    local leader = attacker and attacker.components.follower and attacker.components.follower:GetLeader()
+    local attackermount = attacker.components.rider and attacker.components.rider:GetMount()
+    local leader = attacker.components.follower and attacker.components.follower:GetLeader()
+    local leadermount = leader and leader.components.rider and leader.components.rider:GetMount()
     local leadercombat = leader and leader.components.combat
-    return attackercombat and (attackercombat.target == target or attackercombat:CanTarget(target) and not attackercombat:IsAlly(target)
+    local attackermounthadtag = BrieflyRemovePeacefulMountTag(attackermount, true)
+    local leadermounthadtag = BrieflyRemovePeacefulMountTag(leadermount, true)
+    local ret = attackercombat and (attackercombat.target == target or attackercombat:CanTarget(target) and not attackercombat:IsAlly(target)
         and (not leader or leadercombat and leadercombat:CanTarget(target) and not leadercombat:IsAlly(target)))
+    if attackermounthadtag then BrieflyRemovePeacefulMountTag(attackermount) end
+    if leadermounthadtag then BrieflyRemovePeacefulMountTag(leadermount) end
+    return ret
 end
 
 local SpDamageUtil = require("components/spdamageutil")

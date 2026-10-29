@@ -318,14 +318,14 @@ local states =
 
     State {
         name = "shards_pre",
-        tags = { "attack", "busy", "canrotate", "shards" },
+        tags = { "attack", "busy", "shards" },
 
         onenter = function(inst)
             inst.Physics:Stop()
             inst.components.combat:StartAttack()
             inst.AnimState:PlayAnimation("spin_pre")
             inst.SoundEmitter:PlaySound("UCSounds/moonmaw/anger")
-            inst.SpawnShards(inst)
+            inst:SpawnShards()
         end,
 
         TimeEvent(5 * FRAMES, function(inst)
@@ -339,7 +339,7 @@ local states =
     },
     State {
         name = "shards",
-        tags = { "attack", "busy", "canrotate", "shards" },
+        tags = { "attack", "busy", "shards" },
 
         onenter = function(inst)
             inst.Physics:Stop()
@@ -368,7 +368,7 @@ local states =
 
     State {
         name = "lavaeattack_pre",
-        tags = { "attack", "busy", "canrotate" },
+        tags = { "attack", "busy" },
 
         onenter = function(inst)
             inst.Physics:Stop()
@@ -405,7 +405,7 @@ local states =
 
     State {
         name = "lavaeattack",
-        tags = { "attack", "busy", "canrotate" },
+        tags = { "attack", "busy" },
 
         onenter = function(inst)
             inst.Physics:Stop()
@@ -443,7 +443,7 @@ local states =
 
     State {
         name = "attack",
-        tags = { "attack", "busy", "canrotate" },
+        tags = { "attack", "busy" },
 
         onenter = function(inst)
             inst.Physics:Stop()
@@ -676,7 +676,7 @@ local states =
     },
     State {
         name = "skyfall",
-        tags = { "busy", "canrotate", "crashed", "nosleep" },
+        tags = { "busy", "crashed", "nosleep" },
 
         onenter = function(inst)
             inst.Physics:Stop()
@@ -698,7 +698,7 @@ local states =
     },
     State {
         name = "crashed",
-        tags = { "busy", "canrotate", "crashed", "nosleep" },
+        tags = { "busy", "crashed", "nosleep" },
 
         onenter = function(inst)
             inst.Physics:Stop()
@@ -721,7 +721,7 @@ local states =
     },
     State {
         name = "getup",
-        tags = { "busy", "canrotate", "crashed", "nosleep" },
+        tags = { "busy", "crashed", "nosleep" },
 
         onenter = function(inst)
             inst.Physics:Stop()
@@ -736,7 +736,7 @@ local states =
     },
     State {
         name = "summoncrystals",
-        tags = { "busy", "canrotate", "attack", "crystals" },
+        tags = { "busy", "attack", "crystals" },
 
         onenter = function(inst)
             inst.Physics:Stop()

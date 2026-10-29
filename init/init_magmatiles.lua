@@ -89,54 +89,30 @@ end)
 --playeractionpicker hell and agony
 env.AddComponentPostInit("playeractionpicker", function(self)
     local _GetRightClickActions = self.GetRightClickActions
-
     function self:GetRightClickActions(position, target, spellbook, ...)
+        local actions = _GetRightClickActions(self, position, target, spellbook, ...)
         local equipitem = self.inst.replica.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
 
-        local actions = _GetRightClickActions(self, position, target, spellbook)
-
-        if target ~= nil and not target:HasTag("walkableplatform") then
-            if actions == nil or #actions == 0 then
-                actions = self:GetSceneActions(target, true)
-                if (#actions == 0 or (#actions == 1 and actions[1].action == ACTIONS.LOOKAT)) and target:HasTag("walkableperipheral") then
-                    if equipitem ~= nil and equipitem:IsValid() then
-                        local alwayspassable, allowwater --, deployradius
-                        local aoetargeting = equipitem.components.aoetargeting
-                        if aoetargeting ~= nil and aoetargeting:IsEnabled() then
-                            alwayspassable = aoetargeting.alwaysvalid
-                            allowwater = aoetargeting.allowwater
-                            --deployradius = aoetargeting.deployradius
-                        end
-                        --V2C: just do passable check here, componentactions tends to redo the full check
-                        --if self.map:CanCastAtPoint(position, alwayspassable, allowwater, deployradius) then
-                        if alwayspassable or equipitem:HasTag("allow_action_on_lava") and self.map:GetTileAtPoint(position:Get()) == WORLD_TILES.UM_MAGMA_LAVAMOLTEN then
-                            actions = self:GetPointActions(position, equipitem, true, target)
-                        end
-                    end
-                end
-            end
-        else
-            local item = spellbook or equipitem
-            if item ~= nil and item:IsValid() then
-                local alwayspassable, allowwater --, deployradius
-                local aoetargeting = item.components.aoetargeting
-                if aoetargeting ~= nil and aoetargeting:IsEnabled() then
-                    alwayspassable = item.components.aoetargeting.alwaysvalid
-                    allowwater = item.components.aoetargeting.allowwater
-                    --deployradius = item.components.aoetargeting.deployradius
-                end
-                alwayspassable = alwayspassable
-                --V2C: just do passable check here, componentactions tends to redo the full check
-                --if self.map:CanCastAtPoint(position, alwayspassable, allowwater, deployradius) then
-                if alwayspassable or item:HasTag("allow_action_on_lava") and self.map:GetTileAtPoint(position:Get()) == WORLD_TILES.UM_MAGMA_LAVAMOLTEN then
-                    actions = self:GetPointActions(position, item, true, target)
-                end
-            end
+        if equipitem and equipitem:IsValid() and equipitem:HasTag("allow_action_on_lava") and self.map:GetTileAtPoint(position:Get()) == WORLD_TILES.UM_MAGMA_LAVAMOLTEN then
+            actions = self:GetPointActions(position, equipitem, true, target)
         end
 
         return actions
     end
 end)
+
+--[[local UM_CAST_DEPLOY_IGNORE_TAGS = {"NOBLOCK", "player", "FX", "INLIMBO", "DECOR", "walkableplatform", "walkableperipheral", "isdead", "locomotor", "_inventoryitem", "allow_casting"}
+env.AddPrefabPostInit("world", function(inst)
+    local Map = getmetatable(inst.Map).__index
+
+    local _CanCastAtPoint = Map.CanCastAtPoint
+    function Map:CanCastAtPoint(pt, alwayspassable, allowwater, deployradius, ...)
+        if allowwater and self:GetTileAtPoint(pt:Get()) == WORLD_TILES.UM_MAGMA_LAVAMOLTEN and not self:IsGroundTargetBlocked(pt) then
+            return deployradius == nil or deployradius <= 0 or self:IsDeployPointClear(pt, nil, deployradius, nil, nil, nil, UM_CAST_DEPLOY_IGNORE_TAGS)
+        end
+        return _CanCastAtPoint(self, pt, alwayspassable, allowwater, deployradius, ...)
+    end
+end)]]
 
 local function DoMagmaCoolProjectile(inst)
     --we don't want you to be able to throw these on the void or other impassible tiles, only lava.

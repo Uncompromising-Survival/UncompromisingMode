@@ -284,13 +284,13 @@ local function KillOffRimeweed(inst, toggle)
     end)
 end
 
-local function OnSeasonChanged(inst, season)
+local function OnSeasonChange(inst, season)
     KillOffRimeweed(inst, season ~= SEASONS.WINTER)
 end
 
 local function SetupWatchWorldState(inst)
-    inst:WatchWorldState("season", OnSeasonChanged)
-    KillOffRimeweed(inst, not TheWorld.state.iswinter)
+    inst:WatchWorldState("season", OnSeasonChange)
+    OnSeasonChange(inst, TheWorld.state.season)
 end
 
 local function OnIsPathFindingDirty(inst)

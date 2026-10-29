@@ -15,22 +15,23 @@ local function ChillSurroundings(inst)
     for i, v in ipairs(burnables) do
         if v:IsValid() then
             local attackable = UMCommonFns.IsNotFriendly(inst.um_damager, v)
-            if not attackable then return end
-            if v.components.burnable and not (v.prefab == "um_fire_projectile" and v.chilly) then
-                v.components.burnable:Extinguish(true)
-            end
-            if not v:HasTag("wall") then
-                if v.components.health then
-                    v.components.health:DoDelta(-damage, false, inst.um_damager and inst.um_damager.prefab or nil, nil, inst.um_damager)
+            if attackable then
+                if v.components.burnable and not (v.prefab == "um_fire_projectile" and v.chilly) then
+                    v.components.burnable:Extinguish(true)
                 end
-                if v.components.combat and inst.um_damager then
-                    v.components.combat:SuggestTarget(inst.um_damager)
-                end
-                if v.components.freezable then
-                    v.components.freezable:AddColdness(0.15, 3)
-                end
-                if v.components.temperature and v.components.temperature.current > -15 then
-                    v.components.temperature:DoDelta(-1)
+                if not v:HasTag("wall") then
+                    if v.components.health then
+                        v.components.health:DoDelta(-damage, false, inst.um_damager and inst.um_damager.prefab or nil, nil, inst.um_damager)
+                    end
+                    if v.components.combat and inst.um_damager then
+                        v.components.combat:SuggestTarget(inst.um_damager)
+                    end
+                    if v.components.freezable then
+                        v.components.freezable:AddColdness(0.15, 3)
+                    end
+                    if v.components.temperature and v.components.temperature.current > -15 then
+                        v.components.temperature:DoDelta(-1)
+                    end
                 end
             end
         end
@@ -48,19 +49,20 @@ local function BurnSurroundings(inst)
                 v:Remove()
             end
             local attackable = UMCommonFns.IsNotFriendly(inst.um_damager, v)
-            if not attackable then return end
-            if not v.components.fueled and v.components.burnable and not v.components.burnable:IsBurning() and not v:HasTag("burnt") then
-                v.components.burnable:Ignite(true, inst, inst.um_damager)
-            end
-            if not v:HasTag("wall") then
-                if v.components.health then
-                    v.components.health:DoFireDamage(damage, inst.um_damager, true)
+            if attackable then
+                if not v.components.fueled and v.components.burnable and not v.components.burnable:IsBurning() and not v:HasTag("burnt") then
+                    v.components.burnable:Ignite(true, inst, inst.um_damager)
                 end
-                if v.components.combat and inst.um_damager then
-                    v.components.combat:SuggestTarget(inst.um_damager)
-                end
-                if v.components.temperature and v.components.temperature.current < 90 then
-                    v.components.temperature:DoDelta(1)
+                if not v:HasTag("wall") then
+                    if v.components.health then
+                        v.components.health:DoFireDamage(damage, inst.um_damager, true)
+                    end
+                    if v.components.combat and inst.um_damager then
+                        v.components.combat:SuggestTarget(inst.um_damager)
+                    end
+                    if v.components.temperature and v.components.temperature.current < 90 then
+                        v.components.temperature:DoDelta(1)
+                    end
                 end
             end
         end

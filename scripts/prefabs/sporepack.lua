@@ -63,7 +63,7 @@ local function DoSporeRefresh(inst)
 end
 
 local function PreserverRateFn(inst, item) -- Reason for above is that we want all items to refresh at the same time and rate.
-    return item:HasAnyTag(ITEM_REFRESH_TAGS) and 0 or 2
+    return item and item:HasAnyTag(ITEM_REFRESH_TAGS) and 0 or 2
 end
 
 local function fn()

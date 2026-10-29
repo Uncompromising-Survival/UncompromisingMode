@@ -82,26 +82,168 @@ GLOBAL.TUNING.ROCK_FRUIT_REGROW = {
 -----------------------------------------------------------------
 -- Relevant: MakeNoGrowInWinter in standardcomponents.lua
 
-local function ToggleGrowable(inst)
-    local iswinter = TheWorld.state.season == "winter"
-
-    if iswinter then
-        inst.components.growable:Pause("winter")
-    else
-        inst.components.growable:Resume("winter")
+if GetModConfigData("no_winter_growing_") then
+    local function ToggleGrowable(growable, iswinter)
+        if iswinter then
+            growable.um_winternogrowcheck = true
+            growable:Pause("um_winter")
+            growable.um_winternogrowcheck = nil
+        else
+            growable:Resume("um_winter")
+        end
     end
-end
 
-local _MakeNoGrowInWinter = GLOBAL.MakeNoGrowInWinter
-
-function GLOBAL.MakeNoGrowInWinter(inst)
-    if inst.components.pickable then
-        _MakeNoGrowInWinter(inst)
-    end --making this not an elseif to do BOTH if something has both pickable and growable
-    if inst.components.growable then
-        inst:WatchWorldState("season", ToggleGrowable)
-        ToggleGrowable(inst)
+    local function ToggleHarvestable(harvestable, iswinter)
+        if iswinter then
+            harvestable:PauseGrowing()
+        else
+            if harvestable.produce < harvestable.maxproduce then
+                harvestable:StartGrowing()
+            end
+        end
     end
+
+    local _MakeNoGrowInWinter = GLOBAL.MakeNoGrowInWinter
+    function GLOBAL.MakeNoGrowInWinter(inst, ...)
+        if inst.components.pickable then
+            _MakeNoGrowInWinter(inst, ...)
+        end --making this not an elseif to do BOTH if something has both pickable and growable
+        local growable = inst.components.growable
+        if growable then
+            growable:WatchWorldState("iswinter", ToggleGrowable)
+            ToggleGrowable(growable, TheWorld.state.iswinter)
+        end
+        local harvestable = inst.components.harvestable
+        if harvestable then
+            harvestable:WatchWorldState("iswinter", ToggleHarvestable)
+            ToggleHarvestable(harvestable, TheWorld.state.iswinter)
+        end
+        inst.um_nogrow_winter = true
+    end
+
+    local nowintergrowing = {
+        "rock_avocado_bush",
+        "cherrytomato_planted",
+        "cactus",
+        "oasis_cactus",
+        "bullkelp_plant",
+        "mushroom_farm"
+    }
+
+    local function MakeNotGrowInWinter(prefab)
+        AddPrefabPostInit(prefab, function(inst)
+            if not GLOBAL.TheWorld.ismastersim then return end
+            GLOBAL.MakeNoGrowInWinter(inst)
+        end)
+    end
+
+    for k, v in pairs(nowintergrowing) do
+        MakeNotGrowInWinter(v)
+    end
+
+    -- Farm Crops
+    local PLANT_DEFS = require("prefabs/farm_plant_defs").PLANT_DEFS
+    for k, v in pairs(PLANT_DEFS) do
+        MakeNotGrowInWinter(v.prefab)
+    end
+
+    -- Weeds
+    local WEED_DEFS = require("prefabs/weed_defs").WEED_DEFS
+    for k, v in pairs(WEED_DEFS) do
+        MakeNotGrowInWinter(v.prefab)
+    end
+
+    local function IsWinterAndCantGrow(inst, bypass)
+        return inst.um_nogrow_winter and TheWorld.state.iswinter and not bypass
+    end
+
+    -- Extra check for Farm Crops, Banana Bushes, and Stone Fruit
+    AddComponentPostInit("simplemagicgrower", function(self)
+        local _StartGrowing = self.StartGrowing
+        function self:StartGrowing(...)
+            if IsWinterAndCantGrow(self.inst) then return end
+            return _StartGrowing(self, ...)
+        end
+    end)
+
+    do
+        local Growable = require("components/growable")
+        local _StartGrowing = Growable.StartGrowing
+        function Growable:StartGrowing(time, ...)
+            if IsWinterAndCantGrow(self.inst, self.um_winternogrowcheck) then return end
+            return _StartGrowing(self, time, ...)
+        end
+
+        local _DoMagicGrowth = Growable.DoMagicGrowth
+        function Growable:DoMagicGrowth(doer, ...)
+            if IsWinterAndCantGrow(self.inst) then return false end
+            return _DoMagicGrowth(self, doer, ...)
+        end
+
+        local _DoGrowth = Growable.DoGrowth
+        function Growable:DoGrowth(skipgrownfn, ...)
+            if IsWinterAndCantGrow(self.inst, self.um_winternogrowcheck) then return false end
+            return _DoGrowth(self, skipgrownfn, ...)
+        end
+
+        local _OnLoad = Growable.OnLoad
+        function Growable:OnLoad(data, ...)
+            self.um_winternogrowcheck = true
+            local ret = _OnLoad(self, data, ...)
+            if IsWinterAndCantGrow(self.inst) then self:Pause("um_winter") end
+            self.um_winternogrowcheck = nil
+            return ret
+        end
+    end
+
+    AddComponentPostInit("pickable", function(self)
+        local _Resume = self.Resume
+        function self:Resume(...)
+            if IsWinterAndCantGrow(self.inst) then return end
+            return _Resume(self, ...)
+        end
+    end)
+
+    do
+        local Harvestable = require("components/harvestable")
+        local _DoMagicGrowth = Harvestable.DoMagicGrowth
+        function Harvestable:DoMagicGrowth(doer, ...)
+            if IsWinterAndCantGrow(self.inst) then return end
+            return _DoMagicGrowth(self, doer, ...)
+        end
+
+        local _SetGrowTime = Harvestable.SetGrowTime
+        function Harvestable:SetGrowTime(time, ...)
+            local ret = _SetGrowTime(self, time, ...)
+            if IsWinterAndCantGrow(self.inst) and not self.growtime then self.pausetime = nil end
+            return ret
+        end
+
+        local _Grow = Harvestable.Grow
+        function Harvestable:Grow(...)
+            if IsWinterAndCantGrow(self.inst) and (not self.inst:HasTag("mushroom_farm") or self.produce >= 1) then return false end
+            return _Grow(self, ...)
+        end
+
+        local _StartGrowing = Harvestable.StartGrowing
+        function Harvestable:StartGrowing(time, ...)
+            if IsWinterAndCantGrow(self.inst) then return end
+            return _StartGrowing(self, time, ...)
+        end
+
+        local _StopGrowing = Harvestable.StopGrowing
+        function Harvestable:StopGrowing(...)
+            local taskexisted = self.task
+            local ret = _StopGrowing(self, ...)
+            if IsWinterAndCantGrow(self.inst) and taskexisted and not self.task then self.pausetime = nil end
+            return ret
+        end
+    end
+
+    PLANT_DEFS.potato.good_seasons = { autumn = true, spring = true }
+    PLANT_DEFS.carrot.good_seasons = { autumn = true, spring = true, summer = true }
+    PLANT_DEFS.pumpkin.good_seasons = { autumn = true, summer = true }
+    PLANT_DEFS.asparagus.good_seasons = { spring = true, autumn = true }
 end
 
 -- TODO: Config
@@ -115,74 +257,6 @@ GLOBAL.TUNING.ROCK_FRUIT_LOOT =
     MAX_SPAWNS = 10,
 }
 
-if GetModConfigData("no_winter_growing_") then
-    local nowintergrowing = {
-        --"rock_avocado_bush",
-        "cherrytomato_planted",
-        "cactus",
-        "oasis_cactus",
-        "bullkelp_plant",
-    }
-
-    for k, v in pairs(nowintergrowing) do
-        AddPrefabPostInit(v, function(inst)
-            if not GLOBAL.TheWorld.ismastersim then return end
-            GLOBAL.MakeNoGrowInWinter(inst)
-        end)
-    end
-
-    -- Farm Crops
-    local PLANT_DEFS = require("prefabs/farm_plant_defs").PLANT_DEFS
-    for k, v in pairs(PLANT_DEFS) do
-        AddPrefabPostInit(v.prefab, function(inst)
-            if not GLOBAL.TheWorld.ismastersim then return end
-            GLOBAL.MakeNoGrowInWinter(inst)
-        end)
-    end
-
-    -- Weeds
-    local WEED_DEFS = require("prefabs/weed_defs").WEED_DEFS
-    for k, v in pairs(WEED_DEFS) do
-        AddPrefabPostInit(v.prefab, function(inst)
-            if not GLOBAL.TheWorld.ismastersim then return end
-            GLOBAL.MakeNoGrowInWinter(inst)
-        end)
-    end
-
-    -- Extra check for Farm Crops, Banana Bushes, and Stone Fruit
-    AddComponentPostInit("growable", function(self)
-        local _Resume = self.Resume
-        function self:Resume(...)
-            if (self.inst:HasTag("bananabush") --[[or self.inst.prefab == "rock_avocado_bush"]]) and GLOBAL.TheWorld.state.iswinter then
-                return false
-            end
-            return _Resume(self, ...)
-        end
-
-        local _StartGrowing = self.StartGrowing
-        function self:StartGrowing(time)
-            if (self.inst:HasTag("bananabush") --[[or self.inst.prefab == "rock_avocado_bush"]]) and GLOBAL.TheWorld.state.iswinter then
-                return false
-            end
-            return _StartGrowing(self, time)
-        end
-    end)
-
-    AddComponentPostInit("pickable", function(self)
-        local _Resume = self.Resume
-        function self:Resume(cause, ...)
-            if (self.inst:HasTag("bananabush") --[[or self.inst.prefab == "rock_avocado_bush"]]) and GLOBAL.TheWorld.state.iswinter then
-                return false
-            end
-            return _Resume(self, ...)
-        end
-    end)
-
-    PLANT_DEFS.potato.good_seasons = { autumn = true, spring = true }
-    PLANT_DEFS.carrot.good_seasons = { autumn = true, spring = true, summer = true }
-    PLANT_DEFS.pumpkin.good_seasons = { autumn = true, summer = true }
-    PLANT_DEFS.asparagus.good_seasons = { spring = true, autumn = true }
-end
 -----------------------------------------------------------------
 -- Bunnies don't drop carrots anymore
 -----------------------------------------------------------------

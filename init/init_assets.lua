@@ -458,7 +458,6 @@ local inventoryitems =
     "um_magnifier_purplegem",
 
     "um_gemology_pouch",
-    --"um_gemology_pouch_open",
     "um_hat_nettlemask",
     "um_thulecite_razor",
     "um_winkyhomeburrow",
@@ -1820,8 +1819,6 @@ Assets = {
     Asset("ANIM", "anim/um_wortox_shadow.zip"),
 
     Asset("ANIM", "anim/trinket_wathom1.zip"),
-
-    Asset("ANIM", "anim/winona_portables.zip"),
 
     Asset("ANIM", "anim/ui_um_cookpot_wagstaff_1x4.zip"),
 

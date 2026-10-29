@@ -7,17 +7,15 @@ env.AddComponentPostInit("playeractionpicker", function(self)
         if self.leftclickoverride ~= nil then
             local actions, usedefault = self.leftclickoverride(self.inst, target, position)
             if not usedefault or (actions ~= nil and #actions > 0) then
-                return actions or {}
+                return _GetLeftClickActions(self, position, target, ...)
             end
         end
 
-        local actions = nil
         local useitem = self.inst.replica.inventory and self.inst.replica.inventory:GetActiveItem()
 
         --if we're specifically using an bottle, see if we can use it on the target boat, because the game only does exclusion for that on right click for repairables.
-        if useitem ~= nil and useitem:IsValid() and target ~= nil and target:HasTag("walkableplatform") and useitem:HasTag("boatbottle") then
-            actions = self:GetUseItemActions(target, useitem)
-            return actions
+        if useitem and useitem:IsValid() and target and target:HasTag("walkableplatform") and useitem:HasTag("boatbottle") then
+            return self:GetUseItemActions(target, useitem)
         end
 
         return _GetLeftClickActions(self, position, target, ...)
@@ -128,8 +126,7 @@ env.AddComponentPostInit("playeractionpicker", function(self)
             end
 
             return actions or {}
-        else
-            return _GetRightClickActions(self, position, target, spellbook, ...)
         end
+        return _GetRightClickActions(self, position, target, spellbook, ...)
     end
 end)

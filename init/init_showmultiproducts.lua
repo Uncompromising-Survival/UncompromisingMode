@@ -18,10 +18,9 @@ AddClassPostConstruct("widgets/redux/craftingmenu_widget", function(self, owner,
     end
 
     -- Show and hide the text accordingly
-    local _old_update_fn = self.recipe_grid.update_fn
-
-    self.recipe_grid.update_fn = function(context, widget, data, index)
-        _old_update_fn(context, widget, data, index)
+    local _update_fn = self.recipe_grid.update_fn
+    self.recipe_grid.update_fn = function(context, widget, data, index, ...)
+        _update_fn(context, widget, data, index, ...)
 
         if data ~= nil and data.recipe ~= nil and data.meta ~= nil and data.recipe.numtogive ~= nil and data.recipe.numtogive > 1 then
             widget.numtogive:SetString(data.recipe.numtogive)
@@ -39,11 +38,10 @@ AddClassPostConstruct("widgets/redux/craftingmenu_pinslot", function(self, owner
     self.item_img.numtogive:SetPosition(30,-24)
     self.item_img.numtogive:Hide()
 
-    local _old_refresh = self.Refresh
-
     -- Show and hide the text accordingly
+    local _refresh = self.Refresh 
     function self:Refresh(...)
-        _old_refresh(self, ...)
+        _refresh(self, ...)
 
         if not self.item_img.numtogive or not self.item_img.numtogive.inst:IsValid() then return end
 
