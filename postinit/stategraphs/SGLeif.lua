@@ -1,17 +1,16 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
+local STUMP_MUST_TAGS = {"stump", "evergreen"}
+local STUMP_CANT_TAGS = {"leif", "burnt", "deciduoustree"}
+
 env.AddStategraphPostInit("leif", function(inst)
     local events =
     {
         EventHandler("snare", function(inst, data)
             if not (inst.sg:HasStateTag("busy") or inst.components.health:IsDead()) then
-                if TUNING.DSTU.PINELINGS then
-                    local stump = FindEntity(inst, TUNING.LEIF_MAXSPAWNDIST, nil, {"stump", "evergreen"}, {"leif", "burnt", "deciduoustree"})
-                    if stump then inst.sg:GoToState("summon") end
-                else
-                    inst.sg:GoToState("snare")
-                end
+                local stump = TUNING.DSTU.PINELINGS and FindEntity(inst, TUNING.LEIF_MAXSPAWNDIST, nil, STUMP_MUST_TAGS, STUMP_CANT_TAGS)
+                inst.sg:GoToState(stump and "summon" or "snare")
             else
                 inst.components.timer:StartTimer("snare_cd", TUNING.STALKER_ABILITY_RETRY_CD)
             end
