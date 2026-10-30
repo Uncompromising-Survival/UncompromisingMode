@@ -46,7 +46,7 @@ if TUNING.DSTU.PK_GUARDS then
         if item.components.edible and item.components.edible.foodtype ~= FOODTYPE.ROUGHAGE and item.components.edible.hungervalue > 70 and recruit then
             SendRecruit(inst, item.components.edible.hungervalue, recruit, giver)
             inst.sg:GoToState("cointoss")
-            --_inst.sg:GoToState("recruit")
+            --inst.sg:GoToState("recruit")
         else
             return _OnAccept and _OnAccept(inst, giver, item, ...)
         end
