@@ -2,17 +2,41 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 
-env.AddComponentPostInit("wisecracker", function(self, inst)
-    self.inst = inst
-
-    inst:ListenForEvent("rooting", function(inst, data)
-        inst.components.talker:Say(GetString(inst, "ANNOUNCE_ROOTING"))
+env.AddComponentPostInit("wisecracker", function(self)
+    self.inst:ListenForEvent("rooting", function(_inst, data)
+        _inst.components.talker:Say(GetString(_inst, "ANNOUNCE_ROOTING"))
     end)
 end)
 
 local prefabs = {
     "rootspike",
 }
+
+local function OnNewCombatTarget(inst, data)
+	if data and data.target and not data.oldtarget then
+        inst.um_engaged = true
+        UMCommonFns.RestartTimer(inst, {name = "snare_cd", time = TUNING.STALKER_ABILITY_RETRY_CD, dontrestarttimer = true})
+	end
+end
+
+local function OnDroppedTarget(inst)
+    inst.um_engaged = nil
+end
+
+local function TrySnare(inst)
+    local target = inst.components.combat.target
+    if target and target:IsValid() and inst:GetDistanceSqToInst(target) < 200 then
+        inst:PushEvent("snare", target)
+    else
+        if inst.um_engaged then inst.components.timer:StartTimer("snare_cd", TUNING.STALKER_ABILITY_RETRY_CD) end
+    end
+end
+
+local function OnTimerDone(inst, data)
+    if data.name == "snare_cd" then
+        TrySnare(inst)
+    end
+end
 
 local SNARE_OVERLAP_MIN = 1
 local SNARE_OVERLAP_MAX = 3
@@ -113,51 +137,42 @@ local function SpawnSnare(inst, target)
     return true
 end
 
+local function spawn_stumpling(target)
+    local stumpling = SpawnPrefab(target:HasTag("deciduous") and "birchling" or "stumpling")
+
+    if target.chopper then
+        stumpling.components.combat:SuggestTarget(target.chopper)
+    end
+
+    local x, y, z = target.Transform:GetWorldPosition()
+    local effect = SpawnPrefab("round_puff_fx_hi")
+    effect.Transform:SetPosition(x, y, z)
+    stumpling.Transform:SetPosition(x, y, z)
+    stumpling.sg:GoToState("hit")
+    target:Remove()
+end
+
+local STUMP_MUST_TAGS = {"stump"}
+local STUMP_CANT_TAGS = {"leif", "burnt"}
+local STUMP_ONEOF_TAGS = {"evergreens", "deciduoustree"}
+
 local function find_leif_spawn_target(item)
     return not item.noleif
         and item.components.growable ~= nil
         and item.components.growable.stage <= 3
 end
 
-local function spawn_stumpling(target)
-    if target:HasTag("deciduous") then
-        local stumpling = SpawnPrefab("birchling")
-
-        if target.chopper ~= nil then
-            stumpling.components.combat:SuggestTarget(target.chopper)
-        end
-
-        local x, y, z = target.Transform:GetWorldPosition()
-        target:Remove()
-        local effect = SpawnPrefab("round_puff_fx_hi")
-        effect.Transform:SetPosition(x, y, z)
-        stumpling.Transform:SetPosition(x, y, z)
-        stumpling.sg:GoToState("hit")
-    else
-        local stumpling = SpawnPrefab("stumpling")
-
-        if target.chopper ~= nil then
-            stumpling.components.combat:SuggestTarget(target.chopper)
-        end
-
-        local x, y, z = target.Transform:GetWorldPosition()
-        target:Remove()
-        local effect = SpawnPrefab("round_puff_fx_hi")
-        effect.Transform:SetPosition(x, y, z)
-        stumpling.Transform:SetPosition(x, y, z)
-        stumpling.sg:GoToState("hit")
-    end
+local function FindStump(inst, target)
+    return FindEntity(target, TUNING.LEIF_MAXSPAWNDIST, find_leif_spawn_target, STUMP_MUST_TAGS, STUMP_CANT_TAGS, STUMP_ONEOF_TAGS)
 end
 
-local function SummonStumplings(target)
+local function SummonStumplings(inst, target)
     for k = 1, 3 do
-        local stump = FindEntity(target, TUNING.LEIF_MAXSPAWNDIST, find_leif_spawn_target, {"stump" --[[,"evergreen"]]}, {"leif", "burnt" --[[,"deciduoustree"]]})
-        if stump ~= nil then
+        local stump = inst.UMFindStump and inst:UMFindStump(target)
+        if stump then
             stump.noleif = true
-            if inst.components.combat.target ~= nil then
-                stump.chopper = inst.components.combat.target
-            end
-            stump:DoTaskInTime(0, spawn_stumpling)
+            stump.chopper = target
+            spawn_stumpling(stump)
         end
     end
 end
@@ -215,16 +230,8 @@ local function GetAreaCircleRadius(combat)
 end
 
 local function TreeguardFunctions(inst)
-    inst:AddComponent("timer")
-
-    inst.SummonStumplings = SummonStumplings
-    inst.FindSnareTargets = FindSnareTargets
-    inst.SpawnSnare = SpawnSnare
-
-    --inst:ListenForEvent("attacked", BossCheck)
-
     local combat = inst.components.combat
-    if combat then 
+    if combat then
         combat.onhitotherfn = OnHitOther
         -- Treeguard now has AOE - Axe
         combat:UMSetAreaDamage(GetAreaHitRange, AOE_EXCLUDE_TAGS, 120, GetAreaCircleRadius, ShouldDoConeCheck)
@@ -235,6 +242,18 @@ local function TreeguardFunctions(inst)
     if lootdropper then
         lootdropper:SetLoot({"livinglog", "livinglog", "livinglog", "livinglog", "livinglog", "livinglog", "plantmeat"})
     end
+
+    --inst:ListenForEvent("attacked", BossCheck)
+	inst:ListenForEvent("newcombattarget", OnNewCombatTarget)
+	inst:ListenForEvent("droppedtarget", OnDroppedTarget)
+
+    inst:AddComponent("timer")
+    inst:ListenForEvent("timerdone", OnTimerDone)
+
+    inst.UMFindStump = FindStump
+    inst.SummonStumplings = SummonStumplings
+    inst.FindSnareTargets = FindSnareTargets
+    inst.SpawnSnare = SpawnSnare
 end
 
 local treeguards = {"leif", "leif_sparse"}

@@ -1,4 +1,4 @@
-local env = env
+--[[local env = env
 GLOBAL.setfenv(1, GLOBAL)
 require "behaviours/runaway"
 -----------------------------------------------------------------
@@ -20,8 +20,8 @@ local function LeifRoot(self)
                 ActionNode(function()
                     self.inst:PushEvent("snare")
                 end))
-	
+
 	table.insert(self.bt.root.children, 2, specialattack)
 end
 
-env.AddBrainPostInit("leifbrain", LeifRoot)
+env.AddBrainPostInit("leifbrain", LeifRoot)]]

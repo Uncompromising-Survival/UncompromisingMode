@@ -1,42 +1,46 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-local STUMP_MUST_TAGS = {"stump", "evergreen"}
-local STUMP_CANT_TAGS = {"leif", "burnt", "deciduoustree"}
-
 env.AddStategraphPostInit("leif", function(inst)
     local events =
     {
-        EventHandler("snare", function(inst, data)
-            if not (inst.sg:HasStateTag("busy") or inst.components.health:IsDead()) then
-                local stump = TUNING.DSTU.PINELINGS and FindEntity(inst, TUNING.LEIF_MAXSPAWNDIST, nil, STUMP_MUST_TAGS, STUMP_CANT_TAGS)
-                inst.sg:GoToState(stump and "summon" or "snare")
-            else
-                inst.components.timer:StartTimer("snare_cd", TUNING.STALKER_ABILITY_RETRY_CD)
+        EventHandler("snare", function(inst, target)
+            if not inst.components.health:IsDead() then
+                if inst.sg:HasStateTag("hit") and not inst.sg:HasStateTag("electrocute") or not inst.sg:HasStateTag("busy") then
+                    inst.sg:GoToState("snare", target)
+                else
+                    inst.components.timer:StartTimer("snare_cd", TUNING.STALKER_ABILITY_RETRY_CD)
+                end
             end
         end),
+        --EventHandler("bosshide", function(inst) inst.sg:GoToState("hide") end),
     }
 
     local states = {
         State{
             name = "snare",
-            tags = { "attack", "busy", "snare" },
+            tags = {"attack", "busy", "snare"},
 
             onenter = function(inst, target)
-                inst.components.locomotor:StopMoving()
+                inst.components.locomotor:Stop()
                 inst.AnimState:PlayAnimation("special")
-                inst.sg.statemem.target = inst.components.combat.target
-                inst.components.timer:StartTimer("snare_cd", 30)
+                inst.sg.statemem.target = target and target:IsValid() and target or inst.components.combat.target
+                inst.sg.statemem.summonattack = TUNING.DSTU.PINELINGS and inst.sg.statemem.target and inst.UMFindStump and inst:UMFindStump(inst.sg.statemem.target) or nil
+                inst.components.timer:StartTimer("snare_cd", inst.sg.statemem.summonattack and 15 or 30)
             end,
 
             timeline =
             {
-                TimeEvent(25 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/together/leif/foley") end),
-                TimeEvent(34 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/together/leif/footstep") end),
+                TimeEvent(25 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/leif/foley") end),
+                TimeEvent(34 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/leif/footstep") end),
                 TimeEvent(35 * FRAMES, function(inst)
                     inst.components.combat:DoAttack(inst.sg.statemem.target)
-                    if inst.sg.statemem.target ~= nil then
-                        inst:SpawnSnare(inst.sg.statemem.target)
+                    if inst.sg.statemem.target and inst.sg.statemem.target:IsValid() then
+                        if inst.sg.statemem.summonattack then
+                            inst:SummonStumplings(inst.sg.statemem.target)
+                        else
+                            inst:SpawnSnare(inst.sg.statemem.target)
+                        end
                     end
                 end),
                 TimeEvent(36 * FRAMES, function(inst) inst.sg:RemoveStateTag("busy") end),
@@ -52,42 +56,7 @@ env.AddStategraphPostInit("leif", function(inst)
             },
         },
 
-        State{
-            name = "summon",
-            tags = { "attack", "busy", "snare" },
-
-            onenter = function(inst, target)
-                inst.components.locomotor:StopMoving()
-                inst.AnimState:PlayAnimation("special")
-                inst.sg.statemem.target = inst.components.combat.target
-                inst.components.timer:StartTimer("snare_cd", 15)
-            end,
-
-            timeline =
-            {
-                --TimeEvent(0 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/together/stalker/attack1_pbaoe_pre") end),
-                TimeEvent(25 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/together/leif/foley") end),
-                TimeEvent(34 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/together/leif/footstep") end),
-                TimeEvent(35 * FRAMES, function(inst)
-                    inst.components.combat:DoAttack(inst.sg.statemem.target)
-                    if inst.sg.statemem.target ~= nil then
-                        inst:SummonStumplings(inst.sg.statemem.target)
-                    end
-                end),
-                TimeEvent(50 * FRAMES, function(inst) inst.sg:RemoveStateTag("busy") end),
-            },
-
-            events =
-            {
-                EventHandler("animover", function(inst)
-                    if inst.AnimState:AnimDone() then
-                        inst.sg:GoToState("idle")
-                    end
-                end),
-            },
-        },
-        
-        State{
+        --[[State{
             name = "hide",
             tags = {"hiding", "sleeping", "busy"},
 
@@ -118,7 +87,7 @@ env.AddStategraphPostInit("leif", function(inst)
                 TimeEvent(10 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/leif/foley") end),
                 TimeEvent(25 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/leif/foley") end),
             },
-        },
+        },]]
     }
 
     for k, v in pairs(events) do

@@ -416,7 +416,7 @@ end
 if GetModConfigData("harder_leifs") then
     table.insert(stategraph_post, "Leif")
     table.insert(prefab_post, "leif")
-    table.insert(brain_post, "leif")
+    --table.insert(brain_post, "leif")
 end
 
 if GetModConfigData("rework_minotaur") then

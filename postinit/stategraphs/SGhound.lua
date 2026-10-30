@@ -38,7 +38,8 @@ env.AddStategraphPostInit("hound", function(inst)
         local doattackeventhandler_fn = doattackeventhandler.fn
         doattackeventhandler.fn = function(inst, data, ...)
             if not (inst.components.health and inst.components.health:IsDead())
-                and ((inst.sg:HasStateTag("hit") and not inst.sg:HasStateTag("electrocute")) or not inst.sg:HasStateTag("busy")) and inst.um_specialattackready then
+                and ((inst.sg:HasStateTag("hit") and not inst.sg:HasStateTag("electrocute")) or not inst.sg:HasStateTag("busy")
+                or inst.sg:HasStateTag("caninterrupt")) and inst.um_specialattackready then
                 inst.sg:GoToState(data.target:IsValid() and not inst:IsNear(data.target, 3)
                     and (inst:HasAnyTag("lightninghound", "glacialhound") and "charging_pre" or inst:HasTag("magmahound") and "burning_pre"
                     or (inst.prefab == "firehound" or inst.prefab == "icehound") and "quickattack") or "attack", data.target)
@@ -338,7 +339,7 @@ env.AddStategraphPostInit("hound", function(inst)
 
             onexit = function(inst)
                 inst.um_specialattackready = false
-                inst:UMToggleCombatRange()
+                if inst.UMToggleCombatRange then inst:UMToggleCombatRange() end
                 inst.components.timer:StopTimer("lightningshot_cooldown")
                 inst.components.timer:StartTimer("lightningshot_cooldown", 9 + math.random())
                 inst:CancelCharge()
