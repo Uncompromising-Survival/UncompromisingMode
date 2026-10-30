@@ -20,45 +20,10 @@ local SEE_TREE_DIST = 15
 
 local ANNOYANCE_THRESHOLD = 30
 
-local function IsDeciduousTreeMonster(guy)
-    return guy.monster and guy.prefab == "deciduoustree"
-end
-
-local CHOP_MUST_TAGS = { "CHOP_workable" }
-local function FindDeciduousTreeMonster(inst)
-    return FindEntity(inst, SEE_TREE_DIST, IsDeciduousTreeMonster, CHOP_MUST_TAGS)
-end
-
 local function GetLeader(inst)
     return inst.components.follower and inst.components.follower:GetLeader()
 end
 
-local function KeepChoppingAction(inst)
-    local leader = GetLeader(inst)
-    return inst.tree_target ~= nil
-        or (leader and inst:IsNear(leader, KEEP_CHOPPING_DIST))
-        or FindDeciduousTreeMonster(inst) ~= nil
-end
-
-local function StartChoppingCondition(inst)
-    local leader = GetLeader(inst)
-    return inst.tree_target ~= nil
-        or (leader and leader.sg and leader.sg:HasStateTag("chopping"))
-        or FindDeciduousTreeMonster(inst) ~= nil
-end
-
-local function FindTreeToChopAction(inst)
-    local target = FindEntity(inst, SEE_TREE_DIST, nil, CHOP_MUST_TAGS)
-    if target ~= nil then
-        if inst.tree_target ~= nil then
-            target = inst.tree_target
-            inst.tree_target = nil
-        else
-            target = FindDeciduousTreeMonster(inst) or target
-        end
-        return BufferedAction(inst, target, ACTIONS.CHOP)
-    end
-end
 local function GoHomeAction(inst)
     if inst.components.combat.target ~= nil then
         return
@@ -105,8 +70,13 @@ end
 
 local function ShouldGoHome(inst)
     local leader = GetLeader(inst)
+    if leader then return false end
     local homePos = inst.components.knownlocations:GetLocation("home")
-    return homePos ~= nil and inst:GetDistanceSqToPoint(homePos:Get()) > GO_HOME_DIST * GO_HOME_DIST and leader
+    return homePos ~= nil and inst:GetDistanceSqToPoint(homePos:Get()) > GO_HOME_DIST * GO_HOME_DIST
+end
+
+local function GetRunAwayTarget(inst)
+	return inst.components.combat.target
 end
 
 local PigGuard_pigkingBrain = Class(Brain, function(self, inst)
@@ -163,48 +133,39 @@ end
 function PigGuard_pigkingBrain:OnStart()
     local root = PriorityNode(
     {
-        WhileNode(function() return BrainCommon.ShouldAvoidElectricFence(self.inst) end, "Shocked",
-            ChattyNode(self.inst, "PIG_TALK_PANICELECTRICITY",
-                AvoidElectricFence(self.inst))),
 		--Fearless Guards, not afraid of anything
         ChattyNode(self.inst, "PIG_GUARD_TALK_FIGHT",
-            WhileNode(function() return self.inst.components.combat.target == nil or not self.inst.components.combat:InCooldown() end, "AttackMomentarily",
+            WhileNode(function() return not self.inst.components.combat:HasTarget() or not self.inst.components.combat:InCooldown() end, "AttackMomentarily",
                 ChaseAndAttack(self.inst, SpringCombatMod(MAX_CHASE_TIME), SpringCombatMod(MAX_CHASE_DIST)))),
+        ChattyNode(self.inst, "PIG_TALK_RESCUE",
+            WhileNode(function() local leader = GetLeader(self.inst) return leader and leader.components.pinnable and leader.components.pinnable:IsStuck() end, "Leader Phlegmed",
+                DoAction(self.inst, RescueLeaderAction, "Rescue Leader", true))),
         ChattyNode(self.inst, "PIG_GUARD_TALK_FIGHT",
-            WhileNode(function() return self.inst.components.combat.target ~= nil and self.inst.components.combat:InCooldown() end, "Dodge",
-                RunAway(self.inst, function() return self.inst.components.combat.target end, RUN_AWAY_DIST, STOP_RUN_AWAY_DIST))),
-				
-		IfNode(function() return GetLeader(self.inst) and not (self.inst.components.combat ~= nil and self.inst.components.combat.target ~= nil) end, "has leader",	
-	
-		ChattyNode(self.inst, "PIG_GUARD_PIGKING_TALK_LOOKATWILSON_FRIEND",
-                Follow(self.inst, GetLeader, MIN_FOLLOW_DIST, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST)),
-				
-		WhileNode(function() local leader = GetLeader(self.inst) return leader and leader.components.pinnable and leader.components.pinnable:IsStuck() end, "Leader Phlegmed",
-            DoAction(self.inst, RescueLeaderAction, "Rescue Leader", true) )),
-		
-		
+            WhileNode(function() return self.inst.components.combat:HasTarget() and self.inst.components.combat:InCooldown() end, "Dodge",
+				RunAway(self.inst, { getfn = GetRunAwayTarget }, RUN_AWAY_DIST, STOP_RUN_AWAY_DIST))),
         WhileNode(function() return ShouldGoHome(self.inst) end, "ShouldGoHome",
-        ChattyNode(self.inst, "PIG_GUARD_TALK_GOHOME",
-        DoAction(self.inst, GoHomeAction, "Go Home", true)),
-		        ChattyNode(self.inst, "PIG_TALK_FIND_MEAT",
-            DoAction(self.inst, function() return FindFoodAction(self.inst) end))),
-
-        IfNode(function() return StartChoppingCondition(self.inst) end, "chop", 
-                WhileNode(function() return KeepChoppingAction(self.inst) end, "keep chopping",
-                    LoopNode{ 
-                        ChattyNode(self.inst, "PIG_TALK_HELP_CHOP_WOOD",
-                            DoAction(self.inst, FindTreeToChopAction ))})),	
-		IfNode(function() return GetLeader(self.inst) end, "has leader",	
+            ChattyNode(self.inst, "PIG_GUARD_TALK_GOHOME",
+                DoAction(self.inst, GoHomeAction, "Go Home", true))),
+		ChattyNode(self.inst, "PIG_TALK_FIND_MEAT",
+            DoAction(self.inst, FindFoodAction)),
+        BrainCommon.NodeAssistLeaderDoAction(self, {
+            action = "CHOP", -- Required.
+            finder_finddist = SEE_TREE_DIST,
+            keepgoing_leaderdist = KEEP_CHOPPING_DIST,
+            chatterstring = "PIG_TALK_HELP_CHOP_WOOD",
+        }),
         ChattyNode(self.inst, "PIG_GUARD_PIGKING_TALK_LOOKATWILSON_FRIEND",
-            FaceEntity(self.inst, GetFaceTargetFn, KeepFaceTargetFn))),
+            Follow(self.inst, GetLeader, MIN_FOLLOW_DIST, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST)),
+		IfNode(function() return GetLeader(self.inst) end, "has leader",
+            ChattyNode(self.inst, "PIG_GUARD_PIGKING_TALK_LOOKATWILSON_FRIEND",
+                FaceEntity(self.inst, GetFaceTargetFn, KeepFaceTargetFn))),
 		IfNode(function() return not GetLeader(self.inst) end, "has leader",
-        ChattyNode(self.inst, "PIG_GUARD_TALK_TORCH",
-            DoAction(self.inst, AddFuelAction, "Add Fuel", true))),
-			
-		IfNode(function() return TheWorld.state.isnight and not GetLeader(self.inst) end, "IsNight",	
+            ChattyNode(self.inst, "PIG_GUARD_TALK_TORCH",
+                DoAction(self.inst, AddFuelAction, "Add Fuel", true))),
+		IfNode(function() return TheWorld.state.isnight and not GetLeader(self.inst) end, "IsNight",
             ChattyNode(self.inst, "PIG_GUARD_PIGKING_TALK_LOOKATWILSON_NIGHT",
 				FaceEntity(self.inst, GetFaceTargetFn, ShouldRunFromPlayerFn))),
-		IfNode(function() return TheWorld.state.isdusk and not GetLeader(self.inst) end, "IsDusk",	
+		IfNode(function() return TheWorld.state.isdusk and not GetLeader(self.inst) end, "IsDusk",
         ChattyNode(self.inst, "PIG_GUARD_PIGKING_TALK_LOOKATWILSON_EVENING",
             FaceEntity(self.inst, GetFaceTargetFn, KeepFaceTargetFn))),
 		IfNode(function() return not GetLeader(self.inst) end, "has leader",
