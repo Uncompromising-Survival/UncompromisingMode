@@ -14,8 +14,6 @@ env.AddPrefabPostInit("world", function(world)
             local ret = _SetNormalPig(inst, ...)
             local combat = inst.components.combat
             local _Retarget = combat.targetfn
-            inst.um_setup = true
-            print(inst.um_setup)
             combat:SetRetargetFunction(combat.retargetperiod, function(_inst, ...)
                 if _inst:HasTag("NPC_contestant") or _inst.components.minigame_spectator then return _Retarget(_inst, ...) end
                 return not _inst:IsInLimbo() and FindEntity(_inst, TUNING.PIG_TARGET_DIST, function(guy)
