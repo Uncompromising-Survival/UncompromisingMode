@@ -102,6 +102,7 @@ function DreadEyeBrain:OnStart()
     local root = PriorityNode(
         {
             BrainCommon.PanicTriggerShadowCreature(self.inst),
+            BrainCommon.RunAwayFromQueenTorch(self),
             IfNode(function() return targetatsea(self.inst) end, "target on land",
                 DoAction(self.inst, teleport)),
             WhileNode(function() return ShouldAttack(self) end, "Attack", ChaseAndAttack(self.inst, 100)),
@@ -122,11 +123,6 @@ function DreadEyeBrain:OnStart()
             Follow(self.inst, function() return self.mytarget end, MIN_FOLLOW, MED_FOLLOW, MAX_FOLLOW),
             Wander(self.inst, function() return self.mytarget ~= nil and self.mytarget:GetPosition() or nil end, 20),
         }, .25)
-
- 
-    if UPDATE_CHECK then
-        table.insert(root.children, 2, BrainCommon.RunAwayFromQueenTorch(self))
-    end
 
     self.bt = BT(self.inst, root)
 end

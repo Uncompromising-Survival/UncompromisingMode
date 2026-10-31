@@ -109,6 +109,7 @@ function TrepidationBrain:OnStart()
     local root = PriorityNode(
         {
             --BrainCommon.PanicTriggerShadowCreature(self.inst), breaks it.
+            BrainCommon.RunAwayFromQueenTorch(self),
             WhileNode(function() return ShouldUseAbility(self) end, "Ability",
                 ActionNode(function()
                     self.inst:PushEvent(self.abilityname, self.abilitydata)
@@ -126,10 +127,6 @@ function TrepidationBrain:OnStart()
             WhileNode(function() return self.inst.components.combat and not self.inst.components.combat.target end, "Home",
                 Wander(self.inst, function() return self.inst.components.knownlocations:GetLocation("home") end, 20)),
         }, .25)
-
-    if UPDATE_CHECK then
-        table.insert(root.children, 2, BrainCommon.RunAwayFromQueenTorch(self))
-    end
 
     self.bt = BT(self.inst, root)
 end

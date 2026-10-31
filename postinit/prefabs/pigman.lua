@@ -1,30 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
-local UMUpvalueHacker = require("tools/um_upvaluehacker")
-
-local RETARGET_MUST_TAGS = {"_combat", "player"}
-local RETARGET_CANT_TAGS = {"playerghost"}
-
-env.AddSimPostInit(function()
-    local _SetNormalPig = UMUpvalueHacker.TryGetUpvalue(Prefabs.pigman.fn, "SetNormalPig")
-    if _SetNormalPig then
-        local function SetNormalPig(inst, ...)
-            local ret = _SetNormalPig(inst, ...)
-            local combat = inst.components.combat
-            local _Retarget = combat.targetfn
-            combat:SetRetargetFunction(combat.retargetperiod, function(_inst, ...)
-                if _inst:HasTag("NPC_contestant") or _inst.components.minigame_spectator then return _Retarget(_inst, ...) end
-                return not _inst:IsInLimbo() and FindEntity(_inst, TUNING.PIG_TARGET_DIST, function(guy)
-                    return guy.userid and table.contains(inst.remembered_threats, guy.userid) and guy:IsInLight() and inst.components.combat:CanTarget(guy)
-                end, RETARGET_MUST_TAGS, RETARGET_CANT_TAGS) or _Retarget(_inst, ...)
-            end)
-            return ret
-        end
-        UMUpvalueHacker.SetUpvalue(Prefabs.pigman.fn, SetNormalPig, "SetNormalPig")
-    end
-end)
-
 local function IsPig(inst)
     return inst:HasTag("pig") and not (inst.franken or inst:HasTag("werepig"))
 end
@@ -39,6 +15,29 @@ local function SetShouldAggroStuff(inst)
             return true
         end)
     end
+end
+
+local RETARGET_MUST_TAGS = {"_combat", "player"}
+local RETARGET_CANT_TAGS = {"playerghost"}
+
+local function SetRetargetStuff(inst)
+    local combat = inst.components.combat
+    if combat then
+        local _Retarget = combat.targetfn
+        combat:SetRetargetFunction(combat.retargetperiod, function(_inst, ...)
+            if _inst:HasTag("NPC_contestant") or _inst.components.minigame_spectator then return _Retarget(_inst, ...) end
+            return not _inst:IsInLimbo() and FindEntity(_inst, TUNING.PIG_TARGET_DIST, function(guy)
+                return guy.userid and table.contains(_inst.remembered_threats, guy.userid) and guy:IsInLight() and _inst.components.combat:CanTarget(guy)
+            end, RETARGET_MUST_TAGS, RETARGET_CANT_TAGS) or _Retarget(_inst, ...)
+        end)
+    end
+end
+
+local _OnNormal
+local function OnNormal(inst, ...)
+    local ret = _OnNormal and _OnNormal(inst, ...)
+    SetRetargetStuff(inst)
+    return ret
 end
 
 local _AcceptTest
@@ -93,6 +92,16 @@ env.AddPrefabPostInit("pigman", function(inst)
     inst.remembered_threats = {}
 
     SetShouldAggroStuff(inst)
+
+    local werebeast = inst.components.werebeast
+    if werebeast then
+        if not _OnNormal then
+            _OnNormal = werebeast.onsetnormalfn
+        end
+        werebeast:SetOnNormalFn(OnNormal)
+    end
+
+    SetRetargetStuff(inst)
 
     local trader = inst.components.trader
     if trader then
