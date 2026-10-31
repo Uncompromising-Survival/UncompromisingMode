@@ -22,15 +22,10 @@ env.AddStategraphPostInit("pig", function(inst)
         local doattackeventhandler_fn = doattackeventhandler.fn
         doattackeventhandler.fn = function(inst, data, ...)
             if not inst.franken and not (inst.components.health and inst.components.health:IsDead()) and (not inst.sg:HasStateTag("busy") or inst.sg:HasStateTag("hit") and not inst.sg:HasStateTag("electrocute")) then
-                if inst:HasTag("pigattacker") and data.target:HasTag("pigattacker") and not data.target:HasTag("werepig") or inst:HasTag("manrabbit") and data.target:HasTag("manrabbit") then
-                    inst.sg:GoToState("refuse", data.target)
-                    inst.components.combat:SetTarget(nil)
-                else
-                    local nstate = inst.sg:HasStateTag("charging") and "charge_attack"
-                        or inst.sg.mem.wantstocounter and "counterattack_pre"
-                        or "attack"
-                    inst.sg:GoToState(nstate)
-                end
+                local nstate = inst.sg:HasStateTag("charging") and "charge_attack"
+                    or inst.sg.mem.wantstocounter and "counterattack_pre"
+                    or "attack"
+                inst.sg:GoToState(nstate)
                 return
             end
             return doattackeventhandler_fn(inst, data, ...)
@@ -44,7 +39,7 @@ env.AddStategraphPostInit("pig", function(inst)
             if not inst.franken and not (inst.components.health and inst.components.health:IsDead()) then
                 if CommonHandlers.TryElectrocuteOnAttacked(inst, data) then
                     return
-                elseif inst:HasTag("pigattacker") and not inst:HasTag("werepig") and not inst.sg:HasAnyStateTag("counter", "caninterrupt", "electrocute", "knockback") then
+                elseif not inst.sg:HasAnyStateTag("counter", "caninterrupt", "electrocute", "knockback") then
                     if inst.sg.mem.wantstocounter then
                         inst.components.combat:ResetCooldown()
                         return
