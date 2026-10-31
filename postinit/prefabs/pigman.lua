@@ -35,20 +35,6 @@ local function OnLoad(inst, data)
     end
 end
 
-local MAX_TARGET_SHARES = 5
-local SHARE_TARGET_DIST = 30
-
-local function OnAttacked(inst, data)
-    local attacker = data.attacker
-    inst:ClearBufferedAction()
-
-    if attacker ~= nil and not inst:HasTag("werepig") then
-        if attacker:HasTag("player") then
-            inst.components.combat:ShareTarget(attacker, SHARE_TARGET_DIST, function(dude) return dude.prefab == inst.prefab end, MAX_TARGET_SHARES)
-        end
-    end
-end
-
 env.AddPrefabPostInit("pigman", function(inst)
     if not TheWorld.ismastersim then
         return
@@ -128,10 +114,7 @@ env.AddPrefabPostInit("pigman", function(inst)
         inst._OldOnLoad = _OldOnLoad
     end
 
-    inst:ListenForEvent("attacked", OnAttacked)
-
     inst.OnSave = OnSave
-
     inst.OnLoad = OnLoad
 end)
 
