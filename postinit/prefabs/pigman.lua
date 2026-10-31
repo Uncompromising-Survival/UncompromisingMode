@@ -23,23 +23,6 @@ env.AddSimPostInit(function()
         end
         UMUpvalueHacker.SetUpvalue(Prefabs.pigman.fn, SetNormalPig, "SetNormalPig")
     end
-
-    local _SetNormalPig = UMUpvalueHacker.TryGetUpvalue(Prefabs.pigman.fn, "SetNormalPig")
-    if _SetNormalPig then
-        local function SetNormalPig(inst, ...)
-            local ret = _SetNormalPig(inst, ...)
-            local combat = inst.components.combat
-            local _Retarget = combat.targetfn
-            combat:SetRetargetFunction(combat.retargetperiod, function(_inst, ...)
-                if _inst:HasTag("NPC_contestant") or _inst.components.minigame_spectator then return _Retarget(_inst, ...) end
-                return not _inst:IsInLimbo() and FindEntity(_inst, TUNING.PIG_TARGET_DIST, function(guy)
-                    return guy.userid and table.contains(inst.remembered_threats, guy.userid) and guy:IsInLight() and inst.components.combat:CanTarget(guy)
-                end, RETARGET_MUST_TAGS, RETARGET_CANT_TAGS) or _Retarget(_inst, ...)
-            end)
-            return ret
-        end
-        UMUpvalueHacker.SetUpvalue(Prefabs.pigman.fn, SetNormalPig, "SetNormalPig")
-    end
 end)
 
 local function IsPig(inst)
