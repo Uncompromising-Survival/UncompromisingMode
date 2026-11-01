@@ -32,7 +32,7 @@ return Class(function(self, inst)
         target_location.x = tiles[1].x
         target_location.z = tiles[1].z
         --print("target_location = ", target_location.x, target_location.z)
-        if target_location and CheckForOtherTentacles(target_location) and NotBase(target_location) and NotTooClose(target_location) then -- and NotBase(target_location) then
+        if CheckForOtherTentacles(target_location) and NotBase(target_location) and NotTooClose(target_location) then
             return target_location, tiles
         elseif next(tiles) then
             table.remove(tiles, 1)
