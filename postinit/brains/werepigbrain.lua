@@ -26,13 +26,14 @@ local function WerepigIgnoreFood(self)
         RunAway(self.inst, function() return self.inst.components.combat.target end, RUN_AWAY_DIST, STOP_RUN_AWAY_DIST))
     local ParallelNode = FindNode(self.bt.root.children, function(node) return node.name == "Parallel" end)
     local PriorityNode = ParallelNode and FindNode(ParallelNode.children, function(node) return node.name == "Priority" end)
-    if PriorityNode then
-        for i = #PriorityNode.children, 1, -1 do
-            local node = PriorityNode.children[i]
+    local PriorityNode_children = PriorityNode and PriorityNode.children
+    if PriorityNode_children then
+        for i = #PriorityNode_children, 1, -1 do
+            local node = PriorityNode_children[i]
             if node.name == "ChaseAndAttack" then
-                table.remove(PriorityNode.children, i)
-                table.insert(PriorityNode.children, i - 1, node)
-                table.insert(PriorityNode.children, i - 1, dodge)
+                table.remove(PriorityNode_children, i)
+                table.insert(PriorityNode_children, i - 1, node)
+                table.insert(PriorityNode_children, i - 1, dodge)
                 break
             end
         end
