@@ -27,6 +27,7 @@ return Class(function(self, inst)
     end
     
     local function IterateThroughTiles(tiles)
+        if not next(tiles) then return nil, tiles end
         shuffleArray(tiles)
         local target_location = {}
         target_location.x = tiles[1].x
@@ -34,7 +35,7 @@ return Class(function(self, inst)
         --print("target_location = ", target_location.x, target_location.z)
         if CheckForOtherTentacles(target_location) and NotBase(target_location) and NotTooClose(target_location) then
             return target_location, tiles
-        elseif next(tiles) then
+        else
             table.remove(tiles, 1)
             return IterateThroughTiles(tiles)
         end
@@ -50,12 +51,12 @@ return Class(function(self, inst)
 
     function self:PopulateTentacles()
         local um_tilelogger = TheWorld.components.um_tilelogger
-        local marshtiles = um_tilelogger:AnalyzeWorld(WORLD_TILES["MARSH"])
+        local marshtiles = um_tilelogger:AnalyzeWorld(WORLD_TILES.MARSH)
         for i = 1, math.random(80, 120), 1 do -- Generously 100..
             marshtiles = SpawnTentacle("tentacle", marshtiles)
         end
         if TheWorld:HasTag("cave") then
-            local moontiles = um_tilelogger:AnalyzeWorld(WORLD_TILES["UM_FLOODWATER_GROTTO"])
+            local moontiles = um_tilelogger:AnalyzeWorld(WORLD_TILES.UM_FLOODWATER_GROTTO)
             for i = 1, math.random(20, 30), 1 do -- Generously 25..
                 moontiles = SpawnTentacle("um_tentacle_moon", moontiles)
             end
