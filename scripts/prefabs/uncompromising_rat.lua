@@ -2062,7 +2062,7 @@ local function FindClosestPart(owner)
             end
         end
     elseif not burrows or burrows <= 0 then
-        inst.components.talker:Say(GetString(owner, "ANNOUNCE_NORATBURROWS"))
+        owner.components.talker:Say(GetString(owner, "ANNOUNCE_NORATBURROWS"))
     end
 end
 
