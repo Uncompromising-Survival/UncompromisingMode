@@ -284,7 +284,7 @@ local function DoArcAttack(inst, dist, radius, heavymult, mult, forcelanded, tar
 end]]
 
 local werepigs = {"moonpig", "werepig"}
-for i, werepig in ipairs(werepigs) do
+for i, werepig in pairs(werepigs) do
     env.AddStategraphPostInit(werepig, function(inst)
         --[[local states = {
             State{
