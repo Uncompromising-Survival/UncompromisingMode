@@ -17,7 +17,8 @@ local function OnBoatChange(self, data)
     end
     local inventoryitem = self.inst.components.inventoryitem
     if inventoryitem then
-        inventoryitem:ChangeImageName(self.isfull and "um_boatbottle_full" or "um_boatbottle")
+        inventoryitem.atlasname = self.isfull and resolvefilepath("images/inventoryimages/um_boatbottle.xml") or nil
+        inventoryitem:ChangeImageName(self.isfull and "um_boatbottle_full" or nil)
     end
 end
 

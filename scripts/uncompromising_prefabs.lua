@@ -103,7 +103,6 @@ local prefabs = {
     "zaspberryparfait",
     "uncompromising_buffs",
     "shockfx",
-    "shockstundebuff",
     "carapacecooler",
     "rnefissure",
     "honey_log",
@@ -288,7 +287,6 @@ local prefabs = {
     "rain_horn",
     "floral_bandage",
     "confighealbuff",
-    "shockstundebuffimmunity",
     "pied_rat",
     "pied_piper_flute",
 
@@ -451,7 +449,6 @@ local prefabs = {
     "wixie_reticuleline",
     "wixiegun",
 
-    "winona_structure_item",
     "boiling_water",
     "crabking_geyser_single",
     "staff_starfall",

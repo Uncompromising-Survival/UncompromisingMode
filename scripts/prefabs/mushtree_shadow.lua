@@ -409,6 +409,7 @@ local function fnregular()
         return inst
     end
 
+    inst:AddComponent("inspectable")
 
     inst:AddComponent("edible")
     inst.components.edible.healthvalue = -20
@@ -424,12 +425,8 @@ local function fnregular()
 
     inst:AddComponent("stackable")
     inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
-    inst:AddComponent("inspectable")
-
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/gloomcap.xml"
-
 
     MakeSmallPropagator(inst)
     ---------------------
@@ -493,8 +490,6 @@ local function fn_cooked()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/gloomcap_cooked.xml"
-
 
     MakeSmallPropagator(inst)
     ---------------------

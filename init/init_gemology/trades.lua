@@ -249,6 +249,7 @@ local function FindStealNode(self)
         if node.getactionfn and node.getactionfn == _StealFoodAction then
             self.bt.root.children[id] = WhileNode(function() return not self.inst.traded_and_friendly end, "ShouldBeNice",
                 DoAction(self.inst, _StealFoodAction))
+            break
         end
     end
 end

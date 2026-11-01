@@ -355,8 +355,8 @@ local function fn()
     inst.components.workable:SetOnFinishCallback(OnWorked)
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/um_smolder_spore.xml"
     inst.components.inventoryitem.canbepickedup = false
+
     inst:ListenForEvent("ondropped", OnDropped)
     inst:ListenForEvent("onputininventory", OnPickup)
 

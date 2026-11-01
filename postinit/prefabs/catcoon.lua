@@ -41,17 +41,13 @@ do
 
     local _OnSave
     local function OnSave(inst, data, ...)
-        if inst.hitlist then data.hitlist = inst.hitlist end
+        data.hitlist = inst.hitlist and next(inst.hitlist) and inst.hitlist or nil
         return _OnSave and _OnSave(inst, data, ...)
     end
 
     local _OnLoad
     local function OnLoad(inst, data, ...)
-        if data and data.hitlist then
-            inst.hitlist = data.hitlist
-        else
-            inst.hitlist = {}
-        end
+        if data and data.hitlist then inst.hitlist = data.hitlist end
         return _OnLoad and _OnLoad(inst, data, ...)
     end
 

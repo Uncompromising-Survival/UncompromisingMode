@@ -1,7 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
-
-
+-----------------------------------------------------------------
 local UMUpvalueHacker = require("tools/um_upvaluehacker")
 
 env.AddComponentPostInit("hounded", function(self)
@@ -52,8 +51,7 @@ env.AddComponentPostInit("hounded", function(self)
         if not TheWorld.Map:IsAboveGroundAtPoint(pt:Get()) then
             pt = FindNearbyLand(pt, 1) or pt
         end
-        local offset = FindWalkableOffset(pt, math.random() * 2 * PI, SPAWN_DIST, 12, true, true,
-            NoHoles)
+        local offset = FindWalkableOffset(pt, math.random() * 2 * PI, SPAWN_DIST, 12, true, true, NoHoles)
         if offset ~= nil then
             offset.x = offset.x + pt.x
             offset.z = offset.z + pt.z

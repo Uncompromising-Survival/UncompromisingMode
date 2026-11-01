@@ -1,7 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
-local BASE_IMMUNITY = 7
+--[[local BASE_IMMUNITY = 7
 local IMMUNITY_BUILDUP = 1
 local MAX_IMMUNITY = 20
 local BUILDUP_FADE = 30
@@ -182,4 +182,6 @@ env.AddComponentPostInit("combat", function(self)
 
         return back
     end
-end)
+end)]]
+
+TUNING.ELECTROCUTE_DEFAULT_DELAY = {min = 5, max = 5}

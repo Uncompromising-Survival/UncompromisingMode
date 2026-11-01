@@ -6,7 +6,6 @@ local mermhouses = {
     "mermhouse_crafted"
 }
 
-
 local function StartSpawning_Winter(inst)
     if not inst:HasTag("burnt") and TheWorld.state.iswinter and
         inst.components.childspawner ~= nil and not inst.components.childspawner.spawning then
@@ -66,7 +65,9 @@ for i, v in pairs(mermhouses) do
         StartSpawning_Winter(inst)
 
         inst:WatchWorldState("isday", OnIsDay_Winter)
+        OnIsDay_Winter(inst, TheWorld.state.isday)
         inst:WatchWorldState("iswinter", ToggleWinterTuning_UM)
+        ToggleWinterTuning_UM(inst, TheWorld.state.iswinter)
     end)
 end
 
@@ -77,9 +78,6 @@ env.AddPrefabPostInit("mermwatchtower", function(inst)
 
     inst.um_base_regen_time = TUNING.MERMWATCHTOWER_REGEN_TIME * 8
 
-    if inst.components.childspawner ~= nil then
-        inst.components.childspawner:SetRegenPeriod(inst.um_base_regen_time)
-    end
-
     inst:WatchWorldState("iswinter", ToggleWinterTuning_UM)
+    ToggleWinterTuning_UM(inst, TheWorld.state.iswinter)
 end)

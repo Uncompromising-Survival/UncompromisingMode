@@ -90,8 +90,8 @@ local function ClearAmusementIfAny(inst)
         onequip(inst, inst.owner)
     end
     inst.AnimState:SetBuild("um_backpack_amuletuse")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/um_backpack_amuletuse.xml"
-    inst.components.inventoryitem:ChangeImageName("um_backpack_amuletuse")
+    inst.components.inventoryitem.atlasname = nil
+    inst.components.inventoryitem:ChangeImageName(nil)
 end
 
 local function SetupAmusement(inst, item)
@@ -108,9 +108,9 @@ local function SetupAmusement(inst, item)
     inst.AmusementEquipFn = item.components.equippable.onequipfn
     inst.AmusementUnequipFn = item.components.equippable.onunequipfn
 
-    local buildname = inst.color and ("um_backpack_amuletuse_" .. inst.color) or "um_backpack_amuletuse"
-    inst.AnimState:SetBuild(buildname)
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/" .. buildname .. ".xml"
+    local buildname = inst.color and "um_backpack_amuletuse_"..inst.color or nil
+    if buildname then inst.AnimState:SetBuild(buildname) end
+    inst.components.inventoryitem.atlasname = buildname and resolvefilepath("images/inventoryimages/"..buildname..".xml") or nil
     inst.components.inventoryitem:ChangeImageName(buildname)
 
     if inst.owner then -- I'm being worn, I should activate the effects
@@ -233,8 +233,7 @@ local function fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/um_backpack_amuletuse.xml"
-    inst.components.inventoryitem:ChangeImageName("um_backpack_amuletuse")
+
     inst:ListenForEvent("itemlose", OnContainerChanged)
     inst:ListenForEvent("itemget", OnContainerChanged)
 

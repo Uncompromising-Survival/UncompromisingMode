@@ -19,22 +19,11 @@ local function OnPutInInventory(inst)
     inst.AnimState:PlayAnimation("idle", false)
 end
 
-local function onsave(inst, data)
-    if inst.components.burnable ~= nil and inst.components.burnable:IsBurning() or inst:HasTag("burnt") then
-        data.burnt = true
-    end
-end
-
-local function onload(inst, data)
-    if data ~= nil and data.burnt and inst.components.burnable ~= nil then
-        inst.components.burnable.onburnt(inst)
-    end
-end
-
 local function MakeTackleContainer(name, bank, build, assets)
     assets = assets or {}
     table.insert(assets, Asset("ANIM", "anim/" .. build .. ".zip"))
 
+    local swap_data = { bank = bank, anim = "idle" }
     local function fn()
         local inst = CreateEntity()
 
@@ -44,7 +33,7 @@ local function MakeTackleContainer(name, bank, build, assets)
         inst.entity:AddMiniMapEntity()
         inst.entity:AddNetwork()
 
-        inst.MiniMapEntity:SetIcon(name .. ".tex")
+        inst.MiniMapEntity:SetIcon(name..".tex")
 
         inst:AddTag("waterproofer")
         inst:AddTag("portablestorage")
@@ -52,12 +41,11 @@ local function MakeTackleContainer(name, bank, build, assets)
         inst.AnimState:SetBank(bank)
         inst.AnimState:SetBuild(build)
         inst.AnimState:PlayAnimation("idle")
-        inst.Transform:SetScale(2, 2, 2)
+        inst.scrapbook_anim = "idle"
 
         MakeInventoryPhysics(inst)
 
-        local swap_data = { bank = bank, anim = "idle" }
-        MakeInventoryFloatable(inst, "small", nil, nil, nil, nil, swap_data)
+        MakeInventoryFloatable(inst, "small", .2, 1.2, nil, nil, swap_data)
 
         inst.entity:SetPristine()
 
@@ -83,12 +71,7 @@ local function MakeTackleContainer(name, bank, build, assets)
 
         inst:AddComponent("lootdropper")
 
-        inst:AddComponent("hauntable")
-        inst.components.hauntable:SetHauntValue(TUNING.HAUNT_TINY)
-
-
-        inst.OnSave = onsave
-        inst.OnLoad = onload
+        MakeHauntableLaunch(inst)
 
         return inst
     end

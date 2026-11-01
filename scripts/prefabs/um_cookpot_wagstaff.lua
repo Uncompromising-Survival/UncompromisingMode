@@ -626,7 +626,7 @@ local function fndisplay()
     return inst
 end
 
-local function fnlever()
+local function MakeLever(id)
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -635,57 +635,38 @@ local function fnlever()
 
 	MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("um_cookpot_wagstaff_lever")
-    inst.AnimState:SetBuild("um_cookpot_wagstaff_lever")
+    inst.AnimState:SetBank("um_cookpot_wagstaff_lever"..(id or ""))
+    inst.AnimState:SetBuild("um_cookpot_wagstaff_lever"..(id or ""))
+    inst.AnimState:PlayAnimation("idle", true)
 
+    inst:AddTag("irreplaceable")
 
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
         return inst
     end
-    inst.AnimState:PlayAnimation("idle", true)
+
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/um_cookpot_wagstaff_lever.xml"
 
-    inst:AddTag("irreplaceable")
-	
     inst:AddComponent("tradable")
+
+    return inst
+end
+
+local function fnlever()
+    local inst = MakeLever()
+
     return inst
 end
 
 local function fnlever2()
-    local inst = CreateEntity()
+    local inst = MakeLever("2")
 
-    inst.entity:AddTransform()
-    inst.entity:AddAnimState()
-    inst.entity:AddNetwork()
-
-	MakeInventoryPhysics(inst)
-
-    inst.AnimState:SetBank("um_cookpot_wagstaff_lever2")
-    inst.AnimState:SetBuild("um_cookpot_wagstaff_lever2")
-
-
-    inst.entity:SetPristine()
-
-    if not TheWorld.ismastersim then
-        return inst
-    end
-    inst.AnimState:PlayAnimation("idle", true)
-    inst:AddComponent("inspectable")
-
-    inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/um_cookpot_wagstaff_lever2.xml"
-
-    inst:AddTag("irreplaceable")
-
-    inst:AddComponent("tradable")
     return inst
 end
-
 
 return MakeCookPot("um_cookpot_wagstaff", cookpot_common, cookpot_common_master, assets),
     Prefab("um_cookpot_wagstaff_display", fndisplay),

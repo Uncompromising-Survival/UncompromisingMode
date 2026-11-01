@@ -13,64 +13,63 @@ local function DoCounterAttack(inst)
 end
 
 env.AddStategraphPostInit("pig", function(inst)
-    local events =
+    --[[local events =
     {
-        EventHandler("doattack", function(inst, data)
-            if inst:HasTag("pigattacker") and data.target:HasTag("pigattacker") and not data.target:HasTag("werepig") or inst:HasTag("manrabbit") and data.target:HasTag("manrabbit") then
-                inst.sg:GoToState("refuse", data.target)
-                inst.components.combat:SetTarget(nil)
-            else
-                local nstate = "attack"
-                if inst.sg:HasStateTag("charging") then
-                    nstate = "charge_attack"
-                elseif inst.sg.mem.wantstocounter then
-                    inst.sg.mem.wantstocounter = nil
-                    nstate = "counterattack_pre"
-                end
-                if not (inst.components.health and inst.components.health:IsDead())
-                    and not inst.sg:HasStateTag("busy") then
-                    inst.sg:GoToState(nstate)
-                end
-                --inst.sg:GoToState("attack", data.target)
-            end
-        end),
-    }
+    }]]
 
-    local _OldAttackedEvent = inst.events["attacked"].fn
-    inst.events["attacked"].fn = function(inst, data, ...)
-        if not (inst.components.health and inst.components.health:IsDead()) then
-            if CommonHandlers.TryElectrocuteOnAttacked(inst, data) then
+    local doattackeventhandler = inst.events["doattack"]
+    if doattackeventhandler then
+        local doattackeventhandler_fn = doattackeventhandler.fn
+        doattackeventhandler.fn = function(inst, data, ...)
+            if not inst.franken and not (inst.components.health and inst.components.health:IsDead()) and (not inst.sg:HasStateTag("busy") or inst.sg:HasStateTag("hit") and not inst.sg:HasStateTag("electrocute")) then
+                local nstate = inst.sg:HasStateTag("charging") and "charge_attack"
+                    or inst.sg.mem.wantstocounter and "counterattack_pre"
+                    or "attack"
+                inst.sg:GoToState(nstate)
                 return
-            elseif inst:HasTag("pigattacker") and not inst:HasTag("werepig") and not inst.sg:HasAnyStateTag("counter", "caninterrupt", "electrocute") then
-                if inst.sg.mem.wantstocounter then
-                    inst.components.combat:ResetCooldown()
-                    return
-                end
-                if inst.counter then
-                    inst.counter = inst.counter + 1
-                    if inst.countertask then
-                        inst.countertask:Cancel()
-                        inst.countertask = nil
-                    end
-                else
-                    inst.counter = 1
-                end
+            end
+            return doattackeventhandler_fn(inst, data, ...)
+        end
+    end
 
-                inst.countertask = inst:DoTaskInTime(10, function(inst) inst.counter = 0 end)
-
-                if inst.counter and inst.counter >= math.random(3, 4) and (data.attacker and data.attacker:IsValid() and inst:GetDistanceSqToInst(data.attacker) < 5^2) then -- Added a range check
-                    if inst.countertask then
-                        inst.countertask:Cancel()
-                        inst.countertask = nil
-                    end
-                    inst.counter = 0
-                    inst.sg.mem.wantstocounter = true
-                    inst.components.combat:ResetCooldown()
+    local attackedeventhandler = inst.events["attacked"]
+    if attackedeventhandler then
+        local attackedeventhandler_fn = attackedeventhandler.fn
+        attackedeventhandler.fn = function(inst, data, ...)
+            if not inst.franken and not (inst.components.health and inst.components.health:IsDead()) then
+                if CommonHandlers.TryElectrocuteOnAttacked(inst, data) then
                     return
+                elseif not inst.sg:HasAnyStateTag("counter", "caninterrupt", "electrocute", "knockback") then
+                    if inst.sg.mem.wantstocounter then
+                        inst.components.combat:ResetCooldown()
+                        return
+                    end
+                    if inst.counter then
+                        inst.counter = inst.counter + 1
+                        if inst.countertask then
+                            inst.countertask:Cancel()
+                            inst.countertask = nil
+                        end
+                    else
+                        inst.counter = 1
+                    end
+
+                    inst.countertask = inst:DoTaskInTime(10, function(inst) inst.counter = 0 end)
+
+                    if inst.counter and inst.counter >= math.random(3, 4) and (data.attacker and data.attacker:IsValid() and inst:GetDistanceSqToInst(data.attacker) < 5^2) then -- Added a range check
+                        if inst.countertask then
+                            inst.countertask:Cancel()
+                            inst.countertask = nil
+                        end
+                        inst.counter = 0
+                        inst.sg.mem.wantstocounter = true
+                        inst.components.combat:ResetCooldown()
+                        return
+                    end
                 end
             end
+            return attackedeventhandler_fn(inst, data, ...)
         end
-        _OldAttackedEvent(inst, data, ...)
     end
 
     local states =
@@ -80,6 +79,7 @@ env.AddStategraphPostInit("pig", function(inst)
             tags = {"attack", "busy", "counter"},
 
             onenter = function(inst)
+                inst.sg.mem.wantstocounter = nil
                 inst.SoundEmitter:PlaySound("dontstarve/pig/attack")
                 inst.components.combat:StartAttack()
                 inst.Physics:Stop()
@@ -130,7 +130,7 @@ env.AddStategraphPostInit("pig", function(inst)
         },
         State{
             name = "charge_antic_pre",
-            tags = {"attack", "busy", "moving", "charging", "busy", "atk_pre", "canrotate"},
+            tags = {"attack", "busy", "moving", "charging", "atk_pre", "canrotate"},
 
             onenter = function(inst)
                 inst.Physics:Stop()
@@ -144,7 +144,7 @@ env.AddStategraphPostInit("pig", function(inst)
         },
         State{
             name = "charge_antic_loop",
-            tags = {"attack", "busy", "moving", "charging", "busy", "atk_pre", "canrotate"},
+            tags = {"attack", "busy", "moving", "charging", "atk_pre", "canrotate"},
 
             onenter = function(inst)
                 inst.Physics:Stop()
@@ -233,10 +233,10 @@ env.AddStategraphPostInit("pig", function(inst)
         }
     }
 
-    for k, v in pairs(events) do
+    --[[for k, v in pairs(events) do
         assert(v:is_a(EventHandler), "Non-event added in mod events table!")
         inst.events[v.name] = v
-    end
+    end]]
 
     for k, v in pairs(states) do
         assert(v:is_a(State), "Non-state added in mod state table!")
@@ -244,8 +244,30 @@ env.AddStategraphPostInit("pig", function(inst)
     end
 end)
 
+env.AddStategraphPostInit("werepig", function(inst)
+    local attackstate = inst.states["attack"]
+    if attackstate then
+        local attackstate_onenter = attackstate.onenter
+        attackstate.onenter = function(inst, ...)
+            local ret = attackstate_onenter(inst, ...)
+            inst.sg.statemem.speedmult = inst.sg.statemem.speedmult * 2.5
+            inst.Physics:SetMotorVelOverride(3 * inst.sg.statemem.speedmult, 0 ,0)
+            return ret
+        end
+    end
 
-local ARC = 90 * DEGREES --degrees to each side
+    local hitstate = inst.states["hit"]
+    if hitstate then
+        local hitstate_onenter = hitstate.onenter
+        hitstate.onenter = function(inst, ...)
+            local ret = hitstate_onenter(inst, ...)
+            CommonHandlers.UpdateHitRecoveryDelay(inst) -- This is missing from the original stategraph and is the reason Werepigs get stunlocked.
+            return ret
+        end
+    end
+end)
+
+--[[local ARC = 90 * DEGREES --degrees to each side
 local AOE_TARGET_MUSTHAVE_TAGS = { "_combat" }
 local AOE_TARGET_CANT_TAGS = { "INLIMBO", "invisible", "notarget", "noattack","werepig"}
 
@@ -284,8 +306,8 @@ local function DoArcAttack(inst, dist, radius, heavymult, mult, forcelanded, tar
     inst.components.combat.ignorehitrange = false
 end
 
-local werepigs = {"moonpig","werepig"}
-for i,werepig in ipairs(werepigs) do
+local werepigs = {"moonpig", "werepig"}
+for i, werepig in ipairs(werepigs) do
     env.AddStategraphPostInit(werepig, function(inst)
         local states = {
             State{
@@ -323,14 +345,13 @@ for i,werepig in ipairs(werepigs) do
                 },
                 onexit = function(inst)
                     inst.Physics:Stop()
-                    inst.attacked_run_cd = inst:DoTaskInTime(0.5,function(inst)
-                        inst.attacked_run_cd:Cancel()
+                    inst.attacked_run_cd = inst:DoTaskInTime(.5, function(inst)
                         inst.attacked_run_cd = nil
                     end)
                 end,
             },
         }
-        
+
         --If the werepig is waiting to run away, then manages to reach you, causing him to stand still, stop the dotaskintime that tells the werepig to not run away
         --local idlestate = inst.states["idle"]
         --if idlestate then
@@ -343,7 +364,7 @@ for i,werepig in ipairs(werepigs) do
                 --return idlestate_onenter(inst, ...)
             --end
         --end
-        
+
         local events = -- Klei's implementation (CommonHandlers.OnAttacked(nil, TUNING.PIG_MAX_STUN_LOCKS),) is not working after the werepig finishes his transformation, this implements it in a different way to fix that.
         {
             EventHandler("attacked", function(inst, data)
@@ -370,4 +391,4 @@ for i,werepig in ipairs(werepigs) do
             inst.states[v.name] = v
         end
     end)
-end
+end]]

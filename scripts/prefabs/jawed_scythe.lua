@@ -246,6 +246,8 @@ local function ScytheFn()
         return inst
     end
 
+    inst:AddComponent("inspectable")
+
     local frame = math.random(inst.AnimState:GetCurrentAnimationNumFrames()) - 1
     inst.AnimState:SetFrame(frame)
     --V2C: one networked fx for frame 3 (needed for floating)
@@ -255,9 +257,7 @@ local function ScytheFn()
     SetFxOwner(inst, nil)
     inst:ListenForEvent("floater_stopfloating", OnStopFloating)
 
-    inst:AddComponent("inspectable")
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/jawed_scythe.xml"
 	
     local finiteuses = inst:AddComponent("finiteuses")
     finiteuses:SetMaxUses(100)

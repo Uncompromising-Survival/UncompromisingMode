@@ -15,7 +15,7 @@ local actionhandlers =
         return ba and ba.target and ba.target.prefab == "nitre" and "chew_ground" or "eat_loop"
     end),
     ActionHandler(ACTIONS.PICKUP, "eat_enter"),
-    ActionHandler(ACTIONS.STEAL, "eat_enter")
+    ActionHandler(ACTIONS.STEAL, "eat_enter"),
 }
 
 local function ChooseAttack(inst, target)
@@ -42,6 +42,7 @@ local events =
     CommonHandlers.OnLocomote(false, true),
     CommonHandlers.OnFreeze(),
     CommonHandlers.OnElectrocute(),
+    CommonHandlers.OnKnockback(),
     CommonHandlers.OnSleepEx(),
     CommonHandlers.OnWakeEx(),
     CommonHandlers.OnDeath(),
@@ -167,7 +168,7 @@ local states =
 
     State{
         name = "flyaway",
-        tags = {"flight", "busy", "noelectrocute", "noattack", "temp_invincible", "jumping"},
+        tags = {"flight", "busy", "noelectrocute", "noknockback", "noattack", "temp_invincible", "jumping"},
 
         onenter = function(inst)
             inst.components.locomotor:Stop()
@@ -204,7 +205,7 @@ local states =
 
     State{
         name = "flyback",
-        tags = {"flight", "busy", "noelectrocute", "noattack", "temp_invincible", "jumping"},
+        tags = {"flight", "busy", "noelectrocute", "noknockback", "noattack", "temp_invincible", "jumping"},
 
         onenter = function(inst)
             inst.components.locomotor:Stop()
@@ -748,22 +749,44 @@ CommonStates.AddFrozenStates(states,
         RaiseFlyingCreature(inst)
     end)
 
+local function _nofacedidleonanimover(inst)
+	if inst.AnimState:AnimDone() then
+		inst.sg.statemem.keepnofaced = true
+		inst.sg:GoToState("idle")
+	end
+end
+
 CommonStates.AddElectrocuteStates(states, nil, nil,
 {
-    loop_onenter = SwitchToNoFaced,
-    loop_onexit = TryRestoreSixFaced,
-    pst_onenter = function(inst)
-        inst.sg:AddStateTag("canrotate")
-        SwitchToNoFaced(inst)
-    end,
-    onanimover = function(inst)
-        if inst.AnimState:AnimDone() then
-            inst.sg.statemem.keepnofaced = true
-            inst.sg:GoToState("idle")
-        end
-    end,
-    pst_onexit = TryRestoreSixFaced,
+	loop_onenter = SwitchToNoFaced,
+	loop_onexit = TryRestoreSixFaced,
+	pst_onenter = function(inst)
+		inst.sg:AddStateTag("canrotate")
+		SwitchToNoFaced(inst)
+	end,
+	onanimover = _nofacedidleonanimover,
+	pst_onexit = TryRestoreSixFaced,
 })
+
+CommonStates.AddKnockbackStates(states,
+{ --timelines
+	knockback =
+	{
+		FrameEvent(14, LandFlyingCreature),
+		FrameEvent(33, RaiseFlyingCreature),
+	},
+},
+nil, --anims
+{ --fns
+	knockback_onenter = SwitchToNoFaced,
+	knockback_onexit = function(inst)
+		TryRestoreSixFaced(inst)
+		RaiseFlyingCreature(inst)
+	end,
+	knockback_onanimover = _nofacedidleonanimover,
+})
+
+_nofacedidleonanimover = nil
 
 CommonStates.AddInitState(states, "idle")
 CommonStates.AddCorpseStates(states)

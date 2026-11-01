@@ -26,7 +26,7 @@ local function itemfn()
     inst.AnimState:SetBuild("winona_upgradekit_electrical")
     inst.AnimState:PlayAnimation("idle")
 
-    MakeInventoryFloatable(inst, "med", nil, 0.68)
+    MakeInventoryFloatable(inst, "med", nil, .68)
 
     inst:AddTag("toolbox_item")
 
@@ -47,7 +47,7 @@ local function itemfn()
     inst.components.upgrader.upgradetype = UPGRADETYPES.ELECTRICAL
     inst.components.upgrader.upgradevalue = 2--hm
 
-    MakeHauntableLaunchAndSmash(inst)
+    MakeHauntableLaunch(inst)
 
     return inst
 end

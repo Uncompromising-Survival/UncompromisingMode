@@ -487,8 +487,7 @@ local function fn()
     inst:AddComponent("tradable")
     inst:AddComponent("inspectable")
 
-    local inventoryitem = inst:AddComponent("inventoryitem")
-    inventoryitem.atlasname = "images/inventoryimages/crabclaw.xml"
+    inst:AddComponent("inventoryitem")
 
     local container = inst:AddComponent("container")
     container:WidgetSetup("crabclaw")
@@ -577,7 +576,7 @@ local function buildgem_cracked(colour, precious, multiplier)
 
         inst.AnimState:SetBank("gems")
         inst.AnimState:SetBuild("gems")
-        inst.AnimState:PlayAnimation(colour .. "gem_idle", true)
+        inst.AnimState:PlayAnimation(colour.."gem_idle", true)
 
         inst:AddTag("molebait")
         inst:AddTag("quakedebris")
@@ -594,7 +593,6 @@ local function buildgem_cracked(colour, precious, multiplier)
             return inst
         end
 
-
         inst:AddComponent("edible")
         inst.components.edible.foodtype = FOODTYPE.ELEMENTAL
 
@@ -610,17 +608,14 @@ local function buildgem_cracked(colour, precious, multiplier)
 
         inst:AddComponent("inspectable")
 
-        local image = (precious and "opalprecious" or colour)
-
         inst:AddComponent("inventoryitem")
-        inst.components.inventoryitem.atlasname = "images/inventoryimages/" .. image .. "gem_cracked.xml"
 
         MakeHauntableLaunchAndSmash(inst)
 
         return inst
     end
 
-    return Prefab(colour .. (precious and "preciousgem_cracked" or "gem_cracked"), gemfn, assets)
+    return Prefab(colour..(precious and "preciousgem_cracked" or "gem_cracked"), gemfn, assets)
 end
 
 return Prefab("crabclaw", fn, assets, prefabs),

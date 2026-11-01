@@ -5,7 +5,7 @@ local assets =
 
 --DSV uses 4 but ignores physics radius
 local MAXRANGE = 3
-local NO_TAGS = {"electricdamageimmune", "electricstunimmune", "INLIMBO", "notarget", "noattack", "flight", "invisible", "playerghost", "companion", "abigail", "shadowminion"}
+local NO_TAGS = {"electricdamageimmune", "INLIMBO", "notarget", "noattack", "flight", "invisible", "playerghost", "companion", "abigail", "shadowminion"}
 local NO_TAGS_NO_PLAYERS = JoinArrays(NO_TAGS, {"player"})
 
 local function OnUpdateThorns(inst)
@@ -24,14 +24,14 @@ local function OnUpdateThorns(inst)
                 if inst.owner then
                     if inst.owner.components.combat ~= nil and inst.owner.components.combat:CanTarget(v) then
                         inst.ignore[v] = true
-                        v:AddDebuff("shockstundebuff", "shockstundebuff", {attacker = inst.owner})
+                        v:PushEventImmediate("electrocute", {attacker = inst.owner, stimuli = "electric", noresist = true})
                         --v.components.combat:GetAttacked(v.components.follower ~= nil and v.components.follower:GetLeader() == inst.owner and inst or inst.owner, inst.damage)
                         --V2C: wisecracks make more sense for being pricked by picking
                         --v:PushEvent("thorns")
                     end
                 elseif v.components.combat:CanBeAttacked() then
                     inst.ignore[v] = true
-                    v:AddDebuff("shockstundebuff", "shockstundebuff", {attacker = inst.owner})
+                    v:PushEventImmediate("electrocute", {attacker = inst.owner, stimuli = "electric", noresist = true})
                     --v.components.combat:GetAttacked(inst, inst.damage)
                     --v:PushEvent("thorns")
                 end

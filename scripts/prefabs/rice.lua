@@ -50,6 +50,8 @@ local function fn()
 
     inst:RemoveTag("_named")
 
+    inst:AddComponent("inspectable")
+
     inst:AddComponent("edible")
     inst.components.edible.healthvalue = 0
     inst.components.edible.hungervalue = 12.5
@@ -63,8 +65,6 @@ local function fn()
 
     inst:AddComponent("stackable")
     inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
-
-    inst:AddComponent("inspectable")
 
     inst:AddComponent("named")
     inst.components.named.possiblenames = { STRINGS.NAMES["RICE1"], STRINGS.NAMES["RICE2"] }
@@ -86,8 +86,6 @@ local function fn()
 
     inst:AddComponent("cookable")
     inst.components.cookable.product = "rice_cooked"
-
-
 
     MakeHauntableLaunchAndPerish(inst)
 
@@ -117,6 +115,8 @@ local function fn_cooked()
 
     inst:RemoveTag("_named")
 
+    inst:AddComponent("inspectable")
+
     inst:AddComponent("perishable")
     inst.components.perishable:SetPerishTime(TUNING.PERISH_SUPERFAST)
     inst.components.perishable:StartPerishing()
@@ -131,15 +131,13 @@ local function fn_cooked()
     inst:AddComponent("stackable")
     inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
 
-    inst:AddComponent("inspectable")
-
     inst:AddComponent("named")
     inst.components.named.possiblenames = { STRINGS.NAMES["RICE_COOKED1"], STRINGS.NAMES["RICE_COOKED2"] }
     inst.components.named:PickNewName()
     inst:DoPeriodicTask(5, rename)
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/rice_cooked.xml"
+
     MakeSmallBurnable(inst)
     MakeSmallPropagator(inst)
     ---------------------
@@ -148,7 +146,6 @@ local function fn_cooked()
 
     ------------------------------------------------
     inst:AddComponent("tradable")
-
 
     MakeHauntableLaunchAndPerish(inst)
 

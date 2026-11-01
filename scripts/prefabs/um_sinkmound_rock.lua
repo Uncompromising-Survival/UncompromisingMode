@@ -20,7 +20,7 @@ local creature_features = {
     "slurper",
 }
 
-local function GenerateCreature(inst,worker)
+local function GenerateCreature(inst, worker)
     local creature_prefab = creature_features[math.random(1,#creature_features)]
     for i = 1,math.random(1,3) do
         local creature = inst.components.lootdropper:SpawnLootPrefab(creature_prefab)
@@ -36,7 +36,7 @@ local function OnWork(inst, worker, workleft)
         local pt = inst:GetPosition()
         SpawnPrefab("rock_break_fx").Transform:SetPosition(pt.x, pt.y, pt.z)
         inst.components.lootdropper:DropLoot(pt)
-        GenerateCreature(inst,worker) --AXE We decided to go against it just having random creatures... it wasn't as interesting as it being a bunnyman stash
+        GenerateCreature(inst, worker) --AXE We decided to go against it just having random creatures... it wasn't as interesting as it being a bunnyman stash
         if inst.prefab == "um_sinkmound_rock" then -- gemmed version drops the geode too
             inst.components.lootdropper:SpawnLootPrefab("um_gemology_geode_sink")
         end        
@@ -45,11 +45,8 @@ local function OnWork(inst, worker, workleft)
         spawner.original_pos = inst.original_pos
         inst:Remove()
     else
-        inst.AnimState:PlayAnimation(
-            (workleft < TUNING.ROCKS_MINE / 3 and "low") or
-            (workleft < TUNING.ROCKS_MINE * 2 / 3 and "med") or
-            "full"
-        )
+        inst.AnimState:PlayAnimation(workleft < TUNING.ROCKS_MINE / 3 and "low"
+            or workleft < TUNING.ROCKS_MINE * 2 / 3 and "med" or "full")
     end
 end
 
@@ -135,9 +132,9 @@ end
 local DAMAGE_ONEOF_TAGS = {"NPC_workable", "CHOP_workable", "HAMMER_workable", "MINE_workable", "DIG_workable" }
 local function ReGrow(inst)
     local rock = SpawnPrefab(math.random() > 0.7 and "um_sinkmound_rock" or "um_sinkmound_rock_gemless")
-    local offset = FindWalkableOffset(inst:GetPosition(), TWOPI*math.random(), math.random(4,10),12)
+    local offset = FindWalkableOffset(inst:GetPosition(), TWOPI * math.random(), math.random(4, 10), 12)
     local x,y,z = inst.Transform:GetWorldPosition()
-    rock.Transform:SetPosition(x+offset.x,y,z+offset.z)
+    rock.Transform:SetPosition(x + offset.x, y, z + offset.z)
     rock.original_pos = inst.original_pos
     rock.AnimState:PlayAnimation("grow")
     rock.AnimState:PushAnimation("full")
@@ -145,7 +142,7 @@ local function ReGrow(inst)
     for i,v in ipairs(structure_ents) do
         if not (v.prefab == "um_sinkmound_rock" or v.prefab == "um_sinkmound_rock_gemless") then 
             SpawnPrefab("collapse_small").Transform:SetPosition(v.Transform:GetWorldPosition())
-            v.components.workable:Destroy(inst)                    
+            v.components.workable:Destroy(inst)
         end
     end
     inst:Remove()

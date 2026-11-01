@@ -319,9 +319,6 @@ env.AddStategraphPostInit("wilson", function(inst)
 
     local _OldDeathEvent = inst.events["death"].fn
     inst.events["death"].fn = function(inst, data)
-        if TUNING.DSTU.MAXHPDEATH then
-            inst.components.health:DeltaPenalty(.25) -- ALL deaths cause 25% penalty....
-        end
         if data ~= nil and data.cause == "shadowvortex" and not inst:HasTag("wereplayer") then
             inst.components.rider:ActualDismount()
             inst.sg:GoToState("blackpuddle_death")

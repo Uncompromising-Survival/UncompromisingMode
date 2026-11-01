@@ -1,52 +1,89 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
+
+local RETARGET_MUST_TAGS = {"_combat", "player"}
+local RETARGET_CANT_TAGS = {"playerghost"}
+
+env.AddPrefabPostInit("world", function(world)
+    if not world.ismastersim then return end
+    local _SetNormalPig = UMUpvalueHacker.TryGetUpvalue(Prefabs.pigman.fn, "SetNormalPig")
+    if _SetNormalPig then
+        local function SetNormalPig(inst, ...)
+            local ret = _SetNormalPig(inst, ...)
+            local combat = inst.components.combat
+            local _Retarget = combat.targetfn
+            combat:SetRetargetFunction(combat.retargetperiod, function(_inst, ...)
+                if _inst:HasTag("NPC_contestant") or _inst.components.minigame_spectator then return _Retarget(_inst, ...) end
+                return not _inst:IsInLimbo() and FindEntity(_inst, TUNING.PIG_TARGET_DIST, function(guy)
+                    return guy.userid and table.contains(_inst.remembered_threats, guy.userid) and guy:IsInLight() and _inst.components.combat:CanTarget(guy)
+                end, RETARGET_MUST_TAGS, RETARGET_CANT_TAGS) or _Retarget(_inst, ...)
+            end)
+            return ret
+        end
+        UMUpvalueHacker.SetUpvalue(Prefabs.pigman.fn, SetNormalPig, "SetNormalPig")
+    end
+end)
+
+local function IsPig(inst)
+    return inst:HasTag("pig") and not (inst.franken or inst:HasTag("werepig"))
+end
+
+local function SetShouldAggroStuff(inst)
+    local combat = inst.components.combat
+    if combat then
+        local _ShouldAggroFn = combat.shouldaggrofn
+        combat:SetShouldAggroFn(function(_inst, target, ...)
+            if IsPig(_inst) and IsPig(target) then return false end
+            if _ShouldAggroFn then return _ShouldAggroFn(_inst, target, ...) end
+            return true
+        end)
+    end
+end
+
+local _AcceptTest
+local function AcceptTest(inst, item, ...)
+    if inst.components.eater:CanEat(item) then
+        local foodtype = item.components.edible.foodtype
+        if foodtype == FOODTYPE.UM_HORRIBLE_VEGGIE then
+            local last_eat_time = inst.components.eater:TimeSinceLastEating()
+            return (last_eat_time == nil or
+                    last_eat_time >= TUNING.PIG_MIN_POOP_PERIOD)
+                    and (inst.components.inventory == nil or
+                    not inst.components.inventory:Has(item.prefab, 1))
+        end
+    end
+    return _AcceptTest and _AcceptTest(inst, item, ...)
+end
 
 local function OnNewTarget_Remember(inst, data)
-    if data ~= nil and data.target ~= nil and data.target:HasTag("player") and data.target.userid then
-        if table.contains(inst.remembered_threats, data.target.userid) then
+    local userid = data and data.target and data.target.isplayer and not (inst.franken or inst:HasTag("werepig")) and data.target.userid
+    if userid then
+        if table.contains(inst.remembered_threats, userid) then
             local strtbl = STRINGS["PIG_REMEMBER_THREAT"]
-            if strtbl ~= nil then
+            if strtbl then
                 local strid = math.random(#strtbl)
                 inst.components.talker:Chatter("PIG_REMEMBER_THREAT", strid)
             end
-        else--elseif not inst:HasTag("werepig") then --Werepigs shouldn't remember what they fought
-            
-            table.insert(inst.remembered_threats, data.target.userid)
+        else
+            table.insert(inst.remembered_threats, userid)
         end
     end
 end
 
-local function OnSave(inst, data)
-    data.remembered_threats = inst.remembered_threats
-
-    if inst._OldOnSave ~= nil then
-        return inst._OldOnSave(inst, data)
-    end
+local _OnSave
+local function OnSave(inst, data, ...)
+    data.remembered_threats = inst.remembered_threats and next(inst.remembered_threats) and inst.remembered_threats or nil
+    return _OnSave and _OnSave(inst, data, ...)
 end
 
-local function OnLoad(inst, data)
-    if data then
-        inst.remembered_threats = data.remembered_threats or inst.remembered_threats
+local _OnLoad
+local function OnLoad(inst, data, ...)
+    if data and data.remembered_threats then
+        inst.remembered_threats = data.remembered_threats
     end
-
-    if inst._OldOnLoad ~= nil then
-        return inst._OldOnLoad(inst, data)
-    end
-end
-
-local MAX_TARGET_SHARES = 5
-local SHARE_TARGET_DIST = 30
-
-local function OnAttacked(inst, data)
-    local attacker = data.attacker
-    inst:ClearBufferedAction()
-
-    if attacker ~= nil and not inst:HasTag("werepig") then
-        if attacker:HasTag("player") then
-            inst.components.combat:ShareTarget(attacker, SHARE_TARGET_DIST, function(dude) return dude.prefab == inst.prefab end, MAX_TARGET_SHARES)
-        end
-    end
+    return _OnLoad and _OnLoad(inst, data, ...)
 end
 
 env.AddPrefabPostInit("pigman", function(inst)
@@ -54,84 +91,29 @@ env.AddPrefabPostInit("pigman", function(inst)
         return
     end
 
-    inst:AddTag("pigattacker")
-
     inst.remembered_threats = {}
 
-    if inst.components.combat ~= nil then
-        local _OldRetarget = inst.components.combat.targetfn
-        local period = inst.components.combat.retargetperiod
+    SetShouldAggroStuff(inst)
 
-        inst.components.combat:SetRetargetFunction(period, function(inst)
-            if inst:HasTag("NPC_contestant") then
-                return nil
-            end
-
-            local RETARGET_MUST_TAGS = { "_combat" }
-            local exclude_tags = { "playerghost", "INLIMBO", "NPC_contestant" }
-            if inst.components.follower:GetLeader() then
-                table.insert(exclude_tags, "abigail")
-            end
-            if inst.components.minigame_spectator ~= nil then
-                table.insert(exclude_tags, "player") -- prevent spectators from auto-targeting webber
-            end
-
-            local oneof_tags = { "monster", "wonkey", "pirate", "player" }
-            if not inst:HasTag("merm") then
-                table.insert(oneof_tags, "merm")
-            end
-
-            return not inst:IsInLimbo()
-                and FindEntity(
-                    inst,
-                    TUNING.PIG_TARGET_DIST,
-                    function(guy)
-                        return guy.userid ~= nil and table.contains(inst.remembered_threats, guy.userid) and guy:IsInLight() and inst.components.combat:CanTarget(guy)
-                    end,
-                    RETARGET_MUST_TAGS, -- see entityreplica.lua
-                    exclude_tags,
-                    oneof_tags
-                )
-                or _OldRetarget(inst)
-        end)
+    local trader = inst.components.trader
+    if trader then
+        if not _AcceptTest then
+            _AcceptTest = trader.test
+        end
+        trader:SetAcceptTest(AcceptTest)
     end
-
-    inst:ListenForEvent("newcombattarget", OnNewTarget_Remember)
 
     inst.components.eater:SetCanEatVeggieHorrible() -- Can eat UM_HORRIBLE_VEGGIE
 
-    local _ShouldAcceptItem = inst.components.trader.test
-    local function ShouldAcceptItem(inst, item, ...)
-        if inst.components.eater:CanEat(item) then
-            local foodtype = item.components.edible.foodtype
-            if foodtype == FOODTYPE.UM_HORRIBLE_VEGGIE then
-                local last_eat_time = inst.components.eater:TimeSinceLastEating()
-                return (last_eat_time == nil or
-                        last_eat_time >= TUNING.PIG_MIN_POOP_PERIOD)
-                        and (inst.components.inventory == nil or
-                        not inst.components.inventory:Has(item.prefab, 1))
-            end
-            return true
-        end
-        return _ShouldAcceptItem(inst, item, ...)
+    inst:ListenForEvent("newcombattarget", OnNewTarget_Remember)
+
+    if not _OnSave then
+        _OnSave = inst.OnSave
     end
-    inst.components.trader:SetAcceptTest(ShouldAcceptItem)
-
-    local _OldOnSave = inst.OnSave
-    local _OldOnLoad = inst.OnLoad
-
-    if _OldOnSave ~= nil then
-        inst._OldOnSave = _OldOnSave
-    end
-
-    if _OldOnLoad ~= nil then
-        inst._OldOnLoad = _OldOnLoad
-    end
-
-    inst:ListenForEvent("attacked", OnAttacked)
-
     inst.OnSave = OnSave
-
+    if not _OnLoad then
+        _OnLoad = inst.OnLoad
+    end
     inst.OnLoad = OnLoad
 end)
 
@@ -140,7 +122,7 @@ env.AddPrefabPostInit("pigguard", function(inst)
         return
     end
 
-    inst:AddTag("pigattacker")
+    SetShouldAggroStuff(inst)
 end)
 
 env.AddPrefabPostInit("pigking_pigguard", function(inst)
@@ -148,7 +130,7 @@ env.AddPrefabPostInit("pigking_pigguard", function(inst)
         return
     end
 
-    inst:AddTag("pigattacker")
+    SetShouldAggroStuff(inst)
 
     --[[
     local _setnormalfn = inst.components.werebeast.onsetnormalfn
