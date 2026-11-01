@@ -18,7 +18,7 @@ return Class(function(self, inst)
         end
         return false
     end
-	
+    
     local function NotTooClose(pos)
         local ents = TheSim:FindEntities(pos.x, 0, pos.z, 2)
         if not (ents and #ents > 0) then
@@ -26,7 +26,7 @@ return Class(function(self, inst)
         end
         return false
     end
-	
+    
     local function IterateThroughTiles(tiles)
         shuffleArray(tiles)
         local target_location = {}
@@ -50,23 +50,25 @@ return Class(function(self, inst)
         return tiles
     end
 
-	function self:PopulateTentacles()
-		local marshtiles = TheWorld.components.um_tilelogger:AnalyzeWorld(WORLD_TILES["MARSH"])
-		local moontiles
-		if TheWorld:HasTag("cave") then
-			moontiles = TheWorld.components.um_tilelogger:AnalyzeWorld(WORLD_TILES["UM_FLOODWATER_GROTTO"])
-		end
-		for i = 1,math.random(80,120),1 do -- Generously 100..
+    function self:PopulateTentacles()
+        local marshtiles = TheWorld.components.um_tilelogger:AnalyzeWorld(WORLD_TILES["MARSH"])
+        local moontiles
+        if TheWorld:HasTag("cave") then
+            moontiles = TheWorld.components.um_tilelogger:AnalyzeWorld(WORLD_TILES["UM_FLOODWATER_GROTTO"])
+        end
+        for i = 1,math.random(80,120),1 do -- Generously 100..
             marshtiles = SpawnTentacle("tentacle",marshtiles)
-		end
+        end
         if TheWorld:HasTag("cave") then
             for i = 1,math.random(20,30),1 do -- Generously 25..
                 moontiles = SpawnTentacle("um_tentacle_moon",moontiles)
             end
         end
-	end
+    end
 
-    inst:WatchWorldState("isspring", function(inst, data)
-		self:PopulateTentacles()
+    inst:WatchWorldState("isspring", function(inst, isspring)
+        if isspring then
+            self:PopulateTentacles()
+        end
     end)
 end)
