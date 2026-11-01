@@ -31,18 +31,8 @@ env.AddStategraphPostInit("catcoon", function(inst)
         end)]]
     }
 
-    local attackedeventhandler = inst.events["attacked"]
-    if attackedeventhandler then
-        local attackedeventhandler_fn = attackedeventhandler.fn
-        attackedeventhandler.fn = function(inst, data, ...)
-            if inst.components.health and not inst.components.health:IsDead() and not CommonHandlers.TryElectrocuteOnAttacked(inst, data)
-                and not CommonHandlers.HitRecoveryDelay(inst) and inst.sg.currentstate.name == "hiss" then
-                inst.sg:GoToState("hit")
-                return
-            end
-            return attackedeventhandler_fn(inst, data, ...)
-        end
-    end
+    local hissstate = inst.states["hiss"]
+    if hissstate and hissstate.tags then hissstate.tags["caninterrupt"] = true end
 
     local pounceattackstate = inst.states["pounceattack"]
     if pounceattackstate then

@@ -20,15 +20,13 @@ function ViperlingBrain:OnStart()
     local root = PriorityNode(
         {
             BrainCommon.PanicTriggerShadowCreature(self.inst),
+            BrainCommon.RunAwayFromQueenTorch(self),
             Follow(self.inst, GetLeader, MIN_FOLLOW_LEADER, TARGET_FOLLOW_LEADER, MAX_FOLLOW_LEADER),
             ChaseAndAttack(self.inst, TUNING.WORM_CHASE_TIME, TUNING.WORM_CHASE_DIST),
             Wander(self.inst, function() return self.inst:GetPosition() end, TUNING.WORM_WANDER_DIST),
             StandStill(self.inst),
         }, .25)
 
-    if UPDATE_CHECK then
-        table.insert(root.children, 2, BrainCommon.RunAwayFromQueenTorch(self))
-    end
     self.bt = BT(self.inst, root)
 end
 

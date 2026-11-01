@@ -433,10 +433,14 @@ local function fn()
 
     inst:Hide()
 
-    TheWorld.components.um_ocupusappearinator:RegisterOcupus(inst)
+    if TheWorld.components.um_ocupusappearinator then
+        TheWorld.components.um_ocupusappearinator:RegisterOcupus(inst)
+    end
 
     inst:ListenForEvent("onremove", function()
-        TheWorld.components.um_ocupusappearinator:UnregisterOcupus(inst)
+        if TheWorld.components.um_ocupusappearinator then
+            TheWorld.components.um_ocupusappearinator:UnregisterOcupus(inst)
+        end
         RemoveAllTentacles(inst)
     end)
 

@@ -689,8 +689,6 @@ local function fnlightning()
     inst.UMToggleCombatRange = ToggleCombatRange
     inst:UMToggleCombatRange(true)
 
-    inst.components.combat:SetRange(10, 3)
-
     inst:AddComponent("timer")
     inst:ListenForEvent("timerdone", ontimerdone)
 

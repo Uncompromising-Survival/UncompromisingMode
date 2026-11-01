@@ -19,12 +19,12 @@ env.AddSimPostInit(function()
             local channelcastable = inst.components.channelcastable
             if not waschannelcastable and channelcastable then
                 local _OnStartChanneling = channelcastable.onstartchannelingfn
-                channelcastable:SetOnStartChannelingFn(function(inst, user, ...)
-                    _OnStartChanneling(inst, user, ...)
-                    StopSmog(inst)
-                    inst.smog_task = inst:DoPeriodicTask(.3, function(inst)
+                channelcastable:SetOnStartChannelingFn(function(_inst, user, ...)
+                    _OnStartChanneling(_inst, user, ...)
+                    StopSmog(_inst)
+                    _inst.smog_task = _inst:DoPeriodicTask(.3, function(_inst)
                         if not user:IsValid() then
-                            StopSmog(inst)
+                            StopSmog(_inst)
                             return
                         end
 
@@ -37,9 +37,9 @@ env.AddSimPostInit(function()
                     end)
                 end)
                 local _OnStartChanneling = channelcastable.onstopchannelingfn
-                channelcastable:SetOnStopChannelingFn(function(inst, user, ...)
-                    StopSmog(inst)
-                    _OnStartChanneling(inst, user, ...)
+                channelcastable:SetOnStopChannelingFn(function(_inst, user, ...)
+                    StopSmog(_inst)
+                    _OnStartChanneling(_inst, user, ...)
                 end)
             else
                 StopSmog(inst)

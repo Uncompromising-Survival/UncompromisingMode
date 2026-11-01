@@ -4,7 +4,7 @@ GLOBAL.setfenv(1, GLOBAL)
 local function CanSteal(item)
     return item.components.inventoryitem ~= nil
         and item.components.inventoryitem.canbepickedup
-        and item:IsOnValidGround()      
+        and item:IsOnValidGround()
 end
 
 local PLAY_TAGS = {"cattoy", "cattoyairborne", "catfood"}
