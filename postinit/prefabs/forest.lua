@@ -1,57 +1,68 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
-local function TentacleRegrowth()
-	local _worldstate = TheWorld.state
-	return (
-		_worldstate.isspring and TUNING.CACTUS_REGROWTH_TIME_SUMMER_MULT or -- Bloom.
-		_worldstate.iswinter and TUNING.CACTUS_REGROWTH_TIME_WINTER_MULT or -- Hibernation.
-		TUNING.CACTUS_REGROWTH_TIME_BASE_MULT -- Generic.
-	) * (
-		_worldstate.israining and TUNING.CACTUS_REGROWTH_RAINING_MULT or 1
-	) * TUNING.CACTUS_REGROWTH_TIME_MULT
+--[[local function TentacleRegrowth() -- TODO: Make this work maybe? Has knock on issues with tentacles that are spawned post generation (e.g., Wickerbottom).
+    local _worldstate = TheWorld.state
+    return (
+        _worldstate.isspring and TUNING.CACTUS_REGROWTH_TIME_SUMMER_MULT or -- Bloom.
+        _worldstate.iswinter and TUNING.CACTUS_REGROWTH_TIME_WINTER_MULT or -- Hibernation.
+        TUNING.CACTUS_REGROWTH_TIME_BASE_MULT -- Generic.
+    ) * (
+        _worldstate.israining and TUNING.CACTUS_REGROWTH_RAINING_MULT or 1
+    ) * TUNING.CACTUS_REGROWTH_TIME_MULT
 end
 
-env.AddPrefabPostInit("forest", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
+local shards = {"cave", "forest"}
+for _, shard in pairs(shards) do
+    env.AddPrefabPostInit(shard, function(inst)
+        if not TheWorld.ismastersim then return end
 
-	if inst.components.regrowthmanager ~= nil then
-		inst.components.regrowthmanager:SetRegrowthForType("tentacle", TUNING.CACTUS_REGROWTH_TIME, "tentacle", TentacleRegrowth)
-	end
-end)
+        local regrowthmanager = inst.components.regrowthmanager
+        if regrowthmanager then
+            local prefab = shard == "forest" and "tentacle" or "um_tentacle_moon"
+            regrowthmanager:SetRegrowthForType(prefab, TUNING.CACTUS_REGROWTH_TIME, prefab, TentacleRegrowth)
+        end
+    end)
+end
+
+local tentacles = {"tentacle", "um_tentacle_moon"}
+for _, tentacle in pairs(tentacles) do
+    env.AddPrefabPostInit(tentacle, function(inst)
+        if not TheWorld.ismastersim then return end
+        AddToRegrowthManager(inst)
+    end)
+end]]
 
 local function DropGoop(pt)
-	local offset = FindWalkableOffset(pt, math.random() * TWOPI, math.random(3, 10), 8, true)
-	local x = pt.x + (offset and offset.x or 0)
-	local z = pt.z + (offset and offset.z or 0)
-	local goop = SpawnPrefab("glommerfuel")
-	if goop then
-		goop.Physics:Teleport(x, 35, z)
-	end
+    local offset = FindWalkableOffset(pt, math.random() * TWOPI, math.random(3, 10), 8, true)
+    local x = pt.x + (offset and offset.x or 0)
+    local z = pt.z + (offset and offset.z or 0)
+    local goop = SpawnPrefab("glommerfuel")
+    if goop then
+        goop.Physics:Teleport(x, 35, z)
+    end
 end
 
 env.AddPrefabPostInit("forest", function(inst)
-	if not TheWorld.ismastersim then return end
+    if not TheWorld.ismastersim then return end
 
-	inst:ListenForEvent("megaflare_detonated", function(src, data)
-		if data and data.sourcept and TheWorld.Map:IsVisualGroundAtPoint(data.sourcept.x, data.sourcept.y, data.sourcept.z) and TheWorld.state.isspring then
-			DropGoop(data.sourcept)
-		end
-	end)
+    inst:ListenForEvent("megaflare_detonated", function(src, data)
+        if data and data.sourcept and TheWorld.Map:IsVisualGroundAtPoint(data.sourcept.x, data.sourcept.y, data.sourcept.z) and TheWorld.state.isspring then
+            DropGoop(data.sourcept)
+        end
+    end)
 
-	inst:ListenForEvent("megaflare_guardmet", function(src, data)
-		if not (data and data.sourcept) then return end
+    inst:ListenForEvent("megaflare_guardmet", function(src, data)
+        if not (data and data.sourcept) then return end
 
-		if data.iswinter then
-			inst:DoTaskInTime(6, function()
-				if #TheSim:FindEntities(data.sourcept.x, 0, data.sourcept.z, 60, {"flare_summoned"}) == 0 then
-					DropGoop(data.sourcept)
-				end
-			end)
-		else
-			DropGoop(data.sourcept)
-		end
-	end)
+        if data.iswinter then
+            inst:DoTaskInTime(6, function()
+                if #TheSim:FindEntities(data.sourcept.x, 0, data.sourcept.z, 60, {"flare_summoned"}) == 0 then
+                    DropGoop(data.sourcept)
+                end
+            end)
+        else
+            DropGoop(data.sourcept)
+        end
+    end)
 end)

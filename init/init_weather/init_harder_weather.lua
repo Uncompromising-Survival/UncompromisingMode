@@ -59,7 +59,7 @@ env.AddPrefabPostInit("cave", function(inst)
     end
     inst:AddComponent("um_guano_rain")
     inst:AddComponent("um_tilelogger")
-    inst:AddComponent("um_tentacle_repopulator")
+    --inst:AddComponent("um_tentacle_repopulator") -- Causes lag, needs to be looked into. See postinit/prefabs/forest.lua.
     --inst:AddComponent("um_poofshroom_repopulator")
     -- if TUNING.DSTU.CAVECLOPS then
     -- inst:AddComponent("cavedeerclopsspawner")
@@ -109,7 +109,7 @@ env.AddPrefabPostInit("forest", function(inst)
     --inst:AddComponent("horriblenightmanager")
     inst:AddComponent("um_tilelogger")
     inst:AddComponent("um_ocupusappearinator")
-    inst:AddComponent("um_tentacle_repopulator")
+    --inst:AddComponent("um_tentacle_repopulator") -- Causes lag, needs to be looked into. See postinit/prefabs/forest.lua.
     --inst:AddComponent("um_pestilencecontroller")
     --if TUNING.DSTU.GOOSE_SETTING == "ROG" or TUNING.DSTU.GOOSE_SETTING == "BOTH" then
     --inst:AddComponent("gmoosespawner")
