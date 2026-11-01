@@ -130,18 +130,17 @@ local function GetDamage(inst, attacker, target)
 end
 
 local function onattack(inst, attacker, target)
-    if target and target:IsValid() and target:HasAnyTag("insect", "spider", "hoodedwidow")
-        and attacker and attacker:IsValid() and not inst.components.fueled:IsEmpty() then
-
-        SpawnPrefab("electrichitsparks"):AlignToTarget(target, attacker, true)
-
-        local x, y, z = target.Transform:GetWorldPosition()
-        for i, v in ipairs(TheSim:FindEntities(x, y, z, 4, {"_combat"}, {"INLIMBO", "player", "notarget", "noattack"}, {"insect", "spider", "hoodedwidow"})) do
-            if v ~= inst and v ~= target and v:IsValid() and not (v.components.health and v.components.health:IsDead())
-                and attacker.components.combat:CanTarget(v) and not attacker.components.combat:IsAlly(v) then
-                --v.components.health:DoDelta( -10, false, attacker, false, attacker)
-                v.components.combat:GetAttacked(attacker, 5, nil)
-                SpawnPrefab("electrichitsparks"):AlignToTarget(v, attacker, true)
+    if target and target:IsValid() and attacker and attacker:IsValid() and not inst.components.fueled:IsEmpty() then
+        SpawnElectricHitSparks(attacker, target, true)
+        if target:HasAnyTag("insect", "spider", "hoodedwidow") then
+            local x, y, z = target.Transform:GetWorldPosition()
+            for i, v in ipairs(TheSim:FindEntities(x, y, z, 4, {"_combat"}, {"INLIMBO", "player", "notarget", "noattack"}, {"insect", "spider", "hoodedwidow"})) do
+                if v ~= inst and v ~= target and v:IsValid() and not (v.components.health and v.components.health:IsDead())
+                    and attacker.components.combat:CanTarget(v) and not attacker.components.combat:IsAlly(v) then
+                    --v.components.health:DoDelta( -10, false, attacker, false, attacker)
+                    v.components.combat:GetAttacked(attacker, 5, nil)
+                    SpawnElectricHitSparks(attacker, v, true)
+                end
             end
         end
     end

@@ -298,11 +298,11 @@ env.AddStategraphPostInit("werepig", function(inst)
         local attackstate_onexit = attackstate.onexit
         attackstate.onexit = function(inst, ...)
             local ret = attackstate_onexit(inst, ...)
-            if not inst.attacked_run_cd then
+            --[[if not inst.attacked_run_cd then
                 inst.attacked_run_cd = inst:DoTaskInTime(.5, function(inst)
                     inst.attacked_run_cd = nil
                 end)
-            end
+            end]]
             return ret
         end
     end
