@@ -24,7 +24,7 @@ env.AddStategraphPostInit("leif", function(inst)
             onenter = function(inst, target)
                 inst.components.locomotor:Stop()
                 inst.AnimState:PlayAnimation("special")
-                inst.sg.statemem.target = target and target:IsValid() and target or inst.components.combat.target
+                inst.sg.statemem.target = target
                 inst.sg.statemem.summonattack = TUNING.DSTU.PINELINGS and inst.sg.statemem.target and inst.UMFindStump and inst:UMFindStump(inst.sg.statemem.target) or nil
                 inst.components.timer:StartTimer("snare_cd", inst.sg.statemem.summonattack and 15 or 30)
             end,
@@ -37,9 +37,9 @@ env.AddStategraphPostInit("leif", function(inst)
                     inst.components.combat:DoAttack(inst.sg.statemem.target)
                     if inst.sg.statemem.target and inst.sg.statemem.target:IsValid() then
                         if inst.sg.statemem.summonattack then
-                            inst:SummonStumplings(inst.sg.statemem.target)
+                            inst:UMSummonStumplings(inst.sg.statemem.target)
                         else
-                            inst:SpawnSnare(inst.sg.statemem.target)
+                            inst:UMSpawnSnare(inst.sg.statemem.target)
                         end
                     end
                 end),

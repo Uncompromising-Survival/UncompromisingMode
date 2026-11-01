@@ -12,30 +12,16 @@ local prefabs = {
     "rootspike",
 }
 
-local function OnNewCombatTarget(inst, data)
-	if data and data.target and not data.oldtarget then
-        inst.um_engaged = true
-        UMCommonFns.RestartTimer(inst, {name = "snare_cd", time = TUNING.STALKER_ABILITY_RETRY_CD, dontrestarttimer = true})
-	end
-end
-
-local function OnDroppedTarget(inst)
-    inst.um_engaged = nil
-end
-
-local function TrySnare(inst)
-    local target = inst.components.combat.target
-    if target and target:IsValid() and inst:GetDistanceSqToInst(target) < 200 then
-        inst:PushEvent("snare", target)
-    else
-        if inst.um_engaged then inst.components.timer:StartTimer("snare_cd", TUNING.STALKER_ABILITY_RETRY_CD) end
+local function ShouldSnare(inst)
+    local timer = inst.components.timer
+    if not timer:TimerExists("snare_cd") then
+        local target = inst.components.combat.target
+        if target and target:IsValid() and inst:GetDistanceSqToInst(target) < 200 then
+            return true
+        end
+        timer:StartTimer("snare_cd", TUNING.STALKER_ABILITY_RETRY_CD)
     end
-end
-
-local function OnTimerDone(inst, data)
-    if data.name == "snare_cd" then
-        TrySnare(inst)
-    end
+    return false
 end
 
 local SNARE_OVERLAP_MIN = 1
@@ -244,16 +230,14 @@ local function TreeguardFunctions(inst)
     end
 
     --inst:ListenForEvent("attacked", BossCheck)
-	inst:ListenForEvent("newcombattarget", OnNewCombatTarget)
-	inst:ListenForEvent("droppedtarget", OnDroppedTarget)
 
     inst:AddComponent("timer")
-    inst:ListenForEvent("timerdone", OnTimerDone)
 
+    inst.UMShouldSnare = ShouldSnare
+    inst.UMFindSnareTargets = FindSnareTargets
+    inst.UMSpawnSnare = SpawnSnare
     inst.UMFindStump = FindStump
-    inst.SummonStumplings = SummonStumplings
-    inst.FindSnareTargets = FindSnareTargets
-    inst.SpawnSnare = SpawnSnare
+    inst.UMSummonStumplings = SummonStumplings
 end
 
 local treeguards = {"leif", "leif_sparse"}
