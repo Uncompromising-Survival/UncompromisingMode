@@ -528,10 +528,10 @@ local function ApplySlows(inst)
     local ents = TheSim:FindEntities(x, y, z, 3, { "_combat" }, inst.playermade and no_slow_players or no_slow)
     for i, v in ipairs(ents) do
         local debuffkey = inst.prefab
-        if v.components.locomotor then
-            v.components.locomotor:SetExternalSpeedMultiplier(v, debuffkey, 0.5)
-            v.um_boomslowtask = v:DoPeriodicTask(1, function(guy)
-                if not FindEntity(guy, 3, function(ent) return ent.prefab == "blueberrypuddle" end) then
+        if v.components.locomotor and not v.um_boomslowtask then
+            v.components.locomotor:SetExternalSpeedMultiplier(v, debuffkey, .5)
+            v.um_boomslowtask = v:DoPeriodicTask(1, function(guy, playermade)
+                if not FindEntity(guy, 3, function(ent) return (playermade or not ent.playermade) and ent.prefab == "blueberrypuddle" end) then
                     if guy.components.locomotor then
                         guy.components.locomotor:RemoveExternalSpeedMultiplier(guy, debuffkey)
                     end
@@ -540,7 +540,7 @@ local function ApplySlows(inst)
                         guy.um_boomslowtask = nil
                     end
                 end
-            end)
+            end, nil, inst.playermade)
         end
     end
 end

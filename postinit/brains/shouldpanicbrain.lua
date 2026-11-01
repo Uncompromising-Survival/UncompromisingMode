@@ -9,7 +9,7 @@ if _ShouldTriggerPanic then
     local function ShouldTriggerPanic(inst, ...)
         local takingfiredamage
         local health = inst.components.health
-        if (inst.brain and inst.brain.um_nofirepanic or inst:HasAnyTag("ice_shielded")) and health and health.takingfiredamage then
+        if (inst.brain and inst.brain.um_nofirepanic or inst:HasTag("ice_shielded")) and health and health.takingfiredamage then
             takingfiredamage = health.takingfiredamage
             health.takingfiredamage = false
         end
