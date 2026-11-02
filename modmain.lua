@@ -23,12 +23,7 @@ GLOBAL.MAX_GEM_TIER = 3
 GLOBAL.MIN_GEM_TIER = 0 --ONLY USED FOR DATA. ACTUAL ENCHANT RANGE IS 1 TO 3. USE THE VARIABLE BELOW FOR THAT.
 GLOBAL.MIN_GEM_ENCHANT_TIER = 1
 
-GLOBAL.UM_DEV = GetModConfigData("devmode")
-if GLOBAL.UM_DEV then
-    GLOBAL.CHEATS_ENABLED = true
-end
-
-GLOBAL.UM_DEV = GetModConfigData("scrapbook_debug")
+GLOBAL.UM_DEV = GetModConfigData("devmode") or GetModConfigData("scrapbook_debug")
 if GLOBAL.UM_DEV then
     GLOBAL.CHEATS_ENABLED = true
 end
