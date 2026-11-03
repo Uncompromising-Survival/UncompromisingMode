@@ -343,11 +343,3 @@ do
         inst.OnLoad = OnLoad
     end)
 end
-
---[[env.AddPrefabPostInit("pigking_pigguard", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
-
-    SetShouldAggroStuff(inst)
-end)]]
