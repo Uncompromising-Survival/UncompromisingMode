@@ -177,7 +177,7 @@ end)
 AddPrefabPostInit("wathom", function(inst)
     if not TheWorld.ismastersim then return end
     inst.components.foodaffinity.favorite_foods = {
-        [TUNING.DSTU.BONESTEW == "bone_appetit" and "um_kebab" or "bonestew"] = 15,
+        [UM_CONFIG.BONESTEW_NERF == "bone_appetit" and "um_kebab" or "bonestew"] = 15,
     }
 end)
 

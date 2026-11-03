@@ -14,20 +14,30 @@ local Ingredient = GLOBAL.Ingredient
 -- "WINTER", "SUMMER", "RAIN", "EVERYTHING"
 
 --Turfs
-AddRecipe2("turf_um_hotspring_grass", { Ingredient("twigs", 1), Ingredient("ice", 1) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
-ChangeSortKey("turf_um_hotspring_grass", "turf_desertdirt", "DECOR", true)
+if UM_CONFIG.MAGMA_CAVES then
+    AddRecipe2("turf_um_hotspring_grass", { Ingredient("twigs", 1), Ingredient("ice", 1) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
+    ChangeSortKey("turf_um_hotspring_grass", "turf_desertdirt", "DECOR", true)
 
-AddRecipe2("turf_um_hotspring_whiterock", { Ingredient("rocks", 1), Ingredient("marble", 1) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
-ChangeSortKey("turf_um_hotspring_whiterock", "turf_um_hotspring_grass", "DECOR", true)
+    AddRecipe2("turf_um_hotspring_whiterock", { Ingredient("rocks", 1), Ingredient("marble", 1) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
+    ChangeSortKey("turf_um_hotspring_whiterock", "turf_um_hotspring_grass", "DECOR", true)
 
-AddRecipe2("turf_um_hotspring_yellowrock", { Ingredient("rocks", 1), Ingredient("nitre", 1) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
-ChangeSortKey("turf_um_hotspring_yellowrock", "turf_um_hotspring_whiterock", "DECOR", true)
+    AddRecipe2("turf_um_hotspring_yellowrock", { Ingredient("rocks", 1), Ingredient("nitre", 1) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
+    ChangeSortKey("turf_um_hotspring_yellowrock", "turf_um_hotspring_whiterock", "DECOR", true)
 
-AddRecipe2("turf_magma_grass", { Ingredient("rocks", 1), Ingredient("firenettles", 1) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
-ChangeSortKey("turf_magma_grass", "turf_underrock", "DECOR", false)
+    AddRecipe2("turf_magma_grass", { Ingredient("rocks", 1), Ingredient("firenettles", 1) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
+    ChangeSortKey("turf_magma_grass", "turf_underrock", "DECOR", false)
 
-AddRecipe2("turf_um_magma", { Ingredient("rocks", 1), Ingredient("firenettles_dried", 1) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
-ChangeSortKey("turf_um_magma", "turf_magma_grass", "DECOR", true)
+    AddRecipe2("turf_um_magma", { Ingredient("rocks", 1), Ingredient("firenettles_dried", 1) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
+    ChangeSortKey("turf_um_magma", "turf_magma_grass", "DECOR", true)
+
+    AddRecipe2("um_armor_pyre_nettles", { Ingredient("um_smolder_spore", 2), Ingredient("firenettles", 16), Ingredient("silk", 2) }, TECH.ONE, nil, { "ARMOUR", "WINTER", "RAIN" })
+    ChangeSortKey("um_armor_pyre_nettles", "armordragonfly", "ARMOUR", false)
+    ChangeSortKey("um_armor_pyre_nettles", "raincoat", "WINTER", true)
+    ChangeSortKey("um_armor_pyre_nettles", "armor_reed_um", "RAIN", false)
+    -- Pyre Dart
+    AddRecipe2("um_blowdart_pyre", { Ingredient("cutreeds", 2), Ingredient("um_smolder_spore", 1), Ingredient("firenettles", 1) }, TECH.SCIENCE_TWO, { numtogive = TUNING.DSTU.DART_YIELD }, { "WEAPONS" })
+    ChangeSortKey("um_blowdart_pyre", "blowdart_fire", "WEAPONS", true)
+end
 
 if GetModConfigData("hoodedforest") then
     AddRecipe2("turf_hoodedmoss", { Ingredient("twigs", 1), Ingredient("um_moss", 1) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
@@ -69,27 +79,44 @@ AddRecipe2("sporepack", { Ingredient("shroom_skin", 1), Ingredient("rope", 2), I
 ChangeSortKey("sporepack", "icepack", "CLOTHING", true)
 ChangeSortKey("sporepack", "icepack", "CONTAINERS", true)
 
-AddRecipe2("um_backpack_amuletuse", { Ingredient("um_tentaclespot_moon", 3), Ingredient("um_gemologypurplegem2", 1), Ingredient("goldnugget", 6) }, TECH.CELESTIAL_ONE, { nounlock = true }, { "CLOTHING", "CONTAINERS" })
-ChangeSortKey("um_backpack_amuletuse", "bathbomb", "CRAFTING_STATION", true)
-ChangeSortKey("um_backpack_amuletuse", "backpack", "CLOTHING", true)
-ChangeSortKey("um_backpack_amuletuse", "backpack", "CONTAINERS", true)
+if UM_CONFIG.GEMOLOGY then
+    AddRecipe2("um_backpack_amuletuse", { Ingredient("um_tentaclespot_moon", 3), Ingredient("um_gemologypurplegem2", 1), Ingredient("goldnugget", 6) }, TECH.CELESTIAL_ONE, { nounlock = true }, { "CLOTHING", "CONTAINERS" })
+    ChangeSortKey("um_backpack_amuletuse", "bathbomb", "CRAFTING_STATION", true)
+    ChangeSortKey("um_backpack_amuletuse", "backpack", "CLOTHING", true)
+    ChangeSortKey("um_backpack_amuletuse", "backpack", "CONTAINERS", true)
 
-AddRecipe2("um_gem_repair_kit", { Ingredient("um_gemologypalegem2", 1), Ingredient("steelwool", 2), Ingredient("walrus_tusk", 1) }, TECH.MAGIC_THREE, { "MAGIC", "TOOLS", "ARMOUR" })
-ChangeSortKey("um_gem_repair_kit", "sewingkit", "TOOLS", true)
-ChangeSortKey("um_gem_repair_kit", "um_magnifier_purplegem", "MAGIC", true)
+    AddRecipe2("um_gem_repair_kit", { Ingredient("um_gemologypalegem2", 1), Ingredient("steelwool", 2), Ingredient("walrus_tusk", 1) }, TECH.MAGIC_THREE, { "MAGIC", "TOOLS", "ARMOUR" })
+    ChangeSortKey("um_gem_repair_kit", "sewingkit", "TOOLS", true)
+    ChangeSortKey("um_gem_repair_kit", "um_magnifier_purplegem", "MAGIC", true)
 
 
-AddRecipe2(
-    "jawed_scythe",
-    { Ingredient("twigs", 4), Ingredient("steelwool", 1), Ingredient("snappy_jaw", 3) },
-    TECH.SCIENCE_ONE,
-    nil,
-    { "TOOLS", "WEAPONS" }
-)
-ChangeSortKey("jawed_scythe", "pitchfork", "TOOLS", true)
-ChangeSortKey("jawed_scythe", "spear_wathgrithr_lightning", "WEAPONS", true)
+    AddRecipe2("um_magnifier", { Ingredient("um_gemologypurplegem2", 1), Ingredient("fossil_piece", 1), Ingredient("thulecite", 1) }, TECH.ANCIENT_THREE, { nounlock = true, no_builder_skill = "wathom_allegiance_neutral", forward_ingredients = { "wathom_um_magnifier" } }, { "CRAFTING_STATION" })
+    ChangeSortKey("um_magnifier", "multitool_axe_pickaxe", "CRAFTING_STATION", false)
 
-if TUNING.DSTU.SNOWSTORMS then
+    AddRecipe2("um_magnifier_purplegem", { Ingredient("purplegem", 1), Ingredient("boneshard", 2), Ingredient("livinglog", 1) }, TECH.MAGIC_THREE, {}, { "MAGIC", "TOOLS" })
+    ChangeSortKey("um_magnifier_purplegem", "batbat", "MAGIC", false)
+    ChangeSortKey("um_magnifier_purplegem", "sentryward", "TOOLS", false)
+
+    AddRecipe2("um_gemology_pouch", { Ingredient("um_gemologyorangegem2", 1), Ingredient("pigskin", 4), Ingredient("nightmarefuel", 2) }, TECH.MAGIC_TWO, {}, { "MAGIC", "CONTAINERS" })
+    ChangeSortKey("um_gemology_pouch", "skullchest_child", "MAGIC", false)
+    ChangeSortKey("um_gemology_pouch", "winona_toolbox", "CONTAINERS", false)
+
+    AddRecipe2("wathom_um_magnifier", { Ingredient("um_gemologypurplegem2", 1), Ingredient("fossil_piece", 1), Ingredient("thulecite", 1) }, TECH.ANCIENT_THREE, { builder_tag = "wathom", builder_skill = "wathom_allegiance_neutral", product = "um_magnifier", description = "um_magnifier", no_deconstruction = true }, { "CRAFTING_STATION", "CHARACTER", "TOOLS" })
+end
+
+if UM_CONFIG.HOODED_FOREST or UM_CONFIG.GHOSTWALRUS then
+    AddRecipe2(
+        "jawed_scythe",
+        { Ingredient("twigs", 4), Ingredient("steelwool", 1), Ingredient("snappy_jaw", 3) },
+        TECH.SCIENCE_ONE,
+        nil,
+        { "TOOLS", "WEAPONS" }
+    )
+    ChangeSortKey("jawed_scythe", "pitchfork", "TOOLS", true)
+    ChangeSortKey("jawed_scythe", "spear_wathgrithr_lightning", "WEAPONS", true)
+end
+
+if UM_CONFIG.SNOWSTORMS then
     AddRecipe2("snowgoggles", { Ingredient("catcoonhat", 1), Ingredient("goggleshat", 1), Ingredient("beefalowool", 2) }, TECH.SCIENCE_TWO, nil, { "WINTER", "CLOTHING" })
     ChangeSortKey("snowgoggles", "catcoonhat", "WINTER", true)
     ChangeSortKey("snowgoggles", "catcoonhat", "CLOTHING", true)
@@ -136,81 +163,63 @@ end
 AddRecipe2("bugzapper", { Ingredient("spear", 1), Ingredient("transistor", 2), Ingredient("feather_canary", 2) }, TECH.SCIENCE_TWO, nil, { "WEAPONS" })
 ChangeSortKey("bugzapper", "nightstick", "WEAPONS", true)
 
-AddRecipe2("um_boomberry_bomb", { Ingredient("giant_blueberry", 2), Ingredient("twigs", 2), Ingredient("cutgrass", 1) }, TECH.SCIENCE_ONE, { numtogive = 4 }, { "WEAPONS", "SUMMER" })
-ChangeSortKey("um_boomberry_bomb", "gunpowder", "WEAPONS", true)
-ChangeSortKey("um_boomberry_bomb", "waterballoon", "SUMMER", false)
+if UM_CONFIG.HOODEDFOREST then
+    AddRecipe2("um_boomberry_bomb", { Ingredient("giant_blueberry", 2), Ingredient("twigs", 2), Ingredient("cutgrass", 1) }, TECH.SCIENCE_ONE, { numtogive = 4 }, { "WEAPONS", "SUMMER" })
+    ChangeSortKey("um_boomberry_bomb", "gunpowder", "WEAPONS", true)
+    ChangeSortKey("um_boomberry_bomb", "waterballoon", "SUMMER", false)
+end
 
-AddRecipe2("um_fyre_bomb", { Ingredient("um_fyrite", 2), Ingredient("twigs", 2), Ingredient("rocks", 3) }, TECH.SCIENCE_TWO, { numtogive = 4 }, { "WEAPONS" })
-ChangeSortKey("um_fyre_bomb", "um_boomberry_bomb", "WEAPONS", true)
+if UM_CONFIG.FLOODED_CAVES ~= "off" then
+    AddRecipe2("um_bomb_moon", { Ingredient("um_tentaclespot_moon", 1), Ingredient("wagpunk_bits", 1), Ingredient("moonglass", 8) }, TECH.SCIENCE_TWO, { numtogive = 2 }, { "WEAPONS" })
+    --ChangeSortKey("um_bomb_moon", "glasscutter", "CRAFTING_STATION", true)
+    ChangeSortKey("um_bomb_moon", "um_fyre_bomb", "WEAPONS", true)
+end
 
-AddRecipe2("um_bomb_moon", { Ingredient("um_tentaclespot_moon", 1), Ingredient("wagpunk_bits", 1), Ingredient("moonglass", 8) }, TECH.SCIENCE_TWO, { numtogive = 2 }, { "WEAPONS" })
---ChangeSortKey("um_bomb_moon", "glasscutter", "CRAFTING_STATION", true)
-ChangeSortKey("um_bomb_moon", "um_fyre_bomb", "WEAPONS", true)
+if UM_CONFIG.MOON_BEES then
+    AddRecipe2("um_eyebalm", { Ingredient("um_meatcomb", 1), Ingredient("um_meathoney", 3), Ingredient("mosquitosack", 3) }, TECH.SCIENCE_TWO, { numtogive = 3 }, { "RESTORATION" })
+    ChangeSortKey("um_eyebalm", "compostwrap", "RESTORATION", true)
 
-AddRecipe2("um_eyebalm", { Ingredient("um_meatcomb", 1), Ingredient("um_meathoney", 3), Ingredient("mosquitosack", 3) }, TECH.SCIENCE_TWO, { numtogive = 3 }, { "RESTORATION" })
-ChangeSortKey("um_eyebalm", "compostwrap", "RESTORATION", true)
+    AddRecipe2("um_beemine_moon_item", { Ingredient("log", 2), Ingredient("um_bee_moon", 1), Ingredient("um_meathoney", 2) }, TECH.SCIENCE_TWO, { numtogive = 1 }, { "WEAPONS" })
+    ChangeSortKey("um_beemine_moon_item", "beemine", "WEAPONS", true)
 
-AddRecipe2("um_firecream", { Ingredient("firenettles_dried", 3), Ingredient("um_pepperdragon_bladder", 1), Ingredient("um_ghost_pepper_item", 2) }, TECH.SCIENCE_TWO, { numtogive = 1 }, { "RESTORATION" })
-ChangeSortKey("um_firecream", "um_eyebalm", "RESTORATION", true)
-
-AddRecipe2("um_beemine_moon_item", { Ingredient("log", 2), Ingredient("um_bee_moon", 1), Ingredient("um_meathoney", 2) }, TECH.SCIENCE_TWO, { numtogive = 1 }, { "WEAPONS" })
-ChangeSortKey("um_beemine_moon_item", "beemine", "WEAPONS", true)
-
-AddRecipe2("um_hat_bee_moon", { Ingredient("um_bee_moon", 2), Ingredient("um_meathoney", 3), Ingredient("silk", 1) }, TECH.SCIENCE_TWO, { numtogive = 1 }, { "CLOTHING", "WEAPONS" })
-ChangeSortKey("um_hat_bee_moon", "beehat", "CLOTHING", true)
-ChangeSortKey("um_hat_bee_moon", "um_beemine_moon_item", "WEAPONS", true)
+    AddRecipe2("um_hat_bee_moon", { Ingredient("um_bee_moon", 2), Ingredient("um_meathoney", 3), Ingredient("silk", 1) }, TECH.SCIENCE_TWO, { numtogive = 1 }, { "CLOTHING", "WEAPONS" })
+    ChangeSortKey("um_hat_bee_moon", "beehat", "CLOTHING", true)
+    ChangeSortKey("um_hat_bee_moon", "um_beemine_moon_item", "WEAPONS", true)
+end
 
 AddRecipe2("ancient_amulet_red", { Ingredient("thulecite", 2), Ingredient("nightmarefuel", 3), Ingredient("redgem", 2) }, TECH.ANCIENT_FOUR, { nounlock = true, no_builder_skill = "wathom_allegiance_neutral", forward_ingredients = { "wathom_ancient_amulet_red" } }, { "CRAFTING_STATION" })
 ChangeSortKey("ancient_amulet_red", "orangeamulet", "CRAFTING_STATION", false)
 
+if UM_CONFIG.HOODED_FOREST or UM_CONFIG.GHOSTWALRUS then
+    AddRecipe2(
+        "um_bear_trap_equippable_tooth",
+        { Ingredient("rocks", 1), Ingredient("snappy_jaw", 1) },
+        TECH.SCIENCE_ONE,
+        { nil },
+        { "WEAPONS" }
+    )
+    ChangeSortKey("um_bear_trap_equippable_tooth", "trap_bramble", "WEAPONS", true)
 
-AddRecipe2(
-    "um_bear_trap_equippable_tooth",
-    { Ingredient("rocks", 1), Ingredient("snappy_jaw", 1) },
-    TECH.SCIENCE_ONE,
-    { nil },
-    { "WEAPONS" }
-)
-ChangeSortKey("um_bear_trap_equippable_tooth", "trap_bramble", "WEAPONS", true)
+    AddRecipe2(
+        "um_bear_trap_equippable_gold",
+        { Ingredient("goldnugget", 3), Ingredient("houndstooth", 2), Ingredient("snappy_jaw", 1) },
+        TECH.SCIENCE_TWO,
+        { nil },
+        { "WEAPONS" }
+    )
+    ChangeSortKey("um_bear_trap_equippable_gold", "um_bear_trap_equippable_tooth", "WEAPONS", true)
+end
 
-AddRecipe2(
-    "um_bear_trap_equippable_gold",
-    { Ingredient("goldnugget", 3), Ingredient("houndstooth", 2), Ingredient("snappy_jaw", 1) },
-    TECH.SCIENCE_TWO,
-    { nil },
-    { "WEAPONS" }
-)
-ChangeSortKey("um_bear_trap_equippable_gold", "um_bear_trap_equippable_tooth", "WEAPONS", true)
-
-AddRecipe2(
-    "um_detonator",
-    { Ingredient("zaspberry", 1), Ingredient("wagpunk_bits", 2), Ingredient("lightninggoathorn", 1) },
-    TECH.SCIENCE_TWO,
-    { nil },
-    { "WEAPONS" }
-)
-ChangeSortKey("um_detonator", "gunpowder", "WEAPONS", false)
-
-AddRecipe2(
-    "um_flamethrower",
-    { Ingredient("um_pepperdragon_bladder", 1), Ingredient("um_fyrite", 8), Ingredient("rocks", 5) }, -- I don't like how similar these two recipes are -Axe
-    TECH.SCIENCE_TWO,
-    { nil },
-    { "WEAPONS" }
-)
-ChangeSortKey("um_flamethrower", "firestaff", "WEAPONS", true)
-
-AddRecipe2(
-    "um_hat_pepperdragon",
-    { Ingredient("um_pepperdragon_bladder", 1), Ingredient("um_fyrite", 8), Ingredient("redgem", 2) }, -- I don't like how similar these two recipes are, I know we're trying to get uses for pyrite, but this one actually makes more sense to use silk -Axe
-    TECH.MAGIC_TWO,
-    { nil },
-    { "CLOTHING", "SUMMER", "WINTER", "MAGIC" }
-)
-ChangeSortKey("um_hat_pepperdragon", "plaguemask", "CLOTHING", true)
-ChangeSortKey("um_hat_pepperdragon", "firesuppressor", "SUMMER", false)
-ChangeSortKey("um_hat_pepperdragon", "tent", "WINTER", false)
-ChangeSortKey("um_hat_pepperdragon", "armorslurper", "MAGIC", true)
+if UM_CONFIG.DEPTHSEELS then
+    AddRecipe2(
+        "um_detonator",
+        { Ingredient("zaspberry", 1), Ingredient("wagpunk_bits", 2), Ingredient("lightninggoathorn", 1) },
+        TECH.SCIENCE_TWO,
+        { nil },
+        { "WEAPONS" }
+    )
+    ChangeSortKey("um_detonator", "gunpowder", "WEAPONS", false)
+end
 
 if GetModConfigData("wiltfly") then
     AddRecipe2("armor_glassmail", { Ingredient("glass_scales", 1), Ingredient("moonglass_charged", 10) }, TECH.CELESTIAL_THREE, { nounlock = true }, { "CRAFTING_STATION" })
@@ -259,7 +268,7 @@ if GetModConfigData("sporehounds") then
     ChangeSortKey("shroom_skin", "bearger_fur", "REFINE", true)
 end
 
-AddRecipe2("watermelon_lantern", { Ingredient("watermelon", 1), Ingredient("fireflies", 1) }, TECH.HALLOWED_NIGHTS, {hint_msg = "NEEDSHALLOWED_NIGHTS_MELON"}, { "LIGHT" })
+AddRecipe2("watermelon_lantern", { Ingredient("watermelon", 1), Ingredient("fireflies", 1) }, TECH.HALLOWED_NIGHTS, { hint_msg = "NEEDSHALLOWED_NIGHTS_MELON" }, { "LIGHT" })
 ChangeSortKey("watermelon_lantern", "pumpkin_lantern", "LIGHT", true)
 
 if GetModConfigData("hayfever_disable") then -- not in dev build since the config is commented off, but live does have it.
@@ -304,13 +313,43 @@ AddRecipe2("plaunt_manny", { Ingredient("mandrake", 1), Ingredient("livinglog", 
 ChangeSortKey("plaunt_manny", "firesuppressor", "STRUCTURES", true)
 ChangeSortKey("plaunt_manny", "magician_chest", "MAGIC", true)
 
-AddRecipe2("skullchest_child", { Ingredient("fossil_piece", 2), Ingredient("nightmarefuel", 4), Ingredient("boards", 3) }, TECH.LOST, { placer = "skullchest_child_placer", min_spacing=1 }, { "STRUCTURES", "CONTAINERS", "MAGIC" })
+AddRecipe2("skullchest_child", { Ingredient("fossil_piece", 2), Ingredient("nightmarefuel", 4), Ingredient("boards", 3) }, TECH.LOST, { placer = "skullchest_child_placer", min_spacing = 1 }, { "STRUCTURES", "CONTAINERS", "MAGIC" })
 ChangeSortKey("skullchest_child", "magician_chest", "STRUCTURES", true)
 ChangeSortKey("skullchest_child", "magician_chest", "CONTAINERS", true)
 ChangeSortKey("skullchest_child", "magician_chest", "MAGIC", true)
 
-AddRecipe2("um_ribopodden", { Ingredient("boneshard", 8), Ingredient("um_ribopod", 3), Ingredient("rocks", 12) }, TECH.SCIENCE_TWO, { placer = "um_ribopodden_placer" }, { "STRUCTURES" })
-ChangeSortKey("um_ribopodden", "rabbithouse", "STRUCTURES", true)
+if UM_CONFIG.MAGMA_CAVES then
+    AddRecipe2("um_ribopodden", { Ingredient("boneshard", 8), Ingredient("um_ribopod", 3), Ingredient("rocks", 12) }, TECH.SCIENCE_TWO, { placer = "um_ribopodden_placer" }, { "STRUCTURES" })
+    ChangeSortKey("um_ribopodden", "rabbithouse", "STRUCTURES", true)
+
+    AddRecipe2("um_firecream", { Ingredient("firenettles_dried", 3), Ingredient("um_pepperdragon_bladder", 1), Ingredient("um_ghost_pepper_item", 2) }, TECH.SCIENCE_TWO, { numtogive = 1 }, { "RESTORATION" })
+    ChangeSortKey("um_firecream", "um_eyebalm", "RESTORATION", true)
+
+
+    AddRecipe2(
+        "um_flamethrower",
+        { Ingredient("um_pepperdragon_bladder", 1), Ingredient("um_fyrite", 8), Ingredient("rocks", 5) }, -- I don't like how similar these two recipes are -Axe
+        TECH.SCIENCE_TWO,
+        { nil },
+        { "WEAPONS" }
+    )
+    ChangeSortKey("um_flamethrower", "firestaff", "WEAPONS", true)
+
+    AddRecipe2(
+        "um_hat_pepperdragon",
+        { Ingredient("um_pepperdragon_bladder", 1), Ingredient("um_fyrite", 8), Ingredient("redgem", 2) }, -- I don't like how similar these two recipes are, I know we're trying to get uses for pyrite, but this one actually makes more sense to use silk -Axe
+        TECH.MAGIC_TWO,
+        { nil },
+        { "CLOTHING", "SUMMER", "WINTER", "MAGIC" }
+    )
+    ChangeSortKey("um_hat_pepperdragon", "plaguemask", "CLOTHING", true)
+    ChangeSortKey("um_hat_pepperdragon", "firesuppressor", "SUMMER", false)
+    ChangeSortKey("um_hat_pepperdragon", "tent", "WINTER", false)
+    ChangeSortKey("um_hat_pepperdragon", "armorslurper", "MAGIC", true)
+
+    AddRecipe2("um_fyre_bomb", { Ingredient("um_fyrite", 2), Ingredient("twigs", 2), Ingredient("rocks", 3) }, TECH.SCIENCE_TWO, { numtogive = 4 }, { "WEAPONS" })
+    ChangeSortKey("um_fyre_bomb", "um_boomberry_bomb", "WEAPONS", true)
+end
 
 --[[
 AddRecipe2(
@@ -531,23 +570,13 @@ ChangeSortKey("mastupgrade_windturbine_item", "mastupgrade_lightningrod_item", "
 --ChangeSortKey("staff_starfall", "firestaff", "MAGIC", true)
 --end
 
--- Pyre Nettles stuff
--- Pyre Mantle
-AddRecipe2("um_armor_pyre_nettles", { Ingredient("um_smolder_spore", 2), Ingredient("firenettles", 16), Ingredient("silk", 2) }, TECH.ONE, nil, { "ARMOUR", "WINTER", "RAIN" })
-ChangeSortKey("um_armor_pyre_nettles", "armordragonfly", "ARMOUR", false)
-ChangeSortKey("um_armor_pyre_nettles", "raincoat", "WINTER", true)
-ChangeSortKey("um_armor_pyre_nettles", "armor_reed_um", "RAIN", false)
--- Pyre Dart
-AddRecipe2("um_blowdart_pyre", { Ingredient("cutreeds", 2), Ingredient("um_smolder_spore", 1), Ingredient("firenettles", 1) }, TECH.SCIENCE_TWO, { numtogive = TUNING.DSTU.DART_YIELD }, { "WEAPONS" })
-ChangeSortKey("um_blowdart_pyre", "blowdart_fire", "WEAPONS", true)
-
 --AddRecipe2("um_boat_engine", { Ingredient("wagpunk_bits", 4), Ingredient("cutstone", 2), Ingredient("palmcone_scale", 6)}, TECH.SCIENCE_TWO, { placer = "um_boat_engine_placer",min_spacing=1.5 }, { "SEAFARING" })
 
 
 --AddRecipe2("codex_mantra", { Ingredient("papyrus", 2), Ingredient("nightmarefuel", 2), Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 50) }, TECH.NONE, { builder_tag = "codexmantrareader" }, { "CHARACTER" })
 --ChangeSortKey("codex_mantra", "waxwelljournal", "CHARACTER", true)
 
-if TUNING.DSTU.WAXWELL then
+if UM_CONFIG.WAXWELL then
     local function MakeIndestructible(name)
         local recipe = AllRecipes[name]
         if recipe then
@@ -555,13 +584,13 @@ if TUNING.DSTU.WAXWELL then
             recipe.no_deconstruction = function(inst) return inst:HasTag("um_nodeconstruct") or FunctionOrValue(no_deconstruction, inst) end
         end
     end
-    local no_decon_recipes = {"armor_sanity", "nightsword"}
+    local no_decon_recipes = { "armor_sanity", "nightsword" }
     for _, recipe in pairs(no_decon_recipes) do MakeIndestructible(recipe) end
-    AddCharacterRecipe("um_maxwell_armor_sanity", {Ingredient("nightmarefuel", 5), Ingredient("waxwelljournal", 0)}, TECH.LOST, {builder_tag = "shadowmagic", product = "armor_sanity", image = "armor_sanity.tex", description = "pact_armor_sanity", actionstr = "UM_WAXWELL_SUMMON", hint_msg = "UM_NEEDSORIGINALRECIPE", sg_state = "um_usewaxwelljournal_pre"}, {"MAGIC", "ARMOUR"})
+    AddCharacterRecipe("um_maxwell_armor_sanity", { Ingredient("nightmarefuel", 5), Ingredient("waxwelljournal", 0) }, TECH.LOST, { builder_tag = "shadowmagic", product = "armor_sanity", image = "armor_sanity.tex", description = "pact_armor_sanity", actionstr = "UM_WAXWELL_SUMMON", hint_msg = "UM_NEEDSORIGINALRECIPE", sg_state = "um_usewaxwelljournal_pre" }, { "MAGIC", "ARMOUR" })
     ChangeSortKey("um_maxwell_armor_sanity", "waxwelljournal", "CHARACTER", true)
     ChangeSortKey("um_maxwell_armor_sanity", "armor_sanity", "ARMOUR", true)
     ChangeSortKey("um_maxwell_armor_sanity", "nightsword", "MAGIC", true)
-    AddCharacterRecipe("um_maxwell_nightsword", {Ingredient("nightmarefuel", 5), Ingredient("waxwelljournal", 0)}, TECH.LOST, {builder_tag = "shadowmagic", product = "nightsword", image = "nightsword.tex", description = "pact_sword_sanity", actionstr = "UM_WAXWELL_SUMMON", hint_msg = "UM_NEEDSORIGINALRECIPE", sg_state = "um_usewaxwelljournal_pre"}, {"MAGIC", "WEAPONS"})
+    AddCharacterRecipe("um_maxwell_nightsword", { Ingredient("nightmarefuel", 5), Ingredient("waxwelljournal", 0) }, TECH.LOST, { builder_tag = "shadowmagic", product = "nightsword", image = "nightsword.tex", description = "pact_sword_sanity", actionstr = "UM_WAXWELL_SUMMON", hint_msg = "UM_NEEDSORIGINALRECIPE", sg_state = "um_usewaxwelljournal_pre" }, { "MAGIC", "WEAPONS" })
     ChangeSortKey("um_maxwell_nightsword", "um_maxwell_armor_sanity", "CHARACTER", true)
     ChangeSortKey("um_maxwell_nightsword", "nightsword", "WEAPONS", true)
     ChangeSortKey("um_maxwell_nightsword", "um_maxwell_armor_sanity", "MAGIC", true)
@@ -628,8 +657,15 @@ AddRecipe2("beakbasher", { Ingredient("driftwood_log", 2), Ingredient("kelp", 8)
 ChangeSortKey("beakbasher", "goldenshovel", "TOOLS", true)
 ChangeSortKey("beakbasher", "hambat", "WEAPONS", true)
 
-AddRecipe2("um_hat_leafwing", { Ingredient("um_leafwing", 2), Ingredient("um_moss", 4), Ingredient("log", 3) }, TECH.SCIENCE_TWO, nil, { "CLOTHING" })
-ChangeSortKey("um_hat_leafwing", "beehat", "CLOTHING", true)
+if UM_CONFIG.HOODEDFOREST then
+    AddRecipe2("um_hat_leafwing", { Ingredient("um_leafwing", 2), Ingredient("um_moss", 4), Ingredient("log", 3) }, TECH.SCIENCE_TWO, nil, { "CLOTHING" })
+    ChangeSortKey("um_hat_leafwing", "beehat", "CLOTHING", true)
+
+
+    AddRecipe2("um_feather_totem", { Ingredient("boards", 3), Ingredient("um_moss", 4), Ingredient("woodpecker", 1) }, TECH.MAGIC_TWO, {}, { "RESTORATION", "MAGIC" })
+    ChangeSortKey("um_feather_totem", "reviver", "RESTORATION", true)
+    ChangeSortKey("um_feather_totem", "resurrectionstatue", "MAGIC", false)
+end
 
 if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then
     AddCharacterRecipe("wathgrithr_shield_dreadstone",
@@ -660,25 +696,9 @@ ChangeSortKey("oar_monkey", "oar_driftwood", "SEAFARING", true)
 AddRecipe2("woby_treat_small", { Ingredient("monstersmallmeat_dried", 2) }, TECH.NONE, { product = "woby_treat", builder_skill = "walter_camp_wobytreat", no_deconstruction = true }, { "CHARACTER" })
 ChangeSortKey("woby_treat_small", "woby_treat", "CHARACTER", true)
 
-AddRecipe2("um_feather_totem", { Ingredient("boards", 3), Ingredient("um_moss", 4), Ingredient("woodpecker", 1) }, TECH.MAGIC_TWO, {}, { "RESTORATION", "MAGIC" })
-ChangeSortKey("um_feather_totem", "reviver", "RESTORATION", true)
-ChangeSortKey("um_feather_totem", "resurrectionstatue", "MAGIC", false)
-
-
-AddRecipe2("um_magnifier", { Ingredient("um_gemologypurplegem2", 1), Ingredient("fossil_piece", 1), Ingredient("thulecite", 1) }, TECH.ANCIENT_THREE, { nounlock = true, no_builder_skill = "wathom_allegiance_neutral", forward_ingredients = { "wathom_um_magnifier" } }, { "CRAFTING_STATION" })
-ChangeSortKey("um_magnifier", "multitool_axe_pickaxe", "CRAFTING_STATION", false)
-
-AddRecipe2("um_magnifier_purplegem", { Ingredient("purplegem", 1), Ingredient("boneshard", 2), Ingredient("livinglog", 1) }, TECH.MAGIC_THREE, {}, { "MAGIC", "TOOLS" })
-ChangeSortKey("um_magnifier_purplegem", "batbat", "MAGIC", false)
-ChangeSortKey("um_magnifier_purplegem", "sentryward", "TOOLS", false)
-
-AddRecipe2("um_gemology_pouch", { Ingredient("um_gemologyorangegem2", 1), Ingredient("pigskin", 4), Ingredient("nightmarefuel", 2) }, TECH.MAGIC_TWO, {}, { "MAGIC", "CONTAINERS" })
-ChangeSortKey("um_gemology_pouch", "skullchest_child", "MAGIC", false)
-ChangeSortKey("um_gemology_pouch", "winona_toolbox", "CONTAINERS", false)
-
 AddRecipe2("um_blueprinting_kit", { Ingredient("walrus_tusk", 1), Ingredient("malbatross_feather", 1), Ingredient("papyrus", 2) }, TECH.SCIENCE_TWO, {}, { "PROTOTYPERS", "TOOLS" })
 
-if TUNING.DSTU.SHAVE_MODE then
+if UM_CONFIG.UM_SHAVE_MODE then
     AddRecipe2("um_thulecite_razor", { Ingredient("razor", 1), Ingredient("thulecite", 2), Ingredient("nightmarefuel", 2) }, TECH.ANCIENT_TWO, { nounlock = true, no_builder_skill = "wathom_allegiance_neutral", forward_ingredients = { "wathom_um_thulecite_razor" } }, { "CRAFTING_STATION", "TOOLS" })
     ChangeSortKey("um_thulecite_razor", "multitool_axe_pickaxe", "CRAFTING_STATION", true)
     ChangeSortKey("um_thulecite_razor", "razor", "TOOLS", true)
@@ -711,7 +731,6 @@ AddRecipe2("wathom_blueprint_craftingset_ruinsglow_builder", { Ingredient("papyr
 AddRecipe2("wathom_ancient_amulet_red", { Ingredient("thulecite", 2), Ingredient("nightmarefuel", 3), Ingredient("redgem", 2) }, TECH.ANCIENT_FOUR, { builder_tag = "wathom", builder_skill = "wathom_allegiance_neutral", product = "ancient_amulet_red", description = "ancient_amulet_red", no_deconstruction = true }, { "CRAFTING_STATION", "CHARACTER" })
 ChangeSortKey("wathom_ancient_amulet_red", "wathom_orangeamulet", "CRAFTING_STATION", false)
 ChangeSortKey("wathom_ancient_amulet_red", "wathom_orangeamulet", "CHARACTER", false)
-AddRecipe2("wathom_um_magnifier", { Ingredient("um_gemologypurplegem2", 1), Ingredient("fossil_piece", 1), Ingredient("thulecite", 1) }, TECH.ANCIENT_THREE, { builder_tag = "wathom", builder_skill = "wathom_allegiance_neutral", product = "um_magnifier", description = "um_magnifier", no_deconstruction = true }, { "CRAFTING_STATION", "CHARACTER", "TOOLS" })
 ChangeSortKey("wathom_um_magnifier", "wathom_multitool_axe_pickaxe", "CRAFTING_STATION", false)
 ChangeSortKey("wathom_um_magnifier", "wathom_multitool_axe_pickaxe", "CHARACTER", false)
 ChangeSortKey("wathom_um_magnifier", "sentryward", "TOOLS", false)

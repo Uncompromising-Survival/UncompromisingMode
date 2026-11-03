@@ -641,7 +641,7 @@ local prefabs = {
     "um_magmastone"
 }
 
-if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then
+if TUNING.DSTU ~= nil and UM_CONFIG.WIXIE_WALTER ~= nil and UM_CONFIG.WIXIE_WALTER then
     table.insert(prefabs, "placeholder_recipe_item")
 end
 

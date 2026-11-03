@@ -3,11 +3,11 @@ GLOBAL.setfenv(1, GLOBAL)
 
 local canes = {}
 
-if TUNING.DSTU.CANEDURABILITY then
+if UM_CONFIG.CANE_DURABILITY then
     table.insert(canes,"cane")
 end
 
-if TUNING.DSTU.COOLDOWN_ORANGESTAFF then
+if UM_CONFIG.COOLDOWN_ORANGESTAFF then
     table.insert(canes,"orangestaff")
 end
 

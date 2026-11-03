@@ -89,7 +89,7 @@ if TUNING.DSTU.WARLY_BUTCHER then
 	end
 end]]
 
-    if TUNING.DSTU.WARLY_CHANGES ~= 0 then
+    if UM_CONFIG.WARLY_CHANGES ~= 0 then
         inst:AddTag("warlybuffed")
 
         if inst.components.eater then
@@ -122,7 +122,7 @@ end)]]
 
 
 env.AddPrefabPostInit("spicepack", function(inst)
-    if TUNING.DSTU.WARLY_CHANGES == 1 then
+    if UM_CONFIG.WARLY_CHANGES == 1 then
         inst:RemoveTag("backpack")
         inst:AddTag("portablestorage")
 

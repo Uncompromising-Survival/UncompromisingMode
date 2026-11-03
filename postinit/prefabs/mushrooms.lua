@@ -1,7 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
-if TUNING.DSTU.MUSHROOM_CHANGES then
+if UM_CONFIG.MUSHROOM_CHANGES then
 
 	env.AddPrefabPostInit("green_mushroom", function(inst)
 		if not TheWorld.ismastersim then return end
@@ -187,7 +187,7 @@ end)
 local function testfortransformonload(inst)
 	return TheWorld.state.isfullmoon
 end
-if TUNING.DSTU.MOON_TRANSFORMATIONS then
+if UM_CONFIG.MOON_TRANSFORMATIONS then
 	env.AddPrefabPostInit("red_mushroom", function(inst)
 		if not TheWorld.ismastersim then
 			return

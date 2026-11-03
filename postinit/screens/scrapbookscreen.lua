@@ -278,8 +278,9 @@ function ScrapbookScreen:MakeSideBar(...)
 
         table.insert(self.menubuttons, buttonwidget)
     end
-
-    MakeButton(7, { name = "gemology", filter = "gemology", color = { 121 / 255, 72 / 255, 137 / 255 } })
+    if UM_CONFIG.GEMOLOGY then
+        MakeButton(7, { name = "gemology", filter = "gemology", color = { 121 / 255, 72 / 255, 137 / 255 } })
+    end
 end
 
 -- There's nothing I can do, i gotta overwite it...
@@ -739,7 +740,7 @@ function ScrapbookScreen:PopulateInfoPanel(entry)
 
         if data.absorb_percent then
             if type(data.absorb_percent) == "number" then
-                if TUNING.DSTU.ARMORREWORK then
+                if UM_CONFIG.ARMORREWORK then
                     data.absorb_percent = RemapAbsorption(data.prefab, data.absorb_percent)
                 end
                 makesubentry(STRINGS.SCRAPBOOK.DATA_ARMOR_ABSORB .. (data.absorb_percent * 100) .. "%")

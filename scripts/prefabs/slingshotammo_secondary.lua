@@ -1,5 +1,5 @@
 -- wonder if this will work
-if not TUNING.DSTU.WIXIE then
+if not UM_CONFIG.WIXIE_WALTER then
     return
 end
 

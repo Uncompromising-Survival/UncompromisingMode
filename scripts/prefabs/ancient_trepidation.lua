@@ -272,7 +272,7 @@ local function OnNightmarePhaseChanged(inst, phase)
     elseif phase == "calm" then
         inst.AnimState:SetMultColour(1, 1, 1, .4)
         
-        if not TUNING.DSTU.HARDER_TREPIDATION then
+        if not UM_CONFIG.NODESPAWN_TREPIDATION then
             inst.wantstodespawn = true
         end
     end
@@ -401,7 +401,7 @@ local function fn(Sim)
     inst.Remember = Remember
 
     inst:DoTaskInTime(0, function(inst)
-        if TUNING.DSTU.TREPIDATIONS == false then
+        if UM_CONFIG.TREPIDATIONS == false then
             inst:Remove()
         end
     end)

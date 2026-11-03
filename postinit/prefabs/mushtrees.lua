@@ -31,7 +31,7 @@ local function PetrificationDisaster(inst,replacement,range,gemchance)
 end
 
 
-if TUNING.DSTU.MUSHROOM_CHANGES then
+if UM_CONFIG.MUSHROOM_CHANGES then
 	local tree_data =
 	{
 		small =

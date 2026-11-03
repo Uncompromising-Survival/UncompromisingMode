@@ -7,7 +7,7 @@ local UMUpvalueHacker = require("tools/um_upvaluehacker")
 -- Remove pathing collision exploit by making objects noclip
 -----------------------------------------------------------------
 
-if TUNING.DSTU.IMPASSBLES then
+if UM_CONFIG.PASSIBLEIMPASSIBLES then
     local function RemoveCollisionFromTreeRock(inst)
         return inst:HasAllTags("rock_tree", "boulder")
     end
@@ -60,7 +60,7 @@ if TUNING.DSTU.IMPASSBLES then
     end
 end
 
-if TUNING.DSTU.SHAVE_MODE then
+if UM_CONFIG.UM_SHAVE_MODE then
     env.AddPrefabPostInitAny(function(inst)
         if not TheWorld.ismastersim then return end
         

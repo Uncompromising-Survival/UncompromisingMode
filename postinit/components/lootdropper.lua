@@ -113,7 +113,7 @@ env.AddComponentPostInit("lootdropper", function(self)
         end
     end]]
 
-    if TUNING.DSTU.FIRELOOT > 1 then
+    if UM_CONFIG.FIRELOOT > 1 then
         function self:DropLoot(pt, prefabs, ...)
             prefabs = prefabs or self:GenerateLoot()
 

@@ -904,7 +904,7 @@ containers.params.um_inkubator =
     itemtestfn = CheckInkubator,
 }
 
-if TUNING.DSTU.WARLY_CHANGES == 1 then
+if UM_CONFIG.WARLY_CHANGES == 1 then
     containers.params.spicepack = GLOBAL.deepcopy(containers.params.beargerfur_sack)
     containers.params.spicepack.itemtestfn = function(container, item, slot)
         for i, v in ipairs(GLOBAL.FOODGROUP.OMNI.types) do
@@ -997,7 +997,7 @@ function containers.params.um_gemologyforge.widget.buttoninfo.validfn(inst)
     return inst.replica.container ~= nil and inst.replica.container:IsFull() and tool ~= nil and gem ~= nil
 end
 
-if TUNING.DSTU.ICEBOX_TWEAKS then
+if UM_CONFIG.UM_ICEBOX_TWEAKS then
     containers.params.saltbox.lowpriorityselection = true
     containers.params.icebox.lowpriorityselection = true
     containers.params.treasurechest.lowpriorityselection = true
