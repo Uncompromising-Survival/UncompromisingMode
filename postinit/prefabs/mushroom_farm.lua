@@ -1,7 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
-if TUNING.DSTU.MUSHROOM_CHANGES then
+if UM_CONFIG.MUSHROOM_CHANGES then
 
 	local UMUpvalueHacker = require("tools/um_upvaluehacker")
 	

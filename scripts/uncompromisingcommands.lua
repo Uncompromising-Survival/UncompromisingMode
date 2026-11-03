@@ -372,7 +372,7 @@ local uncompfoods = {
     "zaspberryparfait",
 }
 
-if TUNING.DSTU.BONESTEW == "bone_appetit" then
+if UM_CONFIG.BONESTEW_NERF == "bone_appetit" then
     table.insert(uncompfoods, "um_kebab")
 end
 

@@ -181,6 +181,7 @@ configuration_options = {
     -- Core Gameplay Reworks --
     ------------------------------
     Header("Core Gameplay"),
+    BinaryConfig("gemology", "Gemology", "Gemology adds an equipment enchantment system using Strange Gems, found throughout the caves.", true),
     --BinaryConfig("caved", "[IMPORTANT] Cave Config",
     --"Switches some things around so players who can't run Caves can still enjoy the game. ENABLE IF CAVES ARE ENABLED!",
     --true),
@@ -460,7 +461,7 @@ configuration_options = {
     BinaryConfig("winter_burning", "Harder Burning",
         "Winter makes it so setting stuff alight takes more time, and also finish burning faster.", true),
     BinaryConfig("snowstorms", "Snowstorms",
-        "Snowtorms impede on players' speed and vision if they are not wearing eye protection. Snowstorms also causes snow to build up on structures.",
+        "Snowtorms impede on players' speed and vision if they are not protected. Snowstorms also causes snow to build up on structures, and Rimeweeds to spawn.",
         true),
     SkipSpace(),
 
@@ -552,6 +553,18 @@ configuration_options = {
     BinaryConfig("trapdoorspiders", "Trapdoor Spiders",
         "Enables the spawning of Trapdoor Spider mounds on worldgen. Their dens are usually covered in a resource rich grass.",
         true),
+    BinaryConfig("magma_caves", "Magma Caves", "Magma caves and its content. Gemology Forge is moved to the Ruins if disabled.", true),
+    {
+        name = "flooded_caves",
+        label = "Flooded Caves",
+        hover = "Lunar Grotto is reworked, with significantly wetter areas.",
+        options = {
+            {description = "Lunar Cave", data = "lunar_cave", hover = "Lunar Grotto & Flooded Caves appear the Humid Sinkhole in the Lunar Island"},
+            {description = "Vanilla+", data = "cave", hover = "Lunar Grotto & Flooded Caves appear on connected to Blue Mushtree Forest"},
+            {description = "Off", data = "off", hover = "Grotto remains unchanged."}
+        },
+        default = "lunar_cave"
+    },
     SkipSpace(),
 
     ------------------------------
@@ -561,6 +574,7 @@ configuration_options = {
     ------------------------------
     --BinaryConfig("itemcheck", "Item Score", "Equippable items and mole bait items increase the \'rat score\' value.",
     --true),
+
     {
         name = "rattimer",
         label = "Points",

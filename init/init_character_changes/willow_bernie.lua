@@ -1,7 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
-if TUNING.DSTU.BERNIE_BUFF then
+if UM_CONFIG.BERNIE_BUFFS then
     env.AddPrefabPostInit("bernie_inactive", function(inst)
         inst:AddTag("shadowdominance")
 

@@ -3,6 +3,15 @@ modimport("libraries/um_particletilehelper")
 modimport("libraries/um_particleworldtilestate")
 modimport("scripts/map/misc_tools/tiledefs")
 
+--init_tuning is loaded way later than when we need this config on a non-modmain/worldgenmain env, so i'm setting it here first.
+--honestly we should make config globals outside of that.
+local ConfigBuilder = require("um_configs")
+ConfigBuilder.BuildConfigs(modname)
+
+GLOBAL.UM_CONFIG = ConfigBuilder.ServerConfigs
+GLOBAL.UM_CLIENT_CONFIG = ConfigBuilder.ClientConfigs
+
+
 if GetModConfigData("worldgenmastertoggle") then
     modimport("postinit/map/static_layouts")
 

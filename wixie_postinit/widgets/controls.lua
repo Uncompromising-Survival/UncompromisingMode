@@ -24,7 +24,7 @@ local function GetModName(modname) -- modinfo's modname and internal modname is 
 end
 
 AddClassPostConstruct( "widgets/statusdisplays", function(self, owner)
-    if TUNING.DSTU.WOBYHUNGER_CLASSIC then
+    if UM_CONFIG.WOBY_HUNGER_CLASSIC then
         if owner:HasTag("pinetreepioneer") then
             local WobyHungerDisplay = require "widgets/WobyHungerDisplay"
             self.WobyHungerDisplay = self:AddChild(WobyHungerDisplay(owner, config))

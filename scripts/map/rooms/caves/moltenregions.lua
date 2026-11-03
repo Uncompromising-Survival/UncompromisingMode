@@ -6,6 +6,11 @@ Layouts["cave_exit_magmabiome"] = StaticLayout.Get("map/static_layouts/cave_exit
 Layouts["gemforge1"] = StaticLayout.Get("map/static_layouts/gemforge1")
 Layouts["um_pepperdragon_nest"] = StaticLayout.Get("map/static_layouts/um_pepperdragon_nest")
 Layouts["ia_gem_forge"] = StaticLayout.Get("map/static_layouts/ia_gem_forge")
+Layouts["gemforge_ruins"] = StaticLayout.Get("map/static_layouts/gemforge_ruins", {
+    start_mask = PLACE_MASK.IGNORE_IMPASSABLE_BARREN_RESERVED,
+    fill_mask = PLACE_MASK.IGNORE_IMPASSABLE_BARREN_RESERVED,
+    layout_position = LAYOUT_POSITION.CENTER
+})
 
 Layouts["um_pepperdragon_nest"] = StaticLayout.Get("map/static_layouts/um_pepperdragon_nest")
 Layouts["um_pepperdragon_nest"].ground_types = PYRE_THICKET_GROUND_TYPES
@@ -363,6 +368,20 @@ AddRoom("MagmaVolcanoNest_IA", {
         countstaticlayouts = {
             ["ia_gem_forge"] = 1,
             ["um_pepperdragon_nest"] = 1,
+        },
+    }
+})
+
+AddRoom("GemForge_Ruins", {
+    colour = { r = 0.3, g = 0.2, b = 0.1, a = 0.3 },
+    value = WORLD_TILES.IMPASSABLE,
+    tags = { "Nightmare" },
+    --required_prefabs = { "um_gemologyforge" },
+    internal_type = NODE_INTERNAL_CONNECTION_TYPE.EdgeSite,
+    contents = {
+        countstaticlayouts =
+        {
+            ["gemforge_ruins"] = 1,
         },
     }
 })

@@ -55,7 +55,7 @@ return Class(function(self, inst)
 
         local function AllowedToAttack()
             return (#_activeplayers > 0 and
-                ((TheWorld.state.cycles > TUNING.DSTU.NO_MOCK_DRAGONFLY_BOSS_TIME) or um_overridespawn) and
+                ((TheWorld.state.cycles > UM_CONFIG.WILTFLY_SPAWN) or um_overridespawn) and
                 (_attackduringoffseason or
                 TheWorld.state.season == "summer"))
         end

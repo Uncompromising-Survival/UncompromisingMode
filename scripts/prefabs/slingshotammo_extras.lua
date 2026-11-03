@@ -1500,7 +1500,7 @@ local function fncommon(symbol, inv, overridebuild, special)
     inst:AddTag("slingshotammo")
     inst:AddTag("reloaditem_ammo")
 
-    if not TUNING.DSTU.WIXIE then
+    if not UM_CONFIG.WIXIE_WALTER then
         inst:DoTaskInTime(0, inst.Remove)
     end
 
@@ -2214,7 +2214,7 @@ return Prefab("slingshotammo_firecrackers", cracker_fn, assets, prefabs),
     Prefab("slingshotammo_firecrackers_proj_secondary", crackerproj_fn, assets, prefabs),
     Prefab("firecrackers_slingshot", fn, assets_firecrackers, prefabs_firecrackers),
     Prefab("slingshot_explode_firecrackers", crackerexplosion_fn, assets, prefabs),
-    Prefab(TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE and "slingshotammo_honey" or "slingshotammo_honey_null", honey_fn, assets, prefabs),
+    Prefab(TUNING.DSTU ~= nil and UM_CONFIG.WIXIE_WALTER ~= nil and UM_CONFIG.WIXIE_WALTER and "slingshotammo_honey" or "slingshotammo_honey_null", honey_fn, assets, prefabs),
     Prefab("slingshotammo_honey_proj_secondary", honeyproj_fn, assets, prefabs),
     Prefab("slingshotammo_honey_impact", impacthoneyfn, assets, prefabs),
     Prefab("slingshotammo_goldshatter", impactgoldfn, assets, prefabs),
@@ -2229,7 +2229,7 @@ return Prefab("slingshotammo_firecrackers", cracker_fn, assets, prefabs),
     Prefab("slingshotammo_moonrock", moonrock_fn, assets, prefabs),
     Prefab("slingshotammo_moonrock_proj_secondary", moonrockproj_fn, assets, prefabs),
     Prefab("slingshotammo_moonrock_impact", impactmoonrockfn, assets, prefabs),
-    Prefab(TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE and "slingshotammo_moonglass" or "slingshotammo_moonglass_null", moonglass_fn, assets, prefabs),
+    Prefab(TUNING.DSTU ~= nil and UM_CONFIG.WIXIE_WALTER ~= nil and UM_CONFIG.WIXIE_WALTER and "slingshotammo_moonglass" or "slingshotammo_moonglass_null", moonglass_fn, assets, prefabs),
     Prefab("slingshotammo_moonglass_proj_secondary", moonglassproj_fn, assets, prefabs),
     Prefab("slingshotammo_salt", salt_fn, assets, prefabs),
     Prefab("slingshotammo_salt_proj_secondary", saltproj_fn, assets, prefabs),

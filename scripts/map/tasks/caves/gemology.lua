@@ -1,4 +1,7 @@
 GLOBAL.require("map/rooms/caves/gemology")
+
+if not GetModConfigData("gemology") then return end
+
 AddTaskPreInit("RedForest", function(task)
     task.room_choices={
         ["RedMushForest"] = 1,

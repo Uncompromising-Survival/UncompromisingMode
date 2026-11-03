@@ -6,7 +6,7 @@ local assets =
 }
 
 local prefabs = { "collapse_small", "nightlight_flame" }
-local config = TUNING.DSTU.STORMS_PERFORMANCE
+local config = UM_CONFIG.UM_STORMS_PERFORMANCE
 
 local function Advance_Full(inst)
     if inst.Advance_Task ~= nil then
@@ -452,7 +452,7 @@ local function fn()
         return inst
     end
 
-    if not TUNING.DSTU.STORMS then
+    if not UM_CONFIG.UM_STORMS then
         inst:DoTaskInTime(0, inst.Remove)
     end
 

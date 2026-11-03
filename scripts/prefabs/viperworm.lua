@@ -526,6 +526,12 @@ local function fn()
         return inst
     end
 
+    if not UM_CONFIG.DEPTHSVIPERS then
+        inst:DoTaskInTime(0, function(inst)
+            ReplacePrefab(inst, "worm")
+        end)
+    end
+
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(TUNING.WORM_HEALTH)
 

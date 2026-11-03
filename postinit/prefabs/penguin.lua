@@ -138,7 +138,7 @@ env.AddPrefabPostInit("penguin", function(inst)
 		inst.components.combat:SetRetargetFunction(2, NewRetarget)
 	end
 
-	if TUNING.DSTU.MOON_TRANSFORMATIONS then
+	if UM_CONFIG.MOON_TRANSFORMATIONS then
 		inst:WatchWorldState("isfullmoon", OnFullMoon)
 		OnFullMoon(inst, TheWorld.state.isfullmoon)
 	end
