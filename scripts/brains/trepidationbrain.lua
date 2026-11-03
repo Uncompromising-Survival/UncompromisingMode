@@ -109,7 +109,7 @@ function TrepidationBrain:OnStart()
     local root = PriorityNode(
         {
             --BrainCommon.PanicTriggerShadowCreature(self.inst), breaks it.
-            BrainCommon.RunAwayFromQueenTorch(self),
+            BrainCommon.RunAwayFromQueenTorch(self.inst),
             WhileNode(function() return ShouldUseAbility(self) end, "Ability",
                 ActionNode(function()
                     self.inst:PushEvent(self.abilityname, self.abilitydata)

@@ -5,36 +5,97 @@ local LOCKS_KEYS = GLOBAL.LOCKS_KEYS
 -- keys
 local keycount = 0
 for k, v in pairs(KEYS) do
-	keycount = keycount + 1
+    keycount = keycount + 1
 end
 
-KEYS["MAGMA_CAVES"] = keycount + 1
---KEYS["MAGMA_CAVES_TIER1"] = keycount + 1
---KEYS["MAGMA_CAVES_TIER2"] = keycount + 1
---KEYS["MAGMA_CAVES_TIER3"] = keycount + 1
-KEYS["MAGMA_CAVES_ENTRANCE"] = keycount + 1
-KEYS["MAGMA_CAVES_SACRED"] = keycount + 2
-KEYS["ACTIVE_LAVA_ZONE"] = keycount + 3
+
+local function AddKey(name)
+    keycount = keycount + 1
+    KEYS[string.upper(name)] = keycount
+end
+
+local _keys = {
+    "magma_caves",
+    "magma_caves_tier1",
+    "magma_caves_tier2",
+    "magma_caves_tier3",
+    "magma_caves_entrance",
+    "magma_caves_sacred",
+    "active_lava_zone",
+    "grotto_tier1",
+    "grotto_tier2",
+    "grotto_tier3",
+    "grotto_tier4"
+}
+
+for _, key in pairs(_keys) do
+    AddKey(key)
+end
 
 
 -- locks
 local lockcount = 0
 for k, v in pairs(LOCKS) do
-	lockcount = lockcount + 1
+    lockcount = lockcount + 1
 end
-LOCKS["MAGMA_CAVES"] = lockcount + 1
---LOCKS["MAGMA_CAVES_TIER1"] = lockcount + 1
---LOCKS["MAGMA_CAVES_TIER2"] = lockcount + 1
---LOCKS["MAGMA_CAVES_TIER3"] = lockcount + 1
-LOCKS["MAGMA_CAVES_ENTRANCE"] = lockcount + 1
-LOCKS["MAGMA_CAVES_SACRED"] = lockcount + 2
-LOCKS["ACTIVE_LAVA_ZONE"] = lockcount + 3
 
--- link keys to locks
-LOCKS_KEYS[LOCKS.MAGMA_CAVES] = { KEYS.MAGMA_CAVES}
---LOCKS_KEYS[LOCKS.MAGMA_CAVES_TIER1] = { KEYS.MAGMA_CAVES_TIER1}
---LOCKS_KEYS[LOCKS.MAGMA_CAVES_TIER2] = { KEYS.MAGMA_CAVES_TIER2}
---LOCKS_KEYS[LOCKS.MAGMA_CAVES_TIER3] = { KEYS.MAGMA_CAVES_TIER3}
-LOCKS_KEYS[LOCKS.MAGMA_CAVES_ENTRANCE] = { KEYS.MAGMA_CAVES_ENTRANCE}
-LOCKS_KEYS[LOCKS.ACTIVE_LAVA_ZONE] = { KEYS.ACTIVE_LAVA_ZONE}
-LOCKS_KEYS[LOCKS.MAGMA_CAVES_SACRED] = {KEYS.MAGMA_CAVES_SACRED}
+local function AddLock(name)
+    lockcount = lockcount + 1
+    LOCKS[string.upper(name)] = lockcount
+end
+
+local _locks = {
+    "magma_caves",
+    "magma_caves_tier1",
+    "magma_caves_tier2",
+    "magma_caves_tier3",
+    "magma_caves_entrance",
+    "magma_caves_sacred",
+    "active_lava_zone",
+    "grotto_tier1",
+    "grotto_tier2",
+    "grotto_tier3",
+    "grotto_tier4"
+}
+
+for _, lock in pairs(_locks) do
+    AddLock(lock)
+end
+
+-- link locks to keys
+local function LinkLockKey(lock, keys)
+    local _keys = {}
+
+    if keys == nil then keys = lock end
+
+    if type(keys) == "table" then
+        for k, v in pairs(keys) do
+            table.insert(_keys, KEYS[string.upper(v)])
+        end
+    else
+        table.insert(_keys, KEYS[string.upper(keys)])
+    end
+
+    LOCKS_KEYS[LOCKS[string.upper(lock)]] = _keys
+end
+
+local _lock_n_keys = {
+    "magma_caves",
+    "magma_caves_entrance",
+    "active_lava_zone",
+    "magma_caves_sacred",
+    ["grotto_tier1"] = { "grotto_tier1", "grotto_tier2" },
+    ["grotto_tier2"] = { "grotto_tier2", "grotto_tier3" },
+    ["grotto_tier3"] = { "grotto_tier3", "grotto_tier4" },
+    "grotto_tier4"
+}
+
+for k, v in pairs(_lock_n_keys) do
+    if type(k) == "number" then
+        k = v
+        v = nil
+    end
+
+    LinkLockKey(k, v)
+end
+
