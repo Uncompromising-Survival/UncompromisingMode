@@ -17,7 +17,7 @@ local Um_StormOver = Class(Widget, function(self, owner, storm_overlays)
     self.storm_root = storm_overlays:GetParent()
 --]]
 
-    if not UM_CLIENT_CONFIG.UM_STGORMS_OVER then
+    if not UM_CLIENT_CONFIG.UM_STORMS_OVER then
         self.bg = self:AddChild(Widget("zap_root"))
         self.bg:SetHAnchor(ANCHOR_MIDDLE)
         self.bg:SetVAnchor(ANCHOR_MIDDLE)
@@ -57,7 +57,7 @@ local Um_StormOver = Class(Widget, function(self, owner, storm_overlays)
     self.bg3:GetAnimState():SetBuild("um_storm_over")
     self.bg3:GetAnimState():PlayAnimation("cloud_loop", true)
 
-    if UM_CLIENT_CONFIG.UM_STGORMS_OVER then
+    if UM_CLIENT_CONFIG.UM_STORMS_OVER then
         self.bg3:GetAnimState():SetDeltaTimeMultiplier(0.5)
     end
 
