@@ -868,7 +868,7 @@ configuration_options = {
     --BinaryConfig("kramped_buff", "No Naughtiness Decay", "Prevents naughtiness decay.", true),
     BinaryConfig("pigking_guards", "Pig King Guards",
         "Pig King now has neutral guards watching for any suspicious activity.", true),
-    BinaryConfig("moon_bees", "Carrion Bees", "Carrion bees are aggressive lunar bees found on Lunar Island and during Moonstorms", true),
+
     --BinaryConfig("pollenmites", "Pollen Mites", "Pollen mites spawn in spring and quickly infest the nearby area.", false),
     SkipSpace(),
 
