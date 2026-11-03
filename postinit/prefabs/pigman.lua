@@ -333,6 +333,8 @@ do
 
         inst.UMSetPKTorch = SetPKTorch
 
+        inst.UMSSPostInit = SetPKTorch
+
         if not _OnSave then
             _OnSave = inst.OnSave
         end

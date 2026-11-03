@@ -92,6 +92,10 @@ local function UncompromisingSpawnGOOOOO(inst, data)
             end
             if prefab then
                 -- for area handlers, so they can find all things created by a especific SS.
+                if prefab.UMSSPostinit ~= nil then
+                    prefab:UMSSPostinit(inst)
+                end
+
 
                 if inst.bg_tile then
                     local tile_x, tile_z = TheWorld.Map:GetTileCoordsAtPoint(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz)
