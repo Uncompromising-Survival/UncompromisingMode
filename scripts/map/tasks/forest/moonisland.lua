@@ -1,31 +1,33 @@
-AddRoomPreInit("MoonIsland_Beach", function(room) 
-	room.contents.countprefabs = { um_beehive_moon = function() return math.random(1, 2) end} 
-end)
+if UM_CONFIG.LUNAR_BEES then
+    AddRoomPreInit("MoonIsland_Beach", function(room)
+        room.contents.countprefabs = { um_beehive_moon = function() return math.random(1, 2) end }
+    end)
 
-AddTaskPreInit("MoonIsland_Mine", function(task)
-	GLOBAL.require("map/rooms/forest/UM_moonisland")
+    AddTaskPreInit("MoonIsland_Mine", function(task)
+        GLOBAL.require("map/rooms/forest/UM_moonisland")
 
-	task.room_choices["moonrock_bees"] = 1
-end)
+        task.room_choices["moonrock_bees"] = 1
+    end)
 
-AddTaskPreInit("MoonIsland_Forest", function(task)
-	GLOBAL.require("map/rooms/forest/UM_moonisland")
+    AddTaskPreInit("MoonIsland_Forest", function(task)
+        GLOBAL.require("map/rooms/forest/UM_moonisland")
 
-	task.room_choices["moonforest_bees"] = 1
-end)
+        task.room_choices["moonforest_bees"] = 1
+    end)
 
-AddTaskPreInit("MoonIsland_Beach", function(task)
-	GLOBAL.require("map/rooms/forest/UM_moonisland")
+    AddTaskPreInit("MoonIsland_Beach", function(task)
+        GLOBAL.require("map/rooms/forest/UM_moonisland")
 
-	task.room_choices["moonswamp_cave"] = 1
-end)
+        task.room_choices["moonswamp_cave"] = 1
+    end)
+end
 
 AddTaskSetPreInitAny(function(tasksetdata)
-	if tasksetdata.location ~= "forest" then return end
+    if tasksetdata.location ~= "forest" or UM_CONFIG.FLOODED_CAVES ~= "lunar_cave" then return end
 
-	if tasksetdata.required_prefabs ~= nil then
-		table.insert(tasksetdata.required_prefabs,"cave_entrance_moon")
-	else
-		tasksetdata.required_prefabs = {"cave_entrance_moon"}
-	end
+    if tasksetdata.required_prefabs ~= nil then
+        table.insert(tasksetdata.required_prefabs, "cave_entrance_moon")
+    else
+        tasksetdata.required_prefabs = { "cave_entrance_moon" }
+    end
 end)
