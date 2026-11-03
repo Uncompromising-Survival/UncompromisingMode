@@ -44,7 +44,7 @@ local BATTERY =
     },
 }
 
-if GLOBAL.UM_CONFIG.ELECTRICALMISHAP == 2 then
+if GLOBAL.TUNING.DSTU.ELECTRICALMISHAP == 2 then
     for k, v in pairs(BATTERY) do
         AddPrefabPostInit(k, function(inst)
             if inst.components.fuel == nil then

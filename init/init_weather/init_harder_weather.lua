@@ -20,7 +20,7 @@ AddComponentPostInit("sewing", DoSewing)
 
 -------------Torches only smolder objects now---------------
 local _OldLightAction = GLOBAL.ACTIONS.LIGHT.fn
-if UM_CONFIG.WINTER_BURNING then
+if TUNING.DSTU.WINTER_BURNING then
     GLOBAL.ACTIONS.LIGHT.fn = function(act)
         if act.invobject ~= nil and act.invobject.components.lighter ~= nil then
             if GLOBAL.TheWorld.state.season == "winter" and not act.doer:HasTag("pyromaniac") and act.target.components.burnable
@@ -115,7 +115,7 @@ env.AddPrefabPostInit("forest", function(inst)
     --inst:AddComponent("gmoosespawner")
     --end
 
-    if UM_CONFIG.WILTFLY then
+    if TUNING.DSTU.SPAWNWILTINGFLY then
         inst:AddComponent("mock_dragonflyspawner")
     end
 
@@ -125,18 +125,18 @@ env.AddPrefabPostInit("forest", function(inst)
 
     --inst:DoTaskInTime(TUNING.TOTAL_DAY_TIME/2, GenerateInactiveBiomes)
 
-    if UM_CONFIG.SNOWSTORMS then
+    if TUNING.DSTU.SNOWSTORMS then
         --inst:AddComponent("snowstorminitiator")
         inst:AddComponent("um_snow_stormspawner")
     end
 
     inst:AddComponent("um_snowstormmanager")
 
-    if UM_CONFIG.HEATWAVES then
+    if TUNING.DSTU.HEATWAVES then
         inst:AddComponent("um_heatwaves")
     end
 
-    if UM_CONFIG.UM_STORMS then
+    if TUNING.DSTU.STORMS then
         inst:AddComponent("um_stormspawner")
     end
 end)

@@ -67,7 +67,7 @@ local function dig_up(inst, worker)
 end
 
 local function Init(inst)
-    if UM_CONFIG.TRAPDOORSPIDERS == false then
+    if TUNING.DSTU.TRAPDOORSPIDERS == false then
         inst:Remove()
     end
 end

@@ -179,7 +179,7 @@ end)
 -- local _SpawnDayWalkerArena = self.SpawnDayWalkerArena
 
 -- function self:SpawnDayWalkerArena(x, y, z, ...)
--- if ((math.random() > 0.5 and UM_CONFIG.DAYWALKER_SPAWN == "random") or UM_CONFIG.DAYWALKER_SPAWN == "surface") and not self.first_time then
+-- if ((math.random() > 0.5 and TUNING.DSTU.DAYWALKERSPAWN == "random") or TUNING.DSTU.DAYWALKERSPAWN == "surface") and not self.first_time then
 -- local daywalker = SpawnPrefab("daywalker")
 -- daywalker:DoTaskInTime(30, function(daywalker)
 -- daywalker.components.lootdropper:SetLootSetupFn(nil)

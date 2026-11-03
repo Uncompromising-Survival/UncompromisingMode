@@ -254,7 +254,7 @@ local function SpawnBats(player)
 			local num_bats = math.min(3 + math.floor(day/35), 6) + level
 			for i = 1 * level, num_bats do
 				player:DoTaskInTime(0.2 * i + math.random(4) * 0.3, function()
-					local bat = UM_CONFIG.ADULTBATILISKS and SpawnPrefab("um_vampirebat") or SpawnPrefab("bat")
+					local bat = TUNING.DSTU.ADULTBATILISKS and SpawnPrefab("um_vampirebat") or SpawnPrefab("bat")
 					bat.Transform:SetPosition(x + math.random(-12,12), y, z + math.random(-12,12))
 					bat:PushEvent("fly_back")
 					bat:DoTaskInTime(0, function(bat) DayBreak(bat) end)
@@ -752,7 +752,7 @@ local function CheckPlayers(forced)
 		local numStructures = 0
 		local numStructures2 = 0
 		
-		local playerchancescaling = UM_CONFIG.RNE_CHANCE
+		local playerchancescaling = TUNING.DSTU.RNE_CHANCE
 		
 		local days_survived = player.components.age ~= nil and player.components.age:GetAgeInDays()
 		
@@ -861,7 +861,7 @@ local function DoRNEChance(inst)
 		end
 		local player = playerlist[math.random(#playerlist)]
 		--TheNet:Announce("DIDRNECHANCE")
-		local playerchancescaling = UM_CONFIG.RNE_CHANCE
+		local playerchancescaling = TUNING.DSTU.RNE_CHANCE
 		local days_survived = player.components.age ~= nil and player.components.age:GetAgeInDays()
 		if days_survived >= 5 and math.random() >= playerchancescaling then
 			self.rnequeued = true

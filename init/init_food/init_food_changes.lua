@@ -87,7 +87,7 @@ for k, v in pairs(FROGNEWTONS) do
 end
 
 
-if UM_CONFIG.ICECREAM_BUFF then
+if TUNING.DSTU.ICECREAMBUFF then
     --recipes.icecream.OldOnEat = recipes.icecream.oneatenfn
 
     local ICECREAM =
@@ -128,7 +128,7 @@ end]]
 
 recipes.baconeggs.priority = 9 --No more casino 50/50 baconeggs / monsterlasagna
 
-if UM_CONFIG.FARMFOODREDUX then
+if TUNING.DSTU.FARMFOODREDUX then
     local MASHEDPOTATOES =
     {
         "mashedpotatoes",
@@ -313,20 +313,20 @@ if UM_CONFIG.FARMFOODREDUX then
 end
 
 AddPrefabPostInit("honey", function(inst)
-    if inst ~= nil and inst.components.edible ~= nil and UM_CONFIG.BEEBOX_NERF then
+    if inst ~= nil and inst.components.edible ~= nil and TUNING.DSTU.BEEBOX_NERF then
         inst.components.edible.healthvalue = TUNING.HEALING_SMALL / 3
         inst.components.edible.hungervalue = TUNING.CALORIES_TINY / 3
     end
 end)
 AddPrefabPostInit("butterflywings", function(inst)
-    if inst.components.edible and UM_CONFIG.BUTTERFLY_TWEAKS == "stat_nerf" then
+    if inst.components.edible and TUNING.DSTU.BUTTERFLYWINGS_NERF == "stat_nerf" then
         inst.components.edible.healthvalue = GLOBAL.TUNING.DSTU.FOOD_BUTTERFLY_WING_HEALTH
         inst.components.edible.hungervalue = GLOBAL.TUNING.DSTU.FOOD_BUTTERFLY_WING_HUNGER
         inst.components.edible.perishtime = GLOBAL.TUNING.DSTU.FOOD_BUTTERFLY_WING_PERISHTIME
     end
 end)
 
---if UM_CONFIG.MUSHROOM_CHANGES then
+--if TUNING.DSTU.MUSHROOM_CHANGES then
 --AddPrefabPostInit("green_cap_cooked", function(inst)
 --if inst ~= nil and inst.components.edible ~= nil then
 --inst.components.edible.healthvalue = -5
@@ -370,7 +370,7 @@ end
 -----------------------------------------------------------------
 -- Reduce seeds hunger
 -----------------------------------------------------------------
-if UM_CONFIG.SEEDS then
+if TUNING.DSTU.SEEDS then
     local seeds = { "", "carrot_", "corn_", "dragonfruit_", "durian_", "eggplant_", "pomegranate_", "pumpkin_", "asparagus_", "tomato_", "potato_", "onion_", "pepper_", "garlic_" }
 
     for i, v in ipairs(seeds) do

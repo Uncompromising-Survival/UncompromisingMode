@@ -91,7 +91,7 @@ env.AddPrefabPostInit("wx78", function(inst)
 
     inst:AddTag("automaton")
 
-    if UM_CONFIG.WX78 then
+    if TUNING.DSTU.WX78_CONFIG then
         if inst.components.playerlightningtarget ~= nil then
             inst.components.playerlightningtarget:SetOnStrikeFn(OnLightningStrike)
         end
@@ -107,7 +107,7 @@ env.AddPrefabPostInit("wx78_moduleremover", function(inst)
     inst.components.fuel.fuelvalue = TUNING.SMALL_FUEL
 end)
 
-if UM_CONFIG.WX78_BACKUPBODY then
+if TUNING.DSTU.WX78_BACKUPBODY then
     local _GetDoerSavedStats
     local function GetDoerSavedStats(inst, doer, ...)
         if doer:HasTag("player") then return {wx78_shield = doer.components.wx78_shield and doer.components.wx78_shield:GetCurrent() or nil} end

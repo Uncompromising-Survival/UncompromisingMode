@@ -1222,7 +1222,7 @@ local function DoSporeExplosion(inst)
 end
 
 local function OnHitOther_Spore(inst, data)
-    if data.target and data.target:HasTag("player") and not data.target:HasAnyTag("hasplaguemask", "automaton") and UM_CONFIG.MAXHPHITTERS then
+    if data.target and data.target:HasTag("player") and not data.target:HasAnyTag("hasplaguemask", "automaton") and TUNING.DSTU.MAXHPHITTERS then
         data.target.components.health:DeltaPenalty(.05)
     end
 end

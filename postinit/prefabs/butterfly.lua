@@ -1,7 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-if UM_CONFIG.BUTTERFLY_TWEAKS == "unique" then
+if TUNING.DSTU.BUTTERFLYWINGS_NERF == "unique" then
     local function Slippy(inst, target, distancemod) -- Reduced from wixie_shove to something only applicable to the butterfly
         local x, y, z = inst.Transform:GetWorldPosition()
         for i = 1, 50 do

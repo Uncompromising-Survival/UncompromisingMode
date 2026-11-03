@@ -6,7 +6,7 @@ env.AddPrefabPostInit("siestahut", function(inst)
 		return
 	end
 	
-	if UM_CONFIG.GOTOBED ~= false then
+	if TUNING.DSTU.GOTOBED ~= false then
 		inst.components.sleepingbag.hunger_tick = TUNING.SLEEP_HUNGER_PER_TICK / 2
 	end
 end)

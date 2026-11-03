@@ -64,19 +64,19 @@ end
 
 -- link locks to keys
 local function LinkLockKey(lock, keys)
-    local __keys = {}
+    local _keys = {}
 
     if keys == nil then keys = lock end
 
     if type(keys) == "table" then
         for k, v in pairs(keys) do
-            table.insert(__keys, KEYS[string.upper(v)])
+            table.insert(_keys, KEYS[string.upper(v)])
         end
     else
-        table.insert(__keys, KEYS[string.upper(keys)])
+        table.insert(_keys, KEYS[string.upper(keys)])
     end
 
-    LOCKS_KEYS[LOCKS[string.upper(lock)]] = __keys
+    LOCKS_KEYS[LOCKS[string.upper(lock)]] = _keys
 end
 
 local _lock_n_keys = {

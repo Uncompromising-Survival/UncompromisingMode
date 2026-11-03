@@ -95,8 +95,8 @@ local wormspawn =
 {
     base_prefab = "worm",
     upgrade_spawn = "worm_boss",
-    winter_prefab = UM_CONFIG.DEPTHSEELS and "shockworm" or "worm",
-    summer_prefab = UM_CONFIG.DEPTHSVIPERS and "viperworm" or "worm",
+    winter_prefab = TUNING.DSTU.DEPTHSEELS and "shockworm" or "worm",
+    summer_prefab = TUNING.DSTU.DEPTHSVIPERS and "viperworm" or "worm",
 
     attack_levels =
     {
@@ -185,21 +185,21 @@ env.AddPrefabPostInit("forest", function(inst)
 
     if inst.components.hounded ~= nil then
         local spawndata = inst.components.hounded:GetSpawnData()
-        if UM_CONFIG.SPOREHOUNDS then
+        if TUNING.DSTU.SPOREHOUNDS then
             spawndata.autumn_prefab = "sporehound"
         end
-        if UM_CONFIG.LIGHTNINGHOUNDS then
+        if TUNING.DSTU.LIGHTNINGHOUNDS then
             spawndata.spring_prefab = "lightninghound"
         end
-        if UM_CONFIG.GLACIALHOUNDS then
+        if TUNING.DSTU.GLACIALHOUNDS then
             spawndata.upgrade_spawn_winter = "glacialhound"
         end
-        if UM_CONFIG.MAGMAHOUNDS then
+        if TUNING.DSTU.MAGMAHOUNDS then
             spawndata.upgrade_spawn_summer = "magmahound"
         end
 
 
-        if (UM_CONFIG.GLACIALHOUNDS or UM_CONFIG.MAGMAHOUNDS) then
+        if (TUNING.DSTU.GLACIALHOUNDS or TUNING.DSTU.MAGMAHOUNDS) then
             spawndata.ShouldUpgrade = function(amount, wave_pre_upgraded)
                 local seasonBonus = (TheWorld.state.iswinter or TheWorld.state.issummer) and 0.3 or 0
 

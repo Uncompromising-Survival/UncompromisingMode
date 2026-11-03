@@ -167,7 +167,7 @@ env.AddPrefabPostInit("winona", function(inst)
         return
     end
 
-    if UM_CONFIG.WINONAWORKER then
+    if TUNING.DSTU.WINONA_WORKER then
         inst.multiplierapplied = false
 
         inst:ListenForEvent("performaction", ActionHungerDrain)
@@ -231,7 +231,7 @@ local function ValidRepairFn(inst)
 end
 
 env.AddPrefabPostInit("winona_catapult", function(inst)
-    if UM_CONFIG.WINONAWACKYCATS then
+    if TUNING.DSTU.WINONA_WACKCATS then
         inst:AddComponent("repairable")
         inst.components.repairable.repairmaterial = "stone"
         inst.components.repairable.onrepaired = onrepaired
@@ -239,19 +239,19 @@ env.AddPrefabPostInit("winona_catapult", function(inst)
     end
 end)
 
-if UM_CONFIG.WINONAWACKYCATS then
+if TUNING.DSTU.WINONA_WACKCATS then
     TUNING.WINONA_CATAPULT_HEALTH = 300
     TUNING.WINONA_CATAPULT_HEALTH_REGEN = 0
 end
 
 env.AddPrefabPostInit("winona_catapult_projectile", function(inst)
-    if UM_CONFIG.WINONAWACKYCATS and inst.components.combat ~= nil then
+    if TUNING.DSTU.WINONA_WACKCATS and inst.components.combat ~= nil then
         inst.components.combat:SetDefaultDamage(34)
     end
 end)
 
 env.AddPrefabPostInit("sewing_tape", function(inst)
-    if UM_CONFIG.WINONAWACKYCATS then
+    if TUNING.DSTU.WINONA_WACKCATS then
         inst:AddComponent("repairer")
         inst.components.repairer.healthrepairvalue = 200
         inst.components.repairer.repairmaterial = MATERIALS.STONE
@@ -259,7 +259,7 @@ env.AddPrefabPostInit("sewing_tape", function(inst)
 end)
 
 env.AddComponentPostInit("repairable", function(self)
-    if UM_CONFIG.WINONAWACKYCATS then
+    if TUNING.DSTU.WINONA_WACKCATS then
         local _Repair = self.Repair
         function self:Repair(doer, repair_item)
             if repair_item:HasTag("tape") then

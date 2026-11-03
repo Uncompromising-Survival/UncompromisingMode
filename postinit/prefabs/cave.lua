@@ -46,7 +46,7 @@ env.AddPrefabPostInit("cave", function(inst)
 
     inst.trepspawners = {}
 
-    if UM_CONFIG.TREPIDATIONS then
+    if TUNING.DSTU.TREPIDATIONS then
         inst:WatchWorldState("nightmarephase", OnNightmarePhaseChanged)
         OnNightmarePhaseChanged(inst, TheWorld.state.nightmarephase, true)
     end

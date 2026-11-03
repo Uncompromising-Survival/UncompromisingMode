@@ -3,7 +3,7 @@ require "behaviours/chaseandattack"
 local UMUpvalueHacker = GLOBAL.require("tools/um_upvaluehacker")
 local TheNet = GLOBAL.TheNet
 
-if UM_CONFIG.WORTOX then
+if TUNING.DSTU.WORTOXCHANGES then
     --------------------------------------------------------------------------------------------------------------------------------
     -- [ Soul Healing Changes ] ----------------------------------------------------------------------------------------------------
     --------------------------------------------------------------------------------------------------------------------------------    
@@ -86,7 +86,7 @@ if UM_CONFIG.WORTOX then
     local wortox_soul_common = require("prefabs/wortox_soul_common")
     wortox_soul_common.DoHeal = UncompromisingSoulHeal
 
-    if UM_CONFIG.BUTTERFLY_TWEAKS == "stat_nerf" then
+    if TUNING.DSTU.BUTTERFLYWINGS_NERF == "stat_nerf" then
         local _GetNumSouls = wortox_soul_common.GetNumSouls
         wortox_soul_common.GetNumSouls = function(victim, ...)
             return victim:HasTag("butterfly") and (math.random() > .5 and 1 or 0) or _GetNumSouls(victim, ...)

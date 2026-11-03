@@ -21,7 +21,7 @@ end
 
 local function CheckAndApplyTempDamage(inst, data)
     if data ~= nil and data.amount ~= nil and data.amount < 0 and data.cause ~= nil and inst.components.health ~= nil then
-        if UM_CONFIG.MAXTEMPDAMAGE and (data.cause == "cold" or data.cause == "hot") then
+        if TUNING.DSTU.MAXTEMPDAMAGE and (data.cause == "cold" or data.cause == "hot") then
             local worldtemperature = inst.um_world_temperature ~= nil and math.abs(inst.um_world_temperature - 35) / 20 or 0
             local temp_buffer = 7 - worldtemperature
 
@@ -54,7 +54,7 @@ local function CheckAndApplyTempDamage(inst, data)
                     inst.um_temp_healthdelta_task = nil
                 end
             end)
-        elseif UM_CONFIG.MAXHUNGERDAMAGE and data.cause == "hunger" then
+        elseif TUNING.DSTU.MAXHUNGERDAMAGE and data.cause == "hunger" then
             if inst.um_temp_hungerdelta ~= nil and inst.um_temp_hungerdelta >= 1 then
                 inst.components.health:DeltaPenalty(math.abs(data.amount / inst.components.health.maxhealth))
             else
@@ -190,7 +190,7 @@ local DESPAWN_FOLLOWER_TAGS = { "pig", "raidrat", "winky_rat" }
 local DESPAWN_FOLLOWER_PREFABS = { "eyeofterror_mini_ally", "smallbird", "teenbird", "lightflier", "wx78_scanner" }
 local function DespawnFollowers(inst)
     for k, v in pairs(inst.components.leader.followers) do
-        if k:HasTag("spider") and not TUNING.DSTU.TREATS_FOR_WEBBER or k:HasAnyTag(DESPAWN_FOLLOWER_TAGS) or UM_CONFIG.MERMTWEAKS and k:HasTag("merm")
+        if k:HasTag("spider") and not TUNING.DSTU.TREATS_FOR_WEBBER or k:HasAnyTag(DESPAWN_FOLLOWER_TAGS) or TUNING.DSTU.MERMTWEAKS and k:HasTag("merm")
             or table.contains(DESPAWN_FOLLOWER_PREFABS, k.prefab) then -- exluding things that can't/shouldn't/already do
             local savedata = k:GetSaveRecord()
             table.insert(inst.um_all_followers, savedata)
@@ -299,14 +299,14 @@ env.AddPlayerPostInit(function(inst)
         return _inst:HasTag("under_the_weather") or _IsNearDanger(_inst, hounded_ok, ...)
     end
 
-    if UM_CONFIG.UM_ADVERTISEMENTS then
+    if TUNING.DSTU.ADVERTISEMENTS then
         inst:DoPeriodicTask(10, function()
             inst.Advertisee:set_local(inst)
             inst.Advertisee:set(inst)
         end)
     end
 
-    if UM_CONFIG.UM_SHRINK then
+    if TUNING.DSTU.SHRINK then
         inst:DoPeriodicTask(.5, function()
             --[[if inst.components.locomotor ~= nil then
                 print("walkspeed = " .. inst.components.locomotor:GetWalkSpeed())
@@ -380,7 +380,7 @@ env.AddPlayerPostInit(function(inst)
         if _OnLoad then return _OnLoad(_inst, data, ...) end
     end
 
-    if UM_CONFIG.MAXTEMPDAMAGE or UM_CONFIG.MAXHUNGERDAMAGE then
+    if TUNING.DSTU.MAXTEMPDAMAGE or TUNING.DSTU.MAXHUNGERDAMAGE then
         inst:ListenForEvent("temperaturetick", function(src, temperature)
             inst.um_world_temperature = temperature
         end, TheWorld)
@@ -388,7 +388,7 @@ env.AddPlayerPostInit(function(inst)
         inst:ListenForEvent("healthdelta", CheckAndApplyTempDamage)
     end
 
-    if UM_CONFIG.MAXHPDEATH then
+    if TUNING.DSTU.MAXHPDEATH then
         inst.UMShouldTakePenalty = UMShouldTakePenalty
         inst:ListenForEvent("respawnfromghost", OnRespawnFromGhost)
     end
@@ -396,7 +396,7 @@ env.AddPlayerPostInit(function(inst)
     --Client after this
     --inst:AddTag("um_darkwood")
     --CreateMousePositioning(inst)
-    if UM_CONFIG.UM_SHAVE_MODE then
+    if TUNING.DSTU.SHAVE_MODE then
         if inst.starting_inventory then
             table.insert(inst.starting_inventory, "razor")
         else

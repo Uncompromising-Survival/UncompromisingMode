@@ -68,7 +68,7 @@ env.AddStategraphPostInit("spider", function(inst)
         doattackeventhandler.fn = function(inst, data, ...)
             if not (inst.sg:HasStateTag("busy") or inst.components.health:IsDead()) then
                 if inst:HasTag("spider_regular") then
-                    inst.sg:GoToState(UM_CONFIG.ALLJUMPERSPIDERS and data.target:IsValid() and not inst:IsNear(data.target, TUNING.SPIDER_WARRIOR_MELEE_RANGE)
+                    inst.sg:GoToState(TUNING.DSTU.REGSPIDERJUMP and data.target:IsValid() and not inst:IsNear(data.target, TUNING.SPIDER_WARRIOR_MELEE_RANGE)
                         and "warrior_attack" or "attack", data.target) -- Do leap attack
                     return
                 end
@@ -135,7 +135,7 @@ env.AddStategraphPostInit("spider", function(inst)
             if inst:HasTag("spider_warrior") or inst:HasTag("spider_regular") then
                 inst.sg:GoToState(
                     data.target:IsValid()
-                    and not (inst:IsNear(data.target, TUNING.SPIDER_WARRIOR_MELEE_RANGE) or (UM_CONFIG.ALLJUMPERSPIDERS == false and inst:HasTag("spider_regular")))
+                    and not (inst:IsNear(data.target, TUNING.SPIDER_WARRIOR_MELEE_RANGE) or (TUNING.DSTU.REGSPIDERJUMP == false and inst:HasTag("spider_regular")))
                     and "warrior_attack" --Do leap attack
                     or "attack",
                     data.target

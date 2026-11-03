@@ -28,7 +28,7 @@ local function SpawnRimeweed(plant)
 end
 
 local function SpawnRimeweeds()
-    if TheWorld.state.cycles <= UM_CONFIG.WEATHERHAZARD_WINTER then
+    if TheWorld.state.cycles <= TUNING.DSTU.WEATHERHAZARD_START_DATE_WINTER then
         return
     end
 
@@ -140,7 +140,7 @@ end
 
 local function OnSeasonChange(self)
     if TheWorld.state.season == "winter" then
-        if TheWorld.state.cycles >= UM_CONFIG.WEATHERHAZARD_WINTER then
+        if TheWorld.state.cycles >= TUNING.DSTU.WEATHERHAZARD_START_DATE_WINTER then
             --if not _storming then
             StartSnowstorms()
             --end

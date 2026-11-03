@@ -133,7 +133,7 @@ local function workcallback(inst, worker, workleft)
 end
 
 local function Init(inst)
-    if UM_CONFIG.TRAPDOORSPIDERS == false then inst:Remove() end
+    if TUNING.DSTU.TRAPDOORSPIDERS == false then inst:Remove() end
 
     local x, y, z = inst.Transform:GetWorldPosition()
 
@@ -254,7 +254,7 @@ local function fn2()
     -- inst:AddComponent("health")
     -- inst.components.health:SetMaxHealth(250) --increase health?
     -------------------------
-    if UM_CONFIG.TRAPDOORSPIDERS then
+    if TUNING.DSTU.TRAPDOORSPIDERS then
         inst:AddComponent("childspawner")
         -- Set spawner to wasp. Change tuning values to wasp values.
         inst.components.childspawner.childspawner = "spider_trapdoor_hooded"

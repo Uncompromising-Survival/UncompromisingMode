@@ -57,6 +57,11 @@ TUNING.DSTU = {
     ----------------------------------------------------------------------------
     -- Food changes
     ----------------------------------------------------------------------------
+    ICEBOX_TWEAKS = GetModConfigData("um_icebox_tweaks"),
+    -- Goodie nerf
+    GOODIESNERF = GetModConfigData("goodies_nerf"),
+    -- Daywalker
+    DAYWALKERSPAWN = GetModConfigData("daywalker_spawn"),
 
     -- Global appearance rate of foods
     FOOD_CARROT_PLANTED_APPEARANCE_PERCENT = 0.75,
@@ -101,6 +106,20 @@ TUNING.DSTU = {
         WARNING_DELAY_VARIANCE = .3
     },
     ----------------------------------------------------------------------------
+    -- Clothing Degredation and Sewing Kit Changes
+    ----------------------------------------------------------------------------
+    CLOTHINGDEGREDATION = GetModConfigData("durability"),
+    SEWING_KIT = GetModConfigData("sewingkit"),
+    ----------------------------------------------------------------------------
+    -- Flingo Change
+    ----------------------------------------------------------------------------
+    FLINGO_SETTING = GetModConfigData("flingo_setting"),
+    ----------------------------------------------------------------------------
+    -- Sleeping Change
+    ----------------------------------------------------------------------------
+    GOTOBED = GetModConfigData("gotobed"),
+    SLEEPINGBUFF = GetModConfigData("sleepingbuff"),
+    ----------------------------------------------------------------------------
     -- Cooking recipe changes
     ----------------------------------------------------------------------------
     -- Recipe stat changes
@@ -125,18 +144,31 @@ TUNING.DSTU = {
     RECIPE_CELESTIAL_UPGRADE_GLASS_COST = 20,
 
     DART_YIELD = 1,
+    ----------------------------------------------------------------------------
+    -- Food Changes Config
+    ----------------------------------------------------------------------------
+
+    -- Crockpot Recipes
+    CROCKPOTMONSTMEAT = GetModConfigData("crockpotmonstmeat"),
+    GENERALCROCKBLOCKER = GetModConfigData("generalcrockblocker"),
+    ICECROCKBLOCKER = GetModConfigData("icecrockblocker"),
+    -- Crockpot Dish Changes
 
     --MEATBALL = GetModConfigData("meatball_"),
     --PIEROGI = GetModConfigData("perogi"),
+    FARMFOODREDUX = GetModConfigData("farmfoodredux"),
+    ICECREAMBUFF = GetModConfigData("icecream_buff"),
+    BONESTEW = GetModConfigData("bonestew_nerf"),
     ----------------------------------------------------------------------------
     -- Mob changes
     ----------------------------------------------------------------------------
+    -- Armor Rework
+    ARMORREWORK = GetModConfigData("armorrework"),
 
     -- ratraid
-    RATRAID_TIMERSTART = UM_CONFIG.RATTIMER,
-    RATRAID_GRACE = UM_CONFIG.RATGRACE,
-    RATSNIFFER_TIMER = UM_CONFIG.RATSNIFFTIMER,
-
+    RATRAID_TIMERSTART = GetModConfigData("rattimer"),
+    RATRAID_GRACE = GetModConfigData("ratgrace"),
+    RATSNIFFER_TIMER = GetModConfigData("ratsnifftimer"),
     -- Generics
     MONSTER_BAT_CAVE_NR_INCREASE = 3,
     CAVE_ENTRANCE_BATS_SPAWN_PERIOD_UM = 0.8,
@@ -158,13 +190,40 @@ TUNING.DSTU = {
     HOUND_LIGHTNING_DAMAGE = 10, --Also used for tornado
     -- Spawn New Bosses
     --GOOSE_SETTING = GetModConfigData("goose_setting"),
+    SPAWNWILTINGFLY = GetModConfigData("wiltfly"),
+    -- Hound inclusion
+    SPOREHOUNDS = GetModConfigData("sporehounds"),
+    GLACIALHOUNDS = GetModConfigData("glacialhounds"),
+    LIGHTNINGHOUNDS = GetModConfigData("lightninghounds"),
+    MAGMAHOUNDS = GetModConfigData("magmahounds"),
     --FIREBITEHOUNDS = GetModConfigData("firebitehounds"),
     --FROSTBITEHOUNDS = GetModConfigData("frostbitehounds"),
     VARGWAVES = false,           -- GetModConfigData("vargwaves"),
     VARGWAVES_BOSS_GRACE = 15,   -- GetModConfigData("vargwaves grace"),
     VARGWAVES_DELAY_PERIOD = 15, -- GetModConfigData("vargwaves delay"),
+    -- Worm inclusion
+    DEPTHSEELS = GetModConfigData("depthseels"),
+    DEPTHSVIPERS = GetModConfigData("depthsvipers"),
+    -- Bats
+    ADULTBATILISKS = GetModConfigData("adultbatilisks"),
+    BATSPOOKING = GetModConfigData("batspooking"),
 
-
+    -- Pinelings
+    PINELINGS = GetModConfigData("pinelings"),
+    -- Ancient Trepidations
+    TREPIDATIONS = GetModConfigData("trepidations"),
+    -- Pawns
+    PAWNS = GetModConfigData("pawns"),
+    -- Spiders
+    REGSPIDERJUMP = GetModConfigData("alljumperspiders"),
+    SPIDERWARRIORCOUNTER = GetModConfigData("spiderwarriorcounter"),
+    TRAPDOORSPIDERS = GetModConfigData("trapdoorspiders"),
+    -- Merms
+    MERMTWEAKS = GetModConfigData("mermtweaks"),
+    -- Perishable Increase
+    --PERISHABLETIME = GetModConfigData("more perishing"),
+    -- Fire Loot Rework
+    FIRELOOT = GetModConfigData("fireloot"),
     POLLENMITES = false,
     ----------------------------------------------------------------------------
     -- Player changes
@@ -184,16 +243,26 @@ TUNING.DSTU = {
     ----------------------------------------------------------------------------
     -- Woodie
     GOOSE_WATER_WETNESS_RATE = 3,
+    WOODIE_WET_GOOSE = GetModConfigData("woodie_wet_goose"),
     -- Wolfgang
     WOLFGANG_SANITY_MULTIPLIER = 1.3, -- prev was 1.1
+    WOLFGANG_HUNGERMIGHTY = GetModConfigData("wolfgang"),
     -- WX78
     WX78_MOISTURE_DAMAGE_INCREASE = 3,
+    WX78_CONFIG = GetModConfigData("wx78"),
+    WX78_BACKUPBODY = GetModConfigData("wx78_backupbody"),
     WXLESS = false,          --GetModConfigData("wxless"),
     WXLESSSPEEDBUMP = false, --GetModConfigData("wxlessspeedbump"),
 
     -- Wormwood
     WORMWOOD_BURN_TIME = 6.66,   -- orig 4.3
     WORMWOOD_FIRE_DAMAGE = 1.75, -- orig 1.25
+    WORMWOOD_CONFIG_FIRE = GetModConfigData("wormwood_fire"),
+    WORMWOOD_CONFIG_PLANTS = GetModConfigData("wormwood_plants"),
+    WORMWOOD_CONFIG_TRAPS = GetModConfigData("wormwood_trapbuffs"),
+    WORMWOOD_PHOTOSYNTHESIS = GetModConfigData("wormwood_photosynthesis"),
+    -- Warly
+    WARLY_CHANGES = GetModConfigData("warly_changes"),
     --WARLY_FOOD_TASTE = GetModConfigData("warly_food_taste_"),
     WARLY_SAME_OLD_COOLDOWN = total_day_time * 3,
     WARLY_SAME_OLD_MULTIPLIERS = { .6, .5, .35, .2, .1 },
@@ -204,6 +273,7 @@ TUNING.DSTU = {
     SHADOWWAXWELL_HEALTH_COST = 15,
     OLD_SHADOWWAXWELL_SANITY_COST = 55,
     OLD_SHADOWWAXWELL_SANITY_PENALTY = .275,
+    WAXWELL = GetModConfigData("waxwell"),
     -- Shadow Levels
     SHADOW_CROWN_SHADOW_LEVEL = 2,
     ANCIENT_AMULET_SHADOW_LEVEL = 2,
@@ -258,6 +328,16 @@ TUNING.DSTU = {
     SNIFFER_PLAYER_RANGE = 120,
 
     PIEDPIPER_TOOT_RANGE = 25,
+    -- Weather Start Date
+    WEATHERHAZARD_START_DATE_AUTUMN = GetModConfigData("weatherhazard_autumn"),
+    WEATHERHAZARD_START_DATE_WINTER = GetModConfigData("weatherhazard_winter"),
+    WEATHERHAZARD_START_DATE_SPRING = GetModConfigData("weatherhazard_spring"),
+    WEATHERHAZARD_START_DATE_SUMMER = GetModConfigData("weatherhazard_summer"),
+    RNE_CHANCE = GetModConfigData("rne chance"),
+    SNOWSTORMS = GetModConfigData("snowstorms"),
+    HARDER_SHADOWS = GetModConfigData("harder_shadows"),
+    DREADEYES_ALLOWED = GetModConfigData("dreadeyes_allowed"),
+    CREEPINGFEAR_ALLOWED = GetModConfigData("creepingfear_allowed"),
     MAX_DISTANCE_TO_SHADOWS = 1225, -- 35^2
     CREEPINGFEAR_SPEED = 4.8,
     CREEPINGFEAR_HEALTH = 1600,
@@ -287,7 +367,10 @@ TUNING.DSTU = {
     SUMMER_CAVES_TEMP_MULT = .85,
     WINTER_CAVES_TEMP_MULT = 1.25,
 
+    MUSHROOM_CHANGES = GetModConfigData("mushroom_changes"),
     ALL_MUST_BE_GATHERED = false,
+    WATERING_TEMPERATURE = GetModConfigData("watering_thermal"),
+    BATH_BOMB = GetModConfigData("bath_heal"),
     KLAUS_AMULET_SECOND_HIT_DAMAGE_MULT = .75,
     KLAUS_AMULET_ABSORPTION = .3,
     ORANGESTAFF_COOLDOWN_1 = 5,
@@ -323,9 +406,73 @@ TUNING.DSTU = {
     -- Experimental and DEV
     ----------------------------------------------------------------------------
 
+    WORLDGEN_MASTERTOGGLE = GetModConfigData("worldgenmastertoggle"),
+    ELECTRICALMISHAP = GetModConfigData("electricalmishap"),
+    ANNOUNCE_BASESTATUS = GetModConfigData("announce_basestatus"),
+    EYEBRELLAREWORK = GetModConfigData("eyebrellarework"),
     -- More Config
+    POCKET_POWERTRIP = GetModConfigData("pocket_powertrip_"),
+    WINTER_BURNING = GetModConfigData("winter_burning"),
+    BUTTERFLYWINGS_NERF = GetModConfigData("butterfly_tweaks"),
+    LONGPIG = GetModConfigData("longpig"),
+    RAW_CROPS_NERF = GetModConfigData("rawcropsnerf"),
+    WENDY = GetModConfigData("wendy"),
+    TOADS = GetModConfigData("toads"),
+    MONSTER_EGGS = GetModConfigData("monster_eggs"),
+    IMPASSBLES = GetModConfigData("passibleimpassibles"),
+    VETCURSE = GetModConfigData("vetcurse"),
     VETCURSE_DAMAGE_TAKEN_MULT = 1.25,
     --VETCURSE_HUNGER_RATE = 1.2,
+    MOON_TRANSFORMATIONS = GetModConfigData("moon_transformations"),
+    AMALGAMS = GetModConfigData("amalgams"),
+    HUNGRYFROGS = GetModConfigData("hungryfrogs"),
+    COWARDFROGS = GetModConfigData("cowardfrogs"),
+    INSUL_THERMALSTONE = GetModConfigData("insul_thermalstone"),
+    UNCOOL_CHESTER = GetModConfigData("uncool_chester_"),
+    HOODEDFOREST = GetModConfigData("hoodedforest"),
+    GHOSTWALRUS = GetModConfigData("ghostwalrus"),
+    RICE = GetModConfigData("rice"),
+    NEWRECIPES = GetModConfigData("newrecipes"),
+    CAVECLOPS = GetModConfigData("cave_clops"),
+    HOTCAVES = GetModConfigData("hotcaves"),
+    --ITEMCHECK = GetModConfigData("itemcheck"),
+    SEEDS = GetModConfigData("seeds"),
+    MAXHPDEATH = GetModConfigData("maxhpdeath"),
+    MAXHPHITTERS = GetModConfigData("maxhphitters"),
+    BEEFALO_NERF = GetModConfigData("beefalo_nerf"),
+    NO_MOCK_DRAGONFLY_BOSS_TIME = GetModConfigData("wiltfly_spawn"),
+    --NO_MOTHER_GOOSE_BOSS_TIME = GetModConfigData("mother_goose_spawn"),
+    WATHOM_MAX_DAMAGE_CAP = GetModConfigData("wathom_max_dmg"),
+    WATHOM_AMPED_VULNERABILITY = GetModConfigData("wathom_ampvulnerability"),
+    WATHOM_ARMOR_DAMAGE = GetModConfigData("wathom_armordamage"),
+    SHADOW_WATHOM = GetModConfigData("wathom_undeath"),
+    WATHOM_NIGHTVISON_CC = GetModConfigData("wathom_nightvision", true),
+    PK_GUARDS = GetModConfigData("pigking_guards"),
+    BERNIE_BUFF = GetModConfigData("bernie_buffs"),
+    COMPROMISING_SHADOWVORTEX = GetModConfigData("compromising_vortex"),
+    DISABLE_MEGAFLARE = GetModConfigData("disable_megaflare"),
+    WIXIE = GetModConfigData("wixie_walter"),
+    WOBYHUNGER_CLASSIC = GetModConfigData("woby_hunger_classic"),
+    WIXIE_BIRDS = GetModConfigData("wixie_birds"),
+    MONSTERSMALLMEAT = GetModConfigData("monstersmallmeat"),
+    THE_COOLER_SACRED_CHEST = GetModConfigData("the_cooler_sacred_chest"),
+    BOSS_RESISTANCE = GetModConfigData("boss_resistance_"),
+    STORMS = GetModConfigData("um_storms"),
+    STORMS_PERFORMANCE = GetModConfigData("um_storms_performance"),
+    HEATWAVES = GetModConfigData("heatwaves"),
+    SMOG = GetModConfigData("smog"),
+    MAXTEMPDAMAGE = GetModConfigData("maxtempdamage"),
+    MAXHUNGERDAMAGE = GetModConfigData("maxhungerdamage"),
+    HARDER_TREPIDATION = GetModConfigData("nodespawn_trepidation"),
+    TELESTAFF_REWORK = GetModConfigData("telestaff_rework"),
+    BEEBOX_NERF = GetModConfigData("beebox_nerf"),
+    CANEDURABILITY = GetModConfigData("cane_durability"),
+    COOLDOWN_ORANGESTAFF = GetModConfigData("cooldown_orangestaff"),
+    --AC_COOLING = GetModConfigData("ac_does_ac"),
+    HARDER_SPIDERQUEEN = GetModConfigData("harder_spider_queen"),
+    HARDER_MOOSE = GetModConfigData("harder_moose"),
+    GLASSCUTTER_REVERT = GetModConfigData("celestialitems_revert"),
+    FUNCAP_REWORK = GetModConfigData("funcap_fun"),
 
     --mod checks
     ISLAND_ADVENTURES = ia_check,
@@ -333,6 +480,19 @@ TUNING.DSTU = {
     TREATS_FOR_WEBBER = tfw_check,
     ADM_CLOCKWORK_REWORK = bcr_check,
 
+    --MEME CONFIG
+    ADVERTISEMENTS = GetModConfigData("um_advertisements"),
+    SHRINK = GetModConfigData("um_shrink"),
+    SHAVE_MODE = GetModConfigData("um_shave_mode"),
+
+    --CLIENT CONFIGS
+
+    REDUCED_TORNADO_VFX = GetModConfigData("um_storms_over", true),
+    UM_TIPS_ONLY = GetModConfigData("um_tips_only", true),
+    UI_VETCURSE = GetModConfigData("ui_showvetcurse", true),
+    UI_SHOWMULTIPRODUCTS = GetModConfigData("ui_showmultiproducts", true),
+    UI_SHOWMULTIPRODUCTS_FONT = GetModConfigData("ui_showmultiproducts_font", true),
+    UI_HEALTHPENALTY_GREY = GetModConfigData("ui_healthpenalty_grey", true),
 
     -- boss hp qol
 
@@ -341,6 +501,7 @@ TUNING.DSTU = {
     WILTFLY_HEALTH = 4000 * GetModConfigData("mock_dragonfly_health_"),
     --MOTHER_GOOSE_HEALTH = 6000 * GetModConfigData("mothergoose_health_"),
 
+    ONEHP = GetModConfigData("uncompromising_1hp"),
 
     --hooded forest canoppy setttings
 
@@ -386,7 +547,7 @@ TUNING.DSTU = {
     APHID_SPAWN_CHANCE = .1,
 
     RIPPLE_BLACKLIST_PREFABS = { "webbedcreature", "rainometer" }, -- AXE Many cases would like "structure" tag still count for ripples, but many structures are incompatible, so we do a prefab based blacklist as well
-    RIPPLE_BLACKLIST_TAGS = { "projectile", "FX", "balloon" },     -- AXE other cases are universal, projectiles shouldn't really ever have ripples
+    RIPPLE_BLACKLIST_TAGS = { "projectile", "FX", "balloon" },   -- AXE other cases are universal, projectiles shouldn't really ever have ripples
 
     -- Rat Poison
     RATPOISON_EAT_DAMAGE = 24,
@@ -523,7 +684,7 @@ TUNING.DSTU = {
     MAGMATILE_HEAT_RADIUS = 8, --Atobá: NOT RECOMMENDED TO INCREASE THIS. TILE DIST CHECK VERY UNPERFORMANT.
     MAGMATILE_REFRESH_THRESHOLD = 300,
     MAGMATILE_DEFAULT_COOL_TIME = 1200,
-    MAGMATILE_ICE_STAFF_COOL_TIME = 1200 * 2,
+    MAGMATILE_ICE_STAFF_COOL_TIME = 1200*2,
 
     MAGMATILE_COOL_TIME_RANGE = 200,
 }
@@ -617,9 +778,10 @@ end
 
 if GetModConfigData("sleepingbuff") then
     TUNING.SLEEP_TICK_PERIOD = TUNING.SLEEP_TICK_PERIOD / GetModConfigData("sleepingbuff")
-    -- TUNING.SLEEP_TICK_PERIOD = TUNING.SLEEP_TICK_PERIOD / UM_CONFIG.SLEEPINGBUFF
+    -- TUNING.SLEEP_TICK_PERIOD = TUNING.SLEEP_TICK_PERIOD / TUNING.DSTU.SLEEPINGBUFF
 end
 
+TUNING.DSTU.SPAWN_PROTECTION = GetModConfigData("_uncompromising_spawnprotection")
 
 TUNING.BATTLESONG_FIRE_RESIST_MOD = 0
 

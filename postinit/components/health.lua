@@ -180,8 +180,8 @@ end
 local function StopDeathStuffHere(self, amount, cause, afflicter, ...)
     local res_item = HasPocketResurrection(self)
     local maykill = math.max(amount, self.minhealth or 0) <= 0
-    if UM_CONFIG.WATHOM_UNDEATH and self.inst:HasTag("wathom") then
-        if maykill and cause == "shadowvortex" and UM_CONFIG.COMPROMISING_VORTEX and not self.inst.sg:HasStateTag("blackpuddle_death") then
+    if TUNING.DSTU.SHADOW_WATHOM and self.inst:HasTag("wathom") then
+        if maykill and cause == "shadowvortex" and TUNING.DSTU.COMPROMISING_SHADOWVORTEX and not self.inst.sg:HasStateTag("blackpuddle_death") then
             self.inst.components.rider:ActualDismount()
             self.inst.sg:GoToState("blackpuddle_death")
             return true
@@ -260,7 +260,7 @@ env.AddComponentPostInit("health", function(self)
         return _DoFireDamage(self, ...)
     end
 
-    if UM_CONFIG.UNCOMPROMISING_1HP == true then-- All this code is here
+    if TUNING.DSTU.ONEHP == true then-- All this code is here
         TUNING.WX78_MAXHEALTH_BOOST = 0
         TUNING.WX78_MAXHEALTH2_MULT = 0
         local _SetMaxHealth = self.SetMaxHealth

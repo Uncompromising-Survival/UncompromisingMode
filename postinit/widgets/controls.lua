@@ -13,7 +13,7 @@ AddClassPostConstruct( "widgets/controls", function(self, inst)
 	self.fogover = self:AddChild( FogOver(ownr) )
 	self.fogover:MoveToBack()
 
-	if UM_CLIENT_CONFIG.UI_SHOWVETCURSE then
+	if TUNING.DSTU.UI_VETCURSE then
 		local Vetcursewidget = require "widgets/vetcursewidget"
 		self.vetcursewidget = self:AddChild( Vetcursewidget(ownr) )
 		self.vetcursewidget:MoveToBack()

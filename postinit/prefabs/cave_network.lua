@@ -3,7 +3,7 @@ GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 local function OnSeasonTick(inst, data)
     local season = data.season
-    if season == "summer" and UM_CONFIG.HOTCAVES then
+    if season == "summer" and TUNING.DSTU.HOTCAVES then
         inst.components.worldtemperature:SetTemperatureMod(TUNING.DSTU.SUMMER_CAVES_TEMP_MULT, TUNING.CAVES_TEMP_LOCUS)
     elseif season == "winter" then
         inst.components.worldtemperature:SetTemperatureMod(TUNING.DSTU.WINTER_CAVES_TEMP_MULT, TUNING.CAVES_TEMP_LOCUS)

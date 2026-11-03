@@ -43,7 +43,7 @@ local function on_burnt(inst)
 end
 
 local function OnAttackOther(inst, data)
-	if data.target ~= nil and data.target:HasTag("player") and not data.target:HasTag("hasplaguemask") and UM_CONFIG.MAXHPHITTERS then
+	if data.target ~= nil and data.target:HasTag("player") and not data.target:HasTag("hasplaguemask") and TUNING.DSTU.MAXHPHITTERS then
 		data.target.components.health:DeltaPenalty(0.01)
 	end
 end
@@ -244,7 +244,7 @@ local function fn()
 	inst.components.health:SetMaxHealth(TUNING.DSTU.RAIDRAT_HEALTH)
 
 	inst:AddComponent("lootdropper")
-    if UM_CONFIG.MONSTERSMALLMEAT then
+    if TUNING.DSTU.MONSTERSMALLMEAT then
         inst.components.lootdropper:AddRandomLoot("monstersmallmeat", 0.34)
     else
         inst.components.lootdropper:AddRandomLoot("monstermeat", 0.34)

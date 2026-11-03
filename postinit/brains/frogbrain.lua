@@ -42,11 +42,11 @@ end
 
 local function FrogFindFood(self)
     local avoidthenoid = RunAway(self.inst, "epic", AVOID_PLAYER_DIST, AVOID_PLAYER_STOP, FearfulOfEpics)
-    if UM_CONFIG.COWARDFROGS then
+    if TUNING.DSTU.COWARDFROGS then
         table.insert(self.bt.root.children, 2, avoidthenoid)
     end
     local findfood = DoAction(self.inst, EatFoodAction, "eat food", true)
-    if UM_CONFIG.HUNGRYFROGS then
+    if TUNING.DSTU.HUNGRYFROGS then
         table.insert(self.bt.root.children, 5, findfood)
     end
 end
@@ -55,11 +55,11 @@ env.AddBrainPostInit("frogbrain", FrogFindFood)
 
 local function ToadFindFood(self)
     local avoidthenoid = RunAway(self.inst, "epic", AVOID_PLAYER_DIST, AVOID_PLAYER_STOP, FearfulOfEpics)
-    if UM_CONFIG.COWARDFROGS then
+    if TUNING.DSTU.COWARDFROGS then
         table.insert(self.bt.root.children, 2, avoidthenoid)
     end
     local findfood = DoAction(self.inst, EatFoodAction, "eat food", true)
-    if UM_CONFIG.HUNGRYFROGS then
+    if TUNING.DSTU.HUNGRYFROGS then
         table.insert(self.bt.root.children, 4, findfood)
     end
 end

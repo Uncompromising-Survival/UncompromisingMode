@@ -38,7 +38,7 @@ local function oneat(inst, data)
         health_delta = health_delta + 20
     end
 
-	if UM_CONFIG.WARLY_CHANGES ~= 0 then
+	if TUNING.DSTU.WARLY_CHANGES ~= 0 then
 		if health_delta > 3 and not inst:HasAnyTag("ignores_foodregen", "ignores_healthregen") then
 			inst.components.debuffable:AddDebuff("healthregenbuff_vetcurse_"..data.food.prefab, "healthregenbuff_vetcurse", {duration = (health_delta * 0.1)})
 		else

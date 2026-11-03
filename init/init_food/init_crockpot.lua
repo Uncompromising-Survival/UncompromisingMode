@@ -26,7 +26,7 @@ local RECIPE_TWIG_LIMIT = GLOBAL.TUNING.DSTU.CROCKPOT_RECIPE_TWIG_LIMIT
 local RECIPE_ICE_PLUS_TWIG_LIMIT = GLOBAL.TUNING.DSTU.CROCKPOT_RECIPE_ICE_PLUS_TWIG_LIMIT
 
 local function LimitIceTestFn(tags, ice_limit)
-    if tags ~= nil and tags.frozen ~= nil and UM_CONFIG.GENERALCROCKBLOCKER then
+    if tags ~= nil and tags.frozen ~= nil and TUNING.DSTU.GENERALCROCKBLOCKER then
         return (not tags.frozen or (tags.frozen <= ice_limit))
     end
     return true
@@ -54,7 +54,7 @@ end
 local function UncompromisingFillers(tags)
     return (
         UncompromisingFillerCustomTestFn(tags, RECIPE_ICE_LIMIT, RECIPE_TWIG_LIMIT, RECIPE_ICE_PLUS_TWIG_LIMIT) and
-        UM_CONFIG.GENERALCROCKBLOCKER) or UM_CONFIG.GENERALCROCKBLOCKER == false
+        TUNING.DSTU.GENERALCROCKBLOCKER) or TUNING.DSTU.GENERALCROCKBLOCKER == false
 end
 
 -------------------------------------------------------------------------------
@@ -71,11 +71,11 @@ local function MonsterMeatSupport(tags)
     return (
         (
             tags ~= nil and not tags.monster or tags.monster < 2 or
-            (tags.meat and (tags.monster - tags.meat * meat_reduction_factor) < 2)) and UM_CONFIG.CROCKPOTMONSTMEAT
-    ) or UM_CONFIG.CROCKPOTMONSTMEAT == false
+            (tags.meat and (tags.monster - tags.meat * meat_reduction_factor) < 2)) and TUNING.DSTU.CROCKPOTMONSTMEAT
+    ) or TUNING.DSTU.CROCKPOTMONSTMEAT == false
 end
 
-if UM_CONFIG.CROCKPOTMONSTMEAT then
+if TUNING.DSTU.CROCKPOTMONSTMEAT then
     AddIngredientValues({ "monstermeat" },
         { meat = 1, monster = GLOBAL.TUNING.DSTU.MONSTER_MEAT_COOKED_MONSTER_VALUE --[[ + meat_reduction_factor]] }, true
         , true) --2.5 monster total, Will be calculated with -1 meat
@@ -99,18 +99,18 @@ if UM_CONFIG.CROCKPOTMONSTMEAT then
         { meat = .5, monster = GLOBAL.TUNING.DSTU.MONSTER_MEAT_DRIED_MONSTER_VALUE }, true, true) --2 monster total, Will be calculated with -1 meat
     --RegisterInventoryItemAtlas("images/inventoryimages/monstersmallmeat_dried.xml", "monstersmallmeat_dried.tex")
 
-    AddIngredientValues({ "um_monsteregg" }, { egg = 1, monster = GLOBAL.UM_CONFIG.MONSTER_EGGS }, true)
+    AddIngredientValues({ "um_monsteregg" }, { egg = 1, monster = GLOBAL.TUNING.DSTU.MONSTER_EGGS }, true)
     --RegisterInventoryItemAtlas("images/inventoryimages/um_monsteregg.xml", "um_monsteregg.tex")
-    AddIngredientValues({ "um_monsteregg_cooked" }, { egg = 1, monster = GLOBAL.UM_CONFIG.MONSTER_EGGS }, true)
+    AddIngredientValues({ "um_monsteregg_cooked" }, { egg = 1, monster = GLOBAL.TUNING.DSTU.MONSTER_EGGS }, true)
     --RegisterInventoryItemAtlas("images/inventoryimages/um_monsteregg_cooked.xml", "um_monsteregg_cooked.tex")
 else
     AddIngredientValues({ "monstersmallmeat" }, { meat = .5, monster = 1 }, true, true)       --2 monster total, Will be calculated with -1 meat
     AddIngredientValues({ "cookedmonstersmallmeat" }, { meat = .5, monster = 1 }, true, true) --2.5 monster total, Will be calculated with -1 meat
     AddIngredientValues({ "monstersmallmeat_dried" }, { meat = .5, monster = 1 }, true, true) --2 monster total, Will be calculated with -1 meat
 
-    AddIngredientValues({ "um_monsteregg" }, { egg = 1, monster = GLOBAL.UM_CONFIG.MONSTER_EGGS }, true)
+    AddIngredientValues({ "um_monsteregg" }, { egg = 1, monster = GLOBAL.TUNING.DSTU.MONSTER_EGGS }, true)
     --RegisterInventoryItemAtlas("images/inventoryimages/um_monsteregg.xml", "um_monsteregg.tex")
-    AddIngredientValues({ "um_monsteregg_cooked" }, { egg = 1, monster = GLOBAL.UM_CONFIG.MONSTER_EGGS }, true)
+    AddIngredientValues({ "um_monsteregg_cooked" }, { egg = 1, monster = GLOBAL.TUNING.DSTU.MONSTER_EGGS }, true)
     --RegisterInventoryItemAtlas("images/inventoryimages/um_monsteregg_cooked.xml", "um_monsteregg_cooked.tex")
 end
 
@@ -160,7 +160,7 @@ recipes.frognewton.priority = 20
 -- But made to be easily customised below for future changes
 -----------------------------------------------------------------
 
-if UM_CONFIG.CROCKPOTMONSTMEAT then
+if TUNING.DSTU.CROCKPOTMONSTMEAT then
     recipes.monsterlasagna.test = function(cooker, names, tags)
         return tags.monster and (tags.meat and tags.monster > tags.meat or tags.monster >= 3) and
             not tags.inedible and LimitIceTestFn(tags, RECIPE_ICE_LIMIT)
@@ -297,11 +297,11 @@ recipes.bunnystew.test = function(cooker, names, tags)
 end
 recipes.bunnystew.card_def = { ingredients = { { "rabbit", 1 }, { "ice", 2 } } }
 -- Original: test = function(cooker, names, tags) return (tags.meat and tags.meat < 1) and (tags.frozen and tags.frozen >= 2) and (not tags.inedible) end
-if UM_CONFIG.BONESTEW_NERF == "bone_appetit" then
+if TUNING.DSTU.BONESTEW == "bone_appetit" then
     recipes.bonestew.test = function(cooker, names, tags)
         return tags.meat and tags.meat >= 3 and names.boneshard and not (tags.monster and tags.monster > 2)
     end
-elseif UM_CONFIG.BONESTEW_NERF == "meatier_stew" then
+elseif TUNING.DSTU.BONESTEW == "meatier_stew" then
     recipes.bonestew.test = function(cooker, names, tags)
         return tags.meat and tags.meat >= 3.5 and not tags.inedible
     end
@@ -577,7 +577,7 @@ InsertIngredientValues({ "um_leafwing" }, { meat = .5, plantmeat = 1 })
 InsertIngredientValues({ "um_ghost_pepper_item" }, { veggie = 1 })
 InsertIngredientValues({ "um_spongeplant_item" }, { veggie = .5 }, true, false, false)
 
-if UM_CONFIG.NEWRECIPES then
+if TUNING.DSTU.NEWRECIPES then
     --InsertIngredientValues({ "firenettles" }, { foliage = 1 }, true, false, false)
     --InsertIngredientValues({ "foliage" }, { foliage = 1 }, true, false, false)
     InsertIngredientValues({ "greenfoliage" }, { foliage = 1 }, false, false, false)
@@ -602,7 +602,7 @@ InsertIngredientValues({"cookedmandrake"}, { veggie = 2 , magic = 2 }, false, fa
 InsertIngredientValues({ "um_meathoney" }, { sweetener = 1, meat = .5, monster = 1 }, false, false, false)
 InsertIngredientValues({ "um_meatcomb" }, { sweetener = 1, meat = .5, monster = GLOBAL.TUNING.DSTU.MONSTER_MEAT_DRIED_MONSTER_VALUE }, false, false, false)
 
-if UM_CONFIG.NEWRECIPES then
+if TUNING.DSTU.NEWRECIPES then
     local cookpots = {
         "cookpot",
         "portablecookpot",
@@ -619,7 +619,7 @@ if UM_CONFIG.NEWRECIPES then
 
     for i, v in pairs(cookpots) do
         for n, b in pairs(um_preparedfoods) do
-            if UM_CONFIG.NEWRECIPES then
+            if TUNING.DSTU.NEWRECIPES then
                 if (b.warly_only and v == "portablecookpot") or not b.warly_only then
                     AddCookerRecipe(v, b)
                 end
@@ -665,7 +665,7 @@ AddPrefabPostInitAny(function(inst)
     end
 end)
 
-if UM_CONFIG.GOODIES_NERF then
+if TUNING.DSTU.GOODIESNERF then
     local foods = {
         GENERIC = { "icecream", "taffy",
         },

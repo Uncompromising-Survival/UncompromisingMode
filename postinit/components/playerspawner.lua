@@ -2,7 +2,7 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 env.AddComponentPostInit("playerspawner", function(self)
-	if UM_CONFIG.UNCOMPROMISING_SPAWNPROTECTION then
+	if TUNING.DSTU.SPAWN_PROTECTION then
 		function self:_ShouldEnableSpawnProtection(inst, player, x, y, z, isloading)
 			if TheWorld.topology.overrides ~= nil and TheWorld.topology.overrides.spawnprotection == "never" then return false end
 			return true

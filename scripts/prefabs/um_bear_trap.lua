@@ -555,7 +555,7 @@ local function ghost_walrusfn() -- ghost walrus
             end
         end
     end)
-    if UM_CONFIG.GHOSTWALRUS == "enabled" then
+    if TUNING.DSTU.GHOSTWALRUS == "enabled" then
         inst:ListenForEvent("timerdone", Spawntrap)
     end
     return inst

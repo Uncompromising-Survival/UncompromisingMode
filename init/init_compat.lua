@@ -78,7 +78,7 @@ env.AddPrefabPostInit("shipwrecked", function(inst)
         return
     end
 
-    if UM_CONFIG.HEATWAVES then
+    if TUNING.DSTU.HEATWAVES then
         inst:AddComponent("um_heatwaves")
     end
 
@@ -86,7 +86,7 @@ env.AddPrefabPostInit("shipwrecked", function(inst)
         inst:AddComponent("ratcheck")
     end
 
-    if UM_CONFIG.UM_STORMS then
+    if TUNING.DSTU.STORMS then
         inst:AddComponent("um_stormspawner")
     end
 end)

@@ -58,7 +58,7 @@ local function CommonFunctions(inst, sound, anim)
         armor:SetKeepOnFinished(true)
     end
 
-    local eater = UM_CONFIG.ARMORREWORK and inst.components.eater
+    local eater = TUNING.DSTU.ARMORREWORK and inst.components.eater
     if eater then
         --local _oneatfn = eater.oneatfn
         eater:SetOnEatFn(function(_inst, food)
@@ -156,7 +156,7 @@ env.AddPrefabPostInit("shieldofterror", function(inst)
 
     if not TheWorld.ismastersim then return end
 
-    if UM_CONFIG.ARMORREWORK and inst.components.armor then
+    if TUNING.DSTU.ARMORREWORK and inst.components.armor then
         inst.components.armor:InitCondition(TUNING.SHIELDOFTERROR_ARMOR * 2.333, TUNING.SHIELDOFTERROR_ABSORPTION)
     end
 

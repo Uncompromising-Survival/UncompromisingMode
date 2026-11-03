@@ -91,12 +91,12 @@ if GLOBAL.NAUGHTY_VALUE["ballphin"] ~= nil then
         end
     end
 
-    if UM_CONFIG.SNOWSTORMS then
+    if TUNING.DSTU.SNOWSTORMS then
         SetRecipeIngredientsForGameTypes("ice", RECIPE_GAME_TYPE.SW, { Ingredient("hail_ice", 4) })
         SetRecipeIngredientsForGameTypes("ice", RECIPE_GAME_TYPE.ROG, { Ingredient("snowball_item", 4) })
     end
 
-    if UM_CONFIG.WIXIE_WALTER then
+    if TUNING.DSTU.WIXIE then
         SetRecipeIngredientsForGameTypes("slingshot_gnasher", RECIPE_GAME_TYPE.SW, { Ingredient("livinglog", 1), Ingredient("nightmarefuel", 2), Ingredient("mosquitosack_yellow", 2) }) --TODO: replace sacks with shark fins.
         SetRecipeIngredientsForGameTypes("slingshot_matilda", RECIPE_GAME_TYPE.SW, { Ingredient("ox_horn", 1), Ingredient("vine", 2), Ingredient("mosquitosack_yellow", 3) }) --TODO: replace sacks with shark fins.
         SetRecipeIngredientsForGameTypes("slingshotammo_rubber", RECIPE_GAME_TYPE.SW, { Ingredient("mosquitosack_yellow", 1) }) --TODO: replace sacks with shark fins.

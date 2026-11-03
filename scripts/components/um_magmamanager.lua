@@ -53,10 +53,10 @@ local function BuildLavaTile(self, x, y, z)
         end
 
         --spawn light
-        --if #TheSim:FindEntities(tcx, 0, tcz, 1, { "magma_tile" }) == 0 then
-        --    local prefab = SpawnPrefab("magma_tile")
-        --    prefab.Transform:SetPosition(tcx, 0, tcz)
-        --end
+        if #TheSim:FindEntities(tcx, 0, tcz, 1, { "magma_tile" }) == 0 then
+            local prefab = SpawnPrefab("magma_tile")
+            prefab.Transform:SetPosition(tcx, 0, tcz)
+        end
     end
 end
 

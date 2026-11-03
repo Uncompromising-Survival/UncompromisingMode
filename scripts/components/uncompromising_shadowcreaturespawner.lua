@@ -8,8 +8,8 @@ return Class(function(self, inst)
     --------------------------------------------------------------------------
     --[[ Constants ]]
     --------------------------------------------------------------------------
-	local dreadeyes_allowed = UM_CONFIG.DREADEYES_ALLOWED
-    local creepingfear_allowed = UM_CONFIG.CREEPINGFEAR_ALLOWED
+	local dreadeyes_allowed = TUNING.DSTU.DREADEYES_ALLOWED
+    local creepingfear_allowed = TUNING.DSTU.CREEPINGFEAR_ALLOWED
     local NON_INSANITY_MODE_DESPAWN_INTERVAL = 0.1
     local NON_INSANITY_MODE_DESPAWN_VARIANCE = 0.1
 

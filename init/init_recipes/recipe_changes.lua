@@ -10,7 +10,7 @@ CONSTRUCTION_PLANS["multiplayer_portal_moonrock_constr"] = {
     Ingredient("moonglass", 5)
 }
 
-if UM_CONFIG.WARLY_CHANGES == 1 then
+if TUNING.DSTU.WARLY_CHANGES == 1 then
     AllRecipes["spicepack"].ingredients = { Ingredient("pigskin", 2), Ingredient("silk", 4), Ingredient("nitre", 4) }
 end
 
@@ -21,8 +21,8 @@ if GetModConfigData("longpig") then
     }
 
     local ghostlyelixir_fastregen = AllRecipes["ghostlyelixir_fastregen"]
-    ghostlyelixir_fastregen.ingredients = { Ingredient("ghostflower", 3) }
-    ghostlyelixir_fastregen.character_ingredients = { Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 40) }
+    ghostlyelixir_fastregen.ingredients = {Ingredient("ghostflower", 3)}
+    ghostlyelixir_fastregen.character_ingredients = {Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 40)}
 end
 
 if GetModConfigData("compostoverrot") then
@@ -106,7 +106,7 @@ if GetModConfigData("wanda_nerf") then
     }
 end
 
-if UM_CONFIG.GOTOBED then
+if TUNING.DSTU.GOTOBED then
     AllRecipes["siestahut"].ingredients = {
         Ingredient("silk", 6),
         Ingredient("boards", 4),
@@ -151,12 +151,12 @@ AllRecipes["goggleshat"].ingredients = {
 
 AllRecipes["lantern"].level = TechTree.Create(TECH.SCIENCE_ONE)
 
-if UM_CONFIG.BATH_HEAL then
-    AllRecipes["bathbomb"].level = TechTree.Create(TECH.CELESTIAL_THREE)
-    AllRecipes["bathbomb"].ingredients = {
-        Ingredient("moon_tree_blossom", 3),
-        Ingredient("nitre", 3)
-    }
+if TUNING.DSTU.BATH_BOMB then
+	AllRecipes["bathbomb"].level = TechTree.Create(TECH.CELESTIAL_THREE)
+	AllRecipes["bathbomb"].ingredients = {
+		Ingredient("moon_tree_blossom", 3),
+		Ingredient("nitre", 3)
+	}
 end
 
 AllRecipes["saddle_race"].ingredients = {
@@ -171,45 +171,45 @@ AllRecipes["walterhat"].ingredients = {
 }
 
 --if GetModConfigData("wicker_inv_regen") ~= "vanilla" then
---AllRecipes["bookstation"].ingredients = {
---Ingredient("boards", 4),
---Ingredient("papyrus", 4),
---Ingredient("featherpencil", 1)
---}
+    --AllRecipes["bookstation"].ingredients = {
+        --Ingredient("boards", 4),
+        --Ingredient("papyrus", 4),
+        --Ingredient("featherpencil", 1)
+    --}
 --end
 
 --if GetModConfigData("applied horticulture") then
---AllRecipes["book_horticulture"].ingredients = {
---Ingredient("papyrus", 2),
---Ingredient("plantmeat", 1),
---Ingredient("poop", 5)
---}
+    --AllRecipes["book_horticulture"].ingredients = {
+        --Ingredient("papyrus", 2),
+        --Ingredient("plantmeat", 1),
+        --Ingredient("poop", 5)
+    --}
 --end
 
 --if GetModConfigData("horticulture, expanded") then
---AllRecipes["book_horticulture_upgraded"].ingredients = {
---Ingredient("book_horticulture", 1),
---Ingredient("treegrowthsolution", 1),
---Ingredient("papyrus", 2)
---}
+    --AllRecipes["book_horticulture_upgraded"].ingredients = {
+        --Ingredient("book_horticulture", 1),
+        --Ingredient("treegrowthsolution", 1),
+        --Ingredient("papyrus", 2)
+    --}
 --end
 
 --if GetModConfigData("the angler") then
---AllRecipes["book_fish"].ingredients = {
---Ingredient("papyrus", 2),
---Ingredient("oceanfishingbobber_oval", 2)
---}
+    --AllRecipes["book_fish"].ingredients = {
+        --Ingredient("papyrus", 2),
+        --Ingredient("oceanfishingbobber_oval", 2)
+    --}
 --end
 
 --if GetModConfigData("lux aeterna") then
---AllRecipes["book_light_upgraded"].ingredients = {
---Ingredient("book_light", 1),
---Ingredient("wormlight", 1),
---Ingredient("papyrus", 2)
---}
+    --AllRecipes["book_light_upgraded"].ingredients = {
+        --Ingredient("book_light", 1),
+        --Ingredient("wormlight", 1),
+        --Ingredient("papyrus", 2)
+    --}
 --end
 
-if UM_CONFIG.WICKERBOTTOM_CHANGES == 2 then
+if TUNING.DSTU.WICKERCHANGES == 2 then
     AllRecipes["book_moon"].ingredients = {
         Ingredient("papyrus", 2),
         Ingredient("moonrocknugget", 2),
@@ -218,11 +218,11 @@ if UM_CONFIG.WICKERBOTTOM_CHANGES == 2 then
 end
 
 --if GetModConfigData("apicultural notes") then
---AllRecipes["book_bees"].ingredients = {
---Ingredient("papyrus", 2),
---Ingredient("honeycomb", 1),
---Ingredient("stinger", 8)
---}
+    --AllRecipes["book_bees"].ingredients = {
+        --Ingredient("papyrus", 2),
+        --Ingredient("honeycomb", 1),
+        --Ingredient("stinger", 8)
+    --}
 --end
 
 -- magnets and dock
@@ -259,7 +259,7 @@ if TUNING.DSTU.ISLAND_ADVENTURES_CLIENT then
     AllRecipes["boat_bumper_limestone_kit"].numtogive = 4
 end
 
-if UM_CONFIG.WOLFGANG then
+if TUNING.DSTU.WOLFGANG_HUNGERMIGHTY then
     AllRecipes["mighty_gym"].ingredients = { Ingredient("boards", 4), Ingredient("cutstone", 2), Ingredient("rope", 3) }
     AllRecipes["dumbbell"].ingredients = { Ingredient("rocks", 4), Ingredient("twigs", 1) }
     AllRecipes["dumbbell_golden"].ingredients = {
@@ -283,12 +283,12 @@ if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then
 
     AllRecipes["battlesong_shadowaligned"] = nil
     --AllRecipes["battlesong_lunaraligned"] = nil
-    --AllRecipes["battlesong_shadowaligned"].builder_skill ="wathgrithr_allegiance_lunar"
-    AllRecipes["battlesong_lunaraligned"].builder_skill = "wathgrithr_allegiance_lunar"
-    AllRecipes["battlesong_container"].ingredients = {
-        Ingredient("boards", 2),
-        Ingredient("goldnugget", 4),
-        Ingredient("beeswax", 2)
+    --AllRecipes["battlesong_shadowaligned"].builder_skill ="wathgrithr_allegiance_lunar"  
+    AllRecipes["battlesong_lunaraligned"].builder_skill ="wathgrithr_allegiance_lunar"  
+    AllRecipes["battlesong_container"].ingredients = { 
+        Ingredient("boards", 2), 
+        Ingredient("goldnugget", 4), 
+        Ingredient("beeswax", 2) 
     }
     AllRecipes["battlesong_fireresistance"].ingredients = {
         Ingredient("papyrus", 1),
@@ -324,8 +324,8 @@ AllRecipes["boat_magnet_beacon"].ingredients = { Ingredient("cutstone", 2), Ingr
 AllRecipes["anchor_item"].ingredients = { Ingredient("boards", 2), Ingredient("rope", 2), Ingredient("cutstone", 1) }
 AllRecipes["anchor"].ingredients = { Ingredient("boards", 2), Ingredient("rope", 2), Ingredient("cutstone", 1) }
 
-AllRecipes["steeringwheel_item"].ingredients = { Ingredient("boards", 1), Ingredient("twigs", 4), Ingredient("rope", 1) }
-AllRecipes["steeringwheel"].ingredients = { Ingredient("boards", 1), Ingredient("twigs", 4), Ingredient("rope", 1) }
+AllRecipes["steeringwheel_item"].ingredients = {Ingredient("boards", 1), Ingredient("twigs", 4), Ingredient("rope", 1)}
+AllRecipes["steeringwheel"].ingredients = {Ingredient("boards", 1), Ingredient("twigs", 4), Ingredient("rope", 1)}
 
 AllRecipes["mast_item"].ingredients = { Ingredient("log", 3), Ingredient("rope", 2), Ingredient("silk", 3) }
 AllRecipes["mast"].ingredients = { Ingredient("log", 2), Ingredient("rope", 2), Ingredient("silk", 3) }
@@ -402,7 +402,7 @@ AllRecipes["seafaring_prototyper"].ingredients = { Ingredient("transistor", 1), 
 
 AllRecipes["woby_treat"].numtogive = 1
 
-if not UM_CONFIG.EYEBRELLAREWORK then
+if not TUNING.DSTU.EYEBRELLAREWORK then
     ChangeSortKey("eyebrellahat", "strawhat", "SUMMER", true)
 end
 
@@ -417,7 +417,7 @@ AddRecipeToFilter("sentryward", "STRUCTURES")
 ChangeSortKey("sentryward", "moondial", "STRUCTURES", true)
 --ChangeSortKey("townportal", "archive_resonator_item", "STRUCTURES", false) -- Setting this in recipes.lua so it's ordered correctly with Archives structures.
 
-if UM_CONFIG.UM_SHAVE_MODE then
+if TUNING.DSTU.SHAVE_MODE then
     AllRecipes["razor"].level = TechTree.Create(TECH.NONE)
 end
 
@@ -430,47 +430,45 @@ end
 
 ----BIG WATHOM ANCIENT KINSHIP I SECTION----
 AllRecipes["thulecite"].no_builder_skill = "wathom_allegiance_neutral"
-AllRecipes["thulecite"].forward_ingredients = { "wathom_thulecite" }
+AllRecipes["thulecite"].forward_ingredients = {"wathom_thulecite"}
 AllRecipes["nightmare_timepiece"].no_builder_skill = "wathom_allegiance_neutral"
-AllRecipes["nightmare_timepiece"].forward_ingredients = { "wathom_nightmare_timepiece" }
+AllRecipes["nightmare_timepiece"].forward_ingredients = {"wathom_nightmare_timepiece"}
 AllRecipes["wall_ruins_item"].no_builder_skill = "wathom_allegiance_neutral"
-AllRecipes["wall_ruins_item"].forward_ingredients = { "wathom_wall_ruins_item" }
+AllRecipes["wall_ruins_item"].forward_ingredients = {"wathom_wall_ruins_item"}
 AllRecipes["orangeamulet"].no_builder_skill = "wathom_allegiance_neutral"
-AllRecipes["orangeamulet"].forward_ingredients = { "wathom_orangeamulet" }
+AllRecipes["orangeamulet"].forward_ingredients = {"wathom_orangeamulet"}
 AllRecipes["yellowamulet"].no_builder_skill = "wathom_allegiance_neutral"
-AllRecipes["yellowamulet"].forward_ingredients = { "wathom_yellowamulet" }
+AllRecipes["yellowamulet"].forward_ingredients = {"wathom_yellowamulet"}
 AllRecipes["greenamulet"].no_builder_skill = "wathom_allegiance_neutral"
-AllRecipes["greenamulet"].forward_ingredients = { "wathom_greenamulet" }
+AllRecipes["greenamulet"].forward_ingredients = {"wathom_greenamulet"}
 AllRecipes["orangestaff"].no_builder_skill = "wathom_allegiance_neutral"
-AllRecipes["orangestaff"].forward_ingredients = { "wathom_orangestaff" }
+AllRecipes["orangestaff"].forward_ingredients = {"wathom_orangestaff"}
 AllRecipes["yellowstaff"].no_builder_skill = "wathom_allegiance_neutral"
-AllRecipes["yellowstaff"].forward_ingredients = { "wathom_yellowstaff" }
+AllRecipes["yellowstaff"].forward_ingredients = {"wathom_yellowstaff"}
 AllRecipes["greenstaff"].no_builder_skill = "wathom_allegiance_neutral"
-AllRecipes["greenstaff"].forward_ingredients = { "wathom_greenstaff" }
+AllRecipes["greenstaff"].forward_ingredients = {"wathom_greenstaff"}
 AllRecipes["multitool_axe_pickaxe"].no_builder_skill = "wathom_allegiance_neutral"
-AllRecipes["multitool_axe_pickaxe"].forward_ingredients = { "wathom_multitool_axe_pickaxe" }
+AllRecipes["multitool_axe_pickaxe"].forward_ingredients = {"wathom_multitool_axe_pickaxe"}
 AllRecipes["nutrientsgoggleshat"].no_builder_skill = "wathom_allegiance_neutral"
-AllRecipes["nutrientsgoggleshat"].forward_ingredients = { "wathom_nutrientsgoggleshat" }
+AllRecipes["nutrientsgoggleshat"].forward_ingredients = {"wathom_nutrientsgoggleshat"}
 AllRecipes["ruinshat"].no_builder_skill = "wathom_allegiance_neutral"
-AllRecipes["ruinshat"].forward_ingredients = { "wathom_ruinshat" }
+AllRecipes["ruinshat"].forward_ingredients = {"wathom_ruinshat"}
 AllRecipes["armorruins"].no_builder_skill = "wathom_allegiance_neutral"
-AllRecipes["armorruins"].forward_ingredients = { "wathom_armorruins" }
+AllRecipes["armorruins"].forward_ingredients = {"wathom_armorruins"}
 AllRecipes["ruins_bat"].no_builder_skill = "wathom_allegiance_neutral"
-AllRecipes["ruins_bat"].forward_ingredients = { "wathom_ruins_bat" }
+AllRecipes["ruins_bat"].forward_ingredients = {"wathom_ruins_bat"}
 AllRecipes["eyeturret_item"].no_builder_skill = "wathom_allegiance_neutral"
-AllRecipes["eyeturret_item"].forward_ingredients = { "wathom_eyeturret_item" }
+AllRecipes["eyeturret_item"].forward_ingredients = {"wathom_eyeturret_item"}
 AllRecipes["shadow_forge_kit"].no_builder_skill = "wathom_allegiance_neutral"
-AllRecipes["shadow_forge_kit"].forward_ingredients = { "wathom_shadow_forge_kit" }
+AllRecipes["shadow_forge_kit"].forward_ingredients = {"wathom_shadow_forge_kit"}
 AllRecipes["blueprint_craftingset_ruins_builder"].no_builder_skill = "wathom_allegiance_neutral"
 --AllRecipes["blueprint_craftingset_ruins_builder"].forward_ingredients = {"wathom_blueprint_craftingset_ruins_builder"}
 AllRecipes["blueprint_craftingset_ruinsglow_builder"].no_builder_skill = "wathom_allegiance_neutral"
 --AllRecipes["blueprint_craftingset_ruinsglow_builder"].forward_ingredients = {"wathom_blueprint_craftingset_ruinsglow_builder"}
 
 -- Thermic tools recipe overrides
-if UM_CONFIG.MAGMA_CAVES then
-    AllRecipes["fumaroleaxe"].ingredients = { Ingredient("axe", 1), Ingredient("mitegland", 2), Ingredient("um_fyrite", 3) }
-    AllRecipes["fumarolepickaxe"].ingredients = { Ingredient("pickaxe", 1), Ingredient("mitegland", 2), Ingredient("um_fyrite", 3) }
-    AllRecipes["fumaroleshovel"].ingredients = { Ingredient("shovel", 1), Ingredient("mitegland", 2), Ingredient("um_fyrite", 3) }
-    AllRecipes["fumarolehammer"].ingredients = { Ingredient("hammer", 1), Ingredient("mitegland", 2), Ingredient("um_fyrite", 3) }
-    AllRecipes["fumarole_farm_hoe"].ingredients = { Ingredient("farm_hoe", 1), Ingredient("mitegland", 2), Ingredient("um_fyrite", 3) }
-end
+AllRecipes["fumaroleaxe"].ingredients = { Ingredient("axe", 1), Ingredient("mitegland", 2), Ingredient("um_fyrite", 3) }
+AllRecipes["fumarolepickaxe"].ingredients = { Ingredient("pickaxe", 1), Ingredient("mitegland", 2), Ingredient("um_fyrite", 3) }
+AllRecipes["fumaroleshovel"].ingredients = { Ingredient("shovel", 1), Ingredient("mitegland", 2), Ingredient("um_fyrite", 3) }
+AllRecipes["fumarolehammer"].ingredients = { Ingredient("hammer", 1), Ingredient("mitegland", 2), Ingredient("um_fyrite", 3) }
+AllRecipes["fumarole_farm_hoe"].ingredients = { Ingredient("farm_hoe", 1), Ingredient("mitegland", 2), Ingredient("um_fyrite", 3) }

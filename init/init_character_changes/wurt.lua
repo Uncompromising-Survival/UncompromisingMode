@@ -34,7 +34,7 @@ for _, prefab in ipairs(lunar_merms) do
 
         local _OnChangedLeaderLunar = inst.components.follower.OnChangedLeader
         local function OnChangedLeaderLunar(_inst, new_leader, prev_leader, ...)
-            return not UM_CONFIG.MERMTWEAKS and _OnChangedLeaderLunar(_inst, new_leader, prev_leader, ...) or nil
+            return not TUNING.DSTU.MERMTWEAKS and _OnChangedLeaderLunar(_inst, new_leader, prev_leader, ...) or nil
         end
         inst.components.follower.OnChangedLeader = OnChangedLeaderLunar
 

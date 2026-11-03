@@ -6,7 +6,7 @@ local function VetCurseItem(inst, item)
         return
     end
 
-    if UM_CONFIG.VETCURSE ~= "off" and inst.components.lootdropper then
+    if TUNING.DSTU.VETCURSE ~= "off" and inst.components.lootdropper then
         inst.components.lootdropper:AddChanceLoot(item, 1)
     end
 end

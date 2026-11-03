@@ -63,7 +63,7 @@ local function OnFullMoon(self, inst, isfullmoon, new_inst)
 	end
 
 end
-if UM_CONFIG.MOON_TRANSFORMATIONS then
+if TUNING.DSTU.MOON_TRANSFORMATIONS then
 	env.AddPrefabPostInit("hound", function(inst)
 		if not TheWorld.ismastersim then
 			return

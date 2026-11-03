@@ -122,7 +122,7 @@ local function LaunchWeb(inst, target)
 end
 
 local function SpiderQueenFunctions(inst)
-    if UM_CONFIG.HARDER_SPIDER_QUEEN then
+    if TUNING.DSTU.HARDER_SPIDERQUEEN then
         --inst.WebReady = true
         --inst:AddComponent("inventory")
         --inst.weaponitems = {}
@@ -147,7 +147,7 @@ local function SpiderQueenFunctions(inst)
         end
     end
 
-    if UM_CONFIG.MOON_TRANSFORMATIONS then
+    if TUNING.DSTU.MOON_TRANSFORMATIONS then
         inst:ListenForEvent("death", OnDead)
     end
 end

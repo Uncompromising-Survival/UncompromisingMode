@@ -2,11 +2,11 @@
 --GLOBAL.TUNING.SLEEP_TICK_PERIOD = GLOBAL.TUNING.SLEEP_TICK_PERIOD / 2
 
 AddComponentPostInit("sleepingbaguser", function(self)
-    if UM_CONFIG.GOTOBED ~= false then
+    if TUNING.DSTU.GOTOBED ~= false then
         local _DoSleep = self.DoSleep
         function self:DoSleep(bed, ...)
             local ret = _DoSleep(self, bed, ...)
-            if UM_CONFIG.GOTOBED == "default" then
+            if TUNING.DSTU.GOTOBED == "default" then
                 self.healthtask = self.inst:DoPeriodicTask(self.bed.components.sleepingbag.tick_period, function()
                     local health_tick = self.bed.components.sleepingbag.health_tick * self.health_bonus_mult
                     if self.inst.components.health and not self.inst:HasTag("TiddleVirus")

@@ -18,7 +18,7 @@ for i, TAG in pairs(TOWORK_CANT_TAGS) do
     table.insert(_TOWORK_CANT_TAGS, TAG)
 end
 
-if UM_CONFIG.WAXWELL then
+if TUNING.DSTU.WAXWELL then
     local _IsLeaderInCombat = UMUpvalueHacker.TryGetUpvalue(ShadowWaxwellBrain.OnStart, "IsLeaderInCombat")
     if _IsLeaderInCombat then
         local function IsLeaderInCombat() return false end
@@ -316,7 +316,7 @@ local function WaxwellUMStuff(inst)
     inst:ListenForEvent("ms_becameghost", OnBecameGhost)
     inst:ListenForEvent("ms_playerreroll", ForceDespawnShadowMinions)]]
 
-    if UM_CONFIG.WAXWELL then
+    if TUNING.DSTU.WAXWELL then
         inst:ListenForEvent("itemget", OnGetItem)
         inst:ListenForEvent("equip", OnGetItem)
         inst:ListenForEvent("itemlose", OnLoseItem)
@@ -363,7 +363,7 @@ env.AddPrefabPostInit("waxwell", function(inst)
     WaxwellUMStuff(inst)
 end)
 
-if UM_CONFIG.WAXWELL then
+if TUNING.DSTU.WAXWELL then
     local function ShadowGearClientFunctions(inst)
         local _displaynamefn = inst.displaynamefn
         inst.displaynamefn = function(_inst, ...)

@@ -48,7 +48,7 @@ local function create_common(pawntype)
 
     -------------------
     inst:AddComponent("childspawner")
-    if UM_CONFIG.AMALGAMS then
+    if TUNING.DSTU.AMALGAMS then
         inst.components.childspawner.childname = "um_pawn"..pawntype
     else
         inst.components.childspawner.childname = "um_pawn_nightmare"
@@ -59,7 +59,7 @@ local function create_common(pawntype)
     inst.components.childspawner:SetMaxChildren(1)
 	inst.components.childspawner.spawnoffscreen = true
 
-	if UM_CONFIG.PAWNS then
+	if TUNING.DSTU.PAWNS then
 		inst.components.childspawner:StartSpawning()
 	end
 

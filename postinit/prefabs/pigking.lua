@@ -1,7 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
-if UM_CONFIG.PIGKING_GUARDS then
+if TUNING.DSTU.PK_GUARDS then
     local UMUpvalueHacker = require("tools/um_upvaluehacker")
 
     local function ErectPoleBuild(inst, x, y, z)

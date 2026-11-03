@@ -46,7 +46,7 @@ GLOBAL.GetDescription = function(inst, item, ...)
         end
 
         if prefab and item and item:HasTag("heatrock") and character ~= nil and character ~= "WES" and
-            UM_CONFIG.INSUL_THERMALSTONE then
+            TUNING.DSTU.INSUL_THERMALSTONE then
             if item.components and item.components.temperature ~= nil then
 
                 local winter_insulation, summer_insulation = item.components.temperature:GetInsulation()

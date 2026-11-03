@@ -1,16 +1,4 @@
-
 local require = GLOBAL.require
-
-local ConfigBuilder = require("um_configs")
-
-ConfigBuilder.BuildConfigs(modname)
-
-
-UM_CONFIG = ConfigBuilder.ServerConfigs
-UM_CLIENT_CONFIG = ConfigBuilder.ClientConfigs
-
-GLOBAL.UM_CONFIG = UM_CONFIG
-GLOBAL.UM_CLIENT_CONFIG = UM_CLIENT_CONFIG
 
 --live: 󰀕 white skull
 --beta: 󰀕 red skull

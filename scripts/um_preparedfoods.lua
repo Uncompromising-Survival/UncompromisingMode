@@ -4,7 +4,7 @@ local RECIPE_ICE_PLUS_TWIG_LIMIT = TUNING.DSTU.CROCKPOT_RECIPE_ICE_PLUS_TWIG_LIM
 local easing = require("easing")
 
 local function LimitIceTestFn(tags, ice_limit)
-    if tags ~= nil and tags.frozen ~= nil and UM_CONFIG.GENERALCROCKBLOCKER then
+    if tags ~= nil and tags.frozen ~= nil and TUNING.DSTU.GENERALCROCKBLOCKER then
         return (not tags.frozen or (tags.frozen + (tags.foliage ~= nil and tags.foliage or 0) <= ice_limit))
     end
     return true
@@ -32,7 +32,7 @@ end
 local function UncompromisingFillers(tags)
     return (
         UncompromisingFillerCustomTestFn(tags, RECIPE_ICE_LIMIT, RECIPE_TWIG_LIMIT, RECIPE_ICE_PLUS_TWIG_LIMIT) and
-        UM_CONFIG.GENERALCROCKBLOCKER) or UM_CONFIG.GENERALCROCKBLOCKER == false
+        TUNING.DSTU.GENERALCROCKBLOCKER) or TUNING.DSTU.GENERALCROCKBLOCKER == false
 end
 
 local function UnGhost(eater)
@@ -389,7 +389,7 @@ local um_preparedfoods =
 
     snowcone =
     {
-        test = function(cooker, names, tags) return UM_CONFIG.ICECROCKBLOCKER == true and ((tags.frozen and tags.frozen > 1) or (tags.frozen and names.twigs)) end,
+        test = function(cooker, names, tags) return TUNING.DSTU.ICECROCKBLOCKER == true and ((tags.frozen and tags.frozen > 1) or (tags.frozen and names.twigs)) end,
         hunger = 9.375,
         health = 3,
         sanity = 5,
@@ -800,7 +800,7 @@ local um_preparedfoods =
 }
 
 
-if UM_CONFIG.BONESTEW_NERF == "bone_appetit" then
+if TUNING.DSTU.BONESTEW == "bone_appetit" then
     um_preparedfoods["um_kebab"] =
     {
         test = function(cooker, names, tags) return (tags.meat and tags.meat > 2.5) and not (tags.monster and tags.monster > 2.5) and not names.boneshard end,

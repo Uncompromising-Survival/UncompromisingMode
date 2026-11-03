@@ -124,7 +124,7 @@ env.AddPrefabPostInit("wormwood", function(inst)
     inst:AddTag("hayfever_immune")
 end)
 
-if UM_CONFIG.WORMWOOD_PLANTS then
+if TUNING.DSTU.WORMWOOD_CONFIG_PLANTS then
     env.AddPrefabPostInit("wormwood", function(inst)
         if not TheWorld.ismastersim then
             return
@@ -134,7 +134,7 @@ if UM_CONFIG.WORMWOOD_PLANTS then
     end)
 end
 
-if UM_CONFIG.WORMWOOD_FIRE then
+if TUNING.DSTU.WORMWOOD_CONFIG_FIRE then
     env.AddPrefabPostInit("wormwood", function(inst)
         if not TheWorld.ismastersim then
             return
@@ -169,7 +169,7 @@ local function UpdateBloomStageUM(inst, stage) --Checks the bloom stage in a fri
     end)
 end
 
-if UM_CONFIG.WORMWOOD_TRAPBUFFS then
+if TUNING.DSTU.WORMWOOD_CONFIG_TRAPS then
     env.AddPrefabPostInit("bramblefx_trap", function(inst)
         inst.canhitplayers = false
     end)
@@ -193,7 +193,7 @@ if UM_CONFIG.WORMWOOD_TRAPBUFFS then
 end
 
 
-if UM_CONFIG.WORMWOOD_PHOTOSYNTHESIS then
+if TUNING.DSTU.WORMWOOD_PHOTOSYNTHESIS then
     --------------------------------------------------------------------------------------------------------------------------------
     -- [ Final Built Skilltree ] ---------------------------------------------------------------------------------------------------
     --------------------------------------------------------------------------------------------------------------------------------

@@ -1,14 +1,14 @@
 --- RED
 AddRoom("RedMushForest_Petrified", {
-    colour = { r = 0.8, g = 0.1, b = 0.1, a = 0.9 },
+    colour={r=0.8,g=0.1,b=0.1,a=0.9},
     value = WORLD_TILES.FUNGUSRED,
-    tags = { "Hutch_Fishbowl" },
-    contents = {
+    tags = {"Hutch_Fishbowl"},
+    contents =  {
         distributepercent = .4,
-        distributeprefabs =
+        distributeprefabs=
         {
             um_redmushtree_gemless = 6.0,
-            um_redmushtree_gem = 1,
+			um_redmushtree_gem = 1,
             flower_cave = 0.2,
             flower_cave_double = 0.1,
             flower_cave_triple = 0.1,
@@ -25,15 +25,15 @@ AddRoom("RedMushForest_Petrified", {
     }
 })
 AddRoom("RedSpiderForest_Petrified", {
-    colour = { r = 0.8, g = 0.1, b = 0.4, a = 0.9 },
+    colour={r=0.8,g=0.1,b=0.4,a=0.9},
     value = WORLD_TILES.FUNGUSRED,
-    tags = { "Hutch_Fishbowl" },
-    contents = {
+    tags = {"Hutch_Fishbowl"},
+    contents =  {
         distributepercent = .4,
-        distributeprefabs =
+        distributeprefabs=
         {
             um_redmushtree_gemless = 0.5,
-            um_redmushtree_gem = 1,
+			um_redmushtree_gem = 1,
             red_mushroom = 0.25,
             flower_cave = 0.2,
             flower_cave_double = 0.1,
@@ -53,15 +53,15 @@ AddRoom("RedSpiderForest_Petrified", {
 
 --- GREEN
 AddRoom("GreenMushForest_Petrified", {
-    colour = { r = 0.1, g = 0.8, b = 0.1, a = 0.9 },
+    colour={r=0.1,g=0.8,b=0.1,a=0.9},
     value = WORLD_TILES.FUNGUSGREEN,
-    tags = { "Hutch_Fishbowl" },
-    contents = {
+    tags = {"Hutch_Fishbowl"},
+    contents =  {
         distributepercent = .7,
-        distributeprefabs =
+        distributeprefabs=
         {
             um_greenmushtree_gemless = 3.0,
-            um_greenmushtree_gem = 0.5,
+			um_greenmushtree_gem = 0.5,
             green_mushroom = 0.5,
             flower_cave = 0.2,
             flower_cave_double = 0.1,
@@ -78,18 +78,18 @@ AddRoom("GreenMushForest_Petrified", {
 })
 
 AddRoom("GreenMushRabbits_Petrified", {
-    colour = { r = 0.1, g = 0.8, b = 0.3, a = 0.9 },
+    colour={r=0.1,g=0.8,b=0.3,a=0.9},
     value = WORLD_TILES.FUNGUSGREEN,
-    tags = { "Hutch_Fishbowl" },
-    contents = {
-        countstaticlayouts = {
-            ["RabbitTown"] = 1,
+    tags = {"Hutch_Fishbowl"},
+    contents =  {
+        countstaticlayouts={
+            ["RabbitTown"]=1,
         },
         distributepercent = .4,
-        distributeprefabs =
+        distributeprefabs=
         {
             um_greenmushtree_gemless = 2.0,
-            um_greenmushtree_gem = 0.5,
+			um_greenmushtree_gem = 0.5,
             green_mushroom = 0.5,
             flower_cave = 0.2,
             flower_cave_double = 0.1,
@@ -115,15 +115,15 @@ AddRoom("GreenMushRabbits_Petrified", {
 })
 --- BLUE
 AddRoom("BlueMushForest_Petrified", {
-    colour = { r = 0.1, g = 0.1, b = 0.8, a = 0.9 },
+    colour={r=0.1,g=0.1,b=0.8,a=0.9},
     value = WORLD_TILES.FUNGUS,
-    tags = { "Hutch_Fishbowl" },
-    contents = {
+    tags = {"Hutch_Fishbowl"},
+    contents =  {
         distributepercent = .6,
-        distributeprefabs =
+        distributeprefabs=
         {
             um_bluemushtree_gemless = 3.0,
-            um_bluemushtree_gem = 0.2,
+			um_bluemushtree_gem = 0.2,
             blue_mushroom = 0.5,
             flower_cave = 0.1,
             flower_cave_double = 0.05,
@@ -139,15 +139,15 @@ AddRoom("BlueMushForest_Petrified", {
 })
 
 AddRoom("BlueSpiderForest_Petrified", {
-    colour = { r = 0.1, g = 0.1, b = 0.8, a = 0.9 },
+    colour={r=0.1,g=0.1,b=0.8,a=0.9},
     value = WORLD_TILES.FUNGUS,
-    tags = { "Hutch_Fishbowl" },
-    contents = {
+    tags = {"Hutch_Fishbowl"},
+    contents =  {
         distributepercent = .7,
-        distributeprefabs =
+        distributeprefabs=
         {
             um_bluemushtree_gemless = 3.0,
-            um_bluemushtree_gem = 1,
+			um_bluemushtree_gem = 1,
             blue_mushroom = 2.5,
             flower_cave = 0.1,
             flower_cave_double = 0.05,
@@ -164,13 +164,13 @@ AddRoom("BlueSpiderForest_Petrified", {
 })
 -- NOISE
 AddRoom("FungusNoiseForest_Petrified", {
-    colour = { r = 1.0, g = 1.0, b = 1.0, a = 0.9 },
+    colour={r=1.0,g=1.0,b=1.0,a=0.9},
     value = WORLD_TILES.FUNGUS_NOISE,
-    tags = { "Hutch_Fishbowl" },
+    tags = {"Hutch_Fishbowl"},
     type = NODE_TYPE.Room,
-    contents = {
+    contents =  {
         distributepercent = .4,
-        distributeprefabs =
+        distributeprefabs=
         {
             um_redmushtree_gemless = 8.0,
             um_greenmushtree_gemless = 8.0,
@@ -191,18 +191,18 @@ AddRoom("FungusNoiseForest_Petrified", {
         countprefabs = {
             --um_poofshroom_node_blue = 1,
             --um_poofshroom_node_green = 1,
-            --um_poofshroom_node_red = 1,
+            --um_poofshroom_node_red = 1,      
         }
     }
 })
 AddRoom("FungusNoiseMeadow_Petrified", {
-    colour = { r = 1.0, g = 1.0, b = 1.0, a = 0.9 },
+    colour={r=1.0,g=1.0,b=1.0,a=0.9},
     value = WORLD_TILES.FUNGUS_NOISE,
-    tags = { "Hutch_Fishbowl" },
+    tags = {"Hutch_Fishbowl"},
     type = NODE_TYPE.Room,
-    contents = {
+    contents =  {
         distributepercent = .25,
-        distributeprefabs =
+        distributeprefabs=
         {
             um_redmushtree_gemless = 1.0,
             um_greenmushtree_gemless = 1.0,
@@ -223,22 +223,22 @@ AddRoom("FungusNoiseMeadow_Petrified", {
         countprefabs = {
             --um_poofshroom_node_blue = 1,
             --um_poofshroom_node_green = 1,
-            --um_poofshroom_node_red = 1,
+            --um_poofshroom_node_red = 1,      
         }
     }
 })
 
 AddRoom("AnimalHoles", {
-    colour = { r = 0.1, g = 0.8, b = 0.2, a = 0.9 },
+    colour={r=0.1,g=0.8,b=0.2,a=0.9},
     value = WORLD_TILES.SINKHOLE,
-    tags = { "Hutch_Fishbowl" },
-    contents = {
-        countprefabs = {
-            um_sinkmound_rock_gemless = function() return math.random(3, 5) end,
-            um_sinkmound_rock = function() return math.random(0, 2) end,
-        },
+    tags = {"Hutch_Fishbowl"},
+    contents =  {
+		countprefabs = {
+			um_sinkmound_rock_gemless = function() return math.random(3,5) end,
+			um_sinkmound_rock = function() return math.random(0,2) end,
+		},
         distributepercent = .1,
-        distributeprefabs =
+        distributeprefabs=
         {
             grass = 2,
             cavelight = 0.6,
@@ -247,13 +247,13 @@ AddRoom("AnimalHoles", {
 })
 
 AddRoom("LichenLandMONKEY", {
-    colour = { r = 0.3, g = 0.2, b = 0.1, a = 0.3 },
+    colour={r=0.3,g=0.2,b=0.1,a=0.3},
     value = WORLD_TILES.MUD,
-    tags = { "Hutch_Fishbowl" },
+    tags = {"Hutch_Fishbowl"},
     random_node_entrance_weight = 0,
-    contents = {
+    contents =  {
         distributepercent = 0.3,
-        distributeprefabs =
+        distributeprefabs=
         {
             lichen = 1.0,
             monkeybarrel_spawner = 0.1,
@@ -265,20 +265,20 @@ AddRoom("LichenLandMONKEY", {
             um_slimestone_rock = 0.05,
             worm_spawner = 0.1,
         },
-        countprefabs = {
-            um_slimestone_respawner = function() return math.random(2, 3) end,
-        },
+		countprefabs = {
+			um_slimestone_respawner = function() return math.random(2,3) end,
+		},
     }
 })
 
 AddRoom("LichenLandHub", {
-    colour = { r = 0.3, g = 0.2, b = 0.1, a = 0.3 },
+    colour={r=0.3,g=0.2,b=0.1,a=0.3},
     value = WORLD_TILES.MUD,
-    tags = { "Hutch_Fishbowl" },
+    tags = {"Hutch_Fishbowl"},
     random_node_entrance_weight = 0,
-    contents = {
+    contents =  {
         distributepercent = 0.35,
-        distributeprefabs =
+        distributeprefabs=
         {
             lichen = 1.0,
             monkeybarrel_spawner = 0.1,
@@ -289,8 +289,9 @@ AddRoom("LichenLandHub", {
             um_slimestone_rock_gemless = 0.2,
             um_slimestone_rock = 0.05,
         },
-        countprefabs = {
-            um_slimestone_respawner = function() return math.random(2, 3) end,
-        },
+		countprefabs = {
+			um_slimestone_respawner = function() return math.random(2,3) end,
+		},
     }
 })
+

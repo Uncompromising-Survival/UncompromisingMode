@@ -9,7 +9,7 @@ GLOBAL.setfenv(1, GLOBAL)
     for insulation. --KoreanWaffles
 ]]
 
-if UM_CONFIG.INSUL_THERMALSTONE then
+if TUNING.DSTU.INSUL_THERMALSTONE then
     local base_insulation = TUNING.INSULATION_TINY --60 insulation
 
     local function CalculateInsulation(inst)

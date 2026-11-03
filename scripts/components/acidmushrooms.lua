@@ -32,17 +32,17 @@ local function GetPlayerFromUserHash(c)
 end
 
 local function SpawnAcidMushrooms(spawnpt)
-    local x = GetRandomWithVariance(spawnpt.x, UM_CONFIG.TOADSTOOL_ACIDMUSHROOM.RADIUS)
-    local z = GetRandomWithVariance(spawnpt.z, UM_CONFIG.TOADSTOOL_ACIDMUSHROOM.RADIUS)
+    local x = GetRandomWithVariance(spawnpt.x, TUNING.DSTU.TOADSTOOL_ACIDMUSHROOM.RADIUS)
+    local z = GetRandomWithVariance(spawnpt.z, TUNING.DSTU.TOADSTOOL_ACIDMUSHROOM.RADIUS)
 
     local function IsValidAcidMushroomPosition(offset)
         local x1, z1 = x + offset.x, z + offset.z
-        if #TheSim:FindEntities(x1, 0, z1, UM_CONFIG.TOADSTOOL_ACIDMUSHROOM.RADIUS * 1.9, { "antlion_sinkhole_blocker" } --[[TODO?]]) > 0 then
+        if #TheSim:FindEntities(x1, 0, z1, TUNING.DSTU.TOADSTOOL_ACIDMUSHROOM.RADIUS * 1.9, { "antlion_sinkhole_blocker" } --[[TODO?]]) > 0 then
             return false
         end
         for dx = -1, 1 do
             for dz = -1, 1 do
-                if not _world.Map:IsPassableAtPoint(x1 + dx * UM_CONFIG.TOADSTOOL_ACIDMUSHROOM.RADIUS, 0, z1 + dz * UM_CONFIG.TOADSTOOL_ACIDMUSHROOM.RADIUS) then
+                if not _world.Map:IsPassableAtPoint(x1 + dx * TUNING.DSTU.TOADSTOOL_ACIDMUSHROOM.RADIUS, 0, z1 + dz * TUNING.DSTU.TOADSTOOL_ACIDMUSHROOM.RADIUS) then
                     return false
                 end
             end
@@ -52,9 +52,9 @@ local function SpawnAcidMushrooms(spawnpt)
 
     local offset = Vector3(0, 0, 0)
     offset = IsValidAcidMushroomPosition(offset) and offset or
-    FindValidPositionByFan(math.random() * 2 * PI, UM_CONFIG.TOADSTOOL_ACIDMUSHROOM.RADIUS * 1.8 + math.random(), 9, IsValidAcidMushroomPosition) or
-    FindValidPositionByFan(math.random() * 2 * PI, UM_CONFIG.TOADSTOOL_ACIDMUSHROOM.RADIUS * 2.9 + math.random(), 17, IsValidAcidMushroomPosition) or
-    FindValidPositionByFan(math.random() * 2 * PI, UM_CONFIG.TOADSTOOL_ACIDMUSHROOM.RADIUS * 3.9 + math.random(), 17, IsValidAcidMushroomPosition) or
+    FindValidPositionByFan(math.random() * 2 * PI, TUNING.DSTU.TOADSTOOL_ACIDMUSHROOM.RADIUS * 1.8 + math.random(), 9, IsValidAcidMushroomPosition) or
+    FindValidPositionByFan(math.random() * 2 * PI, TUNING.DSTU.TOADSTOOL_ACIDMUSHROOM.RADIUS * 2.9 + math.random(), 17, IsValidAcidMushroomPosition) or
+    FindValidPositionByFan(math.random() * 2 * PI, TUNING.DSTU.TOADSTOOL_ACIDMUSHROOM.RADIUS * 3.9 + math.random(), 17, IsValidAcidMushroomPosition) or
     nil
 
     if offset ~= nil then
@@ -69,14 +69,14 @@ end
 local WARNING_RADIUS = 3.5
 local function DoTargetWarning(targetinfo)
     if targetinfo.warnings == nil then
-        targetinfo.warnings = UM_CONFIG.TOADSTOOL_ACIDMUSHROOM.NUM_WARNINGS
-        targetinfo.next_warning = math.random() * UM_CONFIG.TOADSTOOL_ACIDMUSHROOM.WARNING_DELAY_VARIANCE
+        targetinfo.warnings = TUNING.DSTU.TOADSTOOL_ACIDMUSHROOM.NUM_WARNINGS
+        targetinfo.next_warning = math.random() * TUNING.DSTU.TOADSTOOL_ACIDMUSHROOM.WARNING_DELAY_VARIANCE
     elseif targetinfo.warnings >= 0 then
         --Handle locally
-        ShakeAllCameras(CAMERASHAKE.SIDE, UM_CONFIG.TOADSTOOL_ACIDMUSHROOM.WARNING_DELAY, .04, .05, targetinfo.pos, 6)
+        ShakeAllCameras(CAMERASHAKE.SIDE, TUNING.DSTU.TOADSTOOL_ACIDMUSHROOM.WARNING_DELAY, .04, .05, targetinfo.pos, 6)
 
         --TODO?
-        for i = 1, math.ceil((UM_CONFIG.TOADSTOOL_ACIDMUSHROOM.NUM_WARNINGS - (targetinfo.warnings or 0) + 1) / 3.2) do
+        for i = 1, math.ceil((TUNING.DSTU.TOADSTOOL_ACIDMUSHROOM.NUM_WARNINGS - (targetinfo.warnings or 0) + 1) / 3.2) do
             local fxpt = targetinfo.pos + Vector3((math.random() * (WARNING_RADIUS*2)) - WARNING_RADIUS, 0, (math.random() * (WARNING_RADIUS*2)) - WARNING_RADIUS)
             local rocks = SpawnPrefab("sinkhole_warn_fx_"..math.random(3)).Transform:SetPosition(fxpt:Get())
         end
@@ -90,9 +90,9 @@ local function DoTargetWarning(targetinfo)
         if targetinfo.warnings <= 0 or targetinfo.client == nil then
             targetinfo.warnings = nil
             targetinfo.next_warning = nil
-            targetinfo.next_attack = UM_CONFIG.TOADSTOOL_ACIDMUSHROOM.WARNING_DELAY + math.random() * UM_CONFIG.TOADSTOOL_ACIDMUSHROOM.WARNING_DELAY_VARIANCE
+            targetinfo.next_attack = TUNING.DSTU.TOADSTOOL_ACIDMUSHROOM.WARNING_DELAY + math.random() * TUNING.DSTU.TOADSTOOL_ACIDMUSHROOM.WARNING_DELAY_VARIANCE
         else
-            targetinfo.next_warning = UM_CONFIG.TOADSTOOL_ACIDMUSHROOM.WARNING_DELAY + math.random() * UM_CONFIG.TOADSTOOL_ACIDMUSHROOM.WARNING_DELAY_VARIANCE
+            targetinfo.next_warning = TUNING.DSTU.TOADSTOOL_ACIDMUSHROOM.WARNING_DELAY + math.random() * TUNING.DSTU.TOADSTOOL_ACIDMUSHROOM.WARNING_DELAY_VARIANCE
         end
     end
 end
@@ -100,12 +100,12 @@ end
 local function DoTargetAttack(targetinfo)
     --Handle locally
     targetinfo.attacks = targetinfo.attacks - 1
-    targetinfo.next_attack = targetinfo.attacks > 0 and UM_CONFIG.TOADSTOOL_ACIDMUSHROOM.WAVE_ATTACK_DELAY + math.random() * UM_CONFIG.TOADSTOOL_ACIDMUSHROOM.WAVE_ATTACK_DELAY_VARIANCE or nil
+    targetinfo.next_attack = targetinfo.attacks > 0 and TUNING.DSTU.TOADSTOOL_ACIDMUSHROOM.WAVE_ATTACK_DELAY + math.random() * TUNING.DSTU.TOADSTOOL_ACIDMUSHROOM.WAVE_ATTACK_DELAY_VARIANCE or nil
 
     for shard_id, uuids in pairs(_targets) do
         for uuid, targets in pairs(uuids) do
             for k, v in pairs(targets) do
-                if v ~= targetinfo and v.pos ~= nil and v.pos:DistSq(targetinfo.pos) < UM_CONFIG.TOADSTOOL_ACIDMUSHROOM.WAVE_MERGE_ATTACKS_DIST_SQ then
+                if v ~= targetinfo and v.pos ~= nil and v.pos:DistSq(targetinfo.pos) < TUNING.DSTU.TOADSTOOL_ACIDMUSHROOM.WAVE_MERGE_ATTACKS_DIST_SQ then
                     --Skip attack
                     return
                 end
@@ -137,7 +137,7 @@ local function OnAcidmushroomsUpdate(inst, data)
         else
             local player = GetPlayerFromUserHash(k)
             local c = TheNet:GetClientTableForUser(player.userid)
-            local num_attacks = math.min(base_num_attacks + math.floor((((c.playerage or 1) - 1) / year_length)) * 2 + UM_CONFIG.TOADSTOOL_ACIDMUSHROOM.WAVE_MIN_ATTACKS, UM_CONFIG.TOADSTOOL_ACIDMUSHROOM.WAVE_MAX_ATTACKS)
+            local num_attacks = math.min(base_num_attacks + math.floor((((c.playerage or 1) - 1) / year_length)) * 2 + TUNING.DSTU.TOADSTOOL_ACIDMUSHROOM.WAVE_MIN_ATTACKS, TUNING.DSTU.TOADSTOOL_ACIDMUSHROOM.WAVE_MAX_ATTACKS)
             if num_attacks > 0 then
                 local targetinfo = {
                     client = c,
@@ -287,9 +287,9 @@ function self:GetDebugString()
         for uuid, targets in pairs(uuids) do
             for k, v in pairs(targets) do
                 if v.next_warning ~= nil then
-                    s = (s ~= nil and (s.."\n") or "")..string.format("  Warning %s (%d/%d) at (%.1f, %.1f) in %.2fs", tostring(v.player), UM_CONFIG.TOADSTOOL_ACIDMUSHROOM.NUM_WARNINGS - v.warnings, UM_CONFIG.TOADSTOOL_ACIDMUSHROOM.NUM_WARNINGS, v.pos ~= nil and v.pos.x or 0, v.pos ~= nil and v.pos.z or 0, v.next_warning)
+                    s = (s ~= nil and (s.."\n") or "")..string.format("  Warning %s (%d/%d) at (%.1f, %.1f) in %.2fs", tostring(v.player), TUNING.DSTU.TOADSTOOL_ACIDMUSHROOM.NUM_WARNINGS - v.warnings, TUNING.DSTU.TOADSTOOL_ACIDMUSHROOM.NUM_WARNINGS, v.pos ~= nil and v.pos.x or 0, v.pos ~= nil and v.pos.z or 0, v.next_warning)
                 elseif v.next_attack ~= nil then
-                    s = (s ~= nil and (s.."\n") or "")..string.format("  Attacking %s (%d/%d) at (%.1f, %.1f) in %.2fs", tostring(v.player), UM_CONFIG.TOADSTOOL_ACIDMUSHROOM.WAVE_MAX_ATTACKS - v.attacks, UM_CONFIG.TOADSTOOL_ACIDMUSHROOM.WAVE_MAX_ATTACKS, v.pos ~= nil and v.pos.x or 0, v.pos ~= nil and v.pos.z or 0, v.next_attack)
+                    s = (s ~= nil and (s.."\n") or "")..string.format("  Attacking %s (%d/%d) at (%.1f, %.1f) in %.2fs", tostring(v.player), TUNING.DSTU.TOADSTOOL_ACIDMUSHROOM.WAVE_MAX_ATTACKS - v.attacks, TUNING.DSTU.TOADSTOOL_ACIDMUSHROOM.WAVE_MAX_ATTACKS, v.pos ~= nil and v.pos.x or 0, v.pos ~= nil and v.pos.z or 0, v.next_attack)
                 end
             end
         end

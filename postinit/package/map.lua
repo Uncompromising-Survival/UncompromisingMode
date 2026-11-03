@@ -20,19 +20,6 @@ local function TileRendersOver(tile1, tile2)
     return (RenderTileOrder[tile1] or 0) > (RenderTileOrder[tile2] or 0)
 end
 
-local _SetTile = Map.SetTile
-function Map:SetTile(tx, tz, tile)
-    _SetTile(self, tx, tz, tile)
-    if tile == WORLD_TILES.UM_MAGMA_LAVAMOLTEN then
-        if TheWorld.components.um_magmamanager then
-            local tcx, tcy, tcz = TheWorld.Map:GetTileCenterPoint(tx, tz)
-            if #TheSim:FindEntities(tcx, 0, tcz, 1, { "magma_tile" }) == 0 then
-                local prefab = SpawnPrefab("magma_tile")
-                prefab.Transform:SetPosition(tcx, 0, tcz)
-            end
-        end
-    end
-end
 
 function Map:TileRendersOver(tile1, tile2)
     return TileRendersOver(tile1, tile2)
@@ -40,11 +27,12 @@ end
 
 local _IsDeployPointClear = Map.IsDeployPointClear
 Map.IsDeployPointClear = function(Map, pt, inst, min_spacing, min_spacing_sq_fn, near_other_fn, check_player, custom_ignore_tags)
+    
     if pt ~= nil and pt.x ~= nil then
         local x = pt.x
         local z = pt.z
-
-        local portaboat = TheSim:FindEntities(x, 0, z, 4, { "portableraft" })
+        
+        local portaboat = TheSim:FindEntities(x, 0, z, 4, {"portableraft"})
         if portaboat ~= nil and #portaboat > 0 then
             return false
         end

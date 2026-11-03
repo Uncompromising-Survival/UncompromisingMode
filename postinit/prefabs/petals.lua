@@ -1,7 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-if UM_CONFIG.WENDY then
+if TUNING.DSTU.WENDY then
 	local function OnPerish(inst)
 		local owner = inst.components.inventoryitem.owner
 

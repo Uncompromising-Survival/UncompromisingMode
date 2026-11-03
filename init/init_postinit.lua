@@ -464,7 +464,7 @@ if GetModConfigData("icehound") then
     table.insert(prefab_post, "icehound")
 end
 
-if UM_CONFIG.HARDER_SPIDER_QUEEN then
+if TUNING.DSTU.HARDER_SPIDERQUEEN then
     --table.insert(prefab_post, "spiderqueen")
     table.insert(stategraph_post, "spiderqueen")
 end
@@ -615,7 +615,7 @@ for _, v in pairs(class_post) do
     modimport("postinit/" .. v)
 end
 
-if UM_CONFIG.ARMORREWORK then
+if TUNING.DSTU.ARMORREWORK then
     modimport("postinit/armor_rework")
 end
 

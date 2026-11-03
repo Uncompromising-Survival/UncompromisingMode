@@ -97,7 +97,7 @@ AddPrefabPostInit("woodie", function(inst)
         return
     end
     
-    if UM_CONFIG.WOODIE_WET_GOOSE then
+    if TUNING.DSTU.WOODIE_WET_GOOSE then
         inst:DoTaskInTime(GLOBAL.TUNING.WEREGOOSE_RUN_DRAIN_TIME_DURATION, OnGooseOverWater)
     end
 

@@ -362,7 +362,7 @@ if GetModConfigData("wickerbottom") then
         "\n󰀕Reading requires brainpower"
 end
 STRINGS.CHARACTER_DESCRIPTIONS.wes = STRINGS.CHARACTER_DESCRIPTIONS.wes .. "\n󰀕Expanded inner dialogue" --"\n󰀕Pengulls are fond of mimes"
-if UM_CONFIG.WAXWELL then
+if TUNING.DSTU.WAXWELL then
     STRINGS.CHARACTER_DESCRIPTIONS.waxwell = STRINGS.CHARACTER_DESCRIPTIONS.waxwell .. "\n󰀕Can learn to summon shadowy gear" --"\n󰀕Can make a pact to regain his old tricks"
 end
 if GetModConfigData("wolfgang") then
@@ -381,7 +381,7 @@ end
 if GetModConfigData("wigfrid") then
     STRINGS.CHARACTER_DESCRIPTIONS.wathgrithr = STRINGS.CHARACTER_DESCRIPTIONS.wathgrithr .. "\n󰀕Combat is less sustaining"
 end
-if UM_CONFIG.WORMWOOD_FIRE then
+if TUNING.DSTU.WORMWOOD_CONFIG_FIRE then
     STRINGS.CHARACTER_DESCRIPTIONS.wormwood = STRINGS.CHARACTER_DESCRIPTIONS.wormwood .. "\n󰀕Is dangerously flammable"
 end
 
@@ -648,7 +648,7 @@ STRINGS.UM_VETERANSHRINE = {
         "COME... CLOSER... CONSIDER...",
         "THE... CHALLENGE.. REWARD...",
         "CURSE... N.. OUT...",
-        "POWER... GLORY..."
+        "POWER.. GLORY..."
     },
     VETERANCURSED = {
         "GO... PACT... MADE...",

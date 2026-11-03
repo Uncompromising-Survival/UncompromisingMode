@@ -10,7 +10,7 @@ end]]
 env.AddComponentPostInit("combat", function(self)
 	local _GetAttacked_Internal = self.GetAttacked_Internal
 	function self:GetAttacked_Internal(attacker, damage, weapon, stimuli, spdamage, from_doattack, ...)
-        if UM_CONFIG.BUTTERFLY_TWEAKS == "unique" and from_doattack and self.inst.UMSlipAway and self.inst:UMSlipAway({attacker = attacker, weapon = weapon, stimuli = stimuli}) then
+        if TUNING.DSTU.BUTTERFLYWINGS_NERF == "unique" and from_doattack and self.inst.UMSlipAway and self.inst:UMSlipAway({attacker = attacker, weapon = weapon, stimuli = stimuli}) then
             if attacker and weapon and weapon:IsValid() then
                 attacker:PushEvent("um_attacker_attacked_pst", {weapon = weapon})
             end
@@ -43,7 +43,7 @@ env.AddComponentPostInit("combat", function(self)
             damage = damage * self.inst.components.health:GetFireDamageScale()
         end
 
-        if self.inst and self.inst:HasTag("wathom") and self.inst.AmpDamageTakenModifier and damage and (not self.inst.components.rider or not self.inst.components.rider:IsRiding()) and UM_CONFIG.WATHOM_ARMORDAMAGE then
+        if self.inst and self.inst:HasTag("wathom") and self.inst.AmpDamageTakenModifier and damage and (not self.inst.components.rider or not self.inst.components.rider:IsRiding()) and TUNING.DSTU.WATHOM_ARMOR_DAMAGE then
             -- Take extra damage
             -- if HasSkill(self.inst,"ancient_terror_3") and self.inst:HasTag("amped") and not self.inst:HasTag("deathamp") then
             -- damage = damage * self.inst.AmpDamageTakenModifier*0.5
@@ -67,9 +67,9 @@ env.AddComponentPostInit("combat", function(self)
                 damage = damage - hpmodulereduct
                 if damage < 5 then damage = 5 end
             end
-        elseif self.inst ~= nil and attacker ~= nil and attacker:HasTag("wathom") and UM_CONFIG.WATHOM_MAX_DMG then
+        elseif self.inst ~= nil and attacker ~= nil and attacker:HasTag("wathom") and TUNING.DSTU.WATHOM_MAX_DAMAGE_CAP then
             if damage > 600 then damage = 600 end
-            --elseif self.inst ~= nil and (self.inst.prefab == "bernie_active" or self.inst.prefab == "bernie_big") and attacker ~= nil and attacker:HasTag("shadow") and UM_CONFIG.BERNIE_BUFFS then
+            --elseif self.inst ~= nil and (self.inst.prefab == "bernie_active" or self.inst.prefab == "bernie_big") and attacker ~= nil and attacker:HasTag("shadow") and TUNING.DSTU.BERNIE_BUFF then
             --damage = damage * 0.2
             --return _GetAttacked(self, attacker, damage, weapon, stimuli, ...)
         elseif self.inst:HasTag("ratwhisperer") and attacker and attacker.prefab == "catcoon" and self.inst.components.health then
@@ -100,7 +100,7 @@ env.AddComponentPostInit("combat", function(self)
         end
 
         local damageredirecttarget = self.redirectdamagefn and self.redirectdamagefn(self.inst, attacker, damage, weapon, stimuli, spdamage)
-        if UM_CONFIG.BEEFALO_NERF and damageredirecttarget and damageredirecttarget.components.rideable then
+        if TUNING.DSTU.BEEFALO_NERF and damageredirecttarget and damageredirecttarget.components.rideable then
             local redirect_combat = damageredirecttarget.components.combat
             if redirect_combat then
                 redirect_combat:GetAttacked_Internal(attacker, damage, weapon, stimuli, spdamage, from_doattack, ...)
@@ -164,7 +164,7 @@ env.AddComponentPostInit("combat", function(self)
     local AREA_EXCLUDE_TAGS = {"INLIMBO", "notarget", "noattack", "flight", "invisible"}
     local _DoAttack = self.DoAttack
     function self:DoAttack(targ, weapon, projectile, stimuli, instancemult, instrangeoverride, instpos, ...)
-        local sliptarget = UM_CONFIG.BUTTERFLY_TWEAKS == "unique" and (targ or self.target)
+        local sliptarget = TUNING.DSTU.BUTTERFLYWINGS_NERF == "unique" and (targ or self.target)
         if sliptarget and sliptarget.UMSlipAway then
             if instrangeoverride then self.temprange = instrangeoverride end
             if instpos then self.temppos = instpos end
