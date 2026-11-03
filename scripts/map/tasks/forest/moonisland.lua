@@ -23,7 +23,7 @@ if GetModConfigData("moon_bees") then
 end
 
 AddTaskSetPreInitAny(function(tasksetdata)
-    if tasksetdata.location ~= "forest" or GetModConfigData("flooded_caves") ~= "lunar_cave" then return end
+    if tasksetdata.location ~= "forest" or UM_CONFIG.FLOODED_CAVES ~= "lunar_cave" then return end
 
     if tasksetdata.required_prefabs ~= nil then
         table.insert(tasksetdata.required_prefabs, "cave_entrance_moon")
