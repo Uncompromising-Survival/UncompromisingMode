@@ -92,8 +92,8 @@ local function UncompromisingSpawnGOOOOO(inst, data)
             end
             if prefab then
                 -- for area handlers, so they can find all things created by a especific SS.
-                if prefab.UMSSPostinit ~= nil then
-                    prefab:UMSSPostinit(inst)
+                if v.postinit then
+                    v.postinit(prefab)
                 end
 
 
