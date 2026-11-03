@@ -91,36 +91,32 @@ local function RescueLeaderAction(inst)
     return BufferedAction(inst, GetLeader(inst), ACTIONS.UNPIN)
 end
 
-local function GetAnnoyedFn(inst, target)
+local function ResetAnnoyance(inst)
+    inst.reset_annoyance_task = nil
     inst.annoyance = 0
+end
+
+local function GetAnnoyedFn(inst, target)
     if inst.reset_annoyance_task then
         inst.reset_annoyance_task:Cancel()
     end
+    ResetAnnoyance(inst)
 
     if inst.components.combat then
         inst.components.combat:SuggestTarget(target)
     end
 end
 
-local function ShouldRunFromPlayerFn(inst)
+local function GetAnnoyedKeepFaceTargetFn(inst)
     local leader = GetLeader(inst)
     local target = FindClosestPlayerToInst(inst, START_FACE_DIST_NIGHT, true)
-	if target ~= nil and not (leader and target ~= leader) then
-		if inst.annoyance == nil then
-			inst.annoyance = 0
-		end
-		
-		inst.annoyance = inst.annoyance + 1
-
-		local resetfn = function()
-			inst.annoyance = 0
-		end
+	if target and not (leader and target ~= leader) then
+		inst.annoyance = (inst.annoyance or 0) + 1
 
 		if inst.reset_annoyance_task then
 			inst.reset_annoyance_task:Cancel()
 		end
-
-		inst.reset_annoyance_task = inst:DoTaskInTime(10, resetfn)
+		inst.reset_annoyance_task = inst:DoTaskInTime(10, ResetAnnoyance)
 
 		if inst.annoyance >= ANNOYANCE_THRESHOLD then
 			GetAnnoyedFn(inst, target)
@@ -164,7 +160,7 @@ function PigGuard_pigkingBrain:OnStart()
                 DoAction(self.inst, AddFuelAction, "Add Fuel", true))),
 		IfNode(function() return TheWorld.state.isnight and not GetLeader(self.inst) end, "IsNight",
             ChattyNode(self.inst, "PIG_GUARD_PIGKING_TALK_LOOKATWILSON_NIGHT",
-				FaceEntity(self.inst, GetFaceTargetFn, ShouldRunFromPlayerFn))),
+				FaceEntity(self.inst, GetFaceTargetFn, GetAnnoyedKeepFaceTargetFn))),
 		IfNode(function() return TheWorld.state.isdusk and not GetLeader(self.inst) end, "IsDusk",
         ChattyNode(self.inst, "PIG_GUARD_PIGKING_TALK_LOOKATWILSON_EVENING",
             FaceEntity(self.inst, GetFaceTargetFn, KeepFaceTargetFn))),
