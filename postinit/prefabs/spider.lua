@@ -297,7 +297,7 @@ env.AddPrefabPostInit("spider", function(inst)
     if not TheWorld.ismastersim then return end
 
     local combat = inst.components.combat
-    if TUNING.DSTU.REGSPIDERJUMP and combat then
+    if UM_CONFIG.ALLJUMPERSPIDERS and combat then
         combat.attackrange = 4
         --combat:SetRetargetFunction(2, WarriorRetarget)
     end
@@ -307,7 +307,7 @@ env.AddPrefabPostInit("spider", function(inst)
     playerprox:SetOnPlayerNear(onnear)
     playerprox:SetPlayerAliveMode(playerprox.AliveModes.AliveOnly)]]
 
-    if TUNING.DSTU.MOON_TRANSFORMATIONS then
+    if UM_CONFIG.MOON_TRANSFORMATIONS then
         inst:WatchWorldState("isfullmoon", OnFullMoon)
         OnFullMoon(inst, TheWorld.state.isfullmoon)
     end

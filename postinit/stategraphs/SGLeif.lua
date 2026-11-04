@@ -25,7 +25,7 @@ env.AddStategraphPostInit("leif", function(inst)
                 inst.components.locomotor:Stop()
                 inst.AnimState:PlayAnimation("special")
                 inst.sg.statemem.target = target
-                inst.sg.statemem.summonattack = TUNING.DSTU.PINELINGS and inst.sg.statemem.target and inst.UMFindStump and inst:UMFindStump(inst.sg.statemem.target) or nil
+                inst.sg.statemem.summonattack = UM_CONFIG.PINELINGS and inst.sg.statemem.target and inst.UMFindStump and inst:UMFindStump(inst.sg.statemem.target) or nil
                 inst.components.timer:StartTimer("snare_cd", inst.sg.statemem.summonattack and 15 or 30)
             end,
 

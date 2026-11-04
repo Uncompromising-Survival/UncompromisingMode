@@ -161,7 +161,7 @@ GLOBAL.ACTIONS.RUMMAGE.fn = function(act, ...)
     if target == nil then
         return
     end
-    if TUNING.DSTU.WARLY_CHANGES ~= 0 then
+    if UM_CONFIG.WARLY_CHANGES ~= 0 then
         if target.prefab == "portablecookpot" and target ~= nil and target.components.container ~= nil
             and target.components.container.canbeopened and GLOBAL.CanEntitySeeTarget(act.doer, target) then
             if target.components.container:IsOpenedBy(act.doer) then
@@ -279,7 +279,7 @@ GLOBAL.ACTIONS.STORE.fn = function(act, ...)
     local target = act.target
     if target:HasTag("pocketbackpack") and not target.components.equippable.isequipped and act.target.components.inventoryitem.owner ~= nil then
         return false
-    elseif TUNING.DSTU.WARLY_CHANGES ~= 0 and target.prefab == "portablecookpot" and target.components.container ~= nil and act.invobject.components.inventoryitem ~= nil
+    elseif UM_CONFIG.WARLY_CHANGES ~= 0 and target.prefab == "portablecookpot" and target.components.container ~= nil and act.invobject.components.inventoryitem ~= nil
         and act.doer.components.inventory ~= nil and target.components.container:CanTakeItemInSlot(act.invobject) then
         local item = act.invobject.components.inventoryitem:RemoveFromOwner(target.components.container.acceptsstacks)
         if item ~= nil then

@@ -12,7 +12,7 @@ local prefabs =
 
 SetSharedLootTable("aphid_loot",
 {
-	{ TUNING.DSTU.MONSTERSMALLMEAT and 'monstersmallmeat' or 'monstermeat', 0.25 },
+	{ UM_CONFIG.MONSTERSMALLMEAT and 'monstersmallmeat' or 'monstermeat', 0.25 },
 	{ 'steelwool', 0.33 },
 })
 

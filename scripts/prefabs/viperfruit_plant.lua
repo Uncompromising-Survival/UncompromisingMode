@@ -85,6 +85,12 @@ local function fn()
         return inst
     end
 
+    if not UM_CONFIG.DEPTHSVIPERS then
+        inst:DoTaskInTime(0, function(inst)
+            ReplacePrefab(inst, "wormlight_plant")
+        end)
+    end
+
     inst.Transform:SetRotation(math.random()*360)
 
     inst:AddComponent("pickable")

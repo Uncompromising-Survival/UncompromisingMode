@@ -340,7 +340,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
     local function FindBlueFuncap(inst)
         local helm = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
-        if TUNING.DSTU.FUNCAP_REWORK and helm and helm.prefab == "blue_mushroomhat" then
+        if UM_CONFIG.FUNCAP_FUN and helm and helm.prefab == "blue_mushroomhat" then
             return helm
         end
     end
@@ -1031,7 +1031,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst.SoundEmitter:PlaySound("dontstarve/characters/" .. (inst.soundsname or inst.prefab) .. "/sinking")
                 inst.SoundEmitter:PlaySound("dontstarve_DLC001/characters/" ..
                     (inst.soundsname or inst.prefab) .. "/sinking")
-                if TUNING.DSTU.COMPROMISING_SHADOWVORTEX and inst.components.health ~= nil then
+                if UM_CONFIG.COMPROMISING_VORTEX and inst.components.health ~= nil then
                     inst.components.health:SetInvincible(true)
                 end
                 inst.components.burnable:Extinguish()
@@ -1042,7 +1042,7 @@ env.AddStategraphPostInit("wilson", function(inst)
             {
                 EventHandler("animover", function(inst)
                     if inst.AnimState:AnimDone() then
-                        if not TUNING.DSTU.COMPROMISING_SHADOWVORTEX then
+                        if not UM_CONFIG.COMPROMISING_VORTEX then
                             inst.components.inventory:DropEverything(true)
                             inst:PushEvent(inst.ghostenabled and "makeplayerghost" or "playerdied", { skeleton = nil }) -- if we are not on valid ground then don't drop a skeleton
                         else

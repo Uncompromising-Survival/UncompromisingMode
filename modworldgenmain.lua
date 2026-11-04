@@ -1,11 +1,8 @@
 --always load tiledefs to prevent nil reference crashes.
+modimport("init/init_configs")
 modimport("libraries/um_particletilehelper")
 modimport("libraries/um_particleworldtilestate")
 modimport("scripts/map/misc_tools/tiledefs")
-
---init_tuning is loaded way later than when we need this config on a non-modmain/worldgenmain env, so i'm setting it here first.
---honestly we should make config globals outside of that.
-GLOBAL.FLOODED_CAVES_CONFIG = GetModConfigData("flooded_caves")
 
 if GetModConfigData("worldgenmastertoggle") then
     modimport("postinit/map/static_layouts")

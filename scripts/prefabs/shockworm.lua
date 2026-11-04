@@ -88,15 +88,15 @@ local function retargetfn(inst)
                 TUNING.WORM_TARGET_DIST,
                 IsAlive,
                 { "_combat", "_health" }, -- see entityscript.lua
-                { "prey", "worm", "INLIMBO","tentacle" },
+                { "prey", "worm", "INLIMBO", "tentacle" },
                 { "character", "monster", "animal" }
             ) or
             FindEntity(
                 inst,
-                TUNING.WORM_TARGET_DIST/4,
+                TUNING.WORM_TARGET_DIST / 4,
                 IsAlive,
                 { "_combat", "_health" }, -- see entityscript.lua
-                { "prey", "worm", "INLIMBO"},
+                { "prey", "worm", "INLIMBO" },
                 { "character", "monster", "animal" }
             )
         )
@@ -120,7 +120,7 @@ end
 
 local function IsAlly(inst, guy)
     -- Prevents lightning from forking from a Depth Eel's target to other Depth Worms.
-    return UMCommonFns.IsAlly(inst, guy, {"worm"})
+    return UMCommonFns.IsAlly(inst, guy, { "worm" })
 end
 
 local function onpickedfn(inst, target)
@@ -141,9 +141,9 @@ end
 local function displaynamefn(inst)
     return
         STRINGS.NAMES[
-            (inst:HasTag("lure") and "WORM_PLANT") or
-            (inst:HasTag("dirt") and "WORM_DIRT") or
-            "SHOCKWORM"
+        (inst:HasTag("lure") and "WORM_PLANT") or
+        (inst:HasTag("dirt") and "WORM_DIRT") or
+        "SHOCKWORM"
         ]
 end
 
@@ -173,7 +173,7 @@ local function LookForHome(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
 
     for i = 1, 30 do
-        local s = i / 32--(num/2) -- 32.0
+        local s = i / 32 --(num/2) -- 32.0
         local a = math.sqrt(s * 512)
         local b = math.sqrt(s) * 30
         local x1 = x + math.sin(a) * b
@@ -244,25 +244,25 @@ local function CustomOnHaunt(inst, haunter)
     return false
 end
 
-local cant_target = JoinArrays(UMCommonFns.GHOSTLIKE_TAGS, {"INLIMBO", "noattack", "invisible", "worm", "structure"})
+local cant_target = JoinArrays(UMCommonFns.GHOSTLIKE_TAGS, { "INLIMBO", "noattack", "invisible", "worm", "structure" })
 local function TryShockingTargets(inst)
-    local x,y,z = inst.Transform:GetWorldPosition()
+    local x, y, z = inst.Transform:GetWorldPosition()
     local shocking = SpawnPrefab("um_shock_projectile")
-    shocking.Transform:SetPosition(x,y,z)
+    shocking.Transform:SetPosition(x, y, z)
     shocking.attacker = inst
     -- Attack my target first
-    if inst.components.combat and inst.components.combat.target and inst.components.combat.target:IsValid() and not table.contains(inst.shock_targets,inst.components.combat.target) then
+    if inst.components.combat and inst.components.combat.target and inst.components.combat.target:IsValid() and not table.contains(inst.shock_targets, inst.components.combat.target) then
         shocking:ForceFacePoint(inst.components.combat.target:GetPosition())
-        table.insert(inst.shock_targets,inst.components.combat.target)
+        table.insert(inst.shock_targets, inst.components.combat.target)
         return
     end
 
     -- I've attacked my target, fall back to other entities I haven't attacked yet
-    local ents = TheSim:FindEntities(x,y,z,32,{"_combat"},cant_target)
-    for i,v in ipairs(ents) do
+    local ents = TheSim:FindEntities(x, y, z, 32, { "_combat" }, cant_target)
+    for i, v in ipairs(ents) do
         if v:IsValid() then
             shocking:ForceFacePoint(inst.components.combat.target:GetPosition())
-            table.insert(inst.shock_targets,v)
+            table.insert(inst.shock_targets, v)
             return
         end
     end
@@ -274,41 +274,41 @@ local function TryShockingTargets(inst)
     end
 
     -- Last Fallback
-    shocking.Transform:SetRotation(math.random(0,360))
+    shocking.Transform:SetRotation(math.random(0, 360))
 end
 
 
 local function TryBeginTimer(inst)
     if not (inst.components.timer:TimerExists("prepare_shock") or inst.shocktargetpoint) then
-        inst.components.timer:StartTimer("prepare_shock",math.random(10,20))
+        inst.components.timer:StartTimer("prepare_shock", math.random(10, 20))
     end
 end
-    
+
 local NOTENTCHECK_CANT_TAGS = { "FX", "INLIMBO" }
 local function noentcheckfn(pt)
     return not TheWorld.Map:IsPointNearHole(pt) and #TheSim:FindEntities(pt.x, pt.y, pt.z, 1, nil, NOTENTCHECK_CANT_TAGS) == 0
 end
 
-local preferred_rotations = {0,PI/6,-PI/6}
+local preferred_rotations = { 0, PI / 6, -PI / 6 }
 local function TryDetermineShockPoint(inst)
     if inst.components.combat and inst.components.combat.target then
         local point = inst.components.combat.target:GetPosition()
         local rot = inst.components.combat.target:GetRotation()
         local offset
         local randmult = math.random() > 0.5 and 1 or -1
-        for i,v in ipairs(preferred_rotations) do
+        for i, v in ipairs(preferred_rotations) do
             if not offset then
                 offset = FindWalkableOffset(point, rot + (randmult) * v, 8, 12, false, true, noentcheckfn, true, true)
             end
         end
         if offset then
-            inst.shocktargetpoint = Vector3(point.x+offset.x,0,point.z+offset.z)
+            inst.shocktargetpoint = Vector3(point.x + offset.x, 0, point.z + offset.z)
             inst.components.locomotor:SetExternalSpeedMultiplier(inst, "about_to_special_shock", 4)
-            inst:DoTaskInTime(3,function(inst)
+            inst:DoTaskInTime(3, function(inst)
                 inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, "about_to_special_shock")
             end)
 
-            local current_tile = TheWorld.Map:GetTileAtPoint(inst.Transform:GetWorldPosition()) 
+            local current_tile = TheWorld.Map:GetTileAtPoint(inst.Transform:GetWorldPosition())
             if current_tile == WORLD_TILES.UM_FLOODWATER or current_tile == WORLD_TILES.UM_FLOODWATER_GROTTO or current_tile == WORLD_TILES.UM_FLOODWATER_BROILING then
                 SpawnPrefab("splash_green").Transform:SetPosition(inst.Transform:GetWorldPosition())
             else
@@ -355,7 +355,7 @@ local function fn()
     inst:AddTag("cavedweller")
     inst:AddTag("electricdamageimmune")
     inst:AddTag("lunar_aligned")
-    
+
     inst.Light:SetRadius(0)
     inst.Light:SetIntensity(2)
     inst.Light:SetFalloff(.5)
@@ -367,7 +367,7 @@ local function fn()
     inst._islighton = net_bool(inst.GUID, "worm._islighton", "lightdirty")
     inst._lighttask = nil
 
-    inst.displaynamefn = displaynamefn  --Handles the changing names.
+    inst.displaynamefn = displaynamefn --Handles the changing names.
 
     inst.entity:SetPristine()
 
@@ -375,6 +375,12 @@ local function fn()
         inst:ListenForEvent("lightdirty", OnLightDirty)
 
         return inst
+    end
+
+    if not UM_CONFIG.DEPTHSEELS then
+        inst:DoTaskInTime(0, function(inst)
+            ReplacePrefab(inst, "worm")
+        end)
     end
 
     inst:AddComponent("health")
@@ -396,7 +402,7 @@ local function fn()
 
     inst:AddComponent("locomotor")
     inst.components.locomotor.walkspeed = 4
-    inst.components.locomotor:SetSlowMultiplier( 1 )
+    inst.components.locomotor:SetSlowMultiplier(1)
     inst.components.locomotor:SetTriggersCreep(false)
     inst.components.locomotor.pathcaps = { ignorecreep = true }
 
@@ -424,7 +430,7 @@ local function fn()
     inst.components.inspectable.getstatus = getstatus
 
     inst:AddComponent("lootdropper")
-    inst.components.lootdropper:SetLoot({"monstermeat", "monstermeat", "monstermeat", "monstermeat", "zaspberry", "moonglass", "moonglass", "moonglass"})
+    inst.components.lootdropper:SetLoot({ "monstermeat", "monstermeat", "monstermeat", "monstermeat", "zaspberry", "moonglass", "moonglass", "moonglass" })
 
     --Disable this task for worm attacks
     inst.HomeTask = inst:DoPeriodicTask(3, LookForHome)
@@ -443,7 +449,7 @@ local function fn()
     inst.OnSave = onsave
     inst.OnLoad = onload
 
-    inst:WatchWorldState("iswinter",function(inst, iswinter)
+    inst:WatchWorldState("iswinter", function(inst, iswinter)
         if iswinter and inst.from_waterhole then
             inst:Remove()
         end
@@ -461,8 +467,8 @@ local function fn()
 end
 
 local function onruinsrespawn(inst)
-    inst.sg:GoToState("lure_enter") 
+    inst.sg:GoToState("lure_enter")
 end
 
 return Prefab("shockworm", fn, assets, prefabs),
-   RuinsRespawner.Inst("shockworm", onruinsrespawn), RuinsRespawner.WorldGen("shockworm", onruinsrespawn)
+    RuinsRespawner.Inst("shockworm", onruinsrespawn), RuinsRespawner.WorldGen("shockworm", onruinsrespawn)

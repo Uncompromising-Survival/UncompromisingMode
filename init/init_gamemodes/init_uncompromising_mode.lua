@@ -69,7 +69,7 @@ modimport("scripts/uncompromisingcommands_autocomplete")
 
 --    [              User   Interface        ]    --
 
-if TUNING.DSTU.UI_SHOWMULTIPRODUCTS then
+if UM_CLIENT_CONFIG.UI_SHOWMULTIPRODUCTS then
     modimport("init/init_showmultiproducts")
 end
 
@@ -97,7 +97,9 @@ modimport("init/init_gemology/trades")
 --scrapbook
 modimport("init/init_scrapbook/changes")
 modimport("init/init_scrapbook/additions") --run add after changes to overwrite tooltip strings.
-modimport("init/init_scrapbook/gemology")
+if UM_CONFIG.GEMOLOGY then
+    modimport("init/init_scrapbook/gemology")
+end
 
 --if GetModConfigData("harder_monsters") then
 modimport("init/init_creatures/init_treebuffs")

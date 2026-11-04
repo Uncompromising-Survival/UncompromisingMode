@@ -192,7 +192,7 @@ local function GenerateTreasure(pt, overrideprefab, spawn_as_empty, postfn, doer
                     if _container ~= nil then
                         _container:GiveItem(item)
 
-                        if item.components.gem_enchantable ~= nil then
+                        if item.components.gem_enchantable ~= nil and UM_CONFIG.GEMOLOGY then
                             local tries = 10
                             while not item.components.gem_enchantable:IsEnchanted() and tries > 0 do
                                 local enchant = GEM_LOOKUP[math.random(#GEM_LOOKUP)]

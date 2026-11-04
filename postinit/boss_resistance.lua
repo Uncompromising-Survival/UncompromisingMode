@@ -27,9 +27,9 @@ env.AddComponentPostInit("combat", function(self)
                 end
 
                 if damage ~= nil then
-                    if TUNING.DSTU.BOSS_RESISTANCE == "static" then
+                    if UM_CONFIG.BOSS_RESISTANCE == "static" then
                         damage = damage * math.pow(0.95, NearbyPlayers)
-                    elseif TUNING.DSTU.BOSS_RESISTANCE == "dynamic" then
+                    elseif UM_CONFIG.BOSS_RESISTANCE == "dynamic" then
                         -- TODO: config options for numbers...
                         if self.inst.damage_res == nil then
                             self.inst.damage_res = 1

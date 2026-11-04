@@ -780,7 +780,7 @@ local function fncommon(symbol, inv, special)
     inst:AddTag("slingshotammo")
     inst:AddTag("reloaditem_ammo")
 
-    if not TUNING.DSTU.WIXIE then
+    if not UM_CONFIG.WIXIE_WALTER then
         inst:DoTaskInTime(0, inst.Remove)
     end
 

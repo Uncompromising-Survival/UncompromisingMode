@@ -181,14 +181,20 @@ local function PlayHitAnimations(inst)
     inst.AnimState:PushAnimation(inst.anims.idle)
 end
 
-local WIDOWWEB_MUST_TAGS = {"widowweb"}
+local function NoEpics(inst)
+    local x, y, z = inst.Transform:GetWorldPosition()
+    return TheSim:FindEntities(x, y, z, 50, { "epic" }, { "hoodedwidow", "smallepic" })
+end
+
 local function Regen(inst, data)
     local attacker = data.attacker
     if not inst.components.health:IsDead() and attacker and not attacker:HasTag("hoodedwidow") then
         inst:PlayHitAnimations()
         if attacker:HasTag("player") then
-            local widowweb = FindEntity(inst, 50, nil, WIDOWWEB_MUST_TAGS)
-            if widowweb then widowweb:SpawnInvestigators(attacker) end
+            local widowweb = FindEntity(inst, 50, function(guy) return guy:HasTag("widowweb") end)
+            if widowweb and #NoEpics(inst) == 0 then
+                widowweb:SpawnInvestigators(attacker)
+            end
             if not attacker:HasTag("widowsgrasp") or (attacker.components.rider and attacker.components.rider:IsRiding()) then
                 UMCommonFns.Say(attacker, GetString(attacker, "WEBBEDCREATURE"))
             end

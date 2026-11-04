@@ -377,7 +377,7 @@ for _, bee in pairs(beelist) do
     end)
 end
 
-if TUNING.DSTU.BEEBOX_NERF then
+if UM_CONFIG.BEEBOX_NERF then
     --local HONEY_PER_STAGE = GLOBAL.TUNING.DSTU.FOOD_HONEY_PRODUCTION_PER_STAGE
     local beebox_prefabs = { "beebox", "beebox_hermit" }
     local function ReleaseBees(inst, picker)

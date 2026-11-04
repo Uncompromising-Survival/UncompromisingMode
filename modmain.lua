@@ -1,5 +1,6 @@
 local require = GLOBAL.require
 
+modimport("init/init_configs")
 --live: 󰀕 white skull
 --beta: 󰀕 red skull
 GLOBAL.rawset(GLOBAL, "UNCOMPROMISING_MODE", string.find(GLOBAL.KnownModIndex:GetModFancyName(modname), "󰀕") ~= nil and "LIVE" or "BETA")

@@ -105,7 +105,7 @@ end
 
 local function OnBathingPoolTick_PerOccupant(inst, occupant, dt)
     if inst.components.bathbombable.is_bathbombed then
-		if TUNING.DSTU.BATH_BOMB then
+		if UM_CONFIG.BATH_HEAL then
 			if occupant.components.health then
 				occupant.components.health:DeltaPenalty(-0.009)
 			end

@@ -73,7 +73,7 @@ local function fn()
         inst:AddComponent("childspawner")
         inst.components.childspawner.childname = "ancient_trepidation"
 		
-		if TUNING.DSTU.TREPIDATIONS then
+		if UM_CONFIG.TREPIDATIONS then
 			inst:WatchWorldState("nightmarephase", OnNightmarePhaseChanged)
 			OnNightmarePhaseChanged(inst, TheWorld.state.nightmarephase, true)
 		end

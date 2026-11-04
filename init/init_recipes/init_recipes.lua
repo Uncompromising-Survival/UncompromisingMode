@@ -83,7 +83,7 @@ AddPrototyperDef(
 
 modimport("init/init_recipes/recipes")
 modimport("init/init_recipes/recipe_changes")
-if TUNING.DSTU.WIXIE then
+if UM_CONFIG.WIXIE_WALTER then
     modimport("init/init_recipes/recipes_wixie")
 end
 modimport("init/init_recipes/recipes_ia")

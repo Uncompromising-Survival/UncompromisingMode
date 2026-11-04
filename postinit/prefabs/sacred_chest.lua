@@ -23,7 +23,7 @@ env.AddPrefabPostInit("sacred_chest", function(inst)
 	
 	-- Then, turn the original invisible/uninteractable.
 	-- Only if the config is turned on! This is in case of issues with the Metheus puzzle.
-	if TUNING.DSTU.THE_COOLER_SACRED_CHEST then
+	if UM_CONFIG.THE_COOLER_SACRED_CHEST then
 		inst:Hide()
 		inst.AnimState:SetMultColour(0,0,0,0)
 		inst:AddTag("NOCLICK")

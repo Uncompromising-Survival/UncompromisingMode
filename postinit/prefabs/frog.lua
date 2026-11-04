@@ -20,7 +20,7 @@ local function DoSporeExplosion(inst)
 end
 
 local function OnIsAutumn(inst, isautumn)
-    if isautumn and TheWorld.state.cycles >= TUNING.DSTU.WEATHERHAZARD_START_DATE_AUTUMN and TUNING.DSTU.TOADS then
+    if isautumn and TheWorld.state.cycles >= UM_CONFIG.WEATHERHAZARD_AUTUMN and UM_CONFIG.TOADS then
         if not inst.um_toad then
             inst.AnimState:SetBuild("frog_yellow_build")
             inst:SetPrefabNameOverride("uncompromising_toad")
