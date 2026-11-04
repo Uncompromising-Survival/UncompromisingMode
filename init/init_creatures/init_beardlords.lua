@@ -23,7 +23,7 @@ function AnimState:PushAnimation(anim, loop, ...)
         local beardlord_anim = inst.um_beardlord_overrides.anim
         if beardlord_anim then
             local beardlord_loop = inst.um_beardlord_overrides.loop
-            if inst.um_beardlord_overrides then
+            if inst.um_beardlord_overrides.blockpush then
                 inst.um_beardlord_overrides.blockpush, inst.um_beardlord_overrides.anim, inst.um_beardlord_overrides.loop = nil, nil, nil
                 inst.AnimState:PlayAnimation(beardlord_anim, beardlord_loop)
                 return
@@ -32,6 +32,16 @@ function AnimState:PushAnimation(anim, loop, ...)
         end
     end
     return _PushAnimation(self, anim, loop, ...)
+end
+
+local _IsCurrentAnimation = AnimState.IsCurrentAnimation
+function AnimState:IsCurrentAnimation(anim, ...)
+    local inst = UM_BEARDLORDS.AnimStates and UM_BEARDLORDS.AnimStates[self]
+    if inst then
+        local beardlord_anim = inst.um_beardlord_overrides.anim
+        if beardlord_anim then anim = beardlord_anim end
+    end
+    return _IsCurrentAnimation(self, anim, ...)
 end
 
 --[[local _SetClientsideBuildOverride = AnimState.SetClientsideBuildOverride
@@ -45,7 +55,7 @@ function SoundEmitter:PlaySound(sound, ...)
     local inst = self:GetEntity()
     if inst then
         local beardlord_overrides = inst.um_beardlord_overrides
-        if beardlord_overrides then
+        if next(beardlord_overrides) then
             if beardlord_overrides.blocksound and sound == beardlord_overrides.blocksound then return end
             sound = beardlord_overrides.sound
         end
@@ -132,9 +142,9 @@ env.AddStategraphPostInit("bunnyman", function(inst)
     if idlestate then
         local idlestate_onenter = idlestate.onenter
         idlestate.onenter = function(inst, pushanim, ...)
-            if inst.UMIsBeardlord and inst:UMIsBeardlord() then inst.um_beardlord_overrides = {anim = "beard_idle_loop"} end
+            if inst.UMIsBeardlord and inst:UMIsBeardlord() then inst.um_beardlord_overrides.anim = "beard_idle_loop" end
             local ret = idlestate_onenter(inst, pushanim, ...)
-            if inst.um_beardlord_overrides then inst.um_beardlord_overrides = nil end
+            if inst.um_beardlord_overrides then inst.um_beardlord_overrides.anim = nil end
             return ret
         end
         table.insert(idlestate.timeline, TimeEvent(0 * FRAMES, function(inst) if inst.UMIsBeardlord and inst:UMIsBeardlord() then inst.SoundEmitter:PlaySound("dontstarve/creatures/bunnyman/wererabbit_breathin") end end))
@@ -145,33 +155,14 @@ env.AddStategraphPostInit("bunnyman", function(inst)
     if funnyidlestate then
         local funnyidlestate_onenter = funnyidlestate.onenter
         funnyidlestate.onenter = function(inst, ...)
-            if inst.UMIsBeardlord and inst:UMIsBeardlord() then inst.um_beardlord_overrides = {anim = "beard_taunt", sound = "dontstarve/creatures/bunnyman/wererabbit_taunt"} end
+            if inst.UMIsBeardlord and inst:UMIsBeardlord() then inst.um_beardlord_overrides.anim = "beard_taunt" inst.um_beardlord_overrides.sound = "dontstarve/creatures/bunnyman/wererabbit_taunt" end
             local ret = funnyidlestate_onenter(inst, ...)
-            if inst.um_beardlord_overrides then inst.um_beardlord_overrides = nil end
+            if inst.um_beardlord_overrides then inst.um_beardlord_overrides.anim = nil inst.um_beardlord_overrides.sound = nil end
             return ret
         end
     end
 
     if attackstate then
-        local attackstate_onenter = attackstate.onenter
-        attackstate.onenter = function(inst, ...)
-            if inst.UMIsBeardlord and inst:UMIsBeardlord() then inst.um_beardlord_overrides = {anim = "beard_atk", sound = "dontstarve/creatures/bunnyman/wererabbit_attack"} end
-            local ret = attackstate_onenter(inst, ...)
-            if inst.um_beardlord_overrides then inst.um_beardlord_overrides = nil end
-            return ret
-        end
-
-        local attackstate_timeline1 = attackstate.timeline[1]
-        if attackstate_timeline1 then
-            local attackstate_timeline1_fn = attackstate_timeline1.fn
-            attackstate_timeline1.fn = function(inst, ...)
-                if inst.UMIsBeardlord and inst:UMIsBeardlord() then inst.um_beardlord_overrides = {blocksound = "dontstarve/creatures/bunnyman/bite"} end
-                local ret = attackstate_timeline1_fn(inst, ...)
-                if inst.um_beardlord_overrides then inst.um_beardlord_overrides = nil end
-                return ret
-            end
-        end
-
         local attackstate_events_animover = attackstate.events["animover"]
         if attackstate_events_animover then
             local attackstate_events_animover_fn = attackstate_events_animover.fn
@@ -185,9 +176,9 @@ env.AddStategraphPostInit("bunnyman", function(inst)
     if walk_startstate then
         local walk_startstate_onenter = walk_startstate.onenter
         walk_startstate.onenter = function(inst, ...)
-            if inst.UMIsBeardlord and inst:UMIsBeardlord() then inst.um_beardlord_overrides = {anim = "beard_walk_pre"} end
+            if inst.UMIsBeardlord and inst:UMIsBeardlord() then inst.um_beardlord_overrides.anim = "beard_walk_pre" end
             local ret = walk_startstate_onenter(inst, ...)
-            if inst.um_beardlord_overrides then inst.um_beardlord_overrides = nil end
+            if inst.um_beardlord_overrides then inst.um_beardlord_overrides.anim = nil end
             return ret
         end
 
@@ -207,9 +198,9 @@ env.AddStategraphPostInit("bunnyman", function(inst)
     if walk_stopstate then
         local walk_stopstate_onenter = walk_stopstate.onenter
         walk_stopstate.onenter = function(inst, ...)
-            if inst.UMIsBeardlord and inst:UMIsBeardlord() then inst.um_beardlord_overrides = {anim = "beard_walk_pst", blockpush = true} end
+            if inst.UMIsBeardlord and inst:UMIsBeardlord() then inst.um_beardlord_overrides.anim = "beard_walk_pst" inst.um_beardlord_overrides.blockpush = true end
             local ret = walk_stopstate_onenter(inst, ...)
-            if inst.um_beardlord_overrides then inst.um_beardlord_overrides = nil end
+            if inst.um_beardlord_overrides then inst.um_beardlord_overrides.anim = nil inst.um_beardlord_overrides.blockpush = nil end
             return ret
         end
     end
@@ -217,9 +208,9 @@ env.AddStategraphPostInit("bunnyman", function(inst)
     if run_startstate then
         local run_startstate_onenter = run_startstate.onenter
         run_startstate.onenter = function(inst, ...)
-            if inst.UMIsBeardlord and inst:UMIsBeardlord() then inst.um_beardlord_overrides = {anim = "beard_run_pre"} end
+            if inst.UMIsBeardlord and inst:UMIsBeardlord() then inst.um_beardlord_overrides.anim = "beard_run_pre" end
             local ret = run_startstate_onenter(inst, ...)
-            if inst.um_beardlord_overrides then inst.um_beardlord_overrides = nil end
+            if inst.um_beardlord_overrides then inst.um_beardlord_overrides.anim = nil end
             return ret
         end
 
@@ -239,9 +230,9 @@ env.AddStategraphPostInit("bunnyman", function(inst)
     if run_stopstate then
         local run_stopstate_onenter = run_stopstate.onenter
         run_stopstate.onenter = function(inst, ...)
-            if inst.UMIsBeardlord and inst:UMIsBeardlord() then inst.um_beardlord_overrides = {anim = "beard_run_pst", blockpush = true} end
+            if inst.UMIsBeardlord and inst:UMIsBeardlord() then inst.um_beardlord_overrides.anim = "beard_run_pst" inst.um_beardlord_overrides.blockpush = true end
             local ret = run_stopstate_onenter(inst, ...)
-            if inst.um_beardlord_overrides then inst.um_beardlord_overrides = nil end
+            if inst.um_beardlord_overrides then inst.um_beardlord_overrides.anim = nil inst.um_beardlord_overrides.blockpush = nil end
             return ret
         end
     end
@@ -310,7 +301,9 @@ env.AddStategraphPostInit("bunnyman", function(inst)
 
             onenter = function(inst)
                 inst.components.locomotor:RunForward()
-                inst.AnimState:PlayAnimation("beard_run_loop", true)
+                if not inst.AnimState:IsCurrentAnimation("beard_run_loop") then
+                    inst.AnimState:PlayAnimation("were_run_loop", true)
+                end
                 inst.sg:SetTimeout(inst.AnimState:GetCurrentAnimationLength())
             end,
 
