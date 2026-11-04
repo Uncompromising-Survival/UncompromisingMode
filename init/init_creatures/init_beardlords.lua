@@ -1,7 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
-local UpvalueHacker = require("tools/upvaluehacker")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 
 _G.UM_BEARDLORDS = {}
 UM_BEARDLORDS.AnimStates = {}
@@ -10,8 +10,8 @@ local _PlayAnimation = AnimState.PlayAnimation
 function AnimState:PlayAnimation(anim, loop, ...)
     local inst = UM_BEARDLORDS.AnimStates and UM_BEARDLORDS.AnimStates[self]
     if inst then
-        local beardlord_overrides = inst.um_beardlord_overrides
-        if beardlord_overrides then anim, loop = beardlord_overrides.anim, beardlord_overrides.loop end
+        local beardlord_anim = inst.um_beardlord_overrides.anim
+        if beardlord_anim then anim, loop = beardlord_anim, inst.um_beardlord_overrides.loop end
     end
     return _PlayAnimation(self, anim, loop, ...)
 end
@@ -20,14 +20,15 @@ local _PushAnimation = AnimState.PushAnimation
 function AnimState:PushAnimation(anim, loop, ...)
     local inst = UM_BEARDLORDS.AnimStates and UM_BEARDLORDS.AnimStates[self]
     if inst then
-        local beardlord_overrides = inst.um_beardlord_overrides
-        if beardlord_overrides then
-            if beardlord_overrides.blockpush then
-                inst.um_beardlord_overrides = nil
-                inst.AnimState:PlayAnimation(beardlord_overrides.anim, beardlord_overrides.loop)
+        local beardlord_anim = inst.um_beardlord_overrides.anim
+        if beardlord_anim then
+            local beardlord_loop = inst.um_beardlord_overrides.loop
+            if inst.um_beardlord_overrides then
+                inst.um_beardlord_overrides.blockpush, inst.um_beardlord_overrides.anim, inst.um_beardlord_overrides.loop = nil, nil, nil
+                inst.AnimState:PlayAnimation(beardlord_anim, beardlord_loop)
                 return
             end
-            anim, loop = beardlord_overrides.anim, beardlord_overrides.loop
+            anim, loop = beardlord_anim, beardlord_loop
         end
     end
     return _PushAnimation(self, anim, loop, ...)
@@ -53,7 +54,7 @@ function SoundEmitter:PlaySound(sound, ...)
 end
 
 local BunnymanBrain = require("brains/bunnymanbrain")
-local hunterparams_scarer = UpvalueHacker.GetUpvalue(BunnymanBrain.OnStart, "hunterparams_scarer")
+local hunterparams_scarer = UMUpvalueHacker.TryGetUpvalue(BunnymanBrain.OnStart, "hunterparams_scarer")
 if hunterparams_scarer then
     local _ShouldRunAway = hunterparams_scarer.fn
     local function ShouldRunAway(hunter, inst, ...)
@@ -105,6 +106,21 @@ env.AddStategraphPostInit("bunnyman", function(inst)
         end),
     }
 
+    local doattackeventhandler = inst.events["doattack"]
+    if doattackeventhandler then
+        local doattackeventhandler_fn = doattackeventhandler.fn
+        doattackeventhandler.fn = function(inst, data, ...)
+            if inst.UMIsBeardlord and inst:UMIsBeardlord() then
+                if inst.components.health and not inst.components.health:IsDead() and
+                    (not inst.sg:HasStateTag("busy") or inst.sg:HasStateTag("hit") and not inst.sg:HasStateTag("electrocute")) then
+                    inst.sg:GoToState("um_beard_attack")
+                end
+                return
+            end
+            return doattackeventhandler_fn(inst, data, ...)
+        end
+    end
+
     local idlestate = inst.states["idle"]
     local funnyidlestate = inst.states["funnyidle"]
     local attackstate = inst.states["attack"]
@@ -135,7 +151,7 @@ env.AddStategraphPostInit("bunnyman", function(inst)
             return ret
         end
     end
-    
+
     if attackstate then
         local attackstate_onenter = attackstate.onenter
         attackstate.onenter = function(inst, ...)
@@ -306,6 +322,77 @@ env.AddStategraphPostInit("bunnyman", function(inst)
 
             ontimeout = function(inst) inst.sg:GoToState("um_beard_run") end,
         },
+        State{
+            name = "um_beard_attack",
+            tags = {"attack", "busy", "jumping"},
+
+            onenter = function(inst)
+                inst.components.locomotor:Stop()
+                inst.components.locomotor:Clear()
+                inst:ClearBufferedAction()
+                inst.components.combat:StartAttack()
+                inst.AnimState:PlayAnimation("beard_atk") --31 frames
+
+                local target = inst.components.combat.target
+                if target and target.components.locomotor == nil then
+                    local dist1 = inst:GetDistanceSqToInst(target)
+                    if dist1 > 0 then
+                        local dist = 1.883
+                        inst.sg.statemem.speedmult = math.clamp(dist1, 0, dist) / dist
+                    else
+                        inst.sg.statemem.speedmult = 0
+                    end
+                else
+                    inst.sg.statemem.speedmult = 1
+                end
+                inst.sg.statemem.speedmult = inst.sg.statemem.speedmult * 2.5
+                inst.Physics:SetMotorVelOverride(3 * inst.sg.statemem.speedmult, 0, 0)
+            end,
+
+            timeline =
+            {
+                FrameEvent(3, PlayFootstep),
+                FrameEvent(10, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/bearger/swhoosh", nil, 0.7) end),
+                FrameEvent(15, function(inst)
+                    inst.SoundEmitter:PlaySound("dontstarve/creatures/bunnyman/wererabbit_attack")
+                    inst.Physics:SetMotorVelOverride(8 * inst.sg.statemem.speedmult, 0, 0)
+                end),
+                FrameEvent(16, function(inst)
+                    PlayFootstep(inst)
+                    inst.components.combat:DoAttack()
+                end),
+                FrameEvent(17, function(inst) inst.Physics:SetMotorVelOverride(4 * inst.sg.statemem.speedmult, 0, 0) end),
+                FrameEvent(18, function(inst) inst.Physics:SetMotorVelOverride(2 * inst.sg.statemem.speedmult, 0, 0) end),
+                FrameEvent(19, function(inst) inst.Physics:SetMotorVelOverride(1 * inst.sg.statemem.speedmult, 0, 0) end),
+                FrameEvent(20, function(inst) inst.Physics:SetMotorVelOverride(0.5 * inst.sg.statemem.speedmult, 0, 0) end),
+                FrameEvent(21, function(inst)
+                    inst.Physics:ClearMotorVelOverride()
+                    inst.Physics:Stop()
+                    inst.sg:RemoveStateTag("jumping")
+                end),
+                FrameEvent(15 + 7 + 4, function(inst)
+                    if inst.components.combat:HasTarget() or math.random() < 0.7 then
+                        inst.sg:AddStateTag("caninterrupt")
+                    end
+                end),
+            },
+
+            events =
+            {
+                EventHandler("animqueueover", function(inst)
+                    if inst.AnimState:AnimDone() then
+                        inst.sg:GoToState("idle")
+                    end
+                end),
+            },
+
+            onexit = function(inst)
+                if inst.sg:HasStateTag("jumping") then
+                    inst.Physics:ClearMotorVelOverride()
+                    inst.Physics:Stop()
+                end
+            end,
+        },
     }
 
     for _, event in pairs(events) do
@@ -321,6 +408,88 @@ local IsForcedNightmare
 local IsCrazyGuy
 local DoShadowFx
 
+local function OnTimerDone(inst, data)
+    if data and data.name == "forcenightmare" then
+        local rendered = not (inst:IsInLimbo() or inst:IsAsleep())
+        if rendered then
+            if inst.sg:HasStateTag("busy") and not inst.sg:HasStateTag("sleeping") then
+                inst.components.timer:StartTimer("forcenightmare", 1)
+                return
+            end
+            if DoShadowFx then DoShadowFx(inst, false) end
+        end
+        inst:RemoveEventCallback("timerdone", OnTimerDone)
+        if inst.beardlord and not (inst.UMShouldBeBeardlord_Internal and inst:UMShouldBeBeardlord_Internal()) then
+            inst.beardlord = nil
+            inst:PushEvent("um_transform", {toggle = nil, nostate = not rendered})
+        end
+        --[[if not inst.clearbeardlordtask then inst.beardlord = nil end
+        inst:PushEvent("um_transform", {toggle = nil, nostate = not rendered})]]
+    end
+end
+
+env.AddPrefabPostInit("world", function(inst) -- Supposedly, this is better since it's called once for each "world" prefab, which usually only spawns once per shard.
+    if not TheWorld.ismastersim then return end
+    IsForcedNightmare = UMUpvalueHacker.TryGetUpvalue(Prefabs.bunnyman.fn, "LootSetupFunction", "IsForcedNightmare")
+    local beardlordloot = UMUpvalueHacker.TryGetUpvalue(Prefabs.bunnyman.fn, "LootSetupFunction", "beardlordloot")
+    local _LootSetupFunction = UMUpvalueHacker.TryGetUpvalue(Prefabs.bunnyman.fn, "LootSetupFunction")
+    if _LootSetupFunction then
+        local function LootSetupFunction(lootdropper, ...)
+            local inst = lootdropper.inst
+            if inst.beardlord and IsForcedNightmare and not IsForcedNightmare(inst) then
+                lootdropper:SetLoot(beardlordloot)
+                return
+            end
+            return _LootSetupFunction(lootdropper, ...)
+        end
+        UMUpvalueHacker.SetUpvalue(Prefabs.bunnyman.fn, LootSetupFunction, "LootSetupFunction")
+    end
+    IsCrazyGuy = UMUpvalueHacker.TryGetUpvalue(Prefabs.bunnyman.fn, "CalcSanityAura", "IsCrazyGuy")
+    local _ClearObservedBeardlord = UMUpvalueHacker.TryGetUpvalue(Prefabs.bunnyman.fn, "CalcSanityAura", "SetObserverdBeardLord", "ClearObservedBeardlord")
+    if _ClearObservedBeardlord then
+        local function ClearObservedBeardlord(inst, ...) end
+        UMUpvalueHacker.SetUpvalue(Prefabs.bunnyman.fn, ClearObservedBeardlord, "CalcSanityAura", "SetObserverdBeardLord", "ClearObservedBeardlord")
+    end
+    local _SetObserverdBeardLord = UMUpvalueHacker.TryGetUpvalue(Prefabs.bunnyman.fn, "CalcSanityAura", "SetObserverdBeardLord")
+    if _SetObserverdBeardLord then
+        local function SetObserverdBeardLord(inst, ...) end
+        UMUpvalueHacker.SetUpvalue(Prefabs.bunnyman.fn, SetObserverdBeardLord, "CalcSanityAura", "SetObserverdBeardLord")
+    end
+    local _CalcSanityAura = UMUpvalueHacker.TryGetUpvalue(Prefabs.bunnyman.fn, "CalcSanityAura")
+    if _CalcSanityAura then
+        local function CalcSanityAura(inst, observer, ...)
+            if inst.beardlord and IsForcedNightmare and not IsForcedNightmare(inst) then return -TUNING.SANITYAURA_MED end
+            return _CalcSanityAura(inst, observer, ...)
+        end
+        UMUpvalueHacker.SetUpvalue(Prefabs.bunnyman.fn, CalcSanityAura, "CalcSanityAura")
+    end
+    DoShadowFx = UMUpvalueHacker.TryGetUpvalue(Prefabs.bunnyman.fn, "OnForceNightmareState", "DoShadowFx")
+    local _SetForcedBeardLord = UMUpvalueHacker.TryGetUpvalue(Prefabs.bunnyman.fn, "OnForceNightmareState", "SetForcedBeardLord")
+    if _SetForcedBeardLord then
+        local function SetForcedBeardLord(inst, duration)
+            --duration nil is loading, so don't perform checks
+            if duration then
+                if inst.components.health:IsDead() then return end
+                local t = inst.components.timer:GetTimeLeft("forcenightmare")
+                if t then
+                    if t < duration then
+                        inst.components.timer:SetTimeLeft("forcenightmare", duration)
+                    end
+                    return
+                end
+                inst.components.timer:StartTimer("forcenightmare", duration)
+            end
+            local wasbeardlord = inst.beardlord
+            if not wasbeardlord then --
+                inst.beardlord = true
+                inst:PushEvent("um_transform", {toggle = true, nostate = inst.um_onload or inst:IsAsleep()})
+            end --
+            inst:ListenForEvent("timerdone", OnTimerDone)
+        end
+        UMUpvalueHacker.SetUpvalue(Prefabs.bunnyman.fn, SetForcedBeardLord, "OnForceNightmareState", "SetForcedBeardLord")
+    end
+end)
+
 local function RemoveFromGlobalTable(inst)
     local AnimState = inst.AnimState
     if AnimState and UM_BEARDLORDS.AnimStates[AnimState] then UM_BEARDLORDS.AnimStates[AnimState] = nil end
@@ -331,6 +500,7 @@ local function BeardlordAnimations(inst)
     local AnimState = inst.AnimState
     if AnimState then UM_BEARDLORDS.AnimStates[AnimState] = inst end
     inst:ListenForEvent("onremove", RemoveFromGlobalTable)
+    inst.um_beardlord_overrides = {}
 end
 
 local function IsBeardlord(inst--[[, forced]])
@@ -370,7 +540,7 @@ local function ShouldBeBeardlord_Internal(inst, data)
 end
 
 local function ShouldBeBeardlord(inst, data)
-    if inst.components.health and inst.components.health:IsDead() or inst.components.timer and inst.components.timer:TimerExists("forcenightmare") then return end
+    if inst.vampire or inst.components.health and inst.components.health:IsDead() or inst.components.timer and inst.components.timer:TimerExists("forcenightmare") then return end
     local becomebeardlord = not (data and data.forcefail) and inst.UMShouldBeBeardlord_Internal and inst:UMShouldBeBeardlord_Internal() or nil
     if inst.beardlord ~= becomebeardlord then
         inst.beardlord = becomebeardlord
@@ -393,9 +563,11 @@ end
 local _OnEntityWake
 local function OnEntityWake(inst, ...)
     local ret = _OnEntityWake and _OnEntityWake(inst, ...)
-    if inst.UMShouldBeBeardlord then inst:UMShouldBeBeardlord({nostate = true}) end
-    if not inst.um_shouldbebeardlord then
-        inst.um_shouldbebeardlord = inst:DoPeriodicTask(FRAMES, inst.UMShouldBeBeardlord)
+    if not inst.vampire then
+        if inst.UMShouldBeBeardlord then inst:UMShouldBeBeardlord({nostate = true}) end
+        if not inst.um_shouldbebeardlord then
+            inst.um_shouldbebeardlord = inst:DoPeriodicTask(FRAMES, inst.UMShouldBeBeardlord)
+        end
     end
     return ret
 end
@@ -403,10 +575,12 @@ end
 local _OnEntitySleep
 local function OnEntitySleep(inst, ...)
     local ret = _OnEntitySleep and _OnEntitySleep(inst, ...)
-    if inst.UMShouldBeBeardlord then inst:UMShouldBeBeardlord({forcefail = true, nostate = true}) end
-    if inst.um_shouldbebeardlord then
-        inst.um_shouldbebeardlord:Cancel()
-        inst.um_shouldbebeardlord = nil
+    if not inst.vampire then
+        if inst.UMShouldBeBeardlord then inst:UMShouldBeBeardlord({forcefail = true, nostate = true}) end
+        if inst.um_shouldbebeardlord then
+            inst.um_shouldbebeardlord:Cancel()
+            inst.um_shouldbebeardlord = nil
+        end
     end
     return ret
 end
@@ -419,7 +593,8 @@ local function OnLoad(inst, ...)
     return ret
 end
 
-local function BunnymanFunctions(inst)
+env.AddPrefabPostInit("bunnyman", function(inst)
+    if not TheWorld.ismastersim then return end
     BeardlordAnimations(inst)
     inst.UMIsBeardlord = IsBeardlord
     inst.UMToggleBeardlord = ToggleBeardlord
@@ -428,14 +603,17 @@ local function BunnymanFunctions(inst)
     inst.UMShouldBeBeardlord = ShouldBeBeardlord
     inst.um_shouldbebeardlord = inst:DoPeriodicTask(FRAMES, inst.UMShouldBeBeardlord, 0)
 
-    if not _SleepTest then
-        _SleepTest = inst.components.sleeper.sleeptestfn
+    local sleeper = inst.components.sleeper
+    if sleeper then
+        if not _SleepTest then
+            _SleepTest = sleeper.sleeptestfn
+        end
+        sleeper.sleeptestfn = SleepTest
+        if not _WakeTest then
+            _WakeTest = sleeper.waketestfn
+        end
+        sleeper.waketestfn = WakeTest
     end
-    inst.components.sleeper.sleeptestfn = SleepTest
-    if not _WakeTest then
-        _WakeTest = inst.components.sleeper.waketestfn
-    end
-    inst.components.sleeper.waketestfn = WakeTest
 
     if not _OnEntityWake then
         _OnEntityWake = inst.OnEntityWake
@@ -449,91 +627,4 @@ local function BunnymanFunctions(inst)
         _OnLoad = inst.OnLoad
     end
     inst.OnLoad = OnLoad
-end
-
-local function OnTimerDone(inst, data)
-    if data and data.name == "forcenightmare" then
-        local rendered = not (inst:IsInLimbo() or inst:IsAsleep())
-        if rendered then
-            if inst.sg:HasStateTag("busy") and not inst.sg:HasStateTag("sleeping") then
-                inst.components.timer:StartTimer("forcenightmare", 1)
-                return
-            end
-            if DoShadowFx then DoShadowFx(inst, false) end
-        end
-        inst:RemoveEventCallback("timerdone", OnTimerDone)
-        if inst.beardlord and not (inst.UMShouldBeBeardlord_Internal and inst:UMShouldBeBeardlord_Internal()) then
-            inst.beardlord = nil
-            inst:PushEvent("um_transform", {toggle = nil, nostate = not rendered})
-        end
-        --[[if not inst.clearbeardlordtask then inst.beardlord = nil end
-        inst:PushEvent("um_transform", {toggle = nil, nostate = not rendered})]]
-    end
-end
-
-env.AddPrefabPostInit("world", function(inst) -- Supposedly, this is better since it's called once for each "world" prefab, which usually only spawns once per shard.
-    if not TheWorld.ismastersim then return end
-    IsForcedNightmare = UpvalueHacker.GetUpvalue(Prefabs.bunnyman.fn, "LootSetupFunction", "IsForcedNightmare")
-    local beardlordloot = UpvalueHacker.GetUpvalue(Prefabs.bunnyman.fn, "LootSetupFunction", "beardlordloot")
-    local _LootSetupFunction = UpvalueHacker.GetUpvalue(Prefabs.bunnyman.fn, "LootSetupFunction")
-    if _LootSetupFunction then
-        local function LootSetupFunction(lootdropper, ...)
-            local inst = lootdropper.inst
-            if inst.beardlord and IsForcedNightmare and not IsForcedNightmare(inst) then
-                lootdropper:SetLoot(beardlordloot)
-                return
-            end
-            return _LootSetupFunction(lootdropper, ...)
-        end
-        UpvalueHacker.SetUpvalue(Prefabs.bunnyman.fn, LootSetupFunction, "LootSetupFunction")
-    end
-    IsCrazyGuy = UpvalueHacker.GetUpvalue(Prefabs.bunnyman.fn, "CalcSanityAura", "IsCrazyGuy")
-    local _ClearObservedBeardlord = UpvalueHacker.GetUpvalue(Prefabs.bunnyman.fn, "CalcSanityAura", "SetObserverdBeardLord", "ClearObservedBeardlord")
-    if _ClearObservedBeardlord then
-        local function ClearObservedBeardlord(inst, ...) end
-        UpvalueHacker.SetUpvalue(Prefabs.bunnyman.fn, ClearObservedBeardlord, "CalcSanityAura", "SetObserverdBeardLord", "ClearObservedBeardlord")
-    end
-    local _SetObserverdBeardLord = UpvalueHacker.GetUpvalue(Prefabs.bunnyman.fn, "CalcSanityAura", "SetObserverdBeardLord")
-    if _SetObserverdBeardLord then
-        local function SetObserverdBeardLord(inst, ...) end
-        UpvalueHacker.SetUpvalue(Prefabs.bunnyman.fn, SetObserverdBeardLord, "CalcSanityAura", "SetObserverdBeardLord")
-    end
-    local _CalcSanityAura = UpvalueHacker.GetUpvalue(Prefabs.bunnyman.fn, "CalcSanityAura")
-    if _CalcSanityAura then
-        local function CalcSanityAura(inst, observer, ...)
-            if inst.beardlord and IsForcedNightmare and not IsForcedNightmare(inst) then return -TUNING.SANITYAURA_MED end
-            return _CalcSanityAura(inst, observer, ...)
-        end
-        UpvalueHacker.SetUpvalue(Prefabs.bunnyman.fn, CalcSanityAura, "CalcSanityAura")
-    end
-    DoShadowFx = UpvalueHacker.GetUpvalue(Prefabs.bunnyman.fn, "OnForceNightmareState", "DoShadowFx")
-    local _SetForcedBeardLord = UpvalueHacker.GetUpvalue(Prefabs.bunnyman.fn, "OnForceNightmareState", "SetForcedBeardLord")
-    if _SetForcedBeardLord then
-        local function SetForcedBeardLord(inst, duration)
-            --duration nil is loading, so don't perform checks
-            if duration then
-                if inst.components.health:IsDead() then return end
-                local t = inst.components.timer:GetTimeLeft("forcenightmare")
-                if t then
-                    if t < duration then
-                        inst.components.timer:SetTimeLeft("forcenightmare", duration)
-                    end
-                    return
-                end
-                inst.components.timer:StartTimer("forcenightmare", duration)
-            end
-            local wasbeardlord = inst.beardlord
-            if not wasbeardlord then --
-                inst.beardlord = true
-                inst:PushEvent("um_transform", {toggle = true, nostate = inst.um_onload or inst:IsAsleep()})
-            end --
-            inst:ListenForEvent("timerdone", OnTimerDone)
-        end
-        UpvalueHacker.SetUpvalue(Prefabs.bunnyman.fn, SetForcedBeardLord, "OnForceNightmareState", "SetForcedBeardLord")
-    end
-end)
-
-env.AddPrefabPostInit("bunnyman", function(inst)
-    if not TheWorld.ismastersim then return end
-    BunnymanFunctions(inst)
 end)
