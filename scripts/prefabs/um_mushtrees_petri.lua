@@ -1,17 +1,17 @@
 local assets =
 {
     Asset("ANIM", "anim/um_redmushtree.zip"),
-	Asset("ANIM", "anim/um_bluemushtree.zip"),
-	Asset("ANIM", "anim/um_greenmushtree.zip"),
-	
-	Asset("IMAGE", "images/map_icons/um_redmushtree_mapicon.tex"),
-	Asset("ATLAS", "images/map_icons/um_redmushtree_mapicon.xml"),		
+    Asset("ANIM", "anim/um_bluemushtree.zip"),
+    Asset("ANIM", "anim/um_greenmushtree.zip"),
 
-	Asset("IMAGE", "images/map_icons/um_greenmushtree_mapicon.tex"),
-	Asset("ATLAS", "images/map_icons/um_greenmushtree_mapicon.xml"),	
+    Asset("IMAGE", "images/map_icons/um_redmushtree_mapicon.tex"),
+    Asset("ATLAS", "images/map_icons/um_redmushtree_mapicon.xml"),
 
-	Asset("IMAGE", "images/map_icons/um_bluemushtree_mapicon.tex"),
-	Asset("ATLAS", "images/map_icons/um_bluemushtree_mapicon.xml"),		
+    Asset("IMAGE", "images/map_icons/um_greenmushtree_mapicon.tex"),
+    Asset("ATLAS", "images/map_icons/um_greenmushtree_mapicon.xml"),
+
+    Asset("IMAGE", "images/map_icons/um_bluemushtree_mapicon.tex"),
+    Asset("ATLAS", "images/map_icons/um_bluemushtree_mapicon.xml"),
 }
 
 
@@ -31,45 +31,45 @@ local function OnWork(inst, worker, workleft)
         end
     else
         inst.AnimState:PlayAnimation(
-            (workleft < TUNING.ROCKS_MINE / 3 and inst.animname.."_small") or
-            (workleft < TUNING.ROCKS_MINE * 2 / 3 and inst.animname.."_med") or
-            inst.animname.."_tall"
+            (workleft < TUNING.ROCKS_MINE / 3 and inst.animname .. "_small") or
+            (workleft < TUNING.ROCKS_MINE * 2 / 3 and inst.animname .. "_med") or
+            inst.animname .. "_tall"
         )
     end
 end
 
 local function onsave(inst, data)
-	data.transformSize = inst.transformSize
+    data.transformSize = inst.transformSize
 end
 
 local function onload(inst, data)
     if data then
-		inst.transformSize = data.transformSize
+        inst.transformSize = data.transformSize
     end
 end
 
 
 local function DetermineSize(inst)
-	local scale
-	if inst.transformSize then
-		scale = inst.transformSize
-	else
-		if inst.prefab == "um_redmushtree_gem" or inst.prefab == "um_redmushtree_gemless" then
-			scale = math.random(11,14)/10
-		end
-		if inst.prefab == "um_greenmushtree_gemless" or inst.prefab == "um_greenmushtree_gem" then
-			scale = math.random(9,11)/10
-		end
-		if inst.prefab == "um_bluemushtree_gemless" or inst.prefab == "um_bluemushtree_gem" then
-			scale = math.random(9,12)/10
-		end
-		inst.scale = scale
-	end
-	inst.Transform:SetScale(scale,scale,scale)
+    local scale
+    if inst.transformSize then
+        scale = inst.transformSize
+    else
+        if inst.prefab == "um_redmushtree_gem" or inst.prefab == "um_redmushtree_gemless" then
+            scale = math.random(11, 14) / 10
+        end
+        if inst.prefab == "um_greenmushtree_gemless" or inst.prefab == "um_greenmushtree_gem" then
+            scale = math.random(9, 11) / 10
+        end
+        if inst.prefab == "um_bluemushtree_gemless" or inst.prefab == "um_bluemushtree_gem" then
+            scale = math.random(9, 12) / 10
+        end
+        inst.scale = scale
+    end
+    inst.Transform:SetScale(scale, scale, scale)
 end
 
 
-local function baserock_fn(bank, build, anim, minimapicon, tag, multcolour,color)
+local function baserock_fn(bank, build, anim, minimapicon, tag, multcolour, color)
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -125,7 +125,7 @@ local function baserock_fn(bank, build, anim, minimapicon, tag, multcolour,color
     workable:SetOnWorkCallback(OnWork)
 
 
-    local colour = math.random(75,100)*0.01
+    local colour = math.random(75, 100) * 0.01
     inst.AnimState:SetMultColour(colour, colour, colour, 1)
 
 
@@ -136,21 +136,21 @@ local function baserock_fn(bank, build, anim, minimapicon, tag, multcolour,color
 
     MakeHauntableWork(inst)
 
-	inst.OnSave = onsave
-	inst.OnLoad = onload
-	inst:DoTaskInTime(0,DetermineSize)
+    inst.OnSave = onsave
+    inst.OnLoad = onload
+    inst:DoTaskInTime(0, DetermineSize)
     return inst
 end
 
-SetSharedLootTable( 'um_petmushtree',
-{
-    {'rocks',   1.0},
-    {'rocks',   1.0},
-    {'rocks',   1.0},
-    {'flint',   1.0},
-	{'nitre',   1.0},
-	{'log',   0.6},
-})
+SetSharedLootTable('um_petmushtree',
+    {
+        { 'rocks', 1.0 },
+        { 'rocks', 1.0 },
+        { 'rocks', 1.0 },
+        { 'flint', 1.0 },
+        { 'nitre', 1.0 },
+        { 'log',   0.6 },
+    })
 
 local function redgemless()
     local inst = baserock_fn("um_redmushtree_gemless", "um_redmushtree", "empty_tall", "um_redmushtree_mapicon.tex")
@@ -158,12 +158,12 @@ local function redgemless()
     if not TheWorld.ismastersim then
         return inst
     end
-	inst.animname = "empty"
-	
+    inst.animname = "empty"
+
     inst.components.lootdropper:SetChanceLootTable('um_petmushtree')
- 	inst.components.lootdropper:AddChanceLoot("red_cap", 1)
-	inst.components.lootdropper:AddChanceLoot("red_cap", 0.1)   
-	
+    inst.components.lootdropper:AddChanceLoot("red_cap", 1)
+    inst.components.lootdropper:AddChanceLoot("red_cap", 0.1)
+
     return inst
 end
 
@@ -174,10 +174,10 @@ local function redgem()
         return inst
     end
 
-	inst.animname = "gem"
+    inst.animname = "gem"
     inst.components.lootdropper:SetChanceLootTable('um_petmushtree')
-	inst.components.lootdropper:AddChanceLoot("um_gemology_geode_red", 1)
-	inst.components.lootdropper:AddChanceLoot("um_gemology_geode_red", 0.1)
+    inst.components.lootdropper:AddChanceLoot("um_gemology_geode_red", 1)
+    inst.components.lootdropper:AddChanceLoot("um_gemology_geode_red", 0.1)
 
     return inst
 end
@@ -188,11 +188,11 @@ local function greengemless()
     if not TheWorld.ismastersim then
         return inst
     end
-	inst.animname = "empty"
-	
+    inst.animname = "empty"
+
     inst.components.lootdropper:SetChanceLootTable('um_petmushtree')
- 	inst.components.lootdropper:AddChanceLoot("green_cap", 1)
-	inst.components.lootdropper:AddChanceLoot("green_cap", 0.1)   
+    inst.components.lootdropper:AddChanceLoot("green_cap", 1)
+    inst.components.lootdropper:AddChanceLoot("green_cap", 0.1)
 
     return inst
 end
@@ -203,10 +203,10 @@ local function greengem()
     if not TheWorld.ismastersim then
         return inst
     end
-	inst.animname = "gem"
+    inst.animname = "gem"
     inst.components.lootdropper:SetChanceLootTable('um_petmushtree')
-	inst.components.lootdropper:AddChanceLoot("um_gemology_geode_green", 1)
-	inst.components.lootdropper:AddChanceLoot("um_gemology_geode_green", 0.1)
+    inst.components.lootdropper:AddChanceLoot("um_gemology_geode_green", 1)
+    inst.components.lootdropper:AddChanceLoot("um_gemology_geode_green", 0.1)
     return inst
 end
 
@@ -216,11 +216,11 @@ local function bluegemless()
     if not TheWorld.ismastersim then
         return inst
     end
-	inst.animname = "empty"
-	
+    inst.animname = "empty"
+
     inst.components.lootdropper:SetChanceLootTable('um_petmushtree')
- 	inst.components.lootdropper:AddChanceLoot("blue_cap", 1)
-	inst.components.lootdropper:AddChanceLoot("blue_cap", 0.1)   
+    inst.components.lootdropper:AddChanceLoot("blue_cap", 1)
+    inst.components.lootdropper:AddChanceLoot("blue_cap", 0.1)
 
     return inst
 end
@@ -231,18 +231,18 @@ local function bluegem()
     if not TheWorld.ismastersim then
         return inst
     end
-	inst.animname = "gem"
+    inst.animname = "gem"
     inst.components.lootdropper:SetChanceLootTable('um_petmushtree')
-	inst.components.lootdropper:AddChanceLoot("um_gemology_geode_blue", 1)
-	inst.components.lootdropper:AddChanceLoot("um_gemology_geode_blue", 0.1)
+    inst.components.lootdropper:AddChanceLoot("um_gemology_geode_blue", 1)
+    inst.components.lootdropper:AddChanceLoot("um_gemology_geode_blue", 0.1)
     return inst
 end
 
 
 
 return Prefab("um_redmushtree_gemless", redgemless, assets),
-    Prefab("um_redmushtree_gem",redgem,assets),
-	Prefab("um_greenmushtree_gemless", greengemless,assets),
-    Prefab("um_greenmushtree_gem",greengem,assets),
-	Prefab("um_bluemushtree_gemless", bluegemless,assets),
-    Prefab("um_bluemushtree_gem",bluegem,assets)
+    Prefab("um_redmushtree_gem", redgem, assets),
+    Prefab("um_greenmushtree_gemless", greengemless, assets),
+    Prefab("um_greenmushtree_gem", greengem, assets),
+    Prefab("um_bluemushtree_gemless", bluegemless, assets),
+    Prefab("um_bluemushtree_gem", bluegem, assets)

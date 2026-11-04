@@ -160,7 +160,7 @@ local function on_burnt(inst)
 end
 
 local function OnHitOther(inst, data)
-    if data.target and data.target:HasTag("player") and not data.target:HasAnyTag("hasplaguemask", "ratfriend", "automaton", "ratwhisperer") and TUNING.DSTU.MAXHPHITTERS then
+    if data.target and data.target:HasTag("player") and not data.target:HasAnyTag("hasplaguemask", "ratfriend", "automaton", "ratwhisperer") and UM_CONFIG.MAXHPHITTERS then
         data.target.components.health:DeltaPenalty(.01)
     end
 
@@ -575,7 +575,7 @@ local function CreateRat(data)
     inst:AddComponent("knownlocations")
 
     local cookable = inst:AddComponent("cookable")
-    cookable.product = TUNING.DSTU.MONSTERSMALLMEAT and "cookedmonstersmallmeat" or "cookedmonstermeat"
+    cookable.product = UM_CONFIG.MONSTERSMALLMEAT and "cookedmonstersmallmeat" or "cookedmonstermeat"
     cookable:SetOnCookedFn(on_cooked_fn)
 
     local inventory = inst:AddComponent("inventory")
@@ -811,7 +811,7 @@ local function junkfn()
     inst.components.health:SetMaxHealth(1.5 * TUNING.DSTU.RAIDRAT_HEALTH)
 
     inst:AddComponent("lootdropper")
-    if TUNING.DSTU.MONSTERSMALLMEAT then
+    if UM_CONFIG.MONSTERSMALLMEAT then
         inst.components.lootdropper:AddRandomLoot("monstersmallmeat", .34)
     else
         inst.components.lootdropper:AddRandomLoot("monstermeat", .34)
@@ -1693,7 +1693,7 @@ local function TimeForACheckUp(inst, dev)
     -- print("Ratscore = "..inst.ratscore)
     -- print("------------------------")
     -- just use the command if you wanna see i guess.
-    if TUNING.DSTU.ANNOUNCE_BASESTATUS then
+    if UM_CONFIG.ANNOUNCE_BASESTATUS then
         TheNet:SystemMessage("-------------------------")
         --TheNet:SystemMessage("Itemscore = "..inst.itemscore)
         TheNet:SystemMessage("Foodscore = "..inst.foodscore)
@@ -1701,7 +1701,7 @@ local function TimeForACheckUp(inst, dev)
         TheNet:SystemMessage("Ratscore = "..inst.ratscore)
     end
     if inst.ratscore > 300 then inst.ratscore = 300 end
-    if TUNING.DSTU.ANNOUNCE_BASESTATUS then
+    if UM_CONFIG.ANNOUNCE_BASESTATUS then
         --TheNet:SystemMessage("True Ratscore = "..inst.ratscore)
         TheNet:SystemMessage("Timer = "..(TheWorld.components.ratcheck:GetRatTimer() and TheWorld.components.ratcheck:GetRatTimer() or "... not available? timer is 0 second").."s")
         TheNet:SystemMessage("-------------------------")

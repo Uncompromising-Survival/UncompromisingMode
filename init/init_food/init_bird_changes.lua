@@ -64,7 +64,7 @@ local function DigestFood(inst, food)
         if inst.components.occupiable and inst.components.occupiable:GetOccupant() and inst.components.occupiable:GetOccupant():HasTag("bird_mutant") then
             inst.components.lootdropper:SpawnLootPrefab("rottenegg")
         else
-            if food.components.edible.secondaryfoodtype ~= nil and food.components.edible.secondaryfoodtype == FOODTYPE.MONSTER and TUNING.DSTU.MONSTER_EGGS > 0 then
+            if food.components.edible.secondaryfoodtype ~= nil and food.components.edible.secondaryfoodtype == FOODTYPE.MONSTER and UM_CONFIG.MONSTER_EGGS > 0 then
                 inst.components.lootdropper:SpawnLootPrefab("um_monsteregg")
             else
                 inst.components.lootdropper:SpawnLootPrefab("bird_egg")
@@ -175,7 +175,7 @@ function ThankYouToshInit(inst)
         local _onaccept = inst.components.trader.onaccept
 
         inst.components.trader.onaccept = function(inst, giver, item)
-            if item.prefab ~= "um_monsteregg" and item.prefab ~= "um_monsteregg_cooked" and (item.prefab == "rice" or item.prefab == "rice_cooked" or item.components.edible.secondaryfoodtype ~= nil and item.components.edible.secondaryfoodtype == FOODTYPE.MONSTER and TUNING.DSTU.MONSTER_EGGS > 0) then
+            if item.prefab ~= "um_monsteregg" and item.prefab ~= "um_monsteregg_cooked" and (item.prefab == "rice" or item.prefab == "rice_cooked" or item.components.edible.secondaryfoodtype ~= nil and item.components.edible.secondaryfoodtype == FOODTYPE.MONSTER and UM_CONFIG.MONSTER_EGGS > 0) then
                 OnGetItem(inst, giver, item)
             else
                 return _onaccept(inst, giver, item)

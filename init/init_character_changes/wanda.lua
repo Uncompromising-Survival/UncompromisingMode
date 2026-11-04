@@ -22,7 +22,7 @@ end
 env.AddPrefabPostInit("wanda", function(inst)
     if not TheWorld.ismastersim then return end
 
-    if TUNING.DSTU.WANDA_NERF then
+    if UM_CONFIG.WANDA_NERF then
         local combat = inst.components.combat
         if combat then
             local _CustomCombatDamage = combat.customdamagemultfn
@@ -42,7 +42,7 @@ env.AddPrefabPostInit("wanda", function(inst)
     inst.UMToggleUniqueVetCurse = ToggleUniqueVetCurse
 end)
 
-if TUNING.DSTU.WANDA_NERF then
+if UM_CONFIG.WANDA_NERF then
     local function Revive_CanTarget(inst, doer, target)
         -- This is a client side function
         return target ~= nil and target:HasTag("playerghost") and not target:HasTag("reviving")

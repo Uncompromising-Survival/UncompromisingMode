@@ -28,7 +28,7 @@ local brain = require "brains/lureplague_ratbrain"
 
 
 local function OnAttackOther(inst, data)
-	if data.target ~= nil and data.target:HasTag("player") and not data.target:HasTag("hasplaguemask") and TUNING.DSTU.MAXHPHITTERS then
+	if data.target ~= nil and data.target:HasTag("player") and not data.target:HasTag("hasplaguemask") and UM_CONFIG.MAXHPHITTERS then
 		data.target.components.health:DeltaPenalty(0.05)
 	end
 end
@@ -135,7 +135,7 @@ local function fn()
 	inst.components.health:SetMaxHealth(TUNING.DSTU.RAIDRAT_HEALTH)
 
 	inst:AddComponent("lootdropper")
-    if TUNING.DSTU.MONSTERSMALLMEAT then
+    if UM_CONFIG.MONSTERSMALLMEAT then
         inst.components.lootdropper:AddRandomLoot("monstersmallmeat", 0.66)
     else
         inst.components.lootdropper:AddRandomLoot("monstermeat", 0.66)

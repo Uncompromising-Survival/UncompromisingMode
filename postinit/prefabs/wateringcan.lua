@@ -1,7 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-if TUNING.DSTU.WATERING_TEMPERATURE then
+if UM_CONFIG.WATERING_THERMAL then
 	env.AddPrefabPostInit("wateringcan", function(inst)
 		if not TheWorld.ismastersim then
 			return

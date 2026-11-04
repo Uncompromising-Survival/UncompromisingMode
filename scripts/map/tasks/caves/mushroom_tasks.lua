@@ -46,142 +46,143 @@ GLOBAL.require("map/rooms/caves/moonregions") --AXE We need to require the rooms
 local grottoConfig = GetModConfigData("flooded_caves")
 local lunarCave = grottoConfig == "lunar_cave"
 
+if grottoConfig ~= "off" then
+    AddTask("GrottoEntrance", {
+        locks = lunarCave and {} or { LOCKS.MOONMUSH },
+        keys_given = lunarCave and { KEYS.TIER1 } or { KEYS.GROTTO_TIER1 },
+        level_set_piece_blocker = true,
+        region_id = lunarCave and "underisland" or nil,
+        room_tags = lunarCave and { "lunacyarea", "not_mainland", "eels_only" } or { "lunacyarea", "eels_only" },
+        room_choices = {
+            ["GrottoStairs"] = 1,
+            ["GrottoGrassNoise"] = 1,
+        },
+        background_room = "BGGrottoReeds",
+        room_bg = WORLD_TILES.UM_MAGMA,
+        colour = { r = .1, g = .1, b = .1, a = 1 },
+    })
 
+    AddTask("PatchyFloodedGrotto", {
+        region_id = lunarCave and "underisland" or nil,
+        room_tags = lunarCave and { "lunacyarea", "not_mainland", "MushGnomeSpawnArea", "eels_only" } or { "lunacyarea", "MushGnomeSpawnArea", "eels_only" },
+        locks = lunarCave and { LOCKS.TIER1 } or { LOCKS.GROTTO_TIER1 },
+        keys_given = lunarCave and { KEYS.TIER2 } or { KEYS.GROTTO_TIER2 },
+        level_set_piece_blocker = true,
+        room_choices = {
+            ["GrottoGrass"] = 1,
+            ["GrottoLightFlood"] = 3,
+            ["GrottoLightFloodNoise"] = 2,
+        },
+        background_room = "GrottoLightFlood",
+        room_bg = WORLD_TILES.UM_GROTTO_LIGHTFLOODED,
+        colour = { r = .1, g = .1, b = .1, a = 1 },
+    })
 
-AddTask("GrottoEntrance", {
-    locks = lunarCave and {} or { LOCKS.MOONMUSH },
-    keys_given = lunarCave and { KEYS.TIER1 } or { KEYS.GROTTO_TIER1 },
-    level_set_piece_blocker = true,
-    region_id = lunarCave and "underisland" or nil,
-    room_tags = lunarCave and { "lunacyarea", "not_mainland", "eels_only" } or { "lunacyarea", "eels_only" },
-    room_choices = {
-        ["GrottoStairs"] = 1,
-        ["GrottoGrassNoise"] = 1,
-    },
-    background_room = "BGGrottoReeds",
-    room_bg = WORLD_TILES.UM_MAGMA,
-    colour = { r = .1, g = .1, b = .1, a = 1 },
-})
-
-AddTask("PatchyFloodedGrotto", {
-    region_id = lunarCave and "underisland" or nil,
-    room_tags = lunarCave and { "lunacyarea", "not_mainland", "MushGnomeSpawnArea", "eels_only" } or { "lunacyarea", "MushGnomeSpawnArea", "eels_only" },
-    locks = lunarCave and { LOCKS.TIER1 } or { LOCKS.GROTTO_TIER1 },
-    keys_given = lunarCave and { KEYS.TIER2 } or { LOCKS.GROTTO_TIER2 },
-    level_set_piece_blocker = true,
-    room_choices = {
-        ["GrottoGrass"] = 1,
-        ["GrottoLightFlood"] = 3,
-        ["GrottoLightFloodNoise"] = 2,
-    },
-    background_room = "GrottoLightFlood",
-    room_bg = WORLD_TILES.UM_GROTTO_LIGHTFLOODED,
-    colour = { r = .1, g = .1, b = .1, a = 1 },
-})
-
--- Keep the vanilla task and redefine the room choices, incase another mod tries to reference it. If it is removed, it could result in a crash. (This happened with removing the forest that used to be the Hooded Forest and the black plague mod)
-AddTaskPreInit("MoonCaveForest", function(task)
-    task.region_id = lunarCave and "underisland" or nil
-    task.locks = lunarCave and { LOCKS.TIER2 } or { LOCKS.GROTTO_TIER2 }
-    task.keys_given = lunarCave and { KEYS.TIER3 } or { KEYS.GROTTO_TIER3 }
-    task.room_tags = lunarCave and { "lunacyarea", "not_mainland", "MushGnomeSpawnArea", "eels_only" } or { "lunacyarea", "MushGnomeSpawnArea", "eels_only" }
-    task.room_choices = {
-        ["MoonMushForest"] = 2,
-        ["MoonMushForest_entrance"] = 1,
-    }
-end)
-
-local mushroom_rooms = { "MoonMushForest", "MoonMushForest_entrance" }
-
-for i, v in ipairs(mushroom_rooms) do
-    AddRoomPreInit(v, function(room)
-        if room.tags then
-            --table.insert(room.tags,"ForceDisconnected")
-            if lunarCave then
-                table.insert(room.tags, "not_mainland")
-            end
-            table.insert(room.tags, "um_grottowar")
-        else
-            room.tags = lunarCave and { "not_mainland", "um_grottowar" } or { "um_grottowar" }
-        end
-        room.SafeFromDisconnect = lunarCave -- Thank you Klei, this is a very nice option to have
+    -- Keep the vanilla task and redefine the room choices, incase another mod tries to reference it. If it is removed, it could result in a crash. (This happened with removing the forest that used to be the Hooded Forest and the black plague mod)
+    AddTaskPreInit("MoonCaveForest", function(task)
+        print("adding MoonCaveForest task preinit!")
+        task.region_id = lunarCave and "underisland" or nil
+        task.locks = lunarCave and { LOCKS.TIER2 } or { LOCKS.GROTTO_TIER2 }
+        task.keys_given = lunarCave and { KEYS.TIER3 } or { KEYS.GROTTO_TIER3 }
+        task.room_tags = lunarCave and { "lunacyarea", "not_mainland", "MushGnomeSpawnArea", "eels_only" } or { "lunacyarea", "MushGnomeSpawnArea", "eels_only" }
+        task.room_choices = {
+            ["MoonMushForest"] = 2,
+            ["MoonMushForest_entrance"] = 1,
+        }
     end)
-end
 
-AddTask("VeryFloodedGrotto", {
-    region_id = lunarCave and "underisland" or nil,
-    room_tags = lunarCave and { "lunacyarea", "not_mainland", "eels_only" } or { "lunacyarea", "eels_only" },
-    locks = lunarCave and { LOCKS.TIER3 } or { LOCKS.GROTTO_TIER3 },
-    keys_given = lunarCave and { KEYS.TIER4 } or { KEYS.GROTTO_TIER4 },
-    level_set_piece_blocker = true,
-    room_choices = {
-        ["GrottoHeavyFloodWorms"] = 2,
-        ["GrottoHeavyFloodBoth"] = 1,
-        ["GrottoHeavyFloodTentacles"] = 2,
-    },
+    local mushroom_rooms = { "MoonMushForest", "MoonMushForest_entrance" }
 
-    background_room = "GrottoHeavyFloodTentacles",
-    --[[cove_room_name = "Empty_Cove",
+    for i, v in ipairs(mushroom_rooms) do
+        AddRoomPreInit(v, function(room)
+            if room.tags then
+                --table.insert(room.tags,"ForceDisconnected")
+                if lunarCave then
+                    table.insert(room.tags, "not_mainland")
+                end
+                table.insert(room.tags, "um_grottowar")
+            else
+                room.tags = lunarCave and { "not_mainland", "um_grottowar" } or { "um_grottowar" }
+            end
+            room.SafeFromDisconnect = lunarCave -- Thank you Klei, this is a very nice option to have
+        end)
+    end
+
+    AddTask("VeryFloodedGrotto", {
+        region_id = lunarCave and "underisland" or nil,
+        room_tags = lunarCave and { "lunacyarea", "not_mainland", "eels_only" } or { "lunacyarea", "eels_only" },
+        locks = lunarCave and { LOCKS.TIER3 } or { LOCKS.GROTTO_TIER3 },
+        keys_given = lunarCave and { KEYS.TIER4 } or { KEYS.GROTTO_TIER4 },
+        level_set_piece_blocker = true,
+        room_choices = {
+            ["GrottoHeavyFloodWorms"] = 2,
+            ["GrottoHeavyFloodBoth"] = 1,
+            ["GrottoHeavyFloodTentacles"] = 2,
+        },
+
+        background_room = "GrottoHeavyFloodTentacles",
+        --[[cove_room_name = "Empty_Cove",
 		cove_room_chance = 1,
 		cove_room_max_edges = 2,]]
-    room_bg = WORLD_TILES.UM_GROTTO_HEAVYFLOODED,
-    colour = { r = .1, g = .1, b = .1, a = 1 },
-})
+        room_bg = WORLD_TILES.UM_GROTTO_HEAVYFLOODED,
+        colour = { r = .1, g = .1, b = .1, a = 1 },
+    })
 
-AddTask("DarkFloodedGrotto", {
-    region_id = lunarCave and "underisland" or nil,
-    room_tags = lunarCave and { "lunacyarea", "not_mainland", "eels_only" } or { "lunacyarea", "eels_only" },
-    locks = lunarCave and { LOCKS.TIER4 } or { LOCKS.GROTTO_TIER4 },
-    keys_given = { KEYS.ARCHIVE },
-    level_set_piece_blocker = true,
-    room_choices = {
-        ["GrottoDarknessWorms"] = 6,
-        ["GrottoDarknessTentacles"] = 1,
-    },
-    background_room = "GrottoLightFlood",
-    room_bg = WORLD_TILES.UM_GROTTO_LIGHTFLOODED,
-    colour = { r = .1, g = .1, b = .1, a = 1 },
-})
+    AddTask("DarkFloodedGrotto", {
+        region_id = lunarCave and "underisland" or nil,
+        room_tags = lunarCave and { "lunacyarea", "not_mainland", "eels_only" } or { "lunacyarea", "eels_only" },
+        locks = lunarCave and { LOCKS.TIER4 } or { LOCKS.GROTTO_TIER4 },
+        keys_given = { KEYS.ARCHIVE },
+        level_set_piece_blocker = true,
+        room_choices = {
+            ["GrottoDarknessWorms"] = 6,
+            ["GrottoDarknessTentacles"] = 1,
+        },
+        background_room = "GrottoLightFlood",
+        room_bg = WORLD_TILES.UM_GROTTO_LIGHTFLOODED,
+        colour = { r = .1, g = .1, b = .1, a = 1 },
+    })
 
 
-AddTaskPreInit("ArchiveMaze", function(task)
-    task.region_id = lunarCave and "underisland" or nil
-    task.room_tags = lunarCave and { "not_mainland", "nocavein", "eels_only" } or { "nocavein", "eels_only" }
-    task.entrance_room = "ArchiveMazeEntrance_Flooded"
-    task.room_choices =
-    {
-        ["ArchiveMazeRooms"] = math.random(8, 10),
-    }
-end)
+    AddTaskPreInit("ArchiveMaze", function(task)
+        task.region_id = lunarCave and "underisland" or nil
+        task.room_tags = lunarCave and { "not_mainland", "nocavein", "eels_only" } or { "nocavein", "eels_only" }
+        task.entrance_room = "ArchiveMazeEntrance_Flooded"
+        task.room_choices =
+        {
+            ["ArchiveMazeRooms"] = math.random(8, 10),
+        }
+    end)
 
-AddRoomPreInit("ArchiveMazeRooms", function(room)
-    if room.tags then
-        table.insert(room.tags, "UMMazeGrotto")
-    else
-        room.tags = { "UMMazeGrotto" }
-    end
-end)
-
-AddTaskSetPreInitAny(function(tasksetdata)
-    if tasksetdata.location ~= "cave" then
-        return
-    end
-    table.insert(tasksetdata.tasks, "GrottoEntrance")
-    table.insert(tasksetdata.tasks, "PatchyFloodedGrotto")
-    table.insert(tasksetdata.tasks, "VeryFloodedGrotto")
-    table.insert(tasksetdata.tasks, "DarkFloodedGrotto")
-    if lunarCave then
-        if tasksetdata.required_prefabs ~= nil then
-            table.insert(tasksetdata.required_prefabs, "cave_exit_moon")
+    AddRoomPreInit("ArchiveMazeRooms", function(room)
+        if room.tags then
+            table.insert(room.tags, "UMMazeGrotto")
         else
-            tasksetdata.required_prefabs = { "cave_exit_moon" }
+            room.tags = { "UMMazeGrotto" }
         end
-    end
-end)
+    end)
+
+    AddTaskSetPreInitAny(function(tasksetdata)
+        if tasksetdata.location ~= "cave" then
+            return
+        end
+        table.insert(tasksetdata.tasks, "GrottoEntrance")
+        table.insert(tasksetdata.tasks, "PatchyFloodedGrotto")
+        table.insert(tasksetdata.tasks, "VeryFloodedGrotto")
+        table.insert(tasksetdata.tasks, "DarkFloodedGrotto")
+        if lunarCave then
+            if tasksetdata.required_prefabs ~= nil then
+                table.insert(tasksetdata.required_prefabs, "cave_exit_moon")
+            else
+                tasksetdata.required_prefabs = { "cave_exit_moon" }
+            end
+        end
+    end)
 
 
--- AXE Add lunar mushrooms
--- Atobá: This can stay regardless of config :)
-AddRoomPreInit("MoonMushForest", function(room)
-    room.contents.distributeprefabs["um_mushroom_moon"] = 0.03
-end)
+    -- AXE Add lunar mushrooms
+    -- Atobá: This can stay regardless of config :)
+    AddRoomPreInit("MoonMushForest", function(room)
+        room.contents.distributeprefabs["um_mushroom_moon"] = 0.03
+    end)
+end

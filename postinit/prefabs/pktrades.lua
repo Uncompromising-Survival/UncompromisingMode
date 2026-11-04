@@ -2,7 +2,7 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 local trade_prefabs = {"coontail", "hambat", "tentaclespots"}
-if TUNING.DSTU.LONGPIG then
+if UM_CONFIG.LONGPIG then
 	table.insert(trade_prefabs, "reviver")
 end
 for i,v in ipairs(trade_prefabs) do

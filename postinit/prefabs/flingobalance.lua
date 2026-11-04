@@ -5,7 +5,7 @@ require "prefabutil"
 local easing = require("easing")
 -----------------------------------------------------------------
 
-if TUNING.DSTU.FLINGO_SETTING == "Fuelmuncher" then
+if UM_CONFIG.FLINGO_SETTING == "Fuelmuncher" then
     local function LaunchProjectile2(inst, targetpos)
         local x, y, z = inst.Transform:GetWorldPosition()
 
@@ -39,7 +39,7 @@ if TUNING.DSTU.FLINGO_SETTING == "Fuelmuncher" then
     end)
 end
 
-if TUNING.DSTU.FLINGO_SETTING == "Waterballs" then
+if UM_CONFIG.FLINGO_SETTING == "Waterballs" then
     env.AddPrefabPostInit("snowball", function(inst)
         if not TheWorld.ismastersim then
             return

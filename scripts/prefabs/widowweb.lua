@@ -28,7 +28,7 @@ local function RerollCocoons(inst)
     local existing_cocoons = TheSim:FindEntities(x, y, z, 30, {"webbedcreature"})
     local widowweb = TheSim:FindFirstEntityWithTag("widowweb")
 
-    if widowweb then
+    if widowweb --[[Just to prevent a crash if it was deleted.]] and widowweb.components.childspawner:IsFull() and widowweb.components.childspawner.numchildrenoutside == 0 then
         for k, v in ipairs(existing_cocoons) do
             if table.contains(blacklisted_coocoons, v.cocoon_creature) --[[or table.contains(UMWebbedCreatureUtil.COCOON_CHARACTERS, v.cocoon_creature)]] then
             else
@@ -43,14 +43,6 @@ local function OnKilled(inst)
     inst.components.timer:StartTimer("regen_widow", TUNING.DRAGONFLY_RESPAWN_TIME)
     if inst.components.timer:TimerExists("reroll_cocoons") then
         inst.components.timer:StopTimer("reroll_cocoons")
-    end
-end
-
-local function OnGoHome(inst)
-    if inst.components.timer:TimerExists("reroll_cocoons") then
-        inst.components.timer:ResumeTimer("reroll_cocoons")
-    else
-        inst.components.timer:StartTimer("reroll_cocoons", TUNING.TOTAL_DAY_TIME * 5)
     end
 end
 
@@ -74,26 +66,28 @@ local function ontimerdone(inst, data)
     end
 end
 
-local function SpawnInvestigators(inst, target)
-    local childspawner = target and inst.components.childspawner
-    local spider = childspawner and childspawner:SpawnChild()
-    if spider then
-        if inst.components.timer:TimerExists("reroll_cocoons") then
-            inst.components.timer:PauseTimer("reroll_cocoons")
-        end
-        spider.sg:GoToState("fall")
-        spider.components.combat:SuggestTarget(target)
-        local x, y, z = inst.Transform:GetWorldPosition()
-        for i = 1, 4 do
-            SpawnPrefab("oceantree_leaf_fx_fall").Transform:SetPosition(x + math.random(-8, 8), 0, z + math.random(-8, 8))
-        end
+local function SpawnFX(inst, num)
+    for i = 1, num do
+        SpawnPrefab("oceantree_leaf_fx_fall").Transform:SetPosition(math.random(-8, 8), 0, math.random(-8, 8))
     end
 end
 
-local function OnLoad(inst, data)
-    local timer = inst.components.timer
-    if not timer:TimerExists("regen_widow") and not timer:TimerExists("reroll_cocoons") then
-        timer:StartTimer("reroll_cocoons", TUNING.TOTAL_DAY_TIME * 5)
+local function SpawnInvestigators(inst, target)
+    local x, y, z = inst.Transform:GetWorldPosition()
+    if inst.components.childspawner and target then
+        local spider = inst.components.childspawner:SpawnChild()
+
+        if inst.components.timer:TimerExists("reroll_cocoons") then
+            inst.components.timer:PauseTimer("reroll_cocoons")
+        end
+
+        if spider then
+            local x, y, z = inst.Transform:GetWorldPosition()
+            spider.sg:GoToState("fall")
+            spider.suggesttarget = target
+            spider:DoTaskInTime(.5, function(spider) spider.components.combat:SuggestTarget(spider.suggesttarget) end)
+            SpawnFX(inst, 4)
+        end
     end
 end
 
@@ -125,14 +119,15 @@ local function fn()
     childspawner.childname = "hoodedwidow"
     childspawner:SetMaxChildren(1)
     childspawner:SetSpawnPeriod(TUNING.DRAGONFLY_SPAWN_TIME, 0)
-    childspawner:SetOnChildKilledFn(OnKilled)
-    childspawner:SetGoHomeFn(OnGoHome)
+    childspawner.onchildkilledfn = OnKilled
     childspawner:StopRegen()
 
     inst:AddComponent("timer")
     inst:ListenForEvent("timerdone", ontimerdone)
 
-    inst.OnLoad = OnLoad
+    if not inst.components.timer:TimerExists("reroll_cocoons") then
+        inst.components.timer:StartTimer("reroll_cocoons", TUNING.TOTAL_DAY_TIME * 5)
+    end
 
     return inst
 end

@@ -1,5 +1,6 @@
 --moved into seperate file, was getting a bit too big.
 local STRINGS = GLOBAL.STRINGS
+local UM_CONFIG = GLOBAL.UM_CONFIG
 
 STRINGS.UNCOMP_TOOLTIP = {
     AMULET = "- Prevents death while worn.\n- Increased heal rate at lower health.\n- Never breaks, can be refueled with Nightmare Fuel.",
@@ -220,28 +221,28 @@ STRINGS.ENGINEERING_TOOLTIP = {
     WINONA_UPGRADEKIT_ELECTRICAL = ""
 }
 
-if TUNING.DSTU.BATH_BOMB then
+if UM_CONFIG.BATH_HEAL then
     TOOLTIPS.BATHBOMB = "- Restores lost maximum health, if tossed in a certain larger spring in mainland."
 end
 
-if TUNING.DSTU.TELESTAFF_REWORK then
+if UM_CONFIG.TELESTAFF_REWORK then
     TOOLTIPS.TELESTAFF = "- Can select its destination.\n- Increased uses for items and objects.\n- Can teleport other players without PVP enabled."
     TOOLTIPS.TELEBASE = "- No longer requires gems per teleport."
 end
 
-if TUNING.DSTU.BEEBOX_NERF then
+if UM_CONFIG.BEEBOX_NERF then
     TOOLTIPS.BEEBOX = "- Reduced maximum amount of Bees.\n- Will deal damage to unprepared players."
     TOOLTIPS.BEEHAT = "- Will protect players from Bee Box damage."
 end
-if TUNING.DSTU.GLASSCUTTER_REVERT then
+if UM_CONFIG.CELESTIALITEMS_REVERT then
     TOOLTIPS.GLASSCUTTER = "- Consumes less durability and deals more damage\n against shadow-aligned creatures."
 end
-if TUNING.DSTU.FUNCAP_REWORK then
+if UM_CONFIG.FUNCAP_FUN then
     TOOLTIPS.RED_MUSHROOMHAT = "- Makes you crave Red Caps.\n- Each bite increases your damage.\n- Holds on tightly."
     TOOLTIPS.GREEN_MUSHROOMHAT = "- Makes you crave Green Caps.\n- Each bite makes you speedier.\n- Holds on tightly."
     TOOLTIPS.BLUE_MUSHROOMHAT = "- Makes you crave Blue Caps.\n- Each bite makes you work harder.\n- Holds on tightly."
 end
-if not TUNING.DSTU.ELECTRICALMISHAP then
+if not UM_CONFIG.ELECTRICALMISHAP then
     TOOLTIPS.NIGHTSTICK =
     "- Can be fueled by various electrical items, and potatoes."
     TOOLTIPS.BUGZAPPER =
@@ -253,27 +254,27 @@ else
     "- Deals bonus damage, and area damage to Insects.\n- Deals electrical damage.\n - Can be charged at generators."
 end
 
-if TUNING.DSTU.SEWING_KIT then
+if UM_CONFIG.SEWINGKIT then
     TOOLTIPS.SEWING_KIT = "- Doubled uses, but repairs less per use."
 end
 
-if TUNING.DSTU.FLINGO_SETTING == "Fuelmuncher" then
+if UM_CONFIG.FLINGO_SETTING == "Fuelmuncher" then
     TOOLTIPS.FIRESUPPRESSOR = "- Drains fuel on each throw.\n- Increased maximum fuel."
-elseif TUNING.DSTU.FLINGO_SETTING == "Waterballs" then
+elseif UM_CONFIG.FLINGO_SETTING == "Waterballs" then
     TOOLTIPS.FIRESUPPRESSOR = "- No longer freezes on hit."
 end
 
-if TUNING.DSTU.LONGPIG then
+if UM_CONFIG.LONGPIG then
     TOOLTIPS.REVIVER = "- Requires flesh from a dead survivor."
 end
 
-if TUNING.DSTU.EYEBRELLAREWORK == false then
+if UM_CONFIG.EYEBRELLAREWORK == false then
     TOOLTIPS.EYEBRELLAHAT = "- Reduced heat protection."
 else
     TOOLTIPS.EYEBRELLAHAT = "- Reduced heat protection.\n- Can't be sewn, but may be repaired."
 end
 
-if TUNING.DSTU.SNOWSTORMS then
+if UM_CONFIG.SNOWSTORMS then
     TOOLTIPS.CAMPFIRE = "- Provides protection from snowstorms."
     TOOLTIPS.TORCH = "- Provides protection from snowstorms."
     TOOLTIPS.FIREPIT = "- Provides protection from snowstorms."
@@ -303,7 +304,7 @@ if TUNING.DSTU.HAYFEVER then
     TOOLTIPS.PERDFAN = "- Grants large amounts of Hayfever protection when blown."
 end
 
-if TUNING.DSTU.SMOG then
+if UM_CONFIG.SMOG then
     TOOLTIPS.UM_HAT_NETTLEMASK = TOOLTIPS.UM_HAT_NETTLEMASK .. "\n- Protects against smog while worn."
     TOOLTIPS.GASMASK = TOOLTIPS.GASMASK .. "\n- Protects against smog while worn."
     TOOLTIPS.PLAGUEMASK = TOOLTIPS.PLAGUEMASK .. "\n- Protects against smog while worn."
@@ -327,15 +328,15 @@ if TUNING.DSTU.SMOG then
     end
 end
 
-if TUNING.DSTU.HEATWAVES then
+if UM_CONFIG.HEATWAVES then
     TOOLTIPS.WINTEROMETER = "- Can predict heatwaves before they occur."
 end
 
-if TUNING.DSTU.STORMS then
+if UM_CONFIG.UM_STORMS then
     TOOLTIPS.RAINOMETER = "- Can track a Tornado's location."
 end
 
-if TUNING.DSTU.GOTOBED == "default" then
+if UM_CONFIG.GOTOBED == "default" then
     TOOLTIPS.BEDROLL_STRAW = "- Restores maximum health, if penalty isn't severe."
 
     TOOLTIPS.BEDROLL_FURRY = "- A bit more efficient.\n- Restores maximum health, if penalty isn't severe."
@@ -345,7 +346,7 @@ if TUNING.DSTU.GOTOBED == "default" then
     TOOLTIPS.PORTABLETENT_ITEM = "- Restores maximum health, if penalty isn't severe."
 
     TOOLTIPS.SIESTAHUT = "- A bit less efficient.\n- Restores maximum health, if penalty isn't severe."
-elseif TUNING.DSTU.GOTOBED == "legacy" then
+elseif UM_CONFIG.GOTOBED == "legacy" then
     TOOLTIPS.BEDROLL_STRAW = "- Restores maximum health."
 
     TOOLTIPS.BEDROLL_FURRY = "- A bit more efficient.\n- Restores maximum health."
@@ -357,8 +358,8 @@ elseif TUNING.DSTU.GOTOBED == "legacy" then
     TOOLTIPS.SIESTAHUT = "- A bit less efficient.\n- Restores maximum health."
 end
 
-if TUNING.DSTU.SLEEPINGBUFF > 1 then
-    if TUNING.DSTU.GOTOBED then
+if UM_CONFIG.SLEEPINGBUFF > 1 then
+    if UM_CONFIG.GOTOBED then
         TOOLTIPS.BEDROLL_STRAW = TOOLTIPS.BEDROLL_STRAW .. "\n- Faster healing rate."
 
         TOOLTIPS.BEDROLL_FURRY = TOOLTIPS.BEDROLL_FURRY .. "\n- Faster healing rate."
@@ -381,7 +382,7 @@ if TUNING.DSTU.SLEEPINGBUFF > 1 then
     end
 end
 
-if TUNING.DSTU.POCKET_POWERTRIP ~= 0 then
+if UM_CONFIG.POCKET_POWERTRIP ~= 0 then
     TOOLTIPS.TRUNKVEST_SUMMER = "- Now has pockets!\n- Slightly increased rain protection and insulation."
     TOOLTIPS.TRUNKVEST_WINTER = "- Now has pockets!"
     TOOLTIPS.REFLECTIVEVEST = "- Now has pockets!"
@@ -399,15 +400,15 @@ if TUNING.DSTU.POCKET_POWERTRIP ~= 0 then
     end
 end
 
-if TUNING.DSTU.CANEDURABILITY then
+if UM_CONFIG.CANE_DURABILITY then
     TOOLTIPS.CANE = "- Has durability, only drains when walking."
 end
 
-if TUNING.DSTU.WANDA_NERF then
+if UM_CONFIG.WANDA_NERF then
     TOOLTIPS.POCKETWATCH_REVIVE = "- Increased cooldown.\n- Gives health penalty."
 end
 
-if TUNING.DSTU.INSUL_THERMALSTONE then
+if UM_CONFIG.INSUL_THERMALSTONE then
     TOOLTIPS.HEATROCK = "- Reduced inherent insulation.\n- Inherits part of players insulation."
 end
 
@@ -416,11 +417,11 @@ end
 --"- Summons Sickly Tentacles\n- Sickly Tentacles die over time, drop no loot but don't attack players."
 --end
 
-if TUNING.DSTU.WOODIE_WET_GOOSE then
+if UM_CONFIG.WOODIE_WET_GOOSE then
     TOOLTIPS.WEREITEM_GOOSE = "- Walking on water makes you wet."
 end
 
-if TUNING.DSTU.WICKERCHANGES == 2 then
+if UM_CONFIG.WICKERBOTTOM_CHANGES == 2 then
     TOOLTIPS.BOOK_MOON = "- Now mutates everything around on use."
 end
 
@@ -444,25 +445,25 @@ if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then
     }
 end
 
-if TUNING.DSTU.DISABLE_MEGAFLARE then
+if UM_CONFIG.DISABLE_MEGAFLARE then
     TOOLTIPS.MEGAFLARE = "- Makes the current season's boss arrive sooner."
 end
 
 
-if TUNING.DSTU.STORMS then
+if UM_CONFIG.UM_STORMS then
     TOOLTIPS.BOOK_RAIN = "- Can briefly redirect Giant Tornadoes when in its range."
     TOOLTIPS.STAFF_TORNADO = "- Can briefly redirect Giant Tornadoes."
 end
 
-if TUNING.DSTU.SHAVE_MODE then
+if UM_CONFIG.UM_SHAVE_MODE then
     TOOLTIPS.UM_THULECITE_RAZOR = "- Can occasionally give an extra resouce."
 end
 
-if TUNING.DSTU.WARLY_CHANGES == 1 then
+if UM_CONFIG.WARLY_CHANGES == 1 then
     TOOLTIPS.SPICEPACK = "- No longer a backpack.\n- Can only store ingredients and perishables."
 end
 
-if TUNING.DSTU.WARLY_CHANGES ~= 0 then
+if UM_CONFIG.WARLY_CHANGES ~= 0 then
     TOOLTIPS.SPICE_SALT = "- Makes dishes restore lost maximum health."
     TOOLTIPS.PORTABLECOOKPOT_ITEM = "- Fellow survivors can now use it."
 end

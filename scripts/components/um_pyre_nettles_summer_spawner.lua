@@ -56,7 +56,7 @@ return Class(function(self, inst)
 
 
 	local function OnSeasonChange()
-		if TheWorld.state.season == "summer" and TheWorld.state.cycles >= TUNING.DSTU.WEATHERHAZARD_START_DATE_SUMMER then
+		if TheWorld.state.season == "summer" and TheWorld.state.cycles >= UM_CONFIG.WEATHERHAZARD_SUMMER then
 			if _worldsettingstimer:GetTimeLeft(PYRENETTLES_TIMER) == nil then
 				_worldsettingstimer:StartTimer(PYRENETTLES_TIMER, _spawninterval + math.random(-120, 120))
 			end

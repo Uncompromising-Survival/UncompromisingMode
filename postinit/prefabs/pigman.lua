@@ -1,7 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
-local PK_GUARDS = TUNING.DSTU.PK_GUARDS
+local PK_GUARDS = UM_CONFIG.PIGKING_GUARDS
 
 local UMUpvalueHacker = require("tools/um_upvaluehacker")
 

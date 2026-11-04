@@ -3,12 +3,14 @@ require "map/room_functions"
 local Layouts = require("map/layouts").Layouts
 local StaticLayout = require("map/static_layout")
 
+
+
 ---------------------------------------------
 -- Lunar Grotto
 ---------------------------------------------
 ---
 
-local config = FLOODED_CAVES_CONFIG
+local config = UM_CONFIG.FLOODED_CAVES
 local not_mainland = config == "lunar_cave" and {"not_mainland"} or {}
 
 
