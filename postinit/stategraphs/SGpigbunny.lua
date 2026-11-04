@@ -244,29 +244,6 @@ env.AddStategraphPostInit("pig", function(inst)
     end
 end)
 
-env.AddStategraphPostInit("werepig", function(inst)
-    local attackstate = inst.states["attack"]
-    if attackstate then
-        local attackstate_onenter = attackstate.onenter
-        attackstate.onenter = function(inst, ...)
-            local ret = attackstate_onenter(inst, ...)
-            inst.sg.statemem.speedmult = inst.sg.statemem.speedmult * 2.5
-            inst.Physics:SetMotorVelOverride(3 * inst.sg.statemem.speedmult, 0 ,0)
-            return ret
-        end
-    end
-
-    local hitstate = inst.states["hit"]
-    if hitstate then
-        local hitstate_onenter = hitstate.onenter
-        hitstate.onenter = function(inst, ...)
-            local ret = hitstate_onenter(inst, ...)
-            CommonHandlers.UpdateHitRecoveryDelay(inst) -- This is missing from the original stategraph and is the reason Werepigs get stunlocked.
-            return ret
-        end
-    end
-end)
-
 --[[local ARC = 90 * DEGREES --degrees to each side
 local AOE_TARGET_MUSTHAVE_TAGS = { "_combat" }
 local AOE_TARGET_CANT_TAGS = { "INLIMBO", "invisible", "notarget", "noattack","werepig"}
@@ -304,12 +281,12 @@ local function DoArcAttack(inst, dist, radius, heavymult, mult, forcelanded, tar
         end
     end
     inst.components.combat.ignorehitrange = false
-end
+end]]
 
 local werepigs = {"moonpig", "werepig"}
-for i, werepig in ipairs(werepigs) do
+for i, werepig in pairs(werepigs) do
     env.AddStategraphPostInit(werepig, function(inst)
-        local states = {
+        --[[local states = {
             State{
                 name = "attack",
                 tags = { "attack", "busy" },
@@ -350,7 +327,30 @@ for i, werepig in ipairs(werepigs) do
                     end)
                 end,
             },
-        }
+        }]]
+
+        local attackstate = inst.states["attack"]
+        if attackstate then
+            local attackstate_onenter = attackstate.onenter
+            attackstate.onenter = function(inst, ...)
+                local ret = attackstate_onenter(inst, ...)
+                inst.sg.statemem.speedmult = inst.sg.statemem.speedmult * 2.5
+                inst.Physics:SetMotorVelOverride(3 * inst.sg.statemem.speedmult, 0 ,0)
+                return ret
+            end
+        end
+
+        if werepig == "werepig" then
+            local hitstate = inst.states["hit"]
+            if hitstate then
+                local hitstate_onenter = hitstate.onenter
+                hitstate.onenter = function(inst, ...)
+                    local ret = hitstate_onenter(inst, ...)
+                    CommonHandlers.UpdateHitRecoveryDelay(inst) -- This is missing from the original stategraph and is the reason Werepigs get stunlocked.
+                    return ret
+                end
+            end
+        end
 
         --If the werepig is waiting to run away, then manages to reach you, causing him to stand still, stop the dotaskintime that tells the werepig to not run away
         --local idlestate = inst.states["idle"]
@@ -365,7 +365,7 @@ for i, werepig in ipairs(werepigs) do
             --end
         --end
 
-        local events = -- Klei's implementation (CommonHandlers.OnAttacked(nil, TUNING.PIG_MAX_STUN_LOCKS),) is not working after the werepig finishes his transformation, this implements it in a different way to fix that.
+        --[[local events = -- Klei's implementation (CommonHandlers.OnAttacked(nil, TUNING.PIG_MAX_STUN_LOCKS),) is not working after the werepig finishes his transformation, this implements it in a different way to fix that.
         {
             EventHandler("attacked", function(inst, data)
                 if not (inst.components.health and inst.components.health:IsDead()) then
@@ -389,6 +389,6 @@ for i, werepig in ipairs(werepigs) do
         for k, v in pairs(states) do
             assert(v:is_a(State), "Non-state added in mod state table!")
             inst.states[v.name] = v
-        end
+        end]]
     end)
-end]]
+end

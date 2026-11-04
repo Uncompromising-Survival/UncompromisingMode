@@ -1,32 +1,44 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
+local PK_GUARDS = UM_CONFIG.PIGKING_GUARDS
+
 local UMUpvalueHacker = require("tools/um_upvaluehacker")
 
 local RETARGET_MUST_TAGS = {"_combat", "player"}
 local RETARGET_CANT_TAGS = {"playerghost"}
 
+local PKGuardKeepTargetFn
+local PKGuardRetargetFn
 env.AddPrefabPostInit("world", function(world)
     if not world.ismastersim then return end
     local _SetNormalPig = UMUpvalueHacker.TryGetUpvalue(Prefabs.pigman.fn, "SetNormalPig")
     if _SetNormalPig then
-        local function SetNormalPig(inst, ...)
-            local ret = _SetNormalPig(inst, ...)
-            local combat = inst.components.combat
-            local _Retarget = combat.targetfn
-            combat:SetRetargetFunction(combat.retargetperiod, function(_inst, ...)
-                if _inst:HasTag("NPC_contestant") or _inst.components.minigame_spectator then return _Retarget(_inst, ...) end
-                return not _inst:IsInLimbo() and FindEntity(_inst, TUNING.PIG_TARGET_DIST, function(guy)
-                    return guy.userid and table.contains(_inst.remembered_threats, guy.userid) and guy:IsInLight() and _inst.components.combat:CanTarget(guy)
-                end, RETARGET_MUST_TAGS, RETARGET_CANT_TAGS) or _Retarget(_inst, ...)
-            end)
-            return ret
+        local _NormalRetargetFn = UMUpvalueHacker.TryGetUpvalue(_SetNormalPig, "NormalRetargetFn")
+        if _NormalRetargetFn then
+            local function NormalRetargetFn(inst, ...)
+                if inst:HasTag("NPC_contestant") or inst.components.minigame_spectator then return _NormalRetargetFn(inst, ...) end
+                return not inst:IsInLimbo() and FindEntity(inst, TUNING.PIG_TARGET_DIST, function(guy)
+                    return guy.userid and table.contains(inst.um_remembered_threats, guy.userid) and guy:IsInLight() and inst.components.combat:CanTarget(guy)
+                end, RETARGET_MUST_TAGS, RETARGET_CANT_TAGS) or _NormalRetargetFn(inst, ...)
+            end
+            if PK_GUARDS then
+                local _IsFranken = UMUpvalueHacker.TryGetUpvalue(_NormalRetargetFn, "IsFranken")
+                if _IsFranken then
+                    local function IsFranken(dude, inst, ...)
+                        return inst.um_pkguard and dude.franken or _IsFranken(dude, inst, ...)
+                    end
+                    UMUpvalueHacker.SetUpvalue(_NormalRetargetFn, IsFranken, "IsFranken")
+                end
+                PKGuardKeepTargetFn = UMUpvalueHacker.TryGetUpvalue(_SetNormalPig, "NormalKeepTargetFn")
+                PKGuardRetargetFn = NormalRetargetFn
+            end
+            UMUpvalueHacker.SetUpvalue(_SetNormalPig, NormalRetargetFn, "NormalRetargetFn")
         end
-        UMUpvalueHacker.SetUpvalue(Prefabs.pigman.fn, SetNormalPig, "SetNormalPig")
     end
 end)
 
-local function IsPig(inst)
+local function IsNonWerePig(inst)
     return inst:HasTag("pig") and not (inst.franken or inst:HasTag("werepig"))
 end
 
@@ -35,114 +47,315 @@ local function SetShouldAggroStuff(inst)
     if combat then
         local _ShouldAggroFn = combat.shouldaggrofn
         combat:SetShouldAggroFn(function(_inst, target, ...)
-            if IsPig(_inst) and IsPig(target) then return false end
+            if IsNonWerePig(_inst) and IsNonWerePig(target) then return false end
             if _ShouldAggroFn then return _ShouldAggroFn(_inst, target, ...) end
             return true
         end)
     end
 end
 
-local _AcceptTest
-local function AcceptTest(inst, item, ...)
-    if inst.components.eater:CanEat(item) then
-        local foodtype = item.components.edible.foodtype
-        if foodtype == FOODTYPE.UM_HORRIBLE_VEGGIE then
-            local last_eat_time = inst.components.eater:TimeSinceLastEating()
-            return (last_eat_time == nil or
-                    last_eat_time >= TUNING.PIG_MIN_POOP_PERIOD)
-                    and (inst.components.inventory == nil or
-                    not inst.components.inventory:Has(item.prefab, 1))
-        end
-    end
-    return _AcceptTest and _AcceptTest(inst, item, ...)
-end
+local MAX_TARGET_SHARES = 15
+local SHARE_TARGET_DIST = 30
 
 local function OnNewTarget_Remember(inst, data)
     local userid = data and data.target and data.target.isplayer and not (inst.franken or inst:HasTag("werepig")) and data.target.userid
     if userid then
-        if table.contains(inst.remembered_threats, userid) then
-            local strtbl = STRINGS["PIG_REMEMBER_THREAT"]
+        if table.contains(inst.um_remembered_threats, userid) then
+            local strtbl = STRINGS.PIG_REMEMBER_THREAT
             if strtbl then
                 local strid = math.random(#strtbl)
                 inst.components.talker:Chatter("PIG_REMEMBER_THREAT", strid)
             end
+            if inst.um_pkguard then inst.components.combat:ShareTarget(data.target, SHARE_TARGET_DIST, IsNonWerePig, MAX_TARGET_SHARES) end
         else
-            table.insert(inst.remembered_threats, userid)
+            table.insert(inst.um_remembered_threats, userid)
         end
     end
 end
 
-local _OnSave
-local function OnSave(inst, data, ...)
-    data.remembered_threats = inst.remembered_threats and next(inst.remembered_threats) and inst.remembered_threats or nil
-    return _OnSave and _OnSave(inst, data, ...)
-end
-
-local _OnLoad
-local function OnLoad(inst, data, ...)
-    if data and data.remembered_threats then
-        inst.remembered_threats = data.remembered_threats
-    end
-    return _OnLoad and _OnLoad(inst, data, ...)
-end
-
-env.AddPrefabPostInit("pigman", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
-
-    inst.remembered_threats = {}
-
-    SetShouldAggroStuff(inst)
-
-    local trader = inst.components.trader
-    if trader then
-        if not _AcceptTest then
-            _AcceptTest = trader.test
+do
+    local _AcceptTest
+    local function AcceptTest(inst, item, ...)
+        if inst.components.eater:CanEat(item) then
+            local foodtype = item.components.edible.foodtype
+            if foodtype == FOODTYPE.UM_HORRIBLE_VEGGIE then
+                local last_eat_time = inst.components.eater:TimeSinceLastEating()
+                return (last_eat_time == nil or
+                        last_eat_time >= TUNING.PIG_MIN_POOP_PERIOD)
+                        and (inst.components.inventory == nil or
+                        not inst.components.inventory:Has(item.prefab, 1))
+            end
         end
-        trader:SetAcceptTest(AcceptTest)
+        return _AcceptTest and _AcceptTest(inst, item, ...)
     end
 
-    inst.components.eater:SetCanEatVeggieHorrible() -- Can eat UM_HORRIBLE_VEGGIE
-
-    inst:ListenForEvent("newcombattarget", OnNewTarget_Remember)
-
-    if not _OnSave then
-        _OnSave = inst.OnSave
-    end
-    inst.OnSave = OnSave
-    if not _OnLoad then
-        _OnLoad = inst.OnLoad
-    end
-    inst.OnLoad = OnLoad
-end)
-
-env.AddPrefabPostInit("pigguard", function(inst)
-    if not TheWorld.ismastersim then
-        return
+    local _OnNormal
+    local function OnNormal(inst, ...)
+        local ret = _OnNormal and _OnNormal(inst, ...)
+        inst.um_remembered_threats = {}
+        return ret
     end
 
-    SetShouldAggroStuff(inst)
-end)
-
-env.AddPrefabPostInit("pigking_pigguard", function(inst)
-    if not TheWorld.ismastersim then
-        return
+    local _OnSave
+    local function OnSave(inst, data, ...)
+        data.um_remembered_threats = inst.um_remembered_threats and next(inst.um_remembered_threats) and inst.um_remembered_threats or nil
+        return _OnSave and _OnSave(inst, data, ...)
     end
 
-    SetShouldAggroStuff(inst)
-
-    --[[
-    local _setnormalfn = inst.components.werebeast.onsetnormalfn
-
-    inst.components.werebeast:SetOnNormalFn(function(_inst)
-        print("Deleting remembered threats of king guard")
-        if _inst.remembered_threats then
-            _inst.components.combat:DropTarget()
-            _inst.remembered_threats = {}
-            _inst.components.combat:DropTarget()
+    local _OnLoad
+    local function OnLoad(inst, data, ...)
+        if data and data.um_remembered_threats then
+            inst.um_remembered_threats = data.um_remembered_threats
         end
-        _setnormalfn(_inst)
+        return _OnLoad and _OnLoad(inst, data, ...)
+    end
+
+    env.AddPrefabPostInit("pigman", function(inst)
+        if not TheWorld.ismastersim then return end
+
+        inst.um_remembered_threats = {}
+
+        SetShouldAggroStuff(inst)
+
+        local werebeast = inst.components.werebeast
+        if werebeast then
+            if not _OnNormal then
+                _OnNormal = werebeast.onsetnormalfn
+            end
+            werebeast:SetOnNormalFn(OnNormal)
+        end
+
+        local trader = inst.components.trader
+        if trader then
+            if not _AcceptTest then
+                _AcceptTest = trader.test
+            end
+            trader:SetAcceptTest(AcceptTest)
+        end
+
+        inst.components.eater:SetCanEatVeggieHorrible() -- Can eat UM_HORRIBLE_VEGGIE
+
+        inst:ListenForEvent("newcombattarget", OnNewTarget_Remember)
+
+        if not _OnSave then
+            _OnSave = inst.OnSave
+        end
+        inst.OnSave = OnSave
+        if not _OnLoad then
+            _OnLoad = inst.OnLoad
+        end
+        inst.OnLoad = OnLoad
     end)
-    ]]
-end)
+end
+
+do
+    local guardbrain = require("brains/pigguard_pigkingbrain")
+
+    local function OnPKGuardNormal(inst)
+        inst:SetBrain(guardbrain)
+        local combat = inst.components.combat
+        local _KeepTargetFn = combat.keeptargetfn
+        combat:SetKeepTargetFunction(function(_inst, target, ...)
+            if _inst.um_pkguard then
+                return PKGuardKeepTargetFn and PKGuardKeepTargetFn(_inst, target, ...)
+            end
+            return _KeepTargetFn(_inst, target, ...)
+        end)
+        local _Retarget = combat.targetfn
+        combat:SetRetargetFunction(combat.retargetperiod, function(_inst, ...)
+            if _inst.um_pkguard then
+                return PKGuardRetargetFn and PKGuardRetargetFn(_inst, ...)
+            end
+            return _Retarget(_inst, ...)
+        end)
+    end
+
+    local _OnNormal
+    local function OnNormal(inst, ...)
+        local ret = _OnNormal and _OnNormal(inst, ...)
+        inst.um_remembered_threats = {}
+        inst:UMOnPKGuardNormal()
+        return ret
+    end
+
+    local function SetPKGuard(inst, threats)
+        inst.um_pkguard = true
+        if PK_GUARDS then
+            inst:AddTag("um_pkguard")
+            inst.um_remembered_threats = threats or {}
+
+            inst.UMOnPKGuardNormal = OnPKGuardNormal
+
+            local werebeast = inst.components.werebeast
+            if werebeast then
+                if not _OnNormal then
+                    _OnNormal = werebeast.onsetnormalfn
+                end
+                werebeast:SetOnNormalFn(OnNormal)
+            end
+
+            if not inst:HasTag("werepig") then inst:UMOnPKGuardNormal() end
+
+            inst:ListenForEvent("newcombattarget", OnNewTarget_Remember)
+        end
+    end
+
+    local _OnSave
+    local function OnSave(inst, data, ...)
+        if inst.um_pkguard then
+            data.um_pkguard = inst.um_pkguard
+            data.um_remembered_threats = inst.um_remembered_threats and next(inst.um_remembered_threats) and inst.um_remembered_threats or nil
+        end
+        return _OnSave and _OnSave(inst, data, ...)
+    end
+
+    local _OnLoad
+    local function OnLoad(inst, data, ...)
+        if data and data.um_pkguard then
+            inst:UMSetPKGuard(data.um_remembered_threats)
+        end
+        return _OnLoad and _OnLoad(inst, data, ...)
+    end
+
+    env.AddPrefabPostInit("pigguard", function(inst)
+        if not TheWorld.ismastersim then return end
+
+        SetShouldAggroStuff(inst)
+
+        inst.UMSetPKGuard = SetPKGuard
+
+        if not _OnSave then
+            _OnSave = inst.OnSave
+        end
+        inst.OnSave = OnSave
+        if not _OnLoad then
+            _OnLoad = inst.OnLoad
+        end
+        inst.OnLoad = OnLoad
+    end)
+end
+
+do
+    local _OnFinish
+    local function OnFinish(inst, worker, ...)
+        local _Remove = inst.Remove
+        inst.Remove = function() end
+        local ret = _OnFinish and _OnFinish(inst, worker, ...)
+        if _Remove then inst.Remove = _Remove end
+        inst:UMSetDemolished(true)
+        return ret
+    end
+
+    local _OnSpawned
+    local function OnSpawned(inst, child, ...)
+        if child.UMSetPKGuard then child:UMSetPKGuard() end
+        return _OnSpawned and _OnSpawned(inst, child, ...)
+    end
+
+    local function SetDemolished(inst, toggle)
+        inst.um_demolished = toggle or nil
+        if PK_GUARDS then
+            local spawner = inst.components.spawner
+            if toggle then
+                inst.Physics:ClearCollisionMask()
+                inst:Hide()
+                inst.components.fueled:InitializeFuelLevel(0)
+                local timer = inst.components.timer
+                if timer and not timer:TimerExists("um_rebuild") then
+                    timer:StartTimer("um_rebuild", 60 * 12)
+                end
+                if spawner then
+                    local spawner_child = spawner and not spawner:IsOccupied() and spawner.child and spawner.child:IsValid() and spawner.child
+                    if spawner_child then
+                        spawner_child:PushEvent("detachchild")
+                        local homeseeker = spawner_child.components.homeseeker
+                        local home = homeseeker and homeseeker:GetHome()
+                        if home then homeseeker.onhomeremoved(home) end
+                    end
+                    spawner:CancelSpawning()
+                end
+            else
+                inst:Show()
+                MakeObstaclePhysics(inst, .33)
+                inst.components.workable:SetWorkLeft(4)
+                if spawner then spawner:SpawnWithDelay(0) end
+            end
+        end
+    end
+
+    local function Rebuild(inst, data)
+        if data and data.name == "um_rebuild" then
+            SpawnPrefab("collapse_small").Transform:SetPosition(inst.Transform:GetWorldPosition())
+            inst:UMSetDemolished()
+        end
+    end
+
+    local function SetPKTorch(inst)
+        inst.um_pktorch = true
+
+        inst.UMSetDemolished = SetDemolished
+
+        if PK_GUARDS then
+            inst:AddTag("um_pktorch")
+
+            local workable = inst.components.workable
+            if workable then
+                if not _OnFinish then
+                    _OnFinish = workable.onfinish
+                end
+                workable:SetOnFinishCallback(OnFinish)
+            end
+
+            local spawner = inst.components.spawner
+            if spawner then
+                if not _OnSpawned then
+                    _OnSpawned = spawner.onspawnedfn
+                end
+                spawner:SetOnSpawnedFn(OnSpawned)
+            end
+
+            local timer = inst.components.timer or inst:AddComponent("timer")
+            local _OnSave = timer.OnSave
+            timer.OnSave = function(self, ...)
+                local data = _OnSave(self, ...) or {}
+                if not data["add_component_if_missing"] then data["add_component_if_missing"] = true end
+                return data
+            end
+
+            inst:ListenForEvent("timerdone", Rebuild)
+        end
+    end
+
+    local _OnSave
+    local function OnSave(inst, data, ...)
+        if inst.um_pktorch then
+            data.um_pktorch = inst.um_pktorch
+            data.um_demolished = inst.um_demolished
+        end
+        return _OnSave and _OnSave(inst, data, ...)
+    end
+
+    local _OnLoad
+    local function OnLoad(inst, data, ...)
+        if data and data.um_pktorch then
+            inst:UMSetPKTorch()
+            if data.um_demolished then inst:UMSetDemolished(true) end
+        end
+        return _OnLoad and _OnLoad(inst, data, ...)
+    end
+
+    env.AddPrefabPostInit("pigtorch", function(inst)
+        if not TheWorld.ismastersim then return end
+
+        inst.UMSetPKTorch = SetPKTorch
+
+        if not _OnSave then
+            _OnSave = inst.OnSave
+        end
+        inst.OnSave = OnSave
+        if not _OnLoad then
+            _OnLoad = inst.OnLoad
+        end
+        inst.OnLoad = OnLoad
+    end)
+end

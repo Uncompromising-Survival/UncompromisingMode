@@ -128,7 +128,7 @@ env.AddClassPostConstruct("widgets/healthbadge", function(self, owner)
         end
     end
 
-    if TUNING.DSTU.UI_HEALTHPENALTY_GREY then
+    if UM_CLIENT_CONFIG.UI_HEALTHPENALTY_GREY then
         local _SetPercent = self.SetPercent
         function self:SetPercent(val, max, penaltypercent, ...)
             _SetPercent(self, val, max, penaltypercent, ...)

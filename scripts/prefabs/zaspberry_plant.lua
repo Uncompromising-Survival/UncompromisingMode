@@ -1,7 +1,7 @@
 local function onregenfn(inst)
     inst.AnimState:PlayAnimation("grow")
     inst.AnimState:PushAnimation("berry_idle", true)
-    inst:DoTaskInTime(8*FRAMES, function()
+    inst:DoTaskInTime(8 * FRAMES, function()
         inst.Light:Enable(true)
     end)
 end
@@ -22,13 +22,13 @@ local function onpickedfn(inst)
     end
 end
 
-local function onsave(inst,data)
+local function onsave(inst, data)
     if inst.from_waterhole then
         data.from_waterhole = inst.from_waterhole
     end
 end
 
-local function onload(inst,data)
+local function onload(inst, data)
     if data and data.from_waterhole then
         inst.from_waterhole = data.from_waterhole
     end
@@ -59,7 +59,7 @@ local function fn()
     inst.Light:SetRadius(4)
     inst.Light:SetIntensity(0.5)
     inst.Light:SetFalloff(0.5)
-    inst.Light:SetColour(1,1,0)
+    inst.Light:SetColour(1, 1, 0)
 
     inst.Light:Enable(true)
 
@@ -69,7 +69,13 @@ local function fn()
         return inst
     end
 
-    inst.Transform:SetRotation(math.random()*360)
+    if not UM_CONFIG.DEPTHSEELS then
+        inst:DoTaskInTime(0, function(inst)
+            ReplacePrefab(inst, "wormlight_plant")
+        end)
+    end
+
+    inst.Transform:SetRotation(math.random() * 360)
 
     inst:AddComponent("umripples")
     inst.components.umripples.xscale = 0.5
@@ -89,19 +95,19 @@ local function fn()
     inst:AddComponent("lootdropper")
 
     inst:AddComponent("inspectable")
-    
+
     inst.OnSave = onsave
-    inst.OnLoad = onload    
+    inst.OnLoad = onload
     ---------------------
-    inst:WatchWorldState("iswinter",function(inst,iswinter) 
-        if iswinter and inst.from_waterhole then 
-            inst:Remove() 
-        end 
+    inst:WatchWorldState("iswinter", function(inst, iswinter)
+        if iswinter and inst.from_waterhole then
+            inst:Remove()
+        end
     end)
     MakeSmallPropagator(inst)
     MakeHauntableIgnite(inst)
     ---------------------
-    
+
     return inst
 end
 

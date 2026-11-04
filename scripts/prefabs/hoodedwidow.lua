@@ -53,13 +53,6 @@ local function DoDespawn(inst)
     if home then
         home.components.childspawner:GoHome(inst)
         --home.components.childspawner:StartSpawning()
-        inst:AddTag("home")
-
-        if home.components.timer:TimerExists("reroll_cocoons") then
-            home.components.timer:ResumeTimer("reroll_cocoons")
-        else
-            home.components.timer:StartTimer("reroll_cocoons", TUNING.TOTAL_DAY_TIME * 5)
-        end
     else
         inst:Remove() --Hooded Widow was probably debug spawned in?
     end

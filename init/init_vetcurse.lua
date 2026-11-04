@@ -182,7 +182,7 @@ env.AddPlayerPostInit(function(inst)
 
     local _OnLoad = inst.OnLoad
     local function OnLoad(inst, data, ...)
-        if TUNING.DSTU.VETCURSE == "default" and data and data.vetscurse and inst.UMToggleVetCurse then
+        if UM_CONFIG.VETCURSE == "default" and data and data.vetscurse and inst.UMToggleVetCurse then
             inst:UMToggleVetCurse(true)
         end
         return _OnLoad(inst, data, ...)
@@ -190,7 +190,7 @@ env.AddPlayerPostInit(function(inst)
 
     inst.UMToggleVetCurse = UMVetCurse.ToggleVetCurse
 
-    if TUNING.DSTU.VETCURSE == "always" and not inst:HasTag("vetcurse") then
+    if UM_CONFIG.VETCURSE == "always" and not inst:HasTag("vetcurse") then
         if inst.UMToggleVetCurse then inst:UMToggleVetCurse(true) end
         inst:PushEvent("foodbuffattached", {buff = "ANNOUNCE_ATTACH_BUFF_VETCURSE", 1})
     end

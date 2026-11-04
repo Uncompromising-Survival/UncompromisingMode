@@ -20,7 +20,7 @@ AddComponentPostInit("sewing", DoSewing)
 
 -------------Torches only smolder objects now---------------
 local _OldLightAction = GLOBAL.ACTIONS.LIGHT.fn
-if TUNING.DSTU.WINTER_BURNING then
+if UM_CONFIG.WINTER_BURNING then
     GLOBAL.ACTIONS.LIGHT.fn = function(act)
         if act.invobject ~= nil and act.invobject.components.lighter ~= nil then
             if GLOBAL.TheWorld.state.season == "winter" and not act.doer:HasTag("pyromaniac") and act.target.components.burnable
@@ -59,7 +59,7 @@ env.AddPrefabPostInit("cave", function(inst)
     end
     inst:AddComponent("um_guano_rain")
     inst:AddComponent("um_tilelogger")
-    inst:AddComponent("um_tentacle_repopulator")
+    --inst:AddComponent("um_tentacle_repopulator") -- Causes lag, needs to be looked into. See postinit/prefabs/forest.lua for another version.
     --inst:AddComponent("um_poofshroom_repopulator")
     -- if TUNING.DSTU.CAVECLOPS then
     -- inst:AddComponent("cavedeerclopsspawner")
@@ -109,13 +109,13 @@ env.AddPrefabPostInit("forest", function(inst)
     --inst:AddComponent("horriblenightmanager")
     inst:AddComponent("um_tilelogger")
     inst:AddComponent("um_ocupusappearinator")
-    inst:AddComponent("um_tentacle_repopulator")
+    --inst:AddComponent("um_tentacle_repopulator") -- Causes lag, needs to be looked into. See postinit/prefabs/forest.lua for another version.
     --inst:AddComponent("um_pestilencecontroller")
     --if TUNING.DSTU.GOOSE_SETTING == "ROG" or TUNING.DSTU.GOOSE_SETTING == "BOTH" then
     --inst:AddComponent("gmoosespawner")
     --end
 
-    if TUNING.DSTU.SPAWNWILTINGFLY then
+    if UM_CONFIG.WILTFLY then
         inst:AddComponent("mock_dragonflyspawner")
     end
 
@@ -125,18 +125,18 @@ env.AddPrefabPostInit("forest", function(inst)
 
     --inst:DoTaskInTime(TUNING.TOTAL_DAY_TIME/2, GenerateInactiveBiomes)
 
-    if TUNING.DSTU.SNOWSTORMS then
+    if UM_CONFIG.SNOWSTORMS then
         --inst:AddComponent("snowstorminitiator")
         inst:AddComponent("um_snow_stormspawner")
     end
 
     inst:AddComponent("um_snowstormmanager")
 
-    if TUNING.DSTU.HEATWAVES then
+    if UM_CONFIG.HEATWAVES then
         inst:AddComponent("um_heatwaves")
     end
 
-    if TUNING.DSTU.STORMS then
+    if UM_CONFIG.UM_STORMS then
         inst:AddComponent("um_stormspawner")
     end
 end)

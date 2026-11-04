@@ -14,13 +14,12 @@ local function ToggleSlowDownDebuff(inst, trap, toggle) -- TODO: Rework this int
                 end
                 _inst["um_bear_trap_speedmulttask_"..traptype] = nil
             end)
-            if inst["um_caught_on_"..debuffkey] and inst["um_caught_on_"..debuffkey]:IsValid() then inst["um_caught_on_"..debuffkey].um_ignoredebuffremoval = true end
-            inst["um_caught_on_"..debuffkey] = trap
-            if not inst.um_bear_trapped then
-                inst.um_bear_trapped = {[traptype] = true}
+            if inst["um_caught_on_"..debuffkey] then
+                if inst["um_caught_on_"..debuffkey]:IsValid() then inst["um_caught_on_"..debuffkey].um_ignoredebuffremoval = true end
             else
-                if not inst.um_bear_trapped[traptype] then inst.um_bear_trapped[traptype] = true end
+                inst.um_bear_trapped = (inst.um_bear_trapped or 0) + 1
             end
+            inst["um_caught_on_"..debuffkey] = trap
         end
     else
         if locomotor then locomotor:RemoveExternalSpeedMultiplier(inst, debuffkey) end
@@ -30,8 +29,8 @@ local function ToggleSlowDownDebuff(inst, trap, toggle) -- TODO: Rework this int
         end
         inst["um_caught_on_"..debuffkey] = nil
         if inst.um_bear_trapped then
-            if inst.um_bear_trapped[traptype] then inst.um_bear_trapped[traptype] = nil end
-            if not next(inst.um_bear_trapped) then inst.um_bear_trapped = nil end
+            inst.um_bear_trapped = inst.um_bear_trapped - 1
+            if inst.um_bear_trapped <= 0 then inst.um_bear_trapped = nil end
         end
     end
 end

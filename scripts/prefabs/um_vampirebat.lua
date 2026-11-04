@@ -19,7 +19,7 @@ local prefabs =
 local BrainCommon = require("brains/braincommon")
 local brain = require "brains/batbrain"
 
-local monstermeattype = TUNING.DSTU.MONSTERSMALLMEAT and "monstersmallmeat" or "monstermeat"
+local monstermeattype = UM_CONFIG.MONSTERSMALLMEAT and "monstersmallmeat" or "monstermeat"
 
 SetSharedLootTable("um_vampirebat",
 {

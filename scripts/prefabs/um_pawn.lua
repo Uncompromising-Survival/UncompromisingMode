@@ -416,7 +416,7 @@ local function pawn_common(pawntype)
 
     inst:AddTag("soulless")
     inst.sg:GoToState("hide_post")
-    inst:DoTaskInTime(0, function(inst) if TUNING.DSTU.PAWNS == false then inst:Remove() end end)
+    inst:DoTaskInTime(0, function(inst) if UM_CONFIG.PAWNS == false then inst:Remove() end end)
 
     return inst
 end

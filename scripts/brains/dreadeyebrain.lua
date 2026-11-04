@@ -102,7 +102,7 @@ function DreadEyeBrain:OnStart()
     local root = PriorityNode(
         {
             BrainCommon.PanicTriggerShadowCreature(self.inst),
-            BrainCommon.RunAwayFromQueenTorch(self),
+            BrainCommon.RunAwayFromQueenTorch(self.inst),
             IfNode(function() return targetatsea(self.inst) end, "target on land",
                 DoAction(self.inst, teleport)),
             WhileNode(function() return ShouldAttack(self) end, "Attack", ChaseAndAttack(self.inst, 100)),

@@ -99,7 +99,7 @@ end
 local function UnAmp(inst)
     inst:RemoveTag("amped") -- Party's over.
     inst.components.combat.attackrange = 2
-    inst.AmpDamageTakenModifier = TUNING.DSTU.WATHOM_AMPED_VULNERABILITY
+    inst.AmpDamageTakenModifier = UM_CONFIG.WATHOM_AMPVULNERABILITY
     if inst.adrenalinehpregen ~= nil then
         inst.adrenalinehpregen:Cancel()
         inst.adrenalinehpregen = nil
@@ -148,7 +148,7 @@ end
 local function Amp(inst)
     inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/ampedbark")
     inst.components.combat.attackrange = 7 -- These values are for when Wathom's at 100 Adrenaline, so he should be Amping Up right now.
-    inst.AmpDamageTakenModifier = TUNING.DSTU.WATHOM_AMPED_VULNERABILITY
+    inst.AmpDamageTakenModifier = UM_CONFIG.WATHOM_AMPVULNERABILITY
     inst:AddTag("amped")
     inst.components.adrenaline:SetAmped(true)
     --inst.components.talker:Say("AMPED UP!", nil, true)
@@ -437,8 +437,8 @@ local function CheckLight(inst)
             inst.updatewathomvisiontask:Cancel()
             inst.updatewathomvisiontask = nil
         end
-        --print(NIGHTVISION_CCS, TUNING.DSTU.WATHOM_NIGHTVISON_CC, NIGHTVISION_CCS[TUNING.DSTU.WATHOM_NIGHTVISON_CC])
-        inst.components.playervision:SetCustomCCTable(NIGHTVISION_CCS[TUNING.DSTU.WATHOM_NIGHTVISON_CC])
+        --print(NIGHTVISION_CCS, UM_CLIENT_CONFIG.WATHOM_UNDEATH, NIGHTVISION_CCS[UM_CLIENT_CONFIG.WATHOM_UNDEATH])
+        inst.components.playervision:SetCustomCCTable(NIGHTVISION_CCS[UM_CLIENT_CONFIG.WATHOM_UNDEATH])
         inst.components.playervision:ForceNightVision(true)
         if TheWorld.ismastersim then
             inst:AddTag("WathomInDark")
@@ -542,7 +542,7 @@ local function UpdateAdrenaline(inst, data)
         inst.AmpDamageTakenModifier = 1
     elseif AmpLevel >= 1 and not inst:HasTag("amped") and HasSkill(inst,"amp_2") then
         Amp(inst)
-        inst.AmpDamageTakenModifier = TUNING.DSTU.WATHOM_AMPED_VULNERABILITY
+        inst.AmpDamageTakenModifier = UM_CONFIG.WATHOM_AMPVULNERABILITY
     elseif AmpLevel >= 1 and not inst:HasTag("amped") and HasSkill(inst,"amp_2") then
         inst.components.combat.attackrange = item and (HasSkill(inst,"amp_2") and 6 or HasSkill(inst,"amp_1") and 5) or 2
         --inst.components.health:SetAbsorptionAmount(HasSkill(inst,"amp_2") and -0.5 or HasSkill(inst,"amp_2") and -0.25 or 0)
@@ -577,7 +577,7 @@ local function OnAttacked(inst, data)
         inst.adrenalresume = nil
     end
     inst.adrenalresume = inst:DoTaskInTime(10, function(inst) inst.adrenalpause = false end)
-    if not TUNING.DSTU.WATHOM_ARMOR_DAMAGE then
+    if not UM_CONFIG.WATHOM_ARMORDAMAGE then
         local dmgmod = inst.AmpDamageTakenModifier
     
         
@@ -730,7 +730,7 @@ local function master_postinit(inst)
         inst.components.eater:SetDiet({FOODGROUP.OMNI}, {FOODTYPE.MEAT, FOODTYPE.GOODIES})
         inst.components.eater:SetCanEatRawMeat(true) -- Comment out when we want to invert insanity.
     end
-    if TUNING.DSTU.BONESTEW == "bone_appetit" then
+    if UM_CONFIG.BONESTEW_NERF == "bone_appetit" then
         inst.components.foodaffinity:AddPrefabAffinity("um_kebab", 20)
     else
         inst.components.foodaffinity:AddPrefabAffinity("bonestew", 20)

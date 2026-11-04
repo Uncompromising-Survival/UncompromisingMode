@@ -23,7 +23,7 @@ function setup_custom_loading_tips()
         OTHER = 1,
     }
 	
-	if TUNING.DSTU.UM_TIPS_ONLY then
+	if UM_CLIENT_CONFIG.UM_TIPS_ONLY then
 		SetLoadingTipCategoryWeights(GLOBAL.LOADING_SCREEN_TIP_CATEGORY_WEIGHTS_START, tipcategoryendweights)
 	else
 		SetLoadingTipCategoryWeights(GLOBAL.LOADING_SCREEN_TIP_CATEGORY_WEIGHTS_START, tipcategorystartweights)

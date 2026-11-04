@@ -1,4 +1,5 @@
 --always load tiledefs to prevent nil reference crashes.
+modimport("init/init_configs")
 modimport("libraries/um_particletilehelper")
 modimport("libraries/um_particleworldtilestate")
 modimport("scripts/map/misc_tools/tiledefs")

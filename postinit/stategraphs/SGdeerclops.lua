@@ -681,10 +681,7 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 FreezeEverything(inst)
                 if not inst.aurafreezetimertask then
                     inst.aurafreezetimertask = inst:DoTaskInTime(7, function()
-                        if inst.aurafreezetimertask then
-                            inst.aurafreezetimertask:Cancel()
-                            inst.aurafreezetimertask = nil
-                        end
+                        inst.aurafreezetimertask = nil
                     end)
                 end
             end,

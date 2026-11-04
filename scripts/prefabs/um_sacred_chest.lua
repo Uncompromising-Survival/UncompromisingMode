@@ -257,7 +257,7 @@ local function fn()
 	
 	-- This block of code determines whether the upgraded chest is visible/interactable.
 	-- When the config is off, we hide it.
-	if not TUNING.DSTU.THE_COOLER_SACRED_CHEST then
+	if not UM_CONFIG.THE_COOLER_SACRED_CHEST then
 		inst:Hide()
 		inst.AnimState:SetMultColour(0,0,0,0)
 		inst:AddTag("NOCLICK")

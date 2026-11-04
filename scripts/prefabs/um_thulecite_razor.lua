@@ -33,7 +33,7 @@ local function fn()
 
     inst:AddComponent("shaver")
 
-    if TUNING.DSTU.SHAVE_MODE then
+    if UM_CONFIG.UM_SHAVE_MODE then
         local finiteuses = inst:AddComponent("finiteuses")
         finiteuses:SetMaxUses(200)
         finiteuses:SetUses(200)

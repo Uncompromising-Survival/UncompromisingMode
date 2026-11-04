@@ -10,7 +10,7 @@ function UMVetCurse.ToggleDamageTakenModifier(inst, toggle)
     local combat = inst.components.combat
     if not combat then return end
     if toggle then
-        combat.externaldamagetakenmultipliers:SetModifier(inst, TUNING.DSTU.VETCURSE_DAMAGE_TAKEN_MULT, "um_vetcurse_damage_taken")
+        combat.externaldamagetakenmultipliers:SetModifier(inst, UM_CONFIG.VETCURSE_DAMAGE_TAKEN_MULT, "um_vetcurse_damage_taken")
     else
         combat.externaldamagetakenmultipliers:RemoveModifier(inst, "um_vetcurse_damage_taken")
     end
@@ -20,7 +20,7 @@ end
     local hunger = inst.components.hunger
     if not hunger then return end
     if toggle then
-        hunger.burnratemodifiers:SetModifier(inst, TUNING.DSTU.VETCURSE_HUNGER_RATE, "um_vetcurse_hunger_rate")
+        hunger.burnratemodifiers:SetModifier(inst, UM_CONFIG.VETCURSE_HUNGER_RATE, "um_vetcurse_hunger_rate")
     else
         hunger.burnratemodifiers:RemoveModifier(inst, "um_vetcurse_hunger_rate")
     end
@@ -116,7 +116,7 @@ local function oneat(inst, data)
         inst.components.health:DoDelta(health_delta, nil, data.food.prefab)
     end
 
-    if TUNING.DSTU.WARLY_CHANGES ~= 0 then
+    if UM_CONFIG.WARLY_CHANGES ~= 0 then
         if string.find(data.food.prefab, "spice_salt") then
             inst.components.health:DeltaPenalty(-.125)
         end
@@ -197,7 +197,7 @@ function UMVetCurse.ToggleVetCurse(inst, toggle)
 end
 
 function UMVetCurse.ApplyCurse(old, new)
-    if TUNING.DSTU.VETCURSE == "default" and old:HasTag("vetcurse") then
+    if UM_CONFIG.VETCURSE == "default" and old:HasTag("vetcurse") then
         if new.UMToggleVetCurse then new:UMToggleVetCurse(true) end
     end
 end

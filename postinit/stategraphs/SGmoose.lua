@@ -81,7 +81,7 @@ env.AddStategraphPostInit("moose", function(inst)
                 end
             else
                 local target = inst.components.combat and inst.components.combat.target
-                if TUNING.DSTU.HARDER_MOOSE and not inst.sg:HasStateTag("hopping") and inst.superhop and target and math.random() < .5 then
+                if UM_CONFIG.HARDER_MOOSE and not inst.sg:HasStateTag("hopping") and inst.superhop and target and math.random() < .5 then
                     inst.sg:GoToState("hopatk")
                 elseif not inst.sg:HasStateTag("hopping") then
                     inst.sg:GoToState("hop")
