@@ -335,7 +335,7 @@ for i, werepig in pairs(werepigs) do
             attackstate.onenter = function(inst, ...)
                 local ret = attackstate_onenter(inst, ...)
                 inst.sg.statemem.speedmult = inst.sg.statemem.speedmult * 2.5
-                inst.Physics:SetMotorVelOverride(3 * inst.sg.statemem.speedmult, 0 ,0)
+                inst.Physics:SetMotorVelOverride(3 * inst.sg.statemem.speedmult, 0, 0)
                 return ret
             end
         end
