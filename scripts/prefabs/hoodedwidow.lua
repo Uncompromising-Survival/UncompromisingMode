@@ -53,7 +53,6 @@ local function DoDespawn(inst)
     if home then
         home.components.childspawner:GoHome(inst)
         --home.components.childspawner:StartSpawning()
-        inst:AddTag("home")
     else
         inst:Remove() --Hooded Widow was probably debug spawned in?
     end
