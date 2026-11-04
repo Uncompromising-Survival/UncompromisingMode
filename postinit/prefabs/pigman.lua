@@ -1,32 +1,37 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
+local PK_GUARDS = UM_CONFIG.PIGKING_GUARDS
+
 local UMUpvalueHacker = require("tools/um_upvaluehacker")
 
 local RETARGET_MUST_TAGS = {"_combat", "player"}
 local RETARGET_CANT_TAGS = {"playerghost"}
 
-local NormalKeepTargetFn
-local NormalRetargetFn
+local PKGuardKeepTargetFn
+local PKGuardRetargetFn
 env.AddPrefabPostInit("world", function(world)
     if not world.ismastersim then return end
     local _SetNormalPig = UMUpvalueHacker.TryGetUpvalue(Prefabs.pigman.fn, "SetNormalPig")
     if _SetNormalPig then
-        NormalKeepTargetFn = UMUpvalueHacker.TryGetUpvalue(_SetNormalPig, "NormalKeepTargetFn")
         local _NormalRetargetFn = UMUpvalueHacker.TryGetUpvalue(_SetNormalPig, "NormalRetargetFn")
         if _NormalRetargetFn then
-            local _IsFranken = UMUpvalueHacker.TryGetUpvalue(_NormalRetargetFn, "IsFranken")
-            if _IsFranken then
-                local function IsFranken(dude, inst, ...)
-                    return inst.um_pkguard and dude.franken or _IsFranken(dude, inst, ...)
-                end
-                UMUpvalueHacker.SetUpvalue(_NormalRetargetFn, IsFranken, "IsFranken")
-            end
-            NormalRetargetFn = function(inst, ...)
+            local function NormalRetargetFn(inst, ...)
                 if inst:HasTag("NPC_contestant") or inst.components.minigame_spectator then return _NormalRetargetFn(inst, ...) end
                 return not inst:IsInLimbo() and FindEntity(inst, TUNING.PIG_TARGET_DIST, function(guy)
                     return guy.userid and table.contains(inst.um_remembered_threats, guy.userid) and guy:IsInLight() and inst.components.combat:CanTarget(guy)
                 end, RETARGET_MUST_TAGS, RETARGET_CANT_TAGS) or _NormalRetargetFn(inst, ...)
+            end
+            if PK_GUARDS then
+                local _IsFranken = UMUpvalueHacker.TryGetUpvalue(_NormalRetargetFn, "IsFranken")
+                if _IsFranken then
+                    local function IsFranken(dude, inst, ...)
+                        return inst.um_pkguard and dude.franken or _IsFranken(dude, inst, ...)
+                    end
+                    UMUpvalueHacker.SetUpvalue(_NormalRetargetFn, IsFranken, "IsFranken")
+                end
+                PKGuardKeepTargetFn = UMUpvalueHacker.TryGetUpvalue(_SetNormalPig, "NormalKeepTargetFn")
+                PKGuardRetargetFn = NormalRetargetFn
             end
             UMUpvalueHacker.SetUpvalue(_SetNormalPig, NormalRetargetFn, "NormalRetargetFn")
         end
@@ -152,14 +157,14 @@ do
         local _KeepTargetFn = combat.keeptargetfn
         combat:SetKeepTargetFunction(function(_inst, target, ...)
             if _inst.um_pkguard then
-                return NormalKeepTargetFn and NormalKeepTargetFn(_inst, target, ...)
+                return PKGuardKeepTargetFn and PKGuardKeepTargetFn(_inst, target, ...)
             end
             return _KeepTargetFn(_inst, target, ...)
         end)
         local _Retarget = combat.targetfn
         combat:SetRetargetFunction(combat.retargetperiod, function(_inst, ...)
             if _inst.um_pkguard then
-                return NormalRetargetFn and NormalRetargetFn(_inst, ...)
+                return PKGuardRetargetFn and PKGuardRetargetFn(_inst, ...)
             end
             return _Retarget(_inst, ...)
         end)
@@ -173,22 +178,26 @@ do
         return ret
     end
 
-    local function SetPKGuard(inst)
+    local function SetPKGuard(inst, threats)
         inst.um_pkguard = true
-        inst:AddTag("um_pkguard")
-        inst.um_remembered_threats = {}
+        if PK_GUARDS then
+            inst:AddTag("um_pkguard")
+            inst.um_remembered_threats = threats or {}
 
-        if not inst:HasTag("werepig") then inst:UMOnPKGuardNormal() end
+            inst.UMOnPKGuardNormal = OnPKGuardNormal
 
-        local werebeast = inst.components.werebeast
-        if werebeast then
-            if not _OnNormal then
-                _OnNormal = werebeast.onsetnormalfn
+            local werebeast = inst.components.werebeast
+            if werebeast then
+                if not _OnNormal then
+                    _OnNormal = werebeast.onsetnormalfn
+                end
+                werebeast:SetOnNormalFn(OnNormal)
             end
-            werebeast:SetOnNormalFn(OnNormal)
-        end
 
-        inst:ListenForEvent("newcombattarget", OnNewTarget_Remember)
+            if not inst:HasTag("werepig") then inst:UMOnPKGuardNormal() end
+
+            inst:ListenForEvent("newcombattarget", OnNewTarget_Remember)
+        end
     end
 
     local _OnSave
@@ -203,8 +212,7 @@ do
     local _OnLoad
     local function OnLoad(inst, data, ...)
         if data and data.um_pkguard then
-            inst:UMSetPKGuard()
-            if data.um_remembered_threats then inst.um_remembered_threats = data.um_remembered_threats end
+            inst:UMSetPKGuard(data.um_remembered_threats)
         end
         return _OnLoad and _OnLoad(inst, data, ...)
     end
@@ -214,7 +222,6 @@ do
 
         SetShouldAggroStuff(inst)
 
-        inst.UMOnPKGuardNormal = OnPKGuardNormal
         inst.UMSetPKGuard = SetPKGuard
 
         if not _OnSave then
@@ -246,31 +253,33 @@ do
     end
 
     local function SetDemolished(inst, toggle)
-        inst.um_demolished = toggle
-        local spawner = inst.components.spawner
-        if toggle then
-            inst.Physics:ClearCollisionMask()
-            inst:Hide()
-            inst.components.fueled:InitializeFuelLevel(0)
-            local timer = inst.components.timer
-            if timer and not timer:TimerExists("um_rebuild") then
-                timer:StartTimer("um_rebuild", 60 * 12)
-            end
-            if spawner then
-                local spawner_child = spawner and not spawner:IsOccupied() and spawner.child and spawner.child:IsValid() and spawner.child
-                if spawner_child then
-                    spawner_child:PushEvent("detachchild")
-                    local homeseeker = spawner_child.components.homeseeker
-                    local home = homeseeker and homeseeker:GetHome()
-                    if home then homeseeker.onhomeremoved(home) end
+        inst.um_demolished = toggle or nil
+        if PK_GUARDS then
+            local spawner = inst.components.spawner
+            if toggle then
+                inst.Physics:ClearCollisionMask()
+                inst:Hide()
+                inst.components.fueled:InitializeFuelLevel(0)
+                local timer = inst.components.timer
+                if timer and not timer:TimerExists("um_rebuild") then
+                    timer:StartTimer("um_rebuild", 60 * 12)
                 end
-                spawner:CancelSpawning()
+                if spawner then
+                    local spawner_child = spawner and not spawner:IsOccupied() and spawner.child and spawner.child:IsValid() and spawner.child
+                    if spawner_child then
+                        spawner_child:PushEvent("detachchild")
+                        local homeseeker = spawner_child.components.homeseeker
+                        local home = homeseeker and homeseeker:GetHome()
+                        if home then homeseeker.onhomeremoved(home) end
+                    end
+                    spawner:CancelSpawning()
+                end
+            else
+                inst:Show()
+                MakeObstaclePhysics(inst, .33)
+                inst.components.workable:SetWorkLeft(4)
+                if spawner then spawner:SpawnWithDelay(0) end
             end
-        else
-            inst:Show()
-            MakeObstaclePhysics(inst, .33)
-            inst.components.workable:SetWorkLeft(4)
-            if spawner then spawner:SpawnWithDelay(0) end
         end
     end
 
@@ -283,27 +292,38 @@ do
 
     local function SetPKTorch(inst)
         inst.um_pktorch = true
-        inst:AddTag("um_pktorch")
-
-        local workable = inst.components.workable
-        if workable then
-            if not _OnFinish then
-                _OnFinish = workable.onfinish
-            end
-            workable:SetOnFinishCallback(OnFinish)
-        end
-
-        local spawner = inst.components.spawner
-        if spawner then
-            if not _OnSpawned then
-                _OnSpawned = spawner.onspawnedfn
-            end
-            spawner:SetOnSpawnedFn(OnSpawned)
-        end
 
         inst.UMSetDemolished = SetDemolished
 
-        inst:ListenForEvent("timerdone", Rebuild)
+        if PK_GUARDS then
+            inst:AddTag("um_pktorch")
+
+            local workable = inst.components.workable
+            if workable then
+                if not _OnFinish then
+                    _OnFinish = workable.onfinish
+                end
+                workable:SetOnFinishCallback(OnFinish)
+            end
+
+            local spawner = inst.components.spawner
+            if spawner then
+                if not _OnSpawned then
+                    _OnSpawned = spawner.onspawnedfn
+                end
+                spawner:SetOnSpawnedFn(OnSpawned)
+            end
+
+            local timer = inst.components.timer or inst:AddComponent("timer")
+            local _OnSave = timer.OnSave
+            timer.OnSave = function(self, ...)
+                local data = _OnSave(self, ...) or {}
+                if not data["add_component_if_missing"] then data["add_component_if_missing"] = true end
+                return data
+            end
+
+            inst:ListenForEvent("timerdone", Rebuild)
+        end
     end
 
     local _OnSave
@@ -327,10 +347,6 @@ do
     env.AddPrefabPostInit("pigtorch", function(inst)
         if not TheWorld.ismastersim then return end
 
-        if not inst.components.timer then
-            inst:AddComponent("timer")
-        end
-
         inst.UMSetPKTorch = SetPKTorch
 
         if not _OnSave then
@@ -343,11 +359,3 @@ do
         inst.OnLoad = OnLoad
     end)
 end
-
---[[env.AddPrefabPostInit("pigking_pigguard", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
-
-    SetShouldAggroStuff(inst)
-end)]]
