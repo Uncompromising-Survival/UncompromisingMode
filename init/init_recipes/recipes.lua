@@ -89,7 +89,6 @@ if UM_CONFIG.GEMOLOGY then
     ChangeSortKey("um_gem_repair_kit", "sewingkit", "TOOLS", true)
     ChangeSortKey("um_gem_repair_kit", "um_magnifier_purplegem", "MAGIC", true)
 
-
     AddRecipe2("um_magnifier", { Ingredient("um_gemologypurplegem2", 1), Ingredient("fossil_piece", 1), Ingredient("thulecite", 1) }, TECH.ANCIENT_THREE, { nounlock = true, no_builder_skill = "wathom_allegiance_neutral", forward_ingredients = { "wathom_um_magnifier" } }, { "CRAFTING_STATION" })
     ChangeSortKey("um_magnifier", "multitool_axe_pickaxe", "CRAFTING_STATION", false)
 

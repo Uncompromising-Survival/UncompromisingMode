@@ -1,17 +1,7 @@
 
 local require = GLOBAL.require
 
-local ConfigBuilder = require("um_configs")
-
-ConfigBuilder.BuildConfigs(modname)
-
-
-UM_CONFIG = ConfigBuilder.ServerConfigs
-UM_CLIENT_CONFIG = ConfigBuilder.ClientConfigs
-
-GLOBAL.UM_CONFIG = UM_CONFIG
-GLOBAL.UM_CLIENT_CONFIG = UM_CLIENT_CONFIG
-
+modimport("init/init_configs")
 --live: 󰀕 white skull
 --beta: 󰀕 red skull
 GLOBAL.rawset(GLOBAL, "UNCOMPROMISING_MODE", string.find(GLOBAL.KnownModIndex:GetModFancyName(modname), "󰀕") ~= nil and "LIVE" or "BETA")
