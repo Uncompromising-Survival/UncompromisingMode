@@ -46,8 +46,8 @@ local function Repopulate(inst)
 end
 
 
-local function TryRepopulate(inst, data)
-    if data.isautumn then
+local function TryRepopulate(inst, isautumn)
+    if isautumn then
         if not inst.entity:IsAwake() then
             Repopulate(inst)
         else
