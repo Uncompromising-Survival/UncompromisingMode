@@ -4146,6 +4146,7 @@ return{
 		SLINGSHOTAMMO_MARBLE = "These will knock the wind out of them!",
 		SLINGSHOTAMMO_THULECITE = "Perfect for the 'other' kind of cursing.",
         SLINGSHOTAMMO_GOLD = "I always spread the love around!",
+        UM_SLINGSHOTAMMO_HONEY = "That should slow them down!",
         SLINGSHOTAMMO_HONEY = "That should slow them down!",
         SLINGSHOTAMMO_SLOW = "This shadow magic stuff is pretty neat!",
         SLINGSHOTAMMO_FREEZE = "This will freeze them in their tracks!",

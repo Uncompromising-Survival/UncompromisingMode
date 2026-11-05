@@ -10,7 +10,7 @@ local noskill =
 	"slingshotammo_purebrilliance",
 	"slingshotammo_lunarplanthusk",
 	"slingshotammo_gunpowder",
-	"slingshotammo_gunpowder",
+	"slingshotammo_honey",
 	"slingshotammo_dreadstone",
 }
 

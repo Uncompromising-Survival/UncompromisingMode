@@ -970,7 +970,7 @@ local function honeyproj_fn()
     inst.Physics:SetCollisionCallback(nil)
     inst.components.projectile:SetOnHitFn(OnHit_Honey)
 
-    inst.impactfx = "slingshotammo_honey_impact"
+    inst.impactfx = "um_slingshotammo_honey_impact"
 
     inst.damage = TUNING.SLINGSHOT_AMMO_DAMAGE_SLOW
 
@@ -1474,7 +1474,7 @@ local function shadowclone_fn()
     return inst
 end
 
-local function fncommon(symbol, inv, overridebuild, special)
+local function fncommon(symbol, overridebuild, special)
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -1496,7 +1496,7 @@ local function fncommon(symbol, inv, overridebuild, special)
 	else
 		inst:AddTag("wixieammo_basic")
 	end
-	
+
     inst:AddTag("slingshotammo")
     inst:AddTag("reloaditem_ammo")
 
@@ -1527,7 +1527,7 @@ local function fncommon(symbol, inv, overridebuild, special)
 end
 
 local function cracker_fn()
-    local inst = fncommon("rock", "slingshotammo_firecrackers", nil, false)
+    local inst = fncommon("rock", nil, false)
 
     if not TheWorld.ismastersim then
         return inst
@@ -1544,7 +1544,7 @@ local function cracker_fn()
 end
 
 local function honey_fn()
-    local inst = fncommon("slow", "slingshotammo_honey", nil, false)
+    local inst = fncommon("slow", nil, false)
 
     if not TheWorld.ismastersim then
         return inst
@@ -1560,7 +1560,7 @@ local function honey_fn()
 end
 
 local function rubber_fn()
-    local inst = fncommon("marble", "slingshotammo_rubber", nil, false)
+    local inst = fncommon("marble", nil, false)
 
     if not TheWorld.ismastersim then
         return inst
@@ -1570,7 +1570,7 @@ local function rubber_fn()
 end
 
 local function tremor_fn()
-    local inst = fncommon("poop", "slingshotammo_tremor", nil, true)
+    local inst = fncommon("poop", nil, true)
 
     if not TheWorld.ismastersim then
         return inst
@@ -1581,7 +1581,7 @@ local function tremor_fn()
 end
 
 local function moonrock_fn()
-    local inst = fncommon("freeze", "slingshotammo_moonrock", nil, false)
+    local inst = fncommon("freeze", nil, false)
 
     if not TheWorld.ismastersim then
         return inst
@@ -1596,7 +1596,7 @@ local function moonrock_fn()
 end
 
 local function moonglass_fn()
-    local inst = fncommon("gold", "slingshotammo_moonglass", nil, true)
+    local inst = fncommon("gold", nil, true)
 
     if not TheWorld.ismastersim then
         return inst
@@ -1607,7 +1607,7 @@ local function moonglass_fn()
 end
 
 local function salt_fn()
-    local inst = fncommon("thulecite", "slingshotammo_salt", nil, true)
+    local inst = fncommon("thulecite", nil, true)
 
     if not TheWorld.ismastersim then
         return inst
@@ -1616,17 +1616,17 @@ local function salt_fn()
     inst:AddComponent("edible")
     inst.components.edible.foodtype = FOODTYPE.ELEMENTAL
     inst.components.edible.hungervalue = 1
-	
+
     inst:AddComponent("fuel")
     inst.components.fuel.fuelvalue = TUNING.MED_FUEL / 7.5 --Fuels Salt Shaker 3000 by the same amount as 1 Salt Crystal. -CB
     inst.components.fuel.fueltype = FUELTYPE.SALT
-	
+
     inst:AddComponent("bait")
     return inst
 end
 
 local function goop_fn()
-    local inst = fncommon("trinket_1", "slingshotammo_goop", nil, true)
+    local inst = fncommon("trinket_1", nil, true)
 
     if not TheWorld.ismastersim then
         return inst
@@ -1643,7 +1643,7 @@ local function goop_fn()
 end
 
 local function slime_fn()
-    local inst = fncommon("freeze", "slingshotammo_slime", "wixieammo_IA", nil, true)
+    local inst = fncommon("freeze", "wixieammo_IA", true)
 
     if not TheWorld.ismastersim then
         return inst
@@ -1653,7 +1653,7 @@ local function slime_fn()
 end
 
 local function lazy_fn()
-    local inst = fncommon("slow", "slingshotammo_lazy", "wixieammo_IA", nil, true)
+    local inst = fncommon("slow", "wixieammo_IA", true)
 
     if not TheWorld.ismastersim then
         return inst
@@ -1663,13 +1663,13 @@ local function lazy_fn()
     inst.components.edible.foodtype = FOODTYPE.ELEMENTAL
     inst.components.edible.hungervalue = 1
     inst.components.inventoryitem:SetSinks(true)
-	
+
     inst:AddComponent("bait")
     return inst
 end
 
 local function shadow_fn()
-    local inst = fncommon("rock", "slingshotammo_shadow", "wixieammo_IA", true)
+    local inst = fncommon("rock", "wixieammo_IA", true)
 
     if not TheWorld.ismastersim then
         return inst
@@ -1713,7 +1713,7 @@ local function Rebound(inst, attacker, target)
                 target.components.combat:SetTarget(set_attacker)
                 target.components.combat:RemoveShouldAvoidAggro(attacker)
             end
-				
+
 			if target.components.health ~= nil and target.components.health:IsDead() then
 				attacker:PushEvent("killed", { victim = target, attacker = attacker })
 			end
@@ -2004,7 +2004,7 @@ local function Tremor(inst)
                     if inst.attacker ~= nil and inst.attacker.components ~= nil and inst.attacker.components.combat then
                         inst.finaldamage = inst.finaldamage * (inst.attacker.components.combat ~= nil and inst.attacker.components.combat.externaldamagemultipliers:Get() or 1)
                     end
-		
+
 					if v.components.planarentity then
 						if not inst.planar_ammo then
 							inst.finaldamage = (math.sqrt(inst.finaldamage * 4 + 64) - 8) * 4
@@ -2028,7 +2028,7 @@ local function Tremor(inst)
                         v.components.combat:SetTarget(inst.attacker)
                         v.components.combat:RemoveShouldAvoidAggro(inst.attacker)
                     end
-						
+
 					if v.components.health ~= nil and v.components.health:IsDead() then
 						inst.attacker:PushEvent("killed", { victim = v, attacker = inst.attacker })
 					end
@@ -2148,7 +2148,7 @@ local function Shock_Rebound(inst, attacker, target)
                 target.components.combat:SetTarget(set_attacker)
                 target.components.combat:RemoveShouldAvoidAggro(attacker)
             end
-				
+
 			if target.components.health ~= nil and target.components.health:IsDead() then
 				attacker:PushEvent("killed", { victim = target, attacker = attacker })
 			end
@@ -2199,7 +2199,7 @@ local function shockscrap_rebound()
     inst:AddComponent("projectile")
     inst.components.projectile:SetSpeed(13)
     inst.components.projectile:SetOnHitFn(Shock_Rebound)
-	
+
     inst.impactfx = "bishop_charge_hit"
 
     inst.persists = false
@@ -2214,9 +2214,9 @@ return Prefab("slingshotammo_firecrackers", cracker_fn, assets, prefabs),
     Prefab("slingshotammo_firecrackers_proj_secondary", crackerproj_fn, assets, prefabs),
     Prefab("firecrackers_slingshot", fn, assets_firecrackers, prefabs_firecrackers),
     Prefab("slingshot_explode_firecrackers", crackerexplosion_fn, assets, prefabs),
-    Prefab(UM_CONFIG.WIXIE_WALTER and "slingshotammo_honey" or "slingshotammo_honey_null", honey_fn, assets, prefabs),
-    Prefab("slingshotammo_honey_proj_secondary", honeyproj_fn, assets, prefabs),
-    Prefab("slingshotammo_honey_impact", impacthoneyfn, assets, prefabs),
+    Prefab(UM_CONFIG.WIXIE_WALTER and "um_slingshotammo_honey" or "um_slingshotammo_honey_null", honey_fn, assets, prefabs),
+    Prefab("um_slingshotammo_honey_proj_secondary", honeyproj_fn, assets, prefabs),
+    Prefab("um_slingshotammo_honey_impact", impacthoneyfn, assets, prefabs),
     Prefab("slingshotammo_goldshatter", impactgoldfn, assets, prefabs),
     Prefab("slingshotammo_rubber", rubber_fn, assets, prefabs),
     Prefab("slingshotammo_rubber_proj_secondary", rubberproj_fn, assets, prefabs),

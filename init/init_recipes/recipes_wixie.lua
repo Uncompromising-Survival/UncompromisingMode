@@ -75,13 +75,13 @@ AddRecipe2("slingshotammo_slime", { Ingredient("slurtleslime", 1), Ingredient("r
 ChangeSortKey("slingshotammo_slime", "slingshotammo_moonrock", "CHARACTER", true)
 ChangeSortKey("slingshotammo_slime", "slingshotammo_moonrock", "WEAPONS", true)
 
-AddRecipe2("slingshotammo_honey", { Ingredient("honey", 3) }, TECH.SCIENCE_TWO, { builder_tag = "pebblemaker", numtogive = 10, no_deconstruction = true }, { "CHARACTER", "WEAPONS" })
-ChangeSortKey("slingshotammo_honey", "slingshotammo_slime", "WEAPONS", true)
-ChangeSortKey("slingshotammo_honey", "slingshotammo_slime", "CHARACTER", true)
+AddRecipe2("um_slingshotammo_honey", { Ingredient("honey", 3) }, TECH.SCIENCE_TWO, { builder_tag = "pebblemaker", numtogive = 10, no_deconstruction = true }, { "CHARACTER", "WEAPONS" })
+ChangeSortKey("um_slingshotammo_honey", "slingshotammo_slime", "WEAPONS", true)
+ChangeSortKey("um_slingshotammo_honey", "slingshotammo_slime", "CHARACTER", true)
 
 AddRecipe2("slingshotammo_tar", { Ingredient("sludge", 1) }, TECH.SCIENCE_TWO, { builder_tag = "pebblemaker", numtogive = 10, no_deconstruction = true }, { "CHARACTER", "WEAPONS" })
-ChangeSortKey("slingshotammo_tar", "slingshotammo_honey", "WEAPONS", true)
-ChangeSortKey("slingshotammo_tar", "slingshotammo_honey", "CHARACTER", true)
+ChangeSortKey("slingshotammo_tar", "um_slingshotammo_honey", "WEAPONS", true)
+ChangeSortKey("slingshotammo_tar", "um_slingshotammo_honey", "CHARACTER", true)
 
 AddRecipe2("slingshotammo_salt", { Ingredient("saltrock", 1) }, TECH.SCIENCE_TWO, { builder_tag = "pebblemaker", numtogive = 10, no_deconstruction = true }, { "CHARACTER", "WEAPONS" })
 ChangeSortKey("slingshotammo_salt", "slingshotammo_tar", "WEAPONS", true)

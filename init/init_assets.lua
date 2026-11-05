@@ -289,7 +289,7 @@ local inventoryitems =
     "slingshot_jessie_3",
     "slingshot_claire",
     "slingshotammo_firecrackers",
-    "slingshotammo_honey",
+    "um_slingshotammo_honey",
     "slingshotammo_rubber",
     "slingshotammo_tremor",
     "slingshotammo_moonrock",
