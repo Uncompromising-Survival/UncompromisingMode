@@ -67,8 +67,8 @@ env.AddStategraphPostInit("spider", function(inst)
         local doattackeventhandler_fn = doattackeventhandler.fn
         doattackeventhandler.fn = function(inst, data, ...)
             if not (inst.sg:HasStateTag("busy") or inst.components.health:IsDead()) then
-                if inst:HasTag("spider_regular") then
-                    inst.sg:GoToState(UM_CONFIG.ALLJUMPERSPIDERS and data.target:IsValid() and not inst:IsNear(data.target, TUNING.SPIDER_WARRIOR_MELEE_RANGE)
+                if UM_CONFIG.ALLJUMPERSPIDERS and inst:HasTag("spider_regular") then
+                    inst.sg:GoToState(data.target:IsValid() and not inst:IsNear(data.target, TUNING.SPIDER_WARRIOR_MELEE_RANGE)
                         and "warrior_attack" or "attack", data.target) -- Do leap attack
                     return
                 end
@@ -86,11 +86,10 @@ env.AddStategraphPostInit("spider", function(inst)
     if attackedeventhandler then
         local attackedeventhandler_fn = attackedeventhandler.fn
         attackedeventhandler.fn = function(inst, data, ...)
-            if inst.components.health and not inst.components.health:IsDead() then
+            if UM_CONFIG.SPIDERWARRIORCOUNTER and inst.components.health and not inst.components.health:IsDead() then
                 if CommonHandlers.TryElectrocuteOnAttacked(inst, data) then
                     return
-                elseif TUNING.DSTU.SPIDERWARRIORCOUNTER and inst:HasTag("spider_warrior") and not inst:HasTag("trapdoorspider")
-                    and not inst.sg:HasStateTag("electrocute") then
+                elseif inst:HasTag("spider_warrior") and not inst:HasTag("trapdoorspider") and not inst.sg:HasStateTag("electrocute") then
                     local caninterrupt = inst.sg:HasStateTag("caninterrupt")
                     if not inst.sg:HasAnyStateTag("attack", "evade", "knockback") or caninterrupt then
                         if not inst.sg:HasStateTag("moving") or caninterrupt then inst.sg:GoToState("hit") end
@@ -118,7 +117,7 @@ env.AddStategraphPostInit("spider", function(inst)
         if not inst.components.health:IsDead() then
             if inst:HasTag("spider_warrior") or inst:HasTag("spider_spitter") or inst:HasTag("spider_moon") then
                 if not inst.sg:HasStateTag("attack") and not inst.sg:HasStateTag("evade") then -- don't interrupt attack or exit shield
-                    if inst:HasTag("spider_warrior") and not inst:HasTag("trapdoorspider") and inst.components.combat.target ~= nil and TUNING.DSTU.SPIDERWARRIORCOUNTER then
+                    if inst:HasTag("spider_warrior") and not inst:HasTag("trapdoorspider") and inst.components.combat.target ~= nil and UM_CONFIG.SPIDERWARRIORCOUNTER then
                     inst.sg:GoToState("evade_loop")
                     else
                     inst.sg:GoToState("hit") -- can still attack
