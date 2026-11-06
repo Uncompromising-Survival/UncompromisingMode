@@ -84,9 +84,12 @@ if UM_CONFIG.BUTTERFLY_TWEAKS == "unique" then
         inst:Remove()
     end
 
-    local function RollForButtery(inst)
-        if inst.buttery and inst.buttery >= 98 then
+    local function RollForButtery(inst, value)
+        if inst.um_buttery then return end
+        if value >= 98 then
             MakeButtery(inst)
+        else
+            inst.um_buttery = value
         end
     end
 
@@ -107,15 +110,16 @@ if UM_CONFIG.BUTTERFLY_TWEAKS == "unique" then
 
                 local _OnSave = inst.OnSave
                 inst.OnSave = function(_inst, data, ...)
-                    if _inst.buttery then data.buttery = _inst.buttery end
+                    if _inst.um_buttery then data.um_buttery = _inst.um_buttery end
                     return _OnSave and _OnSave(_inst, data, ...)
                 end
                 local _OnLoad = inst.OnLoad
                 inst.OnLoad = function(_inst, data, ...)
-                    _inst.buttery = data and data.buttery or math.random(1, 100)
-                    RollForButtery(_inst)
+                    if data and data.um_buttery then _inst.um_buttery = data.um_buttery end
                     return _OnLoad and _OnLoad(_inst, data, ...)
                 end
+
+                inst:DoTaskInTime(0, RollForButtery, math.random(1, 100))
             end
         end)
     end
