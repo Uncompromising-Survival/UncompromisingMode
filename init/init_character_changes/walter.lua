@@ -7,6 +7,12 @@ GLOBAL.setfenv(1, GLOBAL)
 --local timeleft = inst.components.timer:GetTimeLeft("um_walterpenalty_passiveheal")
 --local health_drain = (1 - inst.components.health:GetPercentWithPenalty()) * TUNING.WALTER_SANITY_HEALTH_DRAIN * inst._sanity_damage_protection:Get()
 
+local UM_PICKABLE_FOOD_PRODUCTS = {"zaspberry_lesser", "viperfruit_lesser", "um_ghost_pepper_item", "moon_cap"}
+
+for _, product in pairs(UM_PICKABLE_FOOD_PRODUCTS) do
+    PICKABLE_FOOD_PRODUCTS[product] = true
+end
+
 local function VetCurseMaxSanityLoss(inst, data)
     local overtime = data and data.overtime or nil
     local amount = data.amount < 0 and data.amount -- you can do "overtime and 0" if freezing/overheating shouldn't count

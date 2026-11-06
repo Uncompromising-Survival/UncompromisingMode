@@ -76,8 +76,8 @@ local function testfortransformonload(inst)
     return TheWorld.state.isfullmoon
 end
 
-local function OnIsOpenPhase(inst, isopen)
-    if isopen then
+local function OnCaveFullMoon(inst, iscavefullmoon)
+    if iscavefullmoon then
         open(inst)
     elseif not inst.components.areaaware:CurrentlyInTag("lunacyarea") then
         close(inst)
@@ -85,7 +85,7 @@ local function OnIsOpenPhase(inst, isopen)
 end
 
 local function TryPopup(inst)
-    if TheWorld.state.isfullmoon or inst.components.areaaware:CurrentlyInTag("lunacyarea") then
+    if TheWorld.state.iscavefullmoon or inst.components.areaaware:CurrentlyInTag("lunacyarea") then
         inst.AnimState:PlayAnimation("idle_"..inst.data.animname)
         inst.components.pickable.caninteractwith = true
     else
@@ -169,11 +169,11 @@ local function mushcommonfn(data)
     MakeSmallPropagator(inst)
     MakeNoGrowInWinter(inst)
 
-    inst:WatchWorldState("isfullmoon", OnIsOpenPhase)
+    inst:WatchWorldState("iscavefullmoon", OnCaveFullMoon)
 
-    inst:DoPeriodicTask(TUNING.SEG_TIME, checkregrow, TUNING.SEG_TIME + math.random()*TUNING.SEG_TIME)
+    inst:DoPeriodicTask(TUNING.SEG_TIME, checkregrow, TUNING.SEG_TIME + math.random() * TUNING.SEG_TIME)
 
-    inst:DoTaskInTime(0.1,TryPopup)
+    inst:DoTaskInTime(.1, TryPopup)
 
     inst.TryPopup = TryPopup
 
