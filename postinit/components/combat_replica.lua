@@ -41,6 +41,6 @@ env.AddClassPostConstruct("components/combat_replica", function(self)
     function self:CanBeAttacked(attacker, ...)
         local follower = attacker and attacker.replica.follower
         local leader = follower and follower:GetLeader()
-        return _CanBeAttacked(self, leader and self.inst:HasAnyTag("fused_shadeling") and leader or attacker, ...)
+        return _CanBeAttacked(self, leader and self.inst:HasTag("fused_shadeling") and leader or attacker, ...)
     end]]
 end)
