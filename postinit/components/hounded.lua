@@ -5,7 +5,7 @@ local UMUpvalueHacker = require("tools/um_upvaluehacker")
 
 env.AddComponentPostInit("hounded", function(self)
     local _spawndata = UMUpvalueHacker.GetUpvalue(self.SetSpawnData, "_spawndata")
-    function self:GetSpawnData() return _spawndata end
+    function self:UMGetSpawnData() return _spawndata end
 
     local _spawnwintervariant = UMUpvalueHacker.GetUpvalue(self.SetWinterVariant, "_spawnwintervariant")
     local _spawnsummervariant = UMUpvalueHacker.GetUpvalue(self.SetSummerVariant, "_spawnsummervariant")
@@ -86,12 +86,12 @@ env.AddComponentPostInit("hounded", function(self)
         end
     end
 
-    if not (TheWorld:HasTag("island") or TheWorld:HasTag("volcano")) then
+    if not TheWorld:HasAnyTag("island", "volcano", "cave") then
         UMUpvalueHacker.SetUpvalue(self.SummonSpawn, SummonSpawn, "SummonSpawn")
     end
 end)
 
-local wormspawn =
+--[[local wormspawn =
 {
     base_prefab = "worm",
     upgrade_spawn = "worm_boss",
@@ -166,25 +166,37 @@ local wormspawn =
             return false, nil, wave_pre_upgraded
         end
     end,
-}
+}]]
 
-env.AddPrefabPostInit("cave", function(inst)
+env.AddSimPostInit(function()
+    local wormspawn = UMUpvalueHacker.TryGetUpvalue(Prefabs.cave.fn, "master_postinit", "wormspawn")
+    if wormspawn then
+        if UM_CONFIG.DEPTHSEELS then
+            wormspawn.winter_prefab = "shockworm"
+        end
+        if UM_CONFIG.DEPTHSVIPERS then
+            wormspawn.summer_prefab = "viperworm"
+        end
+    end
+end)
+
+--[[env.AddPrefabPostInit("cave", function(inst)
     if not TheWorld.ismastersim then return end
 
     if inst.components.hounded ~= nil then
-        local spawndata = inst.components.hounded:GetSpawnData()
+        local spawndata = inst.components.hounded:UMGetSpawnData()
         for k, v in pairs(wormspawn) do
             spawndata[k] = v
         end
         inst.components.hounded:SetSpawnData(wormspawn)
     end
-end)
+end)]]
 
 env.AddPrefabPostInit("forest", function(inst)
     if not TheWorld.ismastersim then return end
 
     if inst.components.hounded ~= nil then
-        local spawndata = inst.components.hounded:GetSpawnData()
+        local spawndata = inst.components.hounded:UMGetSpawnData()
         if UM_CONFIG.SPOREHOUNDS then
             spawndata.autumn_prefab = "sporehound"
         end
@@ -197,7 +209,6 @@ env.AddPrefabPostInit("forest", function(inst)
         if UM_CONFIG.MAGMAHOUNDS then
             spawndata.upgrade_spawn_summer = "magmahound"
         end
-
 
         if (UM_CONFIG.GLACIALHOUNDS or UM_CONFIG.MAGMAHOUNDS) then
             spawndata.ShouldUpgrade = function(amount, wave_pre_upgraded)
