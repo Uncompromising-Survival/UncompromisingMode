@@ -30,7 +30,7 @@ env.AddStategraphPostInit("koalefant", function(inst)
     {
         EventHandler("um_counterattack", function(inst, data)
             if inst.components.health and not inst.components.health:IsDead()
-                and not (inst.sg:HasAnyStateTag("attack", "electrocute", "charging") or inst.sg:HasStateTag("busy")
+                and not (inst.sg:HasAnyStateTag("attack", "electrocute", "um_charging") or inst.sg:HasStateTag("busy")
                 and not inst.sg:HasStateTag("hit")) and data.target:IsValid() and inst:IsNear(data.target, 4) then
                 if inst.um_counterattack then
                     local counterrate = TUNING.DSTU.KOALEFANT_STOMP_COUNTERATTACK
@@ -41,24 +41,11 @@ env.AddStategraphPostInit("koalefant", function(inst)
         end)
     }
 
-    local doattackeventhandler = inst.events["doattack"]
-    if doattackeventhandler then
-        local doattackeventhandler_fn = doattackeventhandler.fn
-        doattackeventhandler.fn = function(inst, data, ...)
-            if not (inst.components.health:IsDead() or inst.sg:HasStateTag("electrocute")) and inst.sg.mem.um_chargeattack then
-                inst.sg.mem.um_chargeattack = nil
-                inst.sg:GoToState("chargeattack", data.target)
-            else
-                doattackeventhandler_fn(inst, data, ...)
-            end
-        end
-    end
-
     local attackedeventhandler = inst.events["attacked"]
     if attackedeventhandler then
         local attackedeventhandler_fn = attackedeventhandler.fn
         attackedeventhandler.fn = function(inst, data, ...)
-            if inst.components.health and not inst.components.health:IsDead() and inst.sg:HasStateTag("charging") then
+            if inst.components.health and not inst.components.health:IsDead() and inst.sg:HasStateTag("um_charging") then
                 CommonHandlers.TryElectrocuteOnAttacked(inst, data)
                 return
             end
@@ -70,15 +57,16 @@ env.AddStategraphPostInit("koalefant", function(inst)
     if attackstate then
         local attackstate_animqueueover_fn = attackstate.events["animqueueover"].fn
         attackstate.events["animqueueover"].fn = function(inst, ...)
-            if inst.components.combat.target and inst.components.combat.target:IsValid() then
+            local combat = inst.components.combat
+            if combat.target then
                 local chance = math.random()
                 if chance < .33 and not inst.justcharged then
                     inst.justcharged = true
-                    inst.sg:GoToState("charge_start", inst.components.combat.target)
+                    inst.sg:GoToState("charge_start", combat.target)
                     return
                 else
                     if inst.justcharged then inst.justcharged = nil end
-                    if chance > .77 and inst.disarmattack and inst.components.combat:CanHitTarget(inst.components.combat.target) then
+                    if chance > .77 and inst.disarmattack and combat:CanHitTarget(combat.target) then
                         inst.sg:GoToState("disarm")
                         return
                     end
@@ -96,7 +84,7 @@ env.AddStategraphPostInit("koalefant", function(inst)
             if not (inst.components.health and inst.components.health:IsDead()) then
                 if CommonHandlers.TryElectrocuteOnAttacked(inst, data) then
                     return
-                elseif not inst.sg:HasAnyStateTag("attack", "busy", "electrocute", "charging") and math.random() > .66
+                elseif not inst.sg:HasAnyStateTag("attack", "busy", "electrocute", "um_charging") and math.random() > .66
                     and inst.components.combat.target and 4 > inst:GetDistanceSqToInst(inst.components.combat.target) and inst.counterattack then
                     inst.sg.mem.wantstostomp = true
                     inst.components.combat:ResetCooldown()
@@ -111,10 +99,10 @@ env.AddStategraphPostInit("koalefant", function(inst)
     {
         State{
             name = "charge_start",
-            tags = {"charging", "busy", "canrotate"},
+            tags = {"um_charging", "busy"},
             
             onenter = function(inst, target)
-                inst.sg.statemem.target = target ~= nil and target:IsValid() and target or inst.components.combat and inst.components.combat.target
+                inst.sg.statemem.target = target
                 inst.Physics:Stop()
                 inst.components.locomotor:StopMoving()
                 inst.components.combat:ResetCooldown()
@@ -136,33 +124,34 @@ env.AddStategraphPostInit("koalefant", function(inst)
 
             events =
             {
-                EventHandler("animover", function(inst) inst.sg:GoToState("charge", inst.sg.statemem.target) end),
+                EventHandler("animover", function(inst) inst.sg:GoToState("charge", inst.sg.statemem.target and inst.sg.statemem.target:IsValid() and inst.sg.statemem.target or inst.components.combat.target) end),
             },
         },
         State{  
             name = "charge",
-            tags = {"charging", "busy"},
+            tags = {"um_charging", "busy"},
 
             onenter = function(inst, target)
-                inst.sg.statemem.target = target ~= nil and target:IsValid() and target or inst.components.combat and inst.components.combat.target
-                if not inst.AnimState:IsCurrentAnimation("run_loop") then
-                    inst.AnimState:PlayAnimation("run_loop", true)
-                end
+                inst.components.locomotor:Stop()
+                inst.components.locomotor:Clear()
+                inst.sg.statemem.target = target
+                inst.components.locomotor:RunForward()
+                inst.components.locomotor:SetExternalSpeedMultiplier(inst, "um_charge", math.max(16 / inst.components.locomotor.runspeed, 1))
+                inst.AnimState:PlayAnimation("run_loop", true)
             end,
 
             onupdate = function(inst, dt)
-                inst.components.locomotor.runspeed = 7 * 2.29 -- Should be equal to Rook.
-                inst.components.locomotor:RunForward()
                 if inst:IsAsleep() then
                     inst.sg:GoToState("idle")
                     return
                 elseif dt > 0 then
                     local target = inst.sg.statemem.target
-                    if target and target:IsValid() and inst:GetDistanceSqToInst(target) <= inst.components.combat:CalcAttackRangeSq(target) then
-                        inst.components.combat:ResetCooldown()
-                        inst.sg:RemoveStateTag("busy")
-                        if inst.components.combat:TryAttack(target) then inst.sg.mem.um_chargeattack = true end
-                        inst.sg:GoToState("idle")
+                    if target and target:IsValid() then
+                        local combat = inst.components.combat
+                        if inst:IsNear(target, combat:GetHitRange() + target:GetPhysicsRadius(0)) then
+                            combat:DoAttack(target)
+                            inst.sg:GoToState("chargeattack", target)
+                        end
                     end
                 end
             end,
@@ -181,12 +170,12 @@ env.AddStategraphPostInit("koalefant", function(inst)
             },
 
             onexit = function(inst)
-                inst.components.locomotor.runspeed = 7
+                inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, "um_charge")
             end,
         },
         State{
             name = "chargeattack",
-            tags = {"busy", "charging", "attack"},
+            tags = {"um_charging", "busy", "attack"},
 
             onenter = function(inst, target)
                 inst.sg.statemem.target = target
@@ -261,10 +250,6 @@ env.AddStategraphPostInit("koalefant", function(inst)
                 inst.components.combat:StartAttack()
                 inst.components.locomotor:StopMoving()
                 inst.AnimState:PlayAnimation("stompatk", false)
-                if inst:HasTag("chargespeed") then
-                    inst.components.locomotor.runspeed = 7
-                    inst:RemoveTag("chargespeed")
-                end
                 inst.components.combat:SetAreaDamage(4, 1, isplayer)
             end,
 
