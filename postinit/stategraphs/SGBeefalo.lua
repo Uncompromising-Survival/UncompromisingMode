@@ -18,7 +18,7 @@ env.AddStategraphPostInit("beefalo", function(inst)
     if attackstate then
         local attackstate_animqueueover_fn = attackstate.events["animqueueover"].fn
         attackstate.events["animqueueover"].fn = function(inst, ...)
-            if inst.components.combat.target and math.random() < .33 and not inst.justcharged then
+            if inst.components.combat.target and math.random() < 1 and not inst.justcharged then
                 inst.justcharged = true
                 inst.sg:GoToState("charge_start", inst.components.combat.target)
                 return
