@@ -43,16 +43,24 @@ if UM_CONFIG.PASSIBLEIMPASSIBLES then
     end
 
     env.AddPrefabPostInitAny(function(inst) --or string.find(inst.prefab, "chesspiece_") --or string.find(inst.prefab, "oversized"))
-        if ShouldRemovePhysicsFrom(inst) then RemovePhysicsColliders(inst) end
-        if ShouldRemovePhysicsFrom(inst) and inst.components.heavyobstaclephysics then
+        if ShouldRemovePhysicsFrom(inst) then
             RemovePhysicsColliders(inst)
-            inst.components.heavyobstaclephysics:SetRadius(0)
+            inst.um_nocollide = true
+            if inst.components.heavyobstaclephysics then
+                inst.components.heavyobstaclephysics:SetRadius(0)
+            end
         end
     end)
 
+    local _PreventCharacterCollisionsWithPlacedObjects = PreventCharacterCollisionsWithPlacedObjects
+    function PreventCharacterCollisionsWithPlacedObjects(inst, ...)
+        if inst.um_nocollide then return end
+        return _PreventCharacterCollisionsWithPlacedObjects(inst, ...)
+    end
+
     local _ChangeToObstaclePhysics = ChangeToObstaclePhysics
     function ChangeToObstaclePhysics(inst, rad, height, ...)
-        if ShouldNotAddPhysicsTo(inst) then 
+        if ShouldNotAddPhysicsTo(inst) then
             if inst.Physics:GetCollisionMask() ~= 0 then RemovePhysicsColliders(inst) end
             return
         end
