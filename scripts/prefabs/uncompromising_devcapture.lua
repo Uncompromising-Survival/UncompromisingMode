@@ -285,7 +285,7 @@ local function TileFlag(inst)
     inst.components.inventoryitem:SetOnDroppedFn(OnDropped)
 
     inst:AddComponent("stackable")
-    inst.components.stackable.maxsize = 60
+    inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
 
     inst:DoTaskInTime(0, OnDropped)
     inst.OnEntityWake = OnDropped
