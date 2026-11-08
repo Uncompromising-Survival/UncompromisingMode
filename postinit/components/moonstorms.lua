@@ -30,7 +30,7 @@ env.AddComponentPostInit("moonstorms", function(self)
         if type(node_indices) ~= "table" then
             node_indice = { node_indices }
         end
-        if UM_CONFIG.LUNAR_BEES then
+        if UM_CONFIG.MOON_BEES then
             for _, v in ipairs(node_indices) do
                 --   local center = TheWorld.topology.nodes[firstnode].cent
                 local center = TheWorld.topology.nodes[v].cent
