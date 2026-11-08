@@ -50,7 +50,6 @@ local function onregenfn(inst)
     inst.hidden = nil
     inst.AnimState:PlayAnimation("grow")
     inst.AnimState:PushAnimation("idle", true)
-    inst:AddTag("briar_plants")
 
     if not inst.components.burnable then
         MakeMediumBurnable(inst)
@@ -172,7 +171,6 @@ local function onpickedfn(inst, picker)
         end
     end
     inst.AnimState:PushAnimation("empty", false)
-    inst:RemoveTag("briar_plants")
     inst:RemoveComponent("burnable")
     if picker and picker.prefab == "aphid" then
         picker.full_belly = true

@@ -1,10 +1,8 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
-
-
+-----------------------------------------------------------------
 -- This code is WIP (will finish it out in a while, isn't called)
 -- local UMUpvalueHacker = require("tools/um_upvaluehacker")
-
 
 local function SpawnHiveTraps(center)
     local x = center[1]
@@ -12,16 +10,12 @@ local function SpawnHiveTraps(center)
     local pos = Vector3(x, 0, z)
     --for i = 1,3 do
     local offset = FindWalkableOffset(pos, math.random() * 2 * PI, 24, 32)
+    if not offset then return end
     local newx = x + offset.x
     local newz = z + offset.z
 
-    local hives = TheSim:FindEntities(newx, 0, newz, 24, { "beehive" })
-    for i, v in ipairs(hives) do -- prevent cramming hives
-        if v.prefab == "um_beehive_moon" then
-            offset = nil
-        end
-    end
-    if offset then
+    local blacklistedents = TheSim:FindEntities(newx, 0, newz, 24, nil, nil, {"um_beehive_moon", "briar_plants"})
+    if not next(blacklistedents) and offset then
         local beehive = SpawnPrefab("um_beehive_moon")
         beehive.Transform:SetPosition(newx, 0, newz)
         beehive:BeginDegrade()
@@ -31,9 +25,8 @@ end
 
 env.AddComponentPostInit("moonstorms", function(self)
     local _AddMoonstormNodes = self.AddMoonstormNodes
-
-    function self:AddMoonstormNodes(node_indices, firstnode)
-        _AddMoonstormNodes(self, node_indices, firstnode)
+    function self:AddMoonstormNodes(node_indices, firstnode, ...)
+        _AddMoonstormNodes(self, node_indices, firstnode, ...)
         if type(node_indices) ~= "table" then
             node_indice = { node_indices }
         end
