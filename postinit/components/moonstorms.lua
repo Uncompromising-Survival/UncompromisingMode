@@ -27,10 +27,8 @@ env.AddComponentPostInit("moonstorms", function(self)
     local _AddMoonstormNodes = self.AddMoonstormNodes
     function self:AddMoonstormNodes(node_indices, firstnode, ...)
         _AddMoonstormNodes(self, node_indices, firstnode, ...)
-        if type(node_indices) ~= "table" then
-            node_indice = { node_indices }
-        end
         if UM_CONFIG.MOON_BEES then
+            if type(node_indices) ~= "table" then node_indice = {node_indices} end
             for _, v in ipairs(node_indices) do
                 --   local center = TheWorld.topology.nodes[firstnode].cent
                 local center = TheWorld.topology.nodes[v].cent
