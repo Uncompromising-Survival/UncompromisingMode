@@ -1,34 +1,3 @@
-local function UpdateRippleFXTransform(inst)
-    local ripples = inst.replica.umripples
-    if not ripples then
-        print("PANIC! No replica umripples on prefab ", inst.prefab)
-        print("Printing netvars and similar.")
-        for k, v in pairs(inst) do
-            if type(v) == "userdata" and v.value then
-                print(k, v, v:value())
-            end
-        end
-        return
-    end
-    local front_fx, back_fx = ripples.front_fx, ripples.back_fx
-    local xscale, yscale, zscale = ripples.xscale and ripples.xscale:value() and tonumber(ripples.xscale:value()), ripples.yscale and ripples.yscale:value() and tonumber(ripples.yscale:value()), ripples.zscale and ripples.zscale:value() and tonumber(ripples.zscale:value())
-    if front_fx then
-        front_fx.Transform:SetScale(xscale, yscale, zscale)
-    end
-    if back_fx then
-        back_fx.Transform:SetScale(xscale, yscale, zscale)
-    end
-    local vert_offset = ripples.vert_offset and ripples.vert_offset:value() and tonumber(ripples.vert_offset:value())
-    if vert_offset then
-        if front_fx then
-            front_fx.Transform:SetPosition(0, vert_offset, 0)
-        end
-        if back_fx then
-            back_fx.Transform:SetPosition(0, vert_offset, 0)
-        end
-    end
-end
-
 local Umripples = Class(function(self, inst)
     self.inst = inst
 
@@ -50,11 +19,33 @@ local Umripples = Class(function(self, inst)
                 self:OnNoLongerLandedClient()
             end
         end)
-        self.inst:ListenForEvent("umripples.update_ripples", UpdateRippleFXTransform)
+        self.inst:ListenForEvent("umripples.update_ripples", function()
+            self:UpdateRippleFXTransform()
+        end)
     end
 
     self.showing_effect = false
 end)
+
+function Umripples:UpdateRippleFXTransform()
+    local front_fx, back_fx = self.front_fx, self.back_fx
+    local xscale, yscale, zscale = self.xscale and self.xscale:value() and tonumber(self.xscale:value()), self.yscale and self.yscale:value() and tonumber(self.yscale:value()), self.zscale and self.zscale:value() and tonumber(self.zscale:value())
+    if front_fx then
+        front_fx.Transform:SetScale(xscale, yscale, zscale)
+    end
+    if back_fx then
+        back_fx.Transform:SetScale(xscale, yscale, zscale)
+    end
+    local vert_offset = self.vert_offset and self.vert_offset:value() and tonumber(self.vert_offset:value())
+    if vert_offset then
+        if front_fx then
+            front_fx.Transform:SetPosition(0, vert_offset, 0)
+        end
+        if back_fx then
+            back_fx.Transform:SetPosition(0, vert_offset, 0)
+        end
+    end
+end
 
 function Umripples:IsLanded(islanded)
     self._is_landed:set(islanded)
@@ -72,25 +63,21 @@ end
 function Umripples:SetVerticalOffset(offset)
     self.vert_offset:set(offset)
     self.update_ripples:push()
-    --UpdateRippleFXTransform(self)
 end
 
 function Umripples:SetXScale(scale)
     self.xscale:set(scale)
     self.update_ripples:push()
-    --UpdateRippleFXTransform(self)
 end
 
 function Umripples:SetYScale(scale)
     self.yscale:set(scale)
     self.update_ripples:push()
-    --UpdateRippleFXTransform(self)
 end
 
 function Umripples:SetZScale(scale)
     self.zscale:set(scale)
     self.update_ripples:push()
-    --UpdateRippleFXTransform(self)
 end
 
 function Umripples:AttachEffect(effect)
