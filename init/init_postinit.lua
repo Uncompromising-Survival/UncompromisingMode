@@ -263,7 +263,7 @@ local prefab_post = {
     "cursed_monkey_token",
     "slurtle_shellpieces",
     "fused_shadeling",
-    "eyeturret",
+    "eyeturret"
 }
 
 local stategraph_post = {
@@ -319,6 +319,7 @@ local brain_post = {
     "hound",
     "brightmare_gestalt",
     "beefalo",
+    "dragonfly"
 }
 
 --package post system courtesy of IA team!
