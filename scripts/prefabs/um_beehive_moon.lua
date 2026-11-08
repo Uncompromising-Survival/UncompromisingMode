@@ -62,23 +62,25 @@ local function RemoveChildOnRevert(bee)
     end
 end
 
-local function Revert(inst)
-    local x, y, z = inst.Transform:GetWorldPosition()
-    local hives = TheSim:FindEntities(x, y, z, 32, {"beehive"})
-    if #hives < 3 and math.random() < .25 then
-        SpawnPrefab("beehive").Transform:SetPosition(x, y, z)
-    end
-    local childspawner = inst.components.childspawner
-    if childspawner then
-        for bee in pairs(childspawner.childrenoutside) do
-            RemoveChildOnRevert(bee)
+local function OnTimerDone(inst, data)
+    if data and data.name == "degrade" then
+        local x, y, z = inst.Transform:GetWorldPosition()
+        local hives = TheSim:FindEntities(x, y, z, 32, {"beehive"})
+        if #hives < 3 and math.random() < .25 then
+            SpawnPrefab("beehive").Transform:SetPosition(x, y, z)
         end
-        for bee in pairs(childspawner.emergencychildrenoutside) do
-            RemoveChildOnRevert(bee)
+        local childspawner = inst.components.childspawner
+        if childspawner then
+            for bee in pairs(childspawner.childrenoutside) do
+                RemoveChildOnRevert(bee)
+            end
+            for bee in pairs(childspawner.emergencychildrenoutside) do
+                RemoveChildOnRevert(bee)
+            end
         end
-    end
 
-    inst:Remove()
+        inst:Remove()
+    end
 end
 
 local function OnIgnite(inst)
@@ -193,6 +195,7 @@ local function fn()
     inst:AddTag("beaverchewable") -- by werebeaver
     inst:AddTag("hive")
     inst:AddTag("beehive")
+    inst:AddTag("um_beehive_moon")
     inst:AddTag("lunar_aligned")
 
     MakeSnowCoveredPristine(inst)
@@ -267,7 +270,7 @@ local function fn()
 
     inst.BeginDegrade = BeginDegrade
     inst:AddComponent("timer")
-    inst:ListenForEvent("timerdone", Revert)
+    inst:ListenForEvent("timerdone", OnTimerDone)
 
     return inst
 end
