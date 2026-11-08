@@ -194,7 +194,7 @@ local function MakeGem(gem, bank, build, anim, postfn)
 
         inst:AddComponent("inventoryitem")
         inst:AddComponent("stackable")
-        inst.components.stackable.maxsize = 10 --? idk.
+        inst.components.stackable.maxsize = TUNING.STACK_SIZE_LARGEITEM
         inst.components.stackable:SetOnDeStack(OnDestack)
 
 
