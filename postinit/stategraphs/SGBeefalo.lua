@@ -64,6 +64,7 @@ env.AddStategraphPostInit("beefalo", function(inst)
             onenter = function(inst, target)
                 inst.components.locomotor:Stop()
                 inst.components.locomotor:Clear()
+                inst:ClearBufferedAction()
                 inst.sg.statemem.target = target
                 inst.components.locomotor:RunForward()
                 inst.components.locomotor:SetExternalSpeedMultiplier(inst, "um_charge", math.max(16 / inst.components.locomotor.runspeed, 1))
