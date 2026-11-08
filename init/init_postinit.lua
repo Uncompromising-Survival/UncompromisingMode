@@ -422,7 +422,6 @@ end
 if GetModConfigData("rework_minotaur") then
     table.insert(stategraph_post, "minotaur")
     table.insert(prefab_post, "minotaur")
-    table.insert(prefab_post, "pillar_ruins")
 end
 
 if GetModConfigData("harder_lavae") then

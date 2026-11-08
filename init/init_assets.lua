@@ -1395,7 +1395,6 @@ Assets = {
     Asset("ANIM", "anim/tar_trap.zip"),
 
     Asset("ANIM", "anim/swap_minotaur_boulder.zip"),
-    Asset("ANIM", "anim/pillar_ruins_damaged.zip"),
 
     Asset("ANIM", "anim/rat_note.zip"),
 
