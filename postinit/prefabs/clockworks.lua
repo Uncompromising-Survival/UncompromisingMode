@@ -119,7 +119,7 @@ end
 
 env.AddAction(HEALCHESS)
 
-env.AddComponentAction("USEITEM", "inventoryitem", function(inst, doer, target, actions, right)	
+env.AddComponentAction("USEITEM", "inventoryitem", function(inst, doer, target, actions, right)
     if target ~= nil
         and IsRepairItemValid(inst)
 		and target:HasTag("chessfriend") then

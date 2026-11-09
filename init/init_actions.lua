@@ -474,21 +474,19 @@ end
 AddAction(STORE_BOAT)
 --RELEVANT: playeractionpicker postinit
 
-AddComponentAction("USEITEM", "drawingtool",
-    function(inst, doer, target, actions, right)
-        if target:HasTag("telebase") or
-            target.prefab == "pocketwatch_recall" or
-            target.prefab == "pocketwatch_portal" then
-            table.insert(actions, GLOBAL.ACTIONS.SET_CUSTOM_NAME)
-        end
-    end)
+AddComponentAction("USEITEM", "drawingtool", function(inst, doer, target, actions, right)
+    if target:HasTag("telebase") or
+        target.prefab == "pocketwatch_recall" or
+        target.prefab == "pocketwatch_portal" then
+        table.insert(actions, GLOBAL.ACTIONS.SET_CUSTOM_NAME)
+    end
+end)
 
-AddComponentAction("USEITEM", "boatbottle",
-    function(inst, doer, target, actions, right)
-        if target:HasTag("walkableplatform") and not inst:HasTag("filled_boat_bottle") then
-            table.insert(actions, GLOBAL.ACTIONS.STORE_BOAT)
-        end
-    end)
+AddComponentAction("USEITEM", "boatbottle", function(inst, doer, target, actions, right)
+    if target:HasTag("walkableplatform") and not inst:HasTag("filled_boat_bottle") then
+        table.insert(actions, GLOBAL.ACTIONS.STORE_BOAT)
+    end
+end)
 
 AddStategraphActionHandler("wilson", GLOBAL.ActionHandler(GLOBAL.ACTIONS.STORE_BOAT, "dolongaction"))
 AddStategraphActionHandler("wilson_client", GLOBAL.ActionHandler(GLOBAL.ACTIONS.STORE_BOAT, "dolongaction"))
