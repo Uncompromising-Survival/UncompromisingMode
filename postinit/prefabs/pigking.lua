@@ -6,10 +6,9 @@ if UM_CONFIG.PIGKING_GUARDS then
 
     local function ErectPoleBuild(inst, x, y, z)
         local pole = SpawnPrefab("pigtorch")
-        pole:UMSetPKTorch()
-        local collapse = SpawnPrefab("collapse_big")
         pole.Transform:SetPosition(x, y, z)
-        collapse.Transform:SetPosition(x, y, z)
+        pole:UMSetPKTorch()
+        SpawnPrefab("collapse_big").Transform:SetPosition(x, y, z)
         inst.sg:GoToState("cointoss")
     end
 
