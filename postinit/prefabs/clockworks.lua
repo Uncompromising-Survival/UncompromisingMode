@@ -135,8 +135,6 @@ end)
 env.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.HEALCHESS, "doshortaction"))
 env.AddStategraphActionHandler("wilson_client", ActionHandler(ACTIONS.HEALCHESS, "doshortaction"))
 
-env.AddComponentAction("SCENE", "inspectable", function() end)
-
 for i, v in ipairs(clockworks) do
 	env.AddPrefabPostInit(v, function(inst)
 		if inst.TryBefriendChess ~= nil then
