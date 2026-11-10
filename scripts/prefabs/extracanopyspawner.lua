@@ -79,23 +79,24 @@ local function OnLightningStrike(inst)
 end
 
 local function OnFar(inst, player)
-    if player.canopytrees then   
-        player.canopytrees = player.canopytrees - 1
-        --player:PushEvent("onchangecanopyzone", player.canopytrees > 0)
+    if player.um_gianttrees then   
+        player.um_gianttrees = player.um_gianttrees - 1
+        --player:PushEvent("onchangecanopyzone", player.um_gianttrees > 0)
+        if player.um_gianttrees <= 0 then player.um_gianttrees = nil end
     end
     inst.players[player] = nil
 end
 
 local function OnNear(inst, player)
     inst.players[player] = true
-    player.canopytrees = (player.canopytrees or 0) + 1
-    --player:PushEvent("onchangecanopyzone", player.canopytrees > 0)
+    player.um_gianttrees = (player.um_gianttrees or 0) + 1
+    --player:PushEvent("onchangecanopyzone", player.um_gianttrees > 0)
 end
 
 local function OnRemoveEntity(inst)
     for player in pairs(inst.players) do
         if player:IsValid() then
-            if player.canopytrees then
+            if player.um_gianttrees then
                 OnFar(inst, player)
             end
         end

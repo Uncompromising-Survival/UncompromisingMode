@@ -82,6 +82,7 @@ local component_post = {
     "grottowarmanager",
     "quaker",
     --"oldager",
+    "sheltered"
 }
 
 local prefab_post = {
