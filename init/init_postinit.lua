@@ -285,7 +285,6 @@ local stategraph_post = {
     "bigshadowtentacle",
     "worm",
     "slurtle",
-    "lavae",
     "monkey"
 }
 
