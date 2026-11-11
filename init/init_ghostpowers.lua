@@ -3,28 +3,27 @@ GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 local UMShove = require("tools/um_shoveutility")
 
+local AOE_RANGE_PADDING = 3
 local ATTACK_PROP_MUST_TAGS = {"inspectable","locomotor"}
 local ATTACK_PROP_CANT_TAGS = {"notarget", "invisible", "noattack", "flight", "playerghost", "FX", "NOCLICK", "DECOR", "INLIMBO"}
-local function DoGhostPush(inst)
+local KNOCKBACK_RADIUS_PADDING = .8
+local function DoGhostPush(inst, target)
     --inst:PerformBufferedAction()
     local combat = inst.components.combat
     combat.ignorehitrange = true
-    local radius = combat:GetHitRange() + .8
-    local x, y, z = inst.Transform:GetWorldPosition()
-    for i, v in ipairs(TheSim:FindEntities(x, y, z, radius + 3, ATTACK_PROP_MUST_TAGS, ATTACK_PROP_CANT_TAGS)) do
-        if v:IsValid() and not (v.components.health and v.components.health:IsDead()) then
-            local range = radius + v:GetPhysicsRadius(0)
-            if inst:IsNear(v, range) then
-                --dummy redirected so that players don't get red blood flash
-                local combat = v.components.combat
-                if combat then
-                    combat:SetShouldAvoidAggro(inst)
-                    v:PushEvent("attacked", {attacker = inst, damage = 0, redirected = v})
-                    combat:RemoveShouldAvoidAggro(inst)
-                end
-                UMShove.DoShove(v, {knocker = inst, radius = radius})
-                if v.SoundEmitter then v.SoundEmitter:PlaySound("dontstarve/movement/slip_fall_whoop") end
+    local range = combat:GetHitRange()
+    local x, y, z = target.Transform:GetWorldPosition()
+    for i, v in ipairs(TheSim:FindEntities(x, y, z, range + AOE_RANGE_PADDING, ATTACK_PROP_MUST_TAGS, ATTACK_PROP_CANT_TAGS)) do
+        if v:IsValid() and not (v.components.health and v.components.health:IsDead())
+            and target:IsNear(v, range + v:GetPhysicsRadius(0)) then
+            local combat = v.components.combat
+            if combat then
+                combat:SetShouldAvoidAggro(inst)
+                v:PushEvent("attacked", {attacker = inst, damage = 0, redirected = v})
+                combat:RemoveShouldAvoidAggro(inst)
             end
+            UMShove.DoShove(v, {knocker = inst, radius = range + KNOCKBACK_RADIUS_PADDING})
+            if v.SoundEmitter then v.SoundEmitter:PlaySound("dontstarve/movement/slip_fall_whoop") end
         end
     end
     combat.ignorehitrange = false
@@ -34,8 +33,10 @@ local UM_GHOSTPUSH = Action({priority = 10, rmb = true, mindistance = 2, ghost_v
 UM_GHOSTPUSH.id = "UM_GHOSTPUSH"
 UM_GHOSTPUSH.str = "Push"
 UM_GHOSTPUSH.fn = function(act)
-    DoGhostPush(act.doer)
-    return true
+    if act.target then
+        DoGhostPush(act.doer, act.target)
+        return true
+    end
 end
 
 env.AddAction(UM_GHOSTPUSH)
@@ -71,38 +72,7 @@ env.AddStategraphPostInit("wilsonghost", function(inst)
         ActionHandler(ACTIONS.UM_GHOSTPUSH, "haunt_pre")
     }
 
-    local states = {
-        State{
-            name = "um_ghostpush",
-            tags = {"doing", "busy"},
-
-            onenter = function(inst)
-                inst.components.locomotor:Stop()
-                inst.AnimState:PlayAnimation("dissipate")
-                inst.SoundEmitter:PlaySound("dontstarve/ghost/ghost_haunt", nil, nil, true)
-            end,
-
-            timeline =
-            {
-                TimeEvent(15 * FRAMES, DoGhostPush)
-            },
-
-            events =
-            {
-                EventHandler("animover", function(inst)
-                    if inst.AnimState:AnimDone() then
-                        inst.sg:GoToState("haunt")
-                    end
-                end),
-            },
-        },
-    }
-
     for _, act in pairs(actionhandlers) do
         inst.actionhandlers[act.action] = act
-    end
-
-    for _, state in pairs(states) do
-        inst.states[state.name] = state
     end
 end)
