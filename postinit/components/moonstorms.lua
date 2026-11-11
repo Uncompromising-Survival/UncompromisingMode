@@ -4,6 +4,8 @@ GLOBAL.setfenv(1, GLOBAL)
 -- This code is WIP (will finish it out in a while, isn't called)
 -- local UMUpvalueHacker = require("tools/um_upvaluehacker")
 
+local HIVETRAP_MUSTTAGS = {"um_beehive_moon", "briar_plants", "wormhole"}
+
 local function SpawnHiveTraps(center)
     local x = center[1]
     local z = center[2]
@@ -13,9 +15,8 @@ local function SpawnHiveTraps(center)
     if not offset then return end
     local newx = x + offset.x
     local newz = z + offset.z
-
-    local blacklistedents = TheSim:FindEntities(newx, 0, newz, 24, nil, nil, {"um_beehive_moon", "briar_plants"})
-    if not next(blacklistedents) and offset then
+    if TheSim:CountEntities(newx, 0, newz, 24, nil, nil, HIVETRAP_MUSTTAGS) == 0
+        and TheSim:CountEntities(newx, 0, newz, 12, {"structure"}) == 0 then
         local beehive = SpawnPrefab("um_beehive_moon")
         beehive.Transform:SetPosition(newx, 0, newz)
         beehive:BeginDegrade()
