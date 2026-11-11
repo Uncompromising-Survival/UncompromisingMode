@@ -133,10 +133,9 @@ local function workcallback(inst, worker, workleft)
 end
 
 local function Init(inst)
-    if UM_CONFIG.TRAPDOORSPIDERS == false then inst:Remove() end
+    if not UM_CONFIG.TRAPDOORSPIDERS then inst:Remove() return end
 
     local x, y, z = inst.Transform:GetWorldPosition()
-
     if #TheSim:FindEntities(x, 0, z, 1, {"trapdoorgrass"}) > 0 then
         inst:AddTag("event_trigger") -- for retrofitting
     end
@@ -170,17 +169,18 @@ local function fn1()
     inst.AnimState:SetBank("trapdoor")
     inst.AnimState:SetBuild("trapdoor")
     inst.AnimState:PlayAnimation("idle", true)
+    inst.AnimState:SetLayer(LAYER_WORLD_BACKGROUND)
 
-    inst:AddTag("structure")
     inst:AddTag("trapdoor")
+
     MakeSnowCoveredPristine(inst)
 
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then return inst end
 
-    -------------------------
-    -------------------------
+    inst:AddComponent("inspectable")
+
     inst:AddComponent("childspawner")
     inst.components.childspawner.childspawner = "spider_trapdoor"
     inst.components.childspawner:SetMaxChildren(0)
@@ -189,41 +189,35 @@ local function fn1()
     inst.components.childspawner:SetGoHomeFn(CloseMound)
     inst.components.childspawner:SetRegenPeriod(20, 2)
     inst.components.childspawner:SetOnChildKilledFn(FindNewHole)
-    local startrandomtest = math.random()
     inst.components.childspawner:StopRegen()
-    if startrandomtest >= 0.75 then 
+    if math.random() >= .75 then
         inst.components.childspawner:SetMaxChildren(1)
         inst.components.childspawner:StartRegen()
     end
-    -------------------------
-    -------------------------
+
     inst:AddComponent("playerprox")
     inst.components.playerprox:SetDist(6, 8) -- set specific values
     inst.components.playerprox:SetOnPlayerNear(onnear)
     inst.components.playerprox:SetPlayerAliveMode(inst.components.playerprox.AliveModes.AliveOnly)
     -------------------------
     MakeSnowCovered(inst)
-    -------------------------
-    inst:AddComponent("inspectable")
 
     inst:AddComponent("hauntable")
     inst.components.hauntable:SetHauntValue(TUNING.HAUNT_MEDIUM)
     inst.components.hauntable:SetOnHauntFn(OnHaunt)
 
-    if inst.components.trapdoor == nil then inst:AddComponent("lootdropper") end
-
+    inst:AddComponent("lootdropper")
     inst.components.lootdropper:SetChanceLootTable('trapdoor')
 
     inst:AddComponent("workable")
     inst.components.workable:SetWorkAction(ACTIONS.MINE)
     inst.components.workable:SetWorkLeft(TUNING.ROCKS_MINE)
-
     inst.components.workable:SetOnWorkCallback(workcallback)
 
-    inst.AnimState:SetLayer(LAYER_WORLD_BACKGROUND)
     inst.SummonChildren = SummonChildren
 
     inst:DoTaskInTime(0, Init)
+
     return inst
 end
 
@@ -238,66 +232,48 @@ local function fn2()
     inst.AnimState:SetBank("flipping_rock")
     inst.AnimState:SetBuild("rock_flipping_moss")
     inst.AnimState:PlayAnimation("idle", true)
+    inst.AnimState:SetLayer(LAYER_WORLD_BACKGROUND)
 
-    inst:AddTag("structure")
-    inst:AddTag("hive")
-    inst:AddTag("WORM_DANGER")
     inst:AddTag("trapdoor")
-    -- inst:AddTag("CLASSIFIED")
+
     MakeSnowCoveredPristine(inst)
 
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then return inst end
-    -- inst.entity:SetTint(1,1,1,1)
-    -------------------------
-    -- inst:AddComponent("health")
-    -- inst.components.health:SetMaxHealth(250) --increase health?
-    -------------------------
-    if UM_CONFIG.TRAPDOORSPIDERS then
-        inst:AddComponent("childspawner")
-        -- Set spawner to wasp. Change tuning values to wasp values.
-        inst.components.childspawner.childspawner = "spider_trapdoor_hooded"
-        inst.components.childspawner:SetMaxChildren(0)
-        inst.components.childspawner:SetEmergencyRadius(TUNING.WASPHIVE_EMERGENCY_RADIUS / 2)
-        inst.components.childspawner:SetSpawnedFn(OpenMound)
-        inst.components.childspawner:SetGoHomeFn(CloseMound)
-        inst.components.childspawner:SetRegenPeriod(20, 2)
-        inst.components.childspawner:SetOnChildKilledFn(FindNewHoleHooded)
-        local startrandomtest = math.random()
-        inst.components.childspawner:StopRegen()
-        if startrandomtest >= 0 then -- Guaranteed
-            inst.components.childspawner:SetMaxChildren(1)
-            inst.components.childspawner:StartRegen()
-        end
-        -------------------------
-        -------------------------
-        inst:AddComponent("playerprox")
-        inst.components.playerprox:SetDist(6, 8) -- set specific values
-        inst.components.playerprox:SetOnPlayerNear(onnear)
-        inst.components.playerprox:SetPlayerAliveMode(inst.components.playerprox.AliveModes.AliveOnly)
-    end
 
-    inst:AddComponent("inspectable")
+    inst:AddComponent("childspawner")
+    inst.components.childspawner.childspawner = "spider_trapdoor_hooded"
+    inst.components.childspawner:SetMaxChildren(0)
+    inst.components.childspawner:SetEmergencyRadius(TUNING.WASPHIVE_EMERGENCY_RADIUS / 2)
+    inst.components.childspawner:SetSpawnedFn(OpenMound)
+    inst.components.childspawner:SetGoHomeFn(CloseMound)
+    inst.components.childspawner:SetRegenPeriod(20, 2)
+    inst.components.childspawner:SetOnChildKilledFn(FindNewHoleHooded)
+    inst.components.childspawner:SetMaxChildren(1)
+    inst.components.childspawner:StartRegen()
+
+    inst:AddComponent("playerprox")
+    inst.components.playerprox:SetDist(6, 8) -- set specific values
+    inst.components.playerprox:SetOnPlayerNear(onnear)
+    inst.components.playerprox:SetPlayerAliveMode(inst.components.playerprox.AliveModes.AliveOnly)
 
     inst:AddComponent("hauntable")
     inst.components.hauntable:SetHauntValue(TUNING.HAUNT_MEDIUM)
     inst.components.hauntable:SetOnHauntFn(OnHaunt)
 
-    if inst.components.trapdoor == nil then inst:AddComponent("lootdropper") end
-
+    inst:AddComponent("lootdropper")
     inst.components.lootdropper:SetChanceLootTable('trapdoor')
 
     inst:AddComponent("workable")
     inst.components.workable:SetWorkAction(ACTIONS.MINE)
     inst.components.workable:SetWorkLeft(TUNING.ROCKS_MINE)
-
     inst.components.workable:SetOnWorkCallback(workcallback)
-    inst.AnimState:SetLayer(LAYER_WORLD_BACKGROUND)
 
     inst.SummonChildren = SummonChildren
 
     MakeMediumPropagator(inst)
+
     inst:DoTaskInTime(0, Init)
 
     return inst
