@@ -5,7 +5,7 @@ local UMShove = require("tools/um_shoveutility")
 
 local ATTACK_PROP_MUST_TAGS = {"inspectable","locomotor"}
 local ATTACK_PROP_CANT_TAGS = {"notarget", "invisible", "noattack", "flight", "playerghost", "FX", "NOCLICK", "DECOR", "INLIMBO"}
-local function DoGhostPush(inst, target)
+local function DoGhostPush(inst)
     --inst:PerformBufferedAction()
     local combat = inst.components.combat
     combat.ignorehitrange = true
@@ -22,7 +22,7 @@ local function DoGhostPush(inst, target)
                     v:PushEvent("attacked", {attacker = inst, damage = 0, redirected = v})
                     combat:RemoveShouldAvoidAggro(inst)
                 end
-                UMShove.SingleShove(inst, v, radius, x, z, range)
+                UMShove.DoShove(v, {knocker = inst, radius = radius})
                 if v.SoundEmitter then v.SoundEmitter:PlaySound("dontstarve/movement/slip_fall_whoop") end
             end
         end
@@ -34,10 +34,8 @@ local UM_GHOSTPUSH = Action({priority = 10, rmb = true, mindistance = 2, ghost_v
 UM_GHOSTPUSH.id = "UM_GHOSTPUSH"
 UM_GHOSTPUSH.str = "Push"
 UM_GHOSTPUSH.fn = function(act)
-    if act.target then
-        DoGhostPush(act.doer, act.target)
-        return true
-    end
+    DoGhostPush(act.doer)
+    return true
 end
 
 env.AddAction(UM_GHOSTPUSH)
