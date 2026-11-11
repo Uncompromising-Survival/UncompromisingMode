@@ -41,6 +41,7 @@ local function DoRepel(inst, data)
             locomotor:Stop()
             locomotor:Clear()
         end
+        inst:ClearBufferedAction()
         if DiffAngle(rot, rot1) > 90 then
             inst.um_shovereverse = true
             inst.Transform:SetRotation(rot1 + 180)
