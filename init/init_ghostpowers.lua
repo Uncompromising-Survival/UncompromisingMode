@@ -14,7 +14,7 @@ local function DoGhostPush(inst, target)
     local range = combat:GetHitRange()
     local x, y, z = target.Transform:GetWorldPosition()
     for i, v in ipairs(TheSim:FindEntities(x, y, z, range + AOE_RANGE_PADDING, ATTACK_PROP_MUST_TAGS, ATTACK_PROP_CANT_TAGS)) do
-        if v:IsValid() and not (v.components.health and v.components.health:IsDead())
+        if v:IsValid() and v ~= inst and not (v.components.health and v.components.health:IsDead())
             and target:IsNear(v, range + v:GetPhysicsRadius(0)) then
             local combat = v.components.combat
             if combat then
@@ -33,8 +33,9 @@ local UM_GHOSTPUSH = Action({priority = 10, rmb = true, mindistance = 2, ghost_v
 UM_GHOSTPUSH.id = "UM_GHOSTPUSH"
 UM_GHOSTPUSH.str = "Push"
 UM_GHOSTPUSH.fn = function(act)
-    if act.target then
-        DoGhostPush(act.doer, act.target)
+    local target, doer = act.target, act.doer
+    if target and target ~= doer and not IsEntityDeadOrGhost(target) and target.components.locomotor then
+        DoGhostPush(doer, target)
         return true
     end
 end
@@ -50,7 +51,7 @@ env.AddSimPostInit(function()
             local _SCENE_inspectable_fn = SCENE["inspectable"]
             if _SCENE_inspectable_fn then
                 SCENE["inspectable"] = function(inst, doer, actions, right, ...)
-                    if right and doer:HasTag("playerghost") and inst ~= doer and inst:HasTag("locomotor") then
+                    if right and inst ~= doer and not IsEntityDeadOrGhost(inst) and inst:HasTag("locomotor") then
                         table.insert(actions, ACTIONS.UM_GHOSTPUSH)
                         return
                     end
