@@ -58,7 +58,7 @@ local function DoRepel(inst, data)
 end
 
 function UMShove.DoShove(target, data)
-    if target.sg and target.sg.sg.events.knockback then
+    if target.sg and target.sg.sg.events.knockback and not target.sg.mem.noknockback then
         target:PushEvent("knockback", data)
     elseif target.Physics then
         DoRepel(target, data)
