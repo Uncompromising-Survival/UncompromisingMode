@@ -629,7 +629,7 @@ local function giant_treefn()
     --inst.HideAllMoss = HideAllMoss
     inst:DoTaskInTime(math.random(0, .1), function(inst) --Keep giant trees spaced out
         if FindEntity(inst, 3 ^ 2, nil, {"giant_tree"}) then
-            --inst:Remove()
+            inst:Remove()
         end
     end)
 
