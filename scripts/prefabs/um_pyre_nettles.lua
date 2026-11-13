@@ -41,37 +41,6 @@ SetSharedLootTable('um_pyre_nettles_5',
         { 'firenettles', .25 }
     })
 
-
-
-local PF_DIMS = 6 --equal to 4x4 grid of walls
-
-local function UnregisterPathFinding(inst)
-    --didn't register wall but got removed.
-    if inst._pfpos == nil then return end
-
-    local x = inst._pfpos.x - (PF_DIMS - 1) / 2
-    local z = inst._pfpos.z - (PF_DIMS - 1) / 2
-    local pathfinder = TheWorld.Pathfinder
-    for i = 0, PF_DIMS - 1 do
-        for j = 0, PF_DIMS - 1 do
-            pathfinder:RemoveWall(x + i, 0, z + j)
-        end
-    end
-end
-
-local function RegisterPathFinding(inst)
-    inst._pfpos = inst:GetPosition()
-    local x = inst._pfpos.x - (PF_DIMS - 1) / 2
-    local z = inst._pfpos.z - (PF_DIMS - 1) / 2
-    local pathfinder = TheWorld.Pathfinder
-    for i = 0, PF_DIMS - 1 do
-        for j = 0, PF_DIMS - 1 do
-            pathfinder:AddWall(x + i, 0, z + j)
-        end
-    end
-end
-
-
 local function TrySpawnSpore(inst)
     if not inst:IsAsleep() and math.random() > 2 / 3 then
         SpawnPrefab("um_smolder_spore").Transform:SetPosition(inst.Transform:GetWorldPosition())
@@ -186,9 +155,9 @@ local function SetStage(inst)
     if inst.stage ~= 1 then
         multsize = .75 + (math.random() * .2)
         inst.components.pickable.canbepicked = true
-        inst:DoTaskInTime(0, RegisterPathFinding)
+        inst:DoTaskInTime(0, AddPathfindingWalls)
     else
-        inst:DoTaskInTime(0, UnregisterPathFinding)
+        inst:DoTaskInTime(0, RemovePathfindingWalls)
     end
 
     inst.AnimState:SetScale(math.random() < .5 and -multsize or multsize, multsize, multsize)
@@ -317,9 +286,9 @@ local function StageSpawner(name, SpawnAtStage)
         inst.components.pickable.onpickedfn = OnPicked
         if inst.stage ~= 1 then
             inst.components.pickable.canbepicked = true
-            inst:DoTaskInTime(0, RegisterPathFinding)
+            inst:DoTaskInTime(0, AddPathfindingWalls)
         else
-            inst:DoTaskInTime(0, UnregisterPathFinding)
+            inst:DoTaskInTime(0, RemovePathfindingWalls)
         end
 
         inst:AddComponent("combat")

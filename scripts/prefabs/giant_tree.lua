@@ -557,36 +557,8 @@ end
 --Glorious Tree Main Function GTMF
 ----------------------------------
 
-local PF_DIMS = 4 --equal to 4x4 grid of walls
-
-local function UnregisterPathFinding(inst)
-    --didn't register wall but got removed.
-    if inst._pfpos == nil then return end
-
-    local x = inst._pfpos.x - (PF_DIMS - 1) / 2
-    local z = inst._pfpos.z - (PF_DIMS - 1) / 2
-    local pathfinder = TheWorld.Pathfinder
-    for i = 0, PF_DIMS - 1 do
-        for j = 0, PF_DIMS - 1 do
-            pathfinder:RemoveWall(x + i, 0, z + j)
-        end
-    end
-end
-
-local function RegisterPathFinding(inst)
-    inst._pfpos = inst:GetPosition()
-    local x = inst._pfpos.x - (PF_DIMS - 1) / 2
-    local z = inst._pfpos.z - (PF_DIMS - 1) / 2
-    local pathfinder = TheWorld.Pathfinder
-    for i = 0, PF_DIMS - 1 do
-        for j = 0, PF_DIMS - 1 do
-            pathfinder:AddWall(x + i, 0, z + j)
-        end
-    end
-end
-
 local function OnRemoveEntity(inst)
-    UnregisterPathFinding(inst)
+    RemovePathfindingWalls(inst)
     for player in pairs(inst.players) do
         if player:IsValid() then
             if player.um_gianttrees then
@@ -616,7 +588,7 @@ local function giant_treefn()
     inst:AddTag("shadecanopysmall")
     inst:AddTag("antlion_sinkhole_blocker")
 
-    inst:DoTaskInTime(0, RegisterPathFinding)
+    inst:DoTaskInTime(0, AddPathfindingWalls)
 
     if not TheNet:IsDedicated() then
         local distancefade = inst:AddComponent("distancefade")

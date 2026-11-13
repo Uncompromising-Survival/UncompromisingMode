@@ -6,33 +6,6 @@ local assets =
 local function PrickAdept(picker)
     return picker.components.skilltreeupdater and picker.components.skilltreeupdater:IsActivated("wormwood_prick_adept")
 end
-local PF_DIMS = 4 --equal to 4x4 grid of walls
-
-local function UnregisterPathFinding(inst)
-    if inst._pfpos == nil then return end
-
-    local x = inst._pfpos.x - (PF_DIMS - 1) / 2
-    local z = inst._pfpos.z - (PF_DIMS - 1) / 2
-    local pathfinder = TheWorld.Pathfinder
-    for i = 0, PF_DIMS - 1 do
-        for j = 0, PF_DIMS - 1 do
-            pathfinder:RemoveWall(x + i, 0, z + j)
-        end
-    end
-end
-
-local function RegisterPathFinding(inst)
-    inst._pfpos = inst:GetPosition()
-    local x = inst._pfpos.x - (PF_DIMS - 1) / 2
-    local z = inst._pfpos.z - (PF_DIMS - 1) / 2
-    local pathfinder = TheWorld.Pathfinder
-    for i = 0, PF_DIMS - 1 do
-        for j = 0, PF_DIMS - 1 do
-            pathfinder:AddWall(x + i, 0, z + j)
-        end
-    end
-    inst.OnRemoveEntity = UnregisterPathFinding
-end
 
 local function OnBurnt(inst)
     local node = TheWorld.Map:FindNodeAtPoint(inst.Transform:GetWorldPosition())
@@ -56,13 +29,13 @@ local function onregenfn(inst)
         inst.components.burnable:SetBurnTime(.75)
         inst.components.burnable:SetOnBurntFn(OnBurnt)
     end
-    inst:DoTaskInTime(0, RegisterPathFinding)
+    inst:DoTaskInTime(0, function(inst) AddPathfindingWalls(inst, 3) end)
 end
 
 local function makeemptyfn(inst)
     inst.AnimState:PlayAnimation("pick")
     inst.AnimState:PushAnimation("empty")
-    inst:DoTaskInTime(0, UnregisterPathFinding)
+    inst:DoTaskInTime(0, RemovePathfindingWalls)
 end
 
 local function makebarrenfn(inst, wasempty)
@@ -76,7 +49,7 @@ local function makebarrenfn(inst, wasempty)
         inst.AnimState:PlayAnimation("empty")
     end
 
-    inst:DoTaskInTime(0, UnregisterPathFinding)
+    inst:DoTaskInTime(0, RemovePathfindingWalls)
 end
 
 local function ToggleBusyAnimation(inst)
@@ -176,7 +149,7 @@ local function onpickedfn(inst, picker)
         picker.full_belly = true
         picker:DoTaskInTime(60, function(picker) picker.full_belly = nil end)
     end
-    inst:DoTaskInTime(0, UnregisterPathFinding)
+    inst:DoTaskInTime(0, RemovePathfindingWalls)
 end
 
 local thicket_equipment = {["um_hat_leafwing"] = true, ["armor_bramble"] = true, ["um_armor_bramble_rimeweed"] = true, ["armor_lunarplant_husk"] = true}
@@ -314,7 +287,7 @@ local function grass(name, stage)
         -- local colour = multcolour + math.random() * (1.0 - multcolour)
         -- inst.AnimState:SetMultColour(colour, colour, colour, 1)
         -- end
-        inst:DoTaskInTime(0, RegisterPathFinding)
+        inst:DoTaskInTime(0, function(inst) AddPathfindingWalls(inst, 3) end)
 
         inst.entity:SetPristine()
         inst.AnimState:SetTime(math.random() * 2)

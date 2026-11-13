@@ -79,3 +79,38 @@ function UpdateLuaRegistry(old, new)
         end
     end
 end
+
+
+function RemovePathfindingWalls(inst)
+    if inst._pfradius == nil or inst._pfpos == nil then return end
+
+    local radius = inst._pfradius
+
+    local x = inst._pfpos.x - (radius - 1) / 2
+    local z = inst._pfpos.z - (radius - 1) / 2
+    local pathfinder = TheWorld.Pathfinder
+    for i = 0, radius - 1 do
+        for j = 0, radius - 1 do
+            pathfinder:RemoveWall(x + i, 0, z + j)
+        end
+    end
+end
+
+--Adds pathfinding walls to a prefab with a given radius.
+--if radius is nil, defaults to 6 (4x4 of walls, allegedly.)
+function AddPathfindingWalls(inst, radius)
+    if radius == nil then radius = 6 end
+
+    inst._pfradius = radius
+    inst._pfpos = inst:GetPosition()
+    local x = inst._pfpos.x - (radius - 1) / 2
+    local z = inst._pfpos.z - (radius - 1) / 2
+    local pathfinder = TheWorld.Pathfinder
+    for i = 0, radius - 1 do
+        for j = 0, radius - 1 do
+            pathfinder:AddWall(x + i, 0, z + j)
+        end
+    end
+
+    inst:ListenForEvent("onremove", RemovePathfindingWalls)
+end
