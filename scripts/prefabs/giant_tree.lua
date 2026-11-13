@@ -617,7 +617,6 @@ local function giant_treefn()
     inst:AddComponent("timer")
     inst:ListenForEvent("timerdone", Regrow)
 
-
     inst.partchops = 0
     inst.OnSave = OnSave
     inst.OnLoad = OnLoad
