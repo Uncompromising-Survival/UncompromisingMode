@@ -6,6 +6,6 @@ env.AddPrefabPostInit("lava_pond", function(inst)
         return
     end
 
-    inst:DoTaskInTime(0, AddPathfindingWalls)
+    inst:DoTaskInTime(0, UMAddPathfindingWalls)
     inst:AddComponent("watersource")
 end)

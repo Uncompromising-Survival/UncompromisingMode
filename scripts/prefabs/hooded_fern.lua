@@ -29,13 +29,13 @@ local function onregenfn(inst)
         inst.components.burnable:SetBurnTime(.75)
         inst.components.burnable:SetOnBurntFn(OnBurnt)
     end
-    inst:DoTaskInTime(0, function(inst) AddPathfindingWalls(inst, 3) end)
+    inst:DoTaskInTime(0, function(inst) UMAddPathfindingWalls(inst, 3) end)
 end
 
 local function makeemptyfn(inst)
     inst.AnimState:PlayAnimation("pick")
     inst.AnimState:PushAnimation("empty")
-    inst:DoTaskInTime(0, RemovePathfindingWalls)
+    inst:DoTaskInTime(0, UMRemovePathfindingWalls)
 end
 
 local function makebarrenfn(inst, wasempty)
@@ -49,7 +49,7 @@ local function makebarrenfn(inst, wasempty)
         inst.AnimState:PlayAnimation("empty")
     end
 
-    inst:DoTaskInTime(0, RemovePathfindingWalls)
+    inst:DoTaskInTime(0, UMRemovePathfindingWalls)
 end
 
 local function ToggleBusyAnimation(inst)
@@ -149,7 +149,7 @@ local function onpickedfn(inst, picker)
         picker.full_belly = true
         picker:DoTaskInTime(60, function(picker) picker.full_belly = nil end)
     end
-    inst:DoTaskInTime(0, RemovePathfindingWalls)
+    inst:DoTaskInTime(0, UMRemovePathfindingWalls)
 end
 
 local thicket_equipment = {["um_hat_leafwing"] = true, ["armor_bramble"] = true, ["um_armor_bramble_rimeweed"] = true, ["armor_lunarplant_husk"] = true}
@@ -287,7 +287,7 @@ local function grass(name, stage)
         -- local colour = multcolour + math.random() * (1.0 - multcolour)
         -- inst.AnimState:SetMultColour(colour, colour, colour, 1)
         -- end
-        inst:DoTaskInTime(0, function(inst) AddPathfindingWalls(inst, 3) end)
+        inst:DoTaskInTime(0, function(inst) UMAddPathfindingWalls(inst, 3) end)
 
         inst.entity:SetPristine()
         inst.AnimState:SetTime(math.random() * 2)

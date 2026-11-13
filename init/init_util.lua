@@ -80,8 +80,7 @@ function UpdateLuaRegistry(old, new)
     end
 end
 
-
-function RemovePathfindingWalls(inst)
+function UMRemovePathfindingWalls(inst)
     if inst._pfradius == nil or inst._pfpos == nil then return end
 
     local radius = inst._pfradius
@@ -98,7 +97,7 @@ end
 
 --Adds pathfinding walls to a prefab with a given radius.
 --if radius is nil, defaults to 6 (4x4 of walls, allegedly.)
-function AddPathfindingWalls(inst, radius)
+function UMAddPathfindingWalls(inst, radius)
     if radius == nil then radius = 6 end
 
     inst._pfradius = radius
@@ -112,5 +111,5 @@ function AddPathfindingWalls(inst, radius)
         end
     end
 
-    inst:ListenForEvent("onremove", RemovePathfindingWalls)
+    inst:ListenForEvent("onremove", UMRemovePathfindingWalls)
 end

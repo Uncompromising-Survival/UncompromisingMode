@@ -155,9 +155,9 @@ local function SetStage(inst)
     if inst.stage ~= 1 then
         multsize = .75 + (math.random() * .2)
         inst.components.pickable.canbepicked = true
-        inst:DoTaskInTime(0, AddPathfindingWalls)
+        inst:DoTaskInTime(0, UMAddPathfindingWalls)
     else
-        inst:DoTaskInTime(0, RemovePathfindingWalls)
+        inst:DoTaskInTime(0, UMRemovePathfindingWalls)
     end
 
     inst.AnimState:SetScale(math.random() < .5 and -multsize or multsize, multsize, multsize)
@@ -286,9 +286,9 @@ local function StageSpawner(name, SpawnAtStage)
         inst.components.pickable.onpickedfn = OnPicked
         if inst.stage ~= 1 then
             inst.components.pickable.canbepicked = true
-            inst:DoTaskInTime(0, AddPathfindingWalls)
+            inst:DoTaskInTime(0, UMAddPathfindingWalls)
         else
-            inst:DoTaskInTime(0, RemovePathfindingWalls)
+            inst:DoTaskInTime(0, UMRemovePathfindingWalls)
         end
 
         inst:AddComponent("combat")

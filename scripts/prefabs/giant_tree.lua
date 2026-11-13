@@ -99,27 +99,27 @@ local choploots =
 {
     oceantree_leaf_fx_fall = 4,
     twigs = 1,
-    log = 0.5,
-    frog = 0.05,
-    spider = 0.005,
+    log = .5,
+    frog = .05,
+    spider = .005,
 }
 
 local felloots =
 {
     log = 2,
     oceantree_leaf_fx_fall = 1,
-    bird_egg = 0.25,
-    feather = 0.5,
-    spider = 0.01,
-    frog = 0.05,
-    giant_tree_birdnest = 0.025,
+    bird_egg = .25,
+    feather = .5,
+    spider = .01,
+    frog = .05,
+    giant_tree_birdnest = .025,
 }
 local infestedloots =
 {
     twigs = 1,
     aphid = 1,
-    oceantree_leaf_fx_fall = 0.5,
-    log = 0.5,
+    oceantree_leaf_fx_fall = .5,
+    log = .5,
 }
 -----------------------------
 
@@ -132,8 +132,8 @@ local function _GroundDetectionUpdate(debris, override_density, force_shatter)
     local x, y, z = debris.Transform:GetWorldPosition()
     if y <= .2 then
         if debris.prefab == "giant_tree_birdnest" then
-            debris.AnimState:PlayAnimation("land_" .. debris.egg)
-            debris.AnimState:PushAnimation("idle_" .. debris.egg)
+            debris.AnimState:PlayAnimation("land_"..debris.egg)
+            debris.AnimState:PushAnimation("idle_"..debris.egg)
             if not TheWorld.Map:IsVisualGroundAtPoint(x, y, z) then
                 SpawnPrefab("splash").Transform:SetPosition(x, y, z)
                 debris:Remove()
@@ -233,28 +233,13 @@ local function _GroundDetectionUpdate(debris, override_density, force_shatter)
 end
 
 local function GetDebris(loottable)
+    local frog
+    if loottable["frog"] and not TheWorld.state.isspring then frog, loottable["frog"] = loottable["frog"], 0 end
     local loot = weighted_random_choice(loottable)
-    if loot == "feather" then
-        if math.random() > 0.5 then
-            loot = "feather_crow"
-        else
-            if math.random() > 0.25 then
-                if not TheWorld.state.iswinter then
-                    loot = "feather_robin"
-                else
-                    loot = "feather_robin_winter"
-                end
-            else
-                loot = "feather_canary"
-            end
-        end
-    end
-    if loot == "frog" and not TheWorld.state.isspring then
-        loot = GetDebris(loottable)
-    end
-    return loot
+    if frog then loottable["frog"] = frog end
+    return loot == "feather" and (math.random() > .5 and "feather_crow" or math.random() > .25 and (TheWorld.state.iswinter and "feather_robin_winter" or "feather_robin") or "feather_canary")
+        or loot
 end
-
 
 local function SpawnDebris(inst, chopper, loottable, loc_override, force_shatter)
     local x, y, z = inst.Transform:GetWorldPosition()
@@ -340,7 +325,7 @@ local function SpawnDebris(inst, chopper, loottable, loc_override, force_shatter
 end
 
 local function OnFar(inst, player)
-    if player.um_gianttrees then   
+    if player.um_gianttrees then
         player.um_gianttrees = player.um_gianttrees - 1
         --player:PushEvent("onchangecanopyzone", player.um_gianttrees > 0)
         if player.um_gianttrees <= 0 then player.um_gianttrees = nil end
@@ -440,10 +425,7 @@ local function on_chopped_down(inst, worker)
 
     inst.AnimState:PlayAnimation("idle_damaged")
     inst.components.timer:StartTimer("regrow", TUNING.TOTAL_DAY_TIME * 3)
-    if inst.components.timer:TimerExists("remoss") then
-        inst.components.timer:StopTimer("remoss")
-    end
-    inst.components.timer:StartTimer("remoss", TUNING.TOTAL_DAY_TIME * 5)
+    UMCommonFns.RestartTimer(inst, {name = "remoss", time = TUNING.TOTAL_DAY_TIME * 5})
 end
 
 local function SetupWorkable(inst)
@@ -558,7 +540,6 @@ end
 ----------------------------------
 
 local function OnRemoveEntity(inst)
-    RemovePathfindingWalls(inst)
     for player in pairs(inst.players) do
         if player:IsValid() then
             if player.um_gianttrees then
@@ -588,7 +569,7 @@ local function giant_treefn()
     inst:AddTag("shadecanopysmall")
     inst:AddTag("antlion_sinkhole_blocker")
 
-    inst:DoTaskInTime(0, AddPathfindingWalls)
+    inst:DoTaskInTime(0, UMAddPathfindingWalls)
 
     if not TheNet:IsDedicated() then
         local distancefade = inst:AddComponent("distancefade")
@@ -647,13 +628,13 @@ local function giant_treefn()
 
     inst.PickBuild = PickBuild
     --inst.HideAllMoss = HideAllMoss
-    inst:DoTaskInTime(math.random(0, 0.1), function(inst) --Keep giant trees spaced out
-        if FindEntity(inst, 3 ^ 2, nil, { "giant_tree" }) then
-            inst:Remove()
+    inst:DoTaskInTime(math.random(0, .1), function(inst) --Keep giant trees spaced out
+        if FindEntity(inst, 3 ^ 2, nil, {"giant_tree"}) then
+            --inst:Remove()
         end
     end)
 
-    --[[inst:DoTaskInTime(1,function(inst)
+    --[[inst:DoTaskInTime(1, function(inst)
         if inst.mossy then
             if inst.mossy then
                 TheNet:Announce("inst.mossy is true")
@@ -664,6 +645,7 @@ local function giant_treefn()
             TheNet:Announce("inst.mossy is nil")
         end
     end)]]
+
     inst:ListenForEvent("animover", AnimNext)
 
     inst.OnRemoveEntity = OnRemoveEntity

@@ -197,7 +197,7 @@ local function fn()
     end
 
 
-    inst:DoTaskInTime(0, AddPathfindingWalls)
+    inst:DoTaskInTime(0, UMAddPathfindingWalls)
     inst.Physics:SetCollisionCallback(OnCollide)
 
     inst:AddComponent("inspectable")
