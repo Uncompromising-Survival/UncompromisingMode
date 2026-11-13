@@ -8,7 +8,7 @@ local function UpdateRepel(inst)
             inst.um_shovespeed = speed
             inst.um_shovedspeed = inst.um_shovedspeed + .075
             local angle = (inst.um_shoverot - inst.Transform:GetRotation()) * DEGREES
-            inst.Physics:SetMotorVel(speed * math.cos(angle), 0, -speed * math.sin(angle))
+            inst.Physics:SetMotorVelOverride(speed * math.cos(angle), 0, -speed * math.sin(angle))
         else
             inst.um_shovespeed = nil
             inst.um_shovedspeed = nil
@@ -45,7 +45,7 @@ local function DoRepel(inst, data)
         end
         inst:ClearBufferedAction()
         local angle = (rot1 - rot) * DEGREES
-        inst.Physics:SetMotorVel(speed * math.cos(angle), 0, -speed * math.sin(angle))
+        inst.Physics:SetMotorVelOverride(speed * math.cos(angle), 0, -speed * math.sin(angle))
         inst.um_shoverot = rot1
         inst.um_shovespeed = speed
         inst.um_shovedspeed = 0
@@ -54,6 +54,7 @@ local function DoRepel(inst, data)
     inst.um_shoveupdatetask = inst:DoPeriodicTask(0, UpdateRepel)
 end
 
+--local UMShove = require("tools/um_shoveutility") UMShove.DoShove(c_select(), {knocker = ThePlayer, radius = 3}) -- Debugging Purposes.
 function UMShove.DoShove(target, data)
     if target.sg and target.sg.sg.events.knockback and not target.sg.mem.noknockback then
         target:PushEvent("knockback", data)
