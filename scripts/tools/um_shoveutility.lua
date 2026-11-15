@@ -2,6 +2,7 @@ local UMShove = {}
 
 local function RemoveShoveEntity(inst)
     if inst.um_shoveentity and inst.um_shoveentity:IsValid() then
+        inst.um_shoveentity:RemoveEventCallback("onremove", RemoveShoveEntity, inst)
         inst.um_shoveentity:Remove()
         inst.um_shoveentity = nil
     end
@@ -73,6 +74,7 @@ local function SpawnShoveEntity(inst, x, z)
     shoveentity.Transform:SetPosition(x, 0, z)
     shoveentity.um_child = inst
     shoveentity:ListenForEvent("onremove", RemoveConstrains)
+    shoveentity:ListenForEvent("onremove", RemoveShoveEntity, inst)
     inst.Physics:SetDontRemoveOnSleep(true)
     inst.Physics:ConstrainTo(shoveentity.entity)
     return shoveentity
