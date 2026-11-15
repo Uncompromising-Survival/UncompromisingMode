@@ -289,83 +289,79 @@ local function DoMagmaBreakFx(x, z)
     end
 end
 
+--making this a function so we can use return to skip some performance heavy checks when needed.
+--because if we use return in the for loop it breaks the loop because Lua for SOME REASON doesn't have 'continue'
+local function DoTileUpdate(self, data, dt)
+    local x, z = data.x, data.z
+
+
+    --yes these are seperate if statements for clarity's sake.
+    --don't melt if all sides are land
+    local S = TheWorld.Map:IsLandTileAtPoint(x + 4, 0, z)
+    local N = TheWorld.Map:IsLandTileAtPoint(x - 4, 0, z)
+    local E = TheWorld.Map:IsLandTileAtPoint(x, 0, z + 4)
+    local W = TheWorld.Map:IsLandTileAtPoint(x, 0, z - 4)
+
+    if (S and N and E and W) then
+        return
+    end
+
+    --edge case: if there's a fueled flingo, we don't melt the tile offscreen.
+    --onscreen it'll re-cool the tile as normal.
+    for guid, ent in pairs(self.flingos) do
+        if ent:IsValid() and ent:IsAsleep() and ent:GetDistanceSqToPoint(x, 0, z) < TUNING.FIRE_DETECTOR_RANGE * TUNING.FIRE_DETECTOR_RANGE then
+            if ent.components.fueled ~= nil and not ent.components.fueled:IsEmpty() and ent.components.firedetector ~= nil and ent.components.machine ~= nil and ent.components.machine.ison then
+                return
+            end
+        end
+    end
+
+    -- Don't melt tiles near active crystaeyezers
+    for guid, ent in pairs(self.crystaleyezers) do
+        if ent:IsValid() and ent.components.temperatureoverrider.enabled and ent:GetDistanceSqToPoint(x, 0, z) < TUNING.DEERCLOPSEYEBALL_SENTRYWARD_RADIUS * TUNING.DEERCLOPSEYEBALL_SENTRYWARD_RADIUS then
+            return
+        end
+    end
+
+    data.duration = data.duration - dt
+
+    if data.duration <= 20 then
+        DoMagmaBreakFx(data.x, data.z)
+    end
+
+    for k, v in pairs(AllPlayers) do
+        if v:IsValid() and v:GetDistanceSqToPoint(x, 0, z) < PLAYER_CAMERA_SEE_DISTANCE_SQ then
+            if data.duration <= 10 and math.random() > 0.75 then
+                local fx1 = SpawnPrefab("fossilizing_fx_" .. math.random(1, 2))
+                fx1.Transform:SetPosition(x + (math.random(-4, 4) * math.random()), 0, z + (math.random(-4, 4) * math.random()))
+            elseif data.duration <= 2 and math.random() > 0.75 then
+                local fx2 = SpawnPrefab("deer_fire_burst")
+                fx2.Transform:SetPosition(x + (math.random(-4, 4) * math.random()), 0, z + (math.random(-4, 4) * math.random()))
+            end
+            break
+        end
+    end
+end
+
 function MagmaManager:OnUpdate(dt)
     --skip the loop if its raining directly.
 
     --we only update up to 50 tiles per frame for performance.
     --if we have more, we'll update them next frame.
     if not TheWorld.state.israining then
-        self.next_batch = self.next_batch or 1
-        for i = self.next_batch, #self.temp_tiles do
+        for i = 1, #self.temp_tiles do
             local data = self.temp_tiles[i]
             if data == nil then
                 print("PANIC! Data invalid!")
                 return
             end
 
-            if i == #self.temp_tiles and #self.temp_tiles > 1 then
-                self.next_batch = 1
+            DoTileUpdate(self, data, dt)
+
+            if data.duration <= 0 then
+                self:MeltMagmaTile(data.x, data.z)
+                --We need to break here as the table gets reconstructed while we're iterating over it.
                 break
-            end
-
-            if i % 50 == 0 and i ~= self.next_batch then
-                self.next_batch = i
-                break
-            end
-
-
-            local x, z = data.x, data.z
-            --yes these are seperate if statements for clarity's sake.
-
-            --edge case: if there's a fueled flingo, we don't melt the tile offscreen.
-            --onscreen it'll re-cool the tile as normal.
-            local should_melt = true
-            for guid, ent in pairs(self.flingos) do
-                if ent:IsValid() and ent:IsAsleep() and ent:GetDistanceSqToPoint(x, 0, z) < TUNING.FIRE_DETECTOR_RANGE * TUNING.FIRE_DETECTOR_RANGE then
-                    if ent.components.fueled ~= nil and not ent.components.fueled:IsEmpty() and ent.components.firedetector ~= nil and ent.components.machine ~= nil and ent.components.machine.ison then
-                        should_melt = false
-                    end
-                end
-            end
-
-            -- Don't melt tiles near active crystaeyezers.
-            for guid, ent in pairs(self.crystaleyezers) do
-                if ent:IsValid() and ent.components.temperatureoverrider.enabled then
-                    should_melt = false
-                end
-            end
-
-            --don`t melti if all sides are land
-            local S = TheWorld.Map:IsLandTileAtPoint(x + 4, 0, z)
-            local N = TheWorld.Map:IsLandTileAtPoint(x - 4, 0, z)
-            local E = TheWorld.Map:IsLandTileAtPoint(x, 0, z + 4)
-            local W = TheWorld.Map:IsLandTileAtPoint(x, 0, z - 4)
-
-
-            if (S and N and E and W) then
-                should_melt = false
-            end
-
-            if should_melt then
-                data.duration = data.duration - 1
-
-                if data.duration <= 200 then
-                    DoMagmaBreakFx(data.x, data.z)
-                end
-
-                if data.duration <= 100 and data.duration % 5 == 0 then
-                    local fx1 = SpawnPrefab("fossilizing_fx_" .. math.random(1, 2))
-                    fx1.Transform:SetPosition(x + (math.random(-4, 4) * math.random()), 0, z + (math.random(-4, 4) * math.random()))
-                elseif data.duration <= 50 and data.duration % 2 == 0 then
-                    local fx2 = SpawnPrefab("deer_fire_burst")
-                    fx2.Transform:SetPosition(x + (math.random(-4, 4) * math.random()), 0, z + (math.random(-4, 4) * math.random()))
-                end
-
-                if data.duration <= 0 then
-                    self:MeltMagmaTile(data.x, data.z)
-                    --We need to break here as the table gets reconstructed while we're iterating over it.
-                    break
-                end
             end
         end
     end
