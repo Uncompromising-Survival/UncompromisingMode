@@ -637,7 +637,8 @@ local prefabs = {
     "um_blueprinting_kit",
     "minerstatue",
     "um_gem_repair_kit",
-    "um_magmastone"
+    "um_magmastone",
+    "um_shoveentity"
 }
 
 if UM_CONFIG.WIXIE_WALTER then
