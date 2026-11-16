@@ -65,6 +65,7 @@ local function SpawnThorns(inst, feather, owner, damage)
     end
 
     local x, y, z = inst.Transform:GetWorldPosition()
+    if feather == "feather_canary" then for i = 1, 10 do SpawnPrefab("sparks").Transform:SetPosition(x - 1 + math.random() * 2, y + .25 + math.random() * 2, z) end end
     for i, v in ipairs(TheSim:FindEntities(x, y, z, 5, COMBAT_TARGET_TAGS, NO_TAGS_NO_PLAYERS)) do
         if v:IsValid() and
             v.entity:IsVisible() and

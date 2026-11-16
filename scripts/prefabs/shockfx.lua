@@ -11,9 +11,6 @@ local NO_TAGS_NO_PLAYERS = JoinArrays(NO_TAGS, {"player"})
 local function OnUpdateThorns(inst)
     inst.range = inst.range + .75
     local x, y, z = inst.Transform:GetWorldPosition()
-    for i = 1, 10 do -- How does one make a "do 15" times in lua? This is how we do it.
-        SpawnPrefab("sparks").Transform:SetPosition(x - 1 + math.random() * 2, y + .25 + math.random() * 2, z)
-    end
     for i, v in ipairs(TheSim:FindEntities(x, y, z, inst.range + 3, {"_combat"}, inst.canhitplayers and NO_TAGS or NO_TAGS_NO_PLAYERS)) do
         if not inst.ignore[v] and v:IsValid() and v.entity:IsVisible() and v.components.combat then
             local range = inst.range + v:GetPhysicsRadius(0)

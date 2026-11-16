@@ -1,6 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
-
+-----------------------------------------------------------------
 require "behaviours/follow"
 
 --local BrainSurgeon = env.require("tools/brainsurgeon")
@@ -25,13 +25,17 @@ local function GetCalled(inst)
 end
 
 ---------------------------------------------------------------------------------------
+local function MakeChargeBusyStateGuard(self)
+    self.bt.root = PriorityNode({WhileNode(function() return not self.inst.sg:HasStateTag("um_charging") end, "<busy state guard>", self.bt.root)}, 0)
+end
 
 env.AddBrainPostInit("beefalobrain", function(brain)
     local inst = brain.inst
     local root = brain.bt and brain.bt.root
     if not root then return end
-
-
     -- Insert before first fight node to allow picking up helmets mid battle
     table.insert(root.children, 3, GetCalled(inst))
+    MakeChargeBusyStateGuard(brain)
 end)
+
+env.AddBrainPostInit("koalefantbrain", MakeChargeBusyStateGuard)

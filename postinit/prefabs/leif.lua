@@ -123,19 +123,20 @@ local function SpawnSnare(inst, target)
     return true
 end
 
-local function spawn_stumpling(target)
-    local stumpling = SpawnPrefab(target:HasTag("deciduous") and "birchling" or "stumpling")
+local function spawn_stumpling(stump, target)
+    local stumpling = SpawnPrefab(stump:HasTag("deciduous") and "birchling" or "stumpling")
 
-    if target.chopper then
-        stumpling.components.combat:SuggestTarget(target.chopper)
+    if target then
+        stumpling.components.combat:SuggestTarget(target)
     end
 
-    local x, y, z = target.Transform:GetWorldPosition()
+    local x, y, z = stump.Transform:GetWorldPosition()
+    stump:Remove()
+
     local effect = SpawnPrefab("round_puff_fx_hi")
     effect.Transform:SetPosition(x, y, z)
     stumpling.Transform:SetPosition(x, y, z)
     stumpling.sg:GoToState("hit")
-    target:Remove()
 end
 
 local STUMP_MUST_TAGS = {"stump"}
@@ -157,32 +158,10 @@ local function SummonStumplings(inst, target)
         local stump = inst.UMFindStump and inst:UMFindStump(target)
         if stump then
             stump.noleif = true
-            stump.chopper = target
-            spawn_stumpling(stump)
+            spawn_stumpling(stump, target)
         end
     end
 end
-
---[[local function UnHide(inst, data)
-    if data.statename ~= "sleeping" then
-        inst.sg:RemoveStateTag("hiding")
-        inst:RemoveEventCallback("newstate", UnHide)
-    end
-end
-
-local function BossCheck(inst, data)
-    if not inst.components.health:IsDead() and data.attacker ~= nil and data.attacker:HasTag("epic") then
-        inst:PushEvent("bosshide")
-
-        if inst.components.combat.target ~= nil and not inst.components.combat.target:HasTag("player") then
-            inst.components.combat:DropTarget()
-        end
-
-        if data.attacker.components.combat:HasTarget() and not data.attacker.components.combat:TargetIs(inst) then
-            data.attacker.components.combat:DropTarget()
-        end
-    end
-end]]
 
 local function OnHitOther(inst, other)
     if UMCommonFns.ShouldKnockback(other) then
@@ -204,7 +183,7 @@ end]]
 
 local AOE_EXCLUDE_TAGS = {"leif", "stumpling"}
 local function ShouldDoConeCheck(ent, inst)
-    return not inst.sg:HasStateTag("snare")
+    return not inst.sg:HasStateTag("um_snare")
 end
 
 local function GetAreaHitRange(combat)
@@ -213,6 +192,13 @@ end
 
 local function GetAreaCircleRadius(combat)
     return GetAreaHitRange(combat) / 2
+end
+
+local function BossCheck(inst, data)
+    local attacker = data.attacker
+    if attacker and attacker:HasTag("epic") and not attacker:HasTag("smallepic") then
+        inst:PushEvent("um_hide")
+    end
 end
 
 local function TreeguardFunctions(inst)
@@ -229,7 +215,7 @@ local function TreeguardFunctions(inst)
         lootdropper:SetLoot({"livinglog", "livinglog", "livinglog", "livinglog", "livinglog", "livinglog", "plantmeat"})
     end
 
-    --inst:ListenForEvent("attacked", BossCheck)
+    inst:ListenForEvent("attacked", BossCheck)
 
     inst:AddComponent("timer")
 

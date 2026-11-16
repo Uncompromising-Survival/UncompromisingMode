@@ -18,11 +18,11 @@ env.AddClassPostConstruct("components/combat_replica", function(self)
         return ret
     end
 
-    --[[local _CanTarget = self.CanTarget
+    local _CanTarget = self.CanTarget
     function self:CanTarget(target, ...)
         if target and target:HasTag("um_slippery") and not self.inst.isplayer then return false end
         return _CanTarget(self, target, ...)
-    end]]
+    end
 
     local _IsValidTarget = self.IsValidTarget
     function self:IsValidTarget(target, ...)
@@ -41,6 +41,6 @@ env.AddClassPostConstruct("components/combat_replica", function(self)
     function self:CanBeAttacked(attacker, ...)
         local follower = attacker and attacker.replica.follower
         local leader = follower and follower:GetLeader()
-        return _CanBeAttacked(self, leader and self.inst:HasAnyTag("fused_shadeling") and leader or attacker, ...)
+        return _CanBeAttacked(self, leader and self.inst:HasTag("fused_shadeling") and leader or attacker, ...)
     end]]
 end)

@@ -14,7 +14,9 @@ if GetModConfigData("moon_bees") then
 
         task.room_choices["moonforest_bees"] = 1
     end)
+end
 
+if GetModConfigData("flooded_caves") == "lunar_cave" then
     AddTaskPreInit("MoonIsland_Beach", function(task)
         GLOBAL.require("map/rooms/forest/UM_moonisland")
 

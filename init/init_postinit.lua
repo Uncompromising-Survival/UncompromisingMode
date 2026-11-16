@@ -81,7 +81,8 @@ local component_post = {
     "seamlessplayerswapper",
     "grottowarmanager",
     "quaker",
-    "oldager",
+    --"oldager",
+    "sheltered"
 }
 
 local prefab_post = {
@@ -124,8 +125,8 @@ local prefab_post = {
     "rock_ice",
     --"oasislake",
     --"shadowcreature",
-    "lureplant",
-    "spiderden",
+    --"lureplant",
+    --"spiderden",
     "stafflights",
     "armor_ruins",
     "sweatervest",
@@ -263,7 +264,7 @@ local prefab_post = {
     "cursed_monkey_token",
     "slurtle_shellpieces",
     "fused_shadeling",
-    "eyeturret",
+    "eyeturret"
 }
 
 local stategraph_post = {
@@ -285,7 +286,6 @@ local stategraph_post = {
     "bigshadowtentacle",
     "worm",
     "slurtle",
-    "lavae",
     "monkey"
 }
 
@@ -319,6 +319,7 @@ local brain_post = {
     "hound",
     "brightmare_gestalt",
     "beefalo",
+    "dragonfly"
 }
 
 --package post system courtesy of IA team!
@@ -422,7 +423,6 @@ end
 if GetModConfigData("rework_minotaur") then
     table.insert(stategraph_post, "minotaur")
     table.insert(prefab_post, "minotaur")
-    table.insert(prefab_post, "pillar_ruins")
 end
 
 if GetModConfigData("harder_lavae") then

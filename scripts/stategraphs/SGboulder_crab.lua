@@ -161,7 +161,11 @@ local states =
         
         events =
         {
-            EventHandler("animover", function(inst) inst.sg:GoToState("moving") end),
+            EventHandler("animover", function(inst)
+                if inst.AnimState:AnimDone() then
+                    inst.sg:GoToState("moving")
+                end
+            end),
         },
     },
     State{
@@ -184,16 +188,14 @@ local states =
         events =
         {
             EventHandler("animover", function(inst)
-                if inst.myrock then
-                    if inst.components.combat and inst.components.combat.target and inst:GetDistanceSqToInst(inst.components.combat.target) < 6^2 and not inst.uppercooldown and inst.myrock then
+                if inst.AnimState:AnimDone() then
+                    if inst.myrock and not inst.uppercooldown and inst.components.combat and inst.components.combat.target and inst:GetDistanceSqToInst(inst.components.combat.target) < 6^2 then
                         inst.uppercooldown = true
-                        inst:DoTaskInTime(math.random(8,10),function(inst) inst.uppercooldown = nil end)
-                        inst.sg:GoToState("uppercut")
+                        inst:DoTaskInTime(math.random(8,10), function(inst) inst.uppercooldown = nil end)
+                        inst.sg:GoToState("uppercut", inst.components.combat.target)
                     else
-                        inst.sg:GoToState("moving") 
+                        inst.sg:GoToState("moving")
                     end
-                else
-                    inst.sg:GoToState("moving") 
                 end
             end),
         },
@@ -214,18 +216,23 @@ local states =
     },
     State{
         name = "uppercut",
-        tags = {"moving", "canrotate", "attack"},
+        tags = {"attack", "busy", "moving", "uppercutting"},
 
         onenter = function(inst, target)
+            inst.components.locomotor:Stop()
+            inst.components.locomotor:Clear()
+            inst:ClearBufferedAction()
             inst.components.combat:StartAttack()
             inst.components.locomotor:RunForward()
-            inst.AnimState:PushAnimation("uppercut")
+            inst.AnimState:PlayAnimation("uppercut")
             inst:ListenForEvent("onhitother", KnockOutWeapon)
             inst.sg.statemem.target = target
         end,
 
         onupdate = function(inst)
-            inst.components.locomotor:RunForward()
+            if inst.sg.statemem.target and inst.sg.statemem.target:IsValid() then
+                inst:ForceFacePoint(inst.sg.statemem.target:GetPosition())
+            end
         end,
 
         timeline =
@@ -247,13 +254,16 @@ local states =
         },
 
         onexit = function(inst)
-            inst.Physics:Stop()
             inst:RemoveEventCallback("onhitother", KnockOutWeapon)
         end,
 
         events =
         {
-            EventHandler("animover", function(inst) inst.sg:GoToState("taunt") end),
+            EventHandler("animover", function(inst)
+                if inst.AnimState:AnimDone() then
+                    inst.sg:GoToState("taunt")
+                end
+            end),
         },
     },
     State{
@@ -267,7 +277,11 @@ local states =
 
         events =
         {
-            EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
+            EventHandler("animover", function(inst)
+                if inst.AnimState:AnimDone() then
+                    inst.sg:GoToState("idle")
+                end
+            end),
         },
     },
     State{
@@ -287,7 +301,9 @@ local states =
         events =
         {
             EventHandler("animover", function(inst)
-                inst.sg:GoToState("idle")
+                if inst.AnimState:AnimDone() then
+                    inst.sg:GoToState("idle")
+                end
             end),
         },
     },
@@ -310,7 +326,11 @@ local states =
 
         events =
         {
-            EventHandler("animover", function(inst) inst.sg:GoToState("hide") end),
+            EventHandler("animover", function(inst)
+                if inst.AnimState:AnimDone() then
+                    inst.sg:GoToState("hide")
+                end
+            end),
         },
     },
     State{
@@ -362,11 +382,13 @@ local states =
 
         events =
         {
-            EventHandler("animover", function(inst) 
-                if inst.components.combat and inst.components.combat.target and inst:GetDistanceSqToInst(inst.components.combat.target) < 5^2 then
-                    inst.sg:GoToState("attack")
-                else
-                    inst.sg:GoToState("idle")
+            EventHandler("animover", function(inst)
+                if inst.AnimState:AnimDone() then
+                    if inst.components.combat and inst.components.combat.target and inst:GetDistanceSqToInst(inst.components.combat.target) < 5^2 then
+                        inst.sg:GoToState("attack", inst.components.combat.target)
+                    else
+                        inst.sg:GoToState("idle")
+                    end
                 end
             end),
         },
@@ -390,7 +412,11 @@ local states =
 
         events =
         {
-            EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
+            EventHandler("animover", function(inst)
+                if inst.AnimState:AnimDone() then
+                    inst.sg:GoToState("idle")
+                end
+            end),
         },
     },
     State{
@@ -406,8 +432,10 @@ local states =
         events =
         {
             EventHandler("animover", function(inst)
-                inst:PerformBufferedAction()
-                inst.sg:GoToState("idle")
+                if inst.AnimState:AnimDone() then
+                    inst:PerformBufferedAction()
+                    inst.sg:GoToState("idle")
+                end
             end),
         },
     },
@@ -435,12 +463,14 @@ local states =
         events =
         {
             EventHandler("animover", function(inst)
-                if not inst.uppercooldown and inst.components.combat and inst.components.combat.target and inst:GetDistanceSqToInst(inst.components.combat.target) < 6^2 then
-                    inst.uppercooldown = true
-                    inst:DoTaskInTime(math.random(8,10),function(inst) inst.uppercooldown = nil end)
-                    inst.sg:GoToState("uppercut", inst.sg.statemem.target)
-                else
-                    inst.sg:GoToState("idle")
+                if inst.AnimState:AnimDone() then
+                    if not inst.uppercooldown and inst.components.combat and inst.components.combat.target and inst:GetDistanceSqToInst(inst.components.combat.target) < 6^2 then
+                        inst.uppercooldown = true
+                        inst:DoTaskInTime(math.random(8,10), function(inst) inst.uppercooldown = nil end)
+                        inst.sg:GoToState("uppercut", inst.sg.statemem.target)
+                    else
+                        inst.sg:GoToState("idle")
+                    end
                 end
             end),
         },
@@ -456,7 +486,11 @@ local states =
 
         events =
         {
-            EventHandler("animover", function(inst) inst.sg:GoToState("idle") end ),
+            EventHandler("animover", function(inst)
+                if inst.AnimState:AnimDone() then
+                    inst.sg:GoToState("idle")
+                end
+            end),
         },
     },
     State{
@@ -482,8 +516,10 @@ local states =
         events =
         {
             EventHandler("animover", function(inst)
-                inst.sg:AddStateTag("noattack")
-                inst.SpawnHole(inst)
+                if inst.AnimState:AnimDone() then
+                    inst.sg:AddStateTag("noattack")
+                    inst:SpawnHole()
+                end
             end),
         },
 
@@ -549,7 +585,11 @@ local states =
 
         events =
         {
-            EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
+            EventHandler("animover", function(inst)
+                if inst.AnimState:AnimDone() then
+                    inst.sg:GoToState("idle")
+                end
+            end),
         },
     },
 }

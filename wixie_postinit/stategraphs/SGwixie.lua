@@ -275,7 +275,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
         State {
             name = "slingshot_charge",
-            tags = {"abouttoattack", "notalking"},
+            tags = {"abouttoattack", "notalking", "canrotate"},
 
             onenter = function(inst)
                 inst.sg.slingshot_charge = true

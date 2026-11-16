@@ -335,20 +335,8 @@ for i, werepig in pairs(werepigs) do
             attackstate.onenter = function(inst, ...)
                 local ret = attackstate_onenter(inst, ...)
                 inst.sg.statemem.speedmult = inst.sg.statemem.speedmult * 2.5
-                inst.Physics:SetMotorVelOverride(3 * inst.sg.statemem.speedmult, 0 ,0)
+                inst.Physics:SetMotorVelOverride(3 * inst.sg.statemem.speedmult, 0, 0)
                 return ret
-            end
-        end
-
-        if werepig == "werepig" then
-            local hitstate = inst.states["hit"]
-            if hitstate then
-                local hitstate_onenter = hitstate.onenter
-                hitstate.onenter = function(inst, ...)
-                    local ret = hitstate_onenter(inst, ...)
-                    CommonHandlers.UpdateHitRecoveryDelay(inst) -- This is missing from the original stategraph and is the reason Werepigs get stunlocked.
-                    return ret
-                end
             end
         end
 

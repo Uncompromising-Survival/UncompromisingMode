@@ -140,7 +140,7 @@ env.AddStategraphPostInit("wilson_client", function(inst)
 
         State{
             name = "slingshot_charge",
-            tags = {"abouttoattack", "busy"},
+            tags = {"abouttoattack", "busy", "canrotate"},
 
             onenter = function(inst)
                 inst.entity:SetIsPredictingMovement(false)

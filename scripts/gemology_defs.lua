@@ -372,7 +372,7 @@ local arc_canttarget = { "player", "playerghost", "arcgrounded", "wall", "INLIMB
 
 local function ForceElectrocute(target, attacker)
     if target and target:IsValid() and target.components.health and not target.components.health:IsDead() then
-        target:PushEventImmediate("electrocute", { attacker = attacker, stimuli = "electric", numforks = 0, noresist = true, })
+        target:PushEventImmediate("electrocute", {attacker = attacker, stimuli = "electric", numforks = 0})
     end
 end
 

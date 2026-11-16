@@ -303,7 +303,7 @@ end
 local function OnDestroyOther(inst, other)
     if CanDoWorkOnOther(other) and not inst.recentlycharged[other] then
         SpawnPrefab("collapse_small").Transform:SetPosition(other.Transform:GetWorldPosition())
-        if other.components.lootdropper then
+        if other.components.lootdropper and other:HasAnyTag("tree", "boulder") then
             other.components.lootdropper:SetLoot({})
         end
         other.components.workable:Destroy(inst)

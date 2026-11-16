@@ -15,9 +15,9 @@ local function noentcheckfn(pt)
     return not TheWorld.Map:IsPointNearHole(pt) and #TheSim:FindEntities(pt.x, pt.y, pt.z, 1, nil, NOTENTCHECK_CANT_TAGS) == 0
 end
 
-local function ToggleUniqueVetCurse(inst, toggle)
+--[[local function ToggleUniqueVetCurse(inst, toggle)
     inst.vetcurse_shadowdeath = toggle
-end
+end]]
 
 env.AddPrefabPostInit("wanda", function(inst)
     if not TheWorld.ismastersim then return end
@@ -39,7 +39,7 @@ env.AddPrefabPostInit("wanda", function(inst)
         if damagetyperesist then damagetyperesist:AddResist("shadow_aligned", inst, 1.25, "runningfromshadows") end
     end
 
-    inst.UMToggleUniqueVetCurse = ToggleUniqueVetCurse
+    --inst.UMToggleUniqueVetCurse = ToggleUniqueVetCurse
 end)
 
 if UM_CONFIG.WANDA_NERF then

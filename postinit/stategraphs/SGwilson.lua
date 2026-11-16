@@ -376,8 +376,8 @@ env.AddStategraphPostInit("wilson", function(inst)
         return _OldBuild(inst, action, ...)
     end
     -- Pick
-    local _OldPick                                           = inst.actionhandlers[ACTIONS.PICK].deststate
-    inst.actionhandlers[ACTIONS.PICK].deststate              = function(inst, action, ...)
+    local _OldPick = inst.actionhandlers[ACTIONS.PICK].deststate
+    inst.actionhandlers[ACTIONS.PICK].deststate = function(inst, action, ...)
         local funcap = FindBlueFuncap(inst)
         if funcap and funcap.charge > 0 then
             inst.temp_speed_mod = (action.target and action.target:HasTag("noquickpick") and 1) or -- Get Speed Mod
