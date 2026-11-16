@@ -486,7 +486,6 @@ if env.GetModConfigData("telestaff_rework") then
         local _OnPreLoad = inst.OnPreLoad
         inst.OnPreLoad = function(inst, data, ...)
             _OnPreLoad(inst, data, ...)
-            printwrap("data HERE", data)
             if data then
                 if data.gem and data.gem == "purplegem" then
                     inst.__spellbookenabled:set(true)
