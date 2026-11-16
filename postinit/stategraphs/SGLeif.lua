@@ -4,22 +4,27 @@ GLOBAL.setfenv(1, GLOBAL)
 env.AddStategraphPostInit("leif", function(inst)
     local events =
     {
-        EventHandler("snare", function(inst, target)
+        EventHandler("um_snare", function(inst, target)
             if not inst.components.health:IsDead() then
                 if inst.sg:HasStateTag("hit") and not inst.sg:HasStateTag("electrocute") or not inst.sg:HasStateTag("busy") then
-                    inst.sg:GoToState("snare", target)
+                    inst.sg:GoToState("um_snare", target)
                 else
                     inst.components.timer:StartTimer("snare_cd", TUNING.STALKER_ABILITY_RETRY_CD)
                 end
             end
         end),
-        --EventHandler("bosshide", function(inst) inst.sg:GoToState("hide") end),
+        EventHandler("um_hide", function(inst)
+            if not inst.components.health:IsDead()
+                and (inst.sg:HasStateTag("hit") and not inst.sg:HasStateTag("electrocute") or not inst.sg:HasStateTag("busy")) then
+                inst.sg:GoToState("um_hide")
+            end
+        end),
     }
 
     local states = {
         State{
-            name = "snare",
-            tags = {"attack", "busy", "snare"},
+            name = "um_snare",
+            tags = {"attack", "busy", "um_snare"},
 
             onenter = function(inst, target)
                 inst.components.locomotor:Stop()
@@ -56,30 +61,22 @@ env.AddStategraphPostInit("leif", function(inst)
             },
         },
 
-        --[[State{
-            name = "hide",
-            tags = {"hiding", "sleeping", "busy"},
+        State{
+            name = "um_hide",
+            tags = {"um_hiding", "busy", "nosleep", "nofreeze", "noelectrocute"},
 
             onenter = function(inst)
-                inst:AddTag("notarget")
+                inst.sg.statemem.um_scale = 1
                 inst.Physics:Stop()
                 inst.AnimState:PlayAnimation("transform_tree", false)
                 inst.SoundEmitter:PlaySound("dontstarve/creatures/leif/transform_VO")
-                inst.sg:SetTimeout(10)
             end,
 
-            events =
-            {
-                EventHandler("attacked", function(inst) if not inst.components.health:IsDead() then inst.sg:GoToState("wake") end end),
-            },
-
-            onexit = function(inst)
-                inst:RemoveTag("notarget")
-            end,
-
-            ontimeout = function(inst)
-                inst:RemoveTag("notarget")
-                inst.sg:GoToState("wake")
+            onupdate = function(inst)
+                if inst.sg.statemem.um_scale > .8 then
+                    inst.sg.statemem.um_scale = inst.sg.statemem.um_scale - .01
+                    inst.AnimState:SetScale(inst.sg.statemem.um_scale, inst.sg.statemem.um_scale)
+                end
             end,
 
             timeline =
@@ -87,7 +84,21 @@ env.AddStategraphPostInit("leif", function(inst)
                 TimeEvent(10 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/leif/foley") end),
                 TimeEvent(25 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/leif/foley") end),
             },
-        },]]
+
+            events =
+            {
+                EventHandler("animover", function(inst)
+                    if inst.AnimState:AnimDone() then
+                        local scale = inst._scale or 1
+                        ReplacePrefab(inst, "evergreen"..string.gsub(inst.prefab, "leif", "")..(scale >= 1.25 and "_tall" or scale >= 1 and "_normal" or scale <= .7 and "_short"))
+                    end
+                end),
+            },
+
+            onexit = function(inst)
+                inst.AnimState:SetScale(1, 1)
+            end,
+        },
     }
 
     for k, v in pairs(events) do

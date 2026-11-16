@@ -340,18 +340,6 @@ for i, werepig in pairs(werepigs) do
             end
         end
 
-        if werepig == "werepig" then
-            local hitstate = inst.states["hit"]
-            if hitstate then
-                local hitstate_onenter = hitstate.onenter
-                hitstate.onenter = function(inst, ...)
-                    local ret = hitstate_onenter(inst, ...)
-                    CommonHandlers.UpdateHitRecoveryDelay(inst) -- This is missing from the original stategraph and is the reason Werepigs get stunlocked.
-                    return ret
-                end
-            end
-        end
-
         --If the werepig is waiting to run away, then manages to reach you, causing him to stand still, stop the dotaskintime that tells the werepig to not run away
         --local idlestate = inst.states["idle"]
         --if idlestate then

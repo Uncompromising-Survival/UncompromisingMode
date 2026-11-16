@@ -363,7 +363,7 @@ local characters = {
             Item("bagofmarbles"),
             Item("bagofmarbles", 3, .5),
             Item(RandomItem("um_blowdart_pyre", "um_blowdart_rime"), 3, .5),
-            Item(RandomItem("slingshotammo_honey", "slingshotammo_goop"), 20, .75),
+            Item(RandomItem("um_slingshotammo_honey", "slingshotammo_goop"), 20, .75),
             Item("nitre", 3),
             Item("nitre", 5, .5),
             Item("mosquitosack", 2),

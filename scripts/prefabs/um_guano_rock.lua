@@ -110,7 +110,7 @@ local function RandomDetermineTier(inst)
 end
 
 local function UpgradeTier(inst, tier) --AXE do not call UpgradeTier(inst, 1), it will call an animation that does not exist.
-    inst.AnimState:PlayAnimation(tier_anims[tier].."_grow_1")
+    inst.AnimState:PlayAnimation(tier_anims[inst.tier].."_grow_1")
     inst.AnimState:PushAnimation(tier_anims[tier].."_grow_0", false)
     inst.tier = tier
     inst:ListenForEvent("animqueueover", SetTierAnimOver)

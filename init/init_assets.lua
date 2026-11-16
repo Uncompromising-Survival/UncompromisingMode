@@ -289,7 +289,7 @@ local inventoryitems =
     "slingshot_jessie_3",
     "slingshot_claire",
     "slingshotammo_firecrackers",
-    "slingshotammo_honey",
+    "um_slingshotammo_honey",
     "slingshotammo_rubber",
     "slingshotammo_tremor",
     "slingshotammo_moonrock",
@@ -1395,7 +1395,6 @@ Assets = {
     Asset("ANIM", "anim/tar_trap.zip"),
 
     Asset("ANIM", "anim/swap_minotaur_boulder.zip"),
-    Asset("ANIM", "anim/pillar_ruins_damaged.zip"),
 
     Asset("ANIM", "anim/rat_note.zip"),
 

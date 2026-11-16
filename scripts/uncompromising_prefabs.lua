@@ -637,10 +637,11 @@ local prefabs = {
     "um_blueprinting_kit",
     "minerstatue",
     "um_gem_repair_kit",
-    "um_magmastone"
+    "um_magmastone",
+    "um_shoveentity"
 }
 
-if TUNING.DSTU ~= nil and UM_CONFIG.WIXIE_WALTER ~= nil and UM_CONFIG.WIXIE_WALTER then
+if UM_CONFIG.WIXIE_WALTER then
     table.insert(prefabs, "placeholder_recipe_item")
 end
 

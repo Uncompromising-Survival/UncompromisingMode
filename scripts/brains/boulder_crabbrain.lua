@@ -106,15 +106,17 @@ function Boulder_crabBrain:OnStart()
         WhileNode(function() return (self.inst.myrock and self.inst.myrock:IsValid() and self.inst.myrock.components.workable) end, "Rockhard", ChaseAndAttack(self.inst, SpringCombatMod(TUNING.SPIDER_AGGRESSIVE_MAX_CHASE_TIME))),
     })
 
-    local root =
-        PriorityNode(
-        {
-            pre_nodes,
-            attack_nodes,
-            post_nodes,
+    local root = PriorityNode({
+            WhileNode(function() return not self.inst.sg:HasStateTag("uppercutting") end, "<busy state guard>",
+                PriorityNode(
+                {
+                    pre_nodes,
+                    attack_nodes,
+                    post_nodes,
 
-        }, 1)
-        
+                }, 1))
+        }, 0)
+
     self.bt = BT(self.inst, root)
 end
 

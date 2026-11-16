@@ -71,7 +71,6 @@ local function OnEquip(inst, owner)
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
     SetFxOwner(inst, owner)
-
 end
 
 local function OnUnequip(inst, owner)
@@ -82,7 +81,6 @@ local function OnUnequip(inst, owner)
         owner:PushEvent("unequipskinneditem", inst:GetSkinName())
     end
     SetFxOwner(inst, nil)
-
 end
 
 local function HarvestPickable(inst, ent, doer)
@@ -102,10 +100,11 @@ local function HarvestPickable(inst, ent, doer)
         inst.components.finiteuses:Use(0.125)
     end
 
-   if ent.prefab == "hooded_fern" and inst.components.finiteuses ~= nil then
+    if ent.prefab == "hooded_fern" and inst.components.finiteuses ~= nil then
         inst.components.finiteuses:Use(0.1)
     end
-    if doer.components.temperature:GetCurrent() >= 4 and not TheWorld.state.iswinter then
+
+    if doer.components.temperature:GetCurrent() >= 4 then
         doer.components.temperature:DoDelta(-3)
     end
 end
@@ -122,14 +121,14 @@ local function OnScythed(inst, data)
 end
 
 local function IsEntityInFront(inst, entity, doer_rotation, doer_pos)
-    local facing = Vector3(math.cos(-doer_rotation / RADIANS), 0 , math.sin(-doer_rotation / RADIANS))
+    local facing = Vector3(math.cos(-doer_rotation / RADIANS), 0, math.sin(-doer_rotation / RADIANS))
 
     return IsWithinAngle(doer_pos, facing, TUNING.VOIDCLOTH_SCYTHE_HARVEST_ANGLE_WIDTH, entity:GetPosition())
 end
 
-local HARVEST_MUSTTAGS  = {"pickable"}
-local HARVEST_CANTTAGS  = {"INLIMBO", "FX"}
-local HARVEST_ONEOFTAGS = {"plant", "lichen", "oceanvine", "kelp"}
+local HARVEST_MUSTTAGS  = { "pickable" }
+local HARVEST_CANTTAGS  = { "INLIMBO", "FX" }
+local HARVEST_ONEOFTAGS = { "plant", "lichen", "oceanvine", "kelp" }
 
 local function DoScythe(inst, target, doer)
     --[[if target.components.pickable ~= nil then
@@ -189,7 +188,7 @@ local function onattack_blue(inst, attacker, target)
         attacker.components.temperature:DoDelta(-3)
     end
 
-    OnScythed(inst, {doer = attacker})
+    OnScythed(inst, { doer = attacker })
 end
 
 local function SetupComponents(inst)
@@ -198,7 +197,7 @@ local function SetupComponents(inst)
     inst.components.equippable:SetOnUnequip(OnUnequip)
 
     inst:AddComponent("weapon")
-    inst.components.weapon:SetDamage(TUNING.SPEAR_DAMAGE*1.3)--44.2
+    inst.components.weapon:SetDamage(TUNING.SPEAR_DAMAGE * 1.3) --44.2
     inst.components.weapon:SetOnAttack(onattack_blue)
 
     inst:AddComponent("tool")
@@ -304,8 +303,8 @@ local function ScytheFn()
     inst:AddComponent("inventoryitem")
 
     local finiteuses = inst:AddComponent("finiteuses")
-    finiteuses:SetMaxUses(50*TUNING.GOLDENTOOLFACTOR)
-    finiteuses:SetUses(50*TUNING.GOLDENTOOLFACTOR)
+    finiteuses:SetMaxUses(50 * TUNING.GOLDENTOOLFACTOR)
+    finiteuses:SetUses(50 * TUNING.GOLDENTOOLFACTOR)
     finiteuses:SetConsumption(ACTIONS.SCYTHE, 0.5)
     finiteuses:SetConsumption(ACTIONS.ATTACK, 1)
     finiteuses:SetOnFinished(inst.Remove)

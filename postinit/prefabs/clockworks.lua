@@ -119,7 +119,7 @@ end
 
 env.AddAction(HEALCHESS)
 
-env.AddComponentAction("USEITEM", "inventoryitem", function(inst, doer, target, actions, right)	
+env.AddComponentAction("USEITEM", "inventoryitem", function(inst, doer, target, actions, right)
     if target ~= nil
         and IsRepairItemValid(inst)
 		and target:HasTag("chessfriend") then
@@ -134,8 +134,6 @@ end)
 
 env.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.HEALCHESS, "doshortaction"))
 env.AddStategraphActionHandler("wilson_client", ActionHandler(ACTIONS.HEALCHESS, "doshortaction"))
-
-env.AddComponentAction("SCENE", "inspectable", function() end)
 
 for i, v in ipairs(clockworks) do
 	env.AddPrefabPostInit(v, function(inst)
