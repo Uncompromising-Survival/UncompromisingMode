@@ -60,6 +60,7 @@ local function UpdateRepel(inst)
 end
 
 local function RemoveConstrains(inst)
+    inst.Physics:SetActive(false)
     if inst.um_child and inst.um_child:IsValid() then
         inst.um_child.Physics:ConstrainTo(nil)
         inst.um_child.Physics:SetDontRemoveOnSleep(false)
