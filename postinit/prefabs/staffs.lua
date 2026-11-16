@@ -237,7 +237,6 @@ if env.GetModConfigData("telestaff_rework") then
             return
         end
 
-
         local isplayer = teleportee:HasTag("player")
         if isplayer then
             teleportee.sg:GoToState("forcetele")
@@ -290,7 +289,6 @@ if env.GetModConfigData("telestaff_rework") then
 
     local function validteleporttarget(inst) return inst:canteleto() end
 
-
     function FindNearestActiveTelebase(x, y, z, range, minrange)
         range = (range == nil and math.huge) or (range > 0 and range * range) or 0
         minrange = math.min(range, minrange ~= nil and minrange > 0 and minrange * minrange or 0)
@@ -342,7 +340,6 @@ if env.GetModConfigData("telestaff_rework") then
                 inst.components.spellbook.items = GetAllValidSpells(inst)
             end
         }
-
 
         if #GetAllActiveTelebases() < 2 then -- only show
             return spells
@@ -467,11 +464,9 @@ if env.GetModConfigData("telestaff_rework") then
         end
     end)
 
-
     local function GetGemId(gemtype)
         return string.sub(gemtype, 0, -4)
     end
-
 
     env.AddPrefabPostInit("king_cane", function(inst)
         inst.__spellbookenabled = net_bool(inst.GUID, "king_cane.spellbook_enabled", "king_cane.spellbook_enableddirty")
@@ -525,7 +520,6 @@ if env.GetModConfigData("telestaff_rework") then
         end
     end)
 
-
     local function teleport_target(inst)
         -- nothing!!!
     end
@@ -554,7 +548,20 @@ if env.GetModConfigData("telestaff_rework") then
         ["Frogs and bugs"] = "Grasslands",
         ["GiantTrees"] = "Hooded Forest"
     }
-    local locations2 = { ["veteranshrine"] = "Veteran's Shrine", ["START"] = "Spawn", ["GiantTrees"] = "Hooded Forest", ["MoonIsland_Mine"] = "Lunar Island", ["MoonIsland_Beach"] = "Lunar Island", ["MoonIsland_Baths"] = "Lunar Island", ["MoonIsland_Forest"] = "Lunar Island", ["DeepDeciduous"] = "Deciduous Forest", ["Killer bees!"] = "Killer Bee Field", ["LightningBluffOasis"] = "Oasis", ["Make a Beehat"] = "Grasslands", ["Mole Colony Rocks"] = "Rocky" }
+    local locations2 = {
+        ["veteranshrine"] = "Veteran's Shrine",
+        ["START"] = "Spawn",
+        ["GiantTrees"] = "Hooded Forest",
+        ["MoonIsland_Mine"] = "Lunar Island",
+        ["MoonIsland_Beach"] = "Lunar Island",
+        ["MoonIsland_Baths"] = "Lunar Island",
+        ["MoonIsland_Forest"] = "Lunar Island",
+        ["DeepDeciduous"] = "Deciduous Forest",
+        ["Killer bees!"] = "Killer Bee Field",
+        ["LightningBluffOasis"] = "Oasis",
+        ["Make a Beehat"] = "Grasslands",
+        ["Mole Colony Rocks"] = "Rocky"
+    }
 
     local function ParseAreaAwareData(inst)
         if inst.custom_location_name ~= nil and inst.custom_location_name:value() ~= "" then return inst.custom_location_name:value() end
@@ -607,8 +614,6 @@ if env.GetModConfigData("telestaff_rework") then
         end
 
         inst:DoTaskInTime(0, inst.update_location)
-
-
 
         inst.custom_location_name = net_string(inst.GUID, "custom_location_name")
 
