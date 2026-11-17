@@ -197,33 +197,31 @@ local function ToggleHookSanityDoDelta(doer, item, oldfn) -- DoDelta doesn't pas
     end
 end
 
+local function DoHookSanityDoDelta(doer, ret, self, ...)
+    local _DoDelta = ToggleHookSanityDoDelta(doer, self.inst)
+    local _ret = ret(self, ...)
+    ToggleHookSanityDoDelta(doer, self.inst, _DoDelta)
+    return _ret
+end
+
 env.AddComponentPostInit("weapon", function(self)
     local _OnAttack = self.OnAttack
     function self:OnAttack(attacker, target, projectile, ...)
-        local _DoDelta = ToggleHookSanityDoDelta(attacker, self.inst)
-        local ret = _OnAttack(self, attacker, target, projectile, ...)
-        ToggleHookSanityDoDelta(attacker, self.inst, _DoDelta)
-        return ret
+        return DoHookSanityDoDelta(attacker, _OnAttack, self, attacker, target, projectile, ...)
     end
 end)
 
 env.AddComponentPostInit("spellcaster", function(self)
     local _CastSpell = self.CastSpell
     function self:CastSpell(target, pos, doer, ...)
-        local _DoDelta = ToggleHookSanityDoDelta(doer, self.inst)
-        local ret = _CastSpell(self, target, pos, doer, ...)
-        ToggleHookSanityDoDelta(doer, self.inst, _DoDelta)
-        return ret
+        return DoHookSanityDoDelta(doer, _CastSpell, self, target, pos, doer, ...)
     end
 end)
 
 env.AddComponentPostInit("blinkstaff", function(self)
     local _Blink = self.Blink
     function self:Blink(pt, caster, ...)
-        local _DoDelta = ToggleHookSanityDoDelta(caster, self.inst)
-        local ret = _Blink(self, pt, caster, ...)
-        ToggleHookSanityDoDelta(caster, self.inst, _DoDelta)
-        return ret
+        return DoHookSanityDoDelta(caster, _Blink, self, pt, caster, ...)
     end
 end)
 
@@ -231,11 +229,7 @@ env.AddComponentPostInit("armor", function(self)
     local _TakeDamage = self.TakeDamage
     function self:TakeDamage(damage_amount, ...)
         local inventoryitem = self.inst.components.inventoryitem
-        local owner = inventoryitem and inventoryitem:GetGrandOwner()
-        local _DoDelta = ToggleHookSanityDoDelta(owner, self.inst)
-        local ret = _TakeDamage(self, damage_amount, ...)
-        ToggleHookSanityDoDelta(owner, self.inst, _DoDelta)
-        return ret
+        return DoHookSanityDoDelta(inventoryitem and inventoryitem:GetGrandOwner(), _TakeDamage, self, damage_amount, ...)
     end
 end)
 

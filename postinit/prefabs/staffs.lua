@@ -260,18 +260,20 @@ if env.GetModConfigData("telestaff_rework") then
             end
         end
 
-        if caster ~= nil then
+        local iscasterteleportee = caster and teleportee and caster == teleportee
+        if caster then
+            local amount = (teleportee:HasTag("_inventoryitem") and -TUNING.SANITY_HUGE / 4 or -TUNING.SANITY_HUGE / 2) * (iscasterteleportee and 2 or 1)
             if caster.components.staffsanity then
-                caster.components.staffsanity:DoCastingDelta(teleportee:HasTag("_inventoryitem") and -TUNING.SANITY_HUGE * 0.25 or -TUNING.SANITY_HUGE * 0.5)
-            elseif caster.components.sanity ~= nil then
-                caster.components.sanity:DoDelta(teleportee:HasTag("_inventoryitem") and -TUNING.SANITY_HUGE * 0.25 or -TUNING.SANITY_HUGE * 0.5)
+                caster.components.staffsanity:DoCastingDelta(amount)
+            elseif caster.components.sanity then
+                caster.components.sanity:DoDelta(amount)
             end
         end
 
-        if teleportee ~= nil then
+        if teleportee and not iscasterteleportee then
             if teleportee.components.staffsanity then
                 teleportee.components.staffsanity:DoCastingDelta(-TUNING.SANITY_HUGE / 2)
-            elseif teleportee.components.sanity ~= nil then
+            elseif teleportee.components.sanity then
                 teleportee.components.sanity:DoDelta(-TUNING.SANITY_HUGE / 2)
             end
         end
@@ -417,7 +419,7 @@ if env.GetModConfigData("telestaff_rework") then
         inst.components.spellcaster:SetSpellFn(teleport_func)
         inst.components.spellcaster.canonlyuseonlocomotorspvp = nil
         inst.components.spellcaster.can_cast_fn = function(doer, target, pos)
-            if (target:HasTag("heavy") or target:HasTag("_inventoryitem") or target.components.locomotor ~= nil) and target.Physics then return true end
+            if (target:HasAnyTag("heavy", "_inventoryitem") or target.components.locomotor) and target.Physics then return true end
             return nil
         end
         local _OnEquip = inst.components.equippable.onequipfn
