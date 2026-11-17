@@ -32,7 +32,6 @@ env.AddSimPostInit(function()
     end
 end)
 
-
 env.AddPrefabPostInit("tophat", function(inst)
     if not TheWorld.ismastersim then return end
     TophatPostinit(inst)
@@ -181,7 +180,7 @@ local function ShouldDoTophatHook(doer, item)
 end
 
 local function ToggleHookSanityDoDelta(doer, item, oldfn) -- DoDelta doesn't pass reasons to check against for what we want to do, so I'm doing this for now.
-    local sanity =  doer and doer:IsValid() and ShouldDoTophatHook(doer, item) and doer.components.sanity
+    local sanity = doer and doer:IsValid() and ShouldDoTophatHook(doer, item) and doer.components.sanity
     if sanity then
         if oldfn then
             sanity.DoDelta = oldfn
