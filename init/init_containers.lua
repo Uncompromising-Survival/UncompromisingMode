@@ -70,7 +70,7 @@ local wardrobe_noprefabs = {
 
 function CheckWardrobeItem(container, item, slot)
     -- Discard these, do not let them in even if they match the tags
-    if item:HasOneOfTags(wardrobe_notags) then
+    if item:HasAnyTag(wardrobe_notags) then
         return false
     end
 
@@ -81,7 +81,7 @@ function CheckWardrobeItem(container, item, slot)
     end
 
     -- Allow these
-    if item:HasOneOfTags(wardrobe_tags) then
+    if item:HasAnyTag(wardrobe_tags) then
         return true
     end
 
@@ -99,7 +99,7 @@ function CheckWardrobeItem(container, item, slot)
 end
 
 function CheckToolboxItem(container, item, slot)
-    return item:HasTag("toolbox_item") or item:HasTag("gem") or (GetModConfigData("toolbox_tools") and item:HasTag("tool")) or item:HasTag("portableitem") or item:HasTag("NIGHTMARE_fuel")
+    return item:HasAnyTag("toolbox_item", "gem", "portableitem", "NIGHTMARE_fuel") or (GetModConfigData("toolbox_tools") and item:HasTag("tool"))
 end
 
 function CheckEquipItem(container, item, slot)
@@ -110,8 +110,10 @@ function CheckBee(container, item, slot)
     return item:HasTag("bee")
 end
 
+local nettlelist = {"firenettles", "firenettles_dried", "pepper", "spice_chili", "um_rimeweed_itemvine", "um_rimeweed_itemflower", "um_ghost_pepper_item", "um_ghost_fajita"}
+
 function CheckNettle(container, item, slot)
-    return item.prefab == "firenettles" or item.prefab == "firenettles_dried" or item.prefab == "pepper" or item.prefab == "spice_chili" or item.prefab == "um_rimeweed_itemvine" or item.prefab == "um_rimeweed_itemflower" or item.prefab == "um_ghost_pepper_item" or item.prefab == "um_ghost_fajita"
+    return table.contains(nettlelist, item.prefab)
 end
 
 function CheckGem(container, item, slot)
@@ -139,7 +141,7 @@ function CheckFeather(container, item, slot)
 end
 
 function CheckGemologyGem(container, item, slot)
-    return GEM_DEFS[item.prefab] ~= nil or item:HasTag("gemology_gem") or item:HasTag("gemology_geode") --checking defs in case someone adds some random thing as well.
+    return GEM_DEFS[item.prefab] ~= nil or item:HasAnyTag("gemology_gem", "gemology_geode") --checking defs in case someone adds some random thing as well.
 end
 
 function CheckNOTHING(container, item, slot)
