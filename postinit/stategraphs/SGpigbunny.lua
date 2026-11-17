@@ -338,6 +338,15 @@ for i, werepig in pairs(werepigs) do
                 inst.Physics:SetMotorVelOverride(3 * inst.sg.statemem.speedmult, 0, 0)
                 return ret
             end
+
+            local attackstate_onexit = attackstate.onexit
+            attackstate.onexit = function(inst, ...)
+                local ret = attackstate_onexit(inst, ...)
+                inst.attacked_run_cd = inst:DoTaskInTime(.1, function(_inst)
+                    _inst.attacked_run_cd = nil
+                end)
+                return ret
+            end
         end
 
         --If the werepig is waiting to run away, then manages to reach you, causing him to stand still, stop the dotaskintime that tells the werepig to not run away
