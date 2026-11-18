@@ -77,7 +77,6 @@ env.AddStategraphPostInit("catcoon", function(inst)
                 TimeEvent(0 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/catcoon/hiss_pre") end),
                 TimeEvent(19 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/catcoon/hiss") end)
             },
-            
         },
     }
 
