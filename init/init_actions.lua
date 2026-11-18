@@ -21,7 +21,6 @@ end)
 
 AddAction("INFEST", "INFEST", function(act)
     if not act.doer.infesting then act.doer.components.infester:Infest(act.target) end
-
     return true
 end)
 
@@ -56,7 +55,6 @@ local wingsuit = AddAction("WINGSUIT", "WINGSUIT", function(act)
     local act_pos = act:GetActionPoint()
     if staff and staff:HasTag("um_wingsuit") then
         act.doer:ForceFacePoint(act_pos.x, 0, act_pos.z)
-
         return true
     end
 end)
@@ -65,7 +63,6 @@ wingsuit.priority = HIGH_ACTION_PRIORITY
 wingsuit.rmb = true
 wingsuit.distance = 20
 wingsuit.mount_valid = false
-
 
 -- AXE Allow weapons with complexprojectile to override their toss range - the distance in which wilson will begin the toss action
 local _extra_toss_dist = GLOBAL.ACTIONS.TOSS.extra_arrive_dist
@@ -245,8 +242,8 @@ local USESPELLBOOK_strfn = GLOBAL.ACTIONS.USESPELLBOOK.strfn
 GLOBAL.ACTIONS.USESPELLBOOK.strfn = function(act, ...)
     local invobject = act.invobject
     return invobject and (invobject.prefab == "um_detonator" and "UM_DETONATE"
-            or invobject:HasTag("telestaff") and "TELESTAFF"
-            or invobject:HasTag("um_antlionstaff") and "UM_ANTLIONSTAFF")
+        or invobject:HasTag("telestaff") and "TELESTAFF"
+        or invobject:HasTag("um_antlionstaff") and "UM_ANTLIONSTAFF")
         or USESPELLBOOK_strfn(act, ...)
 end
 
