@@ -1850,7 +1850,12 @@ local function TimeForACheckUp(inst, dev)
             local players = TheSim:FindEntities(x, y, z, 40, {"player"}, {"playerghost"})
             for a, b in ipairs(players) do
                 local str = inst.burrowbonus > inst.foodscore and "BURROWS" or inst.foodscore > inst.burrowbonus and "FOOD" or nil
-                if str ~= nil then
+                
+                if inst.burrowbonus >= 60 and inst.foodscore >= 60 then
+                    b:DoTaskInTime(2 + math.random(), function(b)
+                        b.components.talker:Say(GetString(b, "ANNOUNCE_RATSNIFFER_FOOD", "LEVEL_1").."\n"..GetString(b, "ANNOUNCE_RATSNIFFER_BURROWS", "LEVEL_1"))
+                    end)
+                elseif str ~= nil then
                     b:DoTaskInTime(2 + math.random(), function(b)
                         b.components.talker:Say(GetString(b, "ANNOUNCE_RATSNIFFER_"..str, "LEVEL_1"))
                     end)
