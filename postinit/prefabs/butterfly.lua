@@ -93,8 +93,8 @@ if UM_CONFIG.BUTTERFLY_TWEAKS == "unique" then
         end
     end
 
-    local butterflies = {"butterfly", "um_buttery_fly", "moonbutterfly"}
-    for _, prefab in pairs(butterflies) do
+    local butterflies = {"butterfly", "moonbutterfly", "um_buttery_fly"}
+    for _, prefab in ipairs(butterflies) do
         env.AddPrefabPostInit(prefab, function(inst)
             inst:AddTag("um_slippery")
 
@@ -129,8 +129,8 @@ if UM_CONFIG.BUTTERFLY_TWEAKS == "unique" then
     end
     
     local flower_types = {"flower", "flower_evil", "um_buttercup"}
-    for i,v in ipairs(flower_types) do
-        env.AddPrefabPostInit(v, function(inst)
+    for _, flower in ipairs(flower_types) do
+        env.AddPrefabPostInit(flower, function(inst)
             if not TheWorld.ismastersim then return end
             inst:WatchWorldState("isday", ReEnableButterfly)
         end)

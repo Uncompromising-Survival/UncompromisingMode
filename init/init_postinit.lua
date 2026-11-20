@@ -188,7 +188,6 @@ local prefab_post = {
     --"grassgator",
     "alterguardian",
     "seasonal_shoals",
-    "petals",
     "lantern",
     "minerhat",
     "shark",
