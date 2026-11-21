@@ -1457,6 +1457,10 @@ Assets = {
     Asset("IMAGE", "images/tele_icon5.tex"),
     Asset("ATLAS", "images/tele_icon5b.xml"),
     Asset("IMAGE", "images/tele_icon5b.tex"),
+    Asset("ATLAS", "images/tele_icon6.xml"),
+    Asset("IMAGE", "images/tele_icon6.tex"),
+    Asset("ATLAS", "images/tele_icon6b.xml"),
+    Asset("IMAGE", "images/tele_icon6b.tex"),
 
     --OVERLAYS
     Asset("ATLAS", "images/UM_pollenover.xml"),
