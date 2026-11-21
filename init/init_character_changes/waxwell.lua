@@ -10,11 +10,11 @@ local TOWORK_CANT_TAGS = {"sludgestack"}
 local _DIG_TAGS = UMUpvalueHacker.GetUpvalue(ShadowWaxwellBrain.OnStart, "DIG_TAGS")
 local _TOWORK_CANT_TAGS = UMUpvalueHacker.GetUpvalue(ShadowWaxwellBrain.OnStart, "FindEntityToWorkAction", "TOWORK_CANT_TAGS")
 
-for i, TAG in pairs(DIG_TAGS) do
+for i, TAG in ipairs(DIG_TAGS) do
     table.insert(_DIG_TAGS, TAG)
 end
 
-for i, TAG in pairs(TOWORK_CANT_TAGS) do
+for i, TAG in ipairs(TOWORK_CANT_TAGS) do
     table.insert(_TOWORK_CANT_TAGS, TAG)
 end
 
@@ -30,7 +30,7 @@ if UM_CONFIG.WAXWELL then
 
     local function RemoveNode(self, brainnode)
         if not brainnode then return end
-        for id, node in pairs(self.bt.root.children) do
+        for id, node in ipairs(self.bt.root.children) do
             if node.hunterfn and node.hunterfn == brainnode then
                 table.remove(self.bt.root.children, id)
             end
@@ -42,15 +42,15 @@ if UM_CONFIG.WAXWELL then
         RemoveNode(self, _ShouldRunAway)
     end)
 
+    local pathcaps = {"ignorewalls", "allowocean"}
     local shadows = {"shadowdancer", "shadowworker", "shadowprotector"}
-    for _, prefab in pairs(shadows) do
+    for _, prefab in ipairs(shadows) do
         env.AddPrefabPostInit(prefab, function(inst)
             if not TheWorld.ismastersim then return end
             local locomotor = inst.components.locomotor
-            if locomotor and locomotor.pathcaps then
-                local pathcaps = {"allowocean", "ignorewalls"}
-                for _, pathcap in pairs(pathcaps) do
-                    locomotor.pathcaps[pathcap] = true
+            if locomotor then
+                for _, pathcap in ipairs(pathcaps) do
+                    locomotor:AdjustPathCaps(true, pathcap)
                 end
             end
         end)
@@ -448,7 +448,7 @@ if UM_CONFIG.WAXWELL then
     end
 
     local shadowgear = {"armor_sanity", "nightsword"}
-    for _, prefab in pairs(shadowgear) do
+    for _, prefab in ipairs(shadowgear) do
         env.AddPrefabPostInit(prefab, function(inst)
             ShadowGearClientFunctions(inst)
             if not TheWorld.ismastersim then return end
