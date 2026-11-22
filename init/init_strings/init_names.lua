@@ -136,6 +136,19 @@ NAMES.UM_RECORD_WINKY = "Funny Little Rat"
 NAMES.UM_RECORD_MOONMAW = "Like A Moth to a Flame"
 NAMES.UM_RECORD_TOT = "Twinsanity"
 
+STRINGS.SKIN_NAMES.ms_um_record_menu = "Uncompromising Music"
+STRINGS.SKIN_NAMES.ms_um_record_walter = "Follow Me, Woby!"
+STRINGS.SKIN_NAMES.ms_um_record_wixie = "The Delinquent"
+STRINGS.SKIN_NAMES.ms_um_record_shadow_wixie = "Obscuriores Sui"
+STRINGS.SKIN_NAMES.ms_um_record_hooded_widow = "Arachnophobia"
+STRINGS.SKIN_NAMES.ms_um_record_wathom = "Heart Attacked!"
+STRINGS.SKIN_NAMES.ms_um_record_stranger = "A Mysterious Stranger"
+STRINGS.SKIN_NAMES.ms_um_record_winky = "Funny Little Rat"
+STRINGS.SKIN_NAMES.ms_um_record_moonmaw = "Like A Moth to a Flame"
+STRINGS.SKIN_NAMES.ms_um_record_tot = "Twinsanity"
+
+STRINGS.SKIN_NAMES.ms_record_cfbeequeen = "Floral Flurry"
+
 NAMES.RATSKIN = "Diseased Fur"
 
 NAMES.PLAGUEMASK = "Plague Mask"

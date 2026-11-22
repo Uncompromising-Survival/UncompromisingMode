@@ -14,12 +14,12 @@ local function retargetfn(inst)
     local target = inst.components.combat.target
 
     local x, y, z = inst.Transform:GetWorldPosition()
-    local players = TheSim:FindEntities(x, y, z, 40, {"player"})
+    local players = TheSim:FindEntities(x, y, z, 40, { "player" })
     local rangesq = math.huge
     for i, v in ipairs(players) do
         local distsq = v:GetDistanceSqToPoint(x, y, z)
 
-        local clones = TheSim:FindEntities(x, y, z, 40, {"shadow_wixie"})
+        local clones = TheSim:FindEntities(x, y, z, 40, { "shadow_wixie" })
         for n, b in ipairs(clones) do
             if #clones == 1 or b ~= inst and (b.components.combat.target == nil or b.components.combat.target ~= v) then
                 if distsq < rangesq and inst.components.combat:CanTarget(v) and (target == nil) then
@@ -35,7 +35,7 @@ end
 local function KeepTargetFn(inst, target)
     local x, y, z = inst.Transform:GetWorldPosition()
 
-    local clones = TheSim:FindEntities(x, y, z, 40, {"shadow_wixie"})
+    local clones = TheSim:FindEntities(x, y, z, 40, { "shadow_wixie" })
     for n, b in ipairs(clones) do
         if b ~= inst and b.components.combat.target ~= nil and b.components.combat.target == target then
             return false
@@ -72,7 +72,7 @@ local function OnDamaged(inst, data)
     inst.SoundEmitter:PlaySound("UCSounds/shadow_wixie/appear")
 
     local x, y, z = inst.Transform:GetWorldPosition()
-    local clones = TheSim:FindEntities(x, y, z, 40, {"shadow_wixie_clone"})
+    local clones = TheSim:FindEntities(x, y, z, 40, { "shadow_wixie_clone" })
 
     for i, v in pairs(clones) do
         if v ~= nil and v:IsValid() then
@@ -100,7 +100,7 @@ local function PushMusic(inst, level)
         inst._playingmusic = false
     elseif ThePlayer:IsNear(inst, inst._playingmusic and 40 or 20) then
         inst._playingmusic = true
-        ThePlayer:PushEvent("playwixiemusic", {name = "wixie", level = level})
+        ThePlayer:PushEvent("playwixiemusic", { name = "wixie", level = level })
     elseif inst._playingmusic and not ThePlayer:IsNear(inst, 50) then
         inst._playingmusic = false
     end
@@ -189,7 +189,7 @@ local function fn()
     inst.components.locomotor.walkspeed = 8
     inst.components.locomotor.runspeed = 20
     inst.components.locomotor:SetTriggersCreep(false)
-    inst.components.locomotor.pathcaps = {ignorecreep = true}
+    inst.components.locomotor.pathcaps = { ignorecreep = true }
     inst.components.locomotor:SetSlowMultiplier(.6)
 
     inst:AddComponent("health")
@@ -209,17 +209,21 @@ local function fn()
     inst.components.combat:SetKeepTargetFunction(KeepTargetFn)
 
     inst:AddComponent("lootdropper")
-    inst.components.lootdropper:SetLoot({"nightmarefuel", "nightmarefuel", "nightmarefuel", "the_real_charles_t_horse", "um_record_shadow_wixie"})
+    inst.components.lootdropper:SetLoot({ "nightmarefuel", "nightmarefuel", "nightmarefuel", "the_real_charles_t_horse" })
+    --TODO: UNLOCK SHADOW WIXIE RECORD WHEN KILLING.
 
     inst:AddComponent("sanityaura")
     inst.components.sanityaura.penalty = TUNING.OLD_SHADOWWAXWELL_SANITY_PENALTY
 
     inst:ListenForEvent("attacked", OnAttacked)
     inst:ListenForEvent("healthdelta", OnDamaged)
-    inst:ListenForEvent("death", function()
+    inst:ListenForEvent("death", function(inst)
         if inst.physbox ~= nil then
             inst.physbox:Remove()
         end
+
+        local x, y, z = inst.Transform:GetWorldPosition()
+        UMUnlockSkinForNearbyPlayers(x, y, z, "ms_um_record_shadow_wixie")
     end)
 
     inst:ListenForEvent("removed", function()
@@ -228,7 +232,7 @@ local function fn()
         end
     end)
 
-    local brain = require"brains/shadow_wixie"
+    local brain = require "brains/shadow_wixie"
     inst:SetBrain(brain)
 
     inst:SetStateGraph("SGshadow_wixie")
@@ -243,7 +247,7 @@ local function fn()
         end
     end)
 
-    inst:WatchWorldState("cycles", function() 
+    inst:WatchWorldState("cycles", function()
         if not inst.components.health:IsDead() then
             local wixie_clock = TheSim:FindFirstEntityWithTag("wixie_clock")
             wixie_clock.canbeused = true
@@ -325,7 +329,7 @@ local function helperfn()
     inst.components.locomotor.walkspeed = 8
     inst.components.locomotor.runspeed = 20
     inst.components.locomotor:SetTriggersCreep(false)
-    inst.components.locomotor.pathcaps = {ignorecreep = true}
+    inst.components.locomotor.pathcaps = { ignorecreep = true }
     inst.components.locomotor:SetSlowMultiplier(.6)
 
     inst:AddComponent("health")
@@ -357,13 +361,13 @@ local function helperfn()
     inst:ListenForEvent("death", function()
         if inst.physbox ~= nil then
             inst.physbox:Remove()
-        end 
+        end
     end)
 
     inst:ListenForEvent("removed", function()
         if inst.physbox ~= nil then
             inst.physbox:Remove()
-        end 
+        end
     end)
 
     inst:DoTaskInTime(0, function()
@@ -406,7 +410,7 @@ local function OnHitLazy(inst, attacker, target)
         inst.caster.sg:GoToState("trickster")
 
         local x, y, z = inst.Transform:GetWorldPosition()
-        local clones = TheSim:FindEntities(x, y, z, 40, {"shadow_wixie_helper"})
+        local clones = TheSim:FindEntities(x, y, z, 40, { "shadow_wixie_helper" })
 
         for i, v in pairs(clones) do
             if v ~= nil and v ~= inst and v:IsValid() then
@@ -495,7 +499,7 @@ local function GenerateSpiralSpikes(inst)
     local spawnpoints = {}
     local source = inst
     local x, y, z = source.Transform:GetWorldPosition()
-    local spacing = 12--2.7
+    local spacing = 12 --2.7
     local radius = 15
     local deltaradius = .2
     local angle = 2 * PI * math.random()
@@ -595,7 +599,7 @@ local function shadowclone_fn()
         fxcircle.Transform:SetScale(1.4, 1.4, 1.4)
         fxcircle.entity:SetParent(inst.entity)
 
-        for i, v in ipairs(TheSim:FindEntities(x, y, z, 4, {"_combat", "player"}, {"playerghost"})) do
+        for i, v in ipairs(TheSim:FindEntities(x, y, z, 4, { "_combat", "player" }, { "playerghost" })) do
             if v:IsValid() and v.components.combat ~= nil and v.components.health ~= nil then
                 if not (v.components.health:IsDead() or v:HasTag("playerghost")) then
                     v.components.combat:GetAttacked(inst, 50, inst)
@@ -616,13 +620,13 @@ local function shadowclone_fn()
             inst.components.health:Kill()
         end
     end)
-    
-    inst:WatchWorldState("cycles", function() 
+
+    inst:WatchWorldState("cycles", function()
         if not inst.components.health:IsDead() then
             inst.components.health:Kill()
         end
     end)
-    
+
     inst:ListenForEvent("death", function(inst)
         local x, y, z = inst.Transform:GetWorldPosition()
 
@@ -654,7 +658,7 @@ local function SanityBurst(inst)
     burstring.Transform:SetPosition(x, 0, z)
     burstring.Transform:SetScale(1.8, 1.8, 1.8)
 
-    local players = FindPlayersInRange(x, y, z, radius, {"player"}, {"playerghost"})
+    local players = FindPlayersInRange(x, y, z, radius, { "player" }, { "playerghost" })
 
     local closeplayers = {}
     for i, v in ipairs(players) do
@@ -711,7 +715,7 @@ local function CollisionCheck(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
     local attacker = inst.components.projectile.owner or nil
 
-    for i, v in ipairs(TheSim:FindEntities(x, y, z, .9, {"_combat", "player"}, {"playerghost"})) do
+    for i, v in ipairs(TheSim:FindEntities(x, y, z, .9, { "_combat", "player" }, { "playerghost" })) do
         if v:IsValid() and v.components.combat ~= nil and v.components.health ~= nil then
             if not (v.components.health:IsDead() or v == attacker or v:HasTag("playerghost")) then
                 v.components.combat:GetAttacked(attacker, 50, inst)

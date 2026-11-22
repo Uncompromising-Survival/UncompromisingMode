@@ -108,14 +108,6 @@ if GLOBAL.NAUGHTY_VALUE["ballphin"] ~= nil then
     SetRecipeIngredientsForGameTypes("portableboat_item", RECIPE_GAME_TYPE.SW, { Ingredient("mosquitosack_yellow", 2), Ingredient("rope", 2) }) --TODO: replace sacks with shark fins.
     SetRecipeIngredientsForGameTypes("gasmask", RECIPE_GAME_TYPE.SW, { Ingredient("doydoyfeather", 10), Ingredient("red_cap", 2), Ingredient("pigskin", 2) })
 
-    SetRecipeIngredientsForGameTypes("um_record_menu", RECIPE_GAME_TYPE.SW, { Ingredient("dorsalfin", 2) })
-    SetRecipeIngredientsForGameTypes("um_record_wixie", RECIPE_GAME_TYPE.SW, { Ingredient("dorsalfin", 2) })
-    SetRecipeIngredientsForGameTypes("um_record_walter", RECIPE_GAME_TYPE.SW, { Ingredient("dorsalfin", 2) })
-    SetRecipeIngredientsForGameTypes("um_record_wathom", RECIPE_GAME_TYPE.SW, { Ingredient("dorsalfin", 2) })
-    SetRecipeIngredientsForGameTypes("um_record_winky", RECIPE_GAME_TYPE.SW, { Ingredient("dorsalfin", 2) })
-    SetRecipeIngredientsForGameTypes("um_record_hooded_widow", RECIPE_GAME_TYPE.SW, { Ingredient("dorsalfin", 2) })
-    SetRecipeIngredientsForGameTypes("um_record_stranger", RECIPE_GAME_TYPE.SW, { Ingredient("dorsalfin", 2) })
-
     SetRecipeIngredientsForGameTypes("brine_balm", RECIPE_GAME_TYPE.SW, { Ingredient("saltrock", 2), Ingredient("seaweed", 1) })
     SetRecipeIngredientsForGameTypes("winona_spotlight", RECIPE_GAME_TYPE.SW, { Ingredient("sewing_tape", 1), Ingredient("goldnugget", 2), Ingredient("bioluminescence", 1) })
     SetRecipeIngredientsForGameTypes("winona_spotlight_item", RECIPE_GAME_TYPE.SW, { Ingredient("sewing_tape", 1), Ingredient("goldnugget", 2), Ingredient("bioluminescence", 1) })

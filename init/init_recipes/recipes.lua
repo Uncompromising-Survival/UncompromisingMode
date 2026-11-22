@@ -597,27 +597,6 @@ end
 --AddRecipe2("pact_armor_sanity", { Ingredient("nightmarefuel", 2) }, TECH.LOST, { builder_tag = "codexmantrareader", sg_state = "pact_armor_craft", image = "armor_sanity.tex" }, { "CHARACTER", "ARMOUR" })
 --AddRecipe2("pact_sword_sanity", { Ingredient("nightmarefuel", 2) }, TECH.LOST, { builder_tag = "codexmantrareader", sg_state = "pact_sword_craft", image = "nightsword.tex" }, { "CHARACTER", "WEAPONS" })
 
-AddRecipe2("um_record_menu", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_menu.xml" }, { "DECOR" })
-AddRecipe2("um_record_wixie", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_wixie.xml" }, { "DECOR" })
-AddRecipe2("um_record_walter", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_walter.xml" }, { "DECOR" })
-AddRecipe2("um_record_wathom", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_wathom.xml" }, { "DECOR" })
-AddRecipe2("um_record_winky", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_winky.xml" }, { "DECOR" })
-AddRecipe2("um_record_hooded_widow", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_hooded_widow.xml" }, { "DECOR" })
-AddRecipe2("um_record_stranger", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_stranger.xml" }, { "DECOR" })
-AddRecipe2("um_record_tot", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_tot.xml" }, { "DECOR" })
-AddRecipe2("um_record_moonmaw", { Ingredient("batwing", 1), Ingredient("moonglass", 1) }, TECH.CELESTIAL_ONE, { station_tag = "celestial_station", atlas = "images/inventoryimages/um_record_moonmaw.xml" }, { "DECOR", "CRAFTING_STATION" })
-
-ChangeSortKey("um_record_menu", "record", "DECOR", true)
-ChangeSortKey("um_record_winky", "um_record_menu", "DECOR", true)
-ChangeSortKey("um_record_wathom", "um_record_winky", "DECOR", true)
-ChangeSortKey("um_record_wixie", "um_record_wathom", "DECOR", true)
-ChangeSortKey("um_record_walter", "um_record_wixie", "DECOR", true)
-ChangeSortKey("um_record_stranger", "um_record_walter", "DECOR", true)
-ChangeSortKey("um_record_hooded_widow", "um_record_stranger", "DECOR", true)
-ChangeSortKey("um_record_tot", "um_record_hooded_widow", "DECOR", true)
-ChangeSortKey("um_record_moonmaw", "um_record_tot", "DECOR", true)
-ChangeSortKey("um_record_moonmaw", "um_backpack_amuletuse", "CRAFTING_STATION", true)
-
 AddRecipe2("um_astral_projector", { Ingredient("purplemooneye", 1), Ingredient("thulecite", 4), Ingredient("moonrocknugget", 4) }, TECH.LOST, {
     placer = "um_astral_projector_placer",
     testfn = function(pt, rot, builder)

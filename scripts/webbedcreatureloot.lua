@@ -302,7 +302,6 @@ local characters = {
             Item("brine_balm", 2, .2),
             Item(RandomItem("portabletent_item", "bedroll_furry"), nil, .3, true),
             Item(RandomItem("meatrack_hat", "walterhat", "bushhat"), nil, .5, true),
-            Item("um_record_walter", nil, .05)
         }
     },
     WANDA = {
@@ -341,7 +340,6 @@ local characters = {
             Item(RandomItem("cctrinket_don", "cctrinket_freddo"), nil, .2),
             Item(RandomItem("cctrinket_names", "trinket_jazzy"), nil, .2),
             Item("corncan", nil, .2),
-            Item("um_record_winky", nil, .05)
         }
     },
     WATHOM = {
@@ -355,7 +353,6 @@ local characters = {
             Item(RandomItem("ruins_bat", "hambat"), nil, .5, true),
             Item("thulecite"),
             Item("thulecite", 5, .3),
-            Item("um_record_wathom", nil, .05)
         }
     },
     WIXIE = {
@@ -372,7 +369,6 @@ local characters = {
             Item(RandomItem("sludge", "saltrock"), 4, .5),
             Item(RandomItem("moonrocknugget", "moonglass"), 6),
             Item("townportaltalisman", 3, .1),
-            Item("um_record_wixie", nil, .05)
         }
 
     },

@@ -313,7 +313,7 @@ local function PrepareTreeToShake(inst) -- Give a small delay
     inst.lasttrigger = inst.components.health:GetPercent()
 end
 
-local DIET = {FOODTYPE.MEAT, FOODTYPE.HORRIBLE}
+local DIET = { FOODTYPE.MEAT, FOODTYPE.HORRIBLE }
 
 local function fn()
     local inst = CreateEntity()
@@ -447,6 +447,11 @@ local function fn()
     freezable:SetResistance(TUNING.DRAGONFLY_FREEZE_THRESHOLD / 3)
     freezable.damagetobreak = TUNING.DRAGONFLY_FREEZE_RESIST / 3
     freezable.diminishingreturns = true
+
+    inst:ListenForEvent("death", function(inst)
+        local x,y,z = inst.Transform:GetWorldPosition()
+        UMUnlockSkinForNearbyPlayers(x,y,z, "ms_um_record_hooded_widow")
+    end)
 
     return inst
 end
