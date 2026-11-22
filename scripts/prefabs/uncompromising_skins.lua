@@ -80,7 +80,7 @@ table.insert(prefs, CreatePrefabSkin("ms_um_trans_bomb_moon",
 --records...
 local record_defs = {
     hooded_widow = "UMMusic/gramaphone_record/hoodedforest_efs",
-    menu = "UMMusic/music/uncomp_main_menu",
+    menu = "UMMusic/gramaphone_record/uncomp_main_menu",
     moonmaw = "UMMusic2/gramaphone_record/um_epicfight_moonmaw",
     shadow_wixie = "UMMusic/gramaphone_record/shadow_boxing",
     stranger = "UMMusic/gramaphone_record/tiddlestranger",
