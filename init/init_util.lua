@@ -115,21 +115,16 @@ function UMAddPathfindingWalls(inst, radius)
 end
 
 function UMUnlockSkinForNearbyPlayers(x, y, z, skin)
-    print("unlocking skin "..skin.." at "..x .." " .. y .. " " .. z)
     local sender_list = {}
 
     for k, v in pairs(AllPlayers) do
-        print("player ", v)
         if v:GetDistanceSqToPoint(x, y, z) <= PLAYER_CAMERA_SEE_DISTANCE_SQ then
-            print("inside range")
             table.insert(sender_list, v.userid)
         end
     end
 
     local UNLOCKMODDEDSKIN_RPC = CLIENT_MOD_RPC["ModdedSkins"] and GetClientModRPC("ModdedSkins", "UnlockModdedSkin")
     if UNLOCKMODDEDSKIN_RPC then
-        print("sending rpc for...")
-        printwrap("sender list", sender_list)
         SendModRPCToClient(UNLOCKMODDEDSKIN_RPC, sender_list, skin)
     end
 end
