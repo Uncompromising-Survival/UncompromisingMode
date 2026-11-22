@@ -91,21 +91,34 @@ local record_defs = {
     wixie = "UMMusic/gramaphone_record/wixie_the_delinquent"
 }
 
+local unlockable = {
+    "shadow_wixie",
+    "moonmaw",
+    "hooded_widow",
+    "tot"
+}
+
 for name, _ in pairs(record_defs) do
-    table.insert(prefs, CreatePrefabSkin("ms_um_record_" .. name, {
+    local is_unlock = table.contains(unlockable, name)
+    local data = {
         assets = {
-            Asset("DYNAMIC_ANIM", "anim/dynamic/um_record_"..name..".zip"),
-            Asset("PKGREF", "anim/dynamic/um_record_"..name..".dyn"),
+            Asset("DYNAMIC_ANIM", "anim/dynamic/um_record_" .. name .. ".zip"),
+            Asset("PKGREF", "anim/dynamic/um_record_" .. name .. ".dyn"),
         },
         base_prefab = "record",
         type = "item",
         build_name_override = "um_record_" .. name,
-        rarity = (name == "shadow_wixie" or name == "moonmaw" or name == "hooded_widow" or name == "tot") and "ModLocked" or "ModMade",
+        rarity = is_unlock and "ModLocked" or "ModMade",
         skin_tags = { "CRAFTABLE" },
-        condition = {
+    }
+
+    if is_unlock then
+        data.condition = {
             no_gift = true
         }
-    }))
+    end
+
+    table.insert(prefs, CreatePrefabSkin("ms_um_record_" .. name, data))
 end
 
 --I'll do this here as well just to keep it on one place.
