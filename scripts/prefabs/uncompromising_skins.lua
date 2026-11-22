@@ -1,81 +1,78 @@
-local um_upvaluehacker = require "tools/um_upvaluehacker"
+local UMUpvalueHacker = require "tools/um_upvaluehacker"
 local prefs = {}
 require("skinsutils")
 
 --kill whitelisting
-print("killing whitelisting")
 local function IsWhiteListedMod(...)
-    return true -- Whitelist is no longer used nowadays, but you never know !
+    return true -- Whitelist is no longer used nowadays, but you never know!
 end
 
-print(Sim)
-print(Sim.ReskinEntity)
-um_upvaluehacker.SetUpvalue(Sim.ReskinEntity, IsWhiteListedMod, "IsWhiteListedMod")
+UMUpvalueHacker.SetUpvalue(Sim.ReskinEntity, IsWhiteListedMod, "IsWhiteListedMod")
 
 --require("uncompprefabskin")
 
 table.insert(prefs, CreatePrefabSkin("ms_hat_plaguemask_formal",
-    {
-        assets = {
-            Asset("ANIM", "anim/hat_plaguemask_formal.zip"),
-        },
-        base_prefab = "plaguemask",
-        build_name_override = "hat_plaguemask_formal",
-        type = "item",
-        rarity = "ModMade",
-        skin_tags = { "CRAFTABLE" },
-    }))
+{
+    assets = {
+        Asset("ANIM", "anim/hat_plaguemask_formal.zip"),
+    },
+    base_prefab = "plaguemask",
+    build_name_override = "hat_plaguemask_formal",
+    type = "item",
+    rarity = "ModMade",
+    skin_tags = { "CRAFTABLE" },
+}))
 
 table.insert(prefs, CreatePrefabSkin("ms_feather_frock_fancy",
-    {
-        assets = {
-            Asset("ANIM", "anim/featherfrock_fancy_ground.zip"),
-        },
-        base_prefab = "feather_frock",
-        build_name_override = "featherfrock_fancy_ground",
-        type = "item",
-        rarity = "ModMade",
-        skin_tags = {},
-    }))
+{
+    assets = {
+        Asset("ANIM", "anim/featherfrock_fancy_ground.zip"),
+    },
+    base_prefab = "feather_frock",
+    build_name_override = "featherfrock_fancy_ground",
+    type = "item",
+    rarity = "ModMade",
+    skin_tags = {},
+}))
 
 table.insert(prefs, CreatePrefabSkin("ms_twisted_antler",
-    {
-        assets = {
-            Asset("ANIM", "anim/twisted_antler.zip"),
-        },
-        base_prefab = "cursed_antler",
-        build_name_override = "twisted_antler",
-        type = "item",
-        rarity = "ModMade",
-        skin_tags = {},
-    }))
+{
+    assets = {
+        Asset("ANIM", "anim/twisted_antler.zip"),
+    },
+    base_prefab = "cursed_antler",
+    build_name_override = "twisted_antler",
+    type = "item",
+    rarity = "ModMade",
+    skin_tags = {},
+}))
 
 table.insert(prefs, CreatePrefabSkin("ms_ancient_amulet_red_demoneye",
-    {
-        assets = {
-            Asset("ANIM", "anim/ancient_amulet_red_demoneye.zip"),
-        },
-        base_prefab = "ancient_amulet_red",
-        build_name_override = "ancient_amulet_red_demoneye",
-        type = "item",
-        rarity = "ModMade",
-        skin_tags = { "CRAFTABLE" },
-    }))
+{
+    assets = {
+        Asset("ANIM", "anim/ancient_amulet_red_demoneye.zip"),
+    },
+    base_prefab = "ancient_amulet_red",
+    build_name_override = "ancient_amulet_red_demoneye",
+    type = "item",
+    rarity = "ModMade",
+    skin_tags = { "CRAFTABLE" },
+}))
 
 table.insert(prefs, CreatePrefabSkin("ms_um_trans_bomb_moon",
-    {
-        assets = {
-            Asset("ANIM", "anim/um_trans_bomb_moon.zip"),
-        },
-        base_prefab = "um_bomb_moon",
-        build_name_override = "um_trans_bomb_moon",
-        type = "item",
-        rarity = "ModLocked",
-        condition = {
-            no_gift = true
-        },
-        skin_tags = { "CRAFTABLE" },
-    }))
+{
+    assets = {
+        Asset("ANIM", "anim/um_trans_bomb_moon.zip"),
+    },
+    base_prefab = "um_bomb_moon",
+    build_name_override = "um_trans_bomb_moon",
+    type = "item",
+    rarity = "ModLocked",
+    condition = {
+        no_gift = true
+    },
+    skin_tags = { "CRAFTABLE" },
+}))
 
 --records...
 local record_defs = {
@@ -124,7 +121,6 @@ end
 --I'll do this here as well just to keep it on one place.
 --Credits goes to ADM the GOAT.
 
-
 local old_record_init_fn = record_init_fn
 
 record_init_fn = function(inst, build_name, trackname)
@@ -136,7 +132,5 @@ record_init_fn = function(inst, build_name, trackname)
 
     old_record_init_fn(inst, build_name, trackname)
 end
-
-
 
 return unpack(prefs)
