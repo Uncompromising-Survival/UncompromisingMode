@@ -1,38 +1,43 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
-
+-----------------------------------------------------------------
 local function CommonClientFunctions(inst)
     inst:AddTag("show_broken_ui")
 end
 
-local function CommonFunctions(inst, sound, anim)
-    inst.OnBroken = function(_inst)
-        if _inst.components.equippable then
-            if _inst.components.equippable.restrictedtag then
-                _inst.um_equippable_restrictedtag = _inst.components.equippable.restrictedtag
-            end
-            _inst.components.equippable.restrictedtag = "brokendown_".._inst.prefab -- This does mean that non-player entities can equip this.
+local function OnBroken(inst)
+    local equippable, inspectable = inst.components.equippable, inst.components.inspectable
+    if equippable then
+        if equippable.restrictedtag then
+            inst.um_equippable_restrictedtag = equippable.restrictedtag
         end
-        if _inst.components.inspectable then
-            if _inst.components.inspectable.nameoverride then
-                _inst.um_inspectable_nameoverride = _inst.components.inspectable.nameoverride
-            end
-            _inst.components.inspectable:SetNameOverride("BROKEN_FORGEDITEM")
-        end
-        _inst:AddTag("broken")
+        equippable.restrictedtag = "brokendown_"..inst.prefab -- This does mean that non-player entities can equip this.
     end
+    if inspectable then
+        if inspectable.nameoverride then
+            inst.um_inspectable_nameoverride = inspectable.nameoverride
+        end
+        inspectable:SetNameOverride("BROKEN_FORGEDITEM")
+    end
+    inst:AddTag("broken")
+end
 
-    inst.OnRepaired = function(_inst)
-        if _inst.components.equippable then
-            _inst.components.equippable.restrictedtag = _inst.um_equippable_restrictedtag or nil
-            _inst.um_equippable_restrictedtag = nil
-        end
-        if _inst.components.inspectable then
-            _inst.components.inspectable:SetNameOverride(_inst.um_inspectable_nameoverride or nil)
-            _inst.um_inspectable_nameoverride = nil
-        end
-        _inst:RemoveTag("broken")
+local function OnRepaired(inst)
+    local equippable, inspectable = inst.components.equippable, inst.components.inspectable
+    if equippable then
+        equippable.restrictedtag = inst.um_equippable_restrictedtag or nil
+        inst.um_equippable_restrictedtag = nil
     end
+    if inspectable then
+        inspectable:SetNameOverride(inst.um_inspectable_nameoverride or nil)
+        inst.um_inspectable_nameoverride = nil
+    end
+    inst:RemoveTag("broken")
+end
+
+local function CommonFunctions(inst, sound, anim)
+    inst.OnBroken = OnBroken
+    inst.OnRepaired = OnRepaired
 
     local armor = inst.components.armor
     if armor then
@@ -46,14 +51,14 @@ local function CommonFunctions(inst, sound, anim)
                 end
             end
             _inst:OnBroken()
-            if _OnBroken then _OnBroken(_inst, ...) end
+            return _OnBroken and _OnBroken(_inst, ...)
         end)
         local _OnRepair = armor.onrepair
         armor.onrepair = function(_inst, amount, ...)
             if _inst:HasTag("broken") and amount > 0 then
                 _inst:OnRepaired()
             end
-            if _OnRepair then _OnRepair(_inst, amount, ...) end
+            return _OnRepair and _OnRepair(_inst, amount, ...)
         end
         armor:SetKeepOnFinished(true)
     end
@@ -80,7 +85,7 @@ local function CommonFunctions(inst, sound, anim)
                 _inst.AnimState:PlayAnimation("eat")
                 _inst.AnimState:PushAnimation(anim, true)
             end
-            _inst.SoundEmitter:PlaySound(totaltorepair <= 0 and "dontstarve/common/teleportworm/sick_cough" or "terraria1/" .. sound .. "/eat")
+            _inst.SoundEmitter:PlaySound(totaltorepair <= 0 and "dontstarve/common/teleportworm/sick_cough" or "terraria1/"..sound.."/eat")
             --if _oneatfn then _oneatfn(_inst, food) end
         end)
     end

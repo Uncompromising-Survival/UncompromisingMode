@@ -564,9 +564,9 @@ if GetModConfigData("cookiecutterhat") then
     table.insert(prefab_post, "cookiecutterhat")
 end
 
-if GetModConfigData("boss_resistance_") ~= false then
+--[[if GetModConfigData("boss_resistance_") then
     modimport("postinit/boss_resistance")
-end
+end]]
 
 if GetModConfigData("heatwaves") then
     table.insert(component_post, "wildfires")
