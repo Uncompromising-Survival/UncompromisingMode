@@ -301,7 +301,7 @@ local characters = {
             Item(RandomItem("floral_bandage", "bandage"), 2, .5, true),
             Item("brine_balm", 2, .2),
             Item(RandomItem("portabletent_item", "bedroll_furry"), nil, .3, true),
-            Item(RandomItem("meatrack_hat", "walterhat", "bushhat"), nil, .5, true),
+            Item(RandomItem("meatrack_hat", "walterhat", "bushhat"), nil, .5, true)
         }
     },
     WANDA = {
@@ -339,7 +339,7 @@ local characters = {
             Item(RandomItem("trinket_26", "trinket_27"), nil, .2),
             Item(RandomItem("cctrinket_don", "cctrinket_freddo"), nil, .2),
             Item(RandomItem("cctrinket_names", "trinket_jazzy"), nil, .2),
-            Item("corncan", nil, .2),
+            Item("corncan", nil, .2)
         }
     },
     WATHOM = {
@@ -352,7 +352,7 @@ local characters = {
             Item(RandomItem("ancient_amulet_red", "amulet"), nil, .5, true),
             Item(RandomItem("ruins_bat", "hambat"), nil, .5, true),
             Item("thulecite"),
-            Item("thulecite", 5, .3),
+            Item("thulecite", 5, .3)
         }
     },
     WIXIE = {
@@ -368,7 +368,7 @@ local characters = {
             Item(RandomItem("livinglog", "driftwood_log"), 2, .5),
             Item(RandomItem("sludge", "saltrock"), 4, .5),
             Item(RandomItem("moonrocknugget", "moonglass"), 6),
-            Item("townportaltalisman", 3, .1),
+            Item("townportaltalisman", 3, .1)
         }
 
     },
@@ -399,11 +399,7 @@ local characters = {
 
 local function GemologyRoll(inst)
     if inst and inst:HasTag("gemology_gem") then
-        if math.random() <= .1 then
-            inst:SetTier(3)
-        else
-            inst:SetTier(2)
-        end
+        inst:SetTier(math.random() <= .1 and 3 or 2)
     end
 end
 
