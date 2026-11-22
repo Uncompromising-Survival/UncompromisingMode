@@ -92,8 +92,7 @@ AddUMGemDef("redgem2", {
     fns = {
         onadjustdamage = function(item, damage, attacker, target, tier, calcnum)
             return damage + (calcnum == 3 and target and target.components.propagator and target.components.health and target.components.health:GetFireDamageScale() > 0
-                and TUNING.DSTU.REDGEM2_DAMAGE[tier] + (tier ~= 1 and target.components.burnable and target.components.burnable:IsBurning()
-                and damage * TUNING.DSTU.REDGEM2_BURNING_MULT[tier] or 0) or 0)
+                and TUNING.DSTU.REDGEM2_DAMAGE[tier] + (tier ~= 1 and target.components.burnable and target.components.burnable:IsBurning() and damage * TUNING.DSTU.REDGEM2_BURNING_MULT[tier] or 0) or 0)
         end,
         onattack = function(inst, attacker, target, tier)
             SpawnPrefab("deer_fire_burst").Transform:SetPosition(target.Transform:GetWorldPosition())
