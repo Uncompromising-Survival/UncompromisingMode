@@ -709,7 +709,7 @@ end
 env.AddAction(UM_GEM_REPAIR)
 
 env.AddComponentAction("USEITEM", "gemrepairer", function(inst, doer, target, actions, right)
-    if inst:HasTag("gemrepairer") and target.um_cangemrepair and target.um_cangemrepair:value() and right then
+    if inst:HasTag("gemrepairer") and target.um_cangemrepair and target.um_cangemrepair:value() and right and not target:HasTag("um_gemrepairer_blacklist") then
         table.insert(actions, ACTIONS.UM_GEM_REPAIR)
     end
 end)

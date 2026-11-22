@@ -18,7 +18,8 @@ function CreateGemRepairKit(name, durability, build, bank, common_fn)
 
         --from gemrepairer component
         inst:AddTag("gemrepairer")
-
+        inst:AddTag("um_gemrepairer_blacklist")
+        
         MakeInventoryFloatable(inst, "med", nil, 0.6)
 
         inst.entity:SetPristine()
