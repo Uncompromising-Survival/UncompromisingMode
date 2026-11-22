@@ -80,12 +80,12 @@ table.insert(prefs, CreatePrefabSkin("ms_um_trans_bomb_moon",
 --records...
 local record_defs = {
     hooded_widow = "UMMusic/gramaphone_record/hoodedforest_efs",
-    menu = "UMMusic/gramaphone_record/uncomp_main_menu",
+    menu = "UMMusic/music/uncomp_main_menu",
     moonmaw = "UMMusic2/gramaphone_record/um_epicfight_moonmaw",
     shadow_wixie = "UMMusic/gramaphone_record/shadow_boxing",
     stranger = "UMMusic/gramaphone_record/tiddlestranger",
     tot = "UMMusic2/gramaphone_record/um_epicfight_tot",
-    walter = "UMMusic/gramaphone_record/uncomp_main_menu",
+    walter = "UMMusic/gramaphone_record/follow_me_woby_flat",
     wathom = "UMMusic/gramaphone_record/wathom_amped",
     winky = "UMMusic2/gramaphone_record/winky2",
     wixie = "UMMusic/gramaphone_record/wixie_the_delinquent"
@@ -114,7 +114,7 @@ for name, _ in pairs(record_defs) do
 
     if is_unlock then
         data.condition = {
-            no_gift = true
+            --no_gift = true
         }
     end
 
