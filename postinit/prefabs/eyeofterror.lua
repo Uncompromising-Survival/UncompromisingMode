@@ -179,5 +179,5 @@ local function DeathSkinPostInit(inst)
     end)
 end
 
-env.AddPrefabPostInit("eyeofterror1", DeathSkinPostInit)
-env.AddPrefabPostInit("eyeofterror2", DeathSkinPostInit)
+env.AddPrefabPostInit("twinofterror1", DeathSkinPostInit)
+env.AddPrefabPostInit("twinofterror2", DeathSkinPostInit)
