@@ -169,13 +169,7 @@ local function DeathSkinPostInit(inst)
 
     inst:ListenForEvent("death", function(inst)
         local x, y, z = inst.Transform:GetWorldPosition()
-
-        local et = inst.components.entitytracker
-        local t1 = et:GetEntity("twin1")
-        local t2 = et:GetEntity("twin2")
-        if (t1 == nil or t1.components.health:IsDead()) and (t2 == nil or t2.components.health:IsDead()) then
-            UMUnlockSkinForNearbyPlayers(x, y, z, "ms_um_record_tot")
-        end
+        UMUnlockSkinForNearbyPlayers(x, y, z, "ms_um_record_tot")
     end)
 end
 
