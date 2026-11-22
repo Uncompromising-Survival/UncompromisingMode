@@ -1476,8 +1476,7 @@ configuration_options = {
     {
         name = "boss_resistance_",
         label = "[BROKEN] Dynamic Boss Res.",
-        hover =
-        "Some bosses have increasing resistance against multiple players",
+        hover = "Some bosses have increasing resistance against multiple players",
         options = {
             {
                 description = "Dynamic",
@@ -1489,9 +1488,9 @@ configuration_options = {
                 hover = "Bosses change their resistance based on nearby players.",
                 data = 2
             },
-            { description = "Disabled", data = 3 },
+            { description = "Disabled", data = false },
         },
-        default = 3,
+        default = false,
     },
     BinaryConfig("wormwood_fire", "[BROKEN] Extra Flamable Wormwood", "Wormwood is highly flameable, like in Hamlet.",
         false),
