@@ -1,13 +1,13 @@
 require("stategraphs/commonstates")
 
-local AOE_TARGET_MUSTHAVE_TAGS = {"_combat"}
+local AOE_TARGET_MUST_TAGS = {"_combat"}
 local AOE_TARGET_CANT_TAGS = {"INLIMBO", "flight", "invisible", "notarget", "noattack", "snowish", "wall", "structure"}
 
 local function DoAOEAttack(inst)
     inst.components.combat.ignorehitrange = true
     local radius = inst.components.combat:GetHitRange()
     local x, y, z = inst.Transform:GetWorldPosition()
-    for i, ent in ipairs(TheSim:FindEntities(x, y, z, radius + 3, AOE_TARGET_MUSTHAVE_TAGS, AOE_TARGET_CANT_TAGS)) do
+    for i, ent in ipairs(TheSim:FindEntities(x, y, z, radius + 3, AOE_TARGET_MUST_TAGS, AOE_TARGET_CANT_TAGS)) do
         if ent ~= inst and ent:IsValid() and not (ent.components.health and ent.components.health:IsDead())
             and inst.components.combat:CanTarget(ent) and inst:IsNear(ent, radius + ent:GetPhysicsRadius(0)) then
             inst.components.combat:DoAttack(ent)
