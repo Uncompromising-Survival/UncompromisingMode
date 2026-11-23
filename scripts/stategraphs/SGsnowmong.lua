@@ -8,9 +8,8 @@ local function DoAOEAttack(inst)
     local radius = inst.components.combat:GetHitRange()
     local x, y, z = inst.Transform:GetWorldPosition()
     for i, ent in ipairs(TheSim:FindEntities(x, y, z, radius + 3, AOE_TARGET_MUSTHAVE_TAGS, AOE_TARGET_CANT_TAGS)) do
-        local range = radius + ent:GetPhysicsRadius(0)
         if ent ~= inst and ent:IsValid() and not (ent.components.health and ent.components.health:IsDead())
-            and inst.components.combat:CanTarget(ent) and inst:IsNear(ent, range) then
+            and inst.components.combat:CanTarget(ent) and inst:IsNear(ent, radius + ent:GetPhysicsRadius(0)) then
             inst.components.combat:DoAttack(ent)
         end
     end
