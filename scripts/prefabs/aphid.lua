@@ -46,14 +46,14 @@ end
 
 local function OnDropped(inst)
     inst.sg:GoToState("idle")
-    if inst.components.workable ~= nil then
+    if inst.components.workable then
         inst.components.workable:SetWorkLeft(1)
     end
-    if inst.components.stackable ~= nil then
+    if inst.components.stackable then
         while inst.components.stackable:StackSize() > 1 do
             local item = inst.components.stackable:Get()
-            if item ~= nil then
-                if item.components.inventoryitem ~= nil then
+            if item then
+                if item.components.inventoryitem then
                     item.components.inventoryitem:OnDropped()
                 end
                 item.Physics:Teleport(inst.Transform:GetWorldPosition())
