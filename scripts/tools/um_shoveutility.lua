@@ -20,9 +20,6 @@ local function UpdateRepel(inst)
             inst.Physics:SetMotorVelOverride(speed * math.cos(angle), 0, -speed * math.sin(angle))
             if child then inst:UMUpdateProperties(child, true) end
         else
-            --[[inst.um_shovespeed = nil
-            inst.um_shovedspeed = nil
-            inst.um_shoverot = nil]]
             inst.Physics:ClearMotorVelOverride()
             inst.Physics:Stop()
             if child then RemoveShoveEntity(child) end
