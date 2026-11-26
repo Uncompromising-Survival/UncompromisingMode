@@ -29,6 +29,7 @@ local function NextMannyAnimy(inst)
 			houndtime = bear_timetoattack
 		end
 		if mockfly_timetoattack and mockfly_timetoattack < houndtime then
+			houndtime = mockfly_timetoattack
 		end
 
 		if houndtime then -- Will eventually get it to check for giants too, though I think we may wanna *actually* (which means without bug or fail) redo giant spawns before we do that...
