@@ -134,7 +134,7 @@ local prefab_post = {
     "rocks",
     --"rock_avocado_fruit_sprout_sapling",
     "heatrock",
-    "dragonfly_spawner",
+    --"dragonfly_spawner",
     "rneghostfire",
     "monkey",
     "batcave",
