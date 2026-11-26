@@ -77,7 +77,8 @@ local component_post = {
     "wavemanager",
     "seamlessplayerswapper",
     "grottowarmanager",
-    "quaker"
+    "quaker",
+    "sanityaura"
 }
 
 local prefab_post = {

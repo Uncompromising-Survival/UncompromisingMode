@@ -85,6 +85,26 @@ local function OnUnequip(inst, owner)
 
 end
 
+local function TakePyreDownANotch(ent,doer)
+    if ent.components.pickable and ent.components.pickable.canbepicked and ent.stage ~= 1 then
+        local icefx = SpawnPrefab("deer_ice_flakes")
+        icefx.AnimState:PlayAnimation("idle")
+        local x, y, z = ent.Transform:GetWorldPosition()
+	    icefx:DoTaskInTime(0, icefx.KillFX)
+        icefx.Transform:SetPosition(x, y, z)
+        icefx.Transform:SetScale(0.6, 0.7, 0.7)
+        local success, loot = ent.components.pickable:Pick(TheWorld)
+        if loot ~= nil then
+            for i, item in ipairs(loot) do
+                Launch(item, doer, 1.5)
+            end
+        end     
+        ent:DoTaskInTime(0.4,TakePyreDownANotch,doer) 
+    else
+        ent.no_sting = nil
+    end
+end
+
 local function HarvestPickable(inst, ent, doer)
     if ent.components.pickable.picksound ~= nil then
         doer.SoundEmitter:PlaySound(ent.components.pickable.picksound)
@@ -102,11 +122,15 @@ local function HarvestPickable(inst, ent, doer)
         inst.components.finiteuses:Use(0.125)
     end
 
-   if ent.prefab == "hooded_fern" and inst.components.finiteuses ~= nil then
+    if ent.prefab == "hooded_fern" and inst.components.finiteuses ~= nil then
         inst.components.finiteuses:Use(0.1)
     end
 	if doer.components.temperature:GetCurrent() >= 4 and not TheWorld.state.iswinter then
 		doer.components.temperature:DoDelta(-3)
+    end
+    if ent.prefab == "um_pyre_nettles" then
+        ent.no_sting = true
+        ent:DoTaskInTime(0.4,TakePyreDownANotch,doer)
     end
 end
 

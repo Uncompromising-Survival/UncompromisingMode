@@ -35,10 +35,6 @@ env.AddComponentPostInit("combat", function(self)
             end
         end
 
-        if self.inst:HasTag("wathom_really_spooking_me") then
-            damage = damage * 1.5
-        end
-
         if stimuli and stimuli == "fire" and self.inst.components.health and self.inst.components.health:GetFireDamageScale() then
             damage = damage * self.inst.components.health:GetFireDamageScale()
         end
@@ -54,15 +50,7 @@ env.AddComponentPostInit("combat", function(self)
             end
         end
 
-        if self.inst and self.inst:HasTag("wathom") and self.inst.AmpDamageTakenModifier and damage and (not self.inst.components.rider or not self.inst.components.rider:IsRiding()) and TUNING.DSTU.WATHOM_ARMOR_DAMAGE then
-            -- Take extra damage
-            -- if HasSkill(self.inst,"ancient_terror_3") and self.inst:HasTag("amped") and not self.inst:HasTag("deathamp") then
-            -- damage = damage * self.inst.AmpDamageTakenModifier*0.5
-            -- self.inst.components.adrenaline:DoDelta(-damage/3)
-            -- else
-            damage = damage * self.inst.AmpDamageTakenModifier
-            --end
-        elseif self.inst and self.inst.components.upgrademoduleowner and damage and (not self.inst.components.rider or not self.inst.components.rider:IsRiding()) and TUNING.DSTU.WXLESS then
+        if self.inst and self.inst.components.upgrademoduleowner and damage and (not self.inst.components.rider or not self.inst.components.rider:IsRiding()) and TUNING.DSTU.WXLESS then
             -- Hardy circuit flat damage reduction
             local small_absorb_table = { 0, 2, 4, 5.5, 7, 8, 9, 9.5, 10 }
             local big_absorb_table = { 0, 5, 9, 12, 15 }

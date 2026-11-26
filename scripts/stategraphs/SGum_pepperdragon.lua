@@ -103,12 +103,22 @@ local function ShootFire(inst,total_flame)
             projectile.Transform:SetRotation(rot)
             projectile.speed = 15
             projectile.scale = 1 + math.random(0,10)/100 -- scale up sometimes.
-            projectile.damage = 3
+            projectile.damage = 4
             projectile.damager = inst
             if not inst.coldfire then
                 PoofNearby(inst)
             end
         end)
+    end
+end
+
+local function DoSpecialAreaAttack(inst)
+    local x,y,z = inst.Transform:GetWorldPosition()
+    local ents = TheSim:FindEntities(x,y,z,4,{"_combat","_health"},UMCommonFns.GHOSTLIKE_TAGS)
+    for i,v in ipairs(ents) do
+        if v:IsValid() and v.prefab ~= inst.prefab then -- Hit burrowed creatures
+            v.components.combat:GetAttacked(inst,150)
+        end
     end
 end
 
@@ -282,7 +292,22 @@ local states=
 
         onupdate = function(inst)
             if inst.components.combat and inst.components.combat.target then
-                inst:ForceFacePoint(inst.components.combat.target:GetPosition())
+                local t_rad = (inst:GetAngleToPoint(inst.components.combat.target:GetPosition()))
+                local i_rad = (inst:GetRotation())
+                local drad = 3
+                if math.abs(t_rad-i_rad) > 180 then
+                    if i_rad > t_rad then
+                        inst.Transform:SetRotation(i_rad+drad)
+                    else
+                        inst.Transform:SetRotation(i_rad-drad)
+                    end
+                else
+                    if i_rad > t_rad then
+                        inst.Transform:SetRotation(i_rad-drad)
+                    else
+                        inst.Transform:SetRotation(i_rad+drad)
+                    end
+                end
             end
         end,
         timeline=
@@ -430,8 +455,6 @@ local states=
             inst.components.combat:StartAttack()
             inst.components.locomotor:StopMoving()
             inst.AnimState:PlayAnimation("pound", false)
-            inst.components.combat:SetAreaDamage(4, 1)
-            inst.components.combat:SetDefaultDamage(225) -- AXE He's being killed by worms AAAA
         end,
 
         timeline=
@@ -442,21 +465,19 @@ local states=
                 SpawnPrefab("ground_chunks_breaking").Transform:SetPosition(inst.Transform:GetWorldPosition())
                 SpawnPrefab("ground_chunks_breaking").Transform:SetPosition(inst.Transform:GetWorldPosition())
                 inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/bearger/groundpound")
-                inst.components.combat:DoAttack(inst.sg.statemem.target) 
+                --inst.components.combat:DoAttack(inst.sg.statemem.target) 
                 local ring = SpawnPrefab("groundpoundring_fx")
                 ring.Transform:SetPosition(inst.Transform:GetWorldPosition())
                 ring.Transform:SetScale(.7, .7, .7)
                 TheWorld:PushEvent("ms_miniquake", { rad = 20, num = 20, duration = 2.5, target = inst })
                 BounceStuff(inst)
-                
+                DoSpecialAreaAttack(inst)
             end),
         },
 
         events =
         {
             EventHandler("animqueueover", function(inst)
-                inst.components.combat:SetAreaDamage()
-                inst.components.combat:SetDefaultDamage(75)
                 inst.sg:GoToState("idle")
             end),
         },

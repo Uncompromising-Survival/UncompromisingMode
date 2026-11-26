@@ -90,7 +90,7 @@ local function Flamethrower(inst, caster, pos)
             projectile.Transform:SetRotation(rot + interval_rot + random_rotation)
             projectile.speed = 15
             projectile.scale = 1 + math.random(0, 10) / 100 -- scale up sometimes.
-            projectile.damage = 3
+            projectile.damage = 9
             projectile.damager = caster
         end
     end

@@ -39,6 +39,7 @@ AddRoom("WormyMoonMushForest", {
 })
 
 Layouts["cave_exit_moon"] = StaticLayout.Get("map/static_layouts/cave_exit_moon")
+Layouts["cave_exit_moon"].ground_types = FLOODED_GROTTO_GROUND_TYPES
 AddRoom("GrottoStairs",  {
     colour={r=0.3,g=0.2,b=0.1,a=0.3},
 	tags = {"not_mainland"},
@@ -261,6 +262,43 @@ AddRoom("GrottoLightFlood", {
     }
 })
 
+Layouts["um_himalaya"] = StaticLayout.Get("map/static_layouts/um_himalaya")
+Layouts["um_himalaya"].ground_types = FLOODED_GROTTO_GROUND_TYPES
+AddRoom("Himalayas", {
+    colour={r=0.1,g=0.1,b=0.8,a=0.9},
+    value = WORLD_TILES.UM_GROTTO_HEAVYFLOODED_SANDY,
+	tags = {"not_mainland"},
+	SafeFromDisconnect = true,
+	--random_node_entrance_weight = 0,
+	random_node_exit_weight = 0,
+    contents =  {
+        countstaticlayouts =
+        {
+            ["um_himalaya"] = 1,
+        },
+        countprefabs =
+        {
+			um_moonglass_ceiling = 1,
+            cavelight = 4,
+        },
+        distributepercent = 0.2,
+        distributeprefabs =
+        {
+            lightflier_flower = 0.02,
+
+
+            moonglass_stalactite1 = 0.001,
+            moonglass_stalactite2 = 0.001,
+            moonglass_stalactite3 = 0.001,
+			um_reeds_lunar = 0.01,
+			um_tentacle_moon = 0.003,
+            twigs = 0.005,
+            sapling_moon = 0.0025,
+            flint = 0.0025,
+        },
+    }
+})
+
 AddRoom("GrottoHeavyFloodWorms", {
     colour={r=0.1,g=0.1,b=0.8,a=0.9},
     value = WORLD_TILES.UM_GROTTO_HEAVYFLOODED,
@@ -311,6 +349,7 @@ AddRoom("GrottoDarknessWorms", {
             zaspberry_plant = 1,
             shockworm = function() return math.random(0,2) end,
             skeleton = function() return math.random(0,1) end,
+            moonglass_rock = function() return math.random(3,7) end,
         },
     }
 })
@@ -329,6 +368,7 @@ AddRoom("GrottoDarknessTentacles", {
             twigs = function() return math.random(3,6) end,
             um_tentacle_moon = function() return math.random(0,2) end,
             skeleton = function() return math.random(0,1) end,
+            moonglass_rock = function() return math.random(3,7) end,
         },
     }
 })
@@ -343,13 +383,12 @@ AddRoom("GrottoHeavyFloodTentacles", {
     contents =  {
         countstaticlayouts =
         {
-            ["GrottoPoolBig"] = 2,
-            ["GrottoPoolSmall"] = 2,
+            ["skeleton_reedsuit"] = 1,
         },
         countprefabs =
         {
 			um_moonglass_ceiling = 1,
-            cavelight = 4,
+            cavelight = 4
         },
         distributepercent = 0.2,
         distributeprefabs =
@@ -369,13 +408,16 @@ AddRoom("GrottoHeavyFloodTentacles", {
     }
 })
 
+
+
+
 AddRoom("GrottoHeavyFloodBoth", {
     colour={r=0.1,g=0.1,b=0.8,a=0.9},
     value = WORLD_TILES.UM_GROTTO_HEAVYFLOODED,
 	tags = {"not_mainland"},
 	SafeFromDisconnect = true,
 	--random_node_entrance_weight = 0,
-	random_node_exit_weight = 0,
+	random_node_entrance_weight = 0,
     contents =  {
         countstaticlayouts =
         {

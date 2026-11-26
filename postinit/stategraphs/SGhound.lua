@@ -349,40 +349,48 @@ env.AddStategraphPostInit("hound", function(inst)
                 inst.Physics:Stop()
                 inst.AnimState:PlayAnimation("belch")
                 inst.sg.statemem.target = target ~= nil and target:IsValid() and target or inst.components.combat and inst.components.combat.target
-                if inst.sg.statemem.target and inst.sg.statemem.target:IsValid() then
-                    inst:ForceFacePoint(inst.sg.statemem.target:GetPosition())
+            end,
+            onupdate = function(inst)
+                if inst.components.combat and inst.components.combat.target then
+                    local t_rad = (inst:GetAngleToPoint(inst.components.combat.target:GetPosition()))
+                    local i_rad = (inst:GetRotation())
+                    local drad = 3
+                    if math.abs(t_rad-i_rad) > 180 then
+                        if i_rad > t_rad then
+                            inst.Transform:SetRotation(i_rad+drad)
+                        else
+                            inst.Transform:SetRotation(i_rad-drad)
+                        end
+                    else
+                        if i_rad > t_rad then
+                            inst.Transform:SetRotation(i_rad-drad)
+                        else
+                            inst.Transform:SetRotation(i_rad+drad)
+                        end
+                    end
                 end
             end,
-
             timeline =
             {
                 TimeEvent(0, function(inst) inst.SoundEmitter:PlaySound(inst.sounds.howl) end),
                 TimeEvent(3 * FRAMES, function(inst)
                     if inst.sg.statemem.target and inst.sg.statemem.target:IsValid() then
-                        inst.sg.statemem.inkpos = Vector3(inst.sg.statemem.target.Transform:GetWorldPosition())
 						inst.ShootFire(inst,3)
-                        --inst:LaunchProjectile(inst.sg.statemem.target)
                     end
                 end),
                 TimeEvent(6 * FRAMES, function(inst)
                     if inst.sg.statemem.target and inst.sg.statemem.target:IsValid() then
-                        inst.sg.statemem.inkpos = Vector3(inst.sg.statemem.target.Transform:GetWorldPosition())
 						inst.ShootFire(inst,3)
-                        --inst:LaunchProjectile(inst.sg.statemem.target)
                     end
                 end),
                 TimeEvent(9 * FRAMES, function(inst)
                     if inst.sg.statemem.target and inst.sg.statemem.target:IsValid() then
-                        inst.sg.statemem.inkpos = Vector3(inst.sg.statemem.target.Transform:GetWorldPosition())
 						inst.ShootFire(inst,3)
-                        --inst:LaunchProjectile(inst.sg.statemem.target)
                     end
                 end),
                 TimeEvent(12 * FRAMES, function(inst)
                     if inst.sg.statemem.target and inst.sg.statemem.target:IsValid() then
-                        inst.sg.statemem.inkpos = Vector3(inst.sg.statemem.target.Transform:GetWorldPosition())
 						inst.ShootFire(inst,3)
-                        --inst:LaunchProjectile(inst.sg.statemem.target)
                     end
                 end),
             },
@@ -430,9 +438,6 @@ env.AddStategraphPostInit("hound", function(inst)
                 end),
                 TimeEvent(24 * FRAMES, function(inst)
                     inst.AnimState:SetDeltaTimeMultiplier(1)
-					if inst.sg.statemem.target and inst.sg.statemem.target:GetPosition() then
-						inst:ForceFacePoint(inst.sg.statemem.target:GetPosition())
-					end
 					inst.ShootFire(inst)
                 end),
             },

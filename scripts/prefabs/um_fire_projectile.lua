@@ -131,12 +131,12 @@ local function ShootFire(inst)
     BeginScaleUp(inst)
     if inst.chilly then
         SetupColdLight(inst)
-        inst:DoPeriodicTask(FRAMES, ChillSurroundings)
+        inst:DoPeriodicTask(3*FRAMES, ChillSurroundings)
     elseif inst.cursed then
         -- ADD CURSED
         -- What?
     else
-        inst:DoPeriodicTask(FRAMES, BurnSurroundings)
+        inst:DoPeriodicTask(3*FRAMES, BurnSurroundings)
     end
 end
 

@@ -450,27 +450,38 @@ local function GetTileForHotspring(noise)
 end
 
 local function GetTileForHoodedForest(noise)
-    if noise < 0.5 then
+    if noise < 0.4 then
         return WORLD_TILES.HOODEDFOREST_FOLIAGE
     end
     return WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK
 end
 
 local function GetTileForHoodedForestSparse(noise)
-    if noise < 0.6 then
+    if noise < 0.5 then
         return WORLD_TILES.HOODEDFOREST_FOLIAGE
     end
     return WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK
 end
 
 local function GetTileForRockyHoodedForest(noise)
-    if noise < 0.4 then
+    if noise < 0.8 then
         return WORLD_TILES.ROCKY
     end
-    if noise < 0.5 then
-        return WORLD_TILES.HOODEDFOREST_FOLIAGE
+    return WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK
+end
+
+local function GetTileForSavannaHoodedForest(noise)
+    if noise < 0.6 then
+        return WORLD_TILES.SAVANNA
     end
     return WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK
+end
+
+local function GetTileForMuddyHoodedForest(noise)
+    if noise < 0.4 then
+        return WORLD_TILES.MUD
+    end
+    return WORLD_TILES.HOODEDFOREST
 end
 
 local function GetTileForHotspringIA(noise)
@@ -529,8 +540,10 @@ end
 local function GetTileForGrottoPatchy(noise)
     if noise < 0.4 then
         return WORLD_TILES.UM_FLOODWATER_GROTTO
+    elseif noise < 0.7 then
+        return WORLD_TILES.PEBBLEBEACH
     end
-    return WORLD_TILES.PEBBLEBEACH
+    return WORLD_TILES.METEOR
 end
 
 local function GetTileForGrottoFloodLight(noise)
@@ -554,9 +567,10 @@ end
 local function GetTileForGrottoFloodHeavySandy(noise)
     if noise < 0.6 then
         return WORLD_TILES.UM_FLOODWATER_GROTTO
+    elseif noise < 0.9 then
+        return WORLD_TILES.PEBBLEBEACH
     end
-
-    return WORLD_TILES.PEBBLEBEACH
+    return WORLD_TILES.METEOR
 end
 
 local function GetTileForMoltenMagma(noise)
@@ -574,6 +588,10 @@ AddTile("UM_HOTSPRING_FORESTY", "NOISE")
 AddTile("UM_HOODED_FOREST", "NOISE")
 AddTile("UM_HOODED_FOREST_SPARSE", "NOISE")
 AddTile("UM_HOODED_ROCKY", "NOISE")
+AddTile("UM_HOODED_FOREST_MUDDY", "NOISE")
+AddTile("UM_HOODED_SAVANNA", "NOISE")
+
+
 AddTile("UM_MAGMA_JUNGLY", "NOISE")
 AddTile("UM_MAGMA_FUMAROLE", "NOISE")
 AddTile("UM_MAGMA_MIX", "NOISE")
@@ -593,10 +611,11 @@ NoiseTileFunctions[WORLD_TILES.UM_HOTSPRING_IA] = GetTileForHotspringIA
 NoiseTileFunctions[WORLD_TILES.UM_HOTSPRING_FORESTY] = GetTileForHotspring_Foresty
 
 NoiseTileFunctions[WORLD_TILES.UM_HOODED_FOREST] = GetTileForHoodedForest
-
 NoiseTileFunctions[WORLD_TILES.UM_HOODED_FOREST_SPARSE] = GetTileForHoodedForestSparse
-
 NoiseTileFunctions[WORLD_TILES.UM_HOODED_ROCKY] = GetTileForRockyHoodedForest
+NoiseTileFunctions[WORLD_TILES.UM_HOODED_FOREST_MUDDY] = GetTileForMuddyHoodedForest
+NoiseTileFunctions[WORLD_TILES.UM_HOODED_SAVANNA] = GetTileForSavannaHoodedForest
+
 
 NoiseTileFunctions[WORLD_TILES.UM_MAGMA_JUNGLY] = GetTileForLushMagma
 NoiseTileFunctions[WORLD_TILES.UM_MAGMA_FUMAROLE] = GetTileForMagmaRole
@@ -648,10 +667,25 @@ local filters = {
     ["um_reeds_lunar"] = { WORLD_TILES.PEBBLEBEACH, WORLD_TILES.FUNGUSMOON },
     ["um_tentacle_moon"] = { WORLD_TILES.FUNGUSMOON },
     ["um_mushroom_moon"] = { WORLD_TILES.PEBBLEBEACH, WORLD_TILES.UM_FLOODWATER_GROTTO },
+    ["um_largefern"] = { WORLD_TILES.MUD}, -- Don't allow it to spawn on the mud
+
+
+
+    -- Override mushrooms tile overrides
+    --["red_mushroom"] = 		{WORLD_TILES.ROAD, WORLD_TILES.WOODFLOOR, WORLD_TILES.SCALE, WORLD_TILES.CARPET, WORLD_TILES.CHECKER, WORLD_TILES.ROCKY, WORLD_TILES.DIRT, WORLD_TILES.DESERT_DIRT, WORLD_TILES.MONKEY_DOCK },
 }
 
 for k, v in pairs(filters) do
     GLOBAL.terrain.filter[k] = v
+end
+
+local mushrooms = {"red_mushroom","green_mushroom","blue_mushroom"}
+for _,mushroom in ipairs(mushrooms) do
+    for i,v in ipairs(GLOBAL.terrain.filter[mushroom]) do
+        if v == WORLD_TILES.MARSH then
+            table.remove(GLOBAL.terrain.filter[mushroom],i)
+        end
+    end
 end
 
 table.insert(GLOBAL.terrain.filter["rock1"], WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK)
@@ -667,6 +701,9 @@ GLOBAL.PYRE_THICKET_GROUND_TYPES = {
 }
 GLOBAL.HOODED_ARENA_GROUND_TYPES = {
     WORLD_TILES.HOODEDFOREST, WORLD_TILES.ROCKY, -- 1,2
+}
+GLOBAL.FLOODED_GROTTO_GROUND_TYPES = {
+    WORLD_TILES.UM_FLOODWATER_GROTTO,WORLD_TILES.METEOR,WORLD_TILES.PEBBLEBEACH -- 1,2
 }
 
 -- Setup lava tiles

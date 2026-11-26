@@ -28,7 +28,7 @@ local function OnHitFyre(inst, attacker, target)
                 if not v.components.fueled and v.components.burnable and not v.components.burnable:IsBurning() and not v:HasTag("burnt") then
                     v.components.burnable:Ignite(true, inst, attacker)
                 end
-                if v.components.combat and v.components.combat:CanBeAttacked(attacker) then
+                if v.components.combat and (v.components.combat:CanBeAttacked(attacker) or v:HasTag("worm")) then
                     v.components.combat:GetAttacked(attacker, TUNING.DSTU.PYREBOMB_DAMAGE)
                 end
             end

@@ -38,13 +38,6 @@ local function FindSleepable(inst)
 end
 
 local function TriggerPocketResurrection(self, item)
-    if self.inst.components.timer and self.inst:HasTag("wathom") then
-        if self.inst.components.timer:TimerExists("shadowwathomcooldown") then
-            self.inst.components.timer:StopTimer("shadowwathomcooldown")
-        end
-        self.inst.components.timer:StartTimer("shadowwathomcooldown", TUNING.TOTAL_DAY_TIME)
-    end
-
     if item.prefab == "amulet" then    
         FindSleepable(self.inst)
         if self.inst.components.grogginess then
@@ -134,10 +127,8 @@ local function HasPocketResurrection(self)
                 -- AXE If wearing the amusement pack, see if the amulet is in there... if it is... then swap the item of 
                 -- interest.
         end
-        if self.inst.components.timer and not self.inst.components.timer:TimerExists("shadowwathomcooldown") then
-            if item then
-                return item
-            end
+        if item then
+            return item
         end
     end
 end
@@ -177,6 +168,13 @@ local function TriggerRose(self)
     end
 end
 
+local function ShadowWathomState(self,val,cause,afflicter,...)
+    local maykill = val <= 0
+    if self.inst.prefab == "wathom" and self.inst:HasTag("deathamp") then
+        return true
+    end
+end 
+
 local function StopDeathStuffHere(self, amount, cause, afflicter, ...)
     local res_item = HasPocketResurrection(self)
     local maykill = math.max(amount, self.minhealth or 0) <= 0
@@ -185,21 +183,11 @@ local function StopDeathStuffHere(self, amount, cause, afflicter, ...)
             self.inst.components.rider:ActualDismount()
             self.inst.sg:GoToState("blackpuddle_death")
             return true
-        elseif maykill and res_item and (not self.inst:HasTag("deathamp") or self.inst:HasTag("deathamp") and cause == "deathamp" and self.inst.components.timer and not self.inst.components.timer:TimerExists("shadowwathomcooldown")) then
-            if self.inst:HasTag("deathamp") and not self.inst:HasTag("playerghost") and self.inst.ToggleUndeathState then
-                self.inst:ToggleUndeathState(self.inst, false)
-            end
-
-            TriggerPocketResurrection(self, res_item) -- Don't trigger the LLA here, let it happen in our own component, so this doesn't break whenever canis moves it to his own mod.
-            return true
-        elseif maykill and self.inst:HasAllTags("wathom", "amped") and not self.inst:HasTag("deathamp") and cause ~= "deathamp" and HasSkill(self.inst,"shadow_wathom_1") then -- Suggest that we add a trigger here to show that wathom is still being hit, despite his lack of flinching or anything.
+        --[[elseif maykill and (self.inst:HasAllTags("wathom", "amped")) then -- Suggest that we add a trigger here to show that wathom is still being hit, despite his lack of flinching or anything.
             self.inst:AddTag("deathamp")
             self.inst:ToggleUndeathState(self.inst, true)
             self:DoDelta(-self.currenthealth + 1, false, cause, true) -- Needed to do this for ignore_invincible...
-            return true
-        elseif self.inst:HasTag("deathamp") and cause ~= "deathamp" and amount < 0 then
-            self.inst.components.adrenaline:DoDelta(amount * 1)
-            return true
+            return true]]
         end
     elseif maykill then
         if res_item then
@@ -216,7 +204,9 @@ end
 env.AddComponentPostInit("health", function(self)
     local _SetVal = self.SetVal
     function self:SetVal(val, cause, afflicter, ...)
-        if StopDeathStuffHere(self, val, cause, afflicter, ...) then
+        if ShadowWathomState(self,val,cause,afflicter,...) then -- If shadow wathom - ALWAYS KILL.
+            return _SetVal(self, 0, cause, afflicter, ...) 
+        elseif StopDeathStuffHere(self, val, cause, afflicter, ...) then
             return
         end
         return _SetVal(self, val, cause, afflicter, ...)

@@ -469,7 +469,22 @@ local inventoryitems =
     "um_astral_projector_target",
     "um_blueprinting_kit",
     "um_cookpot_wagstaff_lever",
-    "um_cookpot_wagstaff_lever2"
+    "um_cookpot_wagstaff_lever2",
+    
+    "um_rubbleloot_rainometer",
+    "um_rubbleloot_thermometer",
+    "um_rubbleloot_bloodbag",
+    "um_rubbleloot_researchlab1",
+    "um_rubbleloot_researchlab2",
+    "um_rubbleloot_goldacorn",
+    "um_rubbleloot_petrifier",
+    "um_rubbleloot_garlicbraid",
+    "um_rubbleloot_bones",
+    "um_rubbleloot_rimeseed",
+    "um_rubbleloot_preservecan",
+    "um_rubbleloot_multitool",
+    "um_rubbleloot_pocketforge",
+    "um_rubbleloot_mrnoisy",
 }
 
 local minimap_icons = {
@@ -551,7 +566,10 @@ local minimap_icons = {
     "sludgestack_corked",
     "um_scrapper",
     "um_astral_projector",
-    "um_astral_projector_target"
+    "um_astral_projector_target",
+    "moonpillar_icon",
+    "moontear_icon",
+    "um_rubbleicon"
 }
 
 for _, item in ipairs(inventoryitems) do
@@ -1752,6 +1770,9 @@ Assets = {
     Asset("ANIM", "anim/winona_portables.zip"),
 
     Asset("ANIM", "anim/ui_um_cookpot_wagstaff_1x4.zip"),
+    Asset("ANIM", "anim/ui_rubblecan_1x1.zip"),
+    Asset("ANIM", "anim/ui_rubbleforge_1x2.zip"),
+    
 
     Asset("ATLAS", "images/wortox_lunar_stealer.xml"),
     Asset("IMAGE", "images/wortox_lunar_stealer.tex"),
@@ -1938,7 +1959,8 @@ Assets = {
     --Asset("SOUND", "sound/um_detonator_bank00.fsb"),
     Asset("SOUND", "sound/um_detonator_bank01.fsb"),
 
-
+    Asset("SOUNDPACKAGE", "sound/um_mrnoisy.fev"),
+    Asset("SOUND", "sound/um_mrnoisy_bank00.fsb"),
 
 
     --BIGPORTRAITS

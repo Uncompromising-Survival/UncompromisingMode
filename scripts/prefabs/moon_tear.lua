@@ -1,6 +1,7 @@
 local assets =
 {
     Asset("ANIM", "anim/moonrock_seed.zip"),
+    Asset("ANIM", "anim/um_moontear.zip"),
 }
 
 local function startcrying(inst)
@@ -43,8 +44,8 @@ local function fn()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("moonrock_seed")
-    inst.AnimState:SetBuild("moontear")
+    inst.AnimState:SetBank("um_moontear")
+    inst.AnimState:SetBuild("um_moontear")
     inst.AnimState:PlayAnimation("idle")
 
     inst:AddTag("donotautopick")--sucks to pick this up on accident lol

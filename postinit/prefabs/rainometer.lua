@@ -48,14 +48,7 @@ local function OnActivate(inst, doer)
 		doer.player_classified.revealmapspot_worldx:set(x)
 		doer.player_classified.revealmapspot_worldz:set(z)
 		doer.player_classified.revealmapspotevent:push()
-	
-	--[[
-		local player = doer.player_classified
-		local px, py, pz = doer.Transform:GetWorldPosition()
 
-		if player ~= nil and player.HUD ~= nil then
-			player.HUD.controls:ShowMap(Vector3(x, y, z))
-		end]]
 	else
 		if doer ~= nil and doer.components.talker ~= nil then
 			doer.components.talker:Say(GetString(doer, "ANNOUNCE_UM_NO_TORNADO"))

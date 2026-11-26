@@ -45,6 +45,30 @@ local function OnBurnt(inst)
     inst.components.pickable:Pick(nil) --nil doesn't give any loot.
 end
 
+local function DoRubble(inst)
+    -- Only option is currently stone rubble, let's do a bunched and a not bunched version
+    local x,y,z = inst.Transform:GetWorldPosition()
+    local normal_offset = FindWalkableOffset(inst:GetPosition(), math.random() * 2 * PI, 0.25, 1, false, true)
+    if normal_offset then
+        local rubble
+        if math.random() < 0.05 then
+            rubble = SpawnPrefab("um_canopeer")
+        else
+            rubble = SpawnPrefab("um_hooded_rubble")
+        end
+        rubble.Transform:SetPosition(x + normal_offset.x,0,z + normal_offset.z)
+    end
+end
+
+local function TryRubble(inst)
+    if not inst.entity:IsAwake() then
+        local x,y,z = inst.Transform:GetWorldPosition()
+        if #TheSim:FindEntities(x,y,z,20,{"structure"}) == 0 then
+            DoRubble(inst)
+        end
+    end
+end
+
 local function onregenfn(inst)
     inst:Show()
     inst.hidden = nil
@@ -58,6 +82,9 @@ local function onregenfn(inst)
         inst.components.burnable:SetOnBurntFn(OnBurnt)
     end
     inst:DoTaskInTime(0, RegisterPathFinding)
+    if math.random() < 0.33 then
+        TryRubble(inst)
+    end
 end
 
 local function makeemptyfn(inst)
@@ -231,38 +258,88 @@ local function CheckToSeeIfTargetsMoving(inst)
         inst.BrushingTest:Cancel()
         inst.BrushingTest = nil
         inst.AnimState:PlayAnimation("unpress")
+        inst.SoundEmitter:PlaySound("dontstarve/creatures/eyeplant/vine_emerge")
         inst.AnimState:PushAnimation("idle")
     end
 end
 
-local function AphidStorm(inst,num,unfortunate_soul)
+local function DoSpawnAphid(inst,unfortunate_soul)
     if unfortunate_soul then
-        local thicket = FindEntity(inst,12,function(ent) return
-            ent.prefab == "hooded_fern" and not ent.cant_aphid and inst:GetDistanceSqToInst(ent) > 4^2
-        end)
-        if not thicket then return end
         local aphid = SpawnPrefab("aphid")
-        aphid.Transform:SetPosition(thicket.Transform:GetWorldPosition())
+        aphid.Transform:SetPosition(inst.Transform:GetWorldPosition())
         aphid.components.combat:SuggestTarget(unfortunate_soul)
-
-        if num > 0 then
-            num = num - 1
-            if not unfortunate_soul:HasTag("player") then
-                num = num - 1
-            end
-            thicket.cant_aphid = true
-            thicket:DoTaskInTime(6,function(thicket) thicket.cant_aphid = nil end)
-            inst:DoTaskInTime(0.2,function(inst) AphidStorm(thicket,num,unfortunate_soul) end)
-        end
     end
 end
+
+local function ScheduleAphid(inst,unfortunate_soul)
+    -- shake
+    inst.tremble = inst:DoPeriodicTask(0.66,function(inst)
+        if not inst.BrushingTest then
+            if inst.AnimState:IsCurrentAnimation("depress") then
+                inst.AnimState:PlayAnimation("unpress",false)
+                inst.SoundEmitter:PlaySound("dontstarve/creatures/eyeplant/vine_emerge")
+            else
+                inst.AnimState:PlayAnimation("depress",false)
+                inst.SoundEmitter:PlaySound("dontstarve/creatures/eyeplant/eye_emerge")
+            end
+        end
+    end)
+    inst:DoTaskInTime(5,function(inst)
+        if inst.tremble then
+            inst.tremble:Cancel()
+            inst.tremble = nil
+        end
+        -- Stop the shake
+        if not inst.BrushingTest then
+            if inst.AnimState:IsCurrentAnimation("depress") then
+                inst.AnimState:PlayAnimation("unpress",false)
+                inst.SoundEmitter:PlaySound("dontstarve/creatures/eyeplant/vine_emerge")
+            end
+            inst.AnimState:PushAnimation("idle",true)
+        end
+
+        DoSpawnAphid(inst,unfortunate_soul)
+    end)
+end
+
+local function AphidStorm(inst,num,unfortunate_soul)
+    ScheduleAphid(inst,unfortunate_soul)
+    if num > 0 then
+        num = num - 1
+        if not unfortunate_soul:HasTag("player") then
+            num = num - 1
+        end
+        local thicket = FindEntity(inst,12,function(ent) return
+            ent.prefab == "hooded_fern" and not ent.cant_aphid and inst:GetDistanceSqToInst(ent) > 4^2 and 
+                ent.components.pickable and ent.components.pickable:CanBePicked()
+        end)
+        if not thicket then return end
+
+        inst.cant_aphid = true
+        inst:DoTaskInTime(6,function(thicket) thicket.cant_aphid = nil end)
+        inst:DoTaskInTime(0.2,function(inst) AphidStorm(thicket,num,unfortunate_soul) end)
+    end
+    
+end
+
 
 local function GetNumAphidsWithWorldAge(age)
     return math.clamp(math.random(age/10,age/5),4,9) -- min 4, max 9 guaranteed around 90 days in. 25 days where number is always the same (4).
 end
 
 local function GetChanceAphidsWithWorldAge(age)
-    return math.clamp(100-(age/6), 85, 95) -- max .95, min .85 achieved 90 days in. 30 days where chance is the same (.95).
+    return math.clamp(100-(age/6), 95, 99) -- max .95, min .85 achieved 90 days in. 30 days where chance is the same (.95).
+end
+
+local function BeginAphidStorm(inst,target)
+    local total_aphids = GetNumAphidsWithWorldAge(TheWorld.state.cycles)
+    if not (target and target.cant_aphid) then
+        AphidStorm(inst,total_aphids,target)
+        if target then -- The player can't summon a subsequent aphid storm
+            target.cant_aphid = true
+            target:DoTaskInTime(18,function() target.cant_aphid = nil end)
+        end
+    end
 end
 
 local function onnear(inst, target)
@@ -271,14 +348,7 @@ local function onnear(inst, target)
             local chance_aphids = GetChanceAphidsWithWorldAge(TheWorld.state.cycles) * .01
             if math.random() > chance_aphids and not TheWorld.state.iswinter then
                 if not IsIslandWorld() then
-                    local total_aphids = GetNumAphidsWithWorldAge(TheWorld.state.cycles)
-                    if not target.cant_aphid then
-                        AphidStorm(inst,total_aphids,target)
-                        inst.cant_aphid = true
-                        inst:DoTaskInTime(6,function() inst.cant_aphid = nil end)
-                        target.cant_aphid = true
-                        target:DoTaskInTime(6,function() target.cant_aphid = nil end)
-                    end
+                    BeginAphidStorm(inst,target)
                 else
                     SpawnPrefab("snake").Transform:SetPosition(inst.Transform:GetWorldPosition())
                 end
@@ -297,6 +367,7 @@ local function onnear(inst, target)
             inst.BrushingTest = inst:DoPeriodicTask(0.3, CheckToSeeIfTargetsMoving)
             if #inst.playertracking == 1 then
                 inst.AnimState:PlayAnimation("depress", false)
+                inst.SoundEmitter:PlaySound("dontstarve/creatures/eyeplant/eye_emerge")
                 inst.busyanimation = true
                 inst:ListenForEvent("animover", ToggleBusyAnimation)
             end
@@ -304,6 +375,14 @@ local function onnear(inst, target)
     end
 end
 
+local function TryRubbleWithDelay(inst)
+    inst:DoTaskInTime(0,function(inst)
+        if math.random() < 0.01 then
+            TryRubble(inst)
+        end            
+    end) -- For the buncher to call
+end
+    
 local function grass(name, stage)
     local function fn()
         local inst = CreateEntity()
@@ -362,6 +441,7 @@ local function grass(name, stage)
         --inst.components.playerprox:SetOnPlayerNear(onnear)
         --inst.components.playerprox:SetPlayerAliveMode(inst.components.playerprox.AliveModes.AliveOnly)
 
+        inst.BeginAphidStorm = BeginAphidStorm
 
 
         inst.um_thicketnear = onnear
@@ -372,6 +452,7 @@ local function grass(name, stage)
         inst.components.burnable:SetBurnTime(0.75)
         inst.components.burnable:SetOnBurntFn(OnBurnt)
 
+        inst.DoRNGRubble = TryRubbleWithDelay
 
 
         inst.playertracking = {}
@@ -396,6 +477,12 @@ local function grass(name, stage)
             end
         end)
         MakeMediumPropagator(inst)
+
+        inst:WatchWorldState("isspring",function(inst)
+            if TheWorld.state.isspring then
+                inst.DoRNGRubble(inst)
+            end
+        end)
         return inst
     end
 

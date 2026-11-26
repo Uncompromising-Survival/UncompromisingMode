@@ -58,6 +58,7 @@ else
 		task.colour={r=1,g=0,b=1,a=1}
 	end)
 	AddTaskPreInit("For a nice walk", function(task)
+		task.room_tags = {"Junkyard_Spawner"} 
 		task.room_choices={
 			["MagicalDeciduous"] = 1,
 			["DeepDeciduous"] = function() return 3 + math.random(3) end,

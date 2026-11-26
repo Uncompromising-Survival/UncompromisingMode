@@ -1215,3 +1215,28 @@ STRINGS.MINERAL_LOGBOOK = {
     EFFECTS = "Effects",
     GEMS = "Gems",
 }
+
+STRINGS.SHADOW_BATTLEAXE_TALK.overtime_wathomhone_l2 =
+    {
+        "Fff.. illed..",
+        "Ss... at... ..ed",
+    }
+
+STRINGS.SHADOW_BATTLEAXE_TALK.overtime_wathomhone_l3 = -- And level 4 too!
+    {
+        "Your umbral well almost makes me forget murder.",
+        "You may satisfy my hunger. But we could have more.",
+        "It is unorthodox for me to devour my wielder",
+        "Tasty.",
+        "What are you waiting for, wielder?",
+        "My form will hunger eventually.",
+        "Don't you hunger for bloodshed?",
+        "Boundless shadows, why not use them to rule?",
+    }
+    
+STRINGS.SHADOW_BATTLEAXE_TALK.overtime_wathomhone_l4 =
+    {
+        "It's been a journey.",
+        "Sated in some ways, starving in others.",
+        "After all this, you still choose for me to devour you?",
+    }

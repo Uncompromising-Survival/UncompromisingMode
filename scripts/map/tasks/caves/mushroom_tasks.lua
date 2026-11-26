@@ -113,10 +113,9 @@ AddTask("VeryFloodedGrotto", {
 		level_set_piece_blocker = true,
 		room_choices={
 			
-			["GrottoHeavyFloodWorms"] = 2,		
+			["GrottoHeavyFloodWorms"] = 1,		
 			["GrottoHeavyFloodBoth"] = 1,
 			["GrottoHeavyFloodTentacles"] = 2,
-
 		},
 		
 		background_room="GrottoHeavyFloodTentacles",
@@ -134,9 +133,9 @@ AddTask("DarkFloodedGrotto", {
 		keys_given={KEYS.ARCHIVE},
 		level_set_piece_blocker = true,
 		room_choices={
-			
-			["GrottoDarknessWorms"] = 6,		
-			["GrottoDarknessTentacles"] = 1,	
+			["GrottoDarknessWorms"] = 4,	
+			["Himalayas"] = 1,	
+			["GrottoDarknessTentacles"] = 2,	
 		},
 		
 		room_bg=WORLD_TILES.UM_FLOODWATER_GROTTO,
@@ -172,8 +171,9 @@ AddTaskSetPreInitAny(function(tasksetdata)
 	table.insert(tasksetdata.tasks,"DarkFloodedGrotto")
 	if tasksetdata.required_prefabs ~= nil then
 		table.insert(tasksetdata.required_prefabs,"cave_exit_moon")
+		table.insert(tasksetdata.required_prefabs,"um_moontear_core_base")
 	else
-		tasksetdata.required_prefabs = {"cave_exit_moon"}
+		tasksetdata.required_prefabs = {"cave_exit_moon","um_moontear_core_base"}
 	end
 end)
 

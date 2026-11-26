@@ -20,7 +20,13 @@ local function Populate(inst, tile, plant, thickness)
             local x1 = x + i + math.random(-1, 1) / math.random(2, 4)
             local z1 = z + j + math.random(-1, 1) / math.random(2, 4)
             if TheWorld.Map:GetTileAtPoint(x1, y, z1) == tile and not LargeFernCheck(x1, y, z1, thickness) then
-                SpawnPrefab(to_spawn).Transform:SetPosition(x1, y, z1)
+                local ent_plant = SpawnPrefab(to_spawn)
+                if ent_plant then
+                    ent_plant.Transform:SetPosition(x1, y, z1)
+                    if ent_plant == "hooded_fern" then 
+                        ent_plant.DoRNGRubble(ent_plant) -- Try to place some rubble
+                    end
+                end
             end
         end
     end
@@ -44,7 +50,8 @@ local function PopulateIAThicket(inst, tile, plant, thickness)
 
         if TheWorld.Map:GetTileAtPoint(x1, y, z1) == tile and TheWorld.Map:IsVisualGroundAtPoint(x1, y, z1) then
             if not LargeFernCheck(x1, y, z1, thickness) then
-                SpawnPrefab(plant).Transform:SetPosition(x1, y, z1)
+                local ent_plant = SpawnPrefab(plant)
+                ent_plant.Transform:SetPosition(x1, y, z1)
             end
         else
             break
@@ -61,7 +68,8 @@ local function PopulateIAThicket(inst, tile, plant, thickness)
 
         if TheWorld.Map:GetTileAtPoint(x1, y, z1) == tile and TheWorld.Map:IsVisualGroundAtPoint(x1, y, z1) then
             if not LargeFernCheck(x1, y, z1, thickness) then
-                SpawnPrefab(plant).Transform:SetPosition(x1, y, z1)
+                local ent_plant = SpawnPrefab(plant)
+                ent_plant.Transform:SetPosition(x1, y, z1)
             end
         else
             break

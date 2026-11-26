@@ -12,12 +12,12 @@ local loot =
     "silk",
     "widowsgrasp",
     "widowshead",
-    --"silksack",
 }
 
 local RETARGET_MUST_TAGS = { "_combat" }
 local RETARGET_CANT_TAGS = { "INLIMBO", "structure", "bird", "um_fern_fox" }
 local RETARGET_ONE_OF_TAGS = { "player" }
+
 local function Retarget(inst)
     if not inst.components.health:IsDead() and not inst.components.sleeper:IsAsleep() and not inst.sg:HasStateTag("attack") then
         local newtarget = FindEntity(inst, 64,
@@ -36,13 +36,26 @@ local function Retarget(inst)
 end
 
 local function CalcSanityAura(inst, observer)
-    --return (inst.components.health and inst.components.health:GetPercent() < .5) and -TUNING.SANITYAURA_HUGE*2 or -TUNING.SANITYAURA_HUGE
     return -TUNING.SANITYAURA_HUGE
 end
 
 local function OnAttacked(inst, data)
     if data.attacker and not inst.sg:HasStateTag("attack") then
         inst.components.combat:SetTarget(data.attacker)
+    end
+
+    -- AXE Reduce the timer every time I take damage by an amount proportional to the damage
+    if data and data.damage and inst.components.timer:TimerExists("summon") then
+        local Timer = inst.components.timer
+        local time = Timer:GetTimeLeft("summon")
+        if time > data.damage * 3 / 50 then
+            time = time - data.damage * 3 / 50
+            Timer:SetTimeLeft("summon",time)
+        end
+    end
+
+    if not inst.searching_for_tree and not inst.count and inst.components.health and inst.components.health:GetPercent() < 0.75 and inst.components.timer and not inst.components.timer:TimerExists("summon") then
+        UMCommonFns.RestartTimer(inst, { name = "summon", time = 60})
     end
 end
 
@@ -52,22 +65,19 @@ local function DoDespawn(inst)
     local home = inst.components.homeseeker and inst.components.homeseeker.home or nil
     if home then
         home.components.childspawner:GoHome(inst)
-        --home.components.childspawner:StartSpawning()
         inst:AddTag("home")
 
         if home.components.timer:TimerExists("reroll_cocoons") then
             home.components.timer:ResumeTimer("reroll_cocoons")
         else
-            home.components.timer:StartTimer("reroll_cocoons", TUNING.TOTAL_DAY_TIME * 5)
+            home.components.timer:StartTimer("reroll_cocoons", TUNING.TOTAL_DAY_TIME * 20)
         end
     else
         inst:Remove() --Hooded Widow was probably debug spawned in?
     end
 end
 
-local function OnLoad(inst)
-    inst.investigated = false
-end
+
 
 local function ShouldDodge(inst)
     --TheNet:Announce("Redefining")
@@ -95,22 +105,9 @@ local function ShouldDodge(inst)
     end
 end
 
-local function TryPowerMove(inst)
-    ShouldDodge(inst) --Timer's up, lets get a position to dodge to
-end
-
-local function Reset(inst)
-    inst.reset = true
-end
-
 local function EpicsCheck(inst) -- Widow will not tolerate being bullied by epics, you go fight them yourself!
     local x, y, z = inst.Transform:GetWorldPosition()
     local ents = TheSim:FindEntities(x, y, z, 20, { "epic" }, { "hoodedwidow", "leif" })
-
-    -- if inst.components.homeseeker and inst.components.homeseeker.home and inst:GetDistanceSqToInst(inst.components.homeseeker.home) > TUNING.DRAGONFLY_RESET_DIST * 20 then
-    -- inst.bullier = true
-    -- end
-
     for i, v in pairs(ents) do
         if v and v.components.combat and v.components.combat.target and v.components.combat.target == inst then
             inst.bullier = true
@@ -120,10 +117,16 @@ end
 
 local function OtherFollowSymbol(inst, other)
     other.components.lootdropper:SetLoot(nil)
-    local diff = 10
+    local diff = 3
     other.DynamicShadow:Enable(false)
+    other:AddTag("notarget")
+    other:DoTaskInTime(10,function(other)
+        if other then -- Fallback incase
+            other:Remove()
+        end
+    end)
     other.entity:AddFollower():FollowSymbol(inst.GUID, "c1", math.random(-diff, diff), 0, math.random(-diff, diff) / 2)
-    other:DoTaskInTime(1, function(other) other:Remove() end) -- Give it a second before removal.
+    table.insert(inst.eatin_stuff,other)
 end
 
 local edible_creatures = { "spider", "aphid", "hound", "spider_trapdoor", "spider_trapdoor_hooded" }
@@ -132,15 +135,27 @@ local function ThisIsEdible(other)
     return table.contains(edible_creatures, other.prefab)
 end
 
-local function OnHitOther(inst, data)
-    local other = data.target
-    if ThisIsEdible(other) then
-        if not inst.components.health:IsDead() and (not inst.sg:HasStateTag("ability") or inst.sg:HasStateTag("eating")) then
-            inst.components.health:DoDelta(250)
-            if not inst.sg:HasStateTag("eating") then inst.sg:GoToState("eat_small") end
-            if other.brain then other.brain:Stop() end
-            OtherFollowSymbol(inst, other)
+local function OnEatOther(inst, other)
+    if not other.components.health:IsDead() and not inst.sg:HasStateTag("ability") and not inst.components.health:IsDead() then
+        inst.to_heal = inst.to_heal + 1
+        if not inst.sg:HasStateTag("eating") then 
+            inst.sg:GoToState("eat_chew_pre") 
         end
+        if other.brain then 
+            other.brain:Stop() 
+        end
+        OtherFollowSymbol(inst, other)
+    end
+end
+
+local function DoChewingHeal(inst)
+    inst.components.health:DoDelta(200/inst.components.health.maxhealth*12000) -- Amount widow heals per spider (need to keep the default max health here, the tuning value may change.)
+    local puddle = SpawnPrefab("um_goo_spider")
+    puddle.Transform:SetPosition(inst.Transform:GetWorldPosition())
+    puddle.AnimState:SetMultColour(0.5,0.5,0.5,1)
+    inst.to_heal = inst.to_heal - 1
+    if inst.to_heal > 0 then
+        inst:DoTaskInTime(0.2,DoChewingHeal)
     end
 end
 
@@ -182,22 +197,6 @@ local function ShadowFade(inst)
     end
 end
 
-local function WebMortarCanopy(inst, target)
-    local projectile = SpawnPrefab("web_mortar")
-
-    local scaleFactor = Lerp(.5, 1.5, 1)
-    projectile.shadow = SpawnPrefab("warningshadow")
-    projectile.shadow.scaleFactor = scaleFactor
-    projectile.shadow.Transform:SetScale(scaleFactor, scaleFactor, scaleFactor)
-    projectile.shadow = projectile.shadow:DoPeriodicTask(FRAMES, ShadowFade, nil, 5)
-    local targetpos = target:GetPosition()
-    targetpos.x = targetpos.x + math.random(-6, 6)
-    targetpos.z = targetpos.z + math.random(-6, 6)
-    projectile.components.complexprojectile:SetHorizontalSpeed(1)
-    projectile.Transform:SetPosition(targetpos.x, 20, targetpos.z)
-    projectile.components.complexprojectile:Launch(targetpos, inst, inst)
-end
-
 local function ShakeTree(inst, tree)
     local home = inst.components.homeseeker and inst.components.homeseeker.home or nil
     local target = nil
@@ -207,56 +206,28 @@ local function ShakeTree(inst, tree)
 
     -- Spawn some near the player that will target the player
     if target then
-        --WebMortarCanopy(inst, target)
-        -- for i = 1, 4 do
-        -- tree.SpawnDebris(tree, target, fx_loot, target)           -- FX
-        -- tree.SpawnDebris(tree, target, impact_loot, target, true) -- Watch your head
-        -- end
-
-        -- Enemies
-        --tree.SpawnDebris(tree, target, minion_loot, target)
-        --tree.SpawnDebris(tree, target, minion_loot, target)
         tree.SpawnDebris(tree, nil, minion_loot, target)
     end
 
     -- Spawn some near home that don't necessarily have any idea what they're doing
     if home then
-        -- FX
-        WebMortarCanopy(inst, home)
         for i = 1, 4 do
             tree.SpawnDebris(tree, nil, fx_loot, home)
         end
-
-        -- Watch your head
-        -- for i = 1, 2 do
-        -- tree.SpawnDebris(tree, nil, impact_loot, home, true)
-        -- end
-
-        -- Enemies
-        --tree.SpawnDebris(tree, nil, minion_loot, home)
-        --tree.SpawnDebris(tree, nil, minion_loot, home)
         tree.SpawnDebris(tree, nil, minion_loot, home)
     end
 
-    -- Spawn some near widow, these guys want to attack her
+    -- Spawn some near widow
     -- FX
     for i = 1, 4 do
-        tree.SpawnDebris(tree, inst, fx_loot)
+        tree.SpawnDebris(tree, nil, fx_loot)
     end
 
-    -- Watch your head
-    -- for i = 1, 2 do
-    -- tree.SpawnDebris(tree, inst, impact_loot, nil, true)
-    -- end
-
     -- Enemies
-    --tree.SpawnDebris(tree, inst, minion_loot)
-    --tree.SpawnDebris(tree, inst, minion_loot)
     tree.SpawnDebris(tree, nil, inst.components.health:GetPercent() >= .5 and minion_loot
         or inst.components.health:GetPercent() < .5 and minion_loot2
         or inst.components.health:GetPercent() < .25 and minion_loot3)
 
-    --WebMortarCanopy(inst,inst)
     -- Other players
     local x, y, z = inst.Transform:GetWorldPosition()
     local players = FindPlayersInRange(x, y, z, 25)
@@ -264,26 +235,22 @@ local function ShakeTree(inst, tree)
         if not (target and player == target) then
             -- FX
             for i = 1, 2 do
-                tree.SpawnDebris(tree, player, fx_loot, target)
+                tree.SpawnDebris(tree, nil, fx_loot, target)
             end
 
             -- Watch your head
-            for i = 1, 3 do
+            for i = 1, 2 do
                 tree.SpawnDebris(tree, nil, minion_loot, player)
-                --tree.SpawnDebris(tree, player, impact_loot, player, true)
             end
-
-            -- Enemies
-            --tree.SpawnDebris(tree, target, minion_loot, target)
-            --tree.SpawnDebris(tree, target, minion_loot, target)
         end
     end
 end
 
-local function DecideWhatTreeToBe(inst)
+local function ChooseTreeTarget(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    local trees = TheSim:FindEntities(x, y, z, 50, { "giant_tree" })
-    local mindist = 15 ^ 2
+    local tree_dist = 50
+    local trees = TheSim:FindEntities(x, y, z, tree_dist, { "giant_tree" })
+    local mindist = tree_dist ^ 2
     for i, tree in ipairs(trees) do
         local treedist = inst:GetDistanceSqToInst(tree)
         if treedist < mindist then
@@ -298,11 +265,69 @@ local function FindTreeToShake(inst)
         inst.searching_for_tree:Cancel()
     end
     inst.searching_for_tree = nil
-    DecideWhatTreeToBe(inst)
+    ChooseTreeTarget(inst)
     if inst.treetarget and not (inst.sg:HasStateTag("busy") or inst.sg:HasStateTag("ability")) then
         inst.sg:GoToState("leaptotree_shake_pre")
     else
         inst.searching_for_tree = inst:DoTaskInTime(2, FindTreeToShake)
+    end
+end
+
+local function PrepareTreeToShake(inst) -- Give a small delay
+    inst.should_taunt_health_thresh = true
+    if not inst.searching_for_tree then
+        if inst.lasttrigger then
+            if inst.components.health:GetPercent() < inst.lasttrigger then
+                inst.searching_for_tree = inst:DoTaskInTime(8, FindTreeToShake)
+            end
+        else
+            inst.searching_for_tree = inst:DoTaskInTime(8, FindTreeToShake)
+        end
+    end
+    inst.lasttrigger = inst.components.health:GetPercent()
+end
+
+local function InitializeTreeShaking(inst)
+    PrepareTreeToShake(inst)
+end
+
+local function CancelDodgeTimeOut(inst)
+    if inst.dodgetimeouttask then
+        inst.dodgetimeouttask:Cancel()
+        inst.dodgetimeouttask = nil
+    end
+    inst._dodgetimeout = nil
+end
+
+local function SetDodgeTimeout(inst)
+    inst.dodgetimeouttask = inst:DoTaskInTime(5,function(inst)
+        inst._dodgetimeout = true
+    end)
+end
+
+local function TryPowerMove(inst,data)
+    if data.name == "special" then
+        SetDodgeTimeout(inst)
+        ShouldDodge(inst) --Timer's up, lets get a position to dodge to
+    elseif data.name == "summon" then
+        PrepareTreeToShake(inst)
+    end
+end
+
+local function OnNewState(inst)
+    if inst.components.timer:TimerExists("summon") then
+        if inst.sg:HasStateTag("sleeping") or inst.sg:HasStateTag("frozen") or inst.sg:HasStateTag("thawing") then
+            inst.components.timer:PauseTimer("summon")
+        else
+            inst.components.timer:ResumeTimer("summon")
+        end
+    end
+end
+
+local function OnLoad(inst)
+    inst.investigated = false
+    if inst.components.health:GetPercent() < 0.75 then
+        InitializeTreeShaking(inst)
     end
 end
 
@@ -355,23 +380,8 @@ local function fn()
     inst.components.health:SetMaxHealth(TUNING.DSTU.WIDOW_HEALTH)
     inst:AddComponent("healthtrigger")
 
-    local function PrepareTreeToShake(inst) -- Give a small delay
-        inst.should_taunt_health_thresh = true
-        if not inst.searching_for_tree then
-            if inst.lasttrigger then
-                if inst.components.health:GetPercent() < inst.lasttrigger then
-                    inst.searching_for_tree = inst:DoTaskInTime(8, FindTreeToShake)
-                end
-            else
-                inst.searching_for_tree = inst:DoTaskInTime(8, FindTreeToShake)
-            end
-        end
-        inst.lasttrigger = inst.components.health:GetPercent()
-    end
 
-    inst.components.healthtrigger:AddTrigger(.75, PrepareTreeToShake)
-    inst.components.healthtrigger:AddTrigger(.5, PrepareTreeToShake)
-    inst.components.healthtrigger:AddTrigger(.25, PrepareTreeToShake)
+    inst.components.healthtrigger:AddTrigger(.75, InitializeTreeShaking) -- Also enables shaking
 
     ------------------
     inst:AddComponent("knownlocations")
@@ -405,16 +415,7 @@ local function fn()
 
     ------------------
 
-    inst:AddComponent("eater")
-    inst.components.eater:SetDiet({ FOODTYPE.MEAT }, { FOODTYPE.MEAT })
-    inst.components.eater:SetCanEatHorrible()
-    inst.components.eater.strongstomach = true -- can eat monster meat!
-
-    ------------------
-
     inst:AddComponent("inspectable")
-
-    inst:AddComponent("leader")
 
     inst:AddComponent("groundpounder")
     inst.components.groundpounder.destroyer = true
@@ -423,36 +424,63 @@ local function fn()
     inst.components.groundpounder.platformPushingRings = 2
     inst.components.groundpounder.numRings = 3
     ------------------
-    inst.investigated = false
-    inst.Reset = Reset
+
+    inst.investigated = false -- Dictates Widow's urge to leave if she hasn't seen any people, will eventually be made true after no action.
     inst.DoDespawn = DoDespawn
     inst:SetBrain(brain)
     inst.OnLoad = OnLoad
     inst:ListenForEvent("attacked", OnAttacked)
-    inst.combo = 1
-    inst:AddComponent("timer")
-    inst:ListenForEvent("timerdone", TryPowerMove)
-    UMCommonFns.RestartTimer(inst, { name = "pounce", time = 10 + math.random(-3, 1) })
-    UMCommonFns.RestartTimer(inst, { name = "mortar", time = 20 + math.random(-1, 5) })
-    inst:DoPeriodicTask(3, EpicsCheck)
-    inst.ShouldDodge = ShouldDodge
-    inst.combosucceed = true
-    inst.docombo = false
 
+
+    inst:AddComponent("timer")
+
+
+    inst:ListenForEvent("timerdone", TryPowerMove)
+    UMCommonFns.RestartTimer(inst, { name = "special", time = 15})
+    
+    inst:DoPeriodicTask(3, EpicsCheck)
+
+    -- Called from SG to check if Widow should be dodging.
+    inst.ShouldDodge = ShouldDodge
+
+    
+    -- Charge Variables
     inst.turn_speed = 0
     inst.turns = 0
     inst.chargespeed = 7 / 3
 
-    inst:ListenForEvent("onhitother", OnHitOther)
+    -- Widow's SG calls this when she successfully lands a hit on an edible target, 5 of them may be eaten.
+    inst.ThisIsEdible = ThisIsEdible
+    inst.OnEatOther = OnEatOther
 
-    inst.DecideWhatTreeToBe = DecideWhatTreeToBe -- This looks for which tree she's gonna hop to.
+    -- For her ally devouring mechanic
+    inst.to_heal = 0
+    inst.DoChewingHeal = DoChewingHeal
+    inst.eatin_stuff = {} -- temp table holding the prefabs she's got in her claws when she's about to eat them
+
+    inst.ChooseTreeTarget = ChooseTreeTarget -- This looks for which tree she's gonna hop to.
     inst.FindTreeToShake = FindTreeToShake
     inst.ShakeTree = ShakeTree
+    inst.CancelDodgeTimeOut = CancelDodgeTimeOut
 
+    -- Freezing nerfs
     local freezable = MakeLargeFreezableCharacter(inst, "body")
     freezable:SetResistance(TUNING.DRAGONFLY_FREEZE_THRESHOLD / 3)
     freezable.damagetobreak = TUNING.DRAGONFLY_FREEZE_RESIST / 3
     freezable.diminishingreturns = true
+
+    inst:ListenForEvent("onremove",function(inst) -- Fallback: Remove the stuff we grabbed if we're removed while holding things
+        if inst.eatin_stuff and #inst.eatin_stuff > 0 then
+            for i,v in ipairs(inst.eatin_stuff) do
+                v:Remove()
+            end
+            inst.eatin_stuff = {} -- Reset the table      
+        end
+    end)
+
+
+    -- Make Widow pause her summon timer if she's stunned
+    inst:ListenForEvent("newstate", OnNewState)
 
     return inst
 end

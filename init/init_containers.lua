@@ -287,6 +287,23 @@ end
 
 table.insert(modparams.silksack.widget.slotpos, Vector3(-162 + 37.5, -60 * 4.5 + 135, 0))
 
+modparams.silken_bundle_container =
+{
+    widget =
+    {
+        slotpos = {},
+        animbank = "ui_icepack_2x3",
+        animbuild = "ui_icepack_2x3",
+        pos = Vector3(0, 0, 0),
+    },
+    type = "chest",
+}
+
+for y = 0, 2 do
+    table.insert(modparams.silken_bundle_container.widget.slotpos, Vector3(-162, -75 * y + 75, 0))
+    table.insert(modparams.silken_bundle_container.widget.slotpos, Vector3(-162 + 75, -75 * y + 75, 0))
+end
+
 
 --function modparams.silksack.itemtestfn(container, item, slot)
 --return (item.prefab == "silk" and (slot == 9) or (slot ~= 9) and item.prefab ~= "silk")
@@ -919,6 +936,80 @@ if TUNING.DSTU.WARLY_CHANGES == 1 then
     end
 end
 
+modparams.um_rubbleloot_preservecan_container =
+{
+    widget =
+    {
+        slotpos =
+        {
+            Vector3(0, 16, 0),
+            --Vector3(0, -(64 + 32 + 8 + 4), 0),
+        },
+        slotbg =
+        {
+            { image = "inv_slot_morsel.tex" },
+        },
+        buttoninfo =
+        {
+            text = STRINGS.ACTIONS.WRAPBUNDLE,
+            position = Vector3(0, -50, 0),
+        },
+        animbank = "ui_rubblecan_1x1",
+        animbuild = "ui_rubblecan_1x1",
+        pos = Vector3(0, 0, 0),
+        side_align_tip = 160,
+    },
+    type = "chest",
+}
+
+modparams.um_rubbleloot_preservecan_container.itemtestfn = function(container, item, slot)
+    for i, v in ipairs(GLOBAL.FOODGROUP.OMNI.types) do
+        if item:HasAnyTag("fresh", "stale", "spoiled", "spice", "edible_" .. v) or cooking.IsCookingIngredient(item.prefab) then return true end
+    end
+end
+
+function modparams.um_rubbleloot_preservecan_container.widget.buttoninfo.fn(inst, doer)
+    if inst.components.container ~= nil then
+        GLOBAL.BufferedAction(doer, inst, ACTIONS.WRAPBUNDLE):Do()
+    elseif inst.replica.container ~= nil and not inst.replica.container:IsBusy() then
+        GLOBAL.SendRPCToServer(RPC.DoWidgetButtonAction, ACTIONS.WRAPBUNDLE.code, inst, ACTIONS.WRAPBUNDLE.mod_name)
+    end
+end
+
+function modparams.um_rubbleloot_preservecan_container.widget.buttoninfo.validfn(inst)
+    return inst.replica.container ~= nil and not inst.replica.container:IsEmpty() and not inst.replica.container:IsReadOnlyContainer()
+end
+
+local function CheckToolboxItemMultitool(container, item, slot)
+    return item:HasTag("tool") or item:HasTag("toolbox_item")
+end
+
+containers.params.um_rubbleloot_multitool =
+{
+    widget =
+    {
+        slotpos =
+        {
+            Vector3(64, 0, 0),
+            Vector3(0, 0, 0),
+            Vector3(-64, 0, 0),
+        },
+        slotbg =
+        {
+            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
+            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
+            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
+        },
+        animbank = "ui_chest_3x1",
+        animbuild = "ui_chest_3x1",
+        pos = Vector3(0, 220, 0),
+        side_align_tip = 160,
+    },
+    type = "chest",
+    itemtestfn = CheckToolboxItemMultitool,
+}
+
+
 -- Polar Bearger Bin dried jerky change
 vanilla_beargerfur_sack_itemtestfn = containers.params.beargerfur_sack.itemtestfn
 containers.params.beargerfur_sack.itemtestfn = function(container, item, slot)
@@ -1002,6 +1093,11 @@ function containers.params.um_gemologyforge.widget.buttoninfo.validfn(inst)
     local gem = inst.replica.container:GetItemInSlot(2)
     return inst.replica.container ~= nil and inst.replica.container:IsFull() and tool ~= nil and gem ~= nil
 end
+
+-- Portable Forge
+containers.params.um_rubbleloot_pocketforge = GLOBAL.deepcopy(containers.params.um_gemologyforge)
+containers.params.um_rubbleloot_pocketforge.widget.animbank = "ui_rubbleforge_1x2"
+containers.params.um_rubbleloot_pocketforge.widget.animbuild = containers.params.um_rubbleloot_pocketforge.widget.animbank
 
 if TUNING.DSTU.ICEBOX_TWEAKS then
     containers.params.saltbox.lowpriorityselection = true

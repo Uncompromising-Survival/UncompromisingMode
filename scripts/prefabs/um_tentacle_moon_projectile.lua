@@ -151,7 +151,7 @@ end
 local function OnExplode(inst, target)
     inst.DynamicShadow:Enable(false)
     local x,y,z = inst.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, 3, should_hit, shouldnt_hit)
+    local ents = TheSim:FindEntities(x, y, z, 2, should_hit, shouldnt_hit)
     for i, v in ipairs(ents) do
         if inst.attacker and v.prefab ~= inst.attacker.prefab and not (inst.attacker_faction and v:HasTag(inst.attacker_faction)) then
             DoDamageEffect(inst, v)

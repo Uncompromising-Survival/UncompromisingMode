@@ -112,7 +112,6 @@ local prefabs = {
     "moon_tear",
     "moon_tear_meteor",
     "rneghost",
-    "chimp",
     "pollenmiteden",
     "pollenmitedenprefabspawner",
     "rice",
@@ -392,8 +391,7 @@ local prefabs = {
     "wathom_none",
     "wathom_heartbeat_ringfx",
     "wathom_puddle",
-    "wathom_corpse",
-
+    "um_wathom_trace",
 
     "um_shadowarena",
 
@@ -636,7 +634,16 @@ local prefabs = {
     "gemology_book",
     "magma_tile",
     "um_blueprinting_kit",
-    "minerstatue"
+    "minerstatue",
+
+    "um_goo_spider",
+    "um_largefern",
+    "um_aphidhole",
+    "um_hooded_rubble",
+    "um_rubbleloot_common",
+    "um_canopeer",
+    "um_moontear_rock",
+    "um_mcrusk_trophies"
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then

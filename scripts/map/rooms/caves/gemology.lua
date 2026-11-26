@@ -1,3 +1,8 @@
+require "map/room_functions"
+
+local Layouts = require ("map/layouts").Layouts
+local StaticLayout = require ("map/static_layout")
+
 --- RED
 AddRoom("RedMushForest_Petrified", {
     colour={r=0.8,g=0.1,b=0.1,a=0.9},
@@ -21,7 +26,7 @@ AddRoom("RedMushForest_Petrified", {
 
             slurper = 0.001,
         },
-        countprefabs = {um_poofshroom_node_red = 6},
+        --countprefabs = {um_poofshroom_node_red = 6},
     }
 })
 AddRoom("RedSpiderForest_Petrified", {
@@ -47,7 +52,7 @@ AddRoom("RedSpiderForest_Petrified", {
 
             slurper = 0.001,
         },
-        countprefabs = {um_poofshroom_node_red = 6},
+        --countprefabs = {um_poofshroom_node_red = 6},
     }
 })
 
@@ -73,7 +78,7 @@ AddRoom("GreenMushForest_Petrified", {
 
             slurper = 0.001,
         },
-        countprefabs = {um_poofshroom_node_green = 6},
+        --countprefabs = {um_poofshroom_node_green = 6},
     }
 })
 
@@ -110,7 +115,7 @@ AddRoom("GreenMushRabbits_Petrified", {
             slurper = 0.001,
             rabbithouse = 0.005,
         },
-        countprefabs = {um_poofshroom_node_green = 6}
+        --countprefabs = {um_poofshroom_node_green = 6}
     }
 })
 --- BLUE
@@ -134,7 +139,7 @@ AddRoom("BlueMushForest_Petrified", {
 
             slurper = 0.001,
         },
-        countprefabs = {um_poofshroom_node_blue = 6}
+        --countprefabs = {um_poofshroom_node_blue = 6}
     }
 })
 
@@ -188,11 +193,11 @@ AddRoom("FungusNoiseForest_Petrified", {
 
             slurper = 0.001,
         },
-        countprefabs = {
-            um_poofshroom_node_blue = 1,
-            um_poofshroom_node_green = 1,
-            um_poofshroom_node_red = 1,      
-        }
+        --countprefabs = {
+        --    um_poofshroom_node_blue = 1,
+        --    um_poofshroom_node_green = 1,
+        --    um_poofshroom_node_red = 1,      
+        --}
     }
 })
 AddRoom("FungusNoiseMeadow_Petrified", {
@@ -220,11 +225,11 @@ AddRoom("FungusNoiseMeadow_Petrified", {
 
             slurper = 0.001,
         },
-        countprefabs = {
-            um_poofshroom_node_blue = 1,
-            um_poofshroom_node_green = 1,
-            um_poofshroom_node_red = 1,      
-        }
+        --countprefabs = {
+        --    um_poofshroom_node_blue = 1,
+        --    um_poofshroom_node_green = 1,
+        --    um_poofshroom_node_red = 1,      
+        --}
     }
 })
 
@@ -294,3 +299,34 @@ AddRoom("LichenLandHub", { -- AXE The difference between these two is exit/enter
     }
 })
 
+-- McRusk
+
+Layouts["um_mcrusk1"] = StaticLayout.Get("map/static_layouts/um_mcrusk1")
+-- Mixed Mush
+AddRoom("McRusk_MixedMush", {
+    colour={r=1.0,g=1.0,b=1.0,a=0.9},
+    value = WORLD_TILES.FUNGUS_NOISE,
+    tags = {"Hutch_Fishbowl"},
+    type = NODE_TYPE.Room,
+    contents =  {
+        distributepercent = .4,
+        distributeprefabs=
+        {
+            mushtree_medium = 6.0,
+            mushtree_tall = 6.0,
+            mushtree_small = 6.0,
+            red_mushroom = 0.5,
+            green_mushroom = 0.5,
+            blue_mushroom = 0.5,
+
+            flower_cave = 0.2,
+            flower_cave_double = 0.1,
+            flower_cave_triple = 0.1,
+
+            slurper = 0.001,
+        },
+        countstaticlayouts={
+            ["um_mcrusk1"]=1,
+        },
+    }
+})

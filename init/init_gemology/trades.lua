@@ -73,8 +73,8 @@ local function ProduceItem(inst, prefab, num, tier)
         if tier then
             item:SetTier(tier)
         end
-        if inst.trader and inst.trader:IsValid() then
-            LaunchAt(item, inst, inst.trader, 1, 1, nil, math.random(-10, 10))
+        if inst.trader and inst.trader:IsValid() and inst.trader.components.inventory then
+            inst.trader.components.inventory:GiveItem(item,inst)
         else
             Launch2(item, inst, 1, 0, 1, math.random(-10, 10))
         end

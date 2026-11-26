@@ -390,8 +390,119 @@ local function fngoo()
     return inst
 end
 
+local dont_aoe = JoinArrays(UMCommonFns.GHOSTLIKE_TAGS)
+local function SpreadGoo(inst,number)
+    
+    local circle = inst.radius*2+3
+    if inst.radius == 0 then -- First one just use one puddle
+        circle = 1
+    end
+    local x,y,z = inst.Transform:GetWorldPosition()
+    for i = 1,circle do
+        local x1 = x+inst.radius*math.cos(2*3.14*i/circle)
+        local z1 = z+inst.radius*math.sin(2*3.14*i/circle)
+        local ents = TheSim:FindEntities(x1,0,z1,2)
+        local allow_spawn = true
+        for i,v in ipairs(ents) do
+            if v.prefab == "wathom_puddle" then
+                allow_spawn = false
+                v.AnimState:SetFrame(1)
+            end
+        end
+        if allow_spawn == true and TheWorld.Map:IsAboveGroundAtPoint(x1,0,z1) then
+            local puddle = SpawnPrefab("wathom_puddle")
+            puddle.Transform:SetPosition(x1,y,z1)
+            puddle.wathom = inst
+            if inst.owner then
+                puddle.owner = inst.owner
+            end
+            local others = TheSim:FindEntities(x1, y, z1, 1.5, {"_combat", "_health"},dont_aoe) --I messed around with the funni goo, its range is actually a bit small, so I bumped it up a tad.
+            for i,other in ipairs(others) do
+                local attackable = true
+                if inst.owner then
+                    attackable = UMCommonFns.IsNotFriendly(inst.owner, other)
+                end
+                local attacker = inst.owner or inst
+                if attackable and inst.owner ~= other then
+                    other.components.combat:GetAttacked(attacker,inst.damage) 
+                end
+            end
+        end
+    end
+    
+    if number > 0 then
+        inst.radius = inst.radius + 3
+        inst:DoTaskInTime(.2,function(inst) SpreadGoo(inst,number-1) end)
+    end
+end
+
+local function doprojectilehit_wathom(inst, other)
+    local x,y,z = inst.Transform:GetWorldPosition()
+    local others = TheSim:FindEntities(x, y, z, 2.5, {"_combat", "_health"},dont_aoe) --I messed around with the funni goo, its range is actually a bit small, so I bumped it up a tad.
+    for i,other in ipairs(others) do
+        local attackable = true
+        if inst.owner then
+            attackable = UMCommonFns.IsNotFriendly(inst.owner, other)
+        end
+        local attacker = inst.owner or inst
+        if attackable then
+            other.components.combat:GetAttacked(attacker,inst.damage) 
+        end
+    end
+
+    SpreadGoo(inst,inst.tier)
+    inst:Hide()
+    inst:DoTaskInTime(3,function(inst) inst:Remove() end) -- Remove After Delay
+end
+
+local function wathom_goo()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddNetwork()
+
+    inst:AddTag("projectile")
+    inst:AddTag("weapon")
+
+    inst.AnimState:SetBank("squid_watershoot")
+    inst.AnimState:SetBuild("squid_watershoot")
+    inst.AnimState:PlayAnimation("spin_loop",true)
+    inst:AddComponent("locomotor")
+    inst.AnimState:SetMultColour(0,0,0,0.8)
+    inst.AnimState:UsePointFiltering(true)
+
+    MakeInventoryPhysics(inst)
+    RemovePhysicsColliders(inst)
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst:AddComponent("complexprojectile")
+    inst.components.complexprojectile:SetHorizontalSpeed(40)
+    inst.components.complexprojectile:SetGravity(-35)
+    inst.components.complexprojectile:SetLaunchOffset(Vector3(0, 0, 0))
+    inst.components.complexprojectile:SetOnLaunch(onthrown)
+    inst.components.complexprojectile:SetOnHit(doprojectilehit_wathom)
+
+
+    inst:Hide()
+    inst:DoTaskInTime(.2, function(inst) inst:Show() end)
+
+    inst.damage = 1
+    inst.tier = 1
+    inst.radius = 0
+
+    return inst
+end
+
 return Prefab("shadow_goo", shadow_goofn, projectile_assets, projectile_prefabs),
     Prefab("heckler_goo", guardian_goo),
     Prefab("guardian_goo", guardian_goo),
     Prefab("guardian_splat", guardiansplat),
-    Prefab("shadow_goo_trail", fngoo)
+    Prefab("shadow_goo_trail", fngoo),
+    Prefab("um_wathom_goo", wathom_goo)

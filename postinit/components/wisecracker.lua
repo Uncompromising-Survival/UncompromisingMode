@@ -13,4 +13,17 @@ env.AddComponentPostInit("wisecracker", function(self, inst)
     inst:ListenForEvent("onpresink_portable", function(inst, data)
         inst.components.talker:Say(GetString(inst, "ANNOUNCE_PORTABLEBOAT_SINK"))
     end)
+
+    -- Hook up these to a string.
+    inst:ListenForEvent("himalaya_dormant", function(inst, data)
+		inst.components.talker:Say(GetString(inst, "ANNOUNCE_HIMALAYA_DORMANT"))
+	end)
+
+    inst:ListenForEvent("himalaya_shielded", function(inst, data)
+		inst.components.talker:Say(GetString(inst, "ANNOUNCE_HIMALAYA_SHIELDED"))
+	end)
+
+    inst:ListenForEvent("himalaya_resetting", function(inst, data)
+		inst.components.talker:Say(GetString(inst, "ANNOUNCE_HIMALAYA_RESETTING"))
+	end)
 end)

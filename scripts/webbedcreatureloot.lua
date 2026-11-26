@@ -82,9 +82,16 @@ local characters = {
     },
     WILSON = {
         loot = {
-            Item("blueprint", 3),
+            Item("researchlab3_blueprint", 1),
+            Item("nightsword_blueprint",1),
+            Item("armor_sanity_blueprint",1),
+            Item("chesspiece_rook_sketch",1),
+            Item("chesspiece_bishop_sketch",1),
+            Item("chesspiece_knight_sketch",1),    
+            Item("blueprint", 2),
             Item("blueprint", 2, .5),
             Item("beardhair", 4),
+            Item("beardhair", 2, .5),
             Item("beardhair", 2, .5),
             Item(function() return RandomItem("bluegem", "redgem", "purplegem") end, 2) }
     },

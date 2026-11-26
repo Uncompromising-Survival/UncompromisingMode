@@ -42,12 +42,23 @@ local function UnGhost(eater)
             eater.flashghost = nil
             eater.flashingtask = nil
         end
+        if eater.UpdateCollisionPeriodic then
+            eater.UpdateCollisionPeriodic:Cancel()
+            eater.UpdateCollisionPeriodic = nil
+        end
         eater.Physics:CollidesWith(COLLISION.OBSTACLES)
         eater.Physics:CollidesWith(COLLISION.SMALLOBSTACLES)
         eater.Physics:CollidesWith(COLLISION.CHARACTERS)
         eater.Physics:CollidesWith(COLLISION.FLYERS)
         eater.AnimState:SetHaunted(false)
     end
+end
+
+local function NoClip(eater)
+    eater.Physics:ClearCollidesWith(COLLISION.OBSTACLES)
+    eater.Physics:ClearCollidesWith(COLLISION.SMALLOBSTACLES)
+    eater.Physics:ClearCollidesWith(COLLISION.CHARACTERS)
+    eater.Physics:ClearCollidesWith(COLLISION.FLYERS)
 end
 
 local function Ghost(eater)
@@ -57,14 +68,17 @@ local function Ghost(eater)
         eater.flashingtask = nil
     end
 
-    eater.Physics:ClearCollidesWith(COLLISION.OBSTACLES)
-    eater.Physics:ClearCollidesWith(COLLISION.SMALLOBSTACLES)
-    eater.Physics:ClearCollidesWith(COLLISION.CHARACTERS)
-    eater.Physics:ClearCollidesWith(COLLISION.FLYERS)
+
     eater.AnimState:SetHaunted(true)
 
     if eater.unghosttask then eater.unghosttask:Cancel() end
     eater.unghosttask = eater:DoTaskInTime(60 * 4, UnGhost)
+
+    eater.UpdateCollisionPeriodic = eater:DoPeriodicTask(1,NoClip) -- Some things like Wathom need this to be reapplied
+    -- This is likely the most robust way to do it to prevent collision from coming back for reasons out of our control.
+    -- I don't think there's an OnCollisionUpdate Event or anything...
+
+    -- Note to self, we could grab CollidesWith and wrap it, make it return nil if they're under the effects of this buff
 end
 
 local um_boomberrypieknockbackstates = { "knockback", "knockbacklanded" }

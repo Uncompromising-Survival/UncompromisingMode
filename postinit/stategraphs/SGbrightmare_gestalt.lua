@@ -43,9 +43,6 @@ local function DoSpecialAttack(inst, target)
 	if target.components.hunger then -- additional hunger lost per hit
 		target.components.hunger:DoDelta(-12.5)
 	end
-	if HasSkill(target,"wathom_allegiance_shadow") and target.components.health then
-		target.components.health:DeltaPenalty(1/6)
-	end
 	
 	local grogginess = target.components.grogginess
 	if grogginess ~= nil then

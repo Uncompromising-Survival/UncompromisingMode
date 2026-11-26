@@ -13,6 +13,38 @@ local assets =
     full_moon = "images/colour_cubes/beaver_vision_cc.tex",
 }]]
 
+local function ResetOwnerMods(inst,unequip)
+    local owner = inst.owner 
+
+    owner.components.combat.externaldamagemultipliers:SetModifier(inst, inst.mod)
+    if owner ~= nil and owner.components.combat ~= nil then
+        owner.components.combat.externaldamagemultipliers:RemoveModifier(inst)
+        if not unequip then
+            owner.components.combat.externaldamagemultipliers:SetModifier(inst, inst.mod)
+        end
+    end
+    inst.components.equippable.walkspeedmult = inst.mod
+end
+
+local function AdjustWidowsHeadStats(inst)
+    if TheWorld:HasTag("cave") or TheWorld.state.isnight then
+        if not inst:HasTag("nightvision") then
+            inst:AddTag("nightvision")
+        end
+        inst.mod = 1.25
+    else
+        if inst:HasTag("nightvision") then
+            inst:RemoveTag("nightvision")
+        end
+        if TheWorld.state.isdusk then
+            inst.mod = 1.1
+        end
+    end
+    if inst.owner then
+        ResetOwnerMods(inst)
+    end
+end
+
 local function onequip(inst, owner)
     owner.AnimState:OverrideSymbol("swap_hat", "hat_widowshead", "swap_hat")
 
@@ -27,6 +59,8 @@ local function onequip(inst, owner)
         owner.AnimState:Show("HEAD_HAT_NOHELM")
         owner.AnimState:Hide("HEAD_HAT_HELM")
     end
+    inst.owner = owner
+    AdjustWidowsHeadStats(inst)
     --[[if owner.components.playervision ~= nil then   --Colorcubes don't listen....
         owner.components.playervision:SetCustomCCTable(BEAVERVISION_COLOURCUBES)
         owner.components.playervision:ForceNightVision(true)
@@ -46,11 +80,15 @@ local function onunequip(inst, owner)
         owner.AnimState:Hide("HEAD_HAT_NOHELM")
         owner.AnimState:Hide("HEAD_HAT_HELM")
     end
+    ResetOwnerMods(inst,true)
+    inst.owner = nil
     --[[if owner.components.playervision ~= nil then
         owner.components.playervision:SetCustomCCTable(nil)
         owner.components.playervision:ForceNightVision(false)
         end]]
 end
+
+
 
 local function fn()
     local inst = CreateEntity()
@@ -65,7 +103,7 @@ local function fn()
     inst.AnimState:PlayAnimation("anim")
 
     inst:AddTag("hat")
-    inst:AddTag("nightvision")
+    --inst:AddTag("nightvision")
     inst:AddTag("donotautopick")
 
     MakeInventoryFloatable(inst, "small", 0.2, 0.80)
@@ -98,7 +136,13 @@ local function fn()
     inst.components.waterproofer:SetEffectiveness(TUNING.WATERPROOFNESS_SMALL)
 
     MakeHauntableLaunch(inst)
+
+    inst:WatchWorldState("isdusk", AdjustWidowsHeadStats)
+	inst:WatchWorldState("isday", AdjustWidowsHeadStats)
+	inst:WatchWorldState("isnight", AdjustWidowsHeadStats)
     --------------------------------------------------------------
+
+    inst.mod = 1
 
     return inst
 end

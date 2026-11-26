@@ -79,6 +79,12 @@ local function PopSpore(inst)
     end
 end
 
+local function FireBomb(inst)
+    SpawnPrefab("explode_small").Transform:SetPosition(inst.Transform:GetWorldPosition())
+    FieryAftermath(inst)
+    FireSpread(inst)
+    inst:Remove()
+end
 -- Divebomb the ground and explode!
 local function Divebomb(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
@@ -91,12 +97,7 @@ local function Divebomb(inst)
 
         inst.components.locomotor:Stop()
         inst.AnimState:PlayAnimation("divebomb", false)
-        inst:ListenForEvent("animover", function()
-            SpawnPrefab("explode_small").Transform:SetPosition(inst.Transform:GetWorldPosition())
-            FieryAftermath(inst)
-            FireSpread(inst)
-            inst:Remove()
-        end)
+        inst:ListenForEvent("animover", FireBomb)
     end
 end
 
@@ -389,6 +390,7 @@ local function fn()
         end
     end)
 
+    inst.ModdedExplodeFn = FireBomb
     return inst
 end
 

@@ -11,24 +11,12 @@ Uses lootsetupfn to dynamically give it loot based on the season, instead of cha
 
 --[[Documentation Addendum: Axe
 Make some mushtress petrify after they finish their sporing cycle. Checks whenever season ticks.
+
+It might be a good idea to swap this out for the actual petrifiable component.... I wasn't aware that it was handled in a component the first time
+I made this.
 ]]
 
-local function PetrificationDisaster(inst,replacement,range,gemchance)
-	local x,y,z = inst.Transform:GetWorldPosition()
-	local mushtrees = TheSim:FindEntities(x,y,z,range,{"mushtree"})
-	for i,tree in ipairs(mushtrees) do
-		if tree.prefab == inst.prefab and inst ~= tree then
-			if math.random() < gemchance then
-				SpawnPrefab(replacement).Transform:SetPosition(tree.Transform:GetWorldPosition())
-			else
-				SpawnPrefab(replacement.."less").Transform:SetPosition(tree.Transform:GetWorldPosition())
-			end
-			tree:Remove()
-		end
-	end
-	SpawnPrefab(replacement).Transform:SetPosition(inst.Transform:GetWorldPosition())
-	inst:Remove()
-end
+
 
 
 if TUNING.DSTU.MUSHROOM_CHANGES then
@@ -66,6 +54,43 @@ if TUNING.DSTU.MUSHROOM_CHANGES then
 		},
 	}
 
+
+	local function ShroomPetrify(inst,replacement,gemchance)
+		if not replacement then
+			replacement = inst.petrify_replacement
+		end
+		if not gemchance then
+			gemchance = 0
+		end
+		if math.random() < gemchance then
+			SpawnPrefab(replacement).Transform:SetPosition(inst.Transform:GetWorldPosition())
+		else
+			SpawnPrefab(replacement.."less").Transform:SetPosition(inst.Transform:GetWorldPosition())
+		end
+		inst:Remove()
+	end
+
+	local function DoShroomPetrify(inst,replacement,gemchance)
+		if inst.entity:IsAwake() then
+			inst.AnimState:PlayAnimation("change",false)
+			inst:DoTaskInTime(17*FRAMES,ShroomPetrify,replacement,gemchance)
+		else
+			ShroomPetrify(inst,replacement,gemchance)
+		end
+	end
+
+	local function PetrificationDisaster(inst,replacement,range,gemchance)
+		local x,y,z = inst.Transform:GetWorldPosition()
+		local mushtrees = TheSim:FindEntities(x,y,z,range,{"mushtree"})
+		for i,tree in ipairs(mushtrees) do
+			if tree.prefab == inst.prefab and inst ~= tree then
+				DoShroomPetrify(tree,replacement,gemchance)
+			end
+		end
+		SpawnPrefab(replacement).Transform:SetPosition(inst.Transform:GetWorldPosition())
+		inst:Remove()
+	end
+
 	for tree, data in pairs(tree_data) do
 		env.AddPrefabPostInit("mushtree_" .. tree, function(inst)
 			if not TheWorld.ismastersim then
@@ -82,6 +107,9 @@ if TUNING.DSTU.MUSHROOM_CHANGES then
 				end
 			end
 			
+			inst.DoShroomPetrify = DoShroomPetrify
+			inst.petrify_replacement = data.replacement
+
 			inst:WatchWorldState("season", function(inst)
 				if data.uhohseason == TheWorld.state.season and math.random() < 0.02 and not inst.entity:IsAwake() then
 					PetrificationDisaster(inst,data.replacement,data.range,data.gemchance)

@@ -8,25 +8,30 @@ if GetModConfigData("hoodedforest") then               -- Lock Everything Behind
         table.insert(tasksetdata.required_prefabs, "widowwebspawner")
     end)
 
+    -- We need to make these more consistent in their appearance.
+    --[[["HoodedTown"] = function() return math.random(0, 1) end,
+    ["HFHolidays"] = function() return math.random(0, 1) end,
+    ["RoseGarden"] = function() return math.random(0, 1) end,]]
 
     -- Giant Trees (Hooded Forest) replaces the "Forest hunters" task. In DST layman's speak this is the moonbase forest with the single mactusk camp.
+    
+    GLOBAL.require("map/rooms/forest/gianttreesrooms")
     AddTaskPreInit("Forest hunters", function(task)
-        GLOBAL.require("map/rooms/forest/gianttreesrooms")
         -- Room Redux
         task.level_set_piece_blocker = true
-        task.entrance_room = "HoodedEntrance"
+        task.entrance_room = "GiantTreesEntrance"
         task.room_choices = {
-
+            ["RockyWalrusGiantTrees"] = 1,
+            ["GiantTrees"] = 1, --2
+            ["FoxGathering"] = 1,
             ["SpideryGiantTrees"] = 1,
             ["WalrusGiantTrees"] = 1,
-            ["MoonBaseGiantTrees"] = 1,
-            ["HoodedTown"] = function() return math.random(0, 1) end,
-            ["HFHolidays"] = function() return math.random(0, 1) end,
-            ["RoseGarden"] = function() return math.random(0, 1) end,
-            ["FoxGathering"] = 1,
-            ["GiantTrees"] = 1,
-
-            --["QuestionableDecisions"] = 1 -- Goofy aaa lush caves
+            ["WalrusSavanna"] = 1,
+            ["OldGrowth"] = 2, --3
+            ["OldGrowthInfested"] = 1,
+            ["OldBase"] = 1,   
+                   
+            
         }
         task.room_bg = GLOBAL.WORLD_TILES.HOODEDFOREST
         task.background_room = "BGGiantTrees"
@@ -93,4 +98,20 @@ if GetModConfigData("hoodedforest") then               -- Lock Everything Behind
             table.insert(tasksetdata.required_prefabs, "widowwebspawner")
         end
     end)
+
+
+    if math.random() > 0 then
+        AddTaskPreInit("Forest hunters", function(task)
+            task.locks = {LOCKS.ROCKS,LOCKS.BASIC_COMBAT,LOCKS.TIER1}
+            task.keys_given = {KEYS.MEAT,KEYS.POOP,KEYS.WOOL,KEYS.GRASS,KEYS.TIER2}
+        end)
+
+        AddTaskPreInit("Great Plains", function(task)
+            task.locks = {LOCKS.ADVANCED_COMBAT,LOCKS.MONSTERS_DEFEATED,LOCKS.TIER3}
+            task.keys_given = {KEYS.WALRUS,KEYS.TIER4}
+        end)
+    end
+
 end
+
+

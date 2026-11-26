@@ -8,7 +8,7 @@ local assets = {
     Asset("SOUND", "sound/wathomcustomvoice.fsb")
 }
 
--- Your character's stats
+-- Character stats.
 TUNING.WATHOM_HEALTH = 225
 TUNING.WATHOM_HUNGER = 120
 TUNING.WATHOM_SANITY = 120
@@ -54,11 +54,33 @@ local function TurnOffShadowForm(inst)
     inst:RemoveEventCallback("animqueueover", TurnOffShadowForm)
 end
 
-local function ToggleUndeathState(inst, toggle,fake)
-    if inst.components.timer and inst.components.timer:TimerExists("shadowwathomcooldown") then
-        return
+local function UpdateCarnage(inst,killed)
+    if inst:HasTag("amped") and killed then
+        if inst.carnage_multiplier == 0 then
+            inst.carnage_multiplier = 1 -- Start it off stronger
+        else
+            inst.carnage_multiplier = math.clamp(inst.carnage_multiplier + 0.5,1.5,3)
+        end
+    else
+        inst.carnage_multiplier = 0
     end
 
+    if inst.carnage_multiplier > 0 and not inst.carnage_fx then
+        inst.carnage_fx = SpawnPrefab("tophat_shadow_fx")
+		inst.carnage_fx.entity:SetParent(inst.entity)
+		inst.carnage_fx.Follower:FollowSymbol(inst.GUID, "torso", 0, 100, 0)
+    elseif inst.carnage_multiplier == 0 and inst.carnage_fx then
+        inst.carnage_fx:Remove()
+        inst.carnage_fx = nil
+    end
+
+    if inst.carnage_multiplier > 0 and inst.carnage_fx then
+        local scale = 0.5 + (inst.carnage_multiplier-1)/2
+        inst.carnage_fx.Transform:SetScale(scale,scale,scale)
+    end
+end
+
+local function ToggleUndeathState(inst, toggle,fake)
     if toggle then
         if not inst:HasTag("playerghost") then
             inst.AnimState:SetBuild("wathom_shadow")
@@ -96,14 +118,79 @@ local function ToggleUndeathState(inst, toggle,fake)
     end
 end
 
+local function HealingGlutton(inst)
+    local health = inst.components.health
+    if health then
+        local current = health.currenthealth
+        if current < health.maxhealth then
+            local hunger_mod = 8
+            if current == health:GetMaxWithPenalty() then
+                health:DeltaPenalty(-1/TUNING.WATHOM_HEALTH) 
+                hunger_mod = 2 + hunger_mod        
+            end
+            health:DoDelta(1)
+            if not inst.wathom_is_hungy_active then
+                inst.wathom_is_hungy_active = true
+                inst.components.hunger.burnratemodifiers:RemoveModifier(inst)
+                inst.components.hunger.burnratemodifiers:SetModifier(inst, hunger_mod)
+            end
+        else -- Full health, return to normal AMPED regeneration rate
+            if inst.wathom_is_hungy_active then
+                inst.wathom_is_hungy_active = nil
+                inst.components.hunger.burnratemodifiers:RemoveModifier(inst)
+                inst.components.hunger.burnratemodifiers:SetModifier(inst, 6)
+            end       
+        end
+    end
+end
+
+-- Stalker 4 visuals and collisions
+local function Shadow(inst)
+    inst.Physics:ClearCollidesWith(COLLISION.OBSTACLES)
+    inst.Physics:ClearCollidesWith(COLLISION.SMALLOBSTACLES)
+    inst.Physics:ClearCollidesWith(COLLISION.CHARACTERS)
+    inst.Physics:ClearCollidesWith(COLLISION.FLYERS)
+    inst.AnimState:SetMultColour(0,0,0,1)
+    --local fx = SpawnPrefab("oldager_become_older_fx") -- FX Opportunity
+    --fx.entity:SetParent(inst.entity)
+end
+
+local function UnShadow(inst)
+    inst.Physics:CollidesWith(COLLISION.OBSTACLES)
+    inst.Physics:CollidesWith(COLLISION.SMALLOBSTACLES)
+    inst.Physics:CollidesWith(COLLISION.CHARACTERS)
+    inst.Physics:CollidesWith(COLLISION.FLYERS)
+    inst.AnimState:SetMultColour(1,1,1,1)
+    --local fx = SpawnPrefab("oldager_become_younger_front_fx")
+    --fx.entity:SetParent(inst.entity)
+end
+
+local function NewAmpHungy(inst)
+    local current = inst.components.hunger.current
+    if current < 100 and inst.wathom_is_hungy_active then
+        inst.wathom_is_hungy_active = nil
+        inst.components.hunger.burnratemodifiers:RemoveModifier(inst)
+        inst.components.hunger.burnratemodifiers:SetModifier(inst, 6)
+    elseif not inst.wathom_is_hungy_active then
+        inst.wathom_is_hungy_active = true
+        inst.components.hunger.burnratemodifiers:RemoveModifier(inst)
+        inst.components.hunger.burnratemodifiers:SetModifier(inst, 12)
+    end
+end
+
 local function UnAmp(inst)
+    if HasSkill(inst,"stalker_4") then
+        UnShadow(inst)
+    end
+
+    if HasSkill(inst,"glutton_4") then
+        inst:RemoveEventCallback("hungerdelta",NewAmpHungy)
+    end
+    inst.components.hunger.burnratemodifiers:RemoveModifier(inst)
+    
     inst:RemoveTag("amped") -- Party's over.
     inst.components.combat.attackrange = 2
     inst.AmpDamageTakenModifier = TUNING.DSTU.WATHOM_AMPED_VULNERABILITY
-    if inst.adrenalinehpregen ~= nil then
-        inst.adrenalinehpregen:Cancel()
-        inst.adrenalinehpregen = nil
-    end
 
     inst.components.adrenaline:SetAmped(false)
     if inst.helpimleaking ~= nil then
@@ -126,59 +213,99 @@ local function UnAmp(inst)
             end
         end
     end
-end
 
-local function RegurgitateFuel(inst)
-    local fuel = SpawnPrefab("nightmarefuel")
-    fuel.Transform:SetPosition(inst.Transform:GetWorldPosition())
-    fuel:DoTaskInTime(0,function(fuel)
-        Launch(fuel, inst, 3) -- need to set it to our location first, the 2nd entry does not do that, I tested it in a world, if you fail to do this it'll toss it at 0,0,0
-    end)
-end
+    -- AMP is over, lose your carnage multiplier.
+    if HasSkill(inst,"rampage_4") then
+        UpdateCarnage(inst,false)
+    end 
+    
+    -- Cancel Regeneration from devour_4
+    if inst.devour_regen then
+        inst.devour_regen:Cancel()
+        inst.devour_regen = nil
+    end
 
-local function ShouldRegurgitate(inst)
-    if inst:HasTag("amped") then
-        RegurgitateFuel(inst)
-    else
-        inst.um_wathom_regurgitatetask:Cancel()
-        inst.um_wathom_regurgitatetask = nil
+    if inst.afterImages then
+        inst.afterImages:Cancel()
+        inst.afterImages = nil
     end
 end
+
+local function TellDropAllTargetsAndResetAmbushes(inst)
+    local x,y,z = inst.Transform:GetWorldPosition()
+
+    -- Drop me as a target
+    local ents = TheSim:FindEntities(x,y,z,64,{"_combat"})
+    for i,v in ipairs(ents) do
+        if v.components.combat.target and v.components.combat.target == inst then
+            v.components.combat:DropTarget()
+        end
+        if v.wathom_shouldnt_ambush == true then
+            v.wathom_shouldnt_ambush = nil
+        end
+    end
+
+    inst.components.hunger.burnratemodifiers:SetModifier(inst, 18) -- Absurd drain for effective immunity
+
+    Shadow(inst)
+end
+
 
 local function Amp(inst)
-    inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/ampedbark")
-    inst.components.combat.attackrange = 7 -- These values are for when Wathom's at 100 Adrenaline, so he should be Amping Up right now.
-    inst.AmpDamageTakenModifier = TUNING.DSTU.WATHOM_AMPED_VULNERABILITY
-    inst:AddTag("amped")
-    inst.components.adrenaline:SetAmped(true)
-    --inst.components.talker:Say("AMPED UP!", nil, true)
+    if not inst:HasTag("amped") then
+        inst.components.hunger.burnratemodifiers:SetModifier(inst, 6)
 
-    inst.helpimleaking = inst:DoPeriodicTask(0.33, function(inst)
-        if inst:HasTag("amped") then
-            local x, y, z = inst.Transform:GetWorldPosition()
-            local xoffset = math.random(-10, 10) / 10
-            local zoffset = math.random(-10, 10) / 10
-            --SpawnPrefab("minotaur_blood"..math.random(3)).Transform:SetPosition(x + xoffset, y, z + zoffset)
-            SpawnPrefab("cane_ancient_fx").Transform:SetPosition(x + xoffset, y, z + zoffset)
-        end
-    end)
+        inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/ampedbark")
+        inst.components.combat.attackrange = 7 -- These values are for when Wathom's at 100 Adrenaline, so he should be Amping Up right now.
+        
+        inst:AddTag("amped")
+        inst.components.adrenaline:SetAmped(true)
+        
 
-    --[[inst.adrenalinehpregen = inst:DoPeriodicTask(1, function(inst)
-        if inst.components.health ~= nil and not inst.components.health:IsDead() then
-            inst.components.health:DoDelta(1.5)
+
+        -- Periodic FX
+        inst.helpimleaking = inst:DoPeriodicTask(0.33, function(inst)
+            if inst:HasTag("amped") then
+                local x, y, z = inst.Transform:GetWorldPosition()
+                local xoffset = math.random(-10, 10) / 10
+                local zoffset = math.random(-10, 10) / 10
+                --SpawnPrefab("minotaur_blood"..math.random(3)).Transform:SetPosition(x + xoffset, y, z + zoffset)
+                SpawnPrefab("cane_ancient_fx").Transform:SetPosition(x + xoffset, y, z + zoffset)
+            end
+        end)
+
+
+        if HasSkill(inst,"devour_4") then
+            inst.devour_regen = inst:DoPeriodicTask(1,HealingGlutton)
         end
-    end)]]
-    if not (inst.components.health and inst.components.health:IsDead()) then
-        --inst.sg:GoToState("wathombark")
-        inst.components.health.invincible = true
-        inst:DoTaskInTime(1, function() inst.components.health.invincible = false end)
-    end
-    
-    if HasSkill(inst,"wathom_allegiance_shadow") then
-        RegurgitateFuel(inst)
-        RegurgitateFuel(inst)
-        RegurgitateFuel(inst)
-        inst.um_wathom_regurgitatetask = inst:DoPeriodicTask(30,ShouldRegurgitate)
+
+        if HasSkill(inst,"glutton_4") then
+            inst:ListenForEvent("hungerdelta",NewAmpHungy)
+        end
+
+        if HasSkill(inst,"stalker_4") then
+            TellDropAllTargetsAndResetAmbushes(inst)
+        end
+
+
+        -- Leaving this here, I don't kno what it would have done prior.
+        --[[
+        if not (inst.components.health and inst.components.health:IsDead()) then
+            --inst.sg:GoToState("wathombark")
+            inst.components.health.invincible = true
+            inst:DoTaskInTime(1, function() inst.components.health.invincible = false end)
+        end
+        ]]
+        
+        --AfterImage FX for hyper amp
+        if HasSkill(inst,"hyper_4") then
+            inst.afterImages = inst:DoPeriodicTask(0.5,function(inst)
+                local animPercent = inst.AnimState:GetCurrentAnimationTime() / inst.AnimState:GetCurrentAnimationLength()
+                local fx = SpawnPrefab("um_wathom_trace")
+                fx.Start(fx,inst, 0.6, inst.sg.statemem.animName, animPercent, 0.175)
+            end)
+        end
+
     end
 end
 
@@ -188,14 +315,14 @@ local function onbecamehuman(inst)
     inst.components.locomotor:SetExternalSpeedMultiplier(inst, "wathom_speed_mod", 1)
     UnAmp(inst)
     --inst.AnimState:SetBuild("wathom")
-    inst.components.adrenaline:SetPercent(0.25)
+    inst.components.adrenaline:SetPercent(0)
 end
 
 local function onbecameghost(inst)
     -- Remove speed modifier when becoming a ghost
     inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, "wathom_speed_mod")
     UnAmp(inst)
-    inst.components.adrenaline:SetPercent(0.25)
+    inst.components.adrenaline:SetPercent(0)
 end
 
 -------------------------------------------
@@ -307,24 +434,44 @@ local function SapTask(inst)
     
 end
 
-local function AmpTimer(inst)
-    if inst.components.grogginess ~= nil and
-        (inst.components.adrenaline:GetPercent() < 0.25 and not inst:HasTag("amped") and not inst:HasTag("deathamp")) then
-        inst.components.grogginess.grog_amount = 0.5
-    end
+local function FindSpeed(inst)
+    local item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+    local equiphands = item and item.components.equippable
 
-    -- Draining adrenaline when not in combat.
+    local item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
+    local equipbody = item and item.components.equippable
+ 
+    local item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
+    local equiphat = item and item.components.equippable
+
+    return (equiphands and equiphands.walkspeedmult and equiphands.walkspeedmult > 1) or
+        (equipbody and equipbody.walkspeedmult and equipbody.walkspeedmult > 1) or 
+    (equiphat and equiphat.walkspeedmult and equiphat.walkspeedmult > 1)
+end
+
+local function AmpTimer(inst)
+    -- Passive Adrenaline Loss Mechanics
     if (inst:HasTag("amped") or inst:HasTag("deathamp")) then
-        inst.components.adrenaline:DoDelta(inst.adrenalpause and -1 or -4)
-    elseif inst.components.adrenaline:GetPercent() >= 0.25 then
-        if not inst.adrenalpause then
+        if HasSkill(inst,"stalker_4") then
+            inst.components.adrenaline:DoDelta(-10)
+        end
+        if HasSkill(inst,"hyper_2") and FindSpeed(inst) and inst.sg:HasStateTag("running") then
+            -- Nothing
+        else
+            inst.components.adrenaline:DoDelta(inst.adrenalpause and -1 or -4)
+        end
+    elseif inst.components.adrenaline:GetPercent() >= 0 then
+        if HasSkill(inst,"hyper_2") and FindSpeed(inst) and inst.sg:HasStateTag("running") and not inst:HasTag("amped") then
+            if inst.components.adrenaline:GetPercent() < 0.5 then
+                inst.components.adrenaline:DoDelta(1)
+            else
+                -- Nothing
+            end
+        elseif not inst.adrenalpause and not inst.horror_regen and not inst.nightmare_regen then
             inst.components.adrenaline:DoDelta(-1)
         end
     end
 
-    if inst.components.adrenaline:GetPercent() < 0.25 and not (inst:HasTag("amped") or inst:HasTag("deathamped")) then
-        inst.components.adrenaline:DoDelta(1) -- Slowly regaining to normal levels.
-    end
 
     local AmpLevel = inst.components.adrenaline:GetPercent()
     local item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
@@ -332,27 +479,223 @@ local function AmpTimer(inst)
 
     if inst.components.rider and inst.components.rider:IsRiding() then
         inst.components.combat.attackrange = 2
-        return
+    elseif (inst:HasTag("amped") or inst:HasTag("deathamp")) then
+        inst.components.combat.attackrange = (item or HasSkill(inst,"devour_2")) and 7 or 2
+    else
+        inst.components.combat.attackrange = (item or HasSkill(inst,"devour_2")) and (4 + AmpLevel*3) or 2
+    end
+end
+
+local function OnKilledFunction(inst,target) -- Target has passed a nil check
+    
+    -- Rampage 1 Will allow you to gain adrenaline based upon the kill health
+    if HasSkill(inst,"rampage_1") then
+        local maxhealth = target.components.health.maxhealth
+        if inst.components.adrenaline and not inst:HasTag("amped") then
+            inst.components.adrenaline:DoDelta(math.sqrt(maxhealth))
+            local puff = SpawnPrefab("shadow_puff")
+            local scale = math.clamp(math.sqrt(maxhealth/100),1,4) -- 1x for 100 health mobs, all the way to 4x for bosses
+            puff.Transform:SetPosition(target.Transform:GetWorldPosition())
+            puff.Transform:SetScale(scale,scale,scale)
+        end
     end
 
-    if (inst:HasTag("amped") or inst:HasTag("deathamp")) then
-        inst.components.combat.attackrange = item and 7 or 2
-    elseif AmpLevel < 0.25 and not inst:HasTag("amped") then
-        inst.components.combat.attackrange = 2
-    elseif AmpLevel < 0.5 and not inst:HasTag("amped") then
-        inst.components.combat.attackrange = item and (HasSkill(inst,"amp_1") and 4) or 2
-    elseif AmpLevel < 0.75 and not inst:HasTag("amped") then
-        inst.components.combat.attackrange = item and (HasSkill(inst,"amp_1") and 5) or 2
-    elseif AmpLevel < 1 and not inst:HasTag("amped") then
-        inst.components.combat.attackrange = item and (HasSkill(inst,"amp_2") and 6 or HasSkill(inst,"amp_1") and 5) or 2
+    -- Rampge 4 Will allow you to scale your damage multiplier up to 5x
+    if HasSkill(inst,"rampage_4") then
+        UpdateCarnage(inst,true)
+    end
+end
+
+-- Empowered attacks
+local function SetEmpoweredFx(inst)
+    if inst.num_nightmare_hits > 0 and not inst.nightmare_hit_fx then
+        inst.nightmare_hit_fx = SpawnPrefab("shadow_pillar_base_fx")
+		inst.nightmare_hit_fx.entity:SetParent(inst.entity)
+        inst.nightmare_hit_fx.entity:AddFollower()
+    elseif inst.nightmare_hit_fx and inst.num_nightmare_hits <= 0 then
+        inst.nightmare_hit_fx:Remove()
+        inst.nightmare_hit_fx = nil
+        if inst.nightmare_regen_FN then
+            inst.nightmare_regen_FN:Cancel()
+            inst.nightmare_regen_FN = nil
+        end
+    end
+
+    if inst.num_planar_hits > 0 and not inst.planar_hit_fx then
+        inst.planar_hit_fx = SpawnPrefab("wurt_shadow_merm_planar_fx")
+		inst.planar_hit_fx.entity:SetParent(inst.entity)
+    elseif inst.planar_hit_fx and inst.num_planar_hits <= 0 then
+        inst.planar_hit_fx:Remove()
+        inst.planar_hit_fx = nil
+        if inst.horror_regen_FN then
+            inst.horror_regen_FN:Cancel()
+            inst.horror_regen_FN = nil
+        end
+    end
+end
+
+local planar_attack = {} -- Klei structures planar damage calculation in this way
+planar_attack["planar"] = 68
+
+local MUST_TAGS = {"_combat"}
+local CANT_TAGS = {"player", "companion", "abigail", "shadowminion", "playerghost", "INLIMBO", "wixieshoved", "invisible",
+    "hiding", "notarget", "noattack", "flight"} -- shadowcreatures should probably get hit by this... allies though, maybe not.
+
+local function EmpoweredDamage(inst,target)
+     
+    local regular = false
+    local planar = false
+    local x, y, z = target.Transform:GetWorldPosition()
+    
+    if inst.num_nightmare_hits > 0 then 
+        local fx1 = SpawnPrefab("wanda_attack_pocketwatch_old_fx")
+        fx1.Transform:SetPosition(x,y,z)   
+        inst.num_nightmare_hits = inst.num_nightmare_hits - 1
+        regular = true
+    end
+    if inst.num_planar_hits > 0 then 
+        local fx2 = SpawnPrefab("shadowthrall_projectile_fx")
+        fx2.Transform:SetPosition(x,y,z)   
+        fx2.Transform:SetScale(1.5,1.5,1.5) 
+        inst.num_planar_hits = inst.num_planar_hits - 1
+        fx2.AnimState:PlayAnimation("projectile_impact")
+        fx2.DynamicShadow:Enable(false)
+        fx2.SoundEmitter:PlaySound("rifts2/thrall_wings/projectile")
+        planar = true
+    end
+
+    SetEmpoweredFx(inst)
+    
+    local ents = TheSim:FindEntities(x, y, z, 2, MUST_TAGS, CANT_TAGS)
+    for i, v in ipairs(ents) do
+        if inst.components.combat:CanTarget(v) and not inst.components.combat:IsAlly(v) then
+            if not (v.components.health and v.components.health:IsDead()) then
+                v.components.combat:GetAttacked(inst,regular and 68 or 0,nil,"wathom_aoe",planar and planar_attack or nil)
+            end
+        end
+    end
+end 
+
+local function FindHoneID(inst,prefab)
+    for i,v in ipairs(inst.hone_items) do
+        if v == prefab then
+            return i
+        end
+    end
+end
+
+local function AddHoneFx(inst,scale)
+    inst.hone_fx = SpawnPrefab("smoke_plant")
+    inst.hone_fx.entity:SetParent(inst.entity)
+    inst.hone_fx.entity:AddFollower()
+    inst.hone_fx.Follower:FollowSymbol(inst.GUID, "swap_object", 50, -100, 0)
+    inst.hone_fx.AnimState:SetMultColour(0,0,0,1)
+    inst.hone_fx.Transform:SetScale(scale,scale,scale)
+    inst.hone_fx.Light:Enable(false)
+    inst.hone_fx.SoundEmitter:SetVolume("smolder",0.5)
+end
+
+local function CheckHone(inst)
+    local should_fx = false
+    local weapon = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+    if weapon then
+        local ID = FindHoneID(inst,weapon.prefab)
+        local hone_track
+        if ID then
+            hone_track = inst.hone_amounts[ID]
+        end
+        if hone_track and hone_track >= inst.hone_tiers[1] then
+            local scale = 0
+            if hone_track >= inst.hone_tiers[2] then
+                should_fx = true
+                scale = 1
+            elseif hone_track >= inst.hone_tiers[1] then
+                should_fx = true
+                scale = 0.5
+            end
+            if not inst.hone_fx then
+                AddHoneFx(inst,scale)
+            else
+                inst.hone_fx.Transform:SetScale(scale,scale,scale)
+            end
+        end
+    end
+
+    if not should_fx and inst.hone_fx then
+        inst.hone_fx:Remove()
+        inst.hone_fx = nil
+    end
+end
+
+local function ShouldThreshBurst(inst,amount,prev_amount)
+    local burst  = false
+    local scale = 0
+    if prev_amount < inst.hone_tiers[1] and (prev_amount + amount) >= inst.hone_tiers[1] then
+        burst = true
+        scale = 0.5
+    elseif prev_amount < inst.hone_tiers[2] and (prev_amount + amount) >= inst.hone_tiers[2] then
+        burst = true
+        scale = 1
+    end
+    if burst then
+        local burst_fx = SpawnPrefab("statue_transition")
+        burst_fx.entity:SetParent(inst.entity)
+        burst_fx.entity:AddFollower()
+        burst_fx.Follower:FollowSymbol(inst.GUID, "swap_object", 50, -100, 0)
+        burst_fx.Transform:SetScale(scale,scale,scale)
+        --burst_fx:ListenForEvent("animover")
+        --burst_fx:Remove()
+        
+        local item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+        if item then
+            if item.prefab == "shadow_battleaxe" then
+                item:DoTaskInTime(0,function(item) item.SetLevel(item,item.level) end)
+            end
+        end
+    end
+end
+
+local no_hone = {"nolifedrainable","companion","character"}
+
+local function TryHone(inst,data)
+    local weapon = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+    local target = data.target
+    local health = data.target.components.health and data.target.components.health.maxhealth
+
+    if weapon and target and health and not target:HasAnyTag(no_hone) then
+        local amount = 0        
+        local ID = inst.FindHoneID(inst,weapon.prefab)
+
+        -- Should we bother estimating hone
+        if ID then
+            -- Figure out how much...
+            if health <= 100 and target:HasTag("hostile") then
+                amount = amount + 1
+            elseif health > 100 and health < 600 then
+                amount = amount + 1
+            elseif health > 900 and not target:HasTag("EPIC") then
+                amount = amount + 1.25
+            elseif health < 4000 then
+                amount = amount + 1.5
+            elseif health < 10000 then
+                amount = amount + 1.75
+            elseif health >= 10000 then
+                amount = amount + 2
+            end 
+            if inst.hone_amounts[ID] <= inst.hone_tiers[2] then
+                ShouldThreshBurst(inst,amount,inst.hone_amounts[ID])
+                inst.hone_amounts[ID] = inst.hone_amounts[ID] + amount
+                CheckHone(inst)
+            end
+        end
     end
 end
 
 local function OnAttackOther(inst, data)
-    if data and data.target and not data.projectile and inst.components.adrenaline:GetPercent() >= 0.25
-        and ((data.target.components.combat and data.target.components.combat.defaultdamage > 0)
-        or (data.target.prefab == "dummytarget" or data.target.prefab == "antlion" or data.target.prefab == "stalker_atrium"
-        or data.target.prefab == "stalker")) then
+    if data and data.target and not data.projectile
+        and ((data.target.components.combat and data.target.components.health and data.target.components.health.maxhealth >= 50)) then
+        -- AXE I removed the checks for specific things here we're just relying on a health threshhold now, the value I set captures bats at lowest
+
         inst.adrenalpause = true
         if inst.adrenalresume then
             inst.adrenalresume:Cancel()
@@ -360,16 +703,37 @@ local function OnAttackOther(inst, data)
         end
         inst.adrenalresume = inst:DoTaskInTime(10, function(inst) inst.adrenalpause = false end)
         if not (inst:HasTag("amped") or inst:HasTag("deathamp")) then
-            inst.components.adrenaline:DoDelta(inst.components.adrenaline:GetPercent() >= 0.25 and inst.components.adrenaline:GetPercent() < 0.5 and 5
-                or inst.components.adrenaline:GetPercent() >= 0.50 and inst.components.adrenaline:GetPercent() < 0.75 and 4 or 3)
+            inst.components.adrenaline:DoDelta(5 - 2 * inst.components.adrenaline:GetPercent())
         end
-    end
-end
 
-local function OnHealthDelta(inst, data)
-    if data.amount < 0 and not inst:HasTag("amped") and inst.components.adrenaline:GetPercent() >= 0.25 and
-        data.cause ~= "deathamp" and not (inst.components.health and inst.components.health:IsDead()) then
-        inst.components.adrenaline:DoDelta(math.floor(data.amount * -0.25)) -- This gives Wathom adrenaline when attacked!
+        if HasSkill(inst,"expedition") then
+            TryHone(inst,data)
+        end
+
+        if HasSkill(inst,"rampage_4") and inst.carnage_multiplier > 0 then 
+            local x,y,z = data.target.Transform:GetWorldPosition()
+
+            local fx1 = SpawnPrefab("shadow_merm_spawn_poof_fx")
+            local fx2 = SpawnPrefab("shadow_merm_smacked_poof_fx")
+            local scale = 0.75 + (inst.carnage_multiplier-1)*0.25/2
+            fx1.Transform:SetScale(scale,scale,scale)
+            fx2.Transform:SetScale(scale,scale,scale)
+
+            fx1.Transform:SetPosition(x,y,z)
+            fx2.Transform:SetPosition(x,y,z)          
+        end
+
+        if inst.num_nightmare_hits > 0 or inst.num_planar_hits > 0 then
+            EmpoweredDamage(inst,data.target)
+        end
+
+        inst:DoTaskInTime(0,function(inst)
+            if data and data.target and data.target.components.health and data.target.components.health:IsDead() then
+                OnKilledFunction(inst,data.target)
+            elseif HasSkill(inst,"rampage_4") then
+                UpdateCarnage(inst,false) -- Failed to Kill.
+            end        
+        end)
     end
 end
 
@@ -448,6 +812,30 @@ local function CheckLight(inst)
     end
 end
 
+
+-- Boss Saving/Loading Mechanics
+local function SaveHealthAndHunger(inst,data)
+    data.hunger_current = inst.components.hunger.current
+    data.hunger_max = inst.components.hunger.max
+
+    data.health_current = inst.components.health.currenthealth
+    data.health_max = inst.components.health.maxhealth
+    return data
+end
+
+local function LoadHealthAndHunger(inst,data)
+    if data.hunger_current then
+        inst.components.hunger.current = data.hunger_current
+        inst.components.hunger.max = data.hunger_max
+
+        inst.components.health.currenthealth = data.health_current
+        inst.components.health.maxhealth = data.health_max
+    end
+
+end
+
+
+
 -- When loading or spawning the character
 local function onload(inst, data)
     inst:ListenForEvent("ms_respawnedfromghost", onbecamehuman)
@@ -460,6 +848,11 @@ local function onload(inst, data)
     end
 
     if data then
+        -- Hone
+        if data.hone_amounts then
+            inst.hone_amounts = data.hone_amounts
+        end
+
         if data.amped then
             inst:AddTag("amped")
             SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "WathomMusicToggle"), inst.userid, GetMusicValues(inst))
@@ -474,29 +867,30 @@ local function onload(inst, data)
             inst:AddComponent("prototyper")
             inst.components.prototyper.trees = TUNING.PROTOTYPER_TREES.ANCIENTALTAR_HIGH
         end
+        if data.um_bosses_killed then
+            inst.um_bosses_killed = data.um_bosses_killed
+            if #data.um_bosses_killed > 0 then
+                LoadHealthAndHunger(inst,data)
+            end
+        end
     end
 end
 
-local function HoldingCane(inst)
-    return inst:HasTag("wathom") and inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) and 
-    (inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS).prefab == "cane" or inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS).prefab == "orangestaff" or
-    inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS).prefab == "walking_stick") and true
-end
+
 
 local function CheckForCaneRun(inst)
     local AmpLevel = inst.components.adrenaline:GetPercent()
-    if (AmpLevel >= 0.75 or inst:HasTag("amped") or HoldingCane(inst) or (HasSkill(inst,"digitigrade_1") and inst.components.adrenaline and inst.components.adrenaline:GetPercent() > 0.48)) and
-        (inst.components.rider and not inst.components.rider:IsRiding() or not inst.components.rider) then --Handle VVathom Running
+    if inst:HasTag("amped") or AmpLevel >= (HasSkill(inst,"hyper_1") and 0.48 or 0.75) and
+        (inst.components.rider and not inst.components.rider:IsRiding() or not inst.components.rider) then --Handle Wathom Running
         inst:AddTag("wathomrun")
-        -- if inst.sg:HasStateTag("running") then
-            -- inst.sg:GoToState("idle")
-        -- end
-    elseif inst:HasTag("wathomrun") and not (AmpLevel >= 0.75 or inst:HasTag("amped") or HoldingCane(inst)) or inst.components.rider and inst.components.rider:IsRiding() then
+    elseif inst:HasTag("wathomrun") and not (inst:HasTag("amped") or AmpLevel >= (HasSkill(inst,"hyper_1") and 0.48 or 0.75)) or inst.components.rider and inst.components.rider:IsRiding() then
         inst:RemoveTag("wathomrun")
-        -- if inst.sg:HasStateTag("running") then
-            -- inst.sg:GoToState("idle")
-        -- end
     end
+end
+
+local function EquipChecks(inst)
+    CheckForCaneRun(inst)
+    CheckHone(inst)
 end
 
 local function UpdateAdrenaline(inst, data)
@@ -524,64 +918,25 @@ local function UpdateAdrenaline(inst, data)
 
     CheckForCaneRun(inst)
 
-    if AmpLevel == 0 and inst:HasTag("amped") then
-        UnAmp(inst)
-    elseif AmpLevel < 0.25 and not inst:HasTag("amped") then
-        inst.components.combat.attackrange = 2
-        inst.AmpDamageTakenModifier = 3
-    elseif AmpLevel < 0.5 and not inst:HasTag("amped") then
-        inst.components.combat.attackrange = item and 4 or 2
-        inst.AmpDamageTakenModifier = 1
-    elseif AmpLevel >= 1 and not inst:HasTag("amped") and HasSkill(inst,"amp_3") then
-        Amp(inst)
-        inst.AmpDamageTakenModifier = TUNING.DSTU.WATHOM_AMPED_VULNERABILITY
-    elseif AmpLevel >= 1 and not inst:HasTag("amped") and HasSkill(inst,"amp_3") then
-        inst.components.combat.attackrange = item and (HasSkill(inst,"amp_2") and 6 or HasSkill(inst,"amp_1") and 5) or 2
-        --inst.components.health:SetAbsorptionAmount(HasSkill(inst,"amp_2") and -0.5 or HasSkill(inst,"amp_2") and -0.25 or 0)
-        inst.AmpDamageTakenModifier = HasSkill(inst,"amp_2") and 2 or HasSkill(inst,"amp_1") and 1.5 or 1    
-    elseif AmpLevel >= 0.75 and not inst:HasTag("amped") then
-        inst.components.combat.attackrange = item and (HasSkill(inst,"amp_2") and 6 or HasSkill(inst,"amp_1") and 5) or 2
-        --inst.components.health:SetAbsorptionAmount(HasSkill(inst,"amp_2") and -0.5 or HasSkill(inst,"amp_2") and -0.25 or 0)
-        inst.AmpDamageTakenModifier = HasSkill(inst,"amp_2") and 2 or HasSkill(inst,"amp_1") and 1.5 or 1
-    elseif AmpLevel >= 0.5 and not inst:HasTag("amped") then
-        inst.components.combat.attackrange = item and (HasSkill(inst,"amp_1") and 5) or 2
-        inst.AmpDamageTakenModifier = HasSkill(inst,"amp_1") and 1.5 or 1
-    end
-
     if inst.components.rider and inst.components.rider:IsRiding() then
         inst.components.combat.attackrange = 2
+    elseif (inst:HasTag("amped") or inst:HasTag("deathamp")) then
+        inst.components.combat.attackrange = item and 7 or 2
+    else
+        inst.components.combat.attackrange = item and (4 + AmpLevel*3) or 2
+    end
+    
+    if AmpLevel <= 0 and inst:HasTag("amped") then
+        UnAmp(inst)
+    elseif AmpLevel >= 1 then
+        Amp(inst)
     end
 end
 
 local function CustomCombatDamage(inst, target, weapon, multiplier, mount)
-    --sometimes I hate short-circuit evals...
-    if not mount then
-        return (target.components.hauntable and target.components.hauntable.panic and inst:HasTag("amped")) and (1.5 * 4)
-            or (target.components.hauntable and target.components.hauntable.panic) and (1.5 * 2)
-            or inst:HasTag("amped") and 4 or 2 or 1
-    end
+    return mount and 1 or ((inst:HasTag("amped") and 4 or 2) + inst.carnage_multiplier)
 end
 
-local function OnAttacked(inst, data)
-    inst.adrenalpause = true
-    if inst.adrenalresume then
-        inst.adrenalresume:Cancel()
-        inst.adrenalresume = nil
-    end
-    inst.adrenalresume = inst:DoTaskInTime(10, function(inst) inst.adrenalpause = false end)
-    if not TUNING.DSTU.WATHOM_ARMOR_DAMAGE then
-        local dmgmod = inst.AmpDamageTakenModifier
-    
-        
-        if data.damageresolved then
-            inst.components.health:DoDelta(-((data.damageresolved * dmgmod) - data.damageresolved), nil, data.attacker)
-        end
-    end
-    --    if data.attacker:HasTag("brightmare") then
-    --        inst.components.adrenaline:DoDelta(-10)
-    --        inst.components.health:DoDelta(-10, nil, data.attacker)
-    --    end
-end
 
 local function Exclamationfy(string)
     if not ThePlayer or not ThePlayer:HasAnyTag("amped", "groggy") then
@@ -660,43 +1015,138 @@ local function RemoveCorpse(inst)
     end)
 end
 
-local function SeeIfShouldBecomeShadow(inst)
-    if HasSkill(inst,"shadow_wathom_2") then
-        inst.AnimState:SetBuild("wathom")
-        inst.AnimState:SetBank("wilson")
-        inst.AnimState:SetMultColour(0,0,0,0.6)
-        inst.components.locomotor.runspeed = TUNING.WILSON_RUN_SPEED + TUNING.WONKEY_SPEED_BONUS
-        if inst.components.health:GetPenaltyPercent() <= 0.25 then
-            inst.wathom_corpse = SpawnPrefab("wathom_corpse")
-            inst.wathom_corpse.Transform:SetPosition(inst.Transform:GetWorldPosition())
-            inst:ListenForEvent("ms_respawnedfromghost", RemoveCorpse)
-        else
-            SpawnPrefab("skeleton").Transform:SetPosition(inst.Transform:GetWorldPosition())
-        end
-    end
-end
-
-local function StopBeingShadow(inst)
-    if HasSkill(inst,"shadow_wathom_2") then
-        inst.AnimState:SetMultColour(1,1,1,1)
-        inst.components.locomotor.runspeed = TUNING.WILSON_RUN_SPEED
-    end
-end
-
 local function WathomWarnsEarly(inst, threattype)
     inst.owner.components.talker:Say("Others can't hear, "..threattype.." is coming.")
 end
 
+
+local function AttachEmpoweredHits(inst,pct,planar)
+    if planar then
+        inst.num_planar_hits = math.clamp(20-20*pct,inst.num_planar_hits,20)
+    else
+        inst.num_nightmare_hits = math.clamp(20-20*pct,inst.num_nightmare_hits,20)
+    end
+    SetEmpoweredFx(inst)
+end
+
+local function NMRegen(inst)
+    inst.nightmare_regen = inst.nightmare_regen - 1
+    inst.components.adrenaline:DoDelta(1)
+    if inst.nightmare_regen <= 0 then
+        inst.nightmare_regen_FN:Cancel()
+        inst.nightmare_regen_FN = nil
+    end
+end
+
+local function HRRegen(inst)
+    inst.horror_regen = inst.horror_regen - 1
+    inst.components.adrenaline:DoDelta(2)
+    if inst.horror_regen <= 0 then
+        inst.horror_regen_FN:Cancel()
+        inst.horror_regen_FN = nil
+    end
+end
+
+local function AttachRegenAdrenaline(inst,type)
+    if type == "nightmarefuel" then
+        AttachEmpoweredHits(inst,inst.components.adrenaline:GetPercent(),false)
+        if not inst.nightmare_regen_FN then
+            inst.nightmare_regen_FN = inst:DoPeriodicTask(1,NMRegen)
+        end
+        inst.nightmare_regen = 60
+    elseif type == "horrorfuel" then
+        AttachEmpoweredHits(inst,inst.components.adrenaline:GetPercent(),true)
+        if not inst.horror_regen_FN then
+            inst.horror_regen_FN = inst:DoPeriodicTask(1,HRRegen)
+        end
+        inst.horror_regen = 120
+    end
+
+end
+
+local function OnDeath(inst)
+    if inst.num_planar_hits or inst.num_nightmare_hits then
+        inst.num_nightmare_hits = 0
+        inst.num_planar_hits = 0
+        SetEmpoweredFx(inst)
+    end
+end
+
+local ancients = {"ruinshat","yellowamulet","greenamulet","orangeamulet","yellowstaff","greenstaff","orangestaff","um_magnifier",
+"multitool_axe_pickaxe","armorruins","ruins_bat","ancient_amulet_red",
+"voidcloth_umbrella","saddle_shadow","voidcloth_scythe","beeswax_spray","shadow_battleaxe","voidcloth_boomerang","armor_voidcloth","voidclothhat"}
+-- both ancient AND shadow planar
+local function IsAncientItem(item)
+    for i,v in ipairs(ancients) do
+        if item.prefab == v then
+            return true
+        end
+    end
+    return false
+end
+
+
+local magics = {"nightsword","armor_sanity","icestaff","firestaff","telestaff","armordreadstone","dreadstonehat","um_magnifier_purplegem",
+"batbat","um_ice_sicle","um_hat_pepperdragon","antlionhat","amulet","blueamulet","purpleamulet","onemanband","um_feather_totem","panflute"}
+
+
+local function IsMagicItem(item)
+    for i,v in ipairs(magics) do
+        if item.prefab == v then
+            return true
+        end
+    end
+    return false
+end
+
+local function Artifice(inst,data)
+    if data and data.item and
+        ((HasSkill(inst,"artificer_2") and IsMagicItem(data.item)) or 
+        (HasSkill(inst,"artificer_3") and IsAncientItem(data.item))) and
+        inst.components.adrenaline and 
+        (inst.components.adrenaline.current > 75 or inst:HasTag("amped")) then
+        local augmented = false
+        if data.item.components.finiteuses then
+            augmented = true
+            local oldmax = data.item.components.finiteuses.total
+            data.item.components.finiteuses:SetMaxUses(2*oldmax)
+            data.item.components.finiteuses:SetUses(2*oldmax)
+        end
+        if data.item.components.fueled then
+            augmented = true
+            local oldmaxfuel = data.item.components.fueled.maxfuel
+            data.item.components.fueled:InitializeFuelLevel(2*oldmaxfuel)
+        end
+        if data.item.components.armor then
+            augmented = true
+            local oldcondition = data.item.components.armor.condition
+            data.item.components.armor.maxcondition = 2 * oldcondition
+            data.item.components.armor.condition = 2 * oldcondition
+        end
+        if augmented == true then
+            inst.components.adrenaline:SetPercent(0)
+        end
+
+
+
+    end
+end
+
+-- wathom_barkmod_effects call
+local function SurvivorBarkEffect(player)
+    if player.components.wereness then
+        player.components.wereness:DoDelta(25)
+    end
+    if player.components.mightiness then
+        player.components.mightiness:DoDelta(25)
+    end
+    if player.components.singinginspiration then
+        player.components.singinginspiration:DoDelta(25)
+    end
+end
+
 -- This initializes for the server only. Components are added here.
 local function master_postinit(inst)
-    --    inst.components.sanity:EnableLunacy(true, "wathomlunacy")
-
-    -- --     If at high lunacy, become a target for Gestalts and Greater Gestalts.
-    --    if inst.components.sanity:GetPercent() > 0.84 then
-    --        inst:AddTag("gestalt_possessable")
-    --    else
-    --        inst:RemoveTag("gestalt_possessable")
-    --end
 
     inst.adrenalinecheck = 0 -- I have no idea what this does. It's left over from SCP-049.
 
@@ -706,8 +1156,6 @@ local function master_postinit(inst)
     -- choose which sounds this character will play
     inst.soundsname = "wathomvoiceevent"
     inst.talker_path_override = "wathomcustomvoice/"
-    -- Uncomment if "wathgrithr"(Wigfrid) or "webber" voice is used
-    --inst.talker_path_override = "dontstarve_DLC001/characters/"
 
     -- Carnivore
     if inst.components.eater then
@@ -748,9 +1196,7 @@ local function master_postinit(inst)
     inst:DoPeriodicTask(1.5, function() AmpTimer(inst) end)
     inst:DoPeriodicTask(1, function() SapTask(inst) end)
     
-    inst:ListenForEvent("healthdelta", OnHealthDelta)
     inst:ListenForEvent("onattackother", OnAttackOther)
-    inst:ListenForEvent("attacked", OnAttacked)
     if TheWorld.ismastersim then
         inst:ListenForEvent("adrenalinedelta", UpdateAdrenaline)
     end
@@ -765,25 +1211,18 @@ local function master_postinit(inst)
         UpdateMusic(inst)
     end)
 
-    --    inst:WatchWorldState("isday", function()
-    --        inst:DoTaskInTime(TheWorld.state.isday and 0 or 1, function(inst)
-    --            if not TheWorld:HasTag("cave") then
-    --                if TheWorld.state.isnight or TheWorld.state.isdusk then
-    --                    inst.components.sanity.dapperness = 0
-    --                elseif TheWorld.state.isday then
-    --                    inst.components.sanity.dapperness = 10 / 60
-    --                end
-    --            end
-    --        end)
-    --    end)
-    
     inst.components.sanity.custom_rate_fn = function(inst)
-        if inst.components.sanity:IsLunacyMode() then
-            return 0
+        if inst:HasTag("amped") then
+            if HasSkill(inst,"hyper_4") then
+                return -TUNING.SANITYAURA_SMALL
+            elseif HasSkill(inst,"stalker_4") then
+                return -TUNING.SANITYAURA_HUGE/2
+            else
+                return -TUNING.SANITYAURA_SMALL_TINY
+            end
         end
-
-        if TheWorld.state.isday then
-            return TUNING.SANITY_NIGHT_LIGHT
+        if TheWorld.state.isday and not inst.components.sanity:IsLunacyMode() then
+            return -TUNING.SANITYAURA_SMALL_TINY
         end
 
         return 0
@@ -791,11 +1230,6 @@ local function master_postinit(inst)
 
     inst.components.sanity.night_drain_mult = 0
 
-    -- Night Vision enabler
-    --    inst.components.playervision:ForceNightVision(true) -- Should only force this if it's night or in caves.
-
-    -- Doubles Wathom's attack range so he can jump at things from further away.
-    -- inst.components.combat.attackrange = 4
 
     local _onsave = inst.OnSave
     local function onsave(inst, data)
@@ -805,10 +1239,16 @@ local function master_postinit(inst)
         if inst:HasTag("deathamp") then
             data.deathamped = true
         end
-        if inst.found_station then
-            data.found_station = true
+
+        if inst.hone_amounts then -- Save the list of things wathom has honed
+            data.hone_amounts = inst.hone_amounts
         end
-        
+
+        data.um_bosses_killed = inst.um_bosses_killed
+        if #data.um_bosses_killed > 0 then
+            data = SaveHealthAndHunger(inst,data)
+        end
+    
         if _onsave ~= nil then
             return _onsave(inst, data)
         end
@@ -820,13 +1260,59 @@ local function master_postinit(inst)
     inst.OnNewSpawn = onload
     inst.ToggleUndeathState = ToggleUndeathState
 
-    inst:ListenForEvent("equip",CheckForCaneRun)
-    inst:ListenForEvent("unequip",CheckForCaneRun)
+    inst.SetEmpoweredFx = SetEmpoweredFx
+    inst.EmpoweredDamage = EmpoweredDamage
+    inst.HealingGlutton = HealingGlutton
+    inst.SurvivorBarkEffect = SurvivorBarkEffect
+    inst.carnage_multiplier = 0
+    inst.num_nightmare_hits = 0
+    inst.num_planar_hits = 0
 
-    inst:ListenForEvent("makeplayerghost",function(inst) inst:DoTaskInTime(0,SeeIfShouldBecomeShadow) end)
-    inst:ListenForEvent("ms_respawnedfromghost", StopBeingShadow)
+
+    -- Hone Tuning Variables - we can move to TUNING.DSTU at some - after merge probably
+    inst.hone_tiers = {500,5000}
+    inst.hone_items = {"ruins_bat","multitool_axe_pickaxe","voidcloth_scythe","voidcloth_boomerang","shadow_battleaxe"}
+    if not inst.hone_amounts then
+        inst.hone_amounts = {0,0,0,0,0} -- Starts at 0, loading may give different values
+    end
+    inst.FindHoneID = FindHoneID
+
+    inst:ListenForEvent("equip",EquipChecks)
+    inst:ListenForEvent("unequip",EquipChecks)
+
 
     inst.UMToggleUniqueVetCurse = ToggleUniqueVetCurse
+
+    local _oneatfn = inst.components.eater.oneatfn or nil
+    local function OnEatFn(inst,food,feeder)
+        if HasSkill(inst,"glutton_1") then
+            if food:HasTag("meat") and food:HasTag("cookable") and food.components.perishable then
+                local deltaadrenaline = food.components.edible.hungervalue * food.components.perishable:GetPercent()
+                inst.components.adrenaline:DoDelta(deltaadrenaline)
+            end
+        end
+        if HasSkill(inst,"glutton_2") then
+            -- Attach special effects as well.
+            if food.prefab == "nightmarefuel" then
+                AttachRegenAdrenaline(inst,food.prefab)                
+            end
+            if food.prefab == "horrorfuel" then
+                AttachRegenAdrenaline(inst,food.prefab)
+            end
+        end
+        if _oneatfn then
+            _oneatfn(inst,food,feeder)
+        end
+    end
+
+
+    inst:ListenForEvent("death",OnDeath)
+    inst.components.eater.oneatfn = OnEatFn
+
+    inst.FindSpeed = FindSpeed
+    inst.um_bosses_killed = {}
+    -- Artificer
+    inst:ListenForEvent("builditem",Artifice)
 end
 
 return MakePlayerCharacter("wathom", prefabs, assets, common_postinit, master_postinit)

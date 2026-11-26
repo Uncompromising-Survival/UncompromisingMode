@@ -17,6 +17,20 @@ env.AddComponentPostInit("unwrappable", function(self)
                 end
             end
         end
+
+        -- Make the can refresh by 5 days
+        if self.inst.um_refreshing then
+            if self.itemdata then
+                for i, v in ipairs(self.itemdata) do
+                    if v.data and v.data.perishable then
+                        local self = v.data.perishable
+                        -- If the amount of time that has passed is too much for perishable to handle, go ahead and make the item rot.
+                        self.time = self.time + TUNING.TOTAL_DAY_TIME * 5
+                    end
+                end
+            end
+        end
+
         return _Unwrap(self, doer, ...)
     end
 end)

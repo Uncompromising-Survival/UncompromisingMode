@@ -47,7 +47,7 @@ local function DetermineSize(inst, fitting, removepond)
     if not inst.size or fitting then
         inst.size = math.random(1, fitting or #sizes)
         local x, y, z = inst.Transform:GetWorldPosition()
-        local ents = TheSim:FindEntities(x, y, z, sizes[inst.size].rad, nil, nil, { "plant", "pond", "boulder", "rock", "tree" })
+        local ents = TheSim:FindEntities(x, y, z, sizes[inst.size].rad+1, nil, nil, { "plant", "pond", "boulder", "rock", "tree" })
         for i, v in ipairs(ents) do
             if v ~= inst and inst.size ~= 1 then
                 DetermineSize(inst, 2)

@@ -309,8 +309,11 @@ local function TryDetermineShockPoint(inst)
         if offset then
             inst.shocktargetpoint = Vector3(point.x+offset.x,0,point.z+offset.z)
             inst.components.locomotor:SetExternalSpeedMultiplier(inst, "about_to_special_shock", 4)
-            inst:DoTaskInTime(3,function(inst)
+            inst:DoTaskInTime(3,function(inst) -- Give the worm 3 seconds to make it to it, if they don't then it's probably inaccessible
                 inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, "about_to_special_shock")
+                if inst.shocktargetpoint then
+                    inst.shocktargetpoint = nil
+                end
             end)
 
             local current_tile = TheWorld.Map:GetTileAtPoint(inst.Transform:GetWorldPosition()) 

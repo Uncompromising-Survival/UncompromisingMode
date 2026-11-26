@@ -87,7 +87,7 @@ end
 
 local no_tags = JoinArrays(UMCommonFns.GHOSTLIKE_TAGS, {"pyre_toxin_immune", "FX", "INLIMBO", "wall", "invisible", "notarget", "noattack", "boat", "walkableplatform"})
 local function pyrenettle_bumped(inst, nextvictim)
-    if nextvictim:IsValid() and not nextvictim:HasAnyTag(no_tags) and not PlayerImmunity(nextvictim) then
+    if nextvictim:IsValid() and not nextvictim:HasAnyTag(no_tags) and not PlayerImmunity(nextvictim) and not inst.no_sting then -- no_sting is used for the ice sickle when it's making it rapidly shrink
         inst.AnimState:PlayAnimation("pn" .. inst.stage .. "_bump", false)
         inst.AnimState:PushAnimation("pn" .. inst.stage .. "_idle", true)
         if inst.stage ~= 1 then
@@ -122,12 +122,6 @@ local function SmallPyreNettleGrowthTimerReset(inst, cancel)
 end
 -- This sets up the plant's stage-unique traits.
 local function SetStage(inst)
-    -- Remove and then add a tag to identify current stage, for spawning checks.
-    for i = 1, 5 do
-        inst:RemoveTag("PyreNettle" .. i)
-    end
-    inst:AddTag("PyreNettle" .. inst.stage)
-
     -- Safety mechanisms, in case we're at an invalid stage (loading shenanigans probably).
     if inst.stage > 5 then
         print("um_pyre_nettles.lua has auto-recovered from an invalid SetStage! Stage was: " .. inst.stage)

@@ -4,18 +4,7 @@ local function OnStartBundling(inst)--, doer)
     inst.components.stackable:Get():Remove()
 end
 
-local function MakeWrap(name, containerprefab, tag, cheapfuel)
-    local assets =
-    {
-        Asset("ANIM", "anim/"..name..".zip"),
-    }
-
-    local prefabs =
-    {
-        name,
-        containerprefab,
-    }
-
+local function MakeWrap(name, containerprefab, tag, cheapfuel) -- AXE This is not used
     local function fn()
         local inst = CreateEntity()
 
@@ -61,14 +50,10 @@ local function MakeWrap(name, containerprefab, tag, cheapfuel)
         return inst
     end
 
-    return Prefab(name.."wrap", fn, assets, prefabs)
+    return Prefab(name.."wrap", fn)
 end
 
-local function MakeContainer(name, build)
-    local assets =
-    {
-        Asset("ANIM", "anim/"..build..".zip"),
-    }
+local function MakeContainer(name)
 
     local function fn()
         local inst = CreateEntity()
@@ -95,7 +80,7 @@ local function MakeContainer(name, build)
         return inst
     end
 
-    return Prefab(name, fn, assets)
+    return Prefab(name, fn)
 end
 
 local function onburnt(inst)
@@ -198,7 +183,8 @@ local function MakeBundle(name, onesize, variations, loot, tossloot, setupdata, 
         if inst.burnt then
             SpawnPrefab("ash").Transform:SetPosition(pos:Get())
         else
-            local loottable = (setupdata ~= nil and setupdata.lootfn ~= nil) and setupdata.lootfn(inst, doer) or loot
+            -- this isn't even used
+            --[[local loottable = (setupdata ~= nil and setupdata.lootfn ~= nil) and setupdata.lootfn(inst, doer) or loot
             if loottable ~= nil then
                 local moisture = inst.components.inventoryitem:GetMoisture()
                 local iswet = inst.components.inventoryitem:IsWet()
@@ -218,7 +204,7 @@ local function MakeBundle(name, onesize, variations, loot, tossloot, setupdata, 
                         end
                     end
                 end
-            end
+            end]]
             SpawnPrefab("wetpouch_unwrap").Transform:SetPosition(pos:Get())
         end
         if doer ~= nil and doer.SoundEmitter ~= nil then
@@ -290,7 +276,7 @@ local function MakeBundle(name, onesize, variations, loot, tossloot, setupdata, 
         inst.components.unwrappable:SetOnWrappedFn(OnWrapped)
         inst.components.unwrappable:SetOnUnwrappedFn(OnUnwrapped)
         inst.UpdateInventoryImage = UpdateInventoryImage
-		inst.components.unwrappable:SetPeekContainer("silksack")
+		inst.components.unwrappable:SetPeekContainer("silken_bundle_container")
 		
         MakeSmallBurnable(inst, TUNING.SMALL_BURNTIME)
         MakeSmallPropagator(inst)
@@ -315,4 +301,5 @@ local function MakeBundle(name, onesize, variations, loot, tossloot, setupdata, 
 end
 
 return --MakeBundle("ratacombs_junkpouch", true, nil, JoinArrays(table.invert(wetpouch.loottable), GetAllWinterOrnamentPrefabs()), false, wetpouch,"wetpouch","wetpouch"),
-MakeBundle("silken_bundle", false, nil,nil,nil,nil,"um_silken_bundle","um_silken_bundle")
+MakeBundle("silken_bundle", false, nil,nil,nil,nil,"um_silken_bundle","um_silken_bundle"),
+MakeContainer("silken_bundle_container",MakeContainer)

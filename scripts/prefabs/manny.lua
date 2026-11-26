@@ -10,15 +10,27 @@ local function onbuilt(inst)
 	inst.SoundEmitter:PlaySound("dontstarve/creatures/mandrake/walk")
 end
 
-
-
 local function onhammer(inst)
 	inst.AnimState:PlayAnimation("hit")
 end
 
 local function NextMannyAnimy(inst)
+	local _worldsettingstimer = TheWorld.components.worldsettingstimer
 	if TheWorld.components.hounded then
 		local houndtime = TheWorld.components.hounded:GetTimeToAttack()/(60*8) --Convert seconds to DS days 
+		local deer_timetoattack = _worldsettingstimer:GetTimeLeft("deerclops_timetoattack")
+		local bear_timetoattack = _worldsettingstimer:GetTimeLeft("bearger_timetospawn")
+		local mockfly_timetoattack = _worldsettingstimer:GetTimeLeft("mockfly_timetoattack")
+
+		if deer_timetoattack and deer_timetoattack < houndtime then
+			houndtime = deer_timetoattack
+		end
+		if bear_timetoattack and bear_timetoattack < houndtime then
+			houndtime = bear_timetoattack
+		end
+		if mockfly_timetoattack and mockfly_timetoattack < houndtime then
+		end
+
 		if houndtime then -- Will eventually get it to check for giants too, though I think we may wanna *actually* (which means without bug or fail) redo giant spawns before we do that...
 			--TheNet:Announce(houndtime)
 			if houndtime > 7 then

@@ -40,6 +40,11 @@ ANNOUNCE.ANNOUNCE_DETACH_BUFF_CALIFORNIAKING = "Who am I again?"
 DESCRIBE.CALIFORNIAKING = "This dish is gruesome."
 -- CaliforniaKing
 
+-- Himalaya
+ANNOUNCE.ANNOUNCE_HIMALAYA_DORMANT = "Oof! This rock isn't budging."
+ANNOUNCE.ANNOUNCE_HIMALAYA_SHIELDED = "Something's not letting me through!"
+ANNOUNCE.ANNOUNCE_HIMALAYA_RESETTING = "Oh no, something's not right. It's going to reset soon!"
+
 -- Content Creators
 DESCRIBE.CCTRINKET_DON = "I can only make out the words \"Don\" and \"Guide\"."
 DESCRIBE.CCTRINKET_JAZZY = "Looks pretty jazzy."
@@ -380,7 +385,7 @@ DESCRIBE.STANTON = "You want a drinking partner? Uh..."
 ANNOUNCE.ANNOUNCE_ATTACH_BUFF_HYPERCOURAGE = "What's so scary?"
 ANNOUNCE.ANNOUNCE_DETACH_BUFF_HYPERCOURAGE = "I..."
 -- StantonStuff
-
+ANNOUNCE.ANNOUNCE_WIDOWHEALING = "She's feeding off her cocoons. We can't leave her alone with them!"
 DESCRIBE.ARMORLAVAE = DESCRIBE.LAVAE
 
 DESCRIBE.THEATERCORN = "I should find something interesting to watch."

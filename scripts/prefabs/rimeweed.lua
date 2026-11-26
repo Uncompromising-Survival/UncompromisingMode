@@ -262,7 +262,7 @@ local function KillOffRimeweed(inst)
     if TheWorld.state.iswinter then return end
     inst.persists = false
     if inst.killrimeweedtask then return end
-    inst.killrimeweedtask = inst:DoTaskInTime(math.min(math.random() * .5, .5), function(inst)
+    inst.killrimeweedtask = inst:DoTaskInTime(0.3, function(inst)
         if not TheWorld.state.iswinter then
             inst.nospread = true
             if inst.components.health and not inst.components.health:IsDead() then

@@ -16,6 +16,21 @@ if GetModConfigData("hoodedforest") then               -- Lock Everything Behind
 	AddRoomPreInit("WalrusHut_Grassy", function(room) room.contents.countprefabs = { um_bear_trap_old = function() return math.random(6, 8) end, ghost_walrus = function() return math.random(2, 4) end, walrus_camp = 1 } end)
 	AddRoomPreInit("WalrusHut_Rocky", function(room) room.contents.countprefabs = { um_bear_trap_old = function() return math.random(6, 8) end, ghost_walrus = function() return math.random(2, 4) end, walrus_camp = 1 } end)
 
+	-- If The Hunters appear, remove it.
+	AddTaskSetPreInitAny(function(tasksetdata)
+		if tasksetdata.location ~= "forest" then
+			return
+		end
+		local hunter_task 
+		for i,task in ipairs(tasksetdata.optionaltasks) do
+			if task == "The hunters" then
+				hunter_task = i
+			end
+		end
+		if hunter_task then
+			table.remove(tasksetdata.optionaltasks,hunter_task)
+		end
+	end)
 	-- if not GLOBAL.KnownModIndex:IsModEnabled("workshop-1467214795") then
 		-- AddTask("UMTheHunters", { -- Alternative tasks for whatever reason are not responsive to AddTaskPreInit.... So use AddTask as a workaround
 				-- locks={LOCKS.ADVANCED_COMBAT,LOCKS.MONSTERS_DEFEATED,LOCKS.TIER4},

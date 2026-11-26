@@ -116,6 +116,7 @@ AddRoom("GrassMagma", {
         countprefabs =
         {
             um_ghost_pepper = function() return math.random(6, 9) end,
+            lava_pond_cave = 2,
         },
     }
 })
@@ -134,7 +135,11 @@ AddRoom("GrassMagmaCliffs", {
             pyrethicket_builder = 0.5,
             fyriterock = 0.05,
             um_pyrite_ceiling = 0.01,
+            
         },
+        countprefabs = {
+            lava_pond_cave = 2,
+        }
     }
 })
 

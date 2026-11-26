@@ -6,7 +6,7 @@ modimport("scripts/map/misc_tools/tiledefs")
 if GetModConfigData("worldgenmastertoggle") then
     modimport("postinit/map/static_layouts")
 
-    local misc_tools = { "locks&keys", "room_tags", "umss_init" }
+    local misc_tools = { "locks&keys", "room_tags", "umss_init"}
     for i, tool in ipairs(misc_tools) do
         modimport("scripts/map/misc_tools/" .. tool)
     end

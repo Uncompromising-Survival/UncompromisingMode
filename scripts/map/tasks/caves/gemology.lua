@@ -40,6 +40,18 @@ AddTaskPreInit("BlueForest", function(task)
     }
 end)
 
+AddTaskPreInit("BlueForest", function(task)
+    task.room_choices={
+        ["BlueMushForest"] = 1,
+        ["BlueMushMeadow"] = 1,
+        ["BlueSpiderForest"] = 1,
+        ["DropperDesolation"] = 1,
+		
+		["BlueMushForest_Petrified"] = 1,
+		["BlueSpiderForest_Petrified"] = 1,
+    }
+end)
+
 --AXE Makeover the ruins entrance, firstly get rid of sparse optional tasks
 AddTaskSetPreInitAny(function(tasksetdata)
 	if tasksetdata.location ~= "caves" then
@@ -85,6 +97,10 @@ for i,v in ipairs(add_rocks_rooms) do
     end)
 end
 
+
+
+
+
 -- Fungal Noise Forest 
 AddTask("FungalNoiseForest_Petrified",{
     locks={ LOCKS.CAVE, LOCKS.TIER3, LOCKS.ROCKY },
@@ -95,7 +111,7 @@ AddTask("FungalNoiseForest_Petrified",{
         ["BlueMushForest"] = 1,
         ["GreenMushForest"] = 1,
         ["PitRoom"] = 2,
-		
+		["McRusk_MixedMush"] = 1,
 		["FungusNoiseForest_Petrified"] = 1,
     },
     background_room="FungusNoiseMeadow",
@@ -139,9 +155,33 @@ local rockyrooms = {"RockyPlains","RockyHatchingGrounds"}
 
 for i,v in ipairs(rockyrooms) do
 	AddRoomPreInit(v, function(room) -- red
-		room.contents.countprefabs = {um_rocklobster_rock = math.random(1,3)} -- normally doesn't have countprefabs in this room
+        if not room.contents.countprefabs then
+		    room.contents.countprefabs = {
+                um_rocklobster_rock = function() return math.random(3,5) end,
+            }
+        else
+            room.contents.countprefabs.um_rocklobster_rock = function() return math.random(3,5) end
+        end
 	end)
 end
+
+
+-- Add more rockys to the other stalagmite task
+local bonus_rockyrooms = {"StalagmitesAndLights","ThuleciteDebris"} -- These generate once each in the spilagmitecaverns
+for i,v in ipairs(bonus_rockyrooms) do
+	AddRoomPreInit(v, function(room) -- red
+        if not room.contents.countprefabs then
+		    room.contents.countprefabs = {
+                um_rocklobster_rock = function() return math.random(3,5) end,
+                rocky = function() return math.random(3,5) end,
+            }
+        else
+            room.contents.countprefabs.um_rocklobster_rock = function() return math.random(3,5) end
+            room.contents.countprefabs.rocky = function() return math.random(3,5) end
+        end
+	end)
+end
+
 
 
 
@@ -189,3 +229,32 @@ for i,v in ipairs(startrooms) do
 		room.contents.distributeprefabs.um_sinkmound_rock_gemless = 0.25
 	end)
 end
+--[[
+AddTaskSetPreInitAny(function(tasksetdata)
+    if tasksetdata.location ~= "cave" then
+        return
+    end
+
+    -- Remove first fungal task
+    local mush_task 
+    for i,task in ipairs(tasksetdata.optionaltasks) do
+        if task == "FungalNoiseForest" then
+            mush_task = i
+        end
+    end
+    if mush_task then
+        table.remove(tasksetdata.optionaltasks,mush_task)
+    end
+
+    -- Remove second fungal task
+    local mush_task 
+    for i,task in ipairs(tasksetdata.optionaltasks) do
+        if task == "FungalNoiseMeadow" then
+            mush_task = i
+        end
+    end
+    if mush_task then
+        table.remove(tasksetdata.optionaltasks,mush_task)
+    end
+
+end)]]

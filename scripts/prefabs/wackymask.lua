@@ -401,6 +401,14 @@ local function onequip(inst, owner)
         inst.customequip(inst)
     end
 
+    -- AXE New things hidden from full masks
+    if owner.isplayer then
+        owner.AnimState:HideSymbol("face")
+        owner.AnimState:HideSymbol("swap_face")
+        owner.AnimState:HideSymbol("beard")
+        owner.AnimState:HideSymbol("cheeks")
+    end
+
     if owner ~= nil and not owner:HasTag("equipmentmodel") then
         inst.components.fueled:StartConsuming()
     end
@@ -417,6 +425,16 @@ local function onunequip(inst, owner)
     if inst.customunequip ~= nil then
         inst.customunequip(inst)
     end
+
+    -- AXE New things hidden from full masks
+    if owner.isplayer then
+        owner.AnimState:ShowSymbol("face")
+        owner.AnimState:ShowSymbol("swap_face")
+        owner.AnimState:ShowSymbol("beard")
+        owner.AnimState:ShowSymbol("cheeks")
+    end
+    
+
 
     inst.components.fueled:StopConsuming()
 end

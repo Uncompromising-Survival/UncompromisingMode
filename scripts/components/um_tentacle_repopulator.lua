@@ -66,7 +66,7 @@ return Class(function(self, inst)
         end
 	end
 
-    inst:WatchWorldState("onspring", function(inst, data)
+    inst:WatchWorldState("isspring", function(inst, data)
 		self:PopulateTentacles()
     end)
 end)

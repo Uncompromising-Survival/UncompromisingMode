@@ -3,6 +3,8 @@ local assets =
     Asset("ANIM", "anim/um_gemforge.zip"),
     Asset("IMAGE", "images/map_icons/um_gemologyforge.tex"),
     Asset("ATLAS", "images/map_icons/um_gemologyforge.xml"),
+
+    Asset("ANIM", "anim/um_rubbleloot_pocketforge.zip"),
 }
 
 local GEM_DEFS = require("gemology_defs").GEM_DEFS
@@ -47,14 +49,26 @@ local function ForgeGem(inst)
                 end
             end
 
-            tool.components.gem_enchantable:AddEnchantment(gem.prefab, gem:GetTier())
+            -- Forges now can have an ecosystem for their max tiers that they can implement
+            local tier = math.min(inst.um_forge_maxtier,gem:GetTier())
+            tool.components.gem_enchantable:AddEnchantment(gem.prefab, tier)
             tool.components.gem_enchantable:SetDurability(gem.prefab, 1)
 
             LearnGem(inst, gem.prefab)
             gem:Remove()
             inst.components.container.canbeopened = true
             --inst.components.container:DropEverything()
+            if inst.should_break then
+                inst.components.container:DropEverything()
+                local fx = SpawnPrefab("collapse_small")
+                fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
+                fx:SetMaterial("wood")
+                inst:Remove()
+            end
         end)
+        if inst.components.finiteuses then
+            inst.components.finiteuses:Use(1)
+        end
         return true
     end
 
@@ -160,8 +174,68 @@ local function fn()
     inst:ListenForEvent("itemlose", ShowItems)
 
     ShowItems(inst)
+    inst.um_forge_maxtier = 3
 
     return inst
 end
 
-return Prefab("um_gemologyforge", fn, assets)
+local function Broken(inst, worker)
+    inst.should_break = true
+end
+
+local function fnpocket()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddNetwork()
+
+    MakeInventoryPhysics(inst)
+
+    inst.AnimState:SetBank("um_rubbleloot_pocketforge")
+    inst.AnimState:SetBuild("um_rubbleloot_pocketforge")
+    inst.AnimState:PlayAnimation("idle", false)
+
+    inst:AddTag("structure")
+    inst:AddTag("gem_forge")
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst:AddComponent("inspectable")
+    inst:AddComponent("gem_forge")
+
+    inst.ForgeGem = ForgeGem
+
+    inst:AddComponent("container")
+    inst.components.container:WidgetSetup("um_rubbleloot_pocketforge")
+    inst.components.container.skipclosesnd = true
+    inst.components.container.skipopensnd = true
+    inst.components.container.acceptsstacks = false
+    inst:ListenForEvent("itemget", ShowItems)
+    inst:ListenForEvent("itemlose", ShowItems)
+
+    ShowItems(inst)
+    inst.um_forge_maxtier = 1
+    inst:AddComponent("inventoryitem")
+
+    inst:AddComponent("finiteuses")
+    local uses = 5
+    inst.components.finiteuses:SetMaxUses(5)
+    inst.components.finiteuses:SetUses(5)
+    inst.components.finiteuses:SetOnFinished(Broken)
+    inst.components.inventoryitem:SetOnDroppedFn(function(inst)
+        inst.AnimState:PlayAnimation("idle",false) -- If forged in inventory reset the queued animation
+    end)
+
+    inst.Transform:SetScale(0.75,0.75,0.75)
+
+    return inst
+end
+
+return Prefab("um_gemologyforge", fn, assets),
+Prefab("um_rubbleloot_pocketforge",fnpocket,assets)

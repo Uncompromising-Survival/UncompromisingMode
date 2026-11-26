@@ -15,6 +15,9 @@ AddRoomPreInit("Marsh", function(room)
         marsh_grass = function() return math.random(2, 6) end,
         marshmist = function() return math.random(4, 6) end
     }
+	room.contents.distributeprefabs.red_mushroom = 0.5
+    room.contents.distributeprefabs.green_mushroom = 0.5
+    room.contents.distributeprefabs.blue_mushroom = 0
 end)
 
 AddRoomPreInit("SpiderMarsh", function(room)
