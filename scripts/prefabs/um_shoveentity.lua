@@ -48,7 +48,7 @@ local function SetShovePhysicsActiveListener(inst, child, toggle)
         child.um_shovedphysicsactive_onremove = function(_inst) inst:UMSetShovePhysicsActiveListener(_inst) end
         child:ListenForEvent("onremove", child.um_shovedphysicsactive_onremove)
     else
-        if Physics then UMShovePhysics[Physics] = nil end
+        if Physics and UMShovePhysics[Physics] then UMShovePhysics[Physics] = nil end
         if child.um_shovedphysicsactive_onremove then
             inst:RemoveEventCallback("onremove", child.um_shovedphysicsactive_onremove)
             child.um_shovedphysicsactive_onremove = nil
