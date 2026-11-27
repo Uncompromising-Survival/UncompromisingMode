@@ -6,21 +6,55 @@ local assets =
 
 local easing = require("easing")
 
+local function aac_fxanim(haunter)
+    haunter._AARfx.AnimState:PlayAnimation("hit")
+    haunter._AARfx.AnimState:PushAnimation("idle_loop")
+end
+
+local function aac_unproc(haunter)
+    if haunter._AARfx ~= nil then
+        haunter._AARfx:kill_fx()
+        haunter._AARfx = nil
+    end
+
+    haunter:RemoveEventCallback("attacked", aac_fxanim)
+
+    haunter._aactask = nil
+end
+
+local function aac_proc(haunter)
+    haunter:AddDebuff("buff_ancient_amulet_red", "buff_ancient_amulet_red")
+    SpawnPrefab("lightning").Transform:SetPosition(haunter.Transform:GetWorldPosition())
+
+    if haunter._AARfx ~= nil then
+        haunter._AARfx:kill_fx()
+    end
+    haunter._AARfx = SpawnPrefab("forcefieldfx")
+    haunter._AARfx.entity:SetParent(haunter.entity)
+    haunter._AARfx.Transform:SetPosition(0, 0.2, 0)
+    haunter:ListenForEvent("attacked", aac_fxanim)
+
+    if haunter._aactask ~= nil then
+        haunter._aactask:Cancel()
+    end
+    haunter._aactask = haunter:DoTaskInTime(10, aac_unproc)
+end
+
 local function LaunchProjectile(inst, value)
-	for i = 1, 4 do
-		local theta = math.random() * 2 * PI
-		local r = inst:GetPhysicsRadius(0) + 0.25 + math.sqrt(math.random()) * TUNING.WARG_GINGERBREAD_GOO_DIST_VAR
-		local x, y, z = inst.Transform:GetWorldPosition()
-		local dest_x, dest_z = math.cos(theta) * r + x, math.sin(theta) * r + z
+    for i = 1, 4 do
+        local theta = math.random() * 2 * PI
+        local r = inst:GetPhysicsRadius(0) + 0.25 + math.sqrt(math.random()) * TUNING.WARG_GINGERBREAD_GOO_DIST_VAR
+        local x, y, z = inst.Transform:GetWorldPosition()
+        local dest_x, dest_z = math.cos(theta) * r + x, math.sin(theta) * r + z
 
-		local goo = SpawnPrefab("amulet_health_orb_projectile")
-		goo.Transform:SetPosition(x, y, z)
-		goo.Transform:SetRotation(theta / DEGREES)
-		goo._caster = inst
-		goo.healthvalue = value / 4
+        local goo = SpawnPrefab("amulet_health_orb_projectile")
+        goo.Transform:SetPosition(x, y, z)
+        goo.Transform:SetRotation(theta / DEGREES)
+        goo._caster = inst
+        goo.healthvalue = value / 4
 
-		Launch2(goo, inst, 4, 1, 3, 1)
-	end
+        Launch2(goo, inst, 4, 1, 3, 1)
+    end
 end
 
 local function OnCooldown(inst)
@@ -38,122 +72,78 @@ local function onequip_blue(inst, owner)
 
     inst.orbfn = function(attacked, data)
         if data and data.attacker and data.damage then
-			if inst._cdtask == nil and data ~= nil then
-				inst._cdtask = inst:DoTaskInTime(1, OnCooldown)
+            if inst._cdtask == nil and data ~= nil then
+                inst._cdtask = inst:DoTaskInTime(1, OnCooldown)
 
-				inst.healthvalue = data.damage
-				inst.components.finiteuses:Use(inst.healthvalue < 50 and inst.healthvalue or 50)
+                inst.healthvalue = data.damage
+                inst.components.finiteuses:Use(inst.healthvalue < 50 and inst.healthvalue or 50)
 
-				LaunchProjectile(owner, data.damage)
-			end
+                LaunchProjectile(owner, data.damage)
+            end
         end
     end
 
     inst:ListenForEvent("attacked", inst.orbfn, owner)
-
+    owner:ListenForEvent("um_pocketressurection", aac_proc)
 end
 
 local function onunequip_blue(inst, owner)
-	local skin_build = inst:GetSkinBuild()
-	if skin_build ~= nil then
-		owner:PushEvent("unequipskinneditem", inst:GetSkinName())
-	end
-    owner.AnimState:ClearOverrideSymbol("swap_body")
+    if not owner.sg or owner.sg.currentstate.name ~= "amulet_rebirth" then
+        owner.AnimState:ClearOverrideSymbol("swap_body")
+    end
+
+    local skin_build = inst:GetSkinBuild()
+    if skin_build ~= nil then
+        owner:PushEvent("unequipskinneditem", inst:GetSkinName())
+    end
 
     inst:RemoveEventCallback("attacked", inst.orbfn, owner)
+    owner:RemoveEventCallback("um_pocketressurection", aac_proc)
 end
 
-local function aac_fxanim(haunter)
-	haunter._AARfx.AnimState:PlayAnimation("hit")
-	haunter._AARfx.AnimState:PushAnimation("idle_loop")
-end
-
-local function aac_unproc(haunter)
-	if haunter._AARfx ~= nil then
-		haunter._AARfx:kill_fx()
-		haunter._AARfx = nil
-	end
-
-	haunter:RemoveEventCallback("attacked", aac_fxanim)
-
-	haunter._aactask = nil
-end
-
-local function aac_proc(haunter)
-	haunter.components.debuffable:AddDebuff("buff_ancient_amulet_red", "buff_ancient_amulet_red")
-	SpawnPrefab("lightning").Transform:SetPosition(haunter.Transform:GetWorldPosition())
-
-	if haunter._AARfx ~= nil then
-		haunter._AARfx:kill_fx()
-	end
-	haunter._AARfx = SpawnPrefab("forcefieldfx")
-	haunter._AARfx.entity:SetParent(haunter.entity)
-	haunter._AARfx.Transform:SetPosition(0, 0.2, 0)
-    haunter:ListenForEvent("attacked", aac_fxanim)
-
-    if haunter._aactask ~= nil then
-        haunter._aactask:Cancel()
-    end
-    haunter._aactask = haunter:DoTaskInTime(10, aac_unproc)
-end
-
-local function OnHaunt(inst, haunter)
-	inst.haunting = true
-	haunter:PushEvent("respawnfromghost", { source = inst })
-    haunter.Physics:Teleport(inst.Transform:GetWorldPosition())
-	local x,y,z = inst.Transform:GetWorldPosition()
-	haunter:DoTaskInTime(3, aac_proc)
-
-	inst:DoTaskInTime(1, function(inst)
-		local colour = { 1, 0, 0 }
-
-		inst.revivefx = SpawnPrefab("staff_castinglight")
-		inst.revivefx.entity:SetParent(inst.entity)
-		inst.revivefx.Transform:SetRotation(inst.Transform:GetWorldPosition())
-		inst.revivefx:SetUp(colour, 1.9, .33)
-	end)
-
-	inst:DoTaskInTime(3, function(inst) inst:Remove() end)
+local function OnActivateResurrection(inst, doer)
+    doer:DoTaskInTime(60 * FRAMES, aac_proc)
 end
 
 local function onfar(inst) --doesn't have the player part for some reason....
-	-- local x,y,z = inst.Transform:GetWorldPosition()
-	-- local players = FindPlayersInRange(x, y, z, 6)
-	-- local ghostplayers = false
-	-- for i, v in ipairs(players) do
-		-- if v:HasTag("playerghost") then
-			-- local ghostplayers = true
-		-- end
-	-- end
+    -- local x,y,z = inst.Transform:GetWorldPosition()
+    -- local players = FindPlayersInRange(x, y, z, 6)
+    -- local ghostplayers = false
+    -- for i, v in ipairs(players) do
+        -- if v:HasTag("playerghost") then
+            -- local ghostplayers = true
+        -- end
+    -- end
     -- if inst.floating and ghostplayers == false then
-		-- inst.floating = false
-		-- inst.AnimState:PlayAnimation("Hover_pst")
-		-- inst.AnimState:PushAnimation("Idle",true)
+        -- inst.floating = false
+        -- inst.AnimState:PlayAnimation("Hover_pst")
+        -- inst.AnimState:PushAnimation("Idle",true)
     -- end
 end
 
-local function onnear(inst,player)
-    if player ~= nil and player:HasTag("playerghost") and not inst.floating then
-		inst.AnimState:PlayAnimation("Idle_pre")
-		inst.AnimState:PushAnimation("Hover",true)
-		inst.floating = inst:DoPeriodicTask(0.5,function(inst)
-			local x,y,z = inst.Transform:GetWorldPosition()
-			local players = FindPlayersInRange(x, y, z, 6)
-			local ghostplayers = false
-			for i, v in ipairs(players) do
-				if v:HasTag("playerghost") then
-					ghostplayers = true
-				end
-			end
-			if ghostplayers == false and not inst.haunting then
-				inst.floating:Cancel()
-				inst.floating = nil
-				inst.AnimState:PlayAnimation("Hover_pst")
-				inst.AnimState:PushAnimation("Idle",true)
-				
-			end			
-		end)
-
+local function onnear(inst, player)
+    if player and player:HasTag("playerghost") and not inst.floating then
+        inst.AnimState:PlayAnimation("Idle_pre")
+        inst.AnimState:PushAnimation("Hover",true)
+        inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
+        inst.floating = inst:DoPeriodicTask(.5, function(_inst)
+            local x,y,z = _inst.Transform:GetWorldPosition()
+            local players = FindPlayersInRange(x, y, z, 6)
+            local ghostplayers = false
+            for i, v in ipairs(players) do
+                if v:HasTag("playerghost") then
+                    ghostplayers = true
+                    break
+                end
+            end
+            if not ghostplayers and not _inst.haunting then
+                _inst.floating:Cancel()
+                _inst.floating = nil
+                _inst.AnimState:PlayAnimation("Hover_pst")
+                _inst.AnimState:PushAnimation("Idle",true)
+                _inst.AnimState:ClearBloomEffectHandle()
+            end
+        end)
     end
 end
 
@@ -170,17 +160,16 @@ local function fn()
     inst.AnimState:SetBuild("amulet_red_ground")
     inst.AnimState:PlayAnimation("Idle")
 
-	inst.Transform:SetScale(1.1, 1.1, 1.1)
-
-	inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
+    inst.Transform:SetScale(1.1, 1.1, 1.1)
 
     inst:AddTag("resurrector")
+    inst:AddTag("ancient_amulet_red")
     inst:AddTag("NORATCHECK")
     inst:AddTag("donotautopick")
-    
+
     inst.foleysound = "dontstarve/movement/foley/jewlery"
 
-    MakeInventoryFloatable(inst, "med", nil, 0.6)
+    MakeInventoryFloatable(inst, "med", nil, .6)
 
     inst.entity:SetPristine()
 
@@ -190,38 +179,35 @@ local function fn()
 
     inst:AddComponent("inspectable")
 
-    inst:AddComponent("equippable")
-    if EQUIPSLOTS["NECK"] ~= nil then
-        inst.components.equippable.equipslot = EQUIPSLOTS.NECK
-    else
-        inst.components.equippable.equipslot = EQUIPSLOTS.BODY
-    end
-    inst.components.equippable.dapperness = TUNING.DAPPERNESS_SMALL
-    inst.components.equippable.is_magic_dapperness = true
-
     inst:AddComponent("inventoryitem")
 
-    inst.components.equippable:SetOnEquip(onequip_blue)
-    inst.components.equippable:SetOnUnequip(onunequip_blue)
+    local equippable = inst:AddComponent("equippable")
+    equippable.equipslot = EQUIPSLOTS.NECK or EQUIPSLOTS.BODY
+    equippable.dapperness = TUNING.DAPPERNESS_SMALL
+    equippable.is_magic_dapperness = true
+    equippable:SetOnEquip(onequip_blue)
+    equippable:SetOnUnequip(onunequip_blue)
 
-    inst:AddComponent("finiteuses")
-    inst.components.finiteuses:SetOnFinished(inst.Remove)
-    inst.components.finiteuses:SetMaxUses(1000)
-    inst.components.finiteuses:SetUses(1000)
+    local finiteuses = inst:AddComponent("finiteuses")
+    finiteuses:SetOnFinished(inst.Remove)
+    finiteuses:SetMaxUses(1000)
+    finiteuses:SetUses(1000)
 
-	inst:AddComponent("shadowlevel")
-	inst.components.shadowlevel:SetDefaultLevel(TUNING.DSTU.ANCIENT_AMULET_SHADOW_LEVEL)
+    local shadowlevel = inst:AddComponent("shadowlevel")
+    shadowlevel:SetDefaultLevel(TUNING.DSTU.ANCIENT_AMULET_SHADOW_LEVEL)
 
-    inst:AddComponent("hauntable")
-	inst.components.hauntable:SetOnHauntFn(OnHaunt)
-    inst.components.hauntable:SetHauntValue(TUNING.HAUNT_INSTANT_REZ)
+    local hauntable = inst:AddComponent("hauntable")
+    hauntable:SetHauntValue(TUNING.HAUNT_INSTANT_REZ)
 
-	inst:AddComponent("playerprox")
-    inst.components.playerprox:SetDist(4, 6)
-    inst.components.playerprox:SetOnPlayerNear(onnear)
-    inst.components.playerprox:SetOnPlayerFar(onfar)
+    local playerprox = inst:AddComponent("playerprox")
+    playerprox:SetDist(4, 6)
+    playerprox:SetOnPlayerNear(onnear)
+    playerprox:SetOnPlayerFar(onfar)
 
-	inst.floating = false
+    inst.floating = false
+
+    inst:ListenForEvent("activateresurrection", OnActivateResurrection)
+
     return inst
 end
 

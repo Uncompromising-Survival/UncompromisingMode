@@ -1,7 +1,37 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
-local BigPopupDialogScreen = require "screens/popupdialog"
 -----------------------------------------------------------------
+local BigPopupDialogScreen = require("screens/popupdialog")
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
+local ex_fns = require("prefabs/player_common_extensions")
+local OnRespawnFromGhost = ex_fns.OnRespawnFromGhost
+
+local _DoActualRez = UMUpvalueHacker.TryGetUpvalue(OnRespawnFromGhost, "DoActualRez")
+if _DoActualRez then
+    local function DoActualRez(inst, source, item, ...)
+        local prefab
+        if source and source.prefab == "ancient_amulet_red" then
+            prefab = source.prefab
+            source.prefab = "amulet"
+        end
+        local ret = _DoActualRez(inst, source, item, ...)
+        if prefab then source.prefab = prefab end
+        return ret
+    end
+    UMUpvalueHacker.SetUpvalue(OnRespawnFromGhost, DoActualRez, "DoActualRez")
+end
+
+ex_fns.OnRespawnFromGhost = function(inst, data, ...)
+    if not inst:HasTag("playerghost") then return OnRespawnFromGhost(inst, data, ...) end
+    local prefab
+    if data and data.source and data.source.prefab == "ancient_amulet_red" then
+        prefab = data.source.prefab
+        data.source.prefab = "amulet"
+    end
+    local ret = OnRespawnFromGhost(inst, data, ...)
+    if prefab then data.source.prefab = prefab end
+    return ret
+end
 
 local function ReticuleUpdatePositionFn(inst, pos, reticule, ease, smoothing, dt)
     inst.um_mouseposition_x = pos.x

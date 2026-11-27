@@ -169,7 +169,7 @@ local function topocket(inst, owner)
         --owner:ListenForEvent("onremove", toground, inst)
 
         owner:ListenForEvent("ms_respawnedfromghost", OnRespawn)
-        owner:ListenForEvent("PocketResurrection", OnAvoidDeath)
+        owner:ListenForEvent("um_pocketressurection", OnAvoidDeath)
         inst._owner = owner
     end
 end
