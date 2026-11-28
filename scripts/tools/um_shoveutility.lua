@@ -8,25 +8,27 @@ local function RemoveShoveEntity(inst)
     end
 end
 
+local function UpdateProperties(inst)
+    local child = inst.um_child and inst.um_child:IsValid() and inst.um_child
+    if child then inst:UMUpdateProperties(child, true) end
+end
+
 local function UpdateRepel(inst)
     local speed = inst.um_shovespeed
     if speed then
         speed = speed + inst.um_shovedspeed
-        local child = inst.um_child and inst.um_child:IsValid() and inst.um_child
         if speed < 0 then
             inst.um_shovespeed = speed
             inst.um_shovedspeed = inst.um_shovedspeed + .075
             local angle = (inst.um_shoverot - inst.Transform:GetRotation()) * DEGREES
             inst.Physics:SetMotorVelOverride(speed * math.cos(angle), 0, -speed * math.sin(angle))
-            if child then inst:UMUpdateProperties(child, true) end
         else
             inst.Physics:ClearMotorVelOverride()
             inst.Physics:Stop()
+            local child = inst.um_child and inst.um_child:IsValid() and inst.um_child
             if child then RemoveShoveEntity(child) end
-            if inst.um_shoveupdatetask then
-                inst.um_shoveupdatetask:Cancel()
-                inst.um_shoveupdatetask = nil
-            end
+            inst.components.updatelooper:RemoveOnWallUpdateFn(UpdateProperties)
+            inst.components.updatelooper:RemoveOnUpdateFn(UpdateRepel)
         end
     end
 end
@@ -58,7 +60,8 @@ local function DoRepel(inst, data)
         inst.um_shoveentity.um_shovespeed = speed
         inst.um_shoveentity.um_shovedspeed = 0
     end
-    inst.um_shoveentity.um_shoveupdatetask = inst.um_shoveentity:DoPeriodicTask(0, UpdateRepel)
+    inst.um_shoveentity.components.updatelooper:AddOnWallUpdateFn(UpdateProperties)
+    inst.um_shoveentity.components.updatelooper:AddOnUpdateFn(UpdateRepel)
 end
 
 --local UMShove = require("tools/um_shoveutility") UMShove.DoShove(c_select(), {knocker = ThePlayer, radius = 3}) -- Debugging Purposes.
