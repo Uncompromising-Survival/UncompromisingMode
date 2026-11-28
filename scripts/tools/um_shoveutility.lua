@@ -59,9 +59,9 @@ local function DoRepel(inst, data)
         inst.um_shoveentity.um_shoverot = rot1
         inst.um_shoveentity.um_shovespeed = speed
         inst.um_shoveentity.um_shovedspeed = 0
+        inst.um_shoveentity.components.updatelooper:AddOnWallUpdateFn(UpdateProperties)
+        inst.um_shoveentity.components.updatelooper:AddOnUpdateFn(UpdateRepel)
     end
-    inst.um_shoveentity.components.updatelooper:AddOnWallUpdateFn(UpdateProperties)
-    inst.um_shoveentity.components.updatelooper:AddOnUpdateFn(UpdateRepel)
 end
 
 --local UMShove = require("tools/um_shoveutility") UMShove.DoShove(c_select(), {knocker = ThePlayer, radius = 3}) -- Debugging Purposes.
