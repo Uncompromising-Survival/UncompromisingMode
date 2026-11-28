@@ -7,14 +7,13 @@ local mermhouses = {
 }
 
 local function StartSpawning_Winter(inst)
-    if not inst:HasTag("burnt") and TheWorld.state.iswinter and
-        inst.components.childspawner ~= nil and not inst.components.childspawner.spawning then
+    if TheWorld.state.iswinter and inst.components.childspawner and not inst.components.childspawner.spawning and not inst:HasTag("burnt") then
         inst.components.childspawner:StartSpawning()
     end
 end
 
 local function StopSpawning(inst)
-    if not inst:HasTag("burnt") and inst.components.childspawner ~= nil then
+    if inst.components.childspawner and not inst:HasTag("burnt") then
         inst.components.childspawner:StopSpawning()
     end
 end
@@ -31,18 +30,12 @@ local function OnIsDay_Winter(inst, isday)
 end
 
 local function ToggleWinterTuning_UM(inst, iswinter)
-    if not inst.components.childspawner then
-        return
-    end
+    if not inst.components.childspawner then return end
 
-    if iswinter then
-        inst.components.childspawner:SetRegenPeriod(inst.um_base_regen_time * 2)
-    else
-        inst.components.childspawner:SetRegenPeriod(inst.um_base_regen_time)
-    end
+    inst.components.childspawner:SetRegenPeriod(inst.um_base_regen_time * (iswinter and 2 or 1))
 end
 
-for i, v in pairs(mermhouses) do
+for i, v in ipairs(mermhouses) do
     env.AddPrefabPostInit(v, function(inst)
         if not TheWorld.ismastersim then
             return
@@ -62,10 +55,10 @@ for i, v in pairs(mermhouses) do
 
         inst.um_base_regen_time = v == "mermhouse_crafted" and TUNING.MERMHOUSE_REGEN_TIME / 2 or TUNING.MERMHOUSE_REGEN_TIME
 
+        inst:WatchWorldState("isday", OnIsDay_Winter)
+
         StartSpawning_Winter(inst)
 
-        inst:WatchWorldState("isday", OnIsDay_Winter)
-        OnIsDay_Winter(inst, TheWorld.state.isday)
         inst:WatchWorldState("iswinter", ToggleWinterTuning_UM)
         ToggleWinterTuning_UM(inst, TheWorld.state.iswinter)
     end)

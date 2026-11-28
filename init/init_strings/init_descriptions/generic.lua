@@ -312,7 +312,8 @@ ACTIONFAIL.UM_FORGE_GEM = {
     NOT_COMPATIBLE = "It's not the right gem for this."
 }
 ACTIONFAIL.UM_GEM_REPAIR = {
-    NO_REPAIR_NEEDED = "It's fully repaired."
+    NO_REPAIR_NEEDED = "It's fully repaired.",
+    WRONG_REPAIRER = "This is not the right tool for the job."
 }
 ANNOUNCE.ANNOUNCE_GEM_REPAIR_MAXED = "It's hard to repair this further."
 -- Xmas Update

@@ -5,7 +5,7 @@ GLOBAL.setfenv(1, GLOBAL)
 --graciously borrowed from IA.
 IA_SW_ENABLED, IA_HAM_ENABLED = nil, nil
 
-for i,mod in ipairs(ModManager.mods) do
+for i, mod in ipairs(ModManager.mods) do
     local modinfo = KnownModIndex:GetModInfo(mod.modname)
     if modinfo.ia_shipwrecked then
         IA_SW_ENABLED = true
@@ -112,4 +112,19 @@ function UMAddPathfindingWalls(inst, radius)
     end
 
     inst:ListenForEvent("onremove", UMRemovePathfindingWalls)
+end
+
+function UMUnlockSkinForNearbyPlayers(x, y, z, skin)
+    local sender_list = {}
+
+    for k, v in pairs(AllPlayers) do
+        if v:GetDistanceSqToPoint(x, y, z) <= PLAYER_CAMERA_SEE_DISTANCE_SQ then
+            table.insert(sender_list, v.userid)
+        end
+    end
+
+    local UNLOCKMODDEDSKIN_RPC = CLIENT_MOD_RPC["ModdedSkins"] and GetClientModRPC("ModdedSkins", "UnlockModdedSkin")
+    if UNLOCKMODDEDSKIN_RPC then
+        SendModRPCToClient(UNLOCKMODDEDSKIN_RPC, sender_list, skin)
+    end
 end

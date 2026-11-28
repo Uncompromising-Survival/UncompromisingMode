@@ -1,8 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
-local UMUpvalueHacker = require("tools/um_upvaluehacker")
 -----------------------------------------------------------------
-
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
 -----------------------------------------------------------------
 -- Remove pathing collision exploit by making objects noclip
 -----------------------------------------------------------------
@@ -392,4 +391,12 @@ function EntityScript:ClearUMDebugLabel(name)
             self.um_debug_labels = nil
         end
     end
+end
+
+UMShovePhysics = {}
+local _SetActive = Physics.SetActive
+function Physics:SetActive(toggle, ...)
+    local inst = UMShovePhysics[self]
+    if inst then inst.um_shovedphysicsactive = toggle or nil return end
+    return _SetActive(self, toggle, ...)
 end

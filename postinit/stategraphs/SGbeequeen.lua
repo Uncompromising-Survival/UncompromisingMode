@@ -10,9 +10,8 @@ local function DoStomp(inst)
     local radius = TUNING.BEEQUEEN_HIT_RANGE
     local x, y, z = inst.Transform:GetWorldPosition()
     for i, ent in ipairs(TheSim:FindEntities(x, y, z, radius + 3, STOMP_MUST_TAGS, STOMP_CANT_TAGS)) do
-        local range = radius + ent:GetPhysicsRadius(0)
         if ent ~= inst and ent:IsValid() and not (ent.components.health and ent.components.health:IsDead())
-            and inst.components.combat:CanTarget(ent) and inst:IsNear(ent, range) then
+            and inst.components.combat:CanTarget(ent) and inst:IsNear(ent, radius + ent:GetPhysicsRadius(0)) then
             inst.components.combat:DoAttack(ent)
         end
     end

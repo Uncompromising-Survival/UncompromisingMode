@@ -91,9 +91,8 @@ AddUMGemDef("redgem2", {
     color = RGB(233, 153, 153),
     fns = {
         onadjustdamage = function(item, damage, attacker, target, tier, calcnum)
-            return damage + (calcnum == 3 and target and target.components.propagator and target.components.health and target.components.health:GetFireDamageScale() > 0 
-                and TUNING.DSTU.REDGEM2_DAMAGE[tier] + (tier ~= 1 and target.components.burnable and target.components.burnable:IsBurning()
-                and damage * TUNING.DSTU.REDGEM2_BURNING_MULT[tier] or 0) or 0)
+            return damage + (calcnum == 3 and target and target.components.propagator and target.components.health and target.components.health:GetFireDamageScale() > 0
+                and TUNING.DSTU.REDGEM2_DAMAGE[tier] + (tier ~= 1 and target.components.burnable and target.components.burnable:IsBurning() and damage * TUNING.DSTU.REDGEM2_BURNING_MULT[tier] or 0) or 0)
         end,
         onattack = function(inst, attacker, target, tier)
             SpawnPrefab("deer_fire_burst").Transform:SetPosition(target.Transform:GetWorldPosition())
@@ -119,7 +118,7 @@ AddUMGemDef("redgem1", {
         onattack = function(inst, attacker, target, tier)
             if tier ~= 1 and target:HasAnyTag(devour_tags) and math.random() > 0.75 then -- arbitrarily said "a chance", I have no idea how common this should be
                 local mult = TUNING.DSTU.REDGEM1_DEVOUR_MULT[tier]
-                attacker.components.combat:DoAttack(target, inst, nil, nil, mult, 0)        -- gotta use a bit more durability...
+                attacker.components.combat:DoAttack(target, inst, nil, nil, mult, 0)     -- gotta use a bit more durability...
                 mult = inst.components.weapon:GetDamage(attacker, target) * mult
                 --owner.components.sanity:DoDelta(-mult)
                 attacker.components.hunger:DoDelta(mult * TUNING.DSTU.REDGEM1_HUNGER_MULT)
@@ -354,7 +353,7 @@ AddUMGemDef("yellowgem1", {
     color = RGB(255, 228, 153),
     fns = {
         onapply = function(item, tier)
-            item.volatile_gemology_data.um_gemologyyellowgem1.dapperness = {fn = YellowGemDapperness}
+            item.volatile_gemology_data.um_gemologyyellowgem1.dapperness = { fn = YellowGemDapperness }
         end,
         onupdate = function(item, tier)
             if item.components.equippable and item.components.equippable:IsEquipped() then
@@ -372,7 +371,7 @@ local arc_canttarget = { "player", "playerghost", "arcgrounded", "wall", "INLIMB
 
 local function ForceElectrocute(target, attacker)
     if target and target:IsValid() and target.components.health and not target.components.health:IsDead() then
-        target:PushEventImmediate("electrocute", {attacker = attacker, stimuli = "electric", numforks = 0})
+        target:PushEventImmediate("electrocute", { attacker = attacker, stimuli = "electric", numforks = 0 })
     end
 end
 
@@ -496,23 +495,57 @@ AddUMGemDef("palegem2", {
                 item.components.perishable:SetPercent(pct)
             end
 
-            --TODO: ARMOR
+            if item.components.armor and not item.components.armor:IsIndestructible() then
+                local pct = item.components.armor:GetPercent()
+                item.volatile_gemology_data.um_gemologypalegem2.old_maxcondition = item.components.armor.maxcondition
+                item.components.armor.maxcondition = item.components.armor.maxcondition * (1 + tier)
 
-            if item.components.finiteuses
-                and AllRecipes ~= nil
+                item.components.armor:SetPercent(pct)
+            end
+
+            local not_prototypeable = AllRecipes ~= nil
                 and (AllRecipes[item.prefab] == nil
                     or AllRecipes[item.prefab] ~= nil
                     and (AllRecipes[item.prefab].nounlock
                         or AllRecipes[item.prefab].is_deconstruction_recipe)
-                ) then
-                if tier ~= 1 then
+                )
+
+            if not not_prototypeable and tier ~= 1 then
+                if item.components.finiteuses then
                     local _Use = item.components.finiteuses.Use
                     item.volatile_gemology_data.um_gemologypalegem2.old_use = _Use
-                    item.components.finiteuses.Use = function(self, num) -- Modify only this item's version of finiteuses
+                    item.components.finiteuses.Use = function(self, num, ...)
                         local chance = math.random()
                         if chance > TUNING.DSTU.PALEGEM2_USE_CHANCE[tier] then
-                            _Use(self, num)
+                            _Use(self, num, ...)
                         end
+                    end
+                end
+            end
+
+
+            if item.components.perishable then
+                --I'm not fucking doing this. Cry about it.
+            end
+
+            if item.components.fueled then
+                local _DoDelta = item.components.fueled.DoDelta
+                item.volatile_gemology_data.um_gemologypalegem2.old_dodelta = _DoDelta
+                item.components.fueled.DoDelta = function(self, num, doer, ...)
+                    local chance = math.random()
+                    if chance > TUNING.DSTU.PALEGEM2_USE_CHANCE[tier] or num >= 0 then
+                        _DoDelta(self, num, doer, ...)
+                    end
+                end
+            end
+
+            if item.components.armor then
+                local _SetCondition = item.components.armor.SetCondition
+                item.volatile_gemology_data.um_gemologypalegem2.old_setcondition = _SetCondition
+                item.components.armor.SetCondition = function(self, num, ...)
+                    local chance = math.random()
+                    if chance > TUNING.DSTU.PALEGEM2_USE_CHANCE[tier] or num >= self.condition  then
+                        _SetCondition(self, num, ...)
                     end
                 end
             end
@@ -528,7 +561,11 @@ AddUMGemDef("palegem2", {
             local old_finite = item.volatile_gemology_data.um_gemologypalegem2.old_finite
             local old_fueled = item.volatile_gemology_data.um_gemologypalegem2.old_fueled
             local old_perish = item.volatile_gemology_data.um_gemologypalegem2.old_perish
+            local old_maxcondition = item.volatile_gemology_data.um_gemologypalegem2.old_maxcondition
+
             local old_use = item.volatile_gemology_data.um_gemologypalegem2.old_use
+            local old_dodelta = item.volatile_gemology_data.um_gemologypalegem2.old_dodelta
+            local old_setcondition = item.volatile_gemology_data.um_gemologypalegem2.old_setcondition
 
             --Re-setting the durability needs to be delayed 1 frame so it does so AFTER the enchament is properly removed
             --otherwise, it doesn't properly revert durability
@@ -549,6 +586,20 @@ AddUMGemDef("palegem2", {
                     local pct = item.components.fueled:GetPercent()
                     item.components.fueled.maxfuel = old_fueled
                     item.components.fueled:SetPercent(pct)
+
+                    if old_dodelta then
+                        item.components.fueled.DoDelta = old_dodelta
+                    end
+                end
+
+                if item.components.armor then
+                    local pct = item.components.armor:GetPercent()
+                    item.components.armor.maxcondition = old_maxcondition
+                    item.components.armor:SetPercent(pct)
+
+                    if old_setcondition then
+                        item.components.armor.SetCondition = old_setcondition
+                    end
                 end
 
                 if item.components.perishable then
@@ -559,7 +610,7 @@ AddUMGemDef("palegem2", {
             end)
         end,
         canapply = function(item, tier)
-            return item.components.fueled ~= nil or item.components.finiteuses ~= nil or item.components.perishable ~= nil
+            return item.components.fueled ~= nil or item.components.finiteuses ~= nil or item.components.perishable ~= nil or item.components.armor ~= nil
         end
     }
 })
@@ -664,7 +715,7 @@ AddUMGemDef("purplegem2", {
 local function FindUniqueBaseStructures(inst, tier)
     if not inst:IsAsleep() then
         local x, y, z = inst.Transform:GetWorldPosition()
-        local ents = TheSim:FindEntities(x, y, z, TUNING.DSTU.ORANGEGEM1_STRUCTURE_RANGE, {"structure"})
+        local ents = TheSim:FindEntities(x, y, z, TUNING.DSTU.ORANGEGEM1_STRUCTURE_RANGE, { "structure" })
         local uniquestructures = {}
         for i, v in ipairs(ents) do
             if not table.contains(uniquestructures, v.prefab) then
@@ -713,7 +764,7 @@ local function UpdateSanityStat(inst, tier, dapperness, owner, gemtable)
     if dapperness ~= 0 then
         return dapperness + count * tier * TUNING.DSTU.ORANGEGEM2_OLD_DAPPERNESS_PER_TIER
     else
-        return count * tier * TUNING.DSTU.ORANGEGEM2_DAPPERNESS_PER_TIER 
+        return count * tier * TUNING.DSTU.ORANGEGEM2_DAPPERNESS_PER_TIER
     end
 end
 
@@ -743,7 +794,7 @@ AddUMGemDef("orangegem2", {
     color = RGB(249, 203, 156),
     fns = {
         onapply = function(item, tier)
-            item.volatile_gemology_data.um_gemologyorangegem2.dapperness = {fn = UpdateSanityStat}
+            item.volatile_gemology_data.um_gemologyorangegem2.dapperness = { fn = UpdateSanityStat }
 
             if item.HarvestPickable and tier ~= 1 then
                 item.volatile_gemology_data.um_gemologyorangegem2.old_harvest_pickable_fn = item.HarvestPickable

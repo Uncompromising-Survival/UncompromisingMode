@@ -35,14 +35,14 @@ env.AddStategraphPostInit("frog", function(inst)
                 inst.Physics:Stop()
                 inst.AnimState:PlayAnimation("eat_pre")
                 inst.AnimState:SetFrame(15)
-                inst.AnimState:PushAnimation("eat_loop", true)
+                inst.AnimState:PushAnimation("eat_loop")
                 inst.SoundEmitter:PlaySound("dontstarve/frog/grunt")
                 inst.sg:SetTimeout(1 + math.random() * 2)
             end,
 
             ontimeout = function(inst)
                 inst:PerformBufferedAction()
-                inst.sg:GoToState("eat_pst", "idle")
+                inst.sg:GoToState("eat_pst")
             end,
 
             events =
@@ -51,7 +51,7 @@ env.AddStategraphPostInit("frog", function(inst)
                     if inst.components.inventory then
                         inst.components.inventory:DropEverything()
                     end
-                    inst.sg:GoToState("idle")
+                    inst.sg:GoToState("hit")
                 end)
             },
         },

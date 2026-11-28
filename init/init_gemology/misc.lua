@@ -238,14 +238,14 @@ end)
 
 --IMPORTANT: THIS SHOULD BE ALWAYS *AFTER* init_gemology/common.
 env.AddPrefabPostInitAny(function(inst)
-    inst.um_cangemrepair = net_bool(inst.GUID, inst.prefab..".um_cangemrepair")
+    inst.um_cangemrepair = net_bool(inst.GUID, inst.prefab .. ".um_cangemrepair")
 
     if not TheWorld.ismastersim then return end
 
     if inst.components.armor and not inst.components.armor:IsIndestructible()
         or inst.components.finiteuses or inst.components.gem_enchantable then
-	    inst.um_repaircount = 1
-    
+        inst.um_repaircount = 1
+
         local _OnSave = inst.OnSave
         local function OnSave(inst, data, ...)
             local ret = _OnSave and _OnSave(inst, data, ...)
@@ -264,7 +264,17 @@ env.AddPrefabPostInitAny(function(inst)
 
         inst.OnSave = OnSave
         inst.OnLoad = OnLoad
-
-        inst.um_cangemrepair:set(true)
+        if not (inst.components.armor and not inst.components.armor:IsIndestructible()
+                or inst.components.finiteuses) then
+            --only show repairable when enchanted if the item is indestructible.
+            inst:ListenForEvent("onaddenchant", function(inst)
+                inst.um_cangemrepair:set(inst.components.gem_enchantable:IsEnchanted())
+            end)
+            inst:ListenForEvent("onremoveenchant", function(inst)
+                inst.um_cangemrepair:set(inst.components.gem_enchantable:IsEnchanted())
+            end)
+        else
+            inst.um_cangemrepair:set(true)
+        end
     end
 end)

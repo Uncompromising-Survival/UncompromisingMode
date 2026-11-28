@@ -87,7 +87,7 @@ local function onfinished_normal(inst)
     inst.persists = false
     inst.Physics:SetActive(false)
 
-    if not (inst.Snapped or inst.AnimState:IsCurrentAnimation("hit")) then
+    if not (inst.snapped or inst.AnimState:IsCurrentAnimation("hit")) then
         inst.AnimState:PlayAnimation("activate")
     end
     inst.AnimState:PushAnimation("death", false)
@@ -106,7 +106,7 @@ local function OnExplode(inst, target)
             inst.deathtask = inst:DoTaskInTime(30, onfinished_normal)
         end
 
-        inst.Snapped = true
+        inst.snapped = true
         inst.SoundEmitter:PlaySound("dontstarve/common/trap_teeth_trigger")
         -- inst.SoundEmitter:PlaySound("dontstarve/impacts/impact_metal_armour_sharp")
 
@@ -151,7 +151,7 @@ local function OnExplode(inst, target)
 end
 
 local function OnReset(inst)
-    inst.Snapped = false
+    inst.snapped = false
 
     if inst.components.inventoryitem then
         inst.components.inventoryitem.nobounce = true
@@ -229,7 +229,7 @@ end
 
 local function OnAttacked(inst, worker)
     if not (inst.components.health and inst.components.health:IsDead() or inst.um_dropping_bear_trap) then
-        if inst.Snapped then
+        if inst.snapped then
             inst.SoundEmitter:PlaySound("dontstarve/impacts/impact_metal_armour_dull")
             inst.AnimState:PlayAnimation("hit")
         else
@@ -298,7 +298,7 @@ local function commonfn()
     if not TheWorld.ismastersim then return inst end
 
     inst.latchedtarget = nil
-    inst.Snapped = false
+    inst.snapped = false
 
     inst:AddComponent("inspectable")
 
@@ -361,7 +361,7 @@ local function old_fn(build)
     if not TheWorld.ismastersim then return inst end
 
     inst.latchedtarget = nil
-    inst.Snapped = false
+    inst.snapped = false
 
     inst:AddComponent("inspectable")
 
@@ -645,18 +645,20 @@ local function equiptoothfn()
     inst:AddTag("noclaustrophobia")
     inst:AddTag("donotautopick")
 
-    MakeInventoryFloatable(inst, "med", .05, .65)
-
-    inst.entity:SetPristine()
-
     inst:AddComponent("reticule")
     inst.components.reticule.targetfn = ReticuleTargetFn
     inst.components.reticule.ease = true
 
+    MakeInventoryFloatable(inst, "med", .05, .65)
+
+    inst.entity:SetPristine()
+
     if not TheWorld.ismastersim then return inst end
 
-    inst.latchedtarget = nil
-    inst.Snapped = false
+    inst.snapped = false
+    inst.traptype = "tooth"
+
+    inst:AddComponent("inspectable")
 
     CommonMine(inst, "player")
 
@@ -671,12 +673,11 @@ local function equiptoothfn()
     inst.components.weapon:SetDamage(0)
     inst.components.weapon:SetRange(8, 10)
 
+    inst:AddComponent("stackable")
+    inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
+
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem:SetOnDroppedFn(OnDropped)
-    inst:AddComponent("stackable")
-    inst:AddComponent("inspectable")
-
-    inst.traptype = "tooth"
 
     inst:AddComponent("equippable")
     inst.components.equippable:SetOnEquip(onequip)
@@ -727,15 +728,20 @@ local function equipgoldfn()
     inst:AddTag("noclaustrophobia")
     inst:AddTag("donotautopick")
 
-    MakeInventoryFloatable(inst, "med", .05, .65)
-
-    inst.entity:SetPristine()
-
     inst:AddComponent("reticule")
     inst.components.reticule.targetfn = ReticuleTargetFn
     inst.components.reticule.ease = true
 
+    MakeInventoryFloatable(inst, "med", .05, .65)
+
+    inst.entity:SetPristine()
+
     if not TheWorld.ismastersim then return inst end
+
+    inst.snapped = false
+    inst.traptype = "gold"
+
+    inst:AddComponent("inspectable")
 
     inst:AddComponent("finiteuses")
     inst.components.finiteuses:SetMaxUses(8)
@@ -743,9 +749,6 @@ local function equipgoldfn()
 
     inst:AddComponent("bloomer")
     inst.components.bloomer:PushBloom(inst, "shaders/anim.ksh", 1)
-
-    inst.latchedtarget = nil
-    inst.Snapped = false
 
     CommonMine(inst, "player")
 
@@ -762,10 +765,6 @@ local function equipgoldfn()
 
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem:SetOnDroppedFn(OnDropped)
-
-    inst:AddComponent("inspectable")
-
-    inst.traptype = "gold"
 
     inst:AddComponent("equippable")
     inst.components.equippable:SetOnEquip(onequip)

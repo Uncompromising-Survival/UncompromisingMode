@@ -45,7 +45,7 @@ local function TriggerPocketResurrection(self, item)
         self.inst.components.timer:StartTimer("shadowwathomcooldown", TUNING.TOTAL_DAY_TIME)
     end
 
-    if item.prefab == "amulet" then    
+    if item.prefab == "amulet" or item:HasTag("resurrector") then
         FindSleepable(self.inst)
         if self.inst.components.grogginess then
             self.inst.components.grogginess:ResetGrogginess()
@@ -97,24 +97,23 @@ local function TriggerPocketResurrection(self, item)
         self.inst.components.health:DeltaPenalty(.25)
     end
 
-    local cause = self.inst.components.oldager and "pocketwatch_heal" or item
     self:SetCurrentHealth(TUNING.RESURRECT_HEALTH * (self.inst.resurrect_multiplier or 1)) -- Set to Resurrection value.
-    if cause == "pocketwatch_heal" then
+    if self.inst.components.oldager then
         self.inst.components.oldager:StopDamageOverTime()
     else
-        self:DoDelta(0, false, cause, true, nil, true)
+        self:ForceUpdateHUD()
     end
 
     if self.inst:HasTag("wathom") then
         self.inst.AnimState:SetBuild("wathom")
     end
 
-    self.inst:PushEvent("PocketResurrection")
+    self.inst:PushEvent("um_pocketressurection")
     self:SetInvincible(true)
     self.inst:DoTaskInTime(.2, function(inst) 
         if inst.components.health then 
             inst.components.health:SetInvincible(false) 
-        end 
+        end
     end)
     item:DoTaskInTime(0, function(item) item:Remove() end)
 end
@@ -166,7 +165,7 @@ local function TriggerRose(self)
     self.inst.components.temperature:SetTemperature(TUNING.STARTING_TEMP)
     self:DeltaPenalty(.25)
     self:SetPercent(.5)
-    self.inst:PushEvent("PocketResurrection")
+    self.inst:PushEvent("um_pocketressurection")
 
     for i = 0, 3 do
         self.inst:DoTaskInTime(math.random(), function(inst)

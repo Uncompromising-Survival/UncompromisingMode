@@ -18,22 +18,49 @@ SetSharedLootTable("aphid_loot",
 
 local brain = require "brains/aphidbrain"
 
+local function OnIsWinter(inst, iswinter)
+    if iswinter then
+        if not (inst.leavetask and inst:IsInLimbo()) then
+            inst.leavetask = inst:DoTaskInTime(math.random(3, 8), function(_inst) -- AXE Add some randomization to their removal
+                _inst.leavetask = nil
+                if TheWorld.state.iswinter and not _inst:IsInLimbo() then
+                    if not _inst:IsAsleep() then
+                        _inst:PushEvent("flyintree")
+                    else
+                        _inst:Remove()
+                    end
+                end
+            end)
+        end
+    else
+        if inst.leavetask then
+            inst.leavetask:Cancel()
+            inst.leavetask = nil
+        end
+    end
+end
+
+local function OnPutInInventory(inst, owner)
+    OnIsWinter(inst)
+end
+
 local function OnDropped(inst)
     inst.sg:GoToState("idle")
-    if inst.components.workable ~= nil then
+    if inst.components.workable then
         inst.components.workable:SetWorkLeft(1)
     end
-    if inst.components.stackable ~= nil then
+    if inst.components.stackable then
         while inst.components.stackable:StackSize() > 1 do
             local item = inst.components.stackable:Get()
-            if item ~= nil then
-                if item.components.inventoryitem ~= nil then
+            if item then
+                if item.components.inventoryitem then
                     item.components.inventoryitem:OnDropped()
                 end
                 item.Physics:Teleport(inst.Transform:GetWorldPosition())
             end
         end
     end
+    OnIsWinter(inst, TheWorld.state.iswinter)
 end
 
 local function retargetfn(inst)
@@ -53,11 +80,9 @@ end
 
 local function OnAttacked(inst, data)
     inst.components.combat:SetTarget(data.attacker)
-    inst.components.combat:ShareTarget(data.attacker, 30,
-        function(dude)
-            return dude:HasTag("aphid")
-                and not dude.components.health:IsDead()
-        end, 10)
+    inst.components.combat:ShareTarget(data.attacker, 30, function(dude)
+        return dude:HasTag("aphid") and not dude.components.health:IsDead()
+    end, 10)
 end
 
 local function OnFlyIn(inst)
@@ -70,30 +95,18 @@ end
 local function OnWorked(inst, worker)
     if worker.components.inventory ~= nil then
         inst.SoundEmitter:KillAllSounds()
-
         worker.components.inventory:GiveItem(inst, nil, inst:GetPosition())
     end
 end
 
 local function OnEat(inst)
     inst.full_belly = true
-    inst:DoTaskInTime(30,function(inst)
-        inst.full_belly = nil
+    inst:DoTaskInTime(30, function(_inst)
+        _inst.full_belly = nil
     end)
 end
 
-local function OnWinter(inst)
-    inst:DoTaskInTime(math.random(3,8),function(inst) -- AXE Add some randomization to their removal
-        if TheWorld.state.iswinter then
-            if inst.entity:IsAwake() then
-                inst.sg:GoToState("flyintree")
-            else
-                inst:Remove()
-            end
-
-        end
-    end)
-end
+local DIET = {FOODGROUP.OMNI, FOODTYPE.WOOD, FOODTYPE.SEEDS, FOODTYPE.ROUGHAGE}
 
 local function fn()
     local inst = CreateEntity()
@@ -103,7 +116,9 @@ local function fn()
     inst.entity:AddSoundEmitter()
     inst.entity:AddDynamicShadow()
     inst.entity:AddNetwork()
+
     MakeCharacterPhysics(inst, 10, .5)
+
     inst.DynamicShadow:SetSize(1.5, .5)
     inst.Transform:SetSixFaced()
 
@@ -131,74 +146,74 @@ local function fn()
         return inst
     end
 
+    inst:AddComponent("inspectable")
+
     -- locomotor must be constructed before the stategraph!
-    inst:AddComponent("locomotor")
-    inst.components.locomotor:SetSlowMultiplier(1)
-    inst.components.locomotor:SetTriggersCreep(false)
-    inst.components.locomotor.pathcaps = { ignorecreep = true }
-    inst.components.locomotor.walkspeed = 5
+    local locomotor = inst:AddComponent("locomotor")
+    locomotor:SetSlowMultiplier(1)
+    locomotor:SetTriggersCreep(false)
+    locomotor.pathcaps = { ignorecreep = true }
+    locomotor.walkspeed = 5
 
     inst:AddComponent("inventory")
 
     inst:AddComponent("stackable")
 
-    inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.canbepickedup = false
-    inst.components.inventoryitem.canbepickedupalive = true
-    inst.components.inventoryitem.nobounce = true
-    inst.components.inventoryitem.pushlandedevents = false
+    local inventoryitem = inst:AddComponent("inventoryitem")
+    inventoryitem.canbepickedup = false
+    inventoryitem.canbepickedupalive = true
+    inventoryitem.nobounce = true
+    inventoryitem.pushlandedevents = false
 
     inst:AddComponent("tradable")
 
-    inst:AddComponent("lootdropper")
-    inst.components.lootdropper:SetChanceLootTable("aphid_loot")
+    local lootdropper = inst:AddComponent("lootdropper")
+    lootdropper:SetChanceLootTable("aphid_loot")
 
-    inst:AddComponent("workable")
-    inst.components.workable:SetWorkAction(ACTIONS.NET)
-    inst.components.workable:SetWorkLeft(1)
-    inst.components.workable:SetOnFinishCallback(OnWorked)
+    local workable = inst:AddComponent("workable")
+    workable:SetWorkAction(ACTIONS.NET)
+    workable:SetWorkLeft(1)
+    workable:SetOnFinishCallback(OnWorked)
 
-    inst:AddComponent("health")
-    inst.components.health:SetMaxHealth(100)
+    local health = inst:AddComponent("health")
+    health:SetMaxHealth(100)
 
-    inst:AddComponent("combat")
-    inst.components.combat.hiteffectsymbol = "body"
-    inst.components.combat:SetKeepTargetFunction(keeptargetfn)
-    inst.components.combat:SetRetargetFunction(3, retargetfn)
-    inst.components.combat:SetDefaultDamage(10)
-    inst.components.combat:SetAttackPeriod(GetRandomMinMax(1, 3))
-    inst.components.combat:SetRange(5, 2)
-    inst.components.combat:SetPlayerStunlock(PLAYERSTUNLOCK.RARELY)
+    local combat = inst:AddComponent("combat")
+    combat.hiteffectsymbol = "body"
+    combat:SetKeepTargetFunction(keeptargetfn)
+    combat:SetRetargetFunction(3, retargetfn)
+    combat:SetDefaultDamage(10)
+    combat:SetAttackPeriod(GetRandomMinMax(1, 3))
+    combat:SetRange(5, 2)
+    combat:SetPlayerStunlock(PLAYERSTUNLOCK.RARELY)
 
 	inst:AddComponent("follower")
     inst:AddComponent("knownlocations")
-    inst:AddComponent("inspectable")
 
     inst:ListenForEvent("attacked", OnAttacked)
 
-    inst:AddComponent("eater")
-    inst.components.eater:SetDiet({ FOODGROUP.OMNI, FOODTYPE.WOOD, FOODTYPE.SEEDS, FOODTYPE.ROUGHAGE },
-    { FOODGROUP.OMNI, FOODTYPE.WOOD, FOODTYPE.SEEDS, FOODTYPE.ROUGHAGE })
-
-    inst.components.eater.oneatfn = OnEat
+    local eater = inst:AddComponent("eater")
+    eater:SetDiet(DIET, DIET)
+    eater:SetOnEatFn(OnEat)
 
     inst:SetStateGraph("SGaphid")
     inst:SetBrain(brain)
 
-    MakeFeedableSmallLivestock(inst, TUNING.BUTTERFLY_PERISH_TIME, nil, OnDropped)
+    -- AXE if they spawn from a hole, we may want to consider removing this watch world state
+    inst:WatchWorldState("iswinter", OnIsWinter)
+    OnIsWinter(inst, TheWorld.state.iswinter)
+
+    MakeFeedableSmallLivestock(inst, TUNING.BUTTERFLY_PERISH_TIME, OnPutInInventory, OnDropped)
 
     MakeSmallBurnableCharacter(inst, "body")
     MakeSmallFreezableCharacter(inst, "body")
 
     inst:ListenForEvent("fly_in", OnFlyIn) -- matches enter_loop logic so it does not happen a frame late
-	
+
     if IsSWEnabled() then
-        inst:AddComponent("appeasement")
-        inst.components.appeasement.appeasementvalue = TUNING.TOTAL_DAY_TIME
+        local appeasement = inst:AddComponent("appeasement")
+        appeasement.appeasementvalue = TUNING.TOTAL_DAY_TIME
     end
-    
-    -- AXE if they spawn from a hole, we may want to consider removing this watch world state
-    inst:WatchWorldState("iswinter",OnWinter)
 
     return inst
 end

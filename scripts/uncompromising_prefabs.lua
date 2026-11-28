@@ -515,8 +515,6 @@ local prefabs = {
     --"um_wishbone",
     --"um_sand_staff",
 
-    "um_records",
-
     "dl_prefabs",
     "dl_biometable",
 

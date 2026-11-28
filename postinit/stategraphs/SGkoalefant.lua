@@ -1,8 +1,24 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-local function isplayer(ent)
-    return ent and ent:HasTag("player") -- fix to friendly AOE: refer for later AOE mobs -Axe
+local STOMP_MUST_TAGS = {"_combat"}
+local STOMP_CANT_TAGS = {"INLIMBO", "flight", "invisible", "notarget", "noattack", "koalefant"}
+
+local function DoStomp(inst)
+    inst.components.combat.ignorehitrange = true
+    local radius = inst.components.combat:GetHitRange()
+    local x, y, z = inst.Transform:GetWorldPosition()
+    for i = 1, 4 do SpawnPrefab("ground_chunks_breaking").Transform:SetPosition(x, y, z) end
+    for i, ent in ipairs(TheSim:FindEntities(x, y, z, radius + 3, STOMP_MUST_TAGS, STOMP_CANT_TAGS)) do
+        if ent ~= inst and ent:IsValid() and not (ent.components.health and ent.components.health:IsDead())
+            and inst.components.combat:CanTarget(ent) and inst:IsNear(ent, radius + ent:GetPhysicsRadius(0)) then
+            inst.components.combat:DoAttack(ent)
+        end
+    end
+    local ring = SpawnPrefab("groundpoundring_fx")
+    ring.Transform:SetPosition(inst.Transform:GetWorldPosition())
+    ring.Transform:SetScale(.7, .7, .7)
+    inst.components.combat.ignorehitrange = nil
 end
 
 local function DisarmTarget(inst, target)
@@ -251,28 +267,17 @@ env.AddStategraphPostInit("koalefant", function(inst)
                 inst.components.combat:StartAttack()
                 inst.components.locomotor:StopMoving()
                 inst.AnimState:PlayAnimation("stompatk", false)
-                inst.components.combat:SetAreaDamage(4, 1, isplayer)
             end,
 
-            timeline=
+            timeline =
             {
-                TimeEvent(36 * FRAMES, function(inst) 
-                    SpawnPrefab("ground_chunks_breaking").Transform:SetPosition(inst.Transform:GetWorldPosition())
-                    SpawnPrefab("ground_chunks_breaking").Transform:SetPosition(inst.Transform:GetWorldPosition())
-                    SpawnPrefab("ground_chunks_breaking").Transform:SetPosition(inst.Transform:GetWorldPosition())
-                    SpawnPrefab("ground_chunks_breaking").Transform:SetPosition(inst.Transform:GetWorldPosition())
-                    inst.components.combat:DoAttack(inst.sg.statemem.target) 
-                    local ring = SpawnPrefab("groundpoundring_fx")
-                    ring.Transform:SetPosition(inst.Transform:GetWorldPosition())
-                    ring.Transform:SetScale(.7, .7, .7)
-                end),
+                TimeEvent(36 * FRAMES, DoStomp),
             },
 
             events =
             {
                 EventHandler("animqueueover", function(inst)
                     inst.components.combat:ResetCooldown()
-                    inst.components.combat:SetAreaDamage()
                     inst.sg:GoToState("idle")
                 end),
             },

@@ -18,6 +18,10 @@ function GemRepairer:OnUsed(target, doer)
     local repaircount = target.um_repaircount or 1
     local repair_value = TUNING.DSTU.GEM_REPAIRER_REPAIR_VALUE[math.clamp(repaircount, 1, #TUNING.DSTU.GEM_REPAIRER_REPAIR_VALUE)]
     local success = false
+    local wrong_repair = false
+    if target:HasTag("um_gemrepairer_blacklist") then
+        return false
+    end
 
     local gem_enchantable = target.components.gem_enchantable
     if gem_enchantable and gem_enchantable:IsEnchanted() then
@@ -29,18 +33,20 @@ function GemRepairer:OnUsed(target, doer)
         end
     end
 
-    local finiteuses = target.components.finiteuses
-    local finiteuses_pct = finiteuses and finiteuses:GetPercent()
-    if finiteuses_pct and finiteuses_pct < 1 then
-        finiteuses:SetPercent(math.clamp(finiteuses_pct + repair_value, 0, 1))
-        success = true
-    end
+    if target.components.forgerepairable == nil then
+        local finiteuses = target.components.finiteuses
+        local finiteuses_pct = finiteuses and finiteuses:GetPercent()
+        if finiteuses_pct and finiteuses_pct < 1 then
+            finiteuses:SetPercent(math.clamp(finiteuses_pct + repair_value, 0, 1))
+            success = true
+        end
 
-    local armor = target.components.armor
-    local armor_pct = armor and not armor:IsIndestructible() and armor:GetPercent()
-    if armor_pct and armor_pct < 1 then
-        armor:SetPercent(math.clamp(armor_pct + repair_value, 0, 1))
-        success = true
+        local armor = target.components.armor
+        local armor_pct = armor and not armor:IsIndestructible() and armor:GetPercent()
+        if armor_pct and armor_pct < 1 then
+            armor:Repair(armor.maxcondition * math.clamp(armor_pct + repair_value, 0, 1))
+            success = true
+        end
     end
 
     if success then
@@ -48,6 +54,7 @@ function GemRepairer:OnUsed(target, doer)
             doer.components.talker:Say(GetString(doer, "ANNOUNCE_GEM_REPAIR_MAXED"))
         end
         target:PushEvent("repair")
+        doer:PushEvent("repair")
         target.um_repaircount = repaircount + 1
     end
 
@@ -55,7 +62,7 @@ function GemRepairer:OnUsed(target, doer)
         self.on_used_fn(self.inst, target, doer, success)
     end
 
-    return success, not success and "NO_REPAIR_NEEDED" or nil
+    return success, not success and target.components.forgerepairable ~= nil and "WRONG_REPAIRER" or not success and "NO_REPAIR_NEEDED" or nil
 end
 
 return GemRepairer

@@ -1,7 +1,8 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
-local UMUpvalueHacker = require("tools/um_upvaluehacker")
 -----------------------------------------------------------------
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
+
 local function CLIENT_PlayGrowTailSound(inst)
     local parent = inst.entity:GetParent()
     local container = parent ~= nil and (parent.replica.inventory or parent.replica.container) or nil

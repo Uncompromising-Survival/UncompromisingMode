@@ -370,7 +370,7 @@ env.AddStategraphPostInit("beeguard", function(inst) -- beeguard time
             onenter = function(inst)
                 if inst.target and inst.target:IsValid() then inst:ForceFacePoint(inst.target:GetPosition()) end
                 inst.SoundEmitter:PlaySound(inst.sounds.attack)
-                if inst.circle then
+                if inst.circle and inst.components.linearcircler then
                     inst.components.linearcircler.distance_limit = 12
                     inst.components.linearcircler:Start()
                 end
