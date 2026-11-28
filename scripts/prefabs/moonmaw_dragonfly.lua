@@ -370,6 +370,8 @@ local function OnDead(inst)
         end
     end
     TheWorld:PushEvent("mockflykilled", inst)
+
+    UMUnlockSkinForNearbyPlayers(x, y, z, "ms_um_record_moonmaw")
 end
 
 local function CheckTarget(inst)

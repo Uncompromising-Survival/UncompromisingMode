@@ -4,16 +4,13 @@ require "behaviours/runaway"
 -----------------------------------------------------------------
 local SEE_DIST = 12
 
-local AVOID_PLAYER_DIST = 7
-local AVOID_PLAYER_STOP = 12
-
-local AVOID_DIST = 10
+local AVOID_DIST = 7 --10
 local AVOID_STOP = 12
 
 local FINDFOOD_MUST_TAGS = {"_inventoryitem"}
-local FINDFOOD_CANT_TAGS = {"outofreach", "INLIMBO", "bee", "mosquito"}
+local FINDFOOD_CANT_TAGS = {"INLIMBO", "outofreach", "bee", "mosquito"}
 local function IsFoodValid(item, inst)
-    return inst.components.eater and inst.components.eater:CanEat(item) and item:IsOnPassablePoint()
+    return inst.components.eater and inst.components.eater:CanEat(item) and item:IsOnPassablePoint() and item:GetTimeAlive() >= 1.5
 end
 
 local function EatFoodAction(inst)
@@ -25,9 +22,6 @@ local function EatFoodAction(inst)
             return BufferedAction(inst, target, ACTIONS.EAT)
         end
     end
-    --[[local target = FindEntity(inst, SEE_DIST, function(item) return inst.components.eater:CanEat(item) and item:IsOnPassablePoint(true) end)
-    return target ~= nil and BufferedAction(inst, target, ACTIONS.EAT) or nil
-    ]]
     local target = FindEntity(inst, SEE_DIST, IsFoodValid, FINDFOOD_MUST_TAGS, FINDFOOD_CANT_TAGS, inst.components.eater and inst.components.eater:GetEdibleTags() or nil)
     return target and BufferedAction(inst, target, ACTIONS.PICKUP) or nil
 end
@@ -40,28 +34,21 @@ local function FearfulOfEpics(inst)
     return true
 end
 
-local function FrogFindFood(self)
-    local avoidthenoid = RunAway(self.inst, "epic", AVOID_PLAYER_DIST, AVOID_PLAYER_STOP, FearfulOfEpics)
+local function FrogFindFood(self, pos)
     if UM_CONFIG.COWARDFROGS then
+        local avoidthenoid = RunAway(self.inst, "epic", AVOID_DIST, AVOID_STOP, FearfulOfEpics)
         table.insert(self.bt.root.children, 2, avoidthenoid)
     end
-    local findfood = DoAction(self.inst, EatFoodAction, "eat food", true)
     if UM_CONFIG.HUNGRYFROGS then
-        table.insert(self.bt.root.children, 5, findfood)
+        local findfood = DoAction(self.inst, EatFoodAction, "eat food", true)
+        table.insert(self.bt.root.children, pos, findfood)
     end
 end
 
-env.AddBrainPostInit("frogbrain", FrogFindFood)
+env.AddBrainPostInit("frogbrain", function(self)
+    FrogFindFood(self, 5)
+end)
 
-local function ToadFindFood(self)
-    local avoidthenoid = RunAway(self.inst, "epic", AVOID_PLAYER_DIST, AVOID_PLAYER_STOP, FearfulOfEpics)
-    if UM_CONFIG.COWARDFROGS then
-        table.insert(self.bt.root.children, 2, avoidthenoid)
-    end
-    local findfood = DoAction(self.inst, EatFoodAction, "eat food", true)
-    if UM_CONFIG.HUNGRYFROGS then
-        table.insert(self.bt.root.children, 4, findfood)
-    end
-end
-
-env.AddBrainPostInit("uncompromising_toadbrain", ToadFindFood)
+env.AddBrainPostInit("uncompromising_toadbrain", function(self)
+    FrogFindFood(self, 4)
+end)

@@ -283,8 +283,8 @@ local function DoArcAttack(inst, dist, radius, heavymult, mult, forcelanded, tar
     inst.components.combat.ignorehitrange = false
 end]]
 
-local werepigs = {"moonpig", "werepig"}
-for i, werepig in pairs(werepigs) do
+local werepigs = {"werepig", "moonpig"}
+for _, werepig in ipairs(werepigs) do
     env.AddStategraphPostInit(werepig, function(inst)
         --[[local states = {
             State{
@@ -336,6 +336,15 @@ for i, werepig in pairs(werepigs) do
                 local ret = attackstate_onenter(inst, ...)
                 inst.sg.statemem.speedmult = inst.sg.statemem.speedmult * 2.5
                 inst.Physics:SetMotorVelOverride(3 * inst.sg.statemem.speedmult, 0, 0)
+                return ret
+            end
+
+            local attackstate_onexit = attackstate.onexit
+            attackstate.onexit = function(inst, ...)
+                local ret = attackstate_onexit(inst, ...)
+                inst.attacked_run_cd = inst:DoTaskInTime(.1, function(_inst)
+                    _inst.attacked_run_cd = nil
+                end)
                 return ret
             end
         end

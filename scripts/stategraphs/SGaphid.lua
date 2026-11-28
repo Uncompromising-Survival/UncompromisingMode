@@ -55,6 +55,11 @@ local events =
             inst.sg:GoToState("trapped")
         end
     end),
+    EventHandler("flyintree", function(inst)
+        if not (inst.sg:HasStateTag("flight") or inst.components.health and inst.components.health:IsDead()) then
+            inst.sg:GoToState("flyintree")
+        end
+    end),
 }
 
 local states =
@@ -253,7 +258,7 @@ local states =
 
     State{
         name = "enter_loop",
-        tags = {"flight", "busy"},
+        tags = {"flight", "busy", "nosleep", "nofreeze", "noelectrocute", "noknockback"},
 
         onenter = function(inst)
             inst.Physics:Stop()
@@ -351,7 +356,6 @@ local states =
             inst.sg:GoToState("idle", "eat_pst")
         end,
     },
-
 
     State{
         name = "attack",
@@ -451,27 +455,30 @@ local states =
 
     State{
         name = "flyintree",
-        tags = {"busy", "jumping"},
+        tags = {"flight", "busy", "nosleep", "nofreeze", "noelectrocute", "noknockback"},
 
         onenter = function(inst)
-            inst.Physics:ClearMotorVelOverride()
-            inst.AnimState:PlayAnimation("takeoff")
             inst.Physics:Stop()
+            inst.DynamicShadow:Enable(false)
+            inst.components.health:SetInvincible(true)
+            inst.AnimState:PlayAnimation("takeoff")
+            inst.AnimState:PushAnimation("fly")
         end,
 
         onupdate = function(inst)
-            inst.Physics:SetMotorVel(0,10+math.random()*2,0)
+            inst.Physics:SetMotorVel(0, 10 + math.random() * 2, 0)
         end,
 
         timeline =
         {
-            TimeEvent(50*FRAMES, function(inst) inst:Remove() end),
+            TimeEvent(50 * FRAMES, function(inst) inst:Remove() end),
         },
 
-        events =
-        {
-            EventHandler("animover", function(inst) inst.AnimState:PushAnimation("fly") end)
-        },
+        onexit = function(inst)
+            inst.DynamicShadow:Enable(true)
+            inst.components.health:SetInvincible(false)
+            inst:ClearBufferedAction()
+        end,
     },
 }
 

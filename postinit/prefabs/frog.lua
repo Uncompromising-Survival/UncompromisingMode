@@ -1,6 +1,8 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
+local UMUpvalueHacker = require("tools/um_upvaluehacker")
+
 --[[SetSharedLootTable('toad',
 {
     {'sporecloud_toad', .5},
@@ -35,28 +37,45 @@ local function OnIsAutumn(inst, isautumn)
     end
 end
 
-local RETARGET_MUST_TAGS = { "_combat", "_health" }
-local RETARGET_CANT_TAGS = { "frog","toadstool","toad", "merm", "bird", "invisible", "wall", "structure" }
-local LUNAR_RETARGET_CANT_TAGS = { "merm", "lunar_aligned", "frog","toadstool", "toad", "bird", "invisible", "wall", "structure" }
+local RETARGET_CANT_TAGS = {"frog","toadstool","toad", "bird", "invisible", "wall", "structure"}
+env.AddSimPostInit(function()
+    local _retargetfn = UMUpvalueHacker.TryGetUpvalue(Prefabs.frog.fn, "commonfn", "retargetfn")
+    if _retargetfn then
+        local _RETARGET_CANT_TAGS = UMUpvalueHacker.GetUpvalue(_retargetfn, "RETARGET_CANT_TAGS")
+        local _LUNAR_RETARGET_CANT_TAGS = UMUpvalueHacker.GetUpvalue(_retargetfn, "LUNAR_RETARGET_CANT_TAGS")
 
-local function NewRetargetfn(inst)
-    if not inst.components.health:IsDead() and (inst.components.sleeper == nil or inst.components.sleeper ~= nil and not inst.components.sleeper:IsAsleep()) then
-        local target_dist = inst.islunar and TUNING.LUNARFROG_TARGET_DIST or TUNING.FROG_TARGET_DIST
-        local cant_tags   = inst.islunar and LUNAR_RETARGET_CANT_TAGS or RETARGET_CANT_TAGS
-        
-        return FindEntity(inst, target_dist, function(guy) 
-            if not guy.components.health:IsDead() then
-                return guy.components.inventory ~= nil and inst._um_oldretarget
-            end
-        end,
-        RETARGET_MUST_TAGS, -- see entityreplica.lua
-        cant_tags -- see entityreplica.lua
-        )
+        for i, TAG in ipairs(RETARGET_CANT_TAGS) do
+            table.insert(_RETARGET_CANT_TAGS, TAG)
+            table.insert(_LUNAR_RETARGET_CANT_TAGS, TAG)
+        end
     end
+end)
+
+local DIET = {FOODGROUP.OMNI, FOODTYPE.HORRIBLE, FOODTYPE.RAW}
+local function FrogFunctions(inst)
+    inst:AddTag("frogimmunity")
+
+    if not TheWorld.ismastersim then return end
+
+    local eater = inst.components.eater or inst:AddComponent("eater")
+    if eater then
+        eater:SetDiet(DIET, DIET)
+        eater:SetStrongStomach(true) -- can eat monster meat!
+    end
+
+    if not inst.components.inventory then
+        inst:AddComponent("inventory")
+    end
+
+    --[[local um_dynamic_digester = inst.components.um_dynamic_digester or inst:AddComponent("um_dynamic_digester")
+    if um_dynamic_digester then
+        um_dynamic_digester.digesttime = 5
+        um_dynamic_digester.digest_per = 20
+    end]]
 end
 
-env.AddPrefabPostInit("frog", function (inst)
-    inst:AddTag("frogimmunity")
+env.AddPrefabPostInit("frog", function(inst)
+    FrogFunctions(inst)
 
     if not TheWorld.ismastersim then return end
 
@@ -65,86 +84,7 @@ env.AddPrefabPostInit("frog", function (inst)
     if TheWorld.state.isautumn then
         inst:TurnIntoToad(true)
     end
-
-    if inst.components.combat ~= nil then
-        if inst.components.combat.targetfn ~= nil then
-            inst._um_oldretarget = inst.components.combat.targetfn
-        
-            inst.components.combat:SetRetargetFunction(2, NewRetargetfn)
-        end
-    end
-
-    local eater = inst.components.eater or inst:AddComponent("eater")
-    if eater then
-        eater:SetDiet({ FOODGROUP.OMNI }, { FOODGROUP.OMNI })
-        eater:SetCanEatHorrible()
-        eater:SetCanEatRaw()
-        eater.strongstomach = true -- can eat monster meat!
-    end
-
-    if not inst.components.inventory then
-        inst:AddComponent("inventory")
-    end
-
-    --[[local um_dynamic_digester = inst.components.um_dynamic_digester or inst:AddComponent("um_dynamic_digester")
-    if um_dynamic_digester then
-        um_dynamic_digester.digesttime = 5
-        um_dynamic_digester.digest_per = 20
-    end]]
 end)
 
-env.AddPrefabPostInit("uncompromising_toad", function (inst)
-    inst:AddTag("frogimmunity")
-
-    if not TheWorld.ismastersim then return end
-
-    local eater = inst.components.eater or inst:AddComponent("eater")
-    if eater then
-        eater:SetDiet({ FOODGROUP.OMNI }, { FOODGROUP.OMNI })
-        eater:SetCanEatHorrible()
-        eater:SetCanEatRaw()
-        eater.strongstomach = true -- can eat monster meat!
-    end
-
-    if not inst.components.inventory then
-        inst:AddComponent("inventory")
-    end
-
-    --[[local um_dynamic_digester = inst.components.um_dynamic_digester or inst:AddComponent("um_dynamic_digester")
-    if um_dynamic_digester then
-        um_dynamic_digester.digesttime = 5
-        um_dynamic_digester.digest_per = 20
-    end]]
-end)
-
-env.AddPrefabPostInit("lunarfrog", function (inst)
-    inst:AddTag("frogimmunity")
-
-    if not TheWorld.ismastersim then return end
-
-    if inst.components.combat ~= nil then
-        if inst.components.combat.targetfn ~= nil then
-            inst._um_oldretarget = inst.components.combat.targetfn
-        
-            inst.components.combat:SetRetargetFunction(2, NewRetargetfn)
-        end
-    end
-
-    local eater = inst.components.eater or inst:AddComponent("eater")
-    if eater then
-        eater:SetDiet({ FOODGROUP.OMNI }, { FOODGROUP.OMNI })
-        eater:SetCanEatHorrible()
-        eater:SetCanEatRaw()
-        eater.strongstomach = true -- can eat monster meat!
-    end
-
-    if not inst.components.inventory then
-        inst:AddComponent("inventory")
-    end
-
-    --[[local um_dynamic_digester = inst.components.um_dynamic_digester or inst:AddComponent("um_dynamic_digester")
-    if um_dynamic_digester then
-        um_dynamic_digester.digesttime = 5
-        um_dynamic_digester.digest_per = 20
-    end]]
-end)
+env.AddPrefabPostInit("lunarfrog", FrogFunctions)
+env.AddPrefabPostInit("uncompromising_toad", FrogFunctions)

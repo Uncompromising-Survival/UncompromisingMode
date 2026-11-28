@@ -55,22 +55,22 @@ local function CanReach(item, inst)
     return item:IsOnPassablePoint() and item:GetCurrentPlatform() == inst:GetCurrentPlatform()
 end
 
-local function EatFoodAction(inst)
-    local EAT_CANT_TAGS = {"outofreach", "event_trigger"}
-    local EAT_ONEOF_TAGS = {
-        "edible_GENERIC",
-        "edible_VEGGIE",
-        --"edible_INSECT",
-        "edible_SEEDS",
-        "edible_ROUGHAGE",
-        "edible_WOOD",
-        "edible_MEAT",
-        "pickable",
-        "harvestable",
-        "readyforharvest",
-        --"plant"
-    }
+local EAT_CANT_TAGS = {"INLIMBO", "outofreach", "event_trigger"}
+local EAT_ONEOF_TAGS = {
+    "edible_GENERIC",
+    "edible_VEGGIE",
+    --"edible_INSECT",
+    "edible_SEEDS",
+    "edible_ROUGHAGE",
+    "edible_WOOD",
+    "edible_MEAT",
+    "pickable",
+    "harvestable",
+    "readyforharvest",
+    --"plant"
+}
 
+local function EatFoodAction(inst)
     if inst.sg:HasStateTag("busy") or inst:GetTimeAlive() < 5
         or (inst.components.eater:TimeSinceLastEating() and inst.components.eater:TimeSinceLastEating() < 5) then
         return
@@ -83,25 +83,23 @@ local function EatFoodAction(inst)
         end
     end
 
-    local x, y, z = inst.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, TUNING.WORM_FOOD_DIST, nil, EAT_CANT_TAGS, EAT_ONEOF_TAGS)
-
     --Look for food on the ground, pick it up
-    for i, item in ipairs(ents) do
+    local x, y, z = inst.Transform:GetWorldPosition()
+    for i, item in ipairs(TheSim:FindEntities(x, y, z, TUNING.WORM_FOOD_DIST, nil, EAT_CANT_TAGS, EAT_ONEOF_TAGS)) do
         local action = item:HasTag("pickable") and ACTIONS.PICK or item:HasAnyTag("harvestable", "readyforharvest") and ACTIONS.HARVEST
-            or not (item.components.inventoryitem and item.components.inventoryitem:IsHeld())
+            or item.components.inventoryitem and item.components.inventoryitem.canbepickedup and not item.components.inventoryitem:IsHeld()
             and inst.components.eater and inst.components.eater:CanEat(item) and ACTIONS.PICKUP
         if item ~= inst and item:GetTimeAlive() > 8 and action and CanReach(item, inst) then
             return BufferedAction(inst, item, action)
         end
     end
 
-    --[[
-    local target = FindEntity(inst, SEE_FOOD_DIST, function(item) return inst.components.eater:CanEat(item) and item:IsOnValidGround() end) --May have to give checks so it doesn't try to get food on water.
+    --[[local target = FindEntity(inst, SEE_FOOD_DIST, function(item) return inst.components.eater:CanEat(item) and item:IsOnValidGround() end) --May have to give checks so it doesn't try to get food on water.
     if target then
         return BufferedAction(inst, target, ACTIONS.EAT)
     end]]
 end
+
 local function GetLeader(inst)
     return inst.components.follower:GetLeader()
 end
@@ -121,18 +119,15 @@ function AphidBrain:OnStart()
                     {
                         BrainCommon.PanicTrigger(self.inst),
                         BrainCommon.ElectricFencePanicTrigger(self.inst),
-                        Follow(self.inst, GetLeader, MIN_FOLLOW_DIST, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST),                        
+                        Follow(self.inst, GetLeader, MIN_FOLLOW_DIST, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST),
                         WhileNode(function() return self.inst.components.combat.target == nil or
                                 not self.inst.components.combat:InCooldown() end, "AttackMomentarily", ChaseAndAttack(self.inst, MAX_CHASE_TIME, MAX_CHASE_DIST)),
                         WhileNode(function() return self.inst.components.combat.target and
                                 self.inst.components.combat:InCooldown() end, "Dodge", RunAway(self.inst, function() return
                             self.inst.components.combat.target end, RUN_AWAY_DIST, STOP_RUN_AWAY_DIST)),
                         WhileNode(function() return not self.inst.full_belly end, "JustEaten", DoAction(self.inst, function() return EatFoodAction(self.inst) end)),
-                        
-
                         WhileNode(function() return TheWorld.state.isnight end, "IsNight",
                             DoAction(self.inst, GoHomeAction, "go home", true)),
-
                         WhileNode(function() return GetHome(self.inst) end, "HasHome", Wander(self.inst, GetHomePos, 8)),
                         --    Wander(self.inst, GetWanderPoint, 20),
                         Wander(self.inst, GetWanderPoint, MAX_WANDER_DIST, { minwalktime = .5, randwalktime = math.random() < 0.5 and .5 or 1, minwaittime = math.random() < 0.5 and 0 or 1, randwaittime = .2, }),

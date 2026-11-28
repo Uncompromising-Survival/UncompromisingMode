@@ -160,20 +160,41 @@ if env.GetModConfigData("telestaff_rework") then
 
         if teleportee.components.inventory ~= nil and teleportee.components.inventory:IsHeavyLifting() then teleportee.components.inventory:DropItem(teleportee.components.inventory:Unequip(EQUIPSLOTS.BODY), true, true) end
 
-        -- #v2c hacky way to prevent lightning from igniting us
-        local preventburning = teleportee.components.burnable ~= nil and not teleportee.components.burnable.burning
-        if preventburning then teleportee.components.burnable.burning = true end
-        TheWorld:PushEvent("ms_sendlightningstrike", locpos)
-        if preventburning then teleportee.components.burnable.burning = false end
+        if staff.notlightningteleport then
+            SpawnPrefab("atrium_portal_fx").Transform:SetPosition(teleportee.Transform:GetWorldPosition())
+        else
+            --#v2c hacky way to prevent lightning from igniting us
+            local preventburning = teleportee.components.burnable ~= nil and not teleportee.components.burnable.burning
+            if preventburning then
+                teleportee.components.burnable.burning = true
+            end
+            TheWorld:PushEvent("ms_sendlightningstrike", locpos)
+            if preventburning then
+                teleportee.components.burnable.burning = false
+            end
+        end
 
         if teleportee:HasTag("player") then
             teleportee.sg.statemem.teleport_task = nil
-            teleportee.sg:GoToState(teleportee:HasTag("playerghost") and "appear" or "wakeup")
-            teleportee.SoundEmitter:PlaySound(staff.skin_castsound or "dontstarve/common/staffteleport")
+            teleportee.sg:GoToState(
+                teleportee:HasTag("playerghost") and "appear" or
+                staff.notlightningteleport and "idle" or
+                "wakeup"
+            )
+            local castsound = staff.skin_castsound or staff.castsound or "dontstarve/common/staffteleport"
+            if staff.castsoundparams then
+                teleportee.SoundEmitter:PlaySoundWithParams(castsound, staff.castsoundparams)
+            else
+                teleportee.SoundEmitter:PlaySound(castsound)
+            end
         else
             teleportee:Show()
-            if teleportee.DynamicShadow ~= nil then teleportee.DynamicShadow:Enable(true) end
-            if teleportee.components.health ~= nil then teleportee.components.health:SetInvincible(false) end
+            if teleportee.DynamicShadow ~= nil then
+                teleportee.DynamicShadow:Enable(true)
+            end
+            if teleportee.components.health ~= nil then
+                teleportee.components.health:SetInvincible(false)
+            end
             teleportee:PushEvent("teleported")
         end
         -- staff.target_focus = nil
@@ -185,7 +206,13 @@ if env.GetModConfigData("telestaff_rework") then
         else
             teleportee.Transform:SetPosition(locpos.x, 0, locpos.z)
         end
-        staff.components.finiteuses:Use(teleportee.components.locomotor ~= nil and 3 or teleportee:HasTag("heavy") and 2 or 1)
+
+        if staff.components.rechargeable and staff.dodischarge then
+            staff.components.rechargeable:Discharge(TUNING.KING_CANE_PURPLE_COOLDOWN)
+        elseif staff.components.finiteuses then
+            staff.components.finiteuses:Use(teleportee.components.locomotor ~= nil and 3 or teleportee:HasTag("heavy") and 2 or 1)
+        end
+
         if teleportee:HasTag("player") then
             teleportee:SnapCamera()
             teleportee:ScreenFade(true, 1)
@@ -203,7 +230,7 @@ if env.GetModConfigData("telestaff_rework") then
 
         if teleportee.components.locomotor ~= nil then teleportee.components.locomotor:StopMoving() end
 
-        if ground:HasTag("cave") then
+        if not staff.notlightningteleport and ground:HasTag("cave") then
             -- There's a roof over your head, magic lightning can't strike!
             ground:PushEvent("ms_miniquake", { rad = 3, num = 5, duration = 1.5, target = teleportee })
             staff.components.finiteuses:Use(1)
@@ -219,29 +246,41 @@ if env.GetModConfigData("telestaff_rework") then
             teleportee:Hide()
         end
 
-        -- #v2c hacky way to prevent lightning from igniting us
-        local preventburning = teleportee.components.burnable ~= nil and not teleportee.components.burnable.burning
-        if preventburning then teleportee.components.burnable.burning = true end
-        ground:PushEvent("ms_sendlightningstrike", teleportee:GetPosition())
-        if preventburning then teleportee.components.burnable.burning = false end
-
-        if caster ~= nil then
-            if caster.components.staffsanity then
-                caster.components.staffsanity:DoCastingDelta(teleportee:HasTag("_inventoryitem") and -TUNING.SANITY_HUGE * 0.25 or -TUNING.SANITY_HUGE * 0.5)
-            elseif caster.components.sanity ~= nil then
-                caster.components.sanity:DoDelta(teleportee:HasTag("_inventoryitem") and -TUNING.SANITY_HUGE * 0.25 or -TUNING.SANITY_HUGE * 0.5)
+        if staff.notlightningteleport then
+            SpawnPrefab("atrium_portal_fx").Transform:SetPosition(teleportee.Transform:GetWorldPosition())
+        else
+            --#v2c hacky way to prevent lightning from igniting us
+            local preventburning = teleportee.components.burnable ~= nil and not teleportee.components.burnable.burning
+            if preventburning then
+                teleportee.components.burnable.burning = true
+            end
+            ground:PushEvent("ms_sendlightningstrike", teleportee:GetPosition())
+            if preventburning then
+                teleportee.components.burnable.burning = false
             end
         end
 
-        if teleportee ~= nil then
+        local iscasterteleportee = caster and teleportee and caster == teleportee
+        if caster then
+            local amount = (teleportee:HasTag("_inventoryitem") and -TUNING.SANITY_HUGE / 4 or -TUNING.SANITY_HUGE / 2) * (iscasterteleportee and 2 or 1)
+            if caster.components.staffsanity then
+                caster.components.staffsanity:DoCastingDelta(amount)
+            elseif caster.components.sanity then
+                caster.components.sanity:DoDelta(amount)
+            end
+        end
+
+        if teleportee and not iscasterteleportee then
             if teleportee.components.staffsanity then
                 teleportee.components.staffsanity:DoCastingDelta(-TUNING.SANITY_HUGE / 2)
-            elseif teleportee.components.sanity ~= nil then
+            elseif teleportee.components.sanity then
                 teleportee.components.sanity:DoDelta(-TUNING.SANITY_HUGE / 2)
             end
         end
 
-        ground:PushEvent("ms_deltamoisture", TUNING.TELESTAFF_MOISTURE)
+        if not staff.notlightningteleport then
+            ground:PushEvent("ms_deltamoisture", TUNING.TELESTAFF_MOISTURE)
+        end
 
         if isplayer then
             teleportee.sg.statemem.teleport_task = teleportee:DoTaskInTime(3, teleport_continue, locpos, loctarget, staff)
@@ -251,7 +290,6 @@ if env.GetModConfigData("telestaff_rework") then
     end
 
     local function validteleporttarget(inst) return inst:canteleto() end
-
 
     function FindNearestActiveTelebase(x, y, z, range, minrange)
         range = (range == nil and math.huge) or (range > 0 and range * range) or 0
@@ -305,7 +343,6 @@ if env.GetModConfigData("telestaff_rework") then
             end
         }
 
-
         if #GetAllActiveTelebases() < 2 then -- only show
             return spells
         end
@@ -319,16 +356,16 @@ if env.GetModConfigData("telestaff_rework") then
             spell.target_focus = v
 
             local skin = spell.target_focus.AnimState:GetBuild()
-            spell.atlas = skin == "telebase_hallowpylon" and "images/tele_icon3.xml" or skin == "telebase_crystal" and "images/tele_icon2.xml" or skin == "telebase_mystical" and "images/tele_icon5.xml" or "images/tele_icon1.xml"
+            spell.atlas = skin == "telebase_hallowpylon" and "images/tele_icon3.xml" or skin == "telebase_crystal" and "images/tele_icon2.xml" or skin == "telebase_mystical" and "images/tele_icon5.xml" or skin == "telebase_chess" and "images/tele_icon6.xml" or "images/tele_icon1.xml"
 
-            spell.normal = skin == "telebase_hallowpylon" and "tele_icon3.tex" or skin == "telebase_crystal" and "tele_icon2.tex" or skin == "telebase_mystical" and "tele_icon5.tex" or "tele_icon1.tex"
+            spell.normal = skin == "telebase_hallowpylon" and "tele_icon3.tex" or skin == "telebase_crystal" and "tele_icon2.tex" or skin == "telebase_mystical" and "tele_icon5.tex" or skin == "telebase_chess" and "tele_icon6.tex" or "tele_icon1.tex"
 
             if spell.target_focus == inst.target_focus then
                 -- spell.widget_scale = ICON_SCALE * 2
 
-                spell.atlas = skin == "telebase_hallowpylon" and "images/tele_icon3b.xml" or skin == "telebase_crystal" and "images/tele_icon2b.xml" or skin == "telebase_mystical" and "images/tele_icon5b.xml" or "images/tele_icon1b.xml"
+                spell.atlas = skin == "telebase_hallowpylon" and "images/tele_icon3b.xml" or skin == "telebase_crystal" and "images/tele_icon2b.xml" or skin == "telebase_mystical" and "images/tele_icon5b.xml" or skin == "telebase_chess" and "images/tele_icon6b.xml" or "images/tele_icon1b.xml"
 
-                spell.normal = skin == "telebase_hallowpylon" and "tele_icon3b.tex" or skin == "telebase_crystal" and "tele_icon2b.tex" or skin == "telebase_mystical" and "tele_icon5b.tex" or "tele_icon1b.tex"
+                spell.normal = skin == "telebase_hallowpylon" and "tele_icon3b.tex" or skin == "telebase_crystal" and "tele_icon2b.tex" or skin == "telebase_mystical" and "tele_icon5b.tex" or skin == "telebase_chess" and "tele_icon6b.tex" or "tele_icon1b.tex"
             end
 
             if spell.target_focus.spell_location ~= nil then
@@ -365,6 +402,46 @@ if env.GetModConfigData("telestaff_rework") then
 
     local function UpdateSpells(inst) inst.components.spellbook.items = GetAllValidSpells(inst) end
 
+    local staffcommon = require("prefabs/staff_common")
+    local _purple = staffcommon.fns.purple
+    staffcommon.fns.purple = function(inst, notinit, ...)
+        _purple(inst, notinit, ...)
+
+        local _OnUnequip = inst.components.equippable.onunequipfn
+        inst._purple_old_unequip = _OnUnequip
+
+        inst.components.equippable.onunequipfn = function(inst, owner)
+            if inst.components.spellbook ~= nil then inst.components.spellbook.items = GetAllValidSpells(inst) end
+            owner:RemoveTag("telestaff_spellbook_user")
+            _OnUnequip(inst, owner)
+        end
+
+        inst.components.spellcaster:SetSpellFn(teleport_func)
+        inst.components.spellcaster.canonlyuseonlocomotorspvp = nil
+        inst.components.spellcaster.can_cast_fn = function(doer, target, pos)
+            if (target:HasAnyTag("heavy", "_inventoryitem") or target.components.locomotor) and target.Physics then return true end
+            return nil
+        end
+        local _OnEquip = inst.components.equippable.onequipfn
+
+        inst._purple_old_equip = _OnEquip
+
+        inst.components.equippable.onequipfn = function(inst, owner)
+            if inst.components.spellbook ~= nil then inst.components.spellbook.items = GetAllValidSpells(inst) end
+            owner:AddTag("telestaff_spellbook_user")
+            _OnEquip(inst, owner)
+        end
+    end
+
+    local _cleargemstaff = staffcommon.cleargemstaff
+    staffcommon.cleargemstaff = function(inst)
+        _cleargemstaff(inst)
+        if inst._purple_old_unequip then
+            inst.components.equippable.onunequipfn = inst._purple_old_unequip
+            inst.components.equippable.onequipfn = inst._purple_old_equip
+        end
+    end
+
     env.AddPrefabPostInit("telestaff", function(inst)
         inst:AddTag("telestaff")
         inst:AddComponent("spellbook")
@@ -377,7 +454,7 @@ if env.GetModConfigData("telestaff_rework") then
         local _OpenSpellBook = inst.components.spellbook.OpenSpellBook
         inst.components.spellbook.OpenSpellBook = function(self, user)
             UpdateSpells(self.inst)
-            _OpenSpellBook(self,user)
+            _OpenSpellBook(self, user)
         end
         --inst:ListenForEvent("closespellwheel", UpdateSpells)
 
@@ -387,27 +464,61 @@ if env.GetModConfigData("telestaff_rework") then
             inst.components.finiteuses:SetUses(15)
             inst.components.finiteuses:SetMaxUses(15)
         end
+    end)
 
-        local _OnUnequip = inst.components.equippable.onunequipfn
+    local function GetGemId(gemtype)
+        return string.sub(gemtype, 0, -4)
+    end
 
-        inst.components.equippable.onunequipfn = function(inst, owner)
-            if inst.components.spellbook ~= nil then inst.components.spellbook.items = GetAllValidSpells(inst) end
-            owner:RemoveTag("telestaff_spellbook_user")
-            _OnUnequip(inst, owner)
+    env.AddPrefabPostInit("king_cane", function(inst)
+        inst.__spellbookenabled = net_bool(inst.GUID, "king_cane.spellbook_enabled", "king_cane.spellbook_enableddirty")
+        inst.__spellbookenabled:set(false)
+
+        inst:ListenForEvent("king_cane.spellbook_enableddirty", function(inst)
+            if inst.__spellbookenabled:value() then
+                inst:AddTag("telestaff")
+                inst:AddComponent("spellbook")
+                inst.components.spellbook.items = GetAllValidSpells(inst)
+                --inst.components.spellbook:SetOnOpenFn(UpdateSpells)
+                --inst.components.spellbook:SetOnCloseFn(UpdateSpells)
+
+                inst.components.spellbook:SetRequiredTag("telestaff_spellbook_user")
+
+                local _OpenSpellBook = inst.components.spellbook.OpenSpellBook
+                inst.components.spellbook.OpenSpellBook = function(self, user)
+                    UpdateSpells(self.inst)
+                    _OpenSpellBook(self, user)
+                end
+            else
+                inst:RemoveTag("telestaff")
+                inst:RemoveComponent("spellbook")
+            end
+        end)
+
+        if not TheWorld.ismastersim then return end
+
+        if inst.components.trader then
+            local _OnGemGiven = inst.components.trader.onaccept
+
+            inst.components.trader:SetOnAccept(function(inst, giver, item, ...)
+                _OnGemGiven(inst, giver, item, ...)
+
+                if GetGemId(item.prefab) == "purple" then
+                    inst.__spellbookenabled:set(true)
+                else
+                    inst.__spellbookenabled:set(false)
+                end
+            end)
         end
 
-        inst.components.spellcaster:SetSpellFn(teleport_func)
-        inst.components.spellcaster.canonlyuseonlocomotorspvp = nil
-        inst.components.spellcaster.can_cast_fn = function(doer, target, pos)
-            if (target:HasTag("heavy") or target:HasTag("_inventoryitem") or target.components.locomotor ~= nil) and target.Physics then return true end
-            return nil
-        end
-        local _OnEquip = inst.components.equippable.onequipfn
-
-        inst.components.equippable.onequipfn = function(inst, owner)
-            if inst.components.spellbook ~= nil then inst.components.spellbook.items = GetAllValidSpells(inst) end
-            owner:AddTag("telestaff_spellbook_user")
-            _OnEquip(inst, owner)
+        local _OnPreLoad = inst.OnPreLoad
+        inst.OnPreLoad = function(inst, data, ...)
+            _OnPreLoad(inst, data, ...)
+            if data then
+                if data.gem and data.gem == "purplegem" then
+                    inst.__spellbookenabled:set(true)
+                end
+            end
         end
     end)
 
@@ -439,7 +550,20 @@ if env.GetModConfigData("telestaff_rework") then
         ["Frogs and bugs"] = "Grasslands",
         ["GiantTrees"] = "Hooded Forest"
     }
-    local locations2 = { ["veteranshrine"] = "Veteran's Shrine", ["START"] = "Spawn", ["GiantTrees"] = "Hooded Forest", ["MoonIsland_Mine"] = "Lunar Island", ["MoonIsland_Beach"] = "Lunar Island", ["MoonIsland_Baths"] = "Lunar Island", ["MoonIsland_Forest"] = "Lunar Island", ["DeepDeciduous"] = "Deciduous Forest", ["Killer bees!"] = "Killer Bee Field", ["LightningBluffOasis"] = "Oasis", ["Make a Beehat"] = "Grasslands", ["Mole Colony Rocks"] = "Rocky" }
+    local locations2 = {
+        ["veteranshrine"] = "Veteran's Shrine",
+        ["START"] = "Spawn",
+        ["GiantTrees"] = "Hooded Forest",
+        ["MoonIsland_Mine"] = "Lunar Island",
+        ["MoonIsland_Beach"] = "Lunar Island",
+        ["MoonIsland_Baths"] = "Lunar Island",
+        ["MoonIsland_Forest"] = "Lunar Island",
+        ["DeepDeciduous"] = "Deciduous Forest",
+        ["Killer bees!"] = "Killer Bee Field",
+        ["LightningBluffOasis"] = "Oasis",
+        ["Make a Beehat"] = "Grasslands",
+        ["Mole Colony Rocks"] = "Rocky"
+    }
 
     local function ParseAreaAwareData(inst)
         if inst.custom_location_name ~= nil and inst.custom_location_name:value() ~= "" then return inst.custom_location_name:value() end
@@ -492,8 +616,6 @@ if env.GetModConfigData("telestaff_rework") then
         end
 
         inst:DoTaskInTime(0, inst.update_location)
-
-
 
         inst.custom_location_name = net_string(inst.GUID, "custom_location_name")
 

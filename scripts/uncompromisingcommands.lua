@@ -139,27 +139,6 @@ function c_um_givevetskulls()
     end
 end
 
--- gives all current uncomp records
-
-local records = {
-    "um_record_menu",
-    "um_record_walter",
-    "um_record_wixie",
-    "um_record_shadow_wixie",
-    "um_record_hooded_widow",
-    "um_record_moonmaw",
-    "um_record_tot",
-    "um_record_wathom",
-    "um_record_stranger",
-    "um_record_winky",
-}
-
-function c_um_giverecords()
-    for i, v in ipairs(records) do
-        c_give(v)
-    end
-end
-
 -- lists current rat score shenenigans.
 function c_um_ratcheck()
     local inst = TheSim:FindFirstEntityWithTag("rat_sniffer")

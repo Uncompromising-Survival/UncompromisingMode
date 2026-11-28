@@ -1741,9 +1741,7 @@ end
 
 local function TimeForACheckUp(inst, dev)
     local x, y, z = inst.Transform:GetWorldPosition()
-    
-    local players = TheSim:FindEntities(x, y, z, TUNING.DSTU.SNIFFER_PLAYER_RANGE, {"player"}, {"playerghost"})
-    for a, b in ipairs(players) do
+    for a, b in ipairs(TheSim:FindEntities(x, y, z, TUNING.DSTU.SNIFFER_PLAYER_RANGE, {"player"}, {"playerghost"})) do
         if b:IsValid() and b:IsNear(inst, TUNING.DSTU.SNIFFER_PLAYER_RANGE) then
             Sniffertime(b, inst)
         end
@@ -1790,7 +1788,7 @@ local function TimeForACheckUp(inst, dev)
             end
         end
     end
-    
+
     inst.ratscore = inst.ratscore + inst.foodscore + inst.burrowbonus
     -- print("------------------------")
     -- print("Itemscore = "..inst.itemscore)
@@ -1847,13 +1845,15 @@ local function TimeForACheckUp(inst, dev)
                 end)
             end
 
-            local players = TheSim:FindEntities(x, y, z, 40, {"player"}, {"playerghost"})
-            for a, b in ipairs(players) do
-                local str = inst.burrowbonus > inst.foodscore and "BURROWS" or inst.foodscore > inst.burrowbonus and "FOOD" or nil
-                if str ~= nil then
-                    b:DoTaskInTime(2 + math.random(), function(b)
-                        b.components.talker:Say(GetString(b, "ANNOUNCE_RATSNIFFER_"..str, "LEVEL_1"))
-                    end)
+            local response = inst.burrowbonus >= 60 and inst.foodscore >= 60 and "BOTH"
+                or inst.burrowbonus > inst.foodscore and "BURROWS"
+                or inst.foodscore > inst.burrowbonus and "FOOD"
+
+            if response then
+                for a, b in ipairs(TheSim:FindEntities(x, y, z, 40, {"player"}, {"playerghost"})) do
+                    b:DoTaskInTime(2 + math.random(), function(player, str)
+                        player.components.talker:Say(str == "BOTH" and GetString(player, "ANNOUNCE_RATSNIFFER_FOOD", "LEVEL_1").."\n"..GetString(player, "ANNOUNCE_RATSNIFFER_BURROWS", "LEVEL_1") or GetString(player, "ANNOUNCE_RATSNIFFER_"..str, "LEVEL_1"))
+                    end, response)
                 end
             end
         end

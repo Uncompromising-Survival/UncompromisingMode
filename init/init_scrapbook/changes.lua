@@ -36,6 +36,8 @@ for k, v in pairs(specialinfo_ovewrite) do
 end
 --idfk where to put this
 scrapbookdata["shieldofterror"].notes = { cursed_enhanced_item = true }
+scrapbookdata["shieldofterror"].weapondamage = GLOBAL.TUNING.SHIELDOFTERROR_DAMAGE
+
 if debug then
     scrapbookdata["shieldofterror"].subcat = "um_debug_changes"
 end

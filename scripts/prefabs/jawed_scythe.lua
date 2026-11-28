@@ -1,11 +1,10 @@
 local assets =
 {
     Asset("ANIM", "anim/scythe_jawed.zip"), -- Klei's convention is scythe_type in anim, but type_scythe in code. (Referencing voidcloth_scythe)
-	Asset("IMAGE", "images/inventoryimages/jawed_scythe.tex"),
-	Asset("ATLAS", "images/inventoryimages/jawed_scythe.xml"),
-	
-	Asset("IMAGE", "images/inventoryimages/snappy_jaw.tex"),
-	Asset("ATLAS", "images/inventoryimages/snappy_jaw.xml"),
+    Asset("IMAGE", "images/inventoryimages/jawed_scythe.tex"),
+    Asset("ATLAS", "images/inventoryimages/jawed_scythe.xml"),
+    Asset("IMAGE", "images/inventoryimages/snappy_jaw.tex"),
+    Asset("ATLAS", "images/inventoryimages/snappy_jaw.xml"),
 }
 
 local function AttachClassified(inst, classified)
@@ -37,18 +36,18 @@ end
 local function SetFxOwner(inst, owner)
     if inst.fx == nil then return end
 
-	if inst._fxowner ~= nil and inst._fxowner.components.colouradder ~= nil then
-		inst._fxowner.components.colouradder:DetachChild(inst.fx)
-	end
-	inst._fxowner = owner
+    if inst._fxowner ~= nil and inst._fxowner.components.colouradder ~= nil then
+        inst._fxowner.components.colouradder:DetachChild(inst.fx)
+    end
+    inst._fxowner = owner
     if owner ~= nil then
         inst.fx.entity:SetParent(owner.entity)
         inst.fx.Follower:FollowSymbol(owner.GUID, "swap_object", nil, nil, nil, true, nil, 2)
         inst.fx.components.highlightchild:SetOwner(owner)
         inst.fx:ToggleEquipped(true)
-		if owner.components.colouradder ~= nil then
-			owner.components.colouradder:AttachChild(inst.fx)
-		end
+        if owner.components.colouradder ~= nil then
+            owner.components.colouradder:AttachChild(inst.fx)
+        end
     else
         inst.fx.entity:SetParent(inst.entity)
         --For floating
@@ -59,7 +58,7 @@ local function SetFxOwner(inst, owner)
 end
 
 local function PushIdleLoop(inst)
-	inst.AnimState:PushAnimation("idle")
+    inst.AnimState:PushAnimation("idle")
 end
 
 local function OnStopFloating(inst)
@@ -70,12 +69,11 @@ end
 local function OnEquip(inst, owner)
     local skin_build = inst:GetSkinBuild()
 
-	owner.AnimState:OverrideSymbol("swap_object", "scythe_jawed", "swap_scythe")
+    owner.AnimState:OverrideSymbol("swap_object", "scythe_jawed", "swap_scythe")
 
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
     SetFxOwner(inst, owner)
-
 end
 
 local function OnUnequip(inst, owner)
@@ -86,7 +84,6 @@ local function OnUnequip(inst, owner)
         owner:PushEvent("unequipskinneditem", inst:GetSkinName())
     end
     SetFxOwner(inst, nil)
-
 end
 
 local function HarvestPickable(inst, ent, doer)
@@ -100,7 +97,7 @@ local function HarvestPickable(inst, ent, doer)
         for i, item in ipairs(loot) do
             Launch(item, doer, 1.5)
         end
-    end	
+    end
 end
 
 local function IsEntityInFront(inst, entity, doer_rotation, doer_pos)
@@ -119,22 +116,21 @@ local function DoScythe(inst, target, doer)
         local x, y, z = doer_pos:Get()
 
         local doer_rotation = doer.Transform:GetRotation()
-		inst.components.finiteuses:Use(1)
+        inst.components.finiteuses:Use(1)
         local ents = TheSim:FindEntities(x, y, z, TUNING.VOIDCLOTH_SCYTHE_HARVEST_RADIUS*1.2, HARVEST_MUSTTAGS, HARVEST_CANTTAGS, HARVEST_ONEOFTAGS)
         for _, ent in pairs(ents) do
             if ent:IsValid() and ent.components.pickable ~= nil then
                 if inst:IsEntityInFront(ent, doer_rotation, doer_pos) then
                     inst:HarvestPickable(ent, doer)
-					
-					-- These finiteuses calls need to be here, and not within HarvestPickable, it has to be referenced whenever we make the scythe hoarding through gemology
-					if ent.prefab ~= "hooded_fern" and inst.components.finiteuses ~= nil then
-						inst.components.finiteuses:Use(0.25)
-					end
 
-				   if ent.prefab == "hooded_fern" and inst.components.finiteuses ~= nil then
-						inst.components.finiteuses:Use(0.2)
-				   end
-				   
+                    -- These finiteuses calls need to be here, and not within HarvestPickable, it has to be referenced whenever we make the scythe hoarding through gemology
+                    if ent.prefab ~= "hooded_fern" and inst.components.finiteuses ~= nil then
+                        inst.components.finiteuses:Use(0.25)
+                    end
+
+                    if ent.prefab == "hooded_fern" and inst.components.finiteuses ~= nil then
+                        inst.components.finiteuses:Use(0.2)
+                    end
                 end
             end
         end
@@ -146,21 +142,21 @@ local function OnAttack(inst, attacker, target) -- Save for "wounded" effect
 end
 
 local function SetupComponents(inst)
-	inst:AddComponent("equippable")
-	inst.components.equippable:SetOnEquip(OnEquip)
-	inst.components.equippable:SetOnUnequip(OnUnequip)
+    inst:AddComponent("equippable")
+    inst.components.equippable:SetOnEquip(OnEquip)
+    inst.components.equippable:SetOnUnequip(OnUnequip)
 
-	inst:AddComponent("weapon")
-	inst.components.weapon:SetDamage(TUNING.SPEAR_DAMAGE*1.3)--44.2
-	inst.components.weapon:SetOnAttack(OnAttack)
+    inst:AddComponent("weapon")
+    inst.components.weapon:SetDamage(TUNING.SPEAR_DAMAGE*1.3)--44.2
+    inst.components.weapon:SetOnAttack(OnAttack)
 
-	inst:AddComponent("tool")
-	inst.components.tool:SetAction(ACTIONS.SCYTHE)
+    inst:AddComponent("tool")
+    inst.components.tool:SetAction(ACTIONS.SCYTHE)
 end
 
 local function DisableComponents(inst)
-	inst:RemoveComponent("equippable")
-	inst:RemoveComponent("weapon")
+    inst:RemoveComponent("equippable")
+    inst:RemoveComponent("weapon")
     inst:RemoveComponent("tool")
 end
 
@@ -168,34 +164,34 @@ local FLOAT_SCALE_BROKEN = { 0.8, 0.4, 0.8 }
 local FLOAT_SCALE = { 1.2, 0.4, 1.2 }
 
 local function OnIsBrokenDirty(inst)
-	if inst.isbroken:value() then
-		inst.components.floater:SetSize("med")
-		inst.components.floater:SetVerticalOffset(0.25)
-		inst.components.floater:SetScale(FLOAT_SCALE_BROKEN)
-	else
-		inst.components.floater:SetSize("med")
-		inst.components.floater:SetVerticalOffset(0)
-		inst.components.floater:SetScale(FLOAT_SCALE)
-	end
+    if inst.isbroken:value() then
+        inst.components.floater:SetSize("med")
+        inst.components.floater:SetVerticalOffset(0.25)
+        inst.components.floater:SetScale(FLOAT_SCALE_BROKEN)
+    else
+        inst.components.floater:SetSize("med")
+        inst.components.floater:SetVerticalOffset(0)
+        inst.components.floater:SetScale(FLOAT_SCALE)
+    end
 end
 
 local SWAP_DATA_BROKEN = { sym_build = "scythe_jawed", sym_name = "scythe_base_broken_float", bank = "scythe_voidcloth", anim = "broken" }
 local SWAP_DATA = { sym_build = "scythe_jawed", sym_name = "swap_scythe", bank = "scythe_voidcloth" }
 
 local function SetIsBroken(inst, isbroken)
-	if isbroken then
-		inst.components.floater:SetBankSwapOnFloat(true, -10, SWAP_DATA_BROKEN)
-		if inst.fx ~= nil then
-			inst.fx:Hide()
-		end
-	else
-		inst.components.floater:SetBankSwapOnFloat(true, -20, SWAP_DATA)
-		if inst.fx ~= nil then
-			inst.fx:Show()
-		end
-	end
-	inst.isbroken:set(isbroken)
-	OnIsBrokenDirty(inst)
+    if isbroken then
+        inst.components.floater:SetBankSwapOnFloat(true, -10, SWAP_DATA_BROKEN)
+        if inst.fx ~= nil then
+            inst.fx:Hide()
+        end
+    else
+        inst.components.floater:SetBankSwapOnFloat(true, -20, SWAP_DATA)
+        if inst.fx ~= nil then
+            inst.fx:Show()
+        end
+    end
+    inst.isbroken:set(isbroken)
+    OnIsBrokenDirty(inst)
 end
 
 local function ScytheFn()
@@ -220,10 +216,8 @@ local function ScytheFn()
     --weapon (from weapon component) added to pristine state for optimization
     inst:AddTag("weapon")
 
+    inst:AddComponent("floater")
 
-
-	inst:AddComponent("floater")
-	
     --Dedicated server does not need to spawn the local sound fx
     if not TheNet:IsDedicated() then
         inst.localsounds = CreateEntity()
@@ -237,11 +231,10 @@ local function ScytheFn()
         inst.localsounds.persists = false
     end
 
-
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
-		--inst:ListenForEvent("isbrokendirty", OnIsBrokenDirty)
+        --inst:ListenForEvent("isbrokendirty", OnIsBrokenDirty)
 
         return inst
     end
@@ -258,13 +251,13 @@ local function ScytheFn()
     inst:ListenForEvent("floater_stopfloating", OnStopFloating)
 
     inst:AddComponent("inventoryitem")
-	
+
     local finiteuses = inst:AddComponent("finiteuses")
     finiteuses:SetMaxUses(100)
     finiteuses:SetUses(100)
     --finiteuses:SetConsumption(ACTIONS.SCYTHE, 0)
-	finiteuses:SetOnFinished(inst.Remove)
-	SetupComponents(inst)
+    finiteuses:SetOnFinished(inst.Remove)
+    SetupComponents(inst)
 
     MakeHauntableLaunch(inst)
 
@@ -401,18 +394,18 @@ local function fnjaw()
         return inst
     end
 
-    inst:AddComponent("stackable")
-    inst.components.stackable.maxsize = TUNING.STACK_SIZE_LARGEITEM
-
     inst:AddComponent("inspectable")
-	
-    MakeHauntableLaunchAndIgnite(inst)
+
+    inst:AddComponent("stackable")
+    inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
 
     inst:AddComponent("inventoryitem")
+
+    MakeHauntableLaunchAndIgnite(inst)
 
     return inst
 end
 
 return Prefab("jawed_scythe", ScytheFn, assets),
-Prefab("jawed_scythe_fx", FollowSymbolFxFn),
-Prefab("snappy_jaw", fnjaw)
+    Prefab("jawed_scythe_fx", FollowSymbolFxFn),
+    Prefab("snappy_jaw", fnjaw)

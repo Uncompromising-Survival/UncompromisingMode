@@ -266,19 +266,6 @@ local inventoryitems =
     "wurt_vetskull",
     "wx78_vetskull",
 
-    -- Records
-
-    "um_record_menu",
-    "um_record_walter",
-    "um_record_wixie",
-    "um_record_shadow_wixie",
-    "um_record_hooded_widow",
-    "um_record_wathom",
-    "um_record_stranger",
-    "um_record_winky",
-    "um_record_moonmaw",
-    "um_record_tot",
-
     --Wixie related inventory icons
 
     "slingshot_gnasher",
@@ -340,10 +327,20 @@ local inventoryitems =
     --skins
     "ms_ancient_amulet_red_demoneye",
     "ms_hat_plaguemask_formal",
-    "ms_plaguemask_formal", --dunno??
+    "ms_plaguemask_formal",
     "ms_feather_frock_fancy",
     "ms_twisted_antler",
     "ms_um_trans_bomb_moon",
+    "ms_um_record_menu",
+    "ms_um_record_hooded_widow",
+    "ms_um_record_moonmaw",
+    "ms_um_record_shadow_wixie",
+    "ms_um_record_stranger",
+    "ms_um_record_tot",
+    "ms_um_record_walter",
+    "ms_um_record_wathom",
+    "ms_um_record_winky",
+    "ms_um_record_wixie",
 
     --crab king items
     "hat_crab",
@@ -1420,7 +1417,6 @@ Assets = {
     Asset("ANIM", "anim/wortox_soul_ball_blue.zip"),
     Asset("ANIM", "anim/wortox_soul_ball_green.zip"),
 
-    Asset("ANIM", "anim/um_records.zip"),
 
     Asset("ANIM", "anim/walrus_house_summer.zip"),
 
@@ -1457,6 +1453,10 @@ Assets = {
     Asset("IMAGE", "images/tele_icon5.tex"),
     Asset("ATLAS", "images/tele_icon5b.xml"),
     Asset("IMAGE", "images/tele_icon5b.tex"),
+    Asset("ATLAS", "images/tele_icon6.xml"),
+    Asset("IMAGE", "images/tele_icon6.tex"),
+    Asset("ATLAS", "images/tele_icon6b.xml"),
+    Asset("IMAGE", "images/tele_icon6b.tex"),
 
     --OVERLAYS
     Asset("ATLAS", "images/UM_pollenover.xml"),
@@ -1525,29 +1525,12 @@ Assets = {
 
     --RECORDS
 
-    Asset("ATLAS", "images/inventoryimages/um_record_menu.xml"),
-    Asset("IMAGE", "images/inventoryimages/um_record_menu.tex"),
-    Asset("ATLAS", "images/inventoryimages/um_record_walter.xml"),
-    Asset("IMAGE", "images/inventoryimages/um_record_walter.tex"),
-    Asset("ATLAS", "images/inventoryimages/um_record_wixie.xml"),
-    Asset("IMAGE", "images/inventoryimages/um_record_wixie.tex"),
-    Asset("ATLAS", "images/inventoryimages/um_record_shadow_wixie.xml"),
-    Asset("IMAGE", "images/inventoryimages/um_record_shadow_wixie.tex"),
-    Asset("ATLAS", "images/inventoryimages/um_record_hooded_widow.xml"),
-    Asset("IMAGE", "images/inventoryimages/um_record_hooded_widow.tex"),
-    Asset("ATLAS", "images/inventoryimages/um_record_wathom.xml"),
-    Asset("IMAGE", "images/inventoryimages/um_record_wathom.tex"),
-    Asset("ATLAS", "images/inventoryimages/um_record_stranger.xml"),
-    Asset("IMAGE", "images/inventoryimages/um_record_stranger.tex"),
-    Asset("ATLAS", "images/inventoryimages/um_record_winky.xml"),
-    Asset("IMAGE", "images/inventoryimages/um_record_winky.tex"),]]
-
     --
     Asset("ATLAS", "images/wixiepiano_whitekey.xml"),
     Asset("IMAGE", "images/wixiepiano_whitekey.tex"),
     Asset("ATLAS", "images/wixiepiano_blackkey.xml"),
     Asset("IMAGE", "images/wixiepiano_blackkey.tex"),
-    --[[Asset("IMAGE", "images/inventoryimages/charles_t_horse.tex"),
+    Asset("IMAGE", "images/inventoryimages/charles_t_horse.tex"),
     Asset("ATLAS", "images/inventoryimages/charles_t_horse.xml"),
     Asset("IMAGE", "images/inventoryimages/the_real_charles_t_horse.tex"),
     Asset("ATLAS", "images/inventoryimages/the_real_charles_t_horse.xml"),]]
