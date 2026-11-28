@@ -252,18 +252,17 @@ end
 local function TotemPenalty(inst, data)
     local totem = HasTotem(inst)
     if not totem then return 0 end
-    local boss_feathers = #totem.components.container:FindItems(function(item) return item.prefab == "goose_feather" or item.prefab == "malbatross_feather" end)
-    local basic_feathers = #totem.components.container:FindItems(function(item) return item:HasTag("wingsuit_feather") end) - boss_feathers
-    return (-0.25 / 3) * basic_feathers + (-0.50 / 3) * boss_feathers
+    local _, penalty = totem:UMFeatherEffects(inst, true)
+    return penalty
 end
 
-local function UMShouldTakePenalty(inst, data)
+local function GetPenalty(inst, data)
     local source = data and data.source
     return ((not source or source.prefab ~= "resurrectionstone") and .25 or 0) + TotemPenalty(inst, data)
 end
 
 local function OnRespawnFromGhost(inst, data)
-    local penalty = inst.UMShouldTakePenalty and inst:UMShouldTakePenalty(data)
+    local penalty = inst.UMGetPenalty and inst:UMGetPenalty(data)
     if penalty and penalty ~= 0 then inst.components.health:DeltaPenalty(penalty) end -- ALL deaths cause 25% penalty....
 end
 
@@ -419,7 +418,7 @@ env.AddPlayerPostInit(function(inst)
     end
 
     if UM_CONFIG.MAXHPDEATH then
-        inst.UMShouldTakePenalty = UMShouldTakePenalty
+        inst.UMGetPenalty = GetPenalty
         inst:ListenForEvent("respawnfromghost", OnRespawnFromGhost)
     end
 

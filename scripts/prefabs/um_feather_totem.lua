@@ -35,36 +35,26 @@ local function OnTimerDone(owner, data)
     owner:RemoveEventCallback("timerdone", OnTimerDone)
 end
 
-local function FeatherEffects(owner, totem)
-    local feathertotal = #totem.components.container:FindItems(function(item) return item:HasTag("wingsuit_feather") end)
-    if feathertotal == 0 then return 0 end
+local function FeatherEffects_Internal(totem, owner, data)
+    if not data then return end
+    local feather_robin, feather_crow, feather_robin_winter, feather_canary, goose_feather, malbatross_feather = data.feather_robin, data.feather_crow, data.feather_robin_winter, data.feather_canary, data.goose_feather, data.malbatross_feather
 
-    local feather_robin         = #totem.components.container:FindItems(function(item) return item.prefab == "feather_robin"        end)
-    local feather_crow          = #totem.components.container:FindItems(function(item) return item.prefab == "feather_crow"         end)
-    local feather_robin_winter  = #totem.components.container:FindItems(function(item) return item.prefab == "feather_robin_winter" end)
-    local feather_canary        = #totem.components.container:FindItems(function(item) return item.prefab == "feather_canary"       end)
-    local goose_feather         = #totem.components.container:FindItems(function(item) return item.prefab == "goose_feather"        end)
-    local malbatross_feather    = #totem.components.container:FindItems(function(item) return item.prefab == "malbatross_feather"   end)
-    --local cherryforest_feather1 = #totem.components.container:FindItems(function(item) return item.prefab == "???" end)
-    --local cherryforest_feather2 = #totem.components.container:FindItems(function(item) return item.prefab == "???" end)
-    --local feather_robin = #totem.components.container:FindItems(function(item) return item.prefab == "feather_robin" end)
-
-    if feather_robin > 0 then
-        owner.components.health:DoDelta(owner.components.health.maxhealth * 0.1 * feather_robin)
+    if feather_robin and feather_robin > 0 then
+        owner.components.health:DoDelta(owner.components.health.maxhealth * .1 * feather_robin)
     end
 
-    if feather_crow > 0 then
-        owner.components.sanity:DoDelta(owner.components.sanity.max * 0.15 * feather_crow)
+    if feather_crow and feather_crow > 0 then
+        owner.components.sanity:DoDelta(owner.components.sanity.max * .15 * feather_crow)
     end
 
-    if feather_canary > 0 or goose_feather > 0 then
+    if feather_canary and feather_canary > 0 or goose_feather and goose_feather > 0 then
         local speedmult = ((feather_canary * 1.15) + (goose_feather * 1.25)) / (feather_canary + goose_feather)
         owner.components.locomotor:SetExternalSpeedMultiplier(owner, owner.prefab, speedmult)
         UMCommonFns.RestartTimer(owner, {name = "um_totem_feather_speed", time = 90 * feather_canary + 45 * goose_feather})
         owner.SoundEmitter:PlaySound("dontstarve/birds/takeoff_canary")
     end
 
-    if feather_robin_winter > 0 then
+    if feather_robin_winter and feather_robin_winter > 0 then
         insulationmod = 80 * feather_robin_winter
 
         insulate_summer = TheWorld.state.season ~= "winter" -- Regular insulation will not allow the player to cool down in summer
@@ -83,13 +73,13 @@ local function FeatherEffects(owner, totem)
         UMCommonFns.RestartTimer(owner, {name = "um_totem_azure_insulation", time = 90 * feather_robin_winter})
     end
 
-    --[[if goose_feather > 0 then
+    --[[if goose_feather and goose_feather > 0 then
         owner.components.locomotor:SetExternalSpeedMultiplier(owner, owner.prefab, 1.25)
         UMCommonFns.RestartTimer(owner, {name = "um_totem_goose_speed", time = 45 * goose_feather})
         owner.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mossling/honk")
     end]]
 
-    if malbatross_feather > 0 then
+    if malbatross_feather and malbatross_feather > 0 then
 	    if not owner.components.moistureimmunity then
 		    owner:AddComponent("moistureimmunity")
 	    end
@@ -97,11 +87,43 @@ local function FeatherEffects(owner, totem)
         UMCommonFns.RestartTimer(owner, {name = "um_totem_malbatross_nowet", time = TUNING.TOTAL_DAY_TIME * malbatross_feather})
         owner.SoundEmitter:PlaySound("saltydog/creatures/boss/malbatross/attack_call")
     end
+end
 
+local function FeatherEffects(totem, owner, ondeath)
+    local feathertotal = #totem.components.container:FindItems(function(item) return item:HasTag("wingsuit_feather") end)
+    if feathertotal == 0 then return 0, 0 end
+
+    --local cherryforest_feather1 = #totem.components.container:FindItems(function(item) return item.prefab == "???" end)
+    --local cherryforest_feather2 = #totem.components.container:FindItems(function(item) return item.prefab == "???" end)
+    --local feather_robin = #totem.components.container:FindItems(function(item) return item.prefab == "feather_robin" end)
+
+    local data = {
+        feather_robin = #totem.components.container:FindItems(function(item) return item.prefab == "feather_robin" end),
+        feather_crow = #totem.components.container:FindItems(function(item) return item.prefab == "feather_crow" end),
+        feather_robin_winter = #totem.components.container:FindItems(function(item) return item.prefab == "feather_robin_winter" end),
+        feather_canary = #totem.components.container:FindItems(function(item) return item.prefab == "feather_canary" end),
+        goose_feather = #totem.components.container:FindItems(function(item) return item.prefab == "goose_feather" end),
+        malbatross_feather = #totem.components.container:FindItems(function(item) return item.prefab == "malbatross_feather" end)
+    }
+
+    if ondeath then
+        owner.um_totem_ms_respawnedfromghost = function(_inst)
+            if totem and totem:IsValid() then totem:UMFeatherEffects_Internal(_inst, data) end
+            _inst:RemoveEventCallback("ms_respawnedfromghost", _inst.um_totem_ms_respawnedfromghost)
+            _inst.um_totem_ms_respawnedfromghost = nil
+        end
+        owner:ListenForEvent("ms_respawnedfromghost", owner.um_totem_ms_respawnedfromghost)
+    else
+        totem:UMFeatherEffects_Internal(owner, data)
+    end
+
+
+    local boss_feathers = data.malbatross_feather + data.goose_feather
+    local basic_feathers = feathertotal - boss_feathers
     owner:ListenForEvent("timerdone", OnTimerDone)
     totem.components.container:RemoveAllItems()
 
-    return feathertotal
+    return feathertotal, (-.25 / 3) * basic_feathers + (-.50 / 3) * boss_feathers
 end
 
 local function IsTotem(item)
@@ -112,25 +134,14 @@ local function HasTotem(owner)
     return owner.components.inventory and owner.components.inventory:FindItem(IsTotem)
 end
 
-local function OnRespawn(owner, totem)
-    totem = HasTotem(owner)
-    if totem then
-        owner:DoTaskInTime(5, function()
-            local effectCount = FeatherEffects(owner, totem)
-            if effectCount > 0 then
-                totem.components.finiteuses:Use(effectCount)
-            end
-        end)
-    end
-end
-
 local function OnAvoidDeath(owner, totem)
     totem = HasTotem(owner)
     if totem then
-        local effectCount = FeatherEffects(owner, totem)
+        local effectCount, penalty = totem:UMFeatherEffects(owner)
         if effectCount > 0 then
             totem.components.finiteuses:Use(effectCount)
         end
+        if penalty and penalty ~= 0 then owner.components.health:DeltaPenalty(penalty) end
     end
 end
 
@@ -168,7 +179,6 @@ local function topocket(inst, owner)
         --owner:AddTag("nightmaretracker")
         --owner:ListenForEvent("onremove", toground, inst)
 
-        owner:ListenForEvent("ms_respawnedfromghost", OnRespawn)
         owner:ListenForEvent("um_pocketressurection", OnAvoidDeath)
         inst._owner = owner
     end
@@ -235,6 +245,9 @@ local function fn()
     MakeSmallBurnable(inst, TUNING.SMALL_BURNTIME)
     MakeSmallPropagator(inst)
     MakeHauntableLaunchAndIgnite(inst)
+
+    inst.UMFeatherEffects_Internal = FeatherEffects_Internal
+    inst.UMFeatherEffects = FeatherEffects
 
     inst._owner = nil
     inst:ListenForEvent("onputininventory", topocket)
