@@ -107,6 +107,7 @@ local function FeatherEffects(totem, owner, ondeath)
     }
 
     if ondeath then
+        if owner.um_totem_ms_respawnedfromghost then owner:RemoveEventCallback("ms_respawnedfromghost", owner.um_totem_ms_respawnedfromghost) end
         owner.um_totem_ms_respawnedfromghost = function(_inst)
             if totem and totem:IsValid() then totem:UMFeatherEffects_Internal(_inst, data) end
             _inst:RemoveEventCallback("ms_respawnedfromghost", _inst.um_totem_ms_respawnedfromghost)
