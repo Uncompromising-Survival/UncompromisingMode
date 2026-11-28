@@ -23,7 +23,6 @@ local function UpdateRepel(inst)
             inst.Physics:ClearMotorVelOverride()
             inst.Physics:Stop()
             if child then RemoveShoveEntity(child) end
-            --inst:RestartBrain("um_shoving")
             if inst.um_shoveupdatetask then
                 inst.um_shoveupdatetask:Cancel()
                 inst.um_shoveupdatetask = nil
@@ -53,13 +52,6 @@ local function DoRepel(inst, data)
         inst.um_shoveentity = SpawnShoveEntity(inst, x, y, z)
         local rot = inst.um_shoveentity.Transform:GetRotation()
         local rot1 = dsq > 0 and math.atan2(-dz, dx) * RADIANS or data.knocker.Transform:GetRotation() + 180
-        --[[inst:StopBrain("um_shoving")
-        local locomotor = inst.components.locomotor
-        if locomotor then
-            locomotor:Stop()
-            locomotor:Clear()
-        end
-        inst:ClearBufferedAction()]]
         local angle = (rot1 - rot) * DEGREES
         inst.um_shoveentity.Physics:SetMotorVelOverride(speed * math.cos(angle), 0, -speed * math.sin(angle))
         inst.um_shoveentity.um_shoverot = rot1
